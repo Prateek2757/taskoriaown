@@ -11,7 +11,14 @@ const { Pool } = pkg;
 // });
 
 const pool = new Pool({
-  connectionString: "postgresql://postgres:Taskoria%40123@db.tsljujzmaidytcmhpbfl.supabase.co:5432/postgres",
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 export default pool;
+
+
+
+
