@@ -1,0 +1,120 @@
+{
+	"navigation": {
+		"home": "Home",
+		"about": "About",
+		"services": "Services",
+		"contact": "Contact",
+		"language": "Language"
+	},
+	"home": {
+		"title": "Welcome to Our Website",
+		"subtitle": "Your trusted digital partner",
+		"description": "We are a digital agency that helps you create better experiences with modern technology and innovative solutions.",
+		"cta": "Get Started",
+		"learn_more": "Learn More"
+	},
+	"about": {
+		"title": "About Us",
+		"description": "We are passionate about creating digital solutions that make a difference.",
+		"mission": "Our Mission",
+		"mission_text": "To provide exceptional digital services that help businesses grow and succeed in the modern world.",
+		"vision": "Our Vision",
+		"vision_text": "To be the leading digital agency that transforms ideas into reality through innovation and creativity."
+	},
+	"services": {
+		"title": "Our Services",
+		"web_development": "Web Development",
+		"web_development_desc": "Custom websites and web applications built with modern technologies.",
+		"mobile_apps": "Mobile Apps",
+		"mobile_apps_desc": "Native and cross-platform mobile applications for iOS and Android.",
+		"digital_marketing": "Digital Marketing",
+		"digital_marketing_desc": "Comprehensive digital marketing strategies to grow your business.",
+		"ui_ux_design": "UI/UX Design",
+		"ui_ux_design_desc": "Beautiful and user-friendly designs that enhance user experience."
+	},
+	"contact": {
+		"title": "Contact Us",
+		"get_in_touch": "Get in Touch",
+		"description": "We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+		"name": "Name",
+		"email": "Email",
+		"message": "Message",
+		"send": "Send Message",
+		"phone": "Phone",
+		"address": "Address"
+	},
+	"footer": {
+		"copyright": "© 2025 Sunlife.",
+		"follow_us": "Follow Us"
+	},
+	"proposal": {
+		"sumission_success": "Thank you for your submssion. Your proposal has been submitted successfully.",
+		"proposal_submitted": "Proposal Submitted",
+		"proposal_form": {
+			"personal_details": "Personal Details",
+			"personal_info": " Personal Information",
+			"first_name": "First Name",
+			"middle_name": "Middle Name",
+			"last_name": "Last Name",
+			"mobile_number": "Mobile Number",
+			"dob": "Date of Birth",
+			"provience": "Province",
+			"district": "District",
+			"municipality": "Municipality",
+			"ward_number": "Ward Number",
+			"gender": "Gender",
+			"maritial_status": "Marital Status",
+			"qualification": "Qualification",
+			"continue": "Continue",
+			"identification_details": "Identification Details",
+			"identification_type": "Identification Type",
+			"issued_district": "Issued District",
+			"id_number": "Identification Number",
+			"id_issue_date": "Identification Issued Date (BS)",
+			"id_issue_date_ad": "Identification Expiry Date (AD)",
+			"family_details": "Family Details",
+			"father_name": "Father's Name",
+			"mother_name": "Mother's Name",
+			"spouse_name": "Spouse's Name",
+			"grand_father_name": "Grand Father Name",
+			"son_name": "Son's Name",
+			"daughter_name": "Daughter's Name",
+			"nominee_information": "Nominee Information",
+			"relation": "Relation",
+			"nominee_name": "Nominee Name",
+			"address": "Address",
+			"add_nominee": "Add Nominee",
+			"documents": {
+				"documents": "Documents",
+				"insurer_image": "Insurer Image",
+				"citizenship_front": "Citizenship Front",
+				"citizenship_back": "Citizenship Back",
+				"drag_and_drop": "Drag and drop or browse to upload",
+				"file_types": "PNG, JPG, JPEG, PDF up to 5MB",
+				"declaration": "I hereby declare that all the information, photos, and documents provided for the issuance of the policy are accurate, complete, and relevant, and I understand that they form the basis of the contract.",
+				"accept_terms": "I accept all the",
+				"terms_and_conditions": "Terms and Conditions",
+				"health_declaration_title": "Health Declaration",
+				"health_declaration": "I affirm that I am in good health with no physical defects or disabilities. I handle my daily activities independently and have no history of, currently suffering from, or expectation of receiving any medical treatment or hospitalization for any ailment. Furthermore, no application for life, accident, health, or critical illness insurance on my life has ever been rejected, delayed, or accepted under non-standard terms."
+			}
+		}
+	},
+	"header": {
+		"help": "Need Help"
+	},
+	"auth": {
+		"login": "Login",
+		"register": "Register",
+		"logout": "Logout",
+		"username": "Username",
+		"password": "Password",
+		"confirm_password": "Confirm Password",
+		"forgot_password": "Forgot Password?",
+		"remember_me": "Remember Me",
+		"submit": "Submit",
+		"reset_password": "Reset Password",
+		"email": "Email Address",
+		"become_member": "Become a Member",
+		"already_member": "Already a member?"
+	}
+}
