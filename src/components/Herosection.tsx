@@ -56,7 +56,7 @@ export default function HeroSection() {
 
                     <input
                       type="text"
-                      placeholder="What service do you need?(e.g. Plumber, Web Design, Cleaning...)"
+                      placeholder="What service do you need?  (e.g. Plumber, Web)"
                       className="w-full pl-12 pr- py-2 text-xl text-gray-800 placeholder-gray-400 
                    focus:outline-none rounded-xl"
                     />
