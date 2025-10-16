@@ -84,7 +84,8 @@ const LeadsPage: React.FC = () => {
     return rawLeads.filter((lead) => {
       const matchesSearch =
         !filters.search ||
-        lead.title.toLowerCase().includes(filters.search.toLowerCase());
+        lead.title.toLowerCase().includes(filters.search.toLowerCase())||  (lead.customer_name &&
+            lead.customer_name.toLowerCase().includes(filters.search.toLowerCase()));
         
       const matchesCategory = !filters.category || lead.category_name === filters.category;
       const matchesLocation = !filters.location || lead.location_name === filters.location;
@@ -163,7 +164,7 @@ const LeadsPage: React.FC = () => {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
         <input
           type="text"
-          placeholder="Search leads..."
+          placeholder="Search leads by category"
           value={filters.search}
           onChange={(e) => handleFilterChange({ search: e.target.value })}
           className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg 

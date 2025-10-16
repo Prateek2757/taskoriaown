@@ -27,10 +27,9 @@ const onboardingSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
   phone: z
-    .string()
-    .optional()
-    .transform((val) => (val === "" ? undefined : val))
-    .refine((val) => !val || /^\+?\d{7,15}$/.test(val), "Invalid phone number"),
+  .string()
+  .nonempty("Phone number is required") // optional if you want
+  .regex(/^\d{10}$/, "Phone number must be exactly 10 digits"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
@@ -364,7 +363,7 @@ export default function OnboardingPage() {
                       name="phone"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel>Phone (Optional)</FormLabel>
+                          <FormLabel>Phone </FormLabel>
                           <FormControl>
                             <div className="flex items-center border rounded-xl px-3 py-2 shadow-sm">
                               <MapPin className="w-5 h-5 text-gray-400 mr-2" />
@@ -372,6 +371,12 @@ export default function OnboardingPage() {
                                 {...field}
                                 type="tel"
                                 placeholder="Phone (optional)"
+                                maxLength={10}
+                                onInput={(e) => {
+                                  const target = e.target as HTMLInputElement;
+                                  target.value = target.value.replace(/\D/g, ""); // ✅ Allow only digits
+                                  field.onChange(target.value);
+                                }}
                                 className="w-full outline-none"
                               />
                             </div>

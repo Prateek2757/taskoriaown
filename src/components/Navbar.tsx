@@ -140,7 +140,7 @@ export default function Navbar() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.15 }}
-        className="absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden z-[999]"
+        className="absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-[999]"
       >
         {/* User Info */}
         <div className="bg-gradient-to-r from-blue-50 to-green-50 p-4 border-b border-gray-200">
@@ -309,7 +309,7 @@ export default function Navbar() {
 
             <button
               onClick={() => setIsMenuOpen((prev) => !prev)}
-              className="md:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+              className="md:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
@@ -333,7 +333,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-4 py-2.5 rounded-md font-medium transition-colors ${
+                  className={`px-4 py-2.5 rounded-xl font-medium transition-colors ${
                     pathname === link.href
                       ? "bg-blue-50 text-blue-600"
                       : "text-gray-700 hover:bg-gray-50"
@@ -423,7 +423,7 @@ export default function Navbar() {
                         handleJoinAsProvider();
                         setIsMenuOpen(false);
                       }}
-                      className="w-full bg-gradient-to-r from-blue-600 to-green-600 text-white hover:from-blue-700 hover:to-green-700"
+                      className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-green-600 text-white hover:from-blue-700 hover:to-green-700"
                     >
                       Join as Provider
                     </Button>
