@@ -21,7 +21,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await client.query("BEGIN");
@@ -64,7 +63,7 @@ export async function POST(req: NextRequest) {
 
     await client.query("COMMIT");
 
-    // Fetch user for response
+    // ✅ Corrected: added comma here
     const { rows } = await client.query(
       `
       SELECT u.user_id, u.email, u.phone,
@@ -72,7 +71,7 @@ export async function POST(req: NextRequest) {
       FROM users u
       LEFT JOIN user_profiles p ON u.user_id = p.user_id
       WHERE u.user_id = $1
-      `
+      `,
       [user_id]
     );
 
