@@ -21,7 +21,7 @@ export default function Navbar() {
 
   const profileRef = useRef<HTMLDivElement>(null);
 
-  const minimalPages = ["/en/create", "/en/create-account", "/en/onboarding"];
+  const minimalPages = ["/en/create", "/en/create-account"];
 
   const navLinks = {
     public: [
@@ -437,3 +437,6 @@ export default function Navbar() {
     </header>
   );
 }
+
+
+

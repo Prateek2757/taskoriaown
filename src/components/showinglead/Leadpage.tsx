@@ -13,6 +13,7 @@ export interface Lead {
   location_name: string;
   category_name: string;
   created_at: string;
+  phone:number;
   description: string;
   customer_name?: string;
   customer_email?: string;

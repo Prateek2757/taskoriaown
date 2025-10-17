@@ -30,6 +30,7 @@ interface Lead {
   customer_name?: string;
   customer_email?: string;
   location_name: string;
+  phone:number;
   created_at: string;
   description: string;
   status?: string;
@@ -58,6 +59,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead }) => {
     return `${Math.floor(diffInMinutes / 1440)}d ago`;
   };
 
+
+
   const getInitials = (name: string): string =>
     name
       .split(" ")
@@ -66,7 +69,16 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead }) => {
       .toUpperCase()
       .slice(0, 2);
 
-  const maskPhone = (phone = "079********"): string => phone;
+      const maskPhone = (phone: number | string = ""): string => {
+        if (!phone) return "N/A"; // handle empty phone
+        const phonestr = String(phone)
+        // keep first 3 digits and last 2 digits visible
+        const visibleStart = phonestr.slice(0, 3);
+        const visibleEnd = phonestr.slice(-2);
+        const maskedMiddle = "*".repeat(Math.max(phonestr.length - 5, 0));
+        return `${visibleStart}${maskedMiddle}${visibleEnd}`;
+      };
+  console.log(lead.phone);
   const maskEmail = (email?: string): string => {
     if (!email) return "k******************@g***.com"; // fallback if no email
   
@@ -158,7 +170,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead }) => {
                       Phone Number
                     </div>
                     <div className="font-mono text-sm text-gray-900">
-                      {maskPhone()}
+                      {maskPhone(lead.phone)}
                     </div>
                   </div>
                 </div>

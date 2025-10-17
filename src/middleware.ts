@@ -6,7 +6,14 @@ const secret = process.env.NEXTAUTH_SECRET; // ensure this is set
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const token = await getToken({ req });
 
+  // if (!token) {
+  //   // Redict non-authenticated users trying to access private pages
+  //   const url = new URL("/en/signin", req.nextUrl);
+  //   url.searchParams.set("callbackUrl", req.nextUrl.pathname); // Preserve intended destination
+  //   return NextResponse.redirect(url);
+  // }
   // Skip assets, public files, _next, and API routes
   if (
     pathname.startsWith("/_next") ||
@@ -42,7 +49,6 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(url);
     }
   }
-
   return NextResponse.next();
 }
 

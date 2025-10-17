@@ -7,6 +7,7 @@ interface Lead {
   location_name: string;
   category_name: string;
   customer_name?:string;
+  phone:number;
   customer_email?:string;
   created_at: string;
   description: string;

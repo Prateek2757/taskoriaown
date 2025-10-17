@@ -6,6 +6,7 @@ import { UserProvider } from "@/context/userContext";
 import AuthProvider from "@/context/AuthProvider";
 import { Toaster } from "sonner";
 import NavbarNew from "@/components/navabr/Navbar";
+import ModernNavbar from "@/components/navabr/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,8 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <UserProvider>
-            <Navbar />
+            {/* <Navbar /> */}
+            <ModernNavbar/>
             {/* <NavbarNew/> */}
             {children}
             <Toaster position="top-right" richColors expand closeButton />

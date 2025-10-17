@@ -131,12 +131,13 @@ export const authOptions: NextAuthOptions = {
   // ✅ Pages & Settings
   //
   pages: {
-    signIn: "/signin",
+    signIn: "/en/signin",
     error: "/error",
   },
 
   session: {
     strategy: "jwt",
+    maxAge: 2 * 60 * 60 , 
   },
 
   secret: process.env.NEXTAUTH_SECRET,

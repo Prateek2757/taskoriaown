@@ -88,52 +88,80 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
-    try {
-      const result = await pool.query(`
-        SELECT 
-          t.task_id,
-          t.title,
-          t.description,
-          t.is_remote_allowed,
-          t.budget_min,
-          t.status,
-          t.budget_max,
-          c.name AS category_name,
-          ci.name AS location_name,
-          t.status,
-          t.created_at,
-  
-          -- ✅ User info
-          u.email AS customer_email,
-          up.display_name AS customer_name,
-  
-          -- ✅ Task answers + questions
-          json_agg(
-            json_build_object(
-              'question_id', ta.category_question_id,
-              'question', q.question,
-              'answer', ta.answer
-            )
-          ) FILTER (WHERE ta.task_answer_id IS NOT NULL) AS answers
-  
-        FROM tasks t
-        JOIN service_categories c ON c.category_id = t.category_id
-        LEFT JOIN cities ci ON ci.city_id = t.location_id
-        LEFT JOIN task_answers ta ON ta.task_id = t.task_id
-        LEFT JOIN category_questions q ON q.category_question_id = ta.category_question_id
-        -- ✅ Join user info
-        LEFT JOIN users u ON u.user_id = t.customer_id
-        LEFT JOIN user_profiles up ON up.user_id = t.customer_id
-  
-        WHERE t.status = 'Open'
-        GROUP BY 
-          t.task_id, c.name, ci.name, u.email, up.display_name
-        ORDER BY t.created_at DESC;
-      `);
-  
-      return NextResponse.json(result.rows);
-    } catch (err) {
-      console.error("Leads fetch error:", err);
-      return NextResponse.json({ message: "Failed to fetch leads" }, { status: 500 });
+  const client = await pool.connect();
+
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user?.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
+
+    const userId = session.user.id;
+
+    // 1️⃣ Get provider's category_id from user_categories
+    const { rows: categoryRows } = await client.query(
+      `SELECT category_id FROM user_categories WHERE user_id = $1`,
+      [userId]
+    );
+
+    if (!categoryRows.length) {
+      return NextResponse.json(
+        { message: "No category found for this user." },
+        { status: 404 }
+      );
+    }
+
+    const providerCategoryId = categoryRows[0].category_id;
+
+    // 2️⃣ Fetch only leads with that category_id
+    const result = await client.query(
+      `
+      SELECT 
+        t.task_id,
+        t.title,
+        t.description,
+        t.is_remote_allowed,
+        t.budget_min,
+        t.budget_max,
+        t.status,
+        t.created_at,
+        c.name AS category_name,
+        ci.name AS location_name,
+        u.email AS customer_email,
+        u.phone,
+        up.display_name AS customer_name,
+        json_agg(
+          json_build_object(
+            'question_id', ta.category_question_id,
+            'question', q.question,
+            'answer', ta.answer
+          )
+        ) FILTER (WHERE ta.task_answer_id IS NOT NULL) AS answers
+      FROM tasks t
+      JOIN service_categories c ON c.category_id = t.category_id
+      LEFT JOIN cities ci ON ci.city_id = t.location_id
+      LEFT JOIN task_answers ta ON ta.task_id = t.task_id
+      LEFT JOIN category_questions q ON q.category_question_id = ta.category_question_id
+      LEFT JOIN users u ON u.user_id = t.customer_id
+      LEFT JOIN user_profiles up ON up.user_id = t.customer_id
+      WHERE 
+        t.status IN ('Open', 'Urgent')  -- ✅ fixed: valid PostgreSQL syntax
+        AND t.category_id = $1
+        AND t.customer_id <> $2          -- ✅ exclude provider’s own leads
+      GROUP BY 
+        t.task_id, c.name, ci.name, u.email, u.phone,up.display_name
+      ORDER BY 
+        t.created_at DESC;
+      `,
+      [providerCategoryId, userId] // ✅ pass both parameters
+    );
+
+    return NextResponse.json(result.rows);
+  } catch (err) {
+    console.error("Leads fetch error:", err);
+    return NextResponse.json({ message: "Failed to fetch leads" }, { status: 500 });
+  } finally {
+    client.release();
   }
+}

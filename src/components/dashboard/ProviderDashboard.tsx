@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, ChevronRight, BarChart3, Users, Star, Target } from "lucide-react";
+import LeadSettingsCard from "../Lead-setting/leadsetting";
 
 const theme = {
   background: "#f8fafc",
@@ -276,6 +277,7 @@ export default function ProviderDashboard() {
               </div>
             </CardContent>
           </Card>
+          {/* <LeadSettingsCard/> */}
 
           {/* Right Column - Activity */}
           <div className="space-y-6">

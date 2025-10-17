@@ -107,6 +107,7 @@ export default function OnboardingPage() {
       }
 
       await axios.post("/api/signup/final-submit", payload);
+      localStorage.removeItem("draftProviderId");
 
       const res = await axios.get("/api/profiles", {
         headers: { "x-user-id": userId },
@@ -370,7 +371,7 @@ export default function OnboardingPage() {
                               <input
                                 {...field}
                                 type="tel"
-                                placeholder="Phone (optional)"
+                                placeholder="Phone"
                                 maxLength={10}
                                 onInput={(e) => {
                                   const target = e.target as HTMLInputElement;
