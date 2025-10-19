@@ -147,7 +147,7 @@ export default function StepTwoQuestionsForm({
   // ---------- QUESTION STEP ----------
   if (currentStep === "questions") {
     return (
-      <form className="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-6 flex flex-col gap-6">
+      <form className="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-4 flex flex-col gap-3">
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Step {currentIndex + 1} of {questions.length}
         </p>
@@ -164,7 +164,7 @@ export default function StepTwoQuestionsForm({
           </motion.div>
         </AnimatePresence>
 
-        <div className="flex justify-between pt-2">
+        <div className="flex justify-between pt-">
           <Button
             variant="outline"
             type="button"

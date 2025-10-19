@@ -99,7 +99,7 @@ export async function GET() {
 
     const userId = session.user.id;
 
-    // 1️⃣ Get provider's category_id from user_categories
+    // 1️⃣ Get all provider's category_ids
     const { rows: categoryRows } = await client.query(
       `SELECT category_id FROM user_categories WHERE user_id = $1`,
       [userId]
@@ -107,14 +107,15 @@ export async function GET() {
 
     if (!categoryRows.length) {
       return NextResponse.json(
-        { message: "No category found for this user." },
+        { message: "No categories found for this user." },
         { status: 404 }
       );
     }
 
-    const providerCategoryId = categoryRows[0].category_id;
+    // ✅ Extract all category IDs into an array
+    const categoryIds = categoryRows.map((r) => r.category_id);
 
-    // 2️⃣ Fetch only leads with that category_id
+    // 2️⃣ Fetch leads matching any of these categories
     const result = await client.query(
       `
       SELECT 
@@ -146,15 +147,15 @@ export async function GET() {
       LEFT JOIN users u ON u.user_id = t.customer_id
       LEFT JOIN user_profiles up ON up.user_id = t.customer_id
       WHERE 
-        t.status IN ('Open', 'Urgent')  -- ✅ fixed: valid PostgreSQL syntax
-        AND t.category_id = $1
-        AND t.customer_id <> $2          -- ✅ exclude provider’s own leads
+        t.status IN ('Open', 'Urgent')
+        AND t.category_id = ANY($1::int[])   -- ✅ match any category
+        AND t.customer_id <> $2
       GROUP BY 
-        t.task_id, c.name, ci.name, u.email, u.phone,up.display_name
+        t.task_id, c.name, ci.name, u.email, u.phone, up.display_name
       ORDER BY 
         t.created_at DESC;
       `,
-      [providerCategoryId, userId] // ✅ pass both parameters
+      [categoryIds, userId]
     );
 
     return NextResponse.json(result.rows);

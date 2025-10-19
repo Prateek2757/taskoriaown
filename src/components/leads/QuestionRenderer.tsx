@@ -24,9 +24,9 @@ export default function QuestionRenderer({ q, control, register }: any) {
       animate={{ x: 0, opacity: 1, scale: 1 }}
       exit={{ x: -100, opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.45, ease: [0.25, 0.8, 0.25, 1] }}
-      className="space-y-4"
+      className="space-y-"
     >
-      <Label className="block text-lg font-semibold text-center text-gray-900 dark:text-white">
+      <Label className="block text-lg font-semibold text-center pb-2 text-gray-900 dark:text-white">
         {q.question}
       </Label>
 
@@ -44,7 +44,7 @@ export default function QuestionRenderer({ q, control, register }: any) {
         <Input
           {...register(name)}
           placeholder="Type your answer..."
-          className="border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500"
+          className="border-gray-300 dark:border-gray-700 rounded-xl  focus:ring-2 focus:ring-blue-500"
         />
       )}
 
@@ -70,10 +70,10 @@ export default function QuestionRenderer({ q, control, register }: any) {
               minDate={new Date()} // prevent past dates
               placeholderText="Select a date"
               dateFormat="MMMM d, yyyy"
-              className="w-full rounded-xl border border-gray-300 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition"
+              className="w-full rounded-xl border border-gray-300 overflow-visible z-50 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition"
               calendarClassName="rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
               dayClassName={(date) =>
-                `hover:bg-blue-100 dark:hover:bg-blue-900/30 transition ${
+                `hover:bg-blue-100  dark:hover:bg-blue-900/30 transition ${
                   date.toDateString() === new Date().toDateString()
                     ? "bg-blue-50 dark:bg-blue-900/20 font-semibold"
                     : ""
