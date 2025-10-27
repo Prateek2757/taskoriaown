@@ -25,7 +25,7 @@ const theme = {
 
 export default function ProviderDashboard() {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session, status  } = useSession();
   const [showStats, setShowStats] = useState(false);
   const [totalLeads, setTotalLeads] = useState<number | null>(null);
 

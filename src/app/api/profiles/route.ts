@@ -46,3 +46,38 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ message: "Unknown error" }, { status: 500 });
   }
 }
+
+export async function PUT(req: NextRequest) {
+  try {
+    const userId = req.headers.get("x-user-id"); // or get from session
+    if (!userId) {
+      return NextResponse.json({ message: "User not authenticated" }, { status: 401 });
+    }
+
+    const { display_name } = await req.json();
+
+    if (!display_name) {
+      return NextResponse.json({ message: "Display name is required" }, { status: 400 });
+    }
+
+    const result = await pool.query(
+      `UPDATE user_profiles
+       SET display_name = $1,
+           updated_at = NOW()
+       WHERE user_id = $2
+       RETURNING user_id, display_name`,
+      [display_name, userId]
+    );
+
+    if (result.rows.length === 0) {
+      return NextResponse.json({ message: "Profile not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "Profile updated", profile: result.rows[0] });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return NextResponse.json({ message: err.message }, { status: 500 });
+    }
+    return NextResponse.json({ message: "Unknown error" }, { status: 500 });
+  }
+}

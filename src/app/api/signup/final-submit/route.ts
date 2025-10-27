@@ -61,15 +61,26 @@ export async function POST(req: NextRequest) {
       [email, phone || null, hashedPassword, user_id]
     );
 
+    // ✅ New: insert company record
+    await client.query(
+      `
+      INSERT INTO company (user_id, company_name, contact_name, contact_email, contact_phone)
+      VALUES ($1, $2, $3, $4, $5)
+      ON CONFLICT (user_id) DO NOTHING
+      `,
+      [user_id, name, name, email, phone || null]
+    );
+
     await client.query("COMMIT");
 
-    // ✅ Corrected: added comma here
     const { rows } = await client.query(
       `
       SELECT u.user_id, u.email, u.phone,
-             p.display_name, p.location_id, p.is_nationwide, p.is_onboarded
+             p.display_name, p.location_id, p.is_nationwide, p.is_onboarded,
+             c.company_name, c.contact_name, c.contact_email, c.contact_phone
       FROM users u
       LEFT JOIN user_profiles p ON u.user_id = p.user_id
+      LEFT JOIN company c ON u.user_id = c.user_id
       WHERE u.user_id = $1
       `,
       [user_id]
@@ -78,7 +89,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "✅ Signup successful!", user: rows[0] });
   } catch (err: unknown) {
     await client.query("ROLLBACK");
-    console.error("Final-submit error:", err);
+    console.error("Signup error:", err);
     return NextResponse.json(
       { message: err instanceof Error ? err.message : "Unknown server error" },
       { status: 500 }

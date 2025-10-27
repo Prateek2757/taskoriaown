@@ -37,6 +37,21 @@ export function useLeadProfile() {
     }
   };
 
+  const updateProfile = async (data: { display_name: string }) => {
+    if (!profile) return;
+    setSaving(true);
+    try {
+      const res = await api.put("/api/user_profiles", data);
+      setProfile((p) => (p ? { ...p, ...res.data.profile } : p));
+      return res.data.profile;
+    } catch (err: any) {
+      setError(err.message || "Failed to update profile");
+      throw err;
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const fetchCategories = async () => {
     try {
       const { data } = await api.get("/api/signup/category-selection");
@@ -133,6 +148,7 @@ export function useLeadProfile() {
 
   return {
     profile,
+    updateProfile,
     categories,
     cities,
     loading,
