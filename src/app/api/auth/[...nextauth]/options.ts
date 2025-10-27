@@ -10,10 +10,10 @@ import pool from "@/lib/dbConnect";
 declare module "next-auth" {
   interface User {
     id: string;
-    name: string;             // canonical display name
+    name: string;
     email?: string;
     role: string;
-    serviceCategory: string;  // you can populate if needed
+    serviceCategory: string;
     isVerified?: boolean;
   }
 
@@ -53,7 +53,6 @@ export const authOptions: NextAuthOptions = {
 
         const { email, password } = credentials;
 
-        // ✅ Fetch user + profile + role
         const result = await pool.query(
           `
           SELECT 
@@ -77,31 +76,28 @@ export const authOptions: NextAuthOptions = {
 
         const user = result.rows[0];
 
-        // ✅ Password check
         const isPasswordValid = await bcrypt.compare(password, user.password_hash);
         if (!isPasswordValid) {
           throw new Error("Invalid password");
         }
 
-        // ✅ Return canonical user object
         return {
           id: user.user_id.toString(),
           email: user.email,
-          name: user.display_name || "",     // canonical name
+          name: user.display_name || "",
           role: user.role,
-          serviceCategory: "",               // fill if you have categories
+          serviceCategory: "",
           isVerified: user.is_email_verified || false,
         };
       },
     }),
   ],
 
-  //
-  // ✅ Callbacks
-  //
+
   callbacks: {
-    // Persist user data into JWT
-    async jwt({ token, user }) {
+    
+    async jwt({ token, user, trigger, session }) {
+      
       if (user) {
         token.id = user.id;
         token.name = user.name || "";
@@ -110,6 +106,16 @@ export const authOptions: NextAuthOptions = {
         token.serviceCategory = user.serviceCategory;
         token.isVerified = user.isVerified;
       }
+
+    
+      if (trigger === "update" && session) {
+        // Merge the updated data into the token
+        return {
+          ...token,
+          ...session, // This contains the data you pass to update()
+        };
+      }
+
       return token;
     },
 
@@ -127,9 +133,6 @@ export const authOptions: NextAuthOptions = {
     },
   },
 
-  //
-  // ✅ Pages & Settings
-  //
   pages: {
     signIn: "/signin",
     error: "/error",
@@ -137,7 +140,7 @@ export const authOptions: NextAuthOptions = {
 
   session: {
     strategy: "jwt",
-    maxAge: 2 * 60 * 60 , 
+    maxAge: 2 * 60 * 60,
   },
 
   secret: process.env.NEXTAUTH_SECRET,

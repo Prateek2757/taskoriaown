@@ -40,23 +40,35 @@ export async function GET() {
 // ✅ PUT: Update location or is_nationwide
 export async function PUT(req: Request) {
   const session = await getServerSession(authOptions);
+
   if (!session?.user?.id)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-  const { location_id, is_nationwide } = await req.json();
   const userId = session.user.id;
+  const { display_name, location_id, is_nationwide } = await req.json();
 
   await pool.query(
     `
     UPDATE user_profiles
     SET 
-      location_id = $1,
-      is_nationwide = $2,
+      display_name = COALESCE($1, display_name),
+      location_id = COALESCE($2, location_id),
+      is_nationwide = COALESCE($3, is_nationwide),
       updated_at = NOW()
-    WHERE user_id = $3
+    WHERE user_id = $4
     `,
-    [location_id || null, is_nationwide || false, userId]
+    [display_name, location_id, is_nationwide, userId]
   );
 
-  return NextResponse.json({ success: true });
+  // Fetch the updated profile
+  const { rows } = await pool.query(
+    `
+    SELECT display_name, location_id, is_nationwide
+    FROM user_profiles
+    WHERE user_id = $1
+    `,
+    [userId]
+  );
+
+  return NextResponse.json({ profile: rows[0] });
 }

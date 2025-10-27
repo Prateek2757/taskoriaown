@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import Image from "next/image";
 import {
   Zap,
   Menu as MenuIcon,
@@ -227,12 +228,13 @@ export default function ModernNavbar() {
           {/* Left: Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 hover:opacity-90 transition-opacity"
+            className="flex items-center  hover:opacity-90 transition-opacity"
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-500 rounded-xl flex items-center justify-center shadow-md">
-              <Zap className="w-6 h-6 text-white" />
+            <div  >
+            <Image src={"/taskorianewlogo.png"} alt="" height={50} width={80}/>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-gradient-to-r
+             from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] bg-clip-text ">
               Taskoria
             </span>
           </Link>
