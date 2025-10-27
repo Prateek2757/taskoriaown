@@ -21,21 +21,21 @@ export default function Navbar() {
 
   const profileRef = useRef<HTMLDivElement>(null);
 
-  const minimalPages = ["/en/create", "/en/create-account"];
+  const minimalPages = ["/create", "/create-account"];
 
   const navLinks = {
     public: [
-      { name: "Discover", href: "/en/discover" },
-      { name: "Community", href: "/en/community" },
+      { name: "Discover", href: "/discover" },
+      { name: "Community", href: "/community" },
     ],
     customer: [
-      { name: "My Requests", href: "/en/customer/my-requests" },
-      { name: "Discover", href: "/en/discover" },
+      { name: "My Requests", href: "/customer/my-requests" },
+      { name: "Discover", href: "/discover" },
     ],
     provider: [
-      { name: "Leads", href: "/en/provider/leads" },
-      { name: "My Responses", href: "/en/provider/message" },
-      { name: "Dashboard", href: "/en/provider/dashboard" },
+      { name: "Leads", href: "/provider/leads" },
+      { name: "My Responses", href: "/provider/message" },
+      { name: "Dashboard", href: "/provider/dashboard" },
     ],
   };
 
@@ -86,7 +86,7 @@ export default function Navbar() {
       const data = await res.json();
       if (data?.user?.user_id) {
         localStorage.setItem("draftProviderId", data.user.user_id);
-        router.push(`/en/create?user_id=${data.user.user_id}`);
+        router.push(`/create?user_id=${data.user.user_id}`);
       }
     } catch (error) {
       console.error("Error creating draft provider:", error);
@@ -106,7 +106,7 @@ export default function Navbar() {
       localStorage.removeItem("draftProviderId"); // clear draft on logout
     }
 
-    router.push("/en/signin");
+    router.push("/signin");
   };
 
   // Switch between customer and provider view
@@ -121,16 +121,14 @@ export default function Navbar() {
     setIsMenuOpen(false);
 
     const targetPath =
-      newView === "provider"
-        ? "/en/provider/dashboard"
-        : "/en/customer/dashboard";
+      newView === "provider" ? "/provider/dashboard" : "/customer/dashboard";
 
     router.push(targetPath);
   };
 
   const renderProfileDropdown = () => {
     const profilePath =
-      viewMode === "provider" ? "/en/provider/profile" : "/en/customer/profile";
+      viewMode === "provider" ? "/provider/profile" : "/customer/profile";
 
     const canSwitchView = session?.user?.role === "provider";
 
@@ -185,7 +183,7 @@ export default function Navbar() {
           </Link>
 
           <Link
-            href="/en/settings"
+            href="/settings"
             onClick={() => setIsProfileOpen(false)}
             className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
           >
@@ -216,7 +214,7 @@ export default function Navbar() {
 
   if (status === "loading") {
     return (
-      <header className="bg-white/95 backdrop-blur-md border-b sticky top-0 z-50 shadow-sm">
+      <header className="bg-white/95 backdrop-blur-md  border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-500 rounded-xl animate-pulse" />
@@ -249,7 +247,7 @@ export default function Navbar() {
 
         {!minimalPages.includes(pathname) && (
           <>
-            <nav className="hidden md:flex items-center space-x-1">
+            <nav className="hidden md:flex text-muted-foreground items-center space-x-1">
               {currentLinks.map((link) => (
                 <Link
                   key={link.name}
@@ -292,7 +290,7 @@ export default function Navbar() {
                 <div className="flex items-center gap-2 ml-4">
                   <Button
                     variant="ghost"
-                    onClick={() => router.push("/en/signin")}
+                    onClick={() => router.push("/signin")}
                     className="font-medium"
                   >
                     Sign In
@@ -312,7 +310,11 @@ export default function Navbar() {
               className="md:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
               aria-label="Toggle menu"
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <MenuIcon className="w-6 h-6" />}
+              {isMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <MenuIcon className="w-6 h-6" />
+              )}
             </button>
           </>
         )}
@@ -387,8 +389,8 @@ export default function Navbar() {
                     onClick={() => {
                       const path =
                         viewMode === "provider"
-                          ? "/en/provider/profile"
-                          : "/en/customer/profile";
+                          ? "/provider/profile"
+                          : "/customer/profile";
                       router.push(path);
                       setIsMenuOpen(false);
                     }}
@@ -411,7 +413,7 @@ export default function Navbar() {
                     <Button
                       variant="outline"
                       onClick={() => {
-                        router.push("/en/signin");
+                        router.push("/signin");
                         setIsMenuOpen(false);
                       }}
                       className="w-full"
@@ -437,6 +439,3 @@ export default function Navbar() {
     </header>
   );
 }
-
-
-

@@ -45,8 +45,12 @@ export default function AddLeadModal({
   onClose: () => void;
 }) {
   const { data: session } = useSession();
-  const [categories, setCategories] = useState<{ category_id: number; name: string }[]>([]);
-  const [locations, setLocations] = useState<{ city_id: number; name: string }[]>([]);
+  const [categories, setCategories] = useState<
+    { category_id: number; name: string }[]
+  >([]);
+  const [locations, setLocations] = useState<
+    { city_id: number; name: string }[]
+  >([]);
   const [locationError, setLocationError] = useState<string>("");
 
   const {
@@ -149,7 +153,10 @@ export default function AddLeadModal({
           {/* Description */}
           <div className="space-y-1">
             <Label>Description</Label>
-            <Textarea {...register("description")} placeholder="Describe the task..." />
+            <Textarea
+              {...register("description")}
+              placeholder="Describe the task..."
+            />
           </div>
 
           {/* Category */}
@@ -164,7 +171,10 @@ export default function AddLeadModal({
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => (
-                  <SelectItem key={cat.category_id} value={String(cat.category_id)}>
+                  <SelectItem
+                    key={cat.category_id}
+                    value={String(cat.category_id)}
+                  >
                     {cat.name}
                   </SelectItem>
                 ))}
@@ -181,20 +191,28 @@ export default function AddLeadModal({
               <Label>Min Budget *</Label>
               <Input
                 type="number"
-                {...register("budget_min", { required: "Min budget is required" })}
+                {...register("budget_min", {
+                  required: "Min budget is required",
+                })}
               />
               {errors.budget_min && (
-                <p className="text-red-500 text-sm">{errors.budget_min.message}</p>
+                <p className="text-red-500 text-sm">
+                  {errors.budget_min.message}
+                </p>
               )}
             </div>
             <div className="w-1/2 space-y-1">
               <Label>Max Budget *</Label>
               <Input
                 type="number"
-                {...register("budget_max", { required: "Max budget is required" })}
+                {...register("budget_max", {
+                  required: "Max budget is required",
+                })}
               />
               {errors.budget_max && (
-                <p className="text-red-500 text-sm">{errors.budget_max.message}</p>
+                <p className="text-red-500 text-sm">
+                  {errors.budget_max.message}
+                </p>
               )}
             </div>
           </div>
@@ -205,20 +223,28 @@ export default function AddLeadModal({
               <Label>Start Date *</Label>
               <Input
                 type="date"
-                {...register("preferred_date_start", { required: "Start date required" })}
+                {...register("preferred_date_start", {
+                  required: "Start date required",
+                })}
               />
               {errors.preferred_date_start && (
-                <p className="text-red-500 text-sm">{errors.preferred_date_start.message}</p>
+                <p className="text-red-500 text-sm">
+                  {errors.preferred_date_start.message}
+                </p>
               )}
             </div>
             <div className="w-1/2 space-y-1">
               <Label>End Date *</Label>
               <Input
                 type="date"
-                {...register("preferred_date_end", { required: "End date required" })}
+                {...register("preferred_date_end", {
+                  required: "End date required",
+                })}
               />
               {errors.preferred_date_end && (
-                <p className="text-red-500 text-sm">{errors.preferred_date_end.message}</p>
+                <p className="text-red-500 text-sm">
+                  {errors.preferred_date_end.message}
+                </p>
               )}
             </div>
           </div>
@@ -242,7 +268,11 @@ export default function AddLeadModal({
 
           {/* Remote Checkbox */}
           <div className="flex items-center gap-2 pt-1">
-            <Checkbox id="remote" checked={isRemoteAllowed} onCheckedChange={handleRemoteChange} />
+            <Checkbox
+              id="remote"
+              checked={isRemoteAllowed}
+              onCheckedChange={handleRemoteChange}
+            />
             <Label htmlFor="remote">Remote work allowed</Label>
           </div>
 

@@ -13,7 +13,7 @@ export interface Lead {
   location_name: string;
   category_name: string;
   created_at: string;
-  phone:number;
+  phone: number;
   description: string;
   customer_name?: string;
   customer_email?: string;
@@ -72,7 +72,10 @@ const LeadsPage: React.FC = () => {
   // Close sidebar on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (filtersRef.current && !filtersRef.current.contains(e.target as Node)) {
+      if (
+        filtersRef.current &&
+        !filtersRef.current.contains(e.target as Node)
+      ) {
         setShowFilters(false);
       }
     };
@@ -85,16 +88,24 @@ const LeadsPage: React.FC = () => {
     return rawLeads.filter((lead) => {
       const matchesSearch =
         !filters.search ||
-        lead.title.toLowerCase().includes(filters.search.toLowerCase())||  (lead.customer_name &&
-            lead.customer_name.toLowerCase().includes(filters.search.toLowerCase()));
-        
-      const matchesCategory = !filters.category || lead.category_name === filters.category;
-      const matchesLocation = !filters.location || lead.location_name === filters.location;
-      const matchesBudgetMin = !filters.budgetMin || (lead.budget_max ?? 0) >= +filters.budgetMin;
-      const matchesBudgetMax = !filters.budgetMax || (lead.budget_min ?? 0) <= +filters.budgetMax;
+        lead.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+        (lead.customer_name &&
+          lead.customer_name
+            .toLowerCase()
+            .includes(filters.search.toLowerCase()));
+
+      const matchesCategory =
+        !filters.category || lead.category_name === filters.category;
+      const matchesLocation =
+        !filters.location || lead.location_name === filters.location;
+      const matchesBudgetMin =
+        !filters.budgetMin || (lead.budget_max ?? 0) >= +filters.budgetMin;
+      const matchesBudgetMax =
+        !filters.budgetMax || (lead.budget_min ?? 0) <= +filters.budgetMax;
       const matchesStatus = !filters.status || lead.status === filters.status;
       const matchesRemote =
-        filters.isRemoteAllowed === null || lead.is_remote_allowed === filters.isRemoteAllowed;
+        filters.isRemoteAllowed === null ||
+        lead.is_remote_allowed === filters.isRemoteAllowed;
 
       return (
         matchesSearch &&
@@ -121,7 +132,9 @@ const LeadsPage: React.FC = () => {
     return (
       <div className="flex h-screen items-center justify-center bg-gray-100">
         <div className="text-center p-8 bg-white rounded-xl shadow-md">
-          <h2 className="text-2xl font-semibold mb-2 text-gray-800">Unable to load leads</h2>
+          <h2 className="text-2xl font-semibold mb-2 text-gray-800">
+            Unable to load leads
+          </h2>
           <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
@@ -142,77 +155,78 @@ const LeadsPage: React.FC = () => {
         }`}
       >
         {/* Search & Filter */}
-    {/* Search & Filter Header */}
-{/* Search & Filter Header */}
-{/* Search & Filter Header */}
-<div className="sticky top-16 z-30 bg-white border-b border-gray-200 shadow-sm">
-  <div className="flex flex-wrap items-center justify-between gap-3 px-2 py-3">
+        {/* Search & Filter Header */}
+        {/* Search & Filter Header */}
+        {/* Search & Filter Header */}
+        <div className="sticky top-16 z-30 bg-white border-b border-gray-200 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3 px-2 py-3">
+            {/* Left: Lead Count */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
+              <h2 className="text-lg font-semibold text-gray-900 leading-none">
+                {filteredLeads.length} matching leads
+              </h2>
+              <p className="text-sm text-gray-500 leading-none">
+                {filters.category || "All services"} •{" "}
+                {filters.location || "All locations"}
+              </p>
+            </div>
 
-    {/* Left: Lead Count */}
-    <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
-      <h2 className="text-lg font-semibold text-gray-900 leading-none">
-        {filteredLeads.length} matching leads
-      </h2>
-      <p className="text-sm text-gray-500 leading-none">
-        {filters.category || "All services"} • {filters.location || "All locations"}
-      </p>
-    </div>
-
-    {/* Right: Search + Filter */}
-    <div className="flex items-center gap-3 w-full sm:w-auto">
-      {/* Search Input */}
-      <div className="relative flex-1 sm:w-64">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
-        <input
-          type="text"
-          placeholder="Search leads by category"
-          value={filters.search}
-          onChange={(e) => handleFilterChange({ search: e.target.value })}
-          className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg 
+            {/* Right: Search + Filter */}
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              {/* Search Input */}
+              <div className="relative flex-1 sm:w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <input
+                  type="text"
+                  placeholder="Search leads by category"
+                  value={filters.search}
+                  onChange={(e) =>
+                    handleFilterChange({ search: e.target.value })
+                  }
+                  className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg 
                      text-sm placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 
                      focus:border-emerald-500 outline-none transition"
-        />
-      </div>
+                />
+              </div>
 
-      {/* Filters Button */}
-      <button
-        onClick={() => setShowFilters(true)}
-        className="relative flex items-center gap-2 px-4 py-2 bg-gradient-to-r 
+              {/* Filters Button */}
+              <button
+                onClick={() => setShowFilters(true)}
+                className="relative flex items-center gap-2 px-4 py-2 bg-gradient-to-r 
                    from-emerald-500 to-green-600 text-white text-sm font-medium 
                    rounded-lg shadow hover:opacity-90 active:scale-[0.98] transition"
-      >
-        <SlidersHorizontal className="w-4 h-4" />
-        <span>Filters</span>
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+                <span>Filters</span>
 
-        {/* Active filter counter (badge inside the button) */}
-        {Object.values(filters).some(
-          (val) =>
-            val &&
-            val !== "" &&
-            !(typeof val === "boolean" && val === null) &&
-            !(val === "Open")
-        ) && (
-          <span className="absolute -top-1 -right-1 flex items-center justify-center 
+                {/* Active filter counter (badge inside the button) */}
+                {Object.values(filters).some(
+                  (val) =>
+                    val &&
+                    val !== "" &&
+                    !(typeof val === "boolean" && val === null) &&
+                    !(val === "Open")
+                ) && (
+                  <span
+                    className="absolute -top-1 -right-1 flex items-center justify-center 
                            w-4 h-4 bg-white text-emerald-700 text-[10px] font-semibold 
-                           rounded-full shadow-sm border border-emerald-600">
-            {
-              Object.values(filters).filter(
-                (val) =>
-                  val &&
-                  val !== "" &&
-                  !(typeof val === "boolean" && val === null) &&
-                  !(val === "Open")
-              ).length
-            }
-          </span>
-        )}
-      </button>
-    </div>
-  </div>
-</div>
-
-
-
+                           rounded-full shadow-sm border border-emerald-600"
+                  >
+                    {
+                      Object.values(filters).filter(
+                        (val) =>
+                          val &&
+                          val !== "" &&
+                          !(typeof val === "boolean" && val === null) &&
+                          !(val === "Open")
+                      ).length
+                    }
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Lead Cards */}
         <div className="flex-1 overflow-y-auto overflow-x-auto p-2 space-y-2">
@@ -237,7 +251,9 @@ const LeadsPage: React.FC = () => {
             >
               ← Back
             </button>
-            <h2 className="font-semibold text-gray-800 text-sm">Lead Details</h2>
+            <h2 className="font-semibold text-gray-800 text-sm">
+              Lead Details
+            </h2>
             <div></div>
           </div>
           <LeadDetails lead={selectedLead} />
@@ -250,7 +266,9 @@ const LeadsPage: React.FC = () => {
           <LeadDetails lead={selectedLead} />
         ) : (
           <div className="flex items-center justify-center h-full text-gray-400">
-            <h2 className="text-lg md:text-xl font-medium">Select a lead to view details</h2>
+            <h2 className="text-lg md:text-xl font-medium">
+              Select a lead to view details
+            </h2>
           </div>
         )}
       </div>
@@ -258,7 +276,10 @@ const LeadsPage: React.FC = () => {
       {/* Filter Sidebar */}
       {showFilters && (
         <>
-          <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setShowFilters(false)} />
+          <div
+            className="fixed inset-0 bg-black/30 z-40"
+            onClick={() => setShowFilters(false)}
+          />
           <div
             ref={filtersRef}
             className="fixed top-0 left-0 z-50 h-full w-80 bg-white shadow-2xl overflow-y-auto"

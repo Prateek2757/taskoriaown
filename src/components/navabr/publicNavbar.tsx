@@ -23,10 +23,16 @@ export default function PublicNavbar() {
 
         {/* Links */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link href="/en/discover" className="text-gray-600 hover:text-blue-600 font-medium">
+          <Link
+            href="/discover"
+            className="text-gray-600 hover:text-blue-600 font-medium"
+          >
             Discover
           </Link>
-          <Link href="/en/community" className="text-gray-600 hover:text-blue-600 font-medium">
+          <Link
+            href="/community"
+            className="text-gray-600 hover:text-blue-600 font-medium"
+          >
             Community
           </Link>
           <Button variant="outline" onClick={() => router.push("/en/signin")}>
@@ -34,7 +40,7 @@ export default function PublicNavbar() {
           </Button>
           <Button
             className="bg-blue-600 text-white hover:bg-blue-700"
-            onClick={() => router.push("/en/create-account")}
+            onClick={() => router.push("/create-account")}
           >
             Join as Provider
           </Button>

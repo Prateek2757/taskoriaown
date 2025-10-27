@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
 
   // if (!token) {
   //   // Redict non-authenticated users trying to access private pages
-  //   const url = new URL("/en/signin", req.nextUrl);
+  //   const url = new URL("/signin", req.nextUrl);
   //   url.searchParams.set("callbackUrl", req.nextUrl.pathname); // Preserve intended destination
   //   return NextResponse.redirect(url);
   // }
@@ -25,27 +25,34 @@ export async function middleware(req: NextRequest) {
   }
 
   // Force all non-/en paths to /en
-  if (!pathname.startsWith("/en")) {
+  if (!pathname.startsWith("/")) {
     const url = req.nextUrl.clone();
-    url.pathname = "/en";
+    url.pathname = "/";
     return NextResponse.redirect(url);
   }
 
   // Protect provider & customer dashboards
   const protectedPaths = [
-    "/en/provider/dashboard",
-    "/en/customer/dashboard",
-    "/en/provider/message",
-    "/en/provider/leads",
+    "/provider/dashboard",
+    "/customer/dashboard",
+    "/provider/message",
+    "/provider/leads",
   ];
-
+  
+  if (pathname.startsWith("/create")) {
+    if (token) {
+      const url = req.nextUrl.clone();
+      url.pathname = "/provider/dashboard"; // or "/customer/dashboard" depending on role
+      return NextResponse.redirect(url);
+    }
+  }
   if (protectedPaths.some((path) => pathname.startsWith(path))) {
     // Check if user is logged in via JWT
     const token = await getToken({ req, secret });
     if (!token) {
       // Not logged in → redirect to signin
       const url = req.nextUrl.clone();
-      url.pathname = "/en/signin";
+      url.pathname = "/signin";
       return NextResponse.redirect(url);
     }
   }
@@ -53,5 +60,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/en/:path*", "/"], // applies to all /en routes + root
+  matcher: ["/:path*", "/"], // applies to all /en routes + root
 };

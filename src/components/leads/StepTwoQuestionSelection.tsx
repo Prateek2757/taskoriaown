@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,9 @@ export default function StepTwoQuestionsForm({
 }) {
   const [questions, setQuestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [currentStep, setCurrentStep] = useState<"questions" | "budget">("questions");
+  const [currentStep, setCurrentStep] = useState<"questions" | "budget">(
+    "questions"
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
   const router = useRouter();
 
@@ -100,7 +102,8 @@ export default function StepTwoQuestionsForm({
         city_id: Number(selectedLocationId),
         title: selectedTitle,
         category_answers: questions.reduce((acc, q) => {
-          acc[q.category_question_id] = data[`q_${q.category_question_id}`] ?? null;
+          acc[q.category_question_id] =
+            data[`q_${q.category_question_id}`] ?? null;
           return acc;
         }, {} as any),
         budget_min: Number(data.budget_min),
@@ -118,7 +121,7 @@ export default function StepTwoQuestionsForm({
         reset();
         onClose();
         setTimeout(() => {
-          router.push("/en/provider/leads");
+          router.push("/provider/leads");
         }, 800);
       }
     } catch (err: any) {
@@ -160,7 +163,11 @@ export default function StepTwoQuestionsForm({
             exit={{ opacity: 0, x: -30 }}
             transition={{ duration: 0.3 }}
           >
-            <QuestionRenderer q={currentQuestion} control={control} register={register} />
+            <QuestionRenderer
+              q={currentQuestion}
+              control={control}
+              register={register}
+            />
           </motion.div>
         </AnimatePresence>
 
@@ -179,7 +186,9 @@ export default function StepTwoQuestionsForm({
             onClick={handleNextQuestion}
             className="rounded-lg bg-gradient-to-r from-blue-600 to-green-500 text-white font-semibold shadow hover:shadow-lg"
           >
-            {currentIndex === questions.length - 1 ? "Next: Budget & Dates" : "Next Question"}
+            {currentIndex === questions.length - 1
+              ? "Next: Budget & Dates"
+              : "Next Question"}
           </Button>
         </div>
       </form>
@@ -192,12 +201,16 @@ export default function StepTwoQuestionsForm({
       onSubmit={handleSubmit(onSubmit)}
       className="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-6 flex flex-col gap-6"
     >
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white">Budget & Preferred Dates</h2>
+      <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+        Budget & Preferred Dates
+      </h2>
 
       {/* BUDGET FIELDS */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 flex flex-col">
-          <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">Budget Min *</label>
+          <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
+            Budget Min *
+          </label>
           <input
             type="number"
             {...register("budget_min", { required: true })}
@@ -205,11 +218,15 @@ export default function StepTwoQuestionsForm({
             className="border px-3 py-2 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
           />
           {errors.budget_min && (
-            <span className="text-red-500 text-sm mt-1">Minimum budget is required</span>
+            <span className="text-red-500 text-sm mt-1">
+              Minimum budget is required
+            </span>
           )}
         </div>
         <div className="flex-1 flex flex-col">
-          <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">Budget Max *</label>
+          <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
+            Budget Max *
+          </label>
           <input
             type="number"
             {...register("budget_max", { required: true })}
@@ -217,7 +234,9 @@ export default function StepTwoQuestionsForm({
             className="border px-3 py-2 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
           />
           {errors.budget_max && (
-            <span className="text-red-500 text-sm mt-1">Maximum budget is required</span>
+            <span className="text-red-500 text-sm mt-1">
+              Maximum budget is required
+            </span>
           )}
         </div>
       </div>
@@ -225,7 +244,9 @@ export default function StepTwoQuestionsForm({
       {/* DATE FIELDS */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 flex flex-col">
-          <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">Preferred Start Date *</label>
+          <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
+            Preferred Start Date *
+          </label>
           <Controller
             control={control}
             name="preferred_date_start"
@@ -243,12 +264,16 @@ export default function StepTwoQuestionsForm({
             )}
           />
           {errors.preferred_date_start && (
-            <span className="text-red-500 text-sm mt-1">Start date is required</span>
+            <span className="text-red-500 text-sm mt-1">
+              Start date is required
+            </span>
           )}
         </div>
 
         <div className="flex-1 flex flex-col">
-          <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">Preferred End Date *</label>
+          <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
+            Preferred End Date *
+          </label>
           <Controller
             control={control}
             name="preferred_date_end"
@@ -266,7 +291,9 @@ export default function StepTwoQuestionsForm({
             )}
           />
           {errors.preferred_date_end && (
-            <span className="text-red-500 text-sm mt-1">End date is required</span>
+            <span className="text-red-500 text-sm mt-1">
+              End date is required
+            </span>
           )}
         </div>
       </div>

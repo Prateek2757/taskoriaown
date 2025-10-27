@@ -30,7 +30,7 @@ interface Lead {
   customer_name?: string;
   customer_email?: string;
   location_name: string;
-  phone:number;
+  phone: number;
   created_at: string;
   description: string;
   status?: string;
@@ -59,8 +59,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead }) => {
     return `${Math.floor(diffInMinutes / 1440)}d ago`;
   };
 
-
-
   const getInitials = (name: string): string =>
     name
       .split(" ")
@@ -69,30 +67,31 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead }) => {
       .toUpperCase()
       .slice(0, 2);
 
-      const maskPhone = (phone: number | string = ""): string => {
-        if (!phone) return "N/A"; // handle empty phone
-        const phonestr = String(phone)
-        // keep first 3 digits and last 2 digits visible
-        const visibleStart = phonestr.slice(0, 3);
-        const visibleEnd = phonestr.slice(-2);
-        const maskedMiddle = "*".repeat(Math.max(phonestr.length - 5, 0));
-        return `${visibleStart}${maskedMiddle}${visibleEnd}`;
-      };
+  const maskPhone = (phone: number | string = ""): string => {
+    if (!phone) return "N/A"; // handle empty phone
+    const phonestr = String(phone);
+    // keep first 3 digits and last 2 digits visible
+    const visibleStart = phonestr.slice(0, 3);
+    const visibleEnd = phonestr.slice(-2);
+    const maskedMiddle = "*".repeat(Math.max(phonestr.length - 5, 0));
+    return `${visibleStart}${maskedMiddle}${visibleEnd}`;
+  };
   console.log(lead.phone);
   const maskEmail = (email?: string): string => {
     if (!email) return "k******************@g***.com"; // fallback if no email
-  
+
     const [local, domain] = email.split("@");
     if (!domain) return email;
-  
+
     const firstChar = local[0];
     const maskedLocal = firstChar + "*".repeat(Math.max(local.length - 1, 3));
-  
+
     const domainParts = domain.split(".");
     const domainName = domainParts[0];
     const domainExt = domainParts.slice(1).join(".");
-    const maskedDomain = domainName[0] + "*".repeat(Math.max(domainName.length - 1, 2));
-  
+    const maskedDomain =
+      domainName[0] + "*".repeat(Math.max(domainName.length - 1, 2));
+
     return `${maskedLocal}@${maskedDomain}.${domainExt}`;
   };
 

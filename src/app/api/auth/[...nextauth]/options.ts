@@ -131,7 +131,7 @@ export const authOptions: NextAuthOptions = {
   // ✅ Pages & Settings
   //
   pages: {
-    signIn: "/en/signin",
+    signIn: "/signin",
     error: "/error",
   },
 

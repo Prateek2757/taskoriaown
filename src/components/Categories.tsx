@@ -1,40 +1,65 @@
 "use client";
-import { Card, CardContent, CardDescription } from "../components/ui/card";
+
+import { motion, Variants, easeOut } from "framer-motion";
+import Link from "next/link";
 
 const categories = [
-    { name: "Home Services", icon: "🏠", count: "500+ providers" },
-    { name: "Professional", icon: "💼", count: "300+ providers" },
-    { name: "Creative", icon: "🎨", count: "200+ providers" },
-    { name: "Technology", icon: "💻", count: "150+ providers" },
-    { name: "Health & Wellness", icon: "🏥", count: "100+ providers" },
-    { name: "Education", icon: "📚", count: "80+ providers" }
-  ];
+  { name: "Home Services", icon: "🏠", count: "500+ providers", slug: "home-services" },
+  { name: "Professional", icon: "💼", count: "300+ providers", slug: "professional" },
+  { name: "Creative", icon: "🎨", count: "200+ providers", slug: "creative" },
+  { name: "Technology", icon: "💻", count: "150+ providers", slug: "technology" },
+  { name: "Health & Wellness", icon: "🏥", count: "100+ providers", slug: "health-wellness" },
+  { name: "Education", icon: "📚", count: "80+ providers", slug: "education" },
+];
+
+const containerVariants: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: easeOut } },
+};
 
 export default function Categories() {
   return (
-    <section className="py-16 bg-gradient-to-br from-gray-50 to-blue-50">
-    <div className="container mx-auto px-4">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">Explore Service Categories</h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          From home services to professional consulting, find the perfect provider for any task
-        </p>
-      </div>
-      
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-        {categories.map((category) => (
-          <Card key={category.name} className="hover:shadow-lg transition-all duration-200 cursor-pointer group border-2 hover:border-blue-200 bg-white/70 backdrop-blur-sm">
-            <CardContent className="p-6 text-center">
-              <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">
-                {category.icon}
+    <motion.section
+      id="categories"
+      className="py-16 px-4 text-center"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={containerVariants}
+    >
+      <h2 className="text-3xl font-semibold text-foreground">Explore Service Categories</h2>
+      <p className="text-muted-foreground mt-2">
+        Find experts for every need — from home repair to digital marketing
+      </p>
+
+      <motion.div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+        {categories.map((c) => (
+          <motion.div
+            key={c.name}
+            className="bg-card border border-gray-200 rounded-xl p-5 hover:shadow-lg transition transform hover:-translate-y-1"
+            variants={itemVariants}
+          >
+            <Link
+              href={`/categories/${c.slug ?? c.name.toLowerCase().replace(/\s+/g, "-")}`}
+              className="flex justify-between items-center focus:outline-none focus:ring-2 rounded-lg"
+            >
+              <div>
+                <div className="text-2xl mb-2">{c.icon}</div>
+                <div className="font-medium text-foreground">{c.name}</div>
+                <div className="text-xs text-muted-foreground">{c.count}</div>
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">{category.name}</h3>
-              <p className="text-sm text-gray-500">{category.count}</p>
-            </CardContent>
-          </Card>
+              <span className="text-xs text-primary border border-primary px-3 py-1 rounded-full">
+                Browse
+              </span>
+            </Link>
+          </motion.div>
         ))}
-      </div>
-    </div>
-  </section>
+      </motion.div>
+    </motion.section>
   );
 }

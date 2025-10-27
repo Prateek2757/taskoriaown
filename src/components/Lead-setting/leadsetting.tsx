@@ -36,7 +36,7 @@ export default function LeadSettingsCard() {
           <Wrench className="w-6 h-6 text-green-600" />
           <CardTitle className="text-xl font-bold text-slate-800">Lead Settings</CardTitle>
         </div>
-        <Link href="/en/settings/leads/myservices">
+        <Link href="/settings/leads/myservices">
           <Button
             size="lg"
             variant="outline"
