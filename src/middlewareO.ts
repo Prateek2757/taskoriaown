@@ -77,7 +77,7 @@ export default withAuth(
 			},
 		},
 		pages: {
-			signIn: "/en/login",
+			signIn: "/login",
 		},
 	}
 );

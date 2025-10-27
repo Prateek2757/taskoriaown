@@ -27,11 +27,16 @@ type Props = {
   onClose: () => void;
   setSelectedCategoryId: (id: string) => void;
   setSelectedLocationId: (id: string) => void;
-  setSelectedCategoryTitle: (title: string) => void; 
-
+  setSelectedCategoryTitle: (title: string) => void;
 };
 
-export default function StepOneCategoryForm({ onNext, onClose, setSelectedCategoryId ,setSelectedCategoryTitle ,setSelectedLocationId}: Props) {
+export default function StepOneCategoryForm({
+  onNext,
+  onClose,
+  setSelectedCategoryId,
+  setSelectedCategoryTitle,
+  setSelectedLocationId,
+}: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,7 +52,7 @@ export default function StepOneCategoryForm({ onNext, onClose, setSelectedCatego
   const { control, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       category_id: 0,
-      city_id:0,
+      city_id: 0,
       category_name: "",
       location: "",
     },
@@ -56,7 +61,9 @@ export default function StepOneCategoryForm({ onNext, onClose, setSelectedCatego
   const categoryId = watch("category_id");
   const selectedLocation = watch("location");
 
-  const selectedCategory = categories.find((c) => c.category_id === Number(categoryId));
+  const selectedCategory = categories.find(
+    (c) => c.category_id === Number(categoryId)
+  );
 
   // Fetch categories and locations
   useEffect(() => {
@@ -113,7 +120,7 @@ export default function StepOneCategoryForm({ onNext, onClose, setSelectedCatego
     setValue("category_name", cat.name);
     setSearchCategoryTerm(cat.name);
     setShowCategorySuggestions(false);
-    setSelectedCategoryTitle(cat.name); 
+    setSelectedCategoryTitle(cat.name);
 
     // Reset location
     setValue("location", "");
@@ -122,7 +129,7 @@ export default function StepOneCategoryForm({ onNext, onClose, setSelectedCatego
 
   const handleSelectLocation = (loc: Location) => {
     setValue("location", loc.name);
-    setValue("city_id", loc.city_id); 
+    setValue("city_id", loc.city_id);
     setSearchLocationTerm(loc.name);
     setShowLocationSuggestions(false);
   };
@@ -192,8 +199,8 @@ export default function StepOneCategoryForm({ onNext, onClose, setSelectedCatego
             </div>
 
             <AnimatePresence>
-              {showCategorySuggestions && (
-                filteredCategories.length > 0 ? (
+              {showCategorySuggestions &&
+                (filteredCategories.length > 0 ? (
                   <motion.ul
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -222,15 +229,14 @@ export default function StepOneCategoryForm({ onNext, onClose, setSelectedCatego
                   >
                     No matching categories found.
                   </motion.p>
-                )
-              )}
+                ))}
             </AnimatePresence>
           </div>
 
           {/* Location Search */}
           <div className="relative">
             <Label className="font-semibold text-gray-800 dark:text-gray-200">
-              Location 
+              Location
             </Label>
             <div className="relative mt-2">
               <Search className="absolute left-3 top-3 text-gray-400 w-4 h-4" />
@@ -249,8 +255,9 @@ export default function StepOneCategoryForm({ onNext, onClose, setSelectedCatego
             </div>
 
             <AnimatePresence>
-              {showLocationSuggestions && selectedCategory && (
-                filteredLocations.length > 0 ? (
+              {showLocationSuggestions &&
+                selectedCategory &&
+                (filteredLocations.length > 0 ? (
                   <motion.ul
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -279,8 +286,7 @@ export default function StepOneCategoryForm({ onNext, onClose, setSelectedCatego
                   >
                     No matching locations found.
                   </motion.p>
-                )
-              )}
+                ))}
             </AnimatePresence>
           </div>
 

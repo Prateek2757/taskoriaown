@@ -39,7 +39,8 @@ const LeadsList: React.FC<LeadsListProps> = ({ search = "" }) => {
         description: lead.description,
         min_budget: lead.budget_min,
         max_budget: lead.budget_max,
-        location: lead.location_name || (lead.is_remote_allowed ? "Remote" : "N/A"),
+        location:
+          lead.location_name || (lead.is_remote_allowed ? "Remote" : "N/A"),
         category: lead.category_name,
         postedTime: new Date(lead.created_at).toLocaleString(),
         status: lead.status,
@@ -67,7 +68,9 @@ const LeadsList: React.FC<LeadsListProps> = ({ search = "" }) => {
     return (
       <div className="flex flex-col items-center justify-center py-32 space-y-4">
         <div className="h-12 w-12 border-4 border-t-transparent border-blue-600 rounded-full animate-spin"></div>
-        <p className="text-sm text-muted-foreground">Fetching the latest leads...</p>
+        <p className="text-sm text-muted-foreground">
+          Fetching the latest leads...
+        </p>
       </div>
     );
   }

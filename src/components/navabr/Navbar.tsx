@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import {
   Zap,
   Menu as MenuIcon,
@@ -33,26 +33,28 @@ export default function ModernNavbar() {
   const router = useRouter();
   const profileRef = useRef<HTMLDivElement>(null);
 
-  const minimalPages = ["/en/create", "/en/create-account"];
+  const minimalPages = ["/create", "/create-account"];
 
   const navLinks = {
     public: [
-      { name: "Home", href: "/en", icon: Search },
-      { name: "Discover", href: "/en/discover", icon: Search },
-      { name: "Community", href: "/en/community", icon: Users },
+      { name: "Home", href: "/", icon: Search },
+      { name: "Discover", href: "/discover", icon: Search },
+      { name: "Community", href: "/community", icon: Users },
     ],
     customer: [
-      { name: "My Requests", href: "/en/customer/my-requests", icon: Search },
-      { name: "Discover", href: "/en/discover", icon: Search },
+      { name: "Home", href: "/", icon: Search },
+      { name: "My Requests", href: "/customer/my-requests", icon: Search },
+      { name: "Discover", href: "/discover", icon: Search },
     ],
     provider: [
-      { name: "Leads", href: "/en/provider/leads", icon: Search },
-      { name: "My Responses", href: "/en/provider/message", icon: MessageSquare },
-      { name: "Dashboard", href: "/en/provider/dashboard", icon: LayoutDashboard },
+      { name: "Home", href: "/", icon: Search },
+      { name: "Leads", href: "/provider/leads", icon: Search },
+      { name: "My Responses", href: "/provider/message", icon: MessageSquare },
+      { name: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
     ],
   };
 
-  // Close dropdown on outside click
+  // Close dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
@@ -63,7 +65,7 @@ export default function ModernNavbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Initialize viewMode
+  // Load or initialize view mode
   useEffect(() => {
     if (typeof window === "undefined") return;
     const storedView = localStorage.getItem("viewMode") as ViewMode | null;
@@ -78,7 +80,6 @@ export default function ModernNavbar() {
     }
   }, [session]);
 
-  // Create provider draft
   const handleJoinAsProvider = async () => {
     try {
       localStorage.removeItem("draftProviderId");
@@ -91,7 +92,7 @@ export default function ModernNavbar() {
       const data = await res.json();
       if (data?.user?.user_id) {
         localStorage.setItem("draftProviderId", data.user.user_id);
-        router.push(`/en/create?user_id=${data.user.user_id}`);
+        router.push(`/create?user_id=${data.user.user_id}`);
       }
     } catch (err) {
       console.error("Error creating draft provider:", err);
@@ -99,7 +100,6 @@ export default function ModernNavbar() {
     }
   };
 
-  // Logout cleanup
   const handleLogout = async () => {
     setIsProfileOpen(false);
     setIsMenuOpen(false);
@@ -111,21 +111,17 @@ export default function ModernNavbar() {
     }
 
     setViewMode(null);
-    router.push("/en/signin");
+    router.push("/signin");
   };
 
-  // Switch view
   const handleSwitchView = (newView: "customer" | "provider") => {
     if (!session) return;
     setViewMode(newView);
     localStorage.setItem("viewMode", newView);
     setIsProfileOpen(false);
     setIsMenuOpen(false);
-
     router.push(
-      newView === "provider"
-        ? "/en/provider/dashboard"
-        : "/en/customer/dashboard"
+      newView === "provider" ? "/provider/dashboard" : "/customer/dashboard"
     );
   };
 
@@ -138,10 +134,9 @@ export default function ModernNavbar() {
 
   const currentLinks = getCurrentLinks();
 
-  // Profile dropdown
   const renderProfileDropdown = () => {
     const profilePath =
-      viewMode === "provider" ? "/en/provider/profile" : "/en/customer/profile";
+      viewMode === "provider" ? "/provider/profile" : "/customer/profile";
     const canSwitchView = session?.user?.role === "provider";
 
     return (
@@ -184,7 +179,6 @@ export default function ModernNavbar() {
               <ChevronDown className="w-4 h-4 -rotate-90" />
             </button>
           )}
-
           <Link
             href={profilePath}
             onClick={() => setIsProfileOpen(false)}
@@ -192,16 +186,14 @@ export default function ModernNavbar() {
           >
             View Profile
           </Link>
-
           <Link
-            href="/en/settings"
+            href="/settings"
             onClick={() => setIsProfileOpen(false)}
             className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
           >
             Settings
           </Link>
         </div>
-
         <div className="border-t border-gray-200 p-2">
           <button
             onClick={handleLogout}
@@ -229,9 +221,10 @@ export default function ModernNavbar() {
 
   return (
     <>
-      <header className="bg-white/95 backdrop-blur-lg backdrop-saturate-150  border-b sticky top-0 z-[9999] shadow-sm">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          {/* Logo */}
+      {/* Top Navbar */}
+      <header className="backdrop-saturate-150 border-b sticky top-0 z-50 bg-white/70 backdrop-blur-md border border-white/20 shadow-sm">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between relative">
+          {/* Left: Logo */}
           <Link
             href="/"
             className="flex items-center gap-2 hover:opacity-90 transition-opacity"
@@ -244,28 +237,37 @@ export default function ModernNavbar() {
             </span>
           </Link>
 
-          {/* Desktop Links */}
+          {/* Center Nav (floating glass look) */}
           {!minimalPages.includes(pathname) && (
-            <nav className="hidden md:flex items-center space-x-1">
+            <motion.nav
+              className="hidden md:flex absolute left-1/2 transform -translate-x-1/2    px-5 py-2 rounded-full space-x-2"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
               {currentLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-4 py-2 rounded-xl font-medium transition-all ${
+                  className={`px-4 py-1.5 rounded-full text-muted-foreground font-medium text-sm transition-all ${
                     pathname === link.href
-                      ? "bg-blue-50 text-blue-600"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                      ? "bg-gradient-to-r from-blue-500 to-green-500 text-white shad-sm"
+                      : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
                   {link.name}
                 </Link>
               ))}
+            </motion.nav>
+          )}
 
-              {/* Profile or Join */}
+          {/* Right Side */}
+          {!minimalPages.includes(pathname) && (
+            <div className="hidden md:flex items-center gap-3">
               {session ? (
-                <div className="relative ml-4" ref={profileRef}>
+                <div className="relative" ref={profileRef}>
                   <Button
-                    onClick={() => setIsProfileOpen((p) => !p)} 
+                    onClick={() => setIsProfileOpen((p) => !p)}
                     variant="ghost"
                     className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-50"
                   >
@@ -276,7 +278,7 @@ export default function ModernNavbar() {
                       {session.user?.name?.split(" ")[0] || "User"}
                     </span>
                     <ChevronDown
-                      className={`w-4 h-4 text-gray-500 ${
+                      className={`w-4 h-4 text-gray-500 transition-transform ${
                         isProfileOpen ? "rotate-180" : ""
                       }`}
                     />
@@ -286,10 +288,10 @@ export default function ModernNavbar() {
                   </AnimatePresence>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 ml-4">
+                <>
                   <Button
                     variant="ghost"
-                    onClick={() => router.push("/en/signin")}
+                    onClick={() => router.push("/signin")}
                     className="font-medium"
                   >
                     Sign In
@@ -300,220 +302,191 @@ export default function ModernNavbar() {
                   >
                     Join as Provider
                   </Button>
-                </div>
+                </>
               )}
-            </nav>
+            </div>
           )}
 
-          {/* Mobile Button */}
+          {/* Mobile Menu Button */}
           <Button
-          variant="ghost"
+            variant="ghost"
             onClick={() => setIsMenuOpen((p) => !p)}
             className="md:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-xl"
           >
-            {isMenuOpen ?"" : <MenuIcon />}
+            {isMenuOpen ? <X /> : <MenuIcon />}
           </Button>
         </div>
       </header>
 
       {/* Mobile Sidebar */}
       <AnimatePresence>
-  {isMenuOpen && (
-    <>
-      {/* Backdrop */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998] md:hidden"
-        onClick={() => setIsMenuOpen(false)}
-      />
-
-      {/* Sidebar */}
-      <motion.div
-        initial={{ x: "-100%" }}
-        animate={{ x: 0 }}
-        exit={{ x: "-100%" }}
-        transition={{ type: "spring", damping: 25, stiffness: 200 }}
-        className="fixed left-0 top-0 bottom-0 w-80 bg-white shadow-2xl z-[9999] md:hidden overflow-y-auto"
-      >
-        {/* Header */}
-        <div className="p-6 border-b border-gray-100">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-500 rounded-xl flex items-center justify-center shadow-md">
-                <Zap className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-                Taskoria
-              </span>
-            </div>
-            <button
+        {isMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998] md:hidden"
               onClick={() => setIsMenuOpen(false)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            />
+
+            {/* Sidebar */}
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed left-0 top-0 bottom-0 w-80 bg-white shadow-2xl z-[9999] md:hidden overflow-y-auto"
             >
-              <X className="w-5 h-5 text-gray-600" />
-            </button>
-          </div>
-
-          {/* User Info */}
-          {session && (
-            <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl p-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-green-500 rounded-full flex items-center justify-center shadow-lg ring-4 ring-white">
-                  <User className="w-7 h-7 text-white" />
+              <div className="p-6 border-b border-gray-100">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-2">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-500 rounded-xl flex items-center justify-center shadow-md">
+                      <Zap className="w-6 h-6 text-white" />
+                    </div>
+                    <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+                      Taskoria
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setIsMenuOpen(false)}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <X className="w-5 h-5 text-gray-600" />
+                  </button>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-bold text-gray-900 truncate text-lg">
-                    {session.user?.name || session.user?.display_name}
-                  </p>
-                  <p className="text-sm text-gray-600 truncate">
-                    {session.user?.email}
-                  </p>
-                </div>
-              </div>
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/80 backdrop-blur-sm text-xs font-medium text-blue-700 border border-blue-200">
-                {viewMode === "provider" ? "Provider View" : "Customer View"}
-              </div>
-            </div>
-          )}
-        </div>
 
-        {/* Nav Links */}
-        <nav className="p-4">
-          <div className="space-y-1">
-            {currentLinks.map((link) => {
-              const Icon = link.icon;
-              const isActive = pathname === link.href;
-              return (
+                {/* User Info */}
+                {session && (
+                  <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl p-4 mb-4">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-green-500 rounded-full flex items-center justify-center shadow-lg ring-4 ring-white">
+                        <User className="w-7 h-7 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-gray-900 truncate text-lg">
+                          {session.user?.name || session.user?.display_name}
+                        </p>
+                        <p className="text-sm text-gray-600 truncate">
+                          {session.user?.email}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/80 backdrop-blur-sm text-xs font-medium text-blue-700 border border-blue-200">
+                      {viewMode === "provider"
+                        ? "Provider View"
+                        : "Customer View"}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile Links */}
+              <nav className="p-4">
+                {currentLinks.map((link) => {
+                  const Icon = link.icon;
+                  const isActive = pathname === link.href;
+                  return (
+                    <Link
+                      key={link.name}
+                      href={link.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
+                        isActive
+                          ? "bg-gradient-to-r from-blue-500 to-green-500 text-white shadow-lg"
+                          : "text-gray-700 hover:bg-gray-50"
+                      }`}
+                    >
+                      <Icon
+                        className={`w-5 h-5 ${
+                          isActive ? "text-white" : "text-gray-500"
+                        }`}
+                      />
+                      <span>{link.name}</span>
+                    </Link>
+                  );
+                })}
+
+                <div className="my-4 border-t border-gray-200" />
+
+                {session?.user?.role === "provider" && (
+                  <button
+                    onClick={() =>
+                      handleSwitchView(
+                        viewMode === "provider" ? "customer" : "provider"
+                      )
+                    }
+                    className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-medium"
+                  >
+                    <div className="flex items-center gap-3">
+                      <ChevronDown className="w-5 h-5 text-gray-500 -rotate-90" />
+                      <span>
+                        Switch to{" "}
+                        {viewMode === "provider" ? "Customer" : "Provider"}
+                      </span>
+                    </div>
+                  </button>
+                )}
+
                 <Link
-                  key={link.name}
-                  href={link.href}
+                  href="/settings"
                   onClick={() => setIsMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
-                    isActive
-                      ? "bg-gradient-to-r from-blue-500 to-green-500 text-white shadow-lg shadow-blue-200"
-                      : "text-gray-700 hover:bg-gray-50 active:bg-gray-100"
-                  }`}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-medium"
                 >
-                  <Icon
-                    className={`w-5 h-5 ${
-                      isActive ? "text-white" : "text-gray-500"
-                    }`}
-                  />
-                  <span>{link.name}</span>
+                  <Settings className="w-5 h-5 text-gray-500" />
+                  Settings
                 </Link>
-              );
-            })}
-          </div>
 
-          {/* Divider */}
-          <div className="my-4 border-t border-gray-200" />
-
-          {/* Provider Actions */}
-          {session?.user?.role === "provider" && (
-            <button
-              onClick={() =>
-                handleSwitchView(
-                  viewMode === "provider" ? "customer" : "provider"
-                )
-              }
-              className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 active:bg-gray-100 font-medium transition-all"
-            >
-              <div className="flex items-center gap-3">
-                <ChevronDown className="w-5 h-5 text-gray-500 -rotate-90" />
-                <span>
-                  Switch to{" "}
-                  {viewMode === "provider" ? "Customer" : "Provider"}
-                </span>
-              </div>
-            </button>
-          )}
-
-          {/* Profile */}
-          <Button
-            variant="ghost"
-            onClick={() => {
-              const path =
-                viewMode === "provider"
-                  ? "/en/provider/profile"
-                  : "/en/customer/profile";
-              router.push(path);
-              setIsMenuOpen(false);
-            }}
-            className="w-full justify-start flex items-center gap-3 text-gray-700 hover:bg-gray-50 font-medium transition-all"
-          >
-            <User className="w-5 h-5 text-gray-500" />
-            View Profile
-          </Button>
-
-          {/* Settings */}
-          <Link
-            href="/en/settings"
-            onClick={() => setIsMenuOpen(false)}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 active:bg-gray-100 font-medium transition-all"
-          >
-            <Settings className="w-5 h-5 text-gray-500" />
-            Settings
-          </Link>
-
-          {/* Notifications */}
-          <Link
-            href="/en/notifications"
-            onClick={() => setIsMenuOpen(false)}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 active:bg-gray-100 font-medium transition-all"
-          >
-            <Bell className="w-5 h-5 text-gray-500" />
-            Notifications
-            <span className="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-              23
-            </span>
-          </Link>
-
-          {/* Sign Out */}
-          {session ? (
-            <>
-              <div className="my-4 border-t border-gray-200" />
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 active:bg-red-100 font-medium transition-all"
-              >
-                <LogOut className="w-5 h-5" />
-                Sign Out
-              </button>
-            </>
-          ) : (
-            <>
-              <div className="my-4 border-t border-gray-200" />
-              <div className="space-y-2">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    router.push("/en/signin");
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-full"
+                <Link
+                  href="/notifications"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-medium"
                 >
-                  Sign In
-                </Button>
-                <Button
-                  onClick={() => {
-                    handleJoinAsProvider();
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-green-600 text-white hover:from-blue-700 hover:to-green-700"
-                >
-                  Join as Provider
-                </Button>
-              </div>
-            </>
-          )}
-        </nav>
-      </motion.div>
-    </>
-  )}
-</AnimatePresence>
+                  <Bell className="w-5 h-5 text-gray-500" />
+                  Notifications
+                  <span className="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                    23
+                  </span>
+                </Link>
+
+                {session ? (
+                  <>
+                    <div className="my-4 border-t border-gray-200" />
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 font-medium"
+                    >
+                      <LogOut className="w-5 h-5" />
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className="my-4 border-t border-gray-200" />
+                    <div className="space-y-2">
+                      <Button
+                        variant="outline"
+                        className="w-full border-gray-300 font-medium"
+                        onClick={() => router.push("/signin")}
+                      >
+                        Sign In
+                      </Button>
+                      <Button
+                        onClick={handleJoinAsProvider}
+                        className="w-full bg-gradient-to-r from-blue-600 to-green-600 text-white hover:from-blue-700 hover:to-green-700 font-medium"
+                      >
+                        Join as Provider
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </nav>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 }

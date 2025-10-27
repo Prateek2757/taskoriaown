@@ -1,8 +1,8 @@
 "use client";
 import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
+
 import { Badge } from "@/components/ui/badge";
-import { Search, MapPin, Bot, ArrowRight } from "lucide-react";
+import { Search, MapPin, Bot, ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import AddLeadModal from "./AddLeads";
@@ -15,27 +15,30 @@ export default function HeroSection() {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="space-y-6">
-            <Badge className="bg-blue-100 text-blue-800 px-3 py-2 text-lg  rounded-full font-medium flex flex-wrap items-center justify-center text-center mx-auto">
-              <Bot className="w-7 h-7  flex-shrink-0" />
-              <span className="whitespace-normal ">
-                AI-Powered • Community Driven
-              </span>
-            </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 leading-tight">
+          {/* <div className="inline-flex items-center gap-2 border bg-card rounded-full px-3 py-1 text-xs text-muted-foreground mb-4">
+            <Sparkles className="h-3.5 w-3.5 text-green-600"/> AI‑Powered • Blockchain Secured • Community Driven
+          </div>
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
               The Future of
               <span className="bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
                 {" "}
                 Service{" "}
               </span>
               Marketplaces
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            </h1> */}
+            
+          </div>
+          <div className="inline-flex items-center gap-2 border bg-card rounded-full px-3 py-1 text-xs text-muted-foreground mb-4">
+            <Sparkles className="h-3.5 w-3.5 text-green-600"/> AI‑Powered • Blockchain Secured • Community Driven
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-foreground">
+            The Future of <span className="bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">Service</span> Marketplaces
+          </h1>
+          <p className="mt-4 text-lg text-muted-foreground">
               Connect with verified professionals through our AI-powered
               platform. Experience trust, transparency, and innovation in every
               service interaction.
             </p>
-          </div>
-
           {/* Search Bar */}
           <div className="max-w-2xl mx-auto">
             {/* 🔍 Floating Search Bar */}
@@ -64,7 +67,7 @@ export default function HeroSection() {
                 </div>
 
                 {/* Search Button outside */}
-                <Link href="/en/discover">
+                <Link href="/discover">
                   <Button
                     className="bg-gradient-to-r  from-blue-600 to-green-600 text-md  text-white font-semibold 
                  rounded-xl px-7 py-5 shadow-md hover:shadow-lg hover:from-blue-700 hover:to-green-700 
@@ -94,8 +97,12 @@ export default function HeroSection() {
               open={openModal}
               onClose={() => setOpenModal(false)}
             />
-            <Button variant="outline" className="flex-1 py-5 rounded-xl " asChild>
-              <Link href="/en/become-provider">Join as Provider</Link>
+            <Button
+              variant="outline"
+              className="flex-1 py-5 rounded-xl "
+              asChild
+            >
+              <Link href="/become-provider">Join as Provider</Link>
             </Button>
           </div>
 

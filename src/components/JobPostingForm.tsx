@@ -98,16 +98,16 @@ export default function JobPostingForm() {
                 {...register("jobTitle")}
               />
               {errors.jobTitle && (
-                <p className="text-sm text-red-500">{errors.jobTitle.message}</p>
+                <p className="text-sm text-red-500">
+                  {errors.jobTitle.message}
+                </p>
               )}
             </div>
 
             {/* Category */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Category *</label>
-              <Select
-                onValueChange={(val) => setValue("category", val)}
-              >
+              <Select onValueChange={(val) => setValue("category", val)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
@@ -120,7 +120,9 @@ export default function JobPostingForm() {
                 </SelectContent>
               </Select>
               {errors.category && (
-                <p className="text-sm text-red-500">{errors.category.message}</p>
+                <p className="text-sm text-red-500">
+                  {errors.category.message}
+                </p>
               )}
             </div>
 
@@ -144,7 +146,9 @@ export default function JobPostingForm() {
                 {...register("description")}
               />
               {errors.description && (
-                <p className="text-sm text-red-500">{errors.description.message}</p>
+                <p className="text-sm text-red-500">
+                  {errors.description.message}
+                </p>
               )}
               {aiSuggestions.length > 0 && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-2 animate-in fade-in-50">
@@ -176,7 +180,9 @@ export default function JobPostingForm() {
                   {...register("budget")}
                 />
                 {errors.budget && (
-                  <p className="text-sm text-red-500">{errors.budget.message}</p>
+                  <p className="text-sm text-red-500">
+                    {errors.budget.message}
+                  </p>
                 )}
               </div>
               <div className="space-y-2">

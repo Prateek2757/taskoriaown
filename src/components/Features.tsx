@@ -32,8 +32,8 @@ export const Features = () => {
   return (
     <div>
       {/* Features */}
-      <section id="features" className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+      <section id="features" className="py-16 bg-gradient-to-b from-white to-muted/30">
+        <div className="container max-w-6xl mx-auto px-2">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Why Choose Taskoria?

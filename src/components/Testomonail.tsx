@@ -1,6 +1,8 @@
-
+"use client"
 import { Star } from "lucide-react";
+
 import { Card, CardContent } from "./ui/card";
+import { motion } from "motion/react";
 
 const testimonials = [
     {
@@ -19,33 +21,18 @@ const testimonials = [
 
 function Testomonail() {
   return (
-    <section className="py-16 bg-gradient-to-br from-blue-50 to-green-50">
-    <div className="container mx-auto px-4">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">What Our Users Say</h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Discover how Taskoria is transforming the way people connect with service providers
-        </p>
-      </div>
-      
-      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        {testimonials.map((testimonial, index) => (
-          <Card key={index} className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-8">
-              <div className="flex items-center mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <p className="text-gray-700 mb-6 italic">"{testimonial.content}"</p>
-              <div>
-                <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                <p className="text-sm text-gray-500">{testimonial.role}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+    <section className="bg-card py-16 px-4" id="community">
+    <h2 className="text-3xl font-semibold text-center text-foreground">What Our Users Say</h2>
+    <div className="mt-8 grid gap-6 lg:grid-cols-2 max-w-6xl mx-auto">
+      {testimonials.map((t,idx)=>(
+        <motion.figure key={idx} initial={{opacity:0, y:10}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{duration:0.5, delay:0.05*idx}} className="border bg-muted/30 rounded-xl p-6 hover-lift">
+          <div className="flex text-amber-500 mb-2" aria-label={`${t.rating} out of 5 stars`}>
+            {Array.from({length:t.rating}).map((_,i)=>(<Star key={i} className="h-4 w-4 fill-current"/>))}
+          </div>
+          <blockquote className="text-sm text-foreground leading-relaxed">"{t.content}"</blockquote>
+          <figcaption className="mt-3 font-medium text-foreground">{t.name}<span className="text-muted-foreground font-normal ml-2">{t.role}</span></figcaption>
+        </motion.figure>
+      ))}
     </div>
   </section>
   )

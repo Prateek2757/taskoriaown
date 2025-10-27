@@ -1,57 +1,60 @@
+"use client";
 
-import {  Shield, Users, Bot  } from "lucide-react";
+import { Shield, Rocket, Sparkles } from "lucide-react";
+import { motion, MotionProps } from "motion/react";
 
+// ✅ Data for "How It Works"
 const howItWorks = [
-    {
-      step: "1",
-      title: "Post Your Job",
-      description: "Describe your project with AI assistance to create the perfect job post",
-      icon: <Bot className="w-8 h-8 text-blue-600" />
-    },
-    {
-      step: "2", 
-      title: "Get Matched",
-      description: "Our AI analyzes your needs and connects you with verified providers",
-      icon: <Users className="w-8 h-8 text-green-600" />
-    },
-    {
-      step: "3",
-      title: "Work & Pay Securely",
-      description: "Collaborate through our platform with secure escrow payment protection",
-      icon: <Shield className="w-8 h-8 text-purple-600" />
-    }
-  ];
+  {
+    title: "Post Your Job",
+    description:
+      "Use our AI assistant to describe your project effortlessly and publish instantly.",
+    icon: Rocket,
+  },
+  {
+    title: "Get Matched Instantly",
+    description: "AI connects you with top verified providers for your needs.",
+    icon: Sparkles,
+  },
+  {
+    title: "Collaborate & Pay Securely",
+    description: "Work, chat, and pay via blockchain‑powered escrow.",
+    icon: Shield,
+  },
+];
 
 export default function HowItWorks() {
   return (
-    <section className="py-16 bg-white">
-    <div className="container mx-auto px-4">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">How Taskoria Works</h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Get connected with the right professionals in just three simple steps
-        </p>
-      </div>
-      
-      <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-        {howItWorks.map((step, index) => (
-          <div key={index} className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className="relative">
-                <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center">
-                  {step.icon}
-                </div>
-                <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-blue-600 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                  {step.step}
-                </div>
-              </div>
+    <section
+      id="how"
+      className="bg-muted/30 border-y py-16 px-4 text-center"
+    >
+      <h2 className="text-3xl font-semibold text-foreground">
+        How Taskoria Works
+      </h2>
+      <p className="text-muted-foreground mt-2">
+        Start in minutes — find, match, and work securely
+      </p>
+
+      <div className="mt-8 grid sm:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        {howItWorks.map(({ title, description, icon: Icon }, index) => (
+          <motion.div
+            key={title}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1, duration: 0.5 }}
+            className="bg-card rounded-2xl border p-6 shadow-sm hover-lift"
+          >
+            <div className="h-10 w-10 rounded-xl bg-primary/10 text-green-600 grid place-content-center mx-auto">
+              <Icon className="h-5 w-5" />
             </div>
-            <h3 className="font-semibold text-lg text-gray-900 mb-2">{step.title}</h3>
-            <p className="text-gray-600 text-sm">{step.description}</p>
-          </div>
+            <h3 className="mt-4 font-semibold  text-foreground">
+              {index + 1}. {title}
+            </h3>
+            <p className="text-sm text-muted-foreground mt-2">{description}</p>
+          </motion.div>
         ))}
       </div>
-    </div>
-  </section>
+    </section>
   );
 }

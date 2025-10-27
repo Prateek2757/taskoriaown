@@ -7,16 +7,18 @@ module.exports = {
 				"caret-blink": {
 					"0%,70%,100%": { opacity: "1" },
 					"20%,50%": { opacity: "0" },
+				}, 
+			},
+			colors: {
+			
+				secondary: {
+				  DEFAULT: "#F3F4F6",
 				},
-			},
-			colors:{
-				"primary": "#1E40AF",
-				"secondary": "#F3F4F6",
-				"accent": "#F59E0B",
-			},
-			animation: {
-				"caret-blink": "caret-blink 1.25s ease-out infinite",
-			},
+				accent: {
+				  DEFAULT: "#F59E0B",
+				},
+			  },
+			
 		},
 	},
 };
