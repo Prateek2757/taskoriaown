@@ -37,16 +37,16 @@ export default function Categories() {
         Find experts for every need — from home repair to digital marketing
       </p>
 
-      <motion.div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+      <motion.div className="mt-8 grid gap-6 sm:grid-cols-2  lg:grid-cols-3 max-w-6xl mx-auto">
         {categories.map((c) => (
           <motion.div
             key={c.name}
-            className="bg-card border border-gray-200 rounded-xl p-5 hover:shadow-lg transition transform hover:-translate-y-1"
+            className="bg-card border border-gray-200 rounded-xl p-5 hover:shadow-lg transition  transform hover:-translate-y-1"
             variants={itemVariants}
           >
             <Link
               href={`/categories/${c.slug ?? c.name.toLowerCase().replace(/\s+/g, "-")}`}
-              className="flex justify-between items-center focus:outline-none focus:ring-2 rounded-lg"
+              className="flex justify-between items-center  rounded-lg"
             >
               <div>
                 <div className="text-2xl mb-2">{c.icon}</div>

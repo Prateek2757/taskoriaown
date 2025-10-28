@@ -1,17 +1,16 @@
 "use client";
 import { Button } from "../components/ui/button";
 
-import { Badge } from "@/components/ui/badge";
 import { Search, MapPin, Bot, ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import AddLeadModal from "./AddLeads";
+import NewRequestModal from "@/components/leads/RequestModal";;
 
 export default function HeroSection() {
   const [openModal, setOpenModal] = useState(false);
 
   return (
-    <section className="py-7 text-center   bg-gradient-to-br from-blue-50 via-white to-white ">
+    <section className="py-7 text-center  bg-gradient-to-br from-blue-50 via-white to-white ">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="space-y-6">
@@ -62,7 +61,7 @@ export default function HeroSection() {
 
                     <input
                       type="text"
-                      placeholder="What service you need?    (e.g. Plumber, Web)"
+                      placeholder="What service you need? (e.g. Plumber, Web)"
                       className="w-full pl-12 right-2 py-2    text-gray-800 placeholder-gray-400 
                    focus:outline-none rounded-xl"
                     />
@@ -96,7 +95,7 @@ export default function HeroSection() {
               Post a Job
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-            <AddLeadModal
+            <NewRequestModal
               open={openModal}
               onClose={() => setOpenModal(false)}
             />
@@ -110,7 +109,7 @@ export default function HeroSection() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
+          <div className="grid grid-cols-2 my-10 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-600">10K+</div>
               <div className="text-gray-600">Verified Providers</div>
