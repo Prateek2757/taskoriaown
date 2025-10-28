@@ -240,7 +240,7 @@ export default function Navbar() {
           <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-500 rounded-xl flex items-center justify-center shadow-md">
             <Zap className="w-6 h-6 text-white" />
           </div>
-          <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+          <span className="text-2xl font-bold bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
             Taskoria
           </span>
         </Link>
@@ -297,7 +297,7 @@ export default function Navbar() {
                   </Button>
                   <Button
                     onClick={handleJoinAsProvider}
-                    className="bg-gradient-to-r from-blue-600 to-green-600 text-white hover:from-blue-700 hover:to-green-700 font-medium shadow-md"
+                    className="bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-green-700 font-medium shadow-md"
                   >
                     Join as Provider
                   </Button>
@@ -425,7 +425,7 @@ export default function Navbar() {
                         handleJoinAsProvider();
                         setIsMenuOpen(false);
                       }}
-                      className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-green-600 text-white hover:from-blue-700 hover:to-green-700"
+                      className="w-full rounded-xl bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-green-700"
                     >
                       Join as Provider
                     </Button>

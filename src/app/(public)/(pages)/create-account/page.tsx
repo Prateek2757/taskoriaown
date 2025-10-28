@@ -295,7 +295,7 @@ function OnboardingContent() {
 
                   <Button
                     type="button"
-                    className="w-full bg-gradient-to-r from-blue-600 to-green-600 text-white hover:opacity-90 py-3 rounded-xl shadow-md"
+                    className="w-full bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:opacity-90 py-3 rounded-xl shadow-md"
                     onClick={() => setStep("details")}
                   >
                     Continue
@@ -426,7 +426,7 @@ function OnboardingContent() {
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="bg-gradient-to-r from-blue-600 to-green-600 text-white hover:opacity-90 px-8 py-3 rounded-xl shadow-md disabled:opacity-50"
+                      className="bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:opacity-90 px-8 py-3 rounded-xl shadow-md disabled:opacity-50"
                     >
                       {isSubmitting ? "Saving..." : "Complete Onboarding"}
                     </Button>
@@ -444,7 +444,13 @@ function OnboardingContent() {
 // -------------------- Export Page Wrapped in Suspense --------------------
 export default function OnboardingPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          Loading...
+        </div>
+      }
+    >
       <OnboardingContent />
     </Suspense>
   );

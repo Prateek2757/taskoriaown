@@ -45,7 +45,7 @@ export default function HowItWorks() {
             transition={{ delay: index * 0.1, duration: 0.5 }}
             className="bg-card rounded-2xl border p-6 shadow-sm hover-lift"
           >
-            <div className="h-10 w-10 rounded-xl bg-primary/10 text-green-600 grid place-content-center mx-auto">
+            <div className="h-10 w-10 rounded-xl bg-primary/10 text-blue-600 grid place-content-center mx-auto">
               <Icon className="h-5 w-5" />
             </div>
             <h3 className="mt-4 font-semibold  text-foreground">

@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const client = await pool.connect();
   try {
     const { rows } = await client.query(
-      `SELECT user_id, company_name, contact_name, contact_email, contact_phone, about, company_size, years_in_business
+      `SELECT user_id, company_name, contact_name, contact_email, website,  contact_phone, about, company_size, years_in_business
        FROM company
        WHERE user_id = $1`,
       [userId]
@@ -46,7 +46,7 @@ export async function PUT(req: NextRequest) {
   const client = await pool.connect();
 
   try {
-    const { company_name, contact_name, contact_email, contact_phone } = await req.json();
+    const { company_name, contact_name, contact_email, website ,contact_phone ,company_size, years_in_business ,about } = await req.json();
 
     if (!company_name || !contact_name || !contact_email) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
@@ -58,9 +58,13 @@ export async function PUT(req: NextRequest) {
            contact_name = $2,
            contact_email = $3,
            contact_phone = $4,
+           website = $5,
+           company_size = $6,
+           years_in_business = $7,
+           about = $8,
            updated_at = NOW()
-       WHERE user_id = $5`,
-      [company_name, contact_name, contact_email, contact_phone || null, userId]
+       WHERE user_id = $9`,
+      [company_name, contact_name, contact_email, contact_phone ,website,company_size ,years_in_business , about || null, userId]
     );
 
     if (rowCount === 0) {
@@ -68,7 +72,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const { rows } = await client.query(
-      `SELECT user_id, company_name, contact_name, contact_email, contact_phone, about, company_size, years_in_business
+      `SELECT user_id, company_name, contact_name, contact_email, website ,contact_phone, about, company_size, years_in_business,about
        FROM company
        WHERE user_id = $1`,
       [userId]

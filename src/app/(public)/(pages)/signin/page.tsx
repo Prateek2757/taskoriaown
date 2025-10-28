@@ -79,7 +79,7 @@ export default function SignInPage() {
         <div className="relative bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 p-10 flex flex-col gap-6">
           {/* Header */}
           <div className="text-center space-y-2">
-            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
               Welcome Back
             </h1>
             <p className="text-gray-600 text-sm">

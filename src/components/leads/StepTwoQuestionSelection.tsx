@@ -184,7 +184,7 @@ export default function StepTwoQuestionsForm({
           <Button
             type="button"
             onClick={handleNextQuestion}
-            className="rounded-lg bg-gradient-to-r from-blue-600 to-green-500 text-white font-semibold shadow hover:shadow-lg"
+            className="rounded-lg bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white font-semibold shadow hover:shadow-lg"
           >
             {currentIndex === questions.length - 1
               ? "Next: Budget & Dates"
@@ -311,7 +311,7 @@ export default function StepTwoQuestionsForm({
         <Button
           type="submit"
           disabled={loading}
-          className={`rounded-lg bg-gradient-to-r from-blue-600 to-green-500 text-white font-semibold shadow hover:shadow-lg ${
+          className={`rounded-lg bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white font-semibold shadow hover:shadow-lg ${
             loading ? "opacity-70 cursor-not-allowed" : ""
           }`}
         >

@@ -66,7 +66,7 @@ export default function ProfileSettings() {
       await updateCompany({
         company_name: payload.company_name,
         contact_name: payload.display_name,
-         about:payload.bio,
+         about:payload.description,
         company_size:payload.company_size,
         years_in_business:payload.years_in_business,
         contact_email: payload.contact_email,

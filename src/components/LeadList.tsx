@@ -94,7 +94,7 @@ const LeadsList: React.FC<LeadsListProps> = ({ search = "" }) => {
           key={lead.task_id}
           className="group border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-[2px] relative"
         >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-green-600"></div>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2]"></div>
 
           <CardContent className="p-6 space-y-4">
             <div className="flex justify-between items-start">
@@ -111,7 +111,7 @@ const LeadsList: React.FC<LeadsListProps> = ({ search = "" }) => {
                 className={cn(
                   "text-xs font-medium px-2 py-1 rounded-md",
                   lead.status === "Open"
-                    ? "bg-gradient-to-r from-green-500 to-green-600 text-white"
+                    ? " text-white"
                     : "bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200"
                 )}
               >
@@ -146,7 +146,7 @@ const LeadsList: React.FC<LeadsListProps> = ({ search = "" }) => {
               <Button
                 size="sm"
                 asChild
-                className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-medium rounded-xl shadow-sm hover:shadow-md transition-all"
+                className="w-full bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] hover:from-blue-700 hover:to-green-700 text-white font-medium rounded-xl shadow-sm hover:shadow-md transition-all"
               >
                 <Link href={`/leads/${lead.task_id}`}>View Details</Link>
               </Button>

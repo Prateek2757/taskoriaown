@@ -58,7 +58,10 @@ export default function ModernNavbar() {
   // Close dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(e.target as Node)
+      ) {
         setIsProfileOpen(false);
       }
     };
@@ -230,8 +233,13 @@ export default function ModernNavbar() {
             href="/"
             className="flex items-center   hover:opacity-90 transition-opacity"
           >
-            <div className=""  >
-            <Image src={"/taskorianewlogo.png"} alt="" height={0} width={50}/>
+            <div className="">
+              <Image
+                src={"/taskorianewlogo.png"}
+                alt=""
+                height={0}
+                width={35}
+              />
             </div>
             <span className="text-2xl font-bold   bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
               Taskoria
@@ -252,7 +260,7 @@ export default function ModernNavbar() {
                   href={link.href}
                   className={`px-4 py-1.5 rounded-full text-muted-foreground font-medium text-sm transition-all ${
                     pathname === link.href
-                      ? "bg-gradient-to-r from-blue-500 to-green-500 text-white shad-sm"
+                      ? "bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white shad-sm"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
@@ -299,7 +307,7 @@ export default function ModernNavbar() {
                   </Button>
                   <Button
                     onClick={handleJoinAsProvider}
-                    className="bg-gradient-to-r from-blue-600 to-green-600 text-white hover:from-blue-700 hover:to-green-700 font-medium shadow-md"
+                    className="bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-green-700 font-medium shadow-md"
                   >
                     Join as Provider
                   </Button>
@@ -347,7 +355,7 @@ export default function ModernNavbar() {
                     <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-500 rounded-xl flex items-center justify-center shadow-md">
                       <Zap className="w-6 h-6 text-white" />
                     </div>
-                    <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+                    <span className="text-xl font-bold bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
                       Taskoria
                     </span>
                   </div>
@@ -476,7 +484,7 @@ export default function ModernNavbar() {
                       </Button>
                       <Button
                         onClick={handleJoinAsProvider}
-                        className="w-full bg-gradient-to-r from-blue-600 to-green-600 text-white hover:from-blue-700 hover:to-green-700 font-medium"
+                        className="w-full bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-green-700 font-medium"
                       >
                         Join as Provider
                       </Button>
