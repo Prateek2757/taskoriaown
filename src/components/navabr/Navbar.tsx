@@ -228,13 +228,12 @@ export default function ModernNavbar() {
           {/* Left: Logo */}
           <Link
             href="/"
-            className="flex items-center  hover:opacity-90 transition-opacity"
+            className="flex items-center   hover:opacity-90 transition-opacity"
           >
-            <div  >
-            <Image src={"/taskorianewlogo.png"} alt="" height={50} width={80}/>
+            <div className=""  >
+            <Image src={"/taskorianewlogo.png"} alt="" height={0} width={50}/>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r
-             from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] bg-clip-text ">
+            <span className="text-2xl font-bold   bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
               Taskoria
             </span>
           </Link>
