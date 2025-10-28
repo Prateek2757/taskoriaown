@@ -33,12 +33,13 @@
 //     return NextResponse.json({ message: "Unknown error" }, { status: 500 });
 //   }
 // }
+
 import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 
 export async function GET() {
   try {
-    const result = await pool.query(`SELECT category_id, name FROM service_categories`);
+    const result = await pool.query(`SELECT category_id, name, slug FROM service_categories`);
     return NextResponse.json(result.rows);
   } catch (err: unknown) {
     if (err instanceof Error) {
