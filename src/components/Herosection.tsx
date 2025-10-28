@@ -11,7 +11,7 @@ export default function HeroSection() {
   const [openModal, setOpenModal] = useState(false);
 
   return (
-    <section className="py-7 text-center   bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <section className="py-7 text-center   bg-gradient-to-br from-blue-50 via-white to-white ">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="space-y-6">

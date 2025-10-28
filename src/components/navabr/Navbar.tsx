@@ -238,7 +238,7 @@ export default function ModernNavbar() {
                 src={"/taskorianewlogo.png"}
                 alt=""
                 height={0}
-                width={35}
+                width={33}
               />
             </div>
             <span className="text-2xl font-bold   bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
