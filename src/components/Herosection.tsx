@@ -58,32 +58,36 @@ export default function HeroSection() {
 
           {/* Search Bar */}
           <div className="max-w-2xl mx-auto mt-6 px-4">
-            <div className="relative w-full max-w-3xl group flex items-center">
-              <div className="relative flex-1 mr-4">
-                <div
-                  className="absolute -inset-[2px] bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]
-                  rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition duration-500"
-                />
-                <div className="relative flex items-center bg-white border-2 border-gray-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
-                  <Search className="absolute left-3 text-gray-400 w-5 h-5 pointer-events-none" />
-                  <input
-                    type="text"
-                    placeholder="What service you need?   (e.g. Plumber, Web)"
-                    className="w-full pl-12 right-2 py-2 text-gray-800 placeholder-gray-400 focus:outline-none rounded-xl"
-                  />
-                </div>
-              </div>
-              <Link href="/discover">
-                <Button className="bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-md text-white font-semibold rounded-xl px-7 py-5 shadow-md hover:shadow-lg hover:from-blue-700 hover:to-green-700 active:scale-[0.97] transition-all duration-200">
-                  Search
-                </Button>
-              </Link>
-            </div>
-            <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500">
-              <MapPin className="w-4 h-4" />
-              <span>Serving 50+ cities worldwide</span>
-            </div>
-          </div>
+  <div className="relative w-full max-w-3xl group flex flex-col sm:flex-row sm:items-center">
+    {/* Input */}
+    <div className="relative flex-1 sm:mr-4 w-full">
+      <div
+        className="absolute -inset-[2px] bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]
+        rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition duration-500"
+      />
+      <div className="relative flex items-center bg-white border-2 border-gray-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+        <Search className="absolute left-3 text-gray-400 w-5  h-5 pointer-events-none" />
+        <input
+          type="text"
+          placeholder="What service you need?(e.g. Plumber , Web)"
+          className="w-full pl-12 right-2 py-2 text-gray-800 placeholder-gray-400 focus:outline-none rounded-xl"
+        />
+      </div>
+    </div>
+
+    {/* Button */}
+    <Link href="/discover" className="w-full sm:w-auto mt-4 sm:mt-0">
+      <Button className="w-full sm:w-auto bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-md text-white font-semibold rounded-xl px-7 py-5 shadow-md hover:shadow-lg hover:from-blue-700 hover:to-green-700 active:scale-[0.97] transition-all duration-200">
+        Search
+      </Button>
+    </Link>
+  </div>
+
+  <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500">
+    <MapPin className="w-4 h-4" />
+    <span>Serving 50+ cities worldwide</span>
+  </div>
+</div>
 
           {/* Quick Actions */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto mt-6">

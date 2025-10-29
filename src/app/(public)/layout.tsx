@@ -41,10 +41,11 @@ export const metadata: Metadata = {
     description:
       "Discover and hire top service providers in your area across multiple categories with Taskoria.",
     url: "https://taskoria.com",
+    
     siteName: "Taskoria",
     images: [
       {
-        url: "https://taskoria.com/og-image.png", // replace with your OG image
+        url: "https://taskoria.com/og-image.png",
         width: 1200,
         height: 630,
         alt: "Taskoria - Service Providers",
