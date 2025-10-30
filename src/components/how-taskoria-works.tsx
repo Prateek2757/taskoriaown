@@ -18,7 +18,7 @@ const howItWorks = [
   },
   {
     title: "Collaborate & Pay Securely",
-    description: "Work, chat, and pay via blockchain‑powered escrow.",
+    description: "Work, chat, and pay via AI‑powered escrow.",
     icon: Shield,
   },
 ];

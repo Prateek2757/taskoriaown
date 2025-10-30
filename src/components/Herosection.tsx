@@ -10,7 +10,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import NewRequestModal from "./leads/RequestModal";
 
-
 export default function HeroSection() {
   const [openModal, setOpenModal] = useState(false);
   const { data: session } = useSession();
@@ -23,15 +22,15 @@ export default function HeroSection() {
         description: "Redirecting to Sign In page...",
         duration: 4000,
         style: {
-          borderRadius: "8px",    
-      } , icon: "⚠️",
-    });
+          borderRadius: "8px",
+        },
+        icon: "⚠️",
+      });
       setTimeout(() => router.push("/signin"), 2000);
       setLoading(true);
       return;
     }
     setOpenModal(true);
-    
   };
 
   return (
@@ -40,7 +39,8 @@ export default function HeroSection() {
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 border bg-card rounded-full px-3 py-1 text-xs text-muted-foreground mb-4">
-            <Sparkles className="h-3.5 w-3.5 text-blue-600" /> AI‑Powered • Community Driven
+            <Sparkles className="h-3.5 w-3.5 text-blue-600" /> AI‑Powered •
+            Community Driven
           </div>
 
           {/* Hero Title */}
@@ -53,41 +53,42 @@ export default function HeroSection() {
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
             Connect with verified professionals through our AI-powered platform.
-            Experience trust, transparency, and innovation in every service interaction.
+            Experience trust, transparency, and innovation in every service
+            interaction.
           </p>
 
           {/* Search Bar */}
           <div className="max-w-2xl mx-auto mt-6 px-4">
-  <div className="relative w-full max-w-3xl group flex flex-col sm:flex-row sm:items-center">
-    {/* Input */}
-    <div className="relative flex-1 sm:mr-4 w-full">
-      <div
-        className="absolute -inset-[2px] bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]
+            <div className="relative w-full max-w-3xl group flex flex-col sm:flex-row sm:items-center">
+              {/* Input */}
+              <div className="relative flex-1 sm:mr-4 w-full">
+                <div
+                  className="absolute -inset-[2px] bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]
         rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition duration-500"
-      />
-      <div className="relative flex items-center bg-white border-2 border-gray-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
-        <Search className="absolute left-3 text-gray-400 w-5  h-5 pointer-events-none" />
-        <input
-          type="text"
-          placeholder="What service you need?(e.g. Plumber , Web)"
-          className="w-full pl-12 right-2 py-2 text-gray-800 placeholder-gray-400 focus:outline-none rounded-xl"
-        />
-      </div>
-    </div>
+                />
+                <div className="relative flex items-center bg-white border-2 border-gray-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+                  <Search className="absolute left-3 text-gray-400 w-5  h-5 pointer-events-none" />
+                  <input
+                    type="text"
+                    placeholder="What service you need?(e.g. Cleaning , Web)"
+                    className="w-full pl-12 right-2 py-2 text-gray-800 placeholder-gray-400 focus:outline-none rounded-xl"
+                  />
+                </div>
+              </div>
 
-    {/* Button */}
-    <Link href="/discover" className="w-full sm:w-auto mt-4 sm:mt-0">
-      <Button className="w-full sm:w-auto bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-md text-white font-semibold rounded-xl px-7 py-5 shadow-md hover:shadow-lg hover:from-blue-700 hover:to-green-700 active:scale-[0.97] transition-all duration-200">
-        Search
-      </Button>
-    </Link>
-  </div>
+              {/* Button */}
+              <Link href="/discover" className="w-full sm:w-auto mt-4 sm:mt-0">
+                <Button className="w-full sm:w-auto bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-md text-white font-semibold rounded-xl px-7 py-5 shadow-md hover:shadow-lg hover:from-blue-700 hover:to-green-700 active:scale-[0.97] transition-all duration-200">
+                  Search
+                </Button>
+              </Link>
+            </div>
 
-  <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500">
-    <MapPin className="w-4 h-4" />
-    <span>Serving 50+ cities worldwide</span>
-  </div>
-</div>
+            <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500">
+              <MapPin className="w-4 h-4" />
+              <span>Serving 50+ cities</span>
+            </div>
+          </div>
 
           {/* Quick Actions */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto mt-6">
@@ -102,9 +103,16 @@ export default function HeroSection() {
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
 
-            <NewRequestModal open={openModal} onClose={() => setOpenModal(false)} />
+            <NewRequestModal
+              open={openModal}
+              onClose={() => setOpenModal(false)}
+            />
 
-            <Button variant="outline" className="flex-1 py-5 rounded-xl" asChild>
+            <Button
+              variant="outline"
+              className="flex-1 py-5 rounded-xl"
+              asChild
+            >
               <Link href="/become-provider">Join as Provider</Link>
             </Button>
           </div>
@@ -112,15 +120,15 @@ export default function HeroSection() {
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto mt-10">
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600">10K+</div>
+              <div className="text-3xl font-bold text-blue-600">1K+</div>
               <div className="text-gray-600">Verified Providers</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-600">50K+</div>
+              <div className="text-3xl font-bold text-green-600">5K+</div>
               <div className="text-gray-600">Jobs Completed</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">4.9★</div>
+              <div className="text-3xl font-bold text-purple-600">4.5★</div>
               <div className="text-gray-600">Average Rating</div>
             </div>
             <div className="text-center">

@@ -12,9 +12,9 @@ export const Features = () => {
     },
     {
       icon: <Shield className="w-6 h-6 text-green-600" />,
-      title: "Blockchain Verification",
+      title: "Professional Verification",
       description:
-        "Every provider is verified through our tamper-proof blockchain system, ensuring trust and transparency.",
+        "Every provider is verified through our tamper-proof system, ensuring trust and transparency.",
     },
     {
       icon: <Award className="w-6 h-6 text-purple-600" />,

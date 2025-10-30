@@ -18,6 +18,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import LocationSearch from "@/components/Location/locationsearch";
 
 // -------------------- Zod Schema --------------------
 const onboardingSchema = z.object({
@@ -254,28 +255,15 @@ function OnboardingContent() {
                               <FormField
                                 control={control}
                                 name="city_id"
-                                render={({ field }) => (
+                                render={() => (
                                   <FormItem>
+                                    <FormLabel>Select your city</FormLabel>
                                     <FormControl>
-                                      <select
-                                        {...field}
-                                        disabled={loadingCities}
-                                        className="border border-gray-300 rounded-xl px-4 py-2 w-full focus:ring-2 focus:ring-green-500"
-                                      >
-                                        <option value="">
-                                          {loadingCities
-                                            ? "Loading cities..."
-                                            : "Select your city"}
-                                        </option>
-                                        {cities.map((city) => (
-                                          <option
-                                            key={city.city_id}
-                                            value={city.city_id}
-                                          >
-                                            {city.name}
-                                          </option>
-                                        ))}
-                                      </select>
+                                      <LocationSearch
+                                        onSelect={(data) => {
+                                          setValue("city_id", String(data.city_id));
+                                        }}
+                                      />
                                     </FormControl>
                                     <FormMessage />
                                   </FormItem>

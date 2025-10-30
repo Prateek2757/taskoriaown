@@ -47,7 +47,7 @@ function Footer() {
         </div>
       </div>
       <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-        <p>&copy; {new Date().getFullYear()} Taskoria. All rights reserved. Powered by AI • Secured by Blockchain • Driven by Community</p>
+        <p>&copy; {new Date().getFullYear()} Taskoria. All rights reserved. Powered by AI • Secured • Driven by Community</p>
       </div>
     </div>
   </footer>
