@@ -9,9 +9,12 @@ import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import NewRequestModal from "./leads/RequestModal";
+import CategorySearch from "./category/CategorySearch";
+import { sl } from "date-fns/locale";
 
 export default function HeroSection() {
   const [openModal, setOpenModal] = useState(false);
+  const [slugvalue , setSlugValue]=useState("")
   const { data: session } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -64,21 +67,23 @@ export default function HeroSection() {
               <div className="relative flex-1 sm:mr-4 w-full">
                 <div
                   className="absolute -inset-[2px] bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]
-        rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition duration-500"
+                              rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition duration-500"
                 />
                 <div className="relative flex items-center bg-white border-2 border-gray-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
-                  <Search className="absolute left-3 text-gray-400 w-5  h-5 pointer-events-none" />
+                  {/* <Search className="absolute left-3 text-gray-400 w-5  h-5 pointer-events-none" />
                   <input
                     type="text"
                     placeholder="What service you need?(e.g. Cleaning , Web)"
                     className="w-full pl-12 right-2 py-2 text-gray-800 placeholder-gray-400 focus:outline-none rounded-xl"
-                  />
+                  /> */}
+                  <CategorySearch onSelect={(data)=>setSlugValue(data.slug)} placeholder="What service you need?(e.g. Cleaning , Web)"/>
                 </div>
+                {/* <CategorySearch/> */}
               </div>
 
               {/* Button */}
-              <Link href="/discover" className="w-full sm:w-auto mt-4 sm:mt-0">
-                <Button className="w-full sm:w-auto bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-md text-white font-semibold rounded-xl px-7 py-5 shadow-md hover:shadow-lg hover:from-blue-700 hover:to-green-700 active:scale-[0.97] transition-all duration-200">
+              <Link href={`/services`} className="w-full sm:w-auto mt-4 sm:mt-0">
+                <Button className="w-full sm:w-auto bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-md text-white font-semibold rounded-xl px-7 py-4 shadow-md hover:shadow-lg hover:from-blue-700 hover:to-green-700 active:scale-[0.97] transition-all duration-200">
                   Search
                 </Button>
               </Link>

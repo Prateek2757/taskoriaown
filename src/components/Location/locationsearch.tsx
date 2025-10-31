@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
+import { Input } from "../ui/input";
 
 type Location = {
   place_id: number;
@@ -33,7 +34,6 @@ export default function LocationSearch({ onSelect }: Props) {
   const cache = useRef<{ [key: string]: Location[] }>({});
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  
   const fetchAddresses = async (value: string) => {
     if (value.length < 3) {
       setResults([]);
@@ -119,27 +119,31 @@ export default function LocationSearch({ onSelect }: Props) {
 
   return (
     <div className="relative w-full" ref={containerRef}>
-      <input
+      <Search className="absolute left-3 mr-4 top-3 text-gray-400 w-4 h-4" />
+      <Input
         type="text"
         value={query}
         onChange={(e) => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Enter your location"
-        className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary text-sm shadow-sm"
+        placeholder="Search your location"
+        className="w-full border border-gray-300 rounded-xl pl-9 focus:outline-none focus:ring-2 focus:ring-primary text-sm shadow-sm"
         onFocus={() =>
           query.length >= 3 && results.length > 0 && setShowDropdown(true)
         }
       />
 
+      {/* Loading state */}
       {loading && (
         <div className="absolute top-full left-0 mt-1 w-full flex items-center gap-2 bg-white border border-gray-200 rounded-lg p-2 shadow-md text-gray-500 text-sm z-50">
           <Loader2 className="animate-spin h-4 w-4" /> Searching...
         </div>
       )}
 
+      {/* Dropdown */}
       {showDropdown && !loading && results.length > 0 && (
-        <ul className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-72 overflow-y-auto z-50"
-        onMouseLeave={() => setActiveIndex(-1)}
+        <ul
+          className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-68 overflow-y-auto z-50 scroll-smooth"
+          onMouseLeave={() => setActiveIndex(-1)}
         >
           {results.map((r, i) => (
             <li
@@ -152,10 +156,11 @@ export default function LocationSearch({ onSelect }: Props) {
               onClick={() => handleSelect(r)}
               onMouseEnter={() => setActiveIndex(i)}
             >
-              <p className="truncate">{r.display_name}</p>
-              {r.address?.city && (
+              <p className="truncate font-medium">{r.display_name}</p>
+              {(r.address?.city || r.address?.town || r.address?.village) && (
                 <span className="text-xs text-gray-400">
-                  {r.address.city || r.address.town || r.address.village}
+                  {r.address?.city || r.address?.town || r.address?.village},{" "}
+                  {r.address?.state}
                 </span>
               )}
             </li>
@@ -163,6 +168,7 @@ export default function LocationSearch({ onSelect }: Props) {
         </ul>
       )}
 
+      {/* No results */}
       {showDropdown &&
         !loading &&
         query.length >= 3 &&

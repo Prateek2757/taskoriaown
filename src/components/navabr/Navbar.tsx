@@ -215,7 +215,7 @@ export default function ModernNavbar() {
       <header className="bg-white/95 backdrop-blur-md border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-500 rounded-xl animate-pulse" />
+            <div className="w-10 h-10  bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] rounded-xl animate-pulse" />
             <div className="h-8 w-32 bg-gray-200 rounded animate-pulse" />
           </div>
         </div>
@@ -351,14 +351,22 @@ export default function ModernNavbar() {
             >
               <div className="p-6 border-b border-gray-100">
                 <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-500 rounded-xl flex items-center justify-center shadow-md">
-                      <Zap className="w-6 h-6 text-white" />
+                  <Link
+                    href="/"
+                    className="flex items-center   hover:opacity-90 transition-opacity"
+                  >
+                    <div className="">
+                      <Image
+                        src={"/taskorianewlogo.png"}
+                        alt=""
+                        height={0}
+                        width={33}
+                      />
                     </div>
-                    <span className="text-xl font-bold bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
+                    <span className="text-2xl font-bold   bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
                       Taskoria
                     </span>
-                  </div>
+                  </Link>
                   <button
                     onClick={() => setIsMenuOpen(false)}
                     className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -464,7 +472,10 @@ export default function ModernNavbar() {
                   <>
                     <div className="my-4 border-t border-gray-200" />
                     <button
-                      onClick={handleLogout}
+                      onClick={() => {
+                        handleLogout();
+                        setIsMenuOpen(false);
+                      }}
                       className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 font-medium"
                     >
                       <LogOut className="w-5 h-5" />
@@ -478,12 +489,18 @@ export default function ModernNavbar() {
                       <Button
                         variant="outline"
                         className="w-full border-gray-300 font-medium"
-                        onClick={() => router.push("/signin")}
+                        onClick={() => {
+                          router.push("/signin");
+                          setIsMenuOpen(false);
+                        }}
                       >
                         Sign In
                       </Button>
                       <Button
-                        onClick={handleJoinAsProvider}
+                        onClick={() => {
+                          handleJoinAsProvider();
+                          setIsMenuOpen(false);
+                        }}
                         className="w-full bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-green-700 font-medium"
                       >
                         Join as Provider

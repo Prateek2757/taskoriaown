@@ -1,57 +1,172 @@
-import { Zap } from "lucide-react"
-import Link from "next/link"
+"use client";
 
+import { Twitter, Linkedin, Facebook, Instagram } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 function Footer() {
   return (
     <footer className="bg-gray-900 text-white py-12">
-    <div className="container mx-auto px-4">
-      <div className="grid md:grid-cols-4 gap-8">
-        <div>
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-green-500 rounded-lg flex items-center justify-center">
-              <Zap className="w-5 h-5 text-white" />
+      <div className="container mx-auto px-4">
+        <div className="grid md:grid-cols-4 gap-8">
+          {/* --- Brand Section --- */}
+          <div>
+            <Link
+              href="/"
+              className="flex items-center hover:opacity-90 transition-opacity"
+            >
+              <Image
+                src="/taskorianewlogo.png"
+                alt="Taskoria Logo"
+                height={33}
+                width={33}
+                className="rounded-md"
+              />
+              <span className="ml-2 text-2xl font-bold bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
+                Taskoria
+              </span>
+            </Link>
+            <p className="text-gray-400 mt-2 text-sm">
+              The next-generation service marketplace powered by AI and secured
+              by blockchain technology.
+            </p>
+
+            {/* --- Social Icons --- */}
+            <div className="flex gap-4 mt-4">
+              <a
+                href="https://www.instagram.com/taskoria.au/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-gray-800 hover:bg-blue-500 transition-colors rounded-full"
+              >
+                <Instagram className="w-5 h-5 text-gray-300 hover:text-white" />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/taskoriaa/about/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-gray-800 hover:bg-blue-600 transition-colors rounded-full"
+              >
+                <Linkedin className="w-5 h-5 text-gray-300 hover:text-white" />
+              </a>
+              <a
+                href="http://facebook.com/profile.php?id=61582506497352"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-gray-800 hover:bg-blue-700 transition-colors rounded-full"
+              >
+                <Facebook className="w-5 h-5 text-gray-300 hover:text-white" />
+              </a>
             </div>
-            <span className="text-xl font-bold">Taskoria</span>
           </div>
-          <p className="text-gray-400 text-sm">
-            The next-generation service marketplace powered by AI and secured by blockchain technology.
+
+          {/* --- For Customers --- */}
+          <div>
+            <h4 className="font-semibold mb-4">For Customers</h4>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li>
+                <Link
+                  href="/discover"
+                  className="hover:text-white transition-colors"
+                >
+                  Find Services
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/community"
+                  className="hover:text-white transition-colors"
+                >
+                  Community
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/post-job"
+                  className="hover:text-white transition-colors"
+                >
+                  Post a Job
+                </Link>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">
+                  Trust & Safety
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* --- For Providers --- */}
+          <div>
+            <h4 className="font-semibold mb-4">For Providers</h4>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li>
+                <Link
+                  href="/become-provider"
+                  className="hover:text-white transition-colors"
+                >
+                  Join as Provider
+                </Link>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">
+                  Success Stories
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">
+                  Resources
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">
+                  API Documentation
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* --- Company Section --- */}
+          <div>
+            <h4 className="font-semibold mb-4">Company</h4>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li>
+                <a href="#" className="hover:text-white transition-colors">
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">
+                  Careers
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">
+                  Press
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-white transition-colors">
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* --- Bottom Section --- */}
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+          <p>
+            &copy; {new Date().getFullYear()} Taskoria. All rights reserved.
+            <br />
+            <span className="text-gray-500">
+              Powered by AI • Secured • Driven by Community
+            </span>
           </p>
         </div>
-        <div>
-          <h4 className="font-semibold mb-4">For Customers</h4>
-          <ul className="space-y-2 text-sm text-gray-400">
-            <li><Link href="/discover" className="hover:text-white transition-colors">Find Services</Link></li>
-            <li><Link href="/community" className="hover:text-white transition-colors">Community</Link></li>
-            <li><Link href="/post-job" className="hover:text-white transition-colors">Post a Job</Link></li>
-            <li><a href="#" className="hover:text-white transition-colors">Trust & Safety</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-semibold mb-4">For Providers</h4>
-          <ul className="space-y-2 text-sm text-gray-400">
-            <li><Link href="/become-provider" className="hover:text-white transition-colors">Join as Provider</Link></li>
-            <li><a href="#" className="hover:text-white transition-colors">Success Stories</a></li>
-            <li><a href="#" className="hover:text-white transition-colors">Resources</a></li>
-            <li><a href="#" className="hover:text-white transition-colors">API Documentation</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-semibold mb-4">Company</h4>
-          <ul className="space-y-2 text-sm text-gray-400">
-            <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
-            <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-            <li><a href="#" className="hover:text-white transition-colors">Press</a></li>
-            <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-          </ul>
-        </div>
       </div>
-      <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-        <p>&copy; {new Date().getFullYear()} Taskoria. All rights reserved. Powered by AI • Secured • Driven by Community</p>
-      </div>
-    </div>
-  </footer>
-  )
+    </footer>
+  );
 }
 
-export default Footer
+export default Footer;

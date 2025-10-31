@@ -26,12 +26,12 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import LocationSearch from "@/components/Location/locationsearch";
 
 export default function MyServicesPage() {
   const {
     profile,
     categories,
-    cities,
     loading,
     saving,
     error,
@@ -42,9 +42,9 @@ export default function MyServicesPage() {
   } = useLeadProfile();
 
   const [catSearch, setCatSearch] = useState("");
-  const [citySearch, setCitySearch] = useState("");
+
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
-  const [filteredCities, setFilteredCities] = useState<City[]>([]);
+
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [serviceDialogOpen, setServiceDialogOpen] = useState(false);
   const [locationDialogOpen, setLocationDialogOpen] = useState(false);
@@ -72,37 +72,16 @@ export default function MyServicesPage() {
     [categories]
   );
 
-  const handleCitySearch = useCallback(
-    debounce((query: string) => {
-      if (!query.trim()) {
-        setFilteredCities(cities.slice(0, 15));
-        return;
-      }
-      const filtered = cities.filter((c) =>
-        c.name.toLowerCase().includes(query.toLowerCase())
-      );
-      setFilteredCities(filtered);
-    }, 250),
-    [cities]
-  );
-
   useEffect(() => {
     if (categories.length > 0 && serviceDialogOpen) {
       setFilteredCategories(categories.slice(0, 15));
     }
   }, [categories, serviceDialogOpen]);
 
-  useEffect(() => {
-    if (cities.length > 0 && locationDialogOpen) {
-      setFilteredCities(cities.slice(0, 15));
-    }
-  }, [cities, locationDialogOpen]);
-
   useEffect(
     () => handleCategorySearch(catSearch),
     [catSearch, handleCategorySearch]
   );
-  useEffect(() => handleCitySearch(citySearch), [citySearch, handleCitySearch]);
 
   const isCategorySelected = (categoryId: number) => {
     return (
@@ -135,12 +114,6 @@ export default function MyServicesPage() {
     setSelectedCategories([]);
     setServiceDialogOpen(false);
     setCatSearch("");
-  };
-
-  const handleLocationSelect = (cityId: number, cityName: string) => {
-    setLocation(cityId, cityName);
-    setLocationDialogOpen(false);
-    setCitySearch("");
   };
 
   if (loading || !profile) {
@@ -339,7 +312,7 @@ export default function MyServicesPage() {
         </Card>
 
         {/* Location Card */}
-        <Card className="rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+        <Card className="rounded-2xl shadow-lg border border-gray-200 overflow-hidde">
           <CardHeader className="bg-linear-to-r from-blue-50 to-cyan-50 px-6 py-5 border-b">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -361,7 +334,7 @@ export default function MyServicesPage() {
                     <PlusCircle className="w-4 h-4 mr-2" /> Add Location
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+                <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-visible flex flex-col">
                   <DialogHeader className="pb-4">
                     <DialogTitle className="text-2xl font-bold">
                       Add Location
@@ -372,44 +345,14 @@ export default function MyServicesPage() {
                     </DialogDescription>
                   </DialogHeader>
 
-                  <div className="space-y-4 flex-1 overflow-hidden flex flex-col">
+                  <div className="space-y-4 flex-1 overflow-hiddn flex flex-col">
                     <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <Input
-                        placeholder="Search for cities..."
-                        value={citySearch}
-                        onChange={(e) => setCitySearch(e.target.value)}
-                        className="pl-11 h-12 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      <LocationSearch
+                        onSelect={(data) => {
+                          setLocation(data.city_id, data.city);
+                          setLocationDialogOpen(false);
+                        }}
                       />
-                    </div>
-
-                    <div className="bg-gray-50 rounded-xl p-4 overflow-y-auto flex-1">
-                      <div className="grid grid-cols-2 gap-3">
-                        {filteredCities.map((c) => (
-                          <div
-                            key={c.city_id}
-                            onClick={() =>
-                              handleLocationSelect(c.city_id, c.name)
-                            }
-                            className="flex items-center gap-3 p-3.5 rounded-lg cursor-pointer transition-all bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 hover:shadow-sm"
-                          >
-                            <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                            <span className="font-medium text-sm">
-                              {c.name}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      {filteredCities.length === 0 && (
-                        <div className="text-center py-12">
-                          <p className="text-gray-500 text-base">
-                            No cities found
-                          </p>
-                          <p className="text-gray-400 text-sm mt-1">
-                            Try a different search term
-                          </p>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </DialogContent>

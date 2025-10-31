@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Loader2, Search } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
+import LocationSearch from "../Location/locationsearch";
+import CategorySearch from "../category/CategorySearch";
 
 type Category = {
   category_id: number;
@@ -17,10 +19,6 @@ type Category = {
   remote_available: boolean;
 };
 
-type Location = {
-  city_id: number;
-  name: string;
-};
 
 type Props = {
   onNext: () => void;
@@ -38,18 +36,14 @@ export default function StepOneCategoryForm({
   setSelectedLocationId,
 }: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [locations, setLocations] = useState<Location[]>([]);
+
   const [loading, setLoading] = useState(true);
 
   const [searchCategoryTerm, setSearchCategoryTerm] = useState("");
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const [showCategorySuggestions, setShowCategorySuggestions] = useState(false);
 
-  const [searchLocationTerm, setSearchLocationTerm] = useState("");
-  const [filteredLocations, setFilteredLocations] = useState<Location[]>([]);
-  const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
-
-  const { control, handleSubmit, setValue, watch } = useForm({
+  const { handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       category_id: 0,
       city_id: 0,
@@ -65,17 +59,13 @@ export default function StepOneCategoryForm({
     (c) => c.category_id === Number(categoryId)
   );
 
-  // Fetch categories and locations
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [catRes, locRes] = await Promise.all([
+        const [catRes] = await Promise.all([
           axios.get("/api/signup/category-selection"),
-          axios.get("/api/signup/location"),
         ]);
-
         setCategories(catRes.data);
-        setLocations(locRes.data);
       } catch {
         toast.error("Failed to load data");
       } finally {
@@ -85,35 +75,34 @@ export default function StepOneCategoryForm({
     fetchData();
   }, []);
 
-  // Live search: categories
   useEffect(() => {
-    if (searchCategoryTerm.trim()) {
-      setFilteredCategories(
-        categories.filter((c) =>
-          c.name.toLowerCase().includes(searchCategoryTerm.toLowerCase())
-        )
-      );
-      setShowCategorySuggestions(true);
-    } else {
+    const term = searchCategoryTerm.trim();
+
+    if (!term) {
       setFilteredCategories([]);
       setShowCategorySuggestions(false);
+      return;
     }
-  }, [searchCategoryTerm, categories]);
 
-  // Live search: locations
-  useEffect(() => {
-    if (searchLocationTerm.trim()) {
-      setFilteredLocations(
-        locations.filter((l) =>
-          l.name.toLowerCase().includes(searchLocationTerm.toLowerCase())
-        )
-      );
-      setShowLocationSuggestions(true);
-    } else {
-      setFilteredLocations([]);
-      setShowLocationSuggestions(false);
+    const currentlySelected = categories.find(
+      (c) => c.category_id === Number(categoryId)
+    );
+    if (
+      currentlySelected &&
+      term.toLowerCase() === currentlySelected.name.toLowerCase()
+    ) {
+      setFilteredCategories([]);
+      setShowCategorySuggestions(false);
+      return;
     }
-  }, [searchLocationTerm, locations]);
+
+    setFilteredCategories(
+      categories.filter((c) =>
+        c.name.toLowerCase().includes(term.toLowerCase())
+      )
+    );
+    setShowCategorySuggestions(true);
+  }, [searchCategoryTerm, categories, categoryId]);
 
   const handleSelectCategory = (cat: Category) => {
     setValue("category_id", cat.category_id);
@@ -122,16 +111,7 @@ export default function StepOneCategoryForm({
     setShowCategorySuggestions(false);
     setSelectedCategoryTitle(cat.name);
 
-    // Reset location
-    setValue("location", "");
-    setSearchLocationTerm("");
-  };
 
-  const handleSelectLocation = (loc: Location) => {
-    setValue("location", loc.name);
-    setValue("city_id", loc.city_id);
-    setSearchLocationTerm(loc.name);
-    setShowLocationSuggestions(false);
   };
 
   const onContinue = (data: any) => {
@@ -148,23 +128,10 @@ export default function StepOneCategoryForm({
 
   const isContinueEnabled = !!selectedCategory && !!selectedLocation;
 
-  // Handle Enter key for auto-select first suggestion
-  const handleCategoryKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && filteredCategories.length > 0) {
-      e.preventDefault();
-      handleSelectCategory(filteredCategories[0]);
-    }
-  };
 
-  const handleLocationKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && filteredLocations.length > 0) {
-      e.preventDefault();
-      handleSelectLocation(filteredLocations[0]);
-    }
-  };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-md mx-auto p-6 sm:p-8 space-y-8">
+    <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl w-full max-w-md mx-auto p-6 sm:p-8 space-y-8">
       <div className="space-y-2 text-center">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
           What kind of service do you need?
@@ -187,7 +154,7 @@ export default function StepOneCategoryForm({
               Service Category <span className="text-red-500">*</span>
             </Label>
             <div className="relative mt-2">
-              <Search className="absolute left-3 top-3 text-gray-400 w-4 h-4" />
+              {/* <Search className="absolute left-3 top-3 text-gray-400 w-4 h-4" />
               <Input
                 type="text"
                 placeholder="Search service category..."
@@ -195,7 +162,12 @@ export default function StepOneCategoryForm({
                 onChange={(e) => setSearchCategoryTerm(e.target.value)}
                 onKeyDown={handleCategoryKeyDown}
                 className="pl-9 w-full border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500"
-              />
+              /> */}
+              <CategorySearch onSelect={(data)=>{
+                setValue("category_id",data.id);
+                setValue("category_name",data.name)
+                setSelectedCategoryTitle(data.name)
+              }} />
             </div>
 
             <AnimatePresence>
@@ -239,55 +211,15 @@ export default function StepOneCategoryForm({
               Location
             </Label>
             <div className="relative mt-2">
-              <Search className="absolute left-3 top-3 text-gray-400 w-4 h-4" />
-              <Input
-                type="text"
-                placeholder="Search location..."
-                value={searchLocationTerm}
-                onChange={(e) => setSearchLocationTerm(e.target.value)}
-                onKeyDown={handleLocationKeyDown}
-                disabled={!selectedCategory}
-                className={cn(
-                  "pl-9 w-full border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500",
-                  !selectedCategory && "opacity-60 cursor-not-allowed"
-                )}
+             
+                <LocationSearch
+                onSelect={(data) => {
+                  setValue("city_id", data.city_id),
+                    setValue("location", data.city);
+                }}
               />
+          
             </div>
-
-            <AnimatePresence>
-              {showLocationSuggestions &&
-                selectedCategory &&
-                (filteredLocations.length > 0 ? (
-                  <motion.ul
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-60 overflow-y-auto"
-                  >
-                    {filteredLocations.map((loc, index) => (
-                      <li
-                        key={`loc-${loc.city_id ?? index}`}
-                        onClick={() => handleSelectLocation(loc)}
-                        className={cn(
-                          "px-4 py-3 cursor-pointer text-sm sm:text-base",
-                          "hover:bg-blue-50 dark:hover:bg-blue-900/30 text-gray-800 dark:text-gray-100"
-                        )}
-                      >
-                        {loc.name}
-                      </li>
-                    ))}
-                  </motion.ul>
-                ) : (
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="absolute z-20 mt-2 w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 text-gray-500 dark:text-gray-400"
-                  >
-                    No matching locations found.
-                  </motion.p>
-                ))}
-            </AnimatePresence>
           </div>
 
           {/* Buttons */}

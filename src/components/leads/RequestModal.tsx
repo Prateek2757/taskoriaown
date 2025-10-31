@@ -31,8 +31,8 @@ export default function NewRequestModal({ open, onClose }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={close}>
-      <DialogContent className="max-w-2xl w-[95%] p-0 overflow-hidde rounded-2xl">
-        <DialogHeader className="border-b bg-gray-50 dark:bg-slate-900 p-4 text-center">
+      <DialogContent className="max-w-2xl w-[95%] p-0  rounded-2xl">
+        <DialogHeader className="border-b bg-gray-50 dark:bg-slate-900 rounded-2xl p-4 text-center">
           <DialogTitle className="text-xl text-center font-semibold">
             {step === 1 ? "Place a new request" : "A few quick questions"}
           </DialogTitle>
