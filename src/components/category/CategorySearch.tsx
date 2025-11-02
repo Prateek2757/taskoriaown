@@ -52,7 +52,7 @@ export default function CategorySearch({ onSelect, placeholder }: Props) {
     setShowSuggestions(true);
   }, [query, categories, selected]);
 
-  // Handle selection
+
   const handleSelect = (cat: Category) => {
     setQuery(cat.name);
     setSelected(cat);
@@ -60,7 +60,7 @@ export default function CategorySearch({ onSelect, placeholder }: Props) {
     onSelect?.({ id: cat.category_id, name: cat.name ,slug:cat.slug });
   };
 
-  // If user edits again manually, reset selection
+
   const handleChange = (value: string) => {
     setQuery(value);
     if (selected && value !== selected.name) {
@@ -80,7 +80,7 @@ export default function CategorySearch({ onSelect, placeholder }: Props) {
           if (!selected && filtered.length > 0) setShowSuggestions(true);
         }}
         className={cn(
-          "pl-9 rounded-xl py-2 border border-gray-300"
+          "pl-9 rounded-xl py-4 border"
         )}
         
       />

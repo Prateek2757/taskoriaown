@@ -11,6 +11,8 @@ interface Provider {
     rating: number;
     reviews_count: number;
     image?: string;
+    joineddate?:string;
+    locationname?:string;
     hourly_rate: number;
     badges?: string[];
   }
@@ -24,6 +26,8 @@ export const useProviders = (limit?: number) => {
       try {
         const data = await fetchProviders(limit);
         setProviders(data);
+        
+        
       } catch (error: any) {
         toast.error(error.message || "Failed to load providers.");
       } finally {

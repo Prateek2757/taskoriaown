@@ -10,15 +10,17 @@ export async function GET() {
           up.avg_rating,
           up.total_reviews,
           up.profile_image_id AS image,
-          json_agg(DISTINCT sc.name) AS services
+          up.created_at AS joineddate,
+          json_agg(DISTINCT sc.name) AS services,
+          c.name AS locationname
         FROM user_profiles up
         LEFT JOIN user_categories uc ON up.user_id = uc.user_id
         LEFT JOIN service_categories sc ON sc.category_id = uc.category_id
+        LEFT JOIN cities c  ON c.city_id = up.location_id
         WHERE up.provider_verified = true
-        GROUP BY up.user_id, up.display_name, up.avg_rating, up.total_reviews, up.profile_image_id
-        ORDER BY up.avg_rating DESC;
+        GROUP BY up.user_id, up.display_name, up.avg_rating, up.total_reviews, up.profile_image_id , c.name,up.created_at ,sc.rank
+        ORDER BY sc.rank ASC;
       `);
-
     return NextResponse.json(rows);
   } catch (error) {
     console.error(error);

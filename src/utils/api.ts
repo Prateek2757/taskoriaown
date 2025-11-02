@@ -1,8 +1,8 @@
-// utils/api.ts
+
 export async function fetchProviders(limit?: number) {
     try {
       const res = await fetch(`/api/providers`, {
-        cache: "no-store", // dynamic fetch for always fresh data
+        cache: "no-store", 
       });
       if (!res.ok) throw new Error("Failed to fetch providers");
   
@@ -18,7 +18,7 @@ export async function fetchProviders(limit?: number) {
   export async function fetchCategories(limit?: number) {
     try {
       const res = await fetch(`/api/signup/category-selection`, {
-        cache: "no-store", // dynamic fetch for always fresh data
+        cache: "no-store", 
       });
       if (!res.ok) throw new Error("Failed to fetch providers");
   

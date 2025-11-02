@@ -39,9 +39,20 @@ import pool from "@/lib/dbConnect";
 
 export async function GET() {
   try {
-    const result = await pool.query(`SELECT category_id, name, slug FROM service_categories`);
+    const result = await pool.query(`
+      SELECT 
+        category_id, 
+        name, 
+        slug, 
+        rank
+      FROM service_categories
+      WHERE is_active = true
+      ORDER BY rank ASC;
+    `);
+
     return NextResponse.json(result.rows);
-  } catch (err: unknown) {
+  } catch (err) {
+    console.error("Error fetching categories:", err);
     if (err instanceof Error) {
       return NextResponse.json({ message: err.message }, { status: 500 });
     }

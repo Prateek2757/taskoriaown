@@ -14,7 +14,7 @@ export const FeatureProvider = () => {
   return (
     <section className="bg-muted/30 py-16 px-4">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
+     
         <div className="flex items-center justify-between">
           <h2 className="text-3xl font-semibold text-foreground">
             Featured Providers
@@ -29,7 +29,7 @@ export const FeatureProvider = () => {
           </Link>
         </div>
 
-        {/* Grid */}
+      
         <div className="grid lg:grid-cols-3 sm:grid-cols-2 gap-6 mt-8">
           {loading
             ? [0, 1, 2].map((i) => (
@@ -47,9 +47,9 @@ export const FeatureProvider = () => {
                   transition={{ duration: 0.4 }}
                   className="bg-card border rounded-xl p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300"
                 >
-                  {/* Top Row */}
+                  
                   <div className="flex items-center gap-4">
-                    {/* Avatar */}
+                    
                     {p.image ? (
                       <Image
                         src={p.image}
@@ -67,7 +67,7 @@ export const FeatureProvider = () => {
                       </div>
                     )}
 
-                    {/* Info */}
+                   
                     <div>
                       <div className="font-medium text-foreground">
                         {p.name}
@@ -85,7 +85,6 @@ export const FeatureProvider = () => {
                       </div>
                     </div>
 
-                    {/* Rate & Rating */}
                     <div className="ml-auto text-right">
                       <div className="text-sm font-semibold text-foreground">
                         ${p.hourly_rate}/hr
@@ -97,7 +96,7 @@ export const FeatureProvider = () => {
                     </div>
                   </div>
 
-                  {/* Tags */}
+                  
                   <div className="mt-3 flex flex-wrap gap-2">
                     {p.badges?.slice(0, 2).map((t) => (
                       <span
@@ -109,7 +108,7 @@ export const FeatureProvider = () => {
                     ))}
                   </div>
 
-                  {/* View Button */}
+                 
                   <Link
                     href={`/providerprofile/${encodeURIComponent(
                       p.user_id.toString()
