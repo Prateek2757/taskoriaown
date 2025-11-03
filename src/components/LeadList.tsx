@@ -131,7 +131,7 @@ const LeadsList: React.FC<LeadsListProps> = ({ search = "" }) => {
                 {lead.location}
               </div>
               <div className="flex items-center gap-1.5">
-                <DollarSign className="w-4 h-4 text-green-500" />
+                <DollarSign className="w-4 h-4 text-cyan-500" />
                 {lead.min_budget && lead.max_budget
                   ? `$${lead.min_budget} - $${lead.max_budget}`
                   : "N/A"}
@@ -146,7 +146,7 @@ const LeadsList: React.FC<LeadsListProps> = ({ search = "" }) => {
               <Button
                 size="sm"
                 asChild
-                className="w-full bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] hover:from-blue-700 hover:to-green-700 text-white font-medium rounded-xl shadow-sm hover:shadow-md transition-all"
+                className="w-full bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] hover:from-blue-700 hover:to-cyan-700 text-white font-medium rounded-xl shadow-sm hover:shadow-md transition-all"
               >
                 <Link href={`/leads/${lead.task_id}`}>View Details</Link>
               </Button>

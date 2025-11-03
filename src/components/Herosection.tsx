@@ -22,28 +22,47 @@ export default function HeroSection() {
     if (!session) {
       toast.error("Please sign in first", {
         description: "Redirecting to Sign In page...",
-        duration: 4000,
+        duration: 1000,
         style: { borderRadius: "8px" },
         icon: "⚠️",
       });
-      setTimeout(() => router.push("/signin"), 2000);
+      setTimeout(() => router.push("/signin"));
       setLoading(true);
       return;
     }
     setOpenModal(true);
   };
 
+  const handleJoinAsProvider = async () => {
+   
+    try {
+      localStorage.removeItem("draftProviderId");
+      const res = await fetch("/api/signup/draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: "provider" }),
+      });
+
+      const data = await res.json();
+      if (data?.user?.user_id) {
+        localStorage.setItem("draftProviderId", data.user.user_id);
+        router.push(`/create?user_id=${data.user.user_id}`);
+      }
+    } catch (err) {
+      console.error("Error creating draft provider:", err);
+      alert("Something went wrong. Please try again.");
+    }
+  };
+
   return (
-    <section className="relative py-16 text-center bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-hidden">
+    <section className="relative py-16 text-center bg-gradient-to-br from-blue-50 via-white to-cyan-50 overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto space-y-8">
-          {/* Badge */}
           <div className="inline-flex items-center gap-2 border bg-card rounded-full px-3 py-1 text-xs text-muted-foreground mb-4">
             <Sparkles className="h-3.5 w-3.5 text-blue-600" /> AI-Powered •
             Community Driven
           </div>
 
-          {/* Hero Title */}
           <h1 className="text-5xl md:text-6xl font-bold  text-foreground leading-tight">
             The Future of{" "}
             <span className=" relative inline-block  bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
@@ -51,7 +70,7 @@ export default function HeroSection() {
               <span className="absolute right-4 bottom-0 translate-y-3 w-full h-5 overflow-hidden">
                 <SparklesCore
                   background="transparent"
-                  minSize={0.4} 
+                  minSize={0.4}
                   maxSize={1.7}
                   particleDensity={900}
                   className="w-full h-full"
@@ -65,7 +84,6 @@ export default function HeroSection() {
             </span>{" "}
             <span className="relative inline-block bg-gradient-to- from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-trnsparent">
               Marketplaces
-           
             </span>
           </h1>
 
@@ -94,7 +112,7 @@ export default function HeroSection() {
                 href={`/services/${slugvalue}`}
                 className="w-full sm:w-auto mt-4 sm:mt-0"
               >
-                <Button className="w-full sm:w-auto bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-md text-white font-semibold rounded-xl px-7 py-4 shadow-md hover:shadow-lg hover:from-blue-700 hover:to-green-700 active:scale-[0.97] transition-all duration-200">
+                <Button className="w-full sm:w-auto bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-md text-white font-semibold rounded-xl px-7 py-4 shadow-md hover:shadow-lg hover:from-blue-700 hover:to-cyan-700 active:scale-[0.97] transition-all duration-200">
                   Search
                 </Button>
               </Link>
@@ -106,12 +124,11 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Quick Actions */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto mt-6">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto mt-4">
             <Button
               onClick={handlePostJob}
               disabled={loading}
-              className={`flex-1 py-5 rounded-xl bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] ${
+              className={`flex-1 py-4 sm:py-5 rounded-xl bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] ${
                 loading ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
@@ -123,24 +140,24 @@ export default function HeroSection() {
               open={openModal}
               onClose={() => setOpenModal(false)}
             />
-
-            <Button
-              variant="outline"
-              className="flex-1 py-5 rounded-xl"
-              asChild
-            >
-              <Link href="/become-provider">Join as Provider</Link>
-            </Button>
+            {!session && (
+              <Button
+                variant="outline"
+                onClick={handleJoinAsProvider}
+                className="flex-1 py-5 rounded-xl"
+              >
+                <Link href="/become-provider">Join as Provider</Link>
+              </Button>
+            )}
           </div>
 
-          
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto mt-10">
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-600">1K+</div>
               <div className="text-gray-600">Verified Providers</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-600">5K+</div>
+              <div className="text-3xl font-bold text-cyan-600">5K+</div>
               <div className="text-gray-600">Jobs Completed</div>
             </div>
             <div className="text-center">

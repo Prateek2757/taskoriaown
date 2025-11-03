@@ -30,26 +30,26 @@ export default function LeadSettingsCard() {
 
   return (
     <Card className="border rounded-3xl shadow-2xl backdrop-blur-sm overflow-hidden hover:shadow-3xl transition-shadow duration-300 w-full">
-      {/* HEADER */}
-      <CardHeader className="bg-green-50 px-6 py-4 flex items-center justify-between">
+     
+      <CardHeader className="bg-cyan-50 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Wrench className="w-6 h-6 text-green-600" />
+          <Wrench className="w-6 h-6 text-cyan-600" />
           <CardTitle className="text-xl font-bold text-slate-800">Lead Settings</CardTitle>
         </div>
         <Link href="/settings/leads/myservices">
           <Button
             size="lg"
             variant="outline"
-            className="text-green-700 border-green-600 hover:bg-green-100"
+            className="text-cyan-700 border-cyan-600 hover:bg-cyan-100"
           >
             Manage Services
           </Button>
         </Link>
       </CardHeader>
 
-      {/* CONTENT */}
+    
       <CardContent className="grid gap-8 p-6">
-        {/* SERVICES */}
+        
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-slate-700">Your Services</h3>
           {profile.categories.length ? (
@@ -69,11 +69,11 @@ export default function LeadSettingsCard() {
           )}
         </div>
 
-        {/* LOCATION */}
+  
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-slate-700">Location</h3>
           <div className="flex items-center gap-2 text-slate-700">
-            <MapPin className="w-5 h-5 text-green-600" />
+            <MapPin className="w-5 h-5 text-cyan-600" />
             <span className="text-sm">{location}</span>
           </div>
           <p className="text-sm text-slate-500">
@@ -82,7 +82,7 @@ export default function LeadSettingsCard() {
         </div>
       </CardContent>
 
-      {/* FOOTER */}
+     
       <div className="bg-slate-50 px-6 py-4 text-center text-slate-500 text-sm">
         Profile: <span className="font-medium">{profile.display_name ?? "—"}</span>
       </div>

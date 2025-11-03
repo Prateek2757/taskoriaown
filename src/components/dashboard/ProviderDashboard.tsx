@@ -14,13 +14,13 @@ import { Badge } from "@/components/ui/badge";
 import { MapPin, BarChart3, Users, Star, Target } from "lucide-react";
 
 const theme = {
-  background: "#f8fafc",
+  background: "#00E5FF",
   card: "rgba(255,255,255,0.85)",
-  primary: "#16a34a",
+  primary: "#CCF9FF",
   secondary: "#3b82f6",
   muted: "#f1f5f9",
   border: "#e2e8f0",
-  gradient: "linear-gradient(to right, #16a34a, #3b82f6)",
+  gradient: "linear-gradient(to right, #8A2BE2, #3b82f6)",
 };
 
 export default function ProviderDashboard() {
@@ -66,15 +66,15 @@ export default function ProviderDashboard() {
     <div
       className="min-h-screen py-10"
       style={{
-        background: "linear-gradient(to bottom right, #f0fdf4, #eff6ff)",
+        background: "linear-gradient(to bottom right, [#8A2BE2] , #00E5FF)",
         color: "#1e293b",
       }}
     >
-      <main className="container mx-auto px-6 space-y-10">
-        {/* Header */}
+      <main className="container mx-auto  rounded-2xl px-6 space-y-10">
+        
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-[#8A2BE2]  via-[#6C63FF] to-[#00E5FF] bg-clip-text text-transparent">
               {greeting}, {user.name?.split(" ")[0] || "User"}!
             </h1>
             <p className="text-sm text-slate-600">
@@ -91,14 +91,14 @@ export default function ProviderDashboard() {
           </div>
           <Button
             variant="outline"
-            className="border-green-600 text-green-700 hover:bg-green-600 hover:text-white transition-all"
+            className="border-cyan-600 text-cyan-700 hover:bg-cyan-600 hover:text-white transition-all"
             onClick={() => setShowStats(!showStats)}
           >
             {showStats ? "Hide Insights" : "View Insights"}
           </Button>
         </div>
 
-        {/* Stats Section */}
+       
         {showStats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5 animate-in fade-in-10">
             {[
@@ -129,7 +129,7 @@ export default function ProviderDashboard() {
                 style={{ background: theme.card, borderColor: theme.border }}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <div className="p-2 rounded-full bg-green-100 text-green-600">
+                  <div className="p-2 rounded-full bg-cyan-100 text-cyan-600">
                     {stat.icon}
                   </div>
                 </div>
@@ -142,18 +142,18 @@ export default function ProviderDashboard() {
           </div>
         )}
 
-        {/* Main Dashboard Grid */}
+    
         <div className="grid gap-8 lg:grid-cols-3">
-          {/* Left Column */}
+         
           <div className="space-y-6">
-            {/* Profile Card */}
+           
             <Card
               className="border rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-2xl transition-shadow"
               style={{ background: theme.card, borderColor: theme.border }}
             >
               <CardContent className="pt-6 text-center">
-                <Avatar className="h-24 w-24 mb-4 ring-4 ring-green-100 mx-auto">
-                  <AvatarFallback className="text-2xl font-semibold bg-green-600 text-white">
+                <Avatar className="h-24 w-24 mb-4 ring-4 ring-blue-100 mx-auto">
+                  <AvatarFallback className="text-2xl font-semibold bg-cyan-600 text-white">
                     {user.name
                       ? user.name
                           .split(" ")
@@ -176,7 +176,7 @@ export default function ProviderDashboard() {
                     </span>
                     <Link
                       href="/settings/profile/my-profile"
-                      className="text-sm text-green-700 font-medium"
+                      className="text-sm text-blue-700 font-medium"
                     >
                       Edit
                     </Link>
@@ -186,7 +186,7 @@ export default function ProviderDashboard() {
               </CardContent>
             </Card>
 
-            {/* Starter Pack */}
+        
             <Card
               className="border rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-2xl transition-shadow"
               style={{ background: theme.card, borderColor: theme.border }}
@@ -207,19 +207,18 @@ export default function ProviderDashboard() {
                 <p className="text-sm text-slate-600">
                   Get early exposure and build credibility fast.
                 </p>
-                <Button className="mt-3 w-full bg-gradient-to-r from-green-600 to-blue-600 hover:opacity-90 text-white">
+                <Button className="mt-3 w-full bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]  hover:opacity-90 text-white">
                   Get Offer
                 </Button>
               </CardContent>
             </Card>
           </div>
 
-          {/* Center Column */}
+    
           <LeadSettingsCard />
 
-          {/* Right Column */}
           <div className="space-y-6">
-            {/* Leads Overview */}
+            
             <Card
               className="border rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-2xl transition-shadow"
               style={{ background: theme.card, borderColor: theme.border }}
@@ -230,14 +229,14 @@ export default function ProviderDashboard() {
                 </CardTitle>
                 <Button
                   variant="link"
-                  className="text-green-700"
+                  className="text-cyan-700"
                   onClick={() => router.push("/provider/leads")}
                 >
                   View
                 </Button>
               </CardHeader>
               <CardContent className="flex items-center gap-4">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-100 text-green-700 text-3xl font-bold">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-cyan-100 text-cyan-700 text-3xl font-bold">
                   {totalLeads ?? "—"}
                 </div>
                 <p className="font-semibold text-sm text-slate-700">
@@ -246,7 +245,7 @@ export default function ProviderDashboard() {
               </CardContent>
             </Card>
 
-            {/* Responses */}
+           
             <Card
               className="border rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-2xl transition-shadow"
               style={{ background: theme.card, borderColor: theme.border }}
@@ -255,7 +254,7 @@ export default function ProviderDashboard() {
                 <CardTitle className="text-lg font-semibold">
                   Responses
                 </CardTitle>
-                <Button variant="link" className="text-green-700">
+                <Button variant="link" className="text-cyan-700">
                   View
                 </Button>
               </CardHeader>

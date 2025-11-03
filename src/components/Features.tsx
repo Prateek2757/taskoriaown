@@ -1,17 +1,10 @@
 "use client";
-import {
-  Shield,
-  Users,
-  Bot,
-  Award,
-  ArrowRight,
-  CheckCircle,
-} from "lucide-react";
 
-export const Features = () => {
+import { ArrowRight, CheckCircle } from "lucide-react";
+
+export default function FeaturesPage() {
   const features = [
     {
-      icon: <Bot className="w-7 h-7" />,
       title: "AI-Powered Matching",
       description:
         "Our advanced AI connects you with the perfect service providers based on your specific needs and preferences.",
@@ -20,36 +13,35 @@ export const Features = () => {
       color: "from-blue-500 to-blue-600",
     },
     {
-      icon: <Shield className="w-7 h-7" />,
       title: "Professional Verification",
       description:
         "Every provider is verified through our tamper-proof system, ensuring trust and transparency.",
       image:
-        "https://plus.unsplash.com/premium_photo-1674669009418-2643aa58b11b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80",
-      color: "from-green-500 to-green-600",
+        "https://plus.unsplash.com/premium_photo-1674669009418-2643aa58b11b?ixlib=rb-4.1.0&auto=format&fit=crop&q=80",
+      color: "from-blue-500 to-blue-600",
     },
     {
-      icon: <Award className="w-7 h-7" />,
       title: "Smart Quoting",
       description:
         "Get instant, accurate quotes powered by AI analysis of your project requirements.",
       image:
         "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&auto=format&fit=crop&q=80",
-      color: "from-purple-500 to-purple-600",
+      color: "from-blue-500 to-blue-600",
     },
     {
-      icon: <Users className="w-7 h-7" />,
       title: "Community Driven",
       description:
         "Join our vibrant community forums where providers share knowledge and customers find insights.",
       image:
         "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80",
-      color: "from-orange-500 to-orange-600",
+      color: "from-blue-500 to-blue-600",
     },
   ];
+
   return (
-    <div className="bg-gradient-to-b from-gray-400 via-gray-500  to-gray-600">
-      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+    <div className="bg-gradient-to-b from-gray-400 via-gray-500 to-gray-600">
+      {/* ======================= HERO SECTION ======================= */}
+      {/* <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&auto=format&fit=crop&q=80')] opacity-10 bg-cover bg-center"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/50"></div>
 
@@ -69,7 +61,7 @@ export const Features = () => {
             <p className="text-xl text-slate-300 mb-8 leading-relaxed">
               Experience the next generation of service marketplaces with
               cutting-edge technology, verified professionals, and a thriving
-              community
+              community.
             </p>
             <div className="flex flex-wrap gap-4">
               <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold flex items-center gap-2 transition-all shadow-lg shadow-blue-600/30">
@@ -82,9 +74,21 @@ export const Features = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
+
+      {/* ======================= FEATURES SECTION ======================= */}
       <section className="py-12 bg-gradient-to-r from-slate-50 to-gray-100">
-        <div className="container max-w-6xl mx-auto px-4">
+        <div className="container max-w-7xl mx-auto px-4">
+        <h1 className="text-5xl text-center md:text-5xl font-bold text-black mb-6 leading-tight">
+              Why Choose{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+                Taskoria
+              </span>
+              ?
+            </h1>
+          <h2 className="text-3xl font-bold text-center text-slate-800 mb-12">
+            Powerful Features That Make Taskoria Stand Out
+          </h2>
           <div className="grid md:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <div
@@ -98,11 +102,6 @@ export const Features = () => {
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                  <div
-                    className={`absolute top-4 left-4 p-3 rounded-xl bg-gradient-to-br ${feature.color} text-white shadow-lg`}
-                  >
-                    {feature.icon}
-                  </div>
                 </div>
 
                 <div className="p-4 flex flex-col flex-1 justify-between">
@@ -120,8 +119,6 @@ export const Features = () => {
                       Learn more
                       <ArrowRight className="w-4 h-4" />
                     </button>
-
-                    {/* Decorative gradient line */}
                     <div
                       className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500`}
                     ></div>
@@ -134,4 +131,4 @@ export const Features = () => {
       </section>
     </div>
   );
-};
+}

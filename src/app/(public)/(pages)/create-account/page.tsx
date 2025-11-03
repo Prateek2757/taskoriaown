@@ -131,7 +131,7 @@ function OnboardingContent() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50 p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -203,14 +203,14 @@ function OnboardingContent() {
                           whileTap={{ scale: 0.98 }}
                           className={`relative border-2 rounded-2xl p-6 cursor-pointer shadow-sm transition-all duration-300 ${
                             !field.value
-                              ? "border-green-600 bg-gradient-to-br from-green-50 to-green-100"
-                              : "border-gray-200 hover:border-green-300"
+                              ? "border-cyan-600 bg-gradient-to-br from-cyan-50 to-cyan-100"
+                              : "border-gray-200 hover:border-cyan-300"
                           }`}
                           onClick={() => setValue("is_nationwide", false)}
                         >
                           <div className="flex flex-col items-center text-center space-y-3">
-                            <div className="bg-green-100 p-3 rounded-full">
-                              <MapPin className="w-6 h-6 text-green-600" />
+                            <div className="bg-cyan-100 p-3 rounded-full">
+                              <MapPin className="w-6 h-6 text-cyan-600" />
                             </div>
                             <h3 className="text-lg font-semibold text-gray-900">
                               I serve customers locally
@@ -222,7 +222,7 @@ function OnboardingContent() {
                               type="radio"
                               checked={field.value === false}
                               onChange={() => setValue("is_nationwide", false)}
-                              className="absolute top-4 right-4 accent-green-600 w-4 h-4"
+                              className="absolute top-4 right-4 accent-cyan-600 w-4 h-4"
                             />
                           </div>
 
@@ -238,7 +238,7 @@ function OnboardingContent() {
                                     <FormControl>
                                       <select
                                         {...field}
-                                        className="border border-gray-300 rounded-xl px-4 py-2 w-full focus:ring-2 focus:ring-green-500"
+                                        className="border border-gray-300 rounded-xl px-4 py-2 w-full focus:ring-2 focus:ring-cyan-500"
                                       >
                                         <option value="10">10 miles</option>
                                         <option value="20">20 miles</option>
@@ -261,7 +261,10 @@ function OnboardingContent() {
                                     <FormControl>
                                       <LocationSearch
                                         onSelect={(data) => {
-                                          setValue("city_id", String(data.city_id));
+                                          setValue(
+                                            "city_id",
+                                            String(data.city_id)
+                                          );
                                         }}
                                       />
                                     </FormControl>

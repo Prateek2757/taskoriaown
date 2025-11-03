@@ -145,7 +145,7 @@ export function AIQuoteGenerator() {
                     {/* Total */}
                     <div className="border-t pt-2 flex justify-between font-semibold">
                       <span>Total Estimate</span>
-                      <span className="text-green-600">${quote.total}</span>
+                      <span className="text-cyan-600">${quote.total}</span>
                     </div>
 
                     <p className="text-xs text-gray-500">

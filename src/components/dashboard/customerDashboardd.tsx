@@ -68,7 +68,7 @@ const STATUS_BADGES = {
     </Badge>
   ),
   completed: (
-    <Badge className="text-green-600 border-green-200 bg-green-50">
+    <Badge className="text-cyan-600 border-cyan-200 bg-cyan-50">
       Completed
     </Badge>
   ),
@@ -77,7 +77,7 @@ const STATUS_BADGES = {
 const STATUS_ICONS = {
   open: <Clock className="w-4 h-4 text-blue-600" />,
   in_progress: <AlertCircle className="w-4 h-4 text-orange-600" />,
-  completed: <CheckCircle className="w-4 h-4 text-green-600" />,
+  completed: <CheckCircle className="w-4 h-4 text-cyan-600" />,
 };
 
 // Quick Action Buttons
@@ -108,7 +108,7 @@ const StatsOverview = () => (
     <StatCard
       label="Completed"
       value="12"
-      icon={<CheckCircle className="w-8 h-8 text-green-600" />}
+      icon={<CheckCircle className="w-8 h-8 text-cyan-600" />}
     />
     <StatCard
       label="Total Spent"
@@ -209,7 +209,7 @@ const RecentNotifications = () => (
           time="2 hours ago"
         />
         <Notification
-          color="green"
+          color="cyan"
           text='Job "Logo Design" marked as completed'
           time="1 day ago"
         />

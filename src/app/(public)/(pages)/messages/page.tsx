@@ -23,7 +23,8 @@ const Messages = () => {
       timestamp: "10:30 AM",
       unread: 2,
       online: true,
-      profileImage: "https://images.unsplash.com/photo-1494790108755-2616b12b2134?w=150&h=150&fit=crop&crop=face"
+      profileImage:
+        "https://images.unsplash.com/photo-1494790108755-2616b12b2134?w=150&h=150&fit=crop&crop=face",
     },
     {
       id: 2,
@@ -33,7 +34,8 @@ const Messages = () => {
       timestamp: "Yesterday",
       unread: 0,
       online: false,
-      profileImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+      profileImage:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
     },
     {
       id: 3,
@@ -43,7 +45,8 @@ const Messages = () => {
       timestamp: "2 days ago",
       unread: 0,
       online: true,
-      profileImage: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
+      profileImage:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
     },
     {
       id: 4,
@@ -53,8 +56,9 @@ const Messages = () => {
       timestamp: "3 days ago",
       unread: 1,
       online: false,
-      profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
-    }
+      profileImage:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+    },
   ];
 
   // Mock messages for selected conversation
@@ -62,41 +66,46 @@ const Messages = () => {
     {
       id: 1,
       sender: "Sarah Johnson",
-      message: "Hi! I received your booking for the interior design consultation. I'm excited to work with you!",
+      message:
+        "Hi! I received your booking for the interior design consultation. I'm excited to work with you!",
       timestamp: "9:15 AM",
-      isProvider: true
+      isProvider: true,
     },
     {
       id: 2,
       sender: "You",
-      message: "Thank you! I'm looking forward to it. Could you let me know what I should prepare before our meeting?",
+      message:
+        "Thank you! I'm looking forward to it. Could you let me know what I should prepare before our meeting?",
       timestamp: "9:20 AM",
-      isProvider: false
+      isProvider: false,
     },
     {
       id: 3,
       sender: "Sarah Johnson",
-      message: "Great question! Please prepare:\n• Photos of your current space\n• Budget range\n• Style preferences or inspiration photos\n• List of functional requirements",
+      message:
+        "Great question! Please prepare:\n• Photos of your current space\n• Budget range\n• Style preferences or inspiration photos\n• List of functional requirements",
       timestamp: "9:25 AM",
-      isProvider: true
+      isProvider: true,
     },
     {
       id: 4,
       sender: "You",
-      message: "Perfect! I'll have all of that ready. What time works best for you tomorrow?",
+      message:
+        "Perfect! I'll have all of that ready. What time works best for you tomorrow?",
       timestamp: "9:30 AM",
-      isProvider: false
+      isProvider: false,
     },
     {
       id: 5,
       sender: "Sarah Johnson",
-      message: "I'll be there at 2 PM tomorrow for the consultation. Looking forward to seeing your space!",
+      message:
+        "I'll be there at 2 PM tomorrow for the consultation. Looking forward to seeing your space!",
       timestamp: "10:30 AM",
-      isProvider: true
-    }
+      isProvider: true,
+    },
   ];
 
-  const selectedConv = conversations.find(c => c.id === selectedConversation);
+  const selectedConv = conversations.find((c) => c.id === selectedConversation);
 
   const sendMessage = () => {
     if (newMessage.trim()) {
@@ -108,7 +117,6 @@ const Messages = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-     
 
       <div className="h-[calc(100vh-80px)] flex flex-col md:flex-row">
         {/* Conversations Sidebar */}
@@ -127,30 +135,48 @@ const Messages = () => {
               <div
                 key={conversation.id}
                 className={`p-4 border-b cursor-pointer hover:bg-gray-50 transition-colors ${
-                  selectedConversation === conversation.id ? 'bg-blue-50 border-r-2 border-r-blue-500' : ''
+                  selectedConversation === conversation.id
+                    ? "bg-blue-50 border-r-2 border-r-blue-500"
+                    : ""
                 }`}
                 onClick={() => setSelectedConversation(conversation.id)}
               >
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <Avatar className="w-12 h-12">
-                      <AvatarImage src={conversation.profileImage} alt={conversation.name} />
-                      <AvatarFallback>{conversation.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                      <AvatarImage
+                        src={conversation.profileImage}
+                        alt={conversation.name}
+                      />
+                      <AvatarFallback>
+                        {conversation.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
                     </Avatar>
                     {conversation.online && (
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-cyan-500 border-2 border-white rounded-full"></div>
                     )}
                   </div>
-                  
+
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <p className="font-semibold text-gray-900 truncate">{conversation.name}</p>
-                      <span className="text-xs text-gray-500">{conversation.timestamp}</span>
+                      <p className="font-semibold text-gray-900 truncate">
+                        {conversation.name}
+                      </p>
+                      <span className="text-xs text-gray-500">
+                        {conversation.timestamp}
+                      </span>
                     </div>
-                    <p className="text-sm text-blue-600 mb-1">{conversation.service}</p>
-                    <p className="text-sm text-gray-600 truncate">{conversation.lastMessage}</p>
+                    <p className="text-sm text-blue-600 mb-1">
+                      {conversation.service}
+                    </p>
+                    <p className="text-sm text-gray-600 truncate">
+                      {conversation.lastMessage}
+                    </p>
                   </div>
-                  
+
                   {conversation.unread > 0 && (
                     <Badge className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
                       {conversation.unread}
@@ -171,19 +197,29 @@ const Messages = () => {
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <Avatar className="w-10 h-10">
-                      <AvatarImage src={selectedConv.profileImage} alt={selectedConv.name} />
-                      <AvatarFallback>{selectedConv.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                      <AvatarImage
+                        src={selectedConv.profileImage}
+                        alt={selectedConv.name}
+                      />
+                      <AvatarFallback>
+                        {selectedConv.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
                     </Avatar>
                     {selectedConv.online && (
-                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-cyan-500 border-2 border-white rounded-full"></div>
                     )}
                   </div>
                   <div>
                     <p className="font-semibold">{selectedConv.name}</p>
-                    <p className="text-sm text-gray-600">{selectedConv.service}</p>
+                    <p className="text-sm text-gray-600">
+                      {selectedConv.service}
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                   <Button variant="ghost" size="sm">
                     <Phone className="w-4 h-4" />
@@ -202,26 +238,44 @@ const Messages = () => {
                 {messages.map((message) => (
                   <div
                     key={message.id}
-                    className={`flex ${message.isProvider ? 'justify-start' : 'justify-end'}`}
+                    className={`flex ${
+                      message.isProvider ? "justify-start" : "justify-end"
+                    }`}
                   >
-                    <div className={`max-w-xs lg:max-w-md ${message.isProvider ? 'order-2' : ''}`}>
+                    <div
+                      className={`max-w-xs lg:max-w-md ${
+                        message.isProvider ? "order-2" : ""
+                      }`}
+                    >
                       {message.isProvider && (
                         <div className="flex items-center gap-2 mb-1">
                           <Avatar className="w-6 h-6">
-                            <AvatarImage src={selectedConv.profileImage} alt={selectedConv.name} />
-                            <AvatarFallback className="text-xs">{selectedConv.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                            <AvatarImage
+                              src={selectedConv.profileImage}
+                              alt={selectedConv.name}
+                            />
+                            <AvatarFallback className="text-xs">
+                              {selectedConv.name
+                                .split(" ")
+                                .map((n) => n[0])
+                                .join("")}
+                            </AvatarFallback>
                           </Avatar>
-                          <span className="text-xs text-gray-500">{message.sender}</span>
+                          <span className="text-xs text-gray-500">
+                            {message.sender}
+                          </span>
                         </div>
                       )}
                       <div
                         className={`px-4 py-2 rounded-2xl ${
                           message.isProvider
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'bg-blue-600 text-white'
+                            ? "bg-gray-100 text-gray-900"
+                            : "bg-blue-600 text-white"
                         }`}
                       >
-                        <p className="text-sm whitespace-pre-line">{message.message}</p>
+                        <p className="text-sm whitespace-pre-line">
+                          {message.message}
+                        </p>
                       </div>
                       <p className="text-xs text-gray-500 mt-1 text-right">
                         {message.timestamp}
@@ -238,7 +292,7 @@ const Messages = () => {
                     placeholder="Type your message..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+                    onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                     className="flex-1"
                   />
                   <Button onClick={sendMessage} disabled={!newMessage.trim()}>
@@ -250,7 +304,9 @@ const Messages = () => {
           ) : (
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
-                <p className="text-gray-500 mb-4">Select a conversation to start messaging</p>
+                <p className="text-gray-500 mb-4">
+                  Select a conversation to start messaging
+                </p>
                 <Button asChild>
                   <Link href="/discover">Find Service Providers</Link>
                 </Button>

@@ -1,7 +1,5 @@
 "use client"
 import { Star } from "lucide-react";
-
-import { Card, CardContent } from "./ui/card";
 import { motion } from "motion/react";
 
 const testimonials = [
@@ -38,4 +36,4 @@ function Testomonail() {
   )
 }
 
-export default Testomonail
+export default Testomonail;

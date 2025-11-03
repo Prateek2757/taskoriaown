@@ -73,19 +73,19 @@ export default function CategorySelectionPage() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin mb-3" />
+        <Loader2 className="w-8 h-8 text-cyan-600 animate-spin mb-3" />
         <p className="text-gray-500">Loading categories...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white via-green-50/40 to-gray-50 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white via-cyan-50/40 to-gray-50 p-4">
       <Card className="max-w-2xl w-full shadow-2xl border border-gray-100 rounded-3xl backdrop-blur-sm bg-white/90">
         <CardContent className="p-8">
           {/* Title */}
           <div className="text-center mb-6">
-            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
               What service do you provide?
             </h1>
             <p className="text-gray-500 mt-2">
@@ -99,7 +99,7 @@ export default function CategorySelectionPage() {
             <Input
               type="text"
               placeholder="Search for a service (e.g., Photographer, Web Designer, Plumber...)"
-              className="pl-10 py-6 border-gray-300 focus:ring-2 focus:ring-green-500 text-gray-700 rounded-xl text-base shadow-sm"
+              className="pl-10 py-6 border-gray-300 focus:ring-2 focus:ring-cyan-500 text-gray-700 rounded-xl text-base shadow-sm"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -123,8 +123,8 @@ export default function CategorySelectionPage() {
                         whileHover={{ scale: 1.03 }}
                         className={`cursor-pointer border rounded-xl p-4 text-center font-medium transition-all duration-200 ${
                           selectedCategory === c.category_id
-                            ? "bg-green-600 text-white border-green-600 shadow-md"
-                            : "bg-white hover:bg-green-50 border-gray-200 text-gray-700"
+                            ? "bg-cyan-600 text-white border-cyan-600 shadow-md"
+                            : "bg-white hover:bg-cyan-50 border-gray-200 text-gray-700"
                         }`}
                         onClick={() =>
                           handleSelectCategory(c.category_id, c.name)
@@ -158,8 +158,8 @@ export default function CategorySelectionPage() {
                     onClick={() => setSelectedCategory(c.category_id)}
                     className={`rounded-full px-4 py-2 text-sm transition ${
                       selectedCategory === c.category_id
-                        ? "bg-green-600 text-white"
-                        : "hover:bg-green-50 text-gray-700"
+                        ? "bg-cyan-600 text-white"
+                        : "hover:bg-cyan-50 text-gray-700"
                     }`}
                   >
                     {c.name}
@@ -174,7 +174,7 @@ export default function CategorySelectionPage() {
             <Button
               disabled={isNavigating}
               onClick={goNext}
-              className="bg-gradient-to-r from-green-600 to-blue-600 text-white px-10 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-green-700 hover:to-blue-700 transition-all w-full"
+              className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-10 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-cyan-700 hover:to-blue-700 transition-all w-full"
             >
               {isNavigating ? (
                 <>

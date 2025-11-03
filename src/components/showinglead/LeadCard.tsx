@@ -6,9 +6,9 @@ interface Lead {
   title: string;
   location_name: string;
   category_name: string;
-  customer_name?:string;
-  phone:number;
-  customer_email?:string;
+  customer_name?: string;
+  phone: number;
+  customer_email?: string;
   created_at: string;
   description: string;
   status?: string;
@@ -26,7 +26,9 @@ const LeadCard: React.FC<LeadCardProps> = ({ lead, isSelected, onSelect }) => {
   const formatTimeAgo = (timestamp: string): string => {
     const now = new Date();
     const created = new Date(timestamp);
-    const diffInMinutes = Math.floor((now.getTime() - created.getTime()) / (1000 * 60));
+    const diffInMinutes = Math.floor(
+      (now.getTime() - created.getTime()) / (1000 * 60)
+    );
 
     if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
     if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
@@ -74,7 +76,9 @@ const LeadCard: React.FC<LeadCardProps> = ({ lead, isSelected, onSelect }) => {
             <h3 className="text-gray-900 text-base font-semibold leading-tight line-clamp-1">
               {lead.customer_name}
             </h3>
-            <p className="text-sm text-gray-500 line-clamp-1">{lead.location_name}</p>
+            <p className="text-sm text-gray-500 line-clamp-1">
+              {lead.location_name}
+            </p>
           </div>
         </div>
         <span className="text-xs text-gray-400 whitespace-nowrap font-medium">
@@ -89,7 +93,7 @@ const LeadCard: React.FC<LeadCardProps> = ({ lead, isSelected, onSelect }) => {
             ⚡ Urgent
           </span>
         )}
-        <span className="px-2 py-1 text-[11px] font-medium rounded-full bg-green-100 text-green-700 border border-green-200">
+        <span className="px-2 py-1 text-[11px] font-medium rounded-full bg-cyan-100 text-cyan-700 border border-cyan-200">
           ✓ Verified phone
         </span>
         <span className="px-2 py-1 text-[11px] font-medium rounded-full bg-purple-100 text-purple-700 border border-purple-200">

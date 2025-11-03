@@ -14,14 +14,30 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import Link from "next/link";
 
@@ -77,10 +93,9 @@ export default function BookingPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-    
 
       <div className="container mx-auto px-4 py-8">
-      <Button variant="ghost" asChild className="mb-6">
+        <Button variant="ghost" asChild className="mb-6">
           <Link href="/">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
           </Link>
@@ -116,9 +131,11 @@ export default function BookingPage() {
                     </Avatar>
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-xl font-semibold">{provider.name}</h3>
+                        <h3 className="text-xl font-semibold">
+                          {provider.name}
+                        </h3>
                         {provider.verified && (
-                          <Badge className="bg-green-100 text-green-800">
+                          <Badge className="bg-cyan-100 text-cyan-800">
                             Verified
                           </Badge>
                         )}
@@ -202,7 +219,9 @@ export default function BookingPage() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
-                    <Label className="text-base font-medium">Select Date *</Label>
+                    <Label className="text-base font-medium">
+                      Select Date *
+                    </Label>
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
@@ -234,12 +253,16 @@ export default function BookingPage() {
                   </div>
 
                   <div>
-                    <Label className="text-base font-medium">Select Time *</Label>
+                    <Label className="text-base font-medium">
+                      Select Time *
+                    </Label>
                     <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mt-2">
                       {timeSlots.map((time) => (
                         <Button
                           key={time}
-                          variant={selectedTime === time ? "default" : "outline"}
+                          variant={
+                            selectedTime === time ? "default" : "outline"
+                          }
                           className="text-sm"
                           onClick={() => setSelectedTime(time)}
                         >
@@ -302,12 +325,13 @@ export default function BookingPage() {
                       <span>Service Rate</span>
                       <span>${provider.hourlyRate}/hour</span>
                     </div>
-                    {selectedDuration && selectedDuration.value !== "custom" && (
-                      <div className="flex justify-between">
-                        <span>Duration</span>
-                        <span>{selectedDuration.label}</span>
-                      </div>
-                    )}
+                    {selectedDuration &&
+                      selectedDuration.value !== "custom" && (
+                        <div className="flex justify-between">
+                          <span>Duration</span>
+                          <span>{selectedDuration.label}</span>
+                        </div>
+                      )}
                     {selectedDate && (
                       <div className="flex justify-between">
                         <span>Date</span>
@@ -353,7 +377,7 @@ export default function BookingPage() {
                   </Button>
 
                   <div className="flex items-center gap-2 text-sm text-gray-600 pt-2">
-                    <Shield className="w-4 h-4 text-green-600" />
+                    <Shield className="w-4 h-4 text-cyan-600" />
                     <span>Secure payment & money-back guarantee</span>
                   </div>
                 </CardContent>

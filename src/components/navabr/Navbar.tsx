@@ -55,7 +55,6 @@ export default function ModernNavbar() {
     ],
   };
 
-  // Close dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -69,7 +68,6 @@ export default function ModernNavbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Load or initialize view mode
   useEffect(() => {
     if (typeof window === "undefined") return;
     const storedView = localStorage.getItem("viewMode") as ViewMode | null;
@@ -151,9 +149,9 @@ export default function ModernNavbar() {
         transition={{ duration: 0.15 }}
         className="absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-[999]"
       >
-        <div className="bg-gradient-to-r from-blue-50 to-green-50 p-4 border-b border-gray-200">
+        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 border-b border-gray-200">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-green-500 rounded-full flex items-center justify-center shadow-md">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full flex items-center justify-center shadow-md">
               <User className="w-7 h-7 text-white" />
             </div>
             <div className="flex-1 min-w-0">
@@ -225,10 +223,8 @@ export default function ModernNavbar() {
 
   return (
     <>
-      {/* Top Navbar */}
       <header className="backdrop-saturate-150 border-b sticky top-0 z-50 bg-white/70 backdrop-blur-md border border-white/20 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between relative">
-          {/* Left: Logo */}
           <Link
             href="/"
             className="flex items-center   hover:opacity-90 transition-opacity"
@@ -246,7 +242,6 @@ export default function ModernNavbar() {
             </span>
           </Link>
 
-          {/* Center Nav (floating glass look) */}
           {!minimalPages.includes(pathname) && (
             <motion.nav
               className="hidden md:flex absolute left-1/2 transform -translate-x-1/2    px-5 py-2 rounded-full space-x-2"
@@ -270,7 +265,6 @@ export default function ModernNavbar() {
             </motion.nav>
           )}
 
-          {/* Right Side */}
           {!minimalPages.includes(pathname) && (
             <div className="hidden md:flex items-center gap-3">
               {session ? (
@@ -280,7 +274,7 @@ export default function ModernNavbar() {
                     variant="ghost"
                     className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-50"
                   >
-                    <div className="w-9 h-9 bg-gradient-to-br from-blue-100 to-green-100 rounded-full flex items-center justify-center">
+                    <div className="w-9 h-9 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center">
                       <User className="w-5 h-5 text-blue-600" />
                     </div>
                     <span className="font-medium text-gray-700">
@@ -307,7 +301,7 @@ export default function ModernNavbar() {
                   </Button>
                   <Button
                     onClick={handleJoinAsProvider}
-                    className="bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-green-700 font-medium shadow-md"
+                    className="bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
                     Join as Provider
                   </Button>
@@ -316,7 +310,6 @@ export default function ModernNavbar() {
             </div>
           )}
 
-          {/* Mobile Menu Button */}
           <Button
             variant="ghost"
             onClick={() => setIsMenuOpen((p) => !p)}
@@ -327,11 +320,9 @@ export default function ModernNavbar() {
         </div>
       </header>
 
-      {/* Mobile Sidebar */}
       <AnimatePresence>
         {isMenuOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -341,7 +332,6 @@ export default function ModernNavbar() {
               onClick={() => setIsMenuOpen(false)}
             />
 
-            {/* Sidebar */}
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
@@ -377,9 +367,9 @@ export default function ModernNavbar() {
 
                 {/* User Info */}
                 {session && (
-                  <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl p-4 mb-4">
+                  <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-4 mb-4">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-green-500 rounded-full flex items-center justify-center shadow-lg ring-4 ring-white">
+                      <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full flex items-center justify-center shadow-lg ring-4 ring-white">
                         <User className="w-7 h-7 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -412,7 +402,7 @@ export default function ModernNavbar() {
                       onClick={() => setIsMenuOpen(false)}
                       className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
                         isActive
-                          ? "bg-gradient-to-r from-blue-500 to-green-500 text-white shadow-lg"
+                          ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg"
                           : "text-gray-700 hover:bg-gray-50"
                       }`}
                     >
@@ -501,7 +491,7 @@ export default function ModernNavbar() {
                           handleJoinAsProvider();
                           setIsMenuOpen(false);
                         }}
-                        className="w-full bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-green-700 font-medium"
+                        className="w-full bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-cyan-700 font-medium"
                       >
                         Join as Provider
                       </Button>

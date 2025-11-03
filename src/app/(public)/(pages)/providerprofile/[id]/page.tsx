@@ -112,8 +112,8 @@ export default function ProviderProfile() {
                         {provider.responseTime || "N/A"}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Award className="w-4 h-4" /> {provider.jobscompleted || 0}{" "}
-                        jobs completed
+                        <Award className="w-4 h-4" />{" "}
+                        {provider.jobscompleted || 0} jobs completed
                       </span>
                     </div>
 
@@ -288,7 +288,7 @@ export default function ProviderProfile() {
               <CardHeader>
                 <CardTitle className="flex justify-between">
                   <span>Book Service</span>
-                  <span className="text-green-600 font-bold">
+                  <span className="text-cyan-600 font-bold">
                     ${provider.hourlyRate || 0}/hr
                   </span>
                 </CardTitle>
@@ -311,7 +311,7 @@ export default function ProviderProfile() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-green-600" /> Trust & Safety
+                  <Shield className="w-5 h-5 text-cyan-600" /> Trust & Safety
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -320,21 +320,21 @@ export default function ProviderProfile() {
                     provider.trustIndicators.map((t: string) => (
                       <li
                         key={t}
-                        className="flex items-center gap-2 text-green-600"
+                        className="flex items-center gap-2 text-cyan-600"
                       >
-                        <span className="w-2 h-2 bg-green-600 rounded-full" />{" "}
+                        <span className="w-2 h-2 bg-cyan-600 rounded-full" />{" "}
                         {t}
                       </li>
                     ))
                   ) : (
                     <>
-                      <li className="flex items-center gap-2 text-green-600">
-                        <span className="w-2 h-2 bg-green-600 rounded-full" />{" "}
+                      <li className="flex items-center gap-2 text-cyan-600">
+                        <span className="w-2 h-2 bg-cyan-600 rounded-full" />{" "}
                         Blockchain identity verified
                       </li>
-                      <li className="flex items-center gap-2 text-green-600">
-                        <span className="w-2 h-2 bg-green-600 rounded-full" />{" "}
-                        AI background check passed
+                      <li className="flex items-center gap-2 text-cyan-600">
+                        <span className="w-2 h-2 bg-cyan-600 rounded-full" /> AI
+                        background check passed
                       </li>
                     </>
                   )}

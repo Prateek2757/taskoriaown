@@ -286,7 +286,7 @@ export default function AddLeadModal({
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-2 text-white bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] hover:from-blue-700 hover:to-green-700 shadow-md hover:shadow-lg rounded-xl"
+              className="w-full py-2 text-white bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] hover:from-blue-700 hover:to-cyan-700 shadow-md hover:shadow-lg rounded-xl"
             >
               {isSubmitting ? "Submitting..." : "Submit Lead"}
             </Button>

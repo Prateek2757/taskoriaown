@@ -1,12 +1,13 @@
 import Categories from "@/components/Categories"
 import CTA from "@/components/CTA"
 import { FeatureProvider } from "@/components/FeatureProvider"
-import { Features } from "@/components/Features"
+import FeaturesPage from "@/components/Features"
 import Footer from "@/components/Footer"
 import HeroSection from "@/components/Herosection"
 import HowItWorks from "@/components/how-taskoria-works"
 import SupportChatbot from "@/components/supportChatbox"
 import Testomonail from "@/components/Testomonail"
+import { WorldMapDemo } from "@/components/WorldMap"
 
 function page() {
   return (
@@ -15,10 +16,11 @@ function page() {
       <HeroSection/>
       <HowItWorks/>
       <Categories/>
-      <Features/>
+      <FeaturesPage/>
       <Testomonail/>
       <FeatureProvider/>
       <CTA/>
+      {/* <WorldMapDemo/> */}
       <Footer/>
       <SupportChatbot/>
     </div>

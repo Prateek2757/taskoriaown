@@ -45,7 +45,7 @@ export default function CustomerDashboard() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center sm:text-left">
-            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent tracking-tight">
+            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent tracking-tight">
               Your Requests
             </h1>
             <p className="text-muted-foreground text-sm">
@@ -55,7 +55,7 @@ export default function CustomerDashboard() {
 
           <Button
             onClick={() => setOpenModal(true)}
-            className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-medium shadow-lg hover:shadow-xl transition-all flex items-center gap-2 rounded-xl"
+            className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-medium shadow-lg hover:shadow-xl transition-all flex items-center gap-2 rounded-xl"
           >
             <PlusCircle className="w-4 h-4" />
             Place New Request
@@ -75,7 +75,7 @@ export default function CustomerDashboard() {
             <CardContent className="py-16 text-center space-y-6 max-w-2xl mx-auto">
               <h2 className="text-2xl font-bold text-foreground">
                 Find services for your business on{" "}
-                <span className="text-transparent bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text">
+                <span className="text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text">
                   Taskoria
                 </span>
               </h2>
@@ -93,7 +93,7 @@ export default function CustomerDashboard() {
 
               <Button
                 onClick={() => setOpenModal(true)}
-                className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-medium shadow-md hover:shadow-lg transition-all rounded-xl mt-4"
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-medium shadow-md hover:shadow-lg transition-all rounded-xl mt-4"
               >
                 Get Started
               </Button>
@@ -111,14 +111,14 @@ export default function CustomerDashboard() {
               <Button
                 variant="outline"
                 size="icon"
-                className="h-10 w-10 rounded-full border-2 hover:bg-gradient-to-r hover:from-blue-600 hover:to-green-600 hover:text-white transition-all"
+                className="h-10 w-10 rounded-full border-2 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-600 hover:text-white transition-all"
               >
                 <ChevronLeft className="h-5 w-5" />
               </Button>
               <Button
                 variant="outline"
                 size="icon"
-                className="h-10 w-10 rounded-full border-2 hover:bg-gradient-to-r hover:from-blue-600 hover:to-green-600 hover:text-white transition-all"
+                className="h-10 w-10 rounded-full border-2 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-600 hover:text-white transition-all"
               >
                 <ChevronRight className="h-5 w-5" />
               </Button>

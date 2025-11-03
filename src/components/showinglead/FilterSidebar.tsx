@@ -1,6 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import { Search, SlidersHorizontal, MapPin, DollarSign, Wifi, X, ChevronDown } from "lucide-react";
+import {
+  Search,
+  SlidersHorizontal,
+  MapPin,
+  DollarSign,
+  Wifi,
+  X,
+  ChevronDown,
+} from "lucide-react";
 
 export interface Filters {
   search: string;
@@ -12,33 +20,40 @@ export interface Filters {
   isRemoteAllowed: boolean | null;
 }
 
-
 export interface Lead {
-    category_name: string;
-    location_name: string;
-  }
-  
-  interface FilterSidebarProps {
-    filters: Filters;
-    leads: Lead[];
-    onFilterChange: (updated: Partial<Filters>) => void;
-  }
+  category_name: string;
+  location_name: string;
+}
 
-const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, leads, onFilterChange }) => {
+interface FilterSidebarProps {
+  filters: Filters;
+  leads: Lead[];
+  onFilterChange: (updated: Partial<Filters>) => void;
+}
+
+const FilterSidebar: React.FC<FilterSidebarProps> = ({
+  filters,
+  leads,
+  onFilterChange,
+}) => {
   const [categorySearch, setCategorySearch] = useState("");
   const [locationSearch, setLocationSearch] = useState("");
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
 
   // Extract unique categories and locations
-  const allCategories = Array.from(new Set(leads.map(l => l.category_name).filter(Boolean)));
-  const allLocations = Array.from(new Set(leads.map(l => l.location_name).filter(Boolean)));
+  const allCategories = Array.from(
+    new Set(leads.map((l) => l.category_name).filter(Boolean))
+  );
+  const allLocations = Array.from(
+    new Set(leads.map((l) => l.location_name).filter(Boolean))
+  );
 
   // Filter categories and locations based on search
-  const filteredCategories = allCategories.filter(cat => 
+  const filteredCategories = allCategories.filter((cat) =>
     cat.toLowerCase().includes(categorySearch.toLowerCase())
   );
-  const filteredLocations = allLocations.filter(loc => 
+  const filteredLocations = allLocations.filter((loc) =>
     loc.toLowerCase().includes(locationSearch.toLowerCase())
   );
 
@@ -48,7 +63,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, leads, onFilterC
     filters.budgetMin,
     filters.budgetMax,
     filters.isRemoteAllowed,
-    filters.status !== "Open"
+    filters.status !== "Open",
   ].filter(Boolean).length;
 
   const clearAllFilters = () => {
@@ -59,7 +74,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, leads, onFilterC
       budgetMin: "",
       budgetMax: "",
       status: "Open",
-      isRemoteAllowed: null
+      isRemoteAllowed: null,
     });
     setCategorySearch("");
     setLocationSearch("");
@@ -145,12 +160,22 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, leads, onFilterC
             onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
             className="w-full px-3 py-2.5 rounded-lg border border-gray-300 cursor-pointer hover:border-gray-400 transition flex items-center justify-between bg-white"
           >
-            <span className={filters.category ? "text-gray-900 text-sm" : "text-gray-400 text-sm"}>
+            <span
+              className={
+                filters.category
+                  ? "text-gray-900 text-sm"
+                  : "text-gray-400 text-sm"
+              }
+            >
               {filters.category || "Select category..."}
             </span>
-            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${showCategoryDropdown ? "rotate-180" : ""}`} />
+            <ChevronDown
+              className={`w-4 h-4 text-gray-400 transition-transform ${
+                showCategoryDropdown ? "rotate-180" : ""
+              }`}
+            />
           </div>
-          
+
           {showCategoryDropdown && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-64 overflow-hidden">
               <div className="p-2 border-b border-gray-200 sticky top-0 bg-white">
@@ -185,7 +210,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, leads, onFilterC
                       setCategorySearch("");
                     }}
                     className={`px-3 py-2 hover:bg-blue-50 cursor-pointer text-sm ${
-                      filters.category === cat ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-700"
+                      filters.category === cat
+                        ? "bg-blue-50 text-blue-700 font-medium"
+                        : "text-gray-700"
                     }`}
                   >
                     {cat}
@@ -211,12 +238,22 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, leads, onFilterC
             onClick={() => setShowLocationDropdown(!showLocationDropdown)}
             className="w-full px-3 py-2.5 rounded-lg border border-gray-300 cursor-pointer hover:border-gray-400 transition flex items-center justify-between bg-white"
           >
-            <span className={filters.location ? "text-gray-900 text-sm" : "text-gray-400 text-sm"}>
+            <span
+              className={
+                filters.location
+                  ? "text-gray-900 text-sm"
+                  : "text-gray-400 text-sm"
+              }
+            >
               {filters.location || "Select location..."}
             </span>
-            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${showLocationDropdown ? "rotate-180" : ""}`} />
+            <ChevronDown
+              className={`w-4 h-4 text-gray-400 transition-transform ${
+                showLocationDropdown ? "rotate-180" : ""
+              }`}
+            />
           </div>
-          
+
           {showLocationDropdown && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-64 overflow-hidden">
               <div className="p-2 border-b border-gray-200 sticky top-0 bg-white">
@@ -251,7 +288,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, leads, onFilterC
                       setLocationSearch("");
                     }}
                     className={`px-3 py-2 hover:bg-blue-50 cursor-pointer text-sm ${
-                      filters.location === loc ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-700"
+                      filters.location === loc
+                        ? "bg-blue-50 text-blue-700 font-medium"
+                        : "text-gray-700"
                     }`}
                   >
                     {loc}
@@ -275,7 +314,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, leads, onFilterC
           </label>
           <div className="grid grid-cols-2 gap-2">
             <div className="relative ml-1 ">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">£</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
+                £
+              </span>
               <input
                 type="number"
                 placeholder="Min"
@@ -285,7 +326,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, leads, onFilterC
               />
             </div>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">£</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
+                £
+              </span>
               <input
                 type="number"
                 placeholder="Max"
@@ -301,20 +344,34 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, leads, onFilterC
         <div>
           <label className="flex items-center justify-between p-3 rounded-lg border border-gray-300 cursor-pointer hover:bg-gray-50 transition group">
             <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center transition ${
-                filters.isRemoteAllowed ? "bg-green-100" : "bg-gray-100"
-              }`}>
-                <Wifi className={`w-5 h-5 ${filters.isRemoteAllowed ? "text-green-600" : "text-gray-500"}`} />
+              <div
+                className={`w-10 h-10 rounded-full flex items-center justify-center transition ${
+                  filters.isRemoteAllowed ? "bg-cyan-100" : "bg-gray-100"
+                }`}
+              >
+                <Wifi
+                  className={`w-5 h-5 ${
+                    filters.isRemoteAllowed ? "text-cyan-600" : "text-gray-500"
+                  }`}
+                />
               </div>
               <div>
-                <div className="text-sm font-medium text-gray-900">Remote Work</div>
-                <div className="text-xs text-gray-500">Show remote opportunities</div>
+                <div className="text-sm font-medium text-gray-900">
+                  Remote Work
+                </div>
+                <div className="text-xs text-gray-500">
+                  Show remote opportunities
+                </div>
               </div>
             </div>
             <input
               type="checkbox"
               checked={filters.isRemoteAllowed === true}
-              onChange={(e) => onFilterChange({ isRemoteAllowed: e.target.checked ? true : null })}
+              onChange={(e) =>
+                onFilterChange({
+                  isRemoteAllowed: e.target.checked ? true : null,
+                })
+              }
               className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
             />
           </label>
@@ -337,10 +394,10 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, leads, onFilterC
                 </span>
               )}
               {filters.location && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-md">
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-cyan-100 text-cyan-700 text-xs font-medium rounded-md">
                   {filters.location}
                   <X
-                    className="w-3 h-3 cursor-pointer hover:text-green-900"
+                    className="w-3 h-3 cursor-pointer hover:text-cyan-900"
                     onClick={() => onFilterChange({ location: "" })}
                   />
                 </span>
@@ -350,7 +407,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ filters, leads, onFilterC
                   £{filters.budgetMin || "0"} - £{filters.budgetMax || "∞"}
                   <X
                     className="w-3 h-3 cursor-pointer hover:text-purple-900"
-                    onClick={() => onFilterChange({ budgetMin: "", budgetMax: "" })}
+                    onClick={() =>
+                      onFilterChange({ budgetMin: "", budgetMax: "" })
+                    }
                   />
                 </span>
               )}

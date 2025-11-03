@@ -24,7 +24,6 @@
 //   return (
 //     <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
 //       {/* Header */}
-   
 
 //       {/* Main Content */}
 //       <main className="max-w-7xl mx-auto px-4 py-8">
@@ -79,7 +78,7 @@
 //             <Card>
 //               <CardHeader>
 //                 <CardTitle className="flex items-center gap-2">
-//                   <TrendingUp className="w-5 h-5 text-green-500" />
+//                   <TrendingUp className="w-5 h-5 text-cyan-500" />
 //                   Trending Topics
 //                 </CardTitle>
 //               </CardHeader>
@@ -100,24 +99,24 @@
 //       </main>
 //     </div>
 //   );
-// } 
- "use client"
+// }
+"use client";
 
 import LocationSearch from "@/components/Location/locationsearch";
-
 
 export default function PostJobPage() {
   const location = (loc: string) => {
     console.log("Selected location:", loc);
-
   };
 
   return (
     <div className="max-w-lg mx-auto space-y-4">
       <h2 className="text-xl font-semibold">Where is your service needed?</h2>
-      <LocationSearch onSelect={(location)=>{
-      console.log("Selected Location:", location);
-      }} />
+      <LocationSearch
+        onSelect={(location) => {
+          console.log("Selected Location:", location);
+        }}
+      />
     </div>
   );
 }

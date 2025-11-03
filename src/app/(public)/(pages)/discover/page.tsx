@@ -310,7 +310,7 @@ export default function Discover() {
                               {provider.name}
                             </h3>
                             {provider.verified && (
-                              <Badge className="bg-green-100 text-green-800">
+                              <Badge className="bg-cyan-100 text-cyan-800">
                                 Verified
                               </Badge>
                             )}
@@ -357,7 +357,7 @@ export default function Discover() {
 
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pt-2 gap-2">
                           <div className="space-y-1">
-                            <div className="text-2xl font-bold text-green-600">
+                            <div className="text-2xl font-bold text-cyan-600">
                               ${provider.hourlyRate}/hr
                             </div>
                             <div className="text-sm text-gray-500">

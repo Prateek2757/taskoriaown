@@ -153,7 +153,7 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
 
       await onSave?.(payload);
       setMsg("Saved successfully!");
-      
+
       // Reset file states after successful save
       setFormState((prev) => ({
         ...prev,
@@ -409,7 +409,7 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
             <span
               className={`text-sm font-medium ${
                 msg.includes("success") || msg.includes("Saved")
-                  ? "text-green-600"
+                  ? "text-cyan-600"
                   : "text-gray-600"
               }`}
             >

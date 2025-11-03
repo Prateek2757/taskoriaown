@@ -8,7 +8,13 @@ interface Step {
   title: string;
 }
 
-export default function ProgressSidebar({ steps, currentStep }: { steps: Step[], currentStep: number }) {
+export default function ProgressSidebar({
+  steps,
+  currentStep,
+}: {
+  steps: Step[];
+  currentStep: number;
+}) {
   return (
     <Card className="sticky top-24">
       <CardHeader>
@@ -22,11 +28,15 @@ export default function ProgressSidebar({ steps, currentStep }: { steps: Step[],
                 currentStep === step.number
                   ? "bg-blue-600 text-white"
                   : step.number < currentStep
-                  ? "bg-green-600 text-white"
+                  ? "bg-cyan-600 text-white"
                   : "bg-gray-200 text-gray-600"
               }`}
             >
-              {step.number < currentStep ? <CheckCircle className="w-4 h-4" /> : step.number}
+              {step.number < currentStep ? (
+                <CheckCircle className="w-4 h-4" />
+              ) : (
+                step.number
+              )}
             </div>
             <span
               className={`font-medium ${

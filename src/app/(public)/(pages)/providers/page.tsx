@@ -62,7 +62,7 @@ export default function AllProviders() {
                       className="rounded-full object-cover border"
                     />
                   ) : (
-                    <div className="h-12 w-12 rounded-full bg-gradient-to-r from-green-500 to-blue-500 text-white grid place-content-center font-semibold uppercase">
+                    <div className="h-12 w-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white grid place-content-center font-semibold uppercase">
                       {p.name
                         ?.split(" ")
                         .map((w: string) => w[0])

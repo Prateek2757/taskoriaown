@@ -17,8 +17,12 @@ type FormData = {
 export default function Onboarding() {
   const [step, setStep] = useState(1);
   const [userId, setUserId] = useState<number | null>(null);
-  const [categoriesList, setCategoriesList] = useState<{ category_id: number; name: string }[]>([]);
-  const [citiesList, setCitiesList] = useState<{ city_id: number; name: string }[]>([]);
+  const [categoriesList, setCategoriesList] = useState<
+    { category_id: number; name: string }[]
+  >([]);
+  const [citiesList, setCitiesList] = useState<
+    { city_id: number; name: string }[]
+  >([]);
 
   const { register, handleSubmit, control, watch } = useForm<FormData>({
     defaultValues: { is_nationwide: false, categories: [] },
@@ -26,8 +30,8 @@ export default function Onboarding() {
 
   // Fetch categories and cities from backend
   useEffect(() => {
-    axios.get("/api/categories").then(res => setCategoriesList(res.data));
-    axios.get("/api/cities").then(res => setCitiesList(res.data));
+    axios.get("/api/categories").then((res) => setCategoriesList(res.data));
+    axios.get("/api/cities").then((res) => setCitiesList(res.data));
   }, []);
 
   // Draft user creation
@@ -72,27 +76,30 @@ export default function Onboarding() {
           <div>
             <label className="block font-semibold">Select Categories</label>
             <Controller
-  name="categories"
-  control={control}
-  render={({ field }) => (
-    <select
-      {...field}
-      multiple
-      className="w-full border p-2 rounded"
-      value={field.value.map(String)} // convert numbers to strings
-      onChange={e => {
-        const selectedValues = Array.from(e.target.selectedOptions, option => Number(option.value));
-        field.onChange(selectedValues);
-      }}
-    >
-      {categoriesList.map(c => (
-        <option key={c.category_id} value={c.category_id}>
-          {c.name}
-        </option>
-      ))}
-    </select>
-  )}
-/>
+              name="categories"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  multiple
+                  className="w-full border p-2 rounded"
+                  value={field.value.map(String)} // convert numbers to strings
+                  onChange={(e) => {
+                    const selectedValues = Array.from(
+                      e.target.selectedOptions,
+                      (option) => Number(option.value)
+                    );
+                    field.onChange(selectedValues);
+                  }}
+                >
+                  {categoriesList.map((c) => (
+                    <option key={c.category_id} value={c.category_id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              )}
+            />
           </div>
 
           {/* Location */}
@@ -100,8 +107,11 @@ export default function Onboarding() {
             <label className="block font-semibold">Location</label>
             <input type="checkbox" {...register("is_nationwide")} /> Nationwide
             {!watch("is_nationwide") && (
-              <select {...register("location_id")} className="w-full border p-2 rounded mt-2">
-                {citiesList.map(c => (
+              <select
+                {...register("location_id")}
+                className="w-full border p-2 rounded mt-2"
+              >
+                {citiesList.map((c) => (
                   <option key={c.city_id} value={c.city_id}>
                     {c.name}
                   </option>
@@ -113,22 +123,42 @@ export default function Onboarding() {
           {/* Details */}
           <div>
             <label className="block font-semibold">Name</label>
-            <input {...register("name")} className="w-full border p-2 rounded" required />
+            <input
+              {...register("name")}
+              className="w-full border p-2 rounded"
+              required
+            />
 
             <label className="block font-semibold mt-2">Email</label>
-            <input {...register("email")} className="w-full border p-2 rounded" required />
+            <input
+              {...register("email")}
+              className="w-full border p-2 rounded"
+              required
+            />
 
             <label className="block font-semibold mt-2">Phone</label>
-            <input {...register("phone")} className="w-full border p-2 rounded" />
+            <input
+              {...register("phone")}
+              className="w-full border p-2 rounded"
+            />
 
             <label className="block font-semibold mt-2">Company Name</label>
-            <input {...register("company_name")} className="w-full border p-2 rounded" />
+            <input
+              {...register("company_name")}
+              className="w-full border p-2 rounded"
+            />
 
             <label className="block font-semibold mt-2">Website</label>
-            <input {...register("website")} className="w-full border p-2 rounded" />
+            <input
+              {...register("website")}
+              className="w-full border p-2 rounded"
+            />
           </div>
 
-          <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
+          <button
+            type="submit"
+            className="bg-cyan-600 text-white px-4 py-2 rounded"
+          >
             Complete Signup
           </button>
         </form>

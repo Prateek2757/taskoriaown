@@ -173,7 +173,6 @@
 	position: relative;
 }
 
-
 .date-picker-week-days-container div::after {
 	content: "";
 	position: absolute;
@@ -348,8 +347,6 @@
 .prev-month-days {
 	color: rgb(53, 52, 52);
 }
-
-
 
 .date-picker-calendar
 	.date-picker-calendar-footer

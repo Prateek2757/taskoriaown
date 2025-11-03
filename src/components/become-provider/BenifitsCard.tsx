@@ -4,10 +4,30 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Shield, Award, Users, TrendingUp } from "lucide-react";
 
 const benefits = [
-  { icon: Shield, color: "text-green-600", title: "Blockchain Verification", desc: "Build trust with tamper-proof reputation" },
-  { icon: Award, color: "text-blue-600", title: "AI-Powered Growth", desc: "Get intelligent job recommendations" },
-  { icon: Users, color: "text-purple-600", title: "Community Support", desc: "Network with fellow professionals" },
-  { icon: TrendingUp, color: "text-orange-600", title: "Analytics Dashboard", desc: "Track earnings and performance" },
+  {
+    icon: Shield,
+    color: "text-cyan-600",
+    title: "Blockchain Verification",
+    desc: "Build trust with tamper-proof reputation",
+  },
+  {
+    icon: Award,
+    color: "text-blue-600",
+    title: "AI-Powered Growth",
+    desc: "Get intelligent job recommendations",
+  },
+  {
+    icon: Users,
+    color: "text-purple-600",
+    title: "Community Support",
+    desc: "Network with fellow professionals",
+  },
+  {
+    icon: TrendingUp,
+    color: "text-orange-600",
+    title: "Analytics Dashboard",
+    desc: "Track earnings and performance",
+  },
 ];
 
 export default function BenefitsCard() {

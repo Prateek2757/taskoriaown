@@ -56,13 +56,13 @@ const BecomeProviderPage = () => {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Sidebar */}
+         
           <div className="lg:col-span-1 space-y-6">
             <ProgressSidebar steps={steps} currentStep={currentStep} />
             <BenefitsCard />
           </div>
 
-          {/* Main Form */}
+          
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>

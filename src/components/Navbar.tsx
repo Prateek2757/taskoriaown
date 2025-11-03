@@ -141,9 +141,9 @@ export default function Navbar() {
         className="absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-[999]"
       >
         {/* User Info */}
-        <div className="bg-gradient-to-r from-blue-50 to-green-50 p-4 border-b border-gray-200">
+        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 border-b border-gray-200">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-green-500 rounded-full flex items-center justify-center shadow-md">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full flex items-center justify-center shadow-md">
               <User className="w-7 h-7 text-white" />
             </div>
             <div className="flex-1 min-w-0">
@@ -217,7 +217,7 @@ export default function Navbar() {
       <header className="bg-white/95 backdrop-blur-md  border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-500 rounded-xl animate-pulse" />
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl animate-pulse" />
             <div className="h-8 w-32 bg-gray-200 rounded animate-pulse" />
           </div>
           <div className="hidden md:flex items-center gap-4">
@@ -237,7 +237,7 @@ export default function Navbar() {
           href="/"
           className="flex items-center gap-2 hover:opacity-90 transition-opacity"
         >
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-500 rounded-xl flex items-center justify-center shadow-md">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-md">
             <Zap className="w-6 h-6 text-white" />
           </div>
           <span className="text-2xl font-bold bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
@@ -268,7 +268,7 @@ export default function Navbar() {
                     onClick={() => setIsProfileOpen((prev) => !prev)}
                     className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-50 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   >
-                    <div className="w-9 h-9 bg-gradient-to-br from-blue-100 to-green-100 rounded-full flex items-center justify-center">
+                    <div className="w-9 h-9 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center">
                       <User className="w-5 h-5 text-blue-600" />
                     </div>
                     <span className="font-medium text-gray-700">
@@ -297,7 +297,7 @@ export default function Navbar() {
                   </Button>
                   <Button
                     onClick={handleJoinAsProvider}
-                    className="bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-green-700 font-medium shadow-md"
+                    className="bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
                     Join as Provider
                   </Button>
@@ -350,7 +350,7 @@ export default function Navbar() {
                 <>
                   <div className="border-t border-gray-200 my-3 pt-3">
                     <div className="px-4 py-2 flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-green-100 rounded-full flex items-center justify-center">
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center">
                         <User className="w-5 h-5 text-blue-600" />
                       </div>
                       <div>
@@ -425,7 +425,7 @@ export default function Navbar() {
                         handleJoinAsProvider();
                         setIsMenuOpen(false);
                       }}
-                      className="w-full rounded-xl bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-green-700"
+                      className="w-full rounded-xl bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-cyan-700"
                     >
                       Join as Provider
                     </Button>

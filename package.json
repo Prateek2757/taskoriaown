@@ -45,6 +45,7 @@
     "date-fns": "^4.1.0",
     "date-picker-np": "^1.0.37",
     "dotenv": "^16.4.7",
+    "dotted-map": "^2.2.3",
     "input-otp": "^1.4.2",
     "jsonwebtoken": "^9.0.2",
     "lodash.debounce": "^4.0.8",

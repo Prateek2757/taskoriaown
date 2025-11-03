@@ -124,7 +124,7 @@ const LeadsPage: React.FC = () => {
 
   const handleLeadClick = (lead: Lead) => {
     setSelectedLead(lead);
-    if (window.innerWidth < 768) setIsMobileDetailsOpen(true); // mobile view behavior
+    if (window.innerWidth < 768) setIsMobileDetailsOpen(true);
   };
 
   if (loading) return <LoadingSpinner />;
@@ -148,19 +148,13 @@ const LeadsPage: React.FC = () => {
 
   return (
     <div className="flex flex-col md:flex-row md:h-screen min-h-screen bg-gray-50 font-sans overflow-hidde relative">
-      {/* Leads List */}
       <div
         className={`flex flex-col w-full md:w-[380px] border-r border-gray-200 bg-white transition-all duration-300 ${
           isMobileDetailsOpen ? "hidden md:flex" : "flex"
         }`}
       >
-        {/* Search & Filter */}
-        {/* Search & Filter Header */}
-        {/* Search & Filter Header */}
-        {/* Search & Filter Header */}
         <div className="sticky top-16 z-30 bg-white border-b border-gray-200 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 px-2 py-3">
-            {/* Left: Lead Count */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
               <h2 className="text-lg font-semibold text-gray-900 leading-none">
                 {filteredLeads.length} matching leads
@@ -171,9 +165,7 @@ const LeadsPage: React.FC = () => {
               </p>
             </div>
 
-            {/* Right: Search + Filter */}
             <div className="flex items-center gap-3 w-full sm:w-auto">
-              {/* Search Input */}
               <div className="relative flex-1 sm:w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
@@ -189,17 +181,15 @@ const LeadsPage: React.FC = () => {
                 />
               </div>
 
-              {/* Filters Button */}
               <button
                 onClick={() => setShowFilters(true)}
                 className="relative flex items-center gap-2 px-4 py-2 bg-gradient-to-r 
-                   from-emerald-500 to-green-600 text-white text-sm font-medium 
+                   from-cyan-500 to-cyan-600 text-white text-sm font-medium 
                    rounded-lg shadow hover:opacity-90 active:scale-[0.98] transition"
               >
                 <SlidersHorizontal className="w-4 h-4" />
                 <span>Filters</span>
 
-                {/* Active filter counter (badge inside the button) */}
                 {Object.values(filters).some(
                   (val) =>
                     val &&
@@ -228,7 +218,7 @@ const LeadsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Lead Cards */}
+      
         <div className="flex-1 overflow-y-auto overflow-x-auto p-2 space-y-2">
           {filteredLeads.map((lead) => (
             <LeadCard
@@ -241,7 +231,6 @@ const LeadsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Lead Details Overlay */}
       {isMobileDetailsOpen && selectedLead && (
         <div className="  bg-white overflow-y-auto animate-slideInUp">
           <div className="sticky top-0 flex placeholder-violet-100 items-center justify-between p-4 border-b bg-gray-50 z-10">
@@ -260,7 +249,6 @@ const LeadsPage: React.FC = () => {
         </div>
       )}
 
-      {/* Desktop Lead Details */}
       <div className="hidden md:block flex-1 overflow-y-auto p-6 bg-gray-50">
         {selectedLead ? (
           <LeadDetails lead={selectedLead} />
@@ -273,7 +261,6 @@ const LeadsPage: React.FC = () => {
         )}
       </div>
 
-      {/* Filter Sidebar */}
       {showFilters && (
         <>
           <div

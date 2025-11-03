@@ -27,8 +27,7 @@ function Footer() {
               </span>
             </Link>
             <p className="text-gray-400 mt-2 text-sm">
-              The next-generation service marketplace powered by AI and secured
-              by blockchain technology.
+            Taskoria — A Fusion of Australian Design & Nepali Engineering.
             </p>
 
             {/* --- Social Icons --- */}
