@@ -447,3 +447,108 @@ EXECUTE FUNCTION trg_taskquote_after_insert_fn();
 -- For production, add more CHECK constraints, unique constraints and appropriate FK ON DELETE behavior as needed.
 -- For large tables, consider partitioning (e.g., by created_at or status).
 -- Use connection pooling and proper transaction handling in application code when calling functions above.
+
+
+
+
+
+
+Perfect 👌 — since this is for Taskoria, let’s design SQL tables that handle:
+
+💳 Credit Top-up system
+
+💼 Credit Management for Professionals (balance tracking)
+
+💰 Payment Transactions (history + audit)
+
+📞 Lead Response (how pros interact with leads)
+
+Below is a PostgreSQL schema (you can use similar syntax in MySQL with tiny adjustments).
+I’ll also include relations and key logic so it integrates smoothly with your existing professionals, leads, and users tables.
+
+🧱 1. credit_topups
+
+Tracks when a professional tops up credits (via card, wallet, etc.)
+
+CREATE TABLE public.credit_topups (
+  topup_id BIGSERIAL PRIMARY KEY,
+  professional_id BIGINT NOT NULL REFERENCES professionals(professional_id) ON DELETE CASCADE,
+  amount NUMERIC(10,2) NOT NULL,
+  credits_added INT NOT NULL,
+  payment_method VARCHAR(100) NOT NULL, -- e.g. 'Stripe', 'Khalti', 'eSewa', 'Card'
+  transaction_ref VARCHAR(255) UNIQUE NOT NULL,
+  status VARCHAR(50) DEFAULT 'completed', -- pending, completed, failed, refunded
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+💼 2. credit_wallets
+
+Stores each professional’s available credit balance.
+
+CREATE TABLE public.credit_wallets (
+  wallet_id BIGSERIAL PRIMARY KEY,
+  professional_id BIGINT UNIQUE NOT NULL REFERENCES professionals(professional_id) ON DELETE CASCADE,
+  total_credits INT DEFAULT 0,
+  last_updated TIMESTAMP DEFAULT NOW(),
+  last_topup_id BIGINT REFERENCES credit_topups(topup_id)
+);
+
+
+⚙️ Update logic:
+
+When a top-up succeeds, increase total_credits in credit_wallets.
+
+When a lead is purchased or responded to, deduct credits.
+
+💰 3. payment_transactions
+
+Detailed payment record for auditing and reconciliation (may include non-topup transactions too).
+
+CREATE TABLE public.payment_transactions (
+  transaction_id BIGSERIAL PRIMARY KEY,
+  reference_id VARCHAR(100) UNIQUE NOT NULL, -- maps to topup, refund, payout, etc.
+  professional_id BIGINT REFERENCES professionals(professional_id) ON DELETE CASCADE,
+  transaction_type VARCHAR(50) NOT NULL, -- e.g. 'topup', 'lead_purchase', 'refund', 'payout'
+  amount NUMERIC(10,2) NOT NULL,
+  credits_used INT DEFAULT 0,
+  payment_gateway VARCHAR(100), -- Stripe, eSewa, Khalti, etc.
+  status VARCHAR(50) DEFAULT 'completed',
+  remarks TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+📞 4. lead_responses
+
+Stores professionals’ responses to leads (uses credits).
+
+CREATE TABLE public.lead_responses (
+  response_id BIGSERIAL PRIMARY KEY,
+  lead_id BIGINT NOT NULL REFERENCES leads(lead_id) ON DELETE CASCADE,
+  professional_id BIGINT NOT NULL REFERENCES professionals(professional_id) ON DELETE CASCADE,
+  credits_spent INT DEFAULT 0,
+  message TEXT, -- Optional: custom pitch message or note
+  status VARCHAR(50) DEFAULT 'sent', -- sent, accepted, rejected, ignored
+  response_date TIMESTAMP DEFAULT NOW(),
+  is_viewed BOOLEAN DEFAULT FALSE
+);
+
+🔁 Suggested Relationships
+Table	Relation	Description
+credit_topups → credit_wallets	1:N	each wallet can have many topups
+credit_wallets → professionals	1:1	each professional has one wallet
+lead_responses → leads	N:1	multiple pros can respond to one lead
+payment_transactions	central	logs every financial event for traceability
+🧩 Optional Helper Table (for credit pricing)
+
+If your system uses different rates (e.g., 1 credit = $1 or promo bundles):
+
+CREATE TABLE public.credit_packages (
+  package_id BIGSERIAL PRIMARY KEY,
+  name VARCHAR(100),
+  credits INT NOT NULL,
+  price NUMERIC(10,2) NOT NULL,
+  description TEXT,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT NOW()
+);

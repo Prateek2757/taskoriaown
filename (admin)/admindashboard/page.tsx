@@ -1,6 +1,7 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Briefcase, Layers } from "lucide-react";
+import ProvidersPage from "../admincomponents/providerslist";
 
 export default function Dashboard() {
   const stats = [
@@ -10,6 +11,8 @@ export default function Dashboard() {
   ];
 
   return (
+    <>
+   
     <section className="grid md:grid-cols-3 gap-6">
       {stats.map(({ title, value, icon: Icon }) => (
         <Card key={title} className="hover:shadow-lg transition">
@@ -23,5 +26,9 @@ export default function Dashboard() {
         </Card>
       ))}
     </section>
+    <div>
+        <ProvidersPage/>
+    </div>
+    </>
   );
 }

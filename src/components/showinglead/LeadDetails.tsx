@@ -324,7 +324,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead }) => {
           </div>
         </div>
 
-        {/* Lead Q&A */}
         {lead.answers && lead.answers.length > 0 && (
           <div className="mt-6">
             <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">
@@ -356,20 +355,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead }) => {
           </div>
         )}
 
-        {/* Footer Actions */}
-        {/* <div className="flex flex-wrap gap-3 mt-6">
-          <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition shadow-lg shadow-blue-500/30">
-            <MessageSquare className="w-5 h-5" />
-            Contact {lead.title.split(" ")[0]}
-          </button>
-          <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition">
-            <ThumbsDown className="w-5 h-5" />
-            Not Interested
-          </button>
-          <button className="px-4 py-3.5 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-2">
-            <Share2 className="w-5 h-5" />
-          </button>
-        </div> */}
       </div>
     </div>
   );
