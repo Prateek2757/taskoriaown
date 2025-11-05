@@ -1,14 +1,15 @@
 "use client";
+
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import axios from "axios";
 import LeadCard from "./LeadCard";
 import LeadDetails from "./LeadDetails";
 import LoadingSpinner from "./LoadingSpinner";
 import FilterSidebar from "./FilterSidebar";
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { Search, SlidersHorizontal } from "lucide-react";
 
 export interface Lead {
-  task_id?: string | number;
+  task_id?: number;
   title: string;
   location_name: string;
   category_name: string;
@@ -48,64 +49,74 @@ const LeadsPage: React.FC = () => {
     isRemoteAllowed: null,
   });
   const [showFilters, setShowFilters] = useState(false);
+  const [taskCredits, setTaskCredits] = useState<Record<number, number>>({});
   const [isMobileDetailsOpen, setIsMobileDetailsOpen] = useState(false);
+
   const filtersRef = useRef<HTMLDivElement>(null);
 
-  // Fetch Leads
+  // Fetch leads and task credit estimates
   useEffect(() => {
-    const fetchLeads = async () => {
+    const fetchLeadsAndCredits = async () => {
       try {
         setLoading(true);
-        const res = await axios.get<Lead[]>("/api/leads");
-        const data = Array.isArray(res.data) ? res.data : [];
-        setRawLeads(data);
-        if (data.length > 0) setSelectedLead(data[0]);
+
+        const [leadsRes, creditsRes] = await Promise.all([
+          axios.get<Lead[]>("/api/leads"),
+          axios.get("/api/admin/create-credit-estimate"),
+        ]);
+
+        const leadsData = Array.isArray(leadsRes.data) ? leadsRes.data : [];
+        setRawLeads(leadsData);
+
+        if (leadsData.length > 0) setSelectedLead(leadsData[0]);
+
+        // Map task_id -> estimated_credits
+        const creditsMap: Record<number, number> = {};
+        (creditsRes.data.tasks || []).forEach(
+          (c: { task_id: number; estimated_credits: number }) => {
+            creditsMap[c.task_id] = c.estimated_credits;
+          }
+        );
+        setTaskCredits(creditsMap);
       } catch (err) {
-        setError("Failed to fetch leads. Please try again later.");
+        console.error(err);
+        setError("Failed to fetch leads or credits.");
       } finally {
         setLoading(false);
       }
     };
-    fetchLeads();
+
+    fetchLeadsAndCredits();
   }, []);
 
-  // Close sidebar on outside click
+  // Click outside to close filters
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        filtersRef.current &&
-        !filtersRef.current.contains(e.target as Node)
-      ) {
+      if (filtersRef.current && !filtersRef.current.contains(e.target as Node)) {
         setShowFilters(false);
       }
     };
+
     if (showFilters) document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showFilters]);
 
-  // Filter logic
+  // Filtered leads
   const filteredLeads = useMemo(() => {
     return rawLeads.filter((lead) => {
       const matchesSearch =
         !filters.search ||
         lead.title.toLowerCase().includes(filters.search.toLowerCase()) ||
         (lead.customer_name &&
-          lead.customer_name
-            .toLowerCase()
-            .includes(filters.search.toLowerCase()));
+          lead.customer_name.toLowerCase().includes(filters.search.toLowerCase()));
 
-      const matchesCategory =
-        !filters.category || lead.category_name === filters.category;
-      const matchesLocation =
-        !filters.location || lead.location_name === filters.location;
-      const matchesBudgetMin =
-        !filters.budgetMin || (lead.budget_max ?? 0) >= +filters.budgetMin;
-      const matchesBudgetMax =
-        !filters.budgetMax || (lead.budget_min ?? 0) <= +filters.budgetMax;
+      const matchesCategory = !filters.category || lead.category_name === filters.category;
+      const matchesLocation = !filters.location || lead.location_name === filters.location;
+      const matchesBudgetMin = !filters.budgetMin || (lead.budget_max ?? 0) >= +filters.budgetMin;
+      const matchesBudgetMax = !filters.budgetMax || (lead.budget_min ?? 0) <= +filters.budgetMax;
       const matchesStatus = !filters.status || lead.status === filters.status;
       const matchesRemote =
-        filters.isRemoteAllowed === null ||
-        lead.is_remote_allowed === filters.isRemoteAllowed;
+        filters.isRemoteAllowed === null || lead.is_remote_allowed === filters.isRemoteAllowed;
 
       return (
         matchesSearch &&
@@ -147,12 +158,14 @@ const LeadsPage: React.FC = () => {
     );
 
   return (
-    <div className="flex flex-col md:flex-row md:h-screen min-h-screen bg-gray-50 font-sans overflow-hidde relative">
+    <div className="flex flex-col md:flex-row md:h-screen min-h-screen bg-gray-50 font-sans relative">
+      {/* Sidebar / Lead list */}
       <div
         className={`flex flex-col w-full md:w-[380px] border-r border-gray-200 bg-white transition-all duration-300 ${
           isMobileDetailsOpen ? "hidden md:flex" : "flex"
         }`}
       >
+        {/* Header with search + filters */}
         <div className="sticky top-16 z-30 bg-white border-b border-gray-200 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 px-2 py-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
@@ -160,8 +173,7 @@ const LeadsPage: React.FC = () => {
                 {filteredLeads.length} matching leads
               </h2>
               <p className="text-sm text-gray-500 leading-none">
-                {filters.category || "All services"} •{" "}
-                {filters.location || "All locations"}
+                {filters.category || "All services"} • {filters.location || "All locations"}
               </p>
             </div>
 
@@ -172,20 +184,14 @@ const LeadsPage: React.FC = () => {
                   type="text"
                   placeholder="Search leads by category"
                   value={filters.search}
-                  onChange={(e) =>
-                    handleFilterChange({ search: e.target.value })
-                  }
-                  className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg 
-                     text-sm placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 
-                     focus:border-emerald-500 outline-none transition"
+                  onChange={(e) => handleFilterChange({ search: e.target.value })}
+                  className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
                 />
               </div>
 
               <button
                 onClick={() => setShowFilters(true)}
-                className="relative flex items-center gap-2 px-4 py-2 bg-gradient-to-r 
-                   from-cyan-500 to-cyan-600 text-white text-sm font-medium 
-                   rounded-lg shadow hover:opacity-90 active:scale-[0.98] transition"
+                className="relative flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white text-sm font-medium rounded-lg shadow hover:opacity-90 active:scale-[0.98] transition"
               >
                 <SlidersHorizontal className="w-4 h-4" />
                 <span>Filters</span>
@@ -197,20 +203,10 @@ const LeadsPage: React.FC = () => {
                     !(typeof val === "boolean" && val === null) &&
                     !(val === "Open")
                 ) && (
-                  <span
-                    className="absolute -top-1 -right-1 flex items-center justify-center 
-                           w-4 h-4 bg-white text-emerald-700 text-[10px] font-semibold 
-                           rounded-full shadow-sm border border-emerald-600"
-                  >
-                    {
-                      Object.values(filters).filter(
-                        (val) =>
-                          val &&
-                          val !== "" &&
-                          !(typeof val === "boolean" && val === null) &&
-                          !(val === "Open")
-                      ).length
-                    }
+                  <span className="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-white text-emerald-700 text-[10px] font-semibold rounded-full shadow-sm border border-emerald-600">
+                    {Object.values(filters).filter(
+                      (val) => val && val !== "" && !(typeof val === "boolean" && val === null) && !(val === "Open")
+                    ).length}
                   </span>
                 )}
               </button>
@@ -218,7 +214,7 @@ const LeadsPage: React.FC = () => {
           </div>
         </div>
 
-      
+        {/* Lead list */}
         <div className="flex-1 overflow-y-auto overflow-x-auto p-2 space-y-2">
           {filteredLeads.map((lead) => (
             <LeadCard
@@ -226,64 +222,53 @@ const LeadsPage: React.FC = () => {
               lead={lead}
               isSelected={selectedLead?.task_id === lead.task_id}
               onSelect={handleLeadClick}
+              requiredCredits={taskCredits[Number(lead.task_id)] || 0}
             />
           ))}
         </div>
       </div>
 
-      {isMobileDetailsOpen && selectedLead && (
-        <div className="  bg-white overflow-y-auto animate-slideInUp">
-          <div className="sticky top-0 flex placeholder-violet-100 items-center justify-between p-4 border-b bg-gray-50 z-10">
-            <button
-              onClick={() => setIsMobileDetailsOpen(false)}
-              className="text-gray-700 font-medium"
-            >
-              ← Back
-            </button>
-            <h2 className="font-semibold text-gray-800 text-sm">
-              Lead Details
-            </h2>
-            <div></div>
-          </div>
-          <LeadDetails lead={selectedLead} />
-        </div>
-      )}
-
       <div className="hidden md:block flex-1 overflow-y-auto p-6 bg-gray-50">
         {selectedLead ? (
-          <LeadDetails lead={selectedLead} />
+          <LeadDetails
+            lead={selectedLead}
+            taskId={selectedLead.task_id}
+            requiredCredits={taskCredits[Number(selectedLead.task_id)] || 0}
+          />
         ) : (
           <div className="flex items-center justify-center h-full text-gray-400">
-            <h2 className="text-lg md:text-xl font-medium">
-              Select a lead to view details
-            </h2>
+            <h2>Select a lead to view details</h2>
           </div>
         )}
       </div>
 
+      {/* Mobile Lead Details */}
+      {isMobileDetailsOpen && selectedLead && (
+        <div className="fixed inset-0 bg-white z-50 overflow-y-auto animate-slideInUp">
+          <div className="sticky top-0 flex justify-between p-4 border-b bg-gray-50 z-10">
+            <button onClick={() => setIsMobileDetailsOpen(false)}>← Back</button>
+            <h2 className="font-semibold text-gray-800">Lead Details</h2>
+            <div />
+          </div>
+          <LeadDetails
+            lead={selectedLead}
+            taskId={selectedLead.task_id}
+            requiredCredits={taskCredits[Number(selectedLead.task_id)] || 0}
+          />
+        </div>
+      )}
+
+      {/* Filters Sidebar */}
       {showFilters && (
         <>
-          <div
-            className="fixed inset-0 bg-black/30 z-40"
-            onClick={() => setShowFilters(false)}
-          />
-          <div
-            ref={filtersRef}
-            className="fixed top-0 left-0 z-50 h-full w-80 bg-white shadow-2xl overflow-y-auto"
-          >
+          <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setShowFilters(false)} />
+          <div ref={filtersRef} className="fixed top-0 left-0 z-50 h-full w-80 bg-white shadow-2xl overflow-y-auto">
             <div className="flex justify-end p-4 border-b border-gray-200">
-              <button
-                onClick={() => setShowFilters(false)}
-                className="text-gray-500 hover:text-gray-700 transition"
-              >
+              <button onClick={() => setShowFilters(false)} className="text-gray-500 hover:text-gray-700 transition">
                 ✕ Close
               </button>
             </div>
-            <FilterSidebar
-              filters={filters}
-              leads={rawLeads}
-              onFilterChange={handleFilterChange}
-            />
+            <FilterSidebar filters={filters} leads={rawLeads} onFilterChange={handleFilterChange} />
           </div>
         </>
       )}

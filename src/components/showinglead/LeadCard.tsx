@@ -2,7 +2,7 @@
 import React from "react";
 
 interface Lead {
-  task_id?: string | number;
+  task_id?: number;
   title: string;
   location_name: string;
   category_name: string;
@@ -19,10 +19,11 @@ interface Lead {
 interface LeadCardProps {
   lead: Lead;
   isSelected: boolean;
+  requiredCredits: number;
   onSelect: (lead: Lead) => void;
 }
 
-const LeadCard: React.FC<LeadCardProps> = ({ lead, isSelected, onSelect }) => {
+const LeadCard: React.FC<LeadCardProps> = ({ lead, isSelected,  requiredCredits, onSelect }) => {
   const formatTimeAgo = (timestamp: string): string => {
     const now = new Date();
     const created = new Date(timestamp);
@@ -123,7 +124,7 @@ const LeadCard: React.FC<LeadCardProps> = ({ lead, isSelected, onSelect }) => {
         <div className="flex items-center mt-3 gap-2">
           <div className="flex items-center gap-1 text-sm text-blue-600 font-medium">
             <span>🎯</span>
-            <span>{Math.floor(Math.random() * 10) + 3} Credits</span>
+            <span>{requiredCredits} Credits</span>
           </div>
           <div className="w-px h-4 bg-gray-200" />
           <div className="text-xs text-gray-500 flex items-center gap-1">

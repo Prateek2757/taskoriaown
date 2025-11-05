@@ -552,3 +552,52 @@ CREATE TABLE public.credit_packages (
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT NOW()
 );
+
+
+
+
+
+"use client";
+
+import { useState } from "react";
+import { CreditPurchaseModal } from "@/components/credit-purchase";
+import { Button } from "@/components/ui/button";
+
+export function ContactLeadButton({ lead, currentCredits, professionalId }) {
+  const [showCreditModal, setShowCreditModal] = useState(false);
+  const requiredCredits = 52; // Calculate based on lead
+
+  const handleContact = () => {
+    if (currentCredits < requiredCredits) {
+      setShowCreditModal(true);
+    } else {
+      // Proceed with contact
+      contactLead();
+    }
+  };
+
+  const contactLead = async () => {
+    // Your contact logic
+    console.log("Contacting lead...");
+  };
+
+  return (
+    <>
+      <Button onClick={handleContact}>
+        Contact Lead
+      </Button>
+
+      <CreditPurchaseModal
+        open={showCreditModal}
+        onOpenChange={setShowCreditModal}
+        requiredCredits={requiredCredits}
+        contactName={lead.name}
+        professionalId={professionalId}
+        onPurchaseSuccess={() => {
+          // After successful purchase, contact the lead
+          contactLead();
+        }}
+      />
+    </>
+  );
+}

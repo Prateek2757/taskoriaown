@@ -1,11 +1,8 @@
-// app/api/company/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
-// your NextAuth config
 
-// GET: fetch company details for the logged-in user
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {

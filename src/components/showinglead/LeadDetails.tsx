@@ -16,6 +16,8 @@ import {
   Bookmark,
   Quote,
 } from "lucide-react";
+import { CreditPurchaseModal } from "../payments/CreditTopup";
+import { useSession } from "next-auth/react";
 
 interface LeadAnswer {
   question_id?: string | number;
@@ -42,10 +44,16 @@ interface Lead {
 
 interface LeadDetailsProps {
   lead: Lead;
+  requiredCredits:number;
+  taskId?: number;
 }
 
-const LeadDetails: React.FC<LeadDetailsProps> = ({ lead }) => {
+const LeadDetails: React.FC<LeadDetailsProps> = ({ lead  , requiredCredits , taskId}) => {
   const [isSaved, setIsSaved] = useState(false);
+  const [showCreditModal, setShowCreditModal] = useState(false);
+
+
+  const {data:session} = useSession();
 
   const formatTimeAgo = (timestamp: string): string => {
     const now = new Date();
@@ -95,7 +103,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead }) => {
     return `${maskedLocal}@${maskedDomain}.${domainExt}`;
   };
 
-  const creditsRequired = Math.floor(Math.random() * 10) + 5;
+  // const creditsRequired = Math.floor(Math.random() * 10) + 5;
   const responseRate = 0;
   const maxResponses = 5;
 
@@ -223,7 +231,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead }) => {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-2xl font-bold text-gray-900">
-                    {creditsRequired}
+                    {requiredCredits}
                   </span>
                   <span className="text-sm text-gray-600">
                     credits required
@@ -241,10 +249,19 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead }) => {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition shadow-lg shadow-blue-500/30">
+            <button onClick={()=>setShowCreditModal(true)} className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition shadow-lg shadow-blue-500/30">
               <MessageSquare className="w-5 h-5" />
               Contact {(lead.customer_name ?? "N/A").split(" ")[0]}
+            
             </button>
+            <CreditPurchaseModal
+                open={showCreditModal}
+                onOpenChange={setShowCreditModal}
+                requiredCredits={requiredCredits}
+                contactName={lead.customer_name}
+                taskId={taskId}
+                professionalId={session?.user?.id}
+              />
             <button className="px-6 py-3.5 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-2">
               <ThumbsDown className="w-5 h-5" />
               Not Interested
@@ -354,7 +371,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead }) => {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );

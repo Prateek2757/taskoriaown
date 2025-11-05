@@ -207,9 +207,12 @@ export default function ProviderDashboard() {
                 <p className="text-sm text-slate-600">
                   Get early exposure and build credibility fast.
                 </p>
+                 <Link href="/settings/billing/my_credits">
+                 
                 <Button className="mt-3 w-full bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]  hover:opacity-90 text-white">
                   Get Offer
                 </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>
