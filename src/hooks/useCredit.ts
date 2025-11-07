@@ -103,7 +103,6 @@ export function useCredit(professionalId?: string) {
     }
   }, []);
 
-  /** 🟢 Deduct credits when contacting lead */
   const deductCredits = useCallback(
     async (taskId: number, creditsUsed: number) => {
       if (!professionalId) {
@@ -112,13 +111,13 @@ export function useCredit(professionalId?: string) {
       }
 
       try {
-        const { data } = await axios.post(`/api/credits/deduct`, {
+        const { data } = await axios.post(`/api/admin/deduct-credit`, {
           professionalId,
           taskId,
           credits: creditsUsed,
         });
 
-        toast.success(data.message || "Credits deducted successfully");
+        toast.success(`Credits deducted successfully ${creditsUsed}`);
         await fetchBalance();
         return true;
       } catch (error: any) {

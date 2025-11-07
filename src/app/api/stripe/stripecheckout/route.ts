@@ -48,7 +48,6 @@ export async function POST(request: Request) {
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cancel`,
     });
 
-    // ✅ Save Pending Transaction
     await pool.query(
       `INSERT INTO credit_topups 
       (professional_id, package_id, amount, credits_added, payment_method, transaction_ref, status) 

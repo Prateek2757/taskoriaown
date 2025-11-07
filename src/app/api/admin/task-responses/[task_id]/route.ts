@@ -4,14 +4,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../../auth/[...nextauth]/options";
 export async function GET(
   req: Request,
-  { params }: { params: { task_id: string;  } }
+  { params }: { params: { task_id: string } }
 ) {
   const { task_id } = params;
- const session = await getServerSession(authOptions);
-    if(!session?.user?.id){
-        return NextResponse.json({message:"Unauthorized"},{status:401});
-    }
-    const userId=session.user.id
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+  const userId = session.user.id;
   try {
     const client = await pool.connect();
 
@@ -20,9 +20,10 @@ export async function GET(
       FROM task_responses
       WHERE task_id = $1
     `;
-    const responseCountResult = await client.query(responseCountQuery, [task_id]);
+    const responseCountResult = await client.query(responseCountQuery, [
+      task_id,
+    ]);
 
-    // ✅ Check if this professional purchased the lead
     const purchaseCheckQuery = `
       SELECT 1
       FROM task_responses
@@ -31,14 +32,14 @@ export async function GET(
     `;
     const purchaseCheckResult = await client.query(purchaseCheckQuery, [
       task_id,
-     userId,
+      userId,
     ]);
 
     client.release();
 
     return NextResponse.json({
-      count: Number(responseCountResult.rows[0].total),   // ✅ response count
-      purchased: purchaseCheckResult.rows.length > 0,     // ✅ already purchased?
+      count: Number(responseCountResult.rows[0].total),
+      purchased: purchaseCheckResult.rows.length > 0,
     });
   } catch (error) {
     console.error("Lead status error:", error);

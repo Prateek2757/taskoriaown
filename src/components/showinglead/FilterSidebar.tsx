@@ -41,7 +41,6 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
 
-  // Extract unique categories and locations
   const allCategories = Array.from(
     new Set(leads.map((l) => l.category_name).filter(Boolean))
   );
@@ -315,7 +314,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           <div className="grid grid-cols-2 gap-2">
             <div className="relative ml-1 ">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
-                £
+                A$
               </span>
               <input
                 type="number"
@@ -327,7 +326,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
             </div>
             <div className="relative">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
-                £
+                A$
               </span>
               <input
                 type="number"
@@ -404,7 +403,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
               )}
               {(filters.budgetMin || filters.budgetMax) && (
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-md">
-                  £{filters.budgetMin || "0"} - £{filters.budgetMax || "∞"}
+                  A${filters.budgetMin || "0"} - A${filters.budgetMax || "∞"}
                   <X
                     className="w-3 h-3 cursor-pointer hover:text-purple-900"
                     onClick={() =>

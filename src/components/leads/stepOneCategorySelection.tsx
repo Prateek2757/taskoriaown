@@ -177,8 +177,8 @@ export default function StepOneCategoryForm({
             <div className="relative mt-2">
               <LocationSearch
                 onSelect={(data) => {
-                  setValue("city_id", data.city_id);
-                  setValue("location", data.city);
+                  setValue("city_id", data.city_id, { shouldDirty: true, shouldTouch: true });
+                  setValue("location", data.city || data.display_name, { shouldDirty: true, shouldTouch: true });
                 }}
               />
             </div>

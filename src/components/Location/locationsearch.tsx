@@ -20,7 +20,7 @@ type Location = {
 };
 
 type Props = {
-  onSelect?: (data: { city_id: number; city: string }) => void;
+  onSelect?: (data: { city_id: number; city: string ; display_name:string }) => void;
 };
 
 export default function LocationSearch({ onSelect }: Props) {
@@ -95,7 +95,7 @@ export default function LocationSearch({ onSelect }: Props) {
         body: JSON.stringify(location),
       });
       const data = await res.json();
-      onSelect?.({ city_id: data.city_id, city: location.city });
+      onSelect?.({ city_id: data.city_id, city: location.city ,display_name:location.display_name});
     } catch (err) {
       console.error("Failed to save location:", err);
     }

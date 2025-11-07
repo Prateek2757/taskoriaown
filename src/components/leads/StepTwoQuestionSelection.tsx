@@ -121,7 +121,7 @@ export default function StepTwoQuestionsForm({
         reset();
         onClose();
         setTimeout(() => {
-          router.push("/provider/leads");
+          router.push("/customer/dashboard");
         }, 800);
       }
     } catch (err: any) {

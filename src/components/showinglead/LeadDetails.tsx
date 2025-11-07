@@ -41,7 +41,7 @@ interface Lead {
   budget_max?: number;
   is_remote_allowed?: boolean;
   answers?: LeadAnswer[];
-  responses_count?: number; // New: number of professionals who responded
+  responses_count?: number; 
 }
 
 interface LeadDetailsProps {
@@ -108,7 +108,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     return `${maskedLocal}@${maskedDomain}.${domainExt}`;
   };
 
-
   const fetchResponses = useCallback(async () => {
     if (!taskId) return;
     setLoadingResponses(true);
@@ -121,11 +120,11 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       setLoadingResponses(false);
     }
   }, [taskId]);
-  
+
   useEffect(() => {
     fetchResponses();
   }, [fetchResponses]);
-  
+
   const responseRate = leadStatus.count ?? 0;
 
   return (
@@ -256,7 +255,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </p>
           </div>
 
-          {/* Credits Required */}
           <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl border border-orange-200 p-5 mb-6">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
@@ -282,7 +280,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             <button
               disabled={leadStatus.purchased}
@@ -318,7 +315,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         </div>
       </div>
 
-      {/* Project Details */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
         <h2 className="text-lg font-bold text-gray-900 mb-4">
           Project Details
@@ -337,7 +333,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
             <p className="text-lg font-bold text-gray-900">
               {lead.budget_min && lead.budget_max
-                ? `£${lead.budget_min.toLocaleString()} - £${lead.budget_max.toLocaleString()}`
+                ? `A$${lead.budget_min.toLocaleString()} - A$${lead.budget_max.toLocaleString()}`
                 : "To be discussed"}
             </p>
           </div>
@@ -357,7 +353,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
           )}
         </div>
 
-        {/* Highlights */}
         <div className="flex flex-wrap gap-2 mb-6">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-100 text-red-700 text-xs font-semibold rounded-lg">
             <AlertCircle className="w-3.5 h-3.5" /> Urgent Response Required
@@ -373,7 +368,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
           </span>
         </div>
 
-        {/* Q&A */}
         {lead.answers && lead.answers.length > 0 && (
           <div className="mt-6">
             <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">

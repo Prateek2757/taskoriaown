@@ -23,7 +23,12 @@ interface LeadCardProps {
   onSelect: (lead: Lead) => void;
 }
 
-const LeadCard: React.FC<LeadCardProps> = ({ lead, isSelected,  requiredCredits, onSelect }) => {
+const LeadCard: React.FC<LeadCardProps> = ({
+  lead,
+  isSelected,
+  requiredCredits,
+  onSelect,
+}) => {
   const formatTimeAgo = (timestamp: string): string => {
     const now = new Date();
     const created = new Date(timestamp);
@@ -45,7 +50,7 @@ const LeadCard: React.FC<LeadCardProps> = ({ lead, isSelected,  requiredCredits,
 
   const getBudgetDisplay = (): string => {
     if (lead.budget_min && lead.budget_max) {
-      return `£${lead.budget_min} - £${lead.budget_max}`;
+      return `A$${lead.budget_min} - A$${lead.budget_max}`;
     }
     return "Budget not specified";
   };

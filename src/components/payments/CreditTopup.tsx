@@ -60,13 +60,14 @@ export function CreditPurchase({
     fetchPackages,
     purchaseCredits,
     balance,
+    deductCredits,
     fetchBalance,
     loading,
   } = useCredit(professionalId);
 
   const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<number | null>(null);
-const [loadingButton , setLoadingButton]=useState(false)
+  const [loadingButton, setLoadingButton] = useState(false);
   useEffect(() => {
     if ((mode === "modal" && open) || mode === "page") {
       fetchPackages();
@@ -80,12 +81,12 @@ const [loadingButton , setLoadingButton]=useState(false)
 
   const selected = packages.find((p) => p.package_id === selectedPackage);
 
-  const handleDeductCredits = async () => {
+  const handleUpdateCredits = async () => {
     if (!selected) {
       toast.error("Please select the package first");
       return;
     }
-    setLoadingButton(true)
+    setLoadingButton(true);
     try {
       const res = await fetch("/api/stripe/stripecheckout", {
         method: "POST",
@@ -109,51 +110,42 @@ const [loadingButton , setLoadingButton]=useState(false)
       console.error(error);
       toast.error("Error Deducting Credit");
     }
-    // const res = await fetch("/api/stripecheckout", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     amount: selected?.price,         // $20
-    //     productName: "Premium Plan",
-    //   }),
-    // });
-
-    // const data = await res.json();
-    // window.location.href = data.url; // Redir
-    // try {
-    //   const res = await fetch("/api/admin/deduct-credit", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       professionalId,
-    //        taskId:Number(taskId),
-    //       credits: requiredCredits,
-    //     }),
-    //   });
-
-    //   if (!res.ok) throw new Error("Failed to deduct credits");
-
-    //   toast.success(
-    //     `Successfully deducted ${requiredCredits} credits to contact ${contactName}`
-    //   );
-    //   fetchBalance();
-    //   onPurchaseSuccess?.();
-    //   if (onOpenChange) onOpenChange(false);
-    // } catch (err) {
-    //   console.error(err);
-    //   toast.error("Error deducting credits");
-    // }
   };
+  // const handleDeductCredit = async () => {
+  //   try {
+  //     const res = await fetch("/api/admin/deduct-credit", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         professionalId,
+  //         taskId: Number(taskId),
+  //         credits: requiredCredits,
+  //       }),
+  //     });
 
-  const handlePurchase = async () => {
-    if (!selectedPackage) {
-      toast.error("Please select a package first");
-      return;
-    }
+  //     if (!res.ok) throw new Error("Failed to deduct credits");
 
-    const result = await purchaseCredits(selectedPackage);
+  //     toast.success(
+  //       `Successfully deducted ${requiredCredits} credits to contact ${contactName}`
+  //     );
+  //     fetchBalance();
+  //     onPurchaseSuccess?.();
+  //     if (onOpenChange) onOpenChange(false);
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error("Error deducting credits");
+  //   }
+  // };
+
+  const handleDeduct = async () => {
+    // if (!selected) {
+    //   toast.error("Please select a package first");
+    //   return;
+    // }
+setLoadingButton(true);
+    const result = await deductCredits( Number(taskId),Number(requiredCredits));
     if (result) {
-      toast.success("Credit purchase successful!");
+      fetchBalance();
       onPurchaseSuccess?.();
       if (mode === "modal" && onOpenChange) onOpenChange(false);
     }
@@ -211,7 +203,6 @@ const [loadingButton , setLoadingButton]=useState(false)
         ))}
       </div>
 
-      {/* Show Packages only if balance is low */}
       {showPackages && (
         <>
           {loading ? (
@@ -246,7 +237,7 @@ const [loadingButton , setLoadingButton]=useState(false)
                     </div>
                     <div className="text-right">
                       <div className="text-lg font-semibold text-gray-900">
-                      A${pkg.price}
+                        A${pkg.price}
                       </div>
                     </div>
                   </div>
@@ -257,19 +248,18 @@ const [loadingButton , setLoadingButton]=useState(false)
         </>
       )}
 
-      {/* Action button */}
       {requiredCredits && balance >= requiredCredits ? (
         <Button
-          onClick={handlePurchase}
+          onClick={handleDeduct}
           className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-6 text-base"
           size="lg"
         >
-          Contact Lead – Deduct {requiredCredits} Credits
+          { loadingButton ?"Deducting Credits..." : `Contact Lead – Deduct ${requiredCredits} Credits`}
         </Button>
       ) : (
         selected && (
           <Button
-            onClick={handleDeductCredits}
+            onClick={handleUpdateCredits}
             disabled={loading}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6 text-base"
             size="lg"
@@ -283,7 +273,6 @@ const [loadingButton , setLoadingButton]=useState(false)
     </div>
   );
 
-  // Render modal or page mode
   if (mode === "modal") {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
