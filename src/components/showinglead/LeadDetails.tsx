@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   MapPin,
   Phone,
@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { CreditPurchaseModal } from "../payments/CreditTopup";
 import { useSession } from "next-auth/react";
+import axios from "axios";
 
 interface LeadAnswer {
   question_id?: string | number;
@@ -26,8 +27,8 @@ interface LeadAnswer {
 }
 
 interface Lead {
+  task_id?: number;
   title: string;
-
   category_name: string;
   customer_name?: string;
   customer_email?: string;
@@ -40,20 +41,30 @@ interface Lead {
   budget_max?: number;
   is_remote_allowed?: boolean;
   answers?: LeadAnswer[];
+  responses_count?: number; // New: number of professionals who responded
 }
 
 interface LeadDetailsProps {
   lead: Lead;
-  requiredCredits:number;
+  requiredCredits: number;
   taskId?: number;
 }
 
-const LeadDetails: React.FC<LeadDetailsProps> = ({ lead  , requiredCredits , taskId}) => {
+const LeadDetails: React.FC<LeadDetailsProps> = ({
+  lead,
+  requiredCredits,
+  taskId,
+}) => {
   const [isSaved, setIsSaved] = useState(false);
   const [showCreditModal, setShowCreditModal] = useState(false);
-
-
-  const {data:session} = useSession();
+  const { data: session } = useSession();
+  // const [responsesCount, setResponsesCount] = useState<number>(0);
+  const [loadingResponses, setLoadingResponses] = useState(false);
+  const [leadStatus, setLeadStatus] = useState({
+    count: 0,
+    purchased: false,
+  });
+  const maxResponses = 5;
 
   const formatTimeAgo = (timestamp: string): string => {
     const now = new Date();
@@ -61,7 +72,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead  , requiredCredits , tas
     const diffInMinutes = Math.floor(
       (now.getTime() - created.getTime()) / (1000 * 60)
     );
-
     if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
     if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
     return `${Math.floor(diffInMinutes / 1440)}d ago`;
@@ -76,43 +86,52 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead  , requiredCredits , tas
       .slice(0, 2);
 
   const maskPhone = (phone: number | string = ""): string => {
-    if (!phone) return "N/A"; // handle empty phone
+    if (!phone) return "N/A";
     const phonestr = String(phone);
-    // keep first 3 digits and last 2 digits visible
     const visibleStart = phonestr.slice(0, 3);
     const visibleEnd = phonestr.slice(-2);
     const maskedMiddle = "*".repeat(Math.max(phonestr.length - 5, 0));
     return `${visibleStart}${maskedMiddle}${visibleEnd}`;
   };
-  console.log(lead.phone);
-  const maskEmail = (email?: string): string => {
-    if (!email) return "k******************@g***.com"; // fallback if no email
 
+  const maskEmail = (email?: string): string => {
+    if (!email) return "k******************@g***.com";
     const [local, domain] = email.split("@");
     if (!domain) return email;
-
     const firstChar = local[0];
     const maskedLocal = firstChar + "*".repeat(Math.max(local.length - 1, 3));
-
     const domainParts = domain.split(".");
     const domainName = domainParts[0];
     const domainExt = domainParts.slice(1).join(".");
     const maskedDomain =
       domainName[0] + "*".repeat(Math.max(domainName.length - 1, 2));
-
     return `${maskedLocal}@${maskedDomain}.${domainExt}`;
   };
 
-  // const creditsRequired = Math.floor(Math.random() * 10) + 5;
-  const responseRate = 0;
-  const maxResponses = 5;
+
+  const fetchResponses = useCallback(async () => {
+    if (!taskId) return;
+    setLoadingResponses(true);
+    try {
+      const { data } = await axios.get(`/api/admin/task-responses/${taskId}`);
+      setLeadStatus(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingResponses(false);
+    }
+  }, [taskId]);
+  
+  useEffect(() => {
+    fetchResponses();
+  }, [fetchResponses]);
+  
+  const responseRate = leadStatus.count ?? 0;
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Hero Card */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6">
-        {/* Header with gradient */}
-        <div className="bg-gradient-to-r from-[#8A2BE2]  via-[#6C63FF] to-[#00E5FF] px-6 py-8 text-white">
+        <div className="bg-gradient-to-r from-[#8A2BE2] via-[#6C63FF] to-[#00E5FF] px-6 py-8 text-white">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-xl border-2 border-white/30">
@@ -161,8 +180,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead  , requiredCredits , tas
         <div className="p-6">
           <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-200 p-5 mb-6">
             <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4 flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-cyan-600" />
-              Verified Contact Details
+              <CheckCircle className="w-4 h-4 text-cyan-600" /> Verified Contact
+              Details
             </h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -175,7 +194,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead  , requiredCredits , tas
                       Phone Number
                     </div>
                     <div className="font-mono text-sm text-gray-900">
-                      {maskPhone(lead.phone)}
+                      {leadStatus.purchased
+                        ? lead.phone
+                        : maskPhone(lead.phone)}
                     </div>
                   </div>
                 </div>
@@ -194,7 +215,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead  , requiredCredits , tas
                       Email Address
                     </div>
                     <div className="font-mono text-sm text-gray-900">
-                      {maskEmail(lead.customer_email)}
+                      {leadStatus.purchased
+                        ? lead.customer_email
+                        : maskEmail(lead.customer_email)}
                     </div>
                   </div>
                 </div>
@@ -211,11 +234,21 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead  , requiredCredits , tas
                 {responseRate}/{maxResponses}
               </span>
             </div>
-            <div className="relative w-full h-2 bg-white rounded-full overflow-hidden">
+            <div className="relative w-full h-2 bg-white rounded-full overflow-hidden shadow-inner">
               <div
                 className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500"
                 style={{ width: `${(responseRate / maxResponses) * 100}%` }}
               />
+            </div>
+            <div className="flex justify-between mt-2">
+              {Array.from({ length: maxResponses }, (_, i) => (
+                <div
+                  key={i}
+                  className={`h-1 w-1 rounded-full ${
+                    i < responseRate ? "bg-blue-600" : "bg-gray-300"
+                  }`}
+                />
+              ))}
             </div>
             <p className="text-xs text-gray-600 mt-2">
               <strong>{maxResponses - responseRate} spots remaining</strong> •
@@ -223,6 +256,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead  , requiredCredits , tas
             </p>
           </div>
 
+          {/* Credits Required */}
           <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl border border-orange-200 p-5 mb-6">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
@@ -248,20 +282,31 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead  , requiredCredits , tas
             </div>
           </div>
 
+          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <button onClick={()=>setShowCreditModal(true)} className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition shadow-lg shadow-blue-500/30">
+            <button
+              disabled={leadStatus.purchased}
+              onClick={() => setShowCreditModal(true)}
+              className={`flex-1 flex items-center justify-center px-6 py-3.5 font-semibold rounded-xl
+                ${
+                  leadStatus.purchased
+                    ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                    : "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                }
+              `}
+            >
               <MessageSquare className="w-5 h-5" />
               Contact {(lead.customer_name ?? "N/A").split(" ")[0]}
-            
             </button>
             <CreditPurchaseModal
-                open={showCreditModal}
-                onOpenChange={setShowCreditModal}
-                requiredCredits={requiredCredits}
-                contactName={lead.customer_name}
-                taskId={taskId}
-                professionalId={session?.user?.id}
-              />
+              open={showCreditModal}
+              onOpenChange={setShowCreditModal}
+              requiredCredits={requiredCredits}
+              contactName={lead.customer_name}
+              taskId={taskId}
+              professionalId={session?.user?.id}
+              onPurchaseSuccess={fetchResponses}
+            />
             <button className="px-6 py-3.5 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-2">
               <ThumbsDown className="w-5 h-5" />
               Not Interested
@@ -273,17 +318,12 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead  , requiredCredits , tas
         </div>
       </div>
 
+      {/* Project Details */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
         <h2 className="text-lg font-bold text-gray-900 mb-4">
           Project Details
         </h2>
-
-        <div className="mb-6">
-          <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">
-            Description
-          </h3>
-          <p className="text-gray-700 leading-relaxed">{lead.description}</p>
-        </div>
+        <p className="text-gray-700 leading-relaxed mb-6">{lead.description}</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           <div className="bg-gradient-to-br from-cyan-50 to-emerald-50 rounded-xl p-4 border border-cyan-200">
@@ -317,36 +357,28 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead  , requiredCredits , tas
           )}
         </div>
 
-        <div>
-          <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">
-            Highlights
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-100 text-red-700 text-xs font-semibold rounded-lg">
-              <AlertCircle className="w-3.5 h-3.5" />
-              Urgent Response Required
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-yellow-100 text-yellow-700 text-xs font-semibold rounded-lg">
-              <Award className="w-3.5 h-3.5" />
-              Premium Lead
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 text-blue-700 text-xs font-semibold rounded-lg">
-              <Clock className="w-3.5 h-3.5" />
-              Fast Response Needed
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-cyan-100 text-cyan-700 text-xs font-semibold rounded-lg">
-              <CheckCircle className="w-3.5 h-3.5" />
-              Verified Lead
-            </span>
-          </div>
+        {/* Highlights */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-100 text-red-700 text-xs font-semibold rounded-lg">
+            <AlertCircle className="w-3.5 h-3.5" /> Urgent Response Required
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-yellow-100 text-yellow-700 text-xs font-semibold rounded-lg">
+            <Award className="w-3.5 h-3.5" /> Premium Lead
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 text-blue-700 text-xs font-semibold rounded-lg">
+            <Clock className="w-3.5 h-3.5" /> Fast Response Needed
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-cyan-100 text-cyan-700 text-xs font-semibold rounded-lg">
+            <CheckCircle className="w-3.5 h-3.5" /> Verified Lead
+          </span>
         </div>
 
+        {/* Q&A */}
         {lead.answers && lead.answers.length > 0 && (
           <div className="mt-6">
             <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">
               Lead Questions & Answers
             </h3>
-
             <div className="space-y-4">
               {lead.answers.map((ans) => (
                 <div
@@ -359,7 +391,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({ lead  , requiredCredits , tas
                       {ans.question || "—"}
                     </p>
                   </div>
-
                   <div className="flex items-start gap-2">
                     <Quote size={16} className="text-cyan-600 mt-0.5" />
                     <p className="text-sm text-gray-700 italic">

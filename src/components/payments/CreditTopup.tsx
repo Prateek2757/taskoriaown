@@ -86,31 +86,43 @@ export function CreditPurchase({
   const selected = packages.find((p) => p.package_id === selectedPackage);
 console.log(taskId,"jioejcoenj");
 
-  // ✅ Deduct credits logic (production-ready)
   const handleDeductCredits = async () => {
-    try {
-      const res = await fetch("/api/admin/deduct-credit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          professionalId,
-           taskId:Number(taskId),
-          credits: requiredCredits,
-        }),
-      });
 
-      if (!res.ok) throw new Error("Failed to deduct credits");
+    const res = await fetch("/api/stripecheckout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        amount: selected?.price,         // $20
+        productName: "Premium Plan",
+      }),
+    });
 
-      toast.success(
-        `Successfully deducted ${requiredCredits} credits to contact ${contactName}`
-      );
-      fetchBalance();
-      onPurchaseSuccess?.();
-      if (onOpenChange) onOpenChange(false);
-    } catch (err) {
-      console.error(err);
-      toast.error("Error deducting credits");
-    }
+    const data = await res.json();
+    window.location.href = data.url; // Redir
+    // try {
+    //   const res = await fetch("/api/admin/deduct-credit", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //       professionalId,
+    //        taskId:Number(taskId),
+    //       credits: requiredCredits,
+    //     }),
+    //   });
+
+    //   if (!res.ok) throw new Error("Failed to deduct credits");
+
+    //   toast.success(
+    //     `Successfully deducted ${requiredCredits} credits to contact ${contactName}`
+    //   );
+    //   fetchBalance();
+    //   onPurchaseSuccess?.();
+    //   if (onOpenChange) onOpenChange(false);
+    // } catch (err) {
+    //   console.error(err);
+    //   toast.error("Error deducting credits");
+    // }
+    
   };
 
   const handlePurchase = async () => {
@@ -132,7 +144,6 @@ console.log(taskId,"jioejcoenj");
 
   const content = (
     <div className="w-full">
-      {/* Header for modal mode */}
       {mode === "modal" && requiredCredits && (
         <div className="mb-6 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">

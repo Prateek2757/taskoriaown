@@ -19,6 +19,7 @@ export interface CreditPackage {
 interface CreditState {
   balance: number;
   packages: CreditPackage[];
+  taskCredits: Record<number, number>; // NEW: map of task_id -> estimated credits
   loading: boolean;
 }
 
@@ -26,16 +27,17 @@ export function useCredit(professionalId?: string) {
   const [state, setState] = useState<CreditState>({
     balance: 0,
     packages: [],
+    taskCredits: {},
     loading: false,
   });
 
+  /** 🟢 Fetch credit balance */
   const fetchBalance = useCallback(async () => {
     if (!professionalId) return;
     setState((s) => ({ ...s, loading: true }));
 
     try {
       const { data } = await axios.get(`/api/admin/credit-balance`);
-
       setState((s) => ({ ...s, balance: data.balance || 0 }));
       return data.balance;
     } catch (error: any) {
@@ -46,6 +48,7 @@ export function useCredit(professionalId?: string) {
     }
   }, [professionalId]);
 
+  /** 🟢 Fetch available credit packages */
   const fetchPackages = useCallback(async () => {
     setState((s) => ({ ...s, loading: true }));
 
@@ -61,6 +64,7 @@ export function useCredit(professionalId?: string) {
     }
   }, []);
 
+  /** 🟢 Fetch estimated credits for a single task */
   const estimateCredits = useCallback(async (taskId: number, action = "lead_response") => {
     try {
       const { data } = await axios.get(`/api/credits/estimate`, {
@@ -74,7 +78,34 @@ export function useCredit(professionalId?: string) {
     }
   }, []);
 
-  /** ✅ Deduct credits safely (e.g. when responding to a lead) */
+  const fetchCreditEstimates = useCallback(async () => {
+    setState((s) => ({ ...s, loading: true }));
+
+    try {
+      const { data } = await axios.get(`/api/admin/create-credit-estimate`);
+
+      if (data?.tasks && Array.isArray(data.tasks)) {
+        const creditsMap: Record<number, number> = {};
+        data.tasks.forEach(
+          (t: { task_id: number; estimated_credits: number }) => {
+            creditsMap[t.task_id] = t.estimated_credits;
+          }
+        );
+        setState((s) => ({ ...s, taskCredits: creditsMap }));
+        return creditsMap;
+      } else {
+        throw new Error("Invalid credit estimate data");
+      }
+    } catch (error: any) {
+      console.error("Credit estimate fetch error:", error);
+      toast.error(error.response?.data?.error || "Failed to fetch credit estimates");
+      return {};
+    } finally {
+      setState((s) => ({ ...s, loading: false }));
+    }
+  }, []);
+
+  /** 🟢 Deduct credits when contacting lead */
   const deductCredits = useCallback(
     async (taskId: number, creditsUsed: number) => {
       if (!professionalId) {
@@ -84,9 +115,9 @@ export function useCredit(professionalId?: string) {
 
       try {
         const { data } = await axios.post(`/api/credits/deduct`, {
-          professional_id: professionalId,
-          task_id: taskId,
-          credits_used: creditsUsed,
+          professionalId,
+          taskId,
+          credits: creditsUsed,
         });
 
         toast.success(data.message || "Credits deducted successfully");
@@ -119,7 +150,6 @@ export function useCredit(professionalId?: string) {
           transaction_ref: transactionRef,
         });
 
-        toast.success("Credit purchase successful!");
         await fetchBalance();
         return data;
       } catch (error: any) {
@@ -139,10 +169,12 @@ export function useCredit(professionalId?: string) {
   return {
     balance: state.balance,
     packages: state.packages,
+    taskCredits: state.taskCredits, // 🆕 accessible in LeadsPage or others
     loading: state.loading,
     fetchBalance,
     fetchPackages,
     estimateCredits,
+    fetchCreditEstimates, // 🆕 added
     deductCredits,
     purchaseCredits,
   };
