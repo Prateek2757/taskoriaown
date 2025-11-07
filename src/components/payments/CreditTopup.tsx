@@ -1,12 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronDown } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { ChevronDown, Package } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useCredit } from "@/hooks/useCredit";
@@ -42,7 +38,7 @@ interface CreditPurchaseProps {
   mode?: "page" | "modal";
   requiredCredits?: number;
   contactName?: string;
-  taskId?:string | number;
+  taskId?: string | number;
   professionalId?: string;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -70,8 +66,7 @@ export function CreditPurchase({
 
   const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<number | null>(null);
-
-  // Fetch credit data only when modal is opened or page is loaded
+const [loadingButton , setLoadingButton]=useState(false)
   useEffect(() => {
     if ((mode === "modal" && open) || mode === "page") {
       fetchPackages();
@@ -84,21 +79,47 @@ export function CreditPurchase({
   };
 
   const selected = packages.find((p) => p.package_id === selectedPackage);
-console.log(taskId,"jioejcoenj");
 
   const handleDeductCredits = async () => {
+    if (!selected) {
+      toast.error("Please select the package first");
+      return;
+    }
+    setLoadingButton(true)
+    try {
+      const res = await fetch("/api/stripe/stripecheckout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          professionalId,
+          packageId: selected?.package_id,
+          amount: selected?.price,
+          credits: selected.credits,
+          packageName: selected?.name,
+        }),
+      });
 
-    const res = await fetch("/api/stripecheckout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        amount: selected?.price,         // $20
-        productName: "Premium Plan",
-      }),
-    });
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error);
+        return;
+      }
+      window.location.href = data.url;
+    } catch (error) {
+      console.error(error);
+      toast.error("Error Deducting Credit");
+    }
+    // const res = await fetch("/api/stripecheckout", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     amount: selected?.price,         // $20
+    //     productName: "Premium Plan",
+    //   }),
+    // });
 
-    const data = await res.json();
-    window.location.href = data.url; // Redir
+    // const data = await res.json();
+    // window.location.href = data.url; // Redir
     // try {
     //   const res = await fetch("/api/admin/deduct-credit", {
     //     method: "POST",
@@ -122,7 +143,6 @@ console.log(taskId,"jioejcoenj");
     //   console.error(err);
     //   toast.error("Error deducting credits");
     // }
-    
   };
 
   const handlePurchase = async () => {
@@ -139,8 +159,8 @@ console.log(taskId,"jioejcoenj");
     }
   };
 
-  const showPackages = mode === "page" || (requiredCredits && balance < requiredCredits);
-
+  const showPackages =
+    mode === "page" || (requiredCredits && balance < requiredCredits);
 
   const content = (
     <div className="w-full">
@@ -155,18 +175,14 @@ console.log(taskId,"jioejcoenj");
         </div>
       )}
 
-      {/* Current balance */}
       <div className="text-center mb-6">
         <p className="text-gray-700 text-sm">
           Current Balance:{" "}
-          <span className="font-semibold text-blue-600">
-            {balance ?? 0}
-          </span>{" "}
+          <span className="font-semibold text-blue-600">{balance ?? 0}</span>{" "}
           credits
         </p>
       </div>
 
-      {/* FAQ Section */}
       <div className="space-y-3 mb-6">
         {FAQS.map((faq) => (
           <div
@@ -196,7 +212,7 @@ console.log(taskId,"jioejcoenj");
       </div>
 
       {/* Show Packages only if balance is low */}
-      { showPackages && (
+      {showPackages && (
         <>
           {loading ? (
             <div className="text-center py-8">
@@ -222,7 +238,7 @@ console.log(taskId,"jioejcoenj");
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="text-xl font-bold text-gray-900">
-                        {pkg.package_name}
+                        {pkg.name}
                       </h3>
                       <p className="text-gray-600 text-sm">
                         {pkg.credits} credits • ~{pkg.leads_estimate} leads
@@ -230,7 +246,7 @@ console.log(taskId,"jioejcoenj");
                     </div>
                     <div className="text-right">
                       <div className="text-lg font-semibold text-gray-900">
-                        £{pkg.price}
+                      A${pkg.price}
                       </div>
                     </div>
                   </div>
@@ -244,7 +260,7 @@ console.log(taskId,"jioejcoenj");
       {/* Action button */}
       {requiredCredits && balance >= requiredCredits ? (
         <Button
-          onClick={handleDeductCredits}
+          onClick={handlePurchase}
           className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-6 text-base"
           size="lg"
         >
@@ -253,14 +269,14 @@ console.log(taskId,"jioejcoenj");
       ) : (
         selected && (
           <Button
-            onClick={handlePurchase}
+            onClick={handleDeductCredits}
             disabled={loading}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6 text-base"
             size="lg"
           >
-            {loading
+            {loadingButton
               ? "Processing..."
-              : `Buy ${selected.credits} credits for £${selected.price}`}
+              : `Buy ${selected.credits} credits for A$${selected.price}`}
           </Button>
         )
       )}

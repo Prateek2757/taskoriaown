@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 export interface CreditPackage {
   package_id: number;
-  package_name: string;
+  name: string;
   credits: number;
   price: number;
   original_price?: number;
@@ -19,7 +19,7 @@ export interface CreditPackage {
 interface CreditState {
   balance: number;
   packages: CreditPackage[];
-  taskCredits: Record<number, number>; // NEW: map of task_id -> estimated credits
+  taskCredits: Record<number, number>; 
   loading: boolean;
 }
 
@@ -31,7 +31,6 @@ export function useCredit(professionalId?: string) {
     loading: false,
   });
 
-  /** 🟢 Fetch credit balance */
   const fetchBalance = useCallback(async () => {
     if (!professionalId) return;
     setState((s) => ({ ...s, loading: true }));
@@ -48,7 +47,7 @@ export function useCredit(professionalId?: string) {
     }
   }, [professionalId]);
 
-  /** 🟢 Fetch available credit packages */
+
   const fetchPackages = useCallback(async () => {
     setState((s) => ({ ...s, loading: true }));
 
@@ -64,7 +63,6 @@ export function useCredit(professionalId?: string) {
     }
   }, []);
 
-  /** 🟢 Fetch estimated credits for a single task */
   const estimateCredits = useCallback(async (taskId: number, action = "lead_response") => {
     try {
       const { data } = await axios.get(`/api/credits/estimate`, {
