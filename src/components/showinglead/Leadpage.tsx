@@ -10,6 +10,7 @@ import { Search, SlidersHorizontal } from "lucide-react";
 import { useCredit } from "@/hooks/useCredit";
 
 export interface Lead {
+  user_id?:string | number;
   task_id?: number;
   title: string;
   location_name: string;
@@ -210,6 +211,7 @@ const LeadsPage: React.FC = () => {
         {selectedLead ? (
           <LeadDetails
             lead={selectedLead}
+            userId={selectedLead.user_id}
             taskId={selectedLead.task_id}
             requiredCredits={taskCredits[Number(selectedLead.task_id)] || 0}
           />

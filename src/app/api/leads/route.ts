@@ -22,7 +22,7 @@ export async function POST(req: Request) {
       city_id,
       preferred_date_start,
       preferred_date_end,
-    
+
       category_answers, // ✅ new: answers object
     } = await req.json();
 
@@ -57,7 +57,6 @@ export async function POST(req: Request) {
         city_id || null,
         preferred_date_start || null,
         preferred_date_end || null,
-       
       ]
     );
 
@@ -71,7 +70,11 @@ export async function POST(req: Request) {
       `;
 
       for (const [questionId, answer] of Object.entries(category_answers)) {
-        await client.query(insertAnswerQuery, [taskId, questionId, String(answer)]);
+        await client.query(insertAnswerQuery, [
+          taskId,
+          questionId,
+          String(answer),
+        ]);
       }
     }
 
@@ -131,7 +134,9 @@ export async function GET() {
         ci.name AS location_name,
         u.email AS customer_email,
         u.phone,
+         up.user_id ,
         up.display_name AS customer_name,
+       
         json_agg(
           json_build_object(
             'question_id', ta.category_question_id,
@@ -151,7 +156,7 @@ export async function GET() {
         AND t.category_id = ANY($1::int[])   -- ✅ match any category
         AND t.customer_id <> $2
       GROUP BY 
-        t.task_id, c.name, ci.name, u.email, u.phone, up.display_name
+        t.task_id, c.name, ci.name, up.user_id ,u.email, u.phone, up.display_name
       ORDER BY 
         t.created_at DESC;
       `,
@@ -161,7 +166,10 @@ export async function GET() {
     return NextResponse.json(result.rows);
   } catch (err) {
     console.error("Leads fetch error:", err);
-    return NextResponse.json({ message: "Failed to fetch leads" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Failed to fetch leads" },
+      { status: 500 }
+    );
   } finally {
     client.release();
   }

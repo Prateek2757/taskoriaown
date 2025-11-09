@@ -19,6 +19,7 @@ import {
 import { CreditPurchaseModal } from "../payments/CreditTopup";
 import { useSession } from "next-auth/react";
 import axios from "axios";
+import ChatPage from "../chatPage";
 
 interface LeadAnswer {
   question_id?: string | number;
@@ -27,6 +28,7 @@ interface LeadAnswer {
 }
 
 interface Lead {
+  user_id?:string | number;
   task_id?: number;
   title: string;
   category_name: string;
@@ -48,12 +50,14 @@ interface LeadDetailsProps {
   lead: Lead;
   requiredCredits: number;
   taskId?: number;
+  userId?:string | number;
 }
 
 const LeadDetails: React.FC<LeadDetailsProps> = ({
   lead,
   requiredCredits,
   taskId,
+  userId,
 }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [showCreditModal, setShowCreditModal] = useState(false);
@@ -129,6 +133,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto">
+      <div>{userId !== undefined && <ChatPage otherUserId={userId} />}</div>
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6">
         <div className="bg-gradient-to-r from-[#8A2BE2] via-[#6C63FF] to-[#00E5FF] px-6 py-8 text-white">
           <div className="flex items-start justify-between mb-4">
