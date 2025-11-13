@@ -1,25 +1,24 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   MapPin,
   Phone,
   Mail,
   CheckCircle,
   Clock,
-  DollarSign,
-  Wifi,
-  AlertCircle,
   Award,
   MessageSquare,
   ThumbsDown,
   Share2,
   Bookmark,
   Quote,
+  Loader2,
 } from "lucide-react";
 import { CreditPurchaseModal } from "../payments/CreditTopup";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-import ChatPage from "../chatPage";
+import { toast } from "sonner";
+import { useConversation } from "@/hooks/useConversation";
 
 interface LeadAnswer {
   question_id?: string | number;
@@ -28,7 +27,7 @@ interface LeadAnswer {
 }
 
 interface Lead {
-  user_id?:string | number;
+  user_id?: string | number;
   task_id?: number;
   title: string;
   category_name: string;
@@ -43,14 +42,14 @@ interface Lead {
   budget_max?: number;
   is_remote_allowed?: boolean;
   answers?: LeadAnswer[];
-  responses_count?: number; 
+  responses_count?: number;
 }
 
 interface LeadDetailsProps {
   lead: Lead;
   requiredCredits: number;
-  taskId?: number;
-  userId?:string | number;
+  taskId?: number | string;
+  userId?: string | number;
 }
 
 const LeadDetails: React.FC<LeadDetailsProps> = ({
@@ -59,67 +58,29 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   taskId,
   userId,
 }) => {
+  const { data: session } = useSession();
   const [isSaved, setIsSaved] = useState(false);
   const [showCreditModal, setShowCreditModal] = useState(false);
-  const { data: session } = useSession();
-  // const [responsesCount, setResponsesCount] = useState<number>(0);
+  const [leadStatus, setLeadStatus] = useState({ count: 0, purchased: false });
   const [loadingResponses, setLoadingResponses] = useState(false);
-  const [leadStatus, setLeadStatus] = useState({
-    count: 0,
-    purchased: false,
-  });
+
   const maxResponses = 5;
 
-  const formatTimeAgo = (timestamp: string): string => {
-    const now = new Date();
-    const created = new Date(timestamp);
-    const diffInMinutes = Math.floor(
-      (now.getTime() - created.getTime()) / (1000 * 60)
-    );
-    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
-    return `${Math.floor(diffInMinutes / 1440)}d ago`;
-  };
+  // ✅ Memoized participant IDs
+  const participantIds = useMemo(() => (userId ? [String(userId)] : []), [userId]);
 
-  const getInitials = (name: string): string =>
-    name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-
-  const maskPhone = (phone: number | string = ""): string => {
-    if (!phone) return "N/A";
-    const phonestr = String(phone);
-    const visibleStart = phonestr.slice(0, 3);
-    const visibleEnd = phonestr.slice(-2);
-    const maskedMiddle = "*".repeat(Math.max(phonestr.length - 5, 0));
-    return `${visibleStart}${maskedMiddle}${visibleEnd}`;
-  };
-
-  const maskEmail = (email?: string): string => {
-    if (!email) return "k******************@g***.com";
-    const [local, domain] = email.split("@");
-    if (!domain) return email;
-    const firstChar = local[0];
-    const maskedLocal = firstChar + "*".repeat(Math.max(local.length - 1, 3));
-    const domainParts = domain.split(".");
-    const domainName = domainParts[0];
-    const domainExt = domainParts.slice(1).join(".");
-    const maskedDomain =
-      domainName[0] + "*".repeat(Math.max(domainName.length - 1, 2));
-    return `${maskedLocal}@${maskedDomain}.${domainExt}`;
-  };
-
+  // ✅ Fetch responses with useCallback
   const fetchResponses = useCallback(async () => {
     if (!taskId) return;
     setLoadingResponses(true);
     try {
       const { data } = await axios.get(`/api/admin/task-responses/${taskId}`);
-      setLeadStatus(data);
+      setLeadStatus((prev) =>
+        prev.purchased === data.purchased && prev.count === data.count ? prev : data
+      );
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching responses:", err);
+      toast.error("Failed to fetch lead status");
     } finally {
       setLoadingResponses(false);
     }
@@ -129,12 +90,75 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     fetchResponses();
   }, [fetchResponses]);
 
+  const shouldFetchConversation = useMemo(
+    () => leadStatus.purchased && !!taskId && !!userId,
+    [leadStatus.purchased, taskId, userId]
+  );
+
+  const { conversationId, loading: convoLoading, error: convoError } = useConversation(
+    shouldFetchConversation ? participantIds : [],
+    "Private Chat",
+    shouldFetchConversation ? taskId! : ""
+  );
+
+  const handleGoToChat = useCallback(() => {
+    if (convoLoading) {
+      toast.info("Preparing chat...");
+      return;
+    }
+    if (convoError) {
+      toast.error(convoError);
+      return;
+    }
+    window.location.href = `/messages?conversation=${conversationId}`;
+  }, [convoLoading, convoError, conversationId]);
+
+  const handlePurchaseSuccess = useCallback(async () => {
+    toast.success("Purchase successful!");
+    await fetchResponses();
+  }, [fetchResponses]);
+
+  const formatTimeAgo = useCallback((timestamp: string): string => {
+    const now = new Date();
+    const created = new Date(timestamp);
+    const diff = Math.floor((now.getTime() - created.getTime()) / (1000 * 60));
+    if (diff < 60) return `${diff}m ago`;
+    if (diff < 1440) return `${Math.floor(diff / 60)}h ago`;
+    return `${Math.floor(diff / 1440)}d ago`;
+  }, []);
+
+  const getInitials = useCallback(
+    (name: string) =>
+      name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2),
+    []
+  );
+
+  const maskPhone = useCallback((phone: number | string = "") => {
+    const s = String(phone);
+    return s.length > 5 ? `${s.slice(0, 3)}${"*".repeat(s.length - 5)}${s.slice(-2)}` : s;
+  }, []);
+
+  const maskEmail = useCallback((email?: string) => {
+    if (!email) return "k******************@g***.com";
+    const [local, domain] = email.split("@");
+    const maskedLocal = local[0] + "*".repeat(Math.max(local.length - 1, 3));
+    const [name, ext] = domain.split(".");
+    const maskedDomain = name[0] + "*".repeat(Math.max(name.length - 1, 2));
+    return `${maskedLocal}@${maskedDomain}.${ext}`;
+  }, []);
+
   const responseRate = leadStatus.count ?? 0;
+  const customerFirstName = (lead.customer_name ?? "Customer").split(" ")[0];
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div>{userId !== undefined && <ChatPage otherUserId={userId} />}</div>
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+        {/* Header */}
         <div className="bg-gradient-to-r from-[#8A2BE2] via-[#6C63FF] to-[#00E5FF] px-6 py-8 text-white">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-4">
@@ -181,13 +205,17 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
           </div>
         </div>
 
+        {/* Contact + Action Section */}
         <div className="p-6">
+          {/* Verified Contact Details */}
           <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-200 p-5 mb-6">
             <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4 flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-cyan-600" /> Verified Contact
               Details
             </h3>
+
             <div className="space-y-3">
+              {/* Phone */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
@@ -204,11 +232,15 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                     </div>
                   </div>
                 </div>
-                <span className="inline-flex items-center gap-1 px-2 py-1 bg-cyan-100 text-cyan-700 text-xs font-semibold rounded-md">
-                  <CheckCircle className="w-3 h-3" />
-                  Verified
-                </span>
+                {leadStatus.purchased && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-cyan-100 text-cyan-700 text-xs font-semibold rounded-md">
+                    <CheckCircle className="w-3 h-3" />
+                    Verified
+                  </span>
+                )}
               </div>
+
+              {/* Email */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center">
@@ -229,6 +261,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
           </div>
 
+          {/* Response Progress */}
           <div className="bg-blue-50 rounded-xl p-5 mb-6">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-gray-900">
@@ -244,71 +277,81 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 style={{ width: `${(responseRate / maxResponses) * 100}%` }}
               />
             </div>
-            <div className="flex justify-between mt-2">
-              {Array.from({ length: maxResponses }, (_, i) => (
-                <div
-                  key={i}
-                  className={`h-1 w-1 rounded-full ${
-                    i < responseRate ? "bg-blue-600" : "bg-gray-300"
-                  }`}
-                />
-              ))}
-            </div>
             <p className="text-xs text-gray-600 mt-2">
               <strong>{maxResponses - responseRate} spots remaining</strong> •
               Be one of the first to respond
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl border border-orange-200 p-5 mb-6">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
-                <Award className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl font-bold text-gray-900">
-                    {requiredCredits}
-                  </span>
-                  <span className="text-sm text-gray-600">
-                    credits required
-                  </span>
+          {/* Credits Info */}
+          {!leadStatus.purchased && (
+            <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl border border-orange-200 p-5 mb-6">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
+                  <Award className="w-6 h-6 text-white" />
                 </div>
-                <h4 className="text-sm font-semibold text-gray-900 mb-1">
-                  🏆 Protected by Get Hired Guarantee
-                </h4>
-                <p className="text-xs text-gray-600">
-                  Full credit refund if you're not hired during your starter
-                  pack period
-                </p>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-2xl font-bold text-gray-900">
+                      {requiredCredits}
+                    </span>
+                    <span className="text-sm text-gray-600">
+                      credits required
+                    </span>
+                  </div>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-1">
+                    🏆 Protected by Get Hired Guarantee
+                  </h4>
+                  <p className="text-xs text-gray-600">
+                    Full credit refund if you're not hired during your starter
+                    pack period
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
+          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <button
-              disabled={leadStatus.purchased}
-              onClick={() => setShowCreditModal(true)}
-              className={`flex-1 flex items-center justify-center px-6 py-3.5 font-semibold rounded-xl
-                ${
-                  leadStatus.purchased
-                    ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                    : "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
-                }
-              `}
-            >
-              <MessageSquare className="w-5 h-5" />
-              Contact {(lead.customer_name ?? "N/A").split(" ")[0]}
-            </button>
+            {leadStatus.purchased ? (
+              <button
+                onClick={handleGoToChat}
+                disabled={convoLoading}
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {convoLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Preparing Chat...
+                  </>
+                ) : (
+                  <>
+                    <MessageSquare className="w-5 h-5" />
+                    Chat with {customerFirstName}
+                  </>
+                )}
+              </button>
+            ) : (
+              <button
+                onClick={() => setShowCreditModal(true)}
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all"
+              >
+                <MessageSquare className="w-5 h-5" />
+                Contact {customerFirstName}
+              </button>
+            )}
+
             <CreditPurchaseModal
               open={showCreditModal}
               onOpenChange={setShowCreditModal}
               requiredCredits={requiredCredits}
               contactName={lead.customer_name}
               taskId={taskId}
+              userId={userId}
               professionalId={session?.user?.id}
-              onPurchaseSuccess={fetchResponses}
+              onPurchaseSuccess={handlePurchaseSuccess}
             />
+
             <button className="px-6 py-3.5 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-2">
               <ThumbsDown className="w-5 h-5" />
               Not Interested
@@ -320,58 +363,12 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         </div>
       </div>
 
+      {/* Project Details */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
         <h2 className="text-lg font-bold text-gray-900 mb-4">
           Project Details
         </h2>
         <p className="text-gray-700 leading-relaxed mb-6">{lead.description}</p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-          <div className="bg-gradient-to-br from-cyan-50 to-emerald-50 rounded-xl p-4 border border-cyan-200">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center">
-                <DollarSign className="w-4 h-4 text-white" />
-              </div>
-              <h3 className="text-sm font-semibold text-gray-900">
-                Budget Range
-              </h3>
-            </div>
-            <p className="text-lg font-bold text-gray-900">
-              {lead.budget_min && lead.budget_max
-                ? `A$${lead.budget_min.toLocaleString()} - A$${lead.budget_max.toLocaleString()}`
-                : "To be discussed"}
-            </p>
-          </div>
-
-          {lead.is_remote_allowed && (
-            <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-4 border border-teal-200">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-teal-500 flex items-center justify-center">
-                  <Wifi className="w-4 h-4 text-white" />
-                </div>
-                <h3 className="text-sm font-semibold text-gray-900">
-                  Work Type
-                </h3>
-              </div>
-              <p className="text-lg font-bold text-teal-700">Remote Allowed</p>
-            </div>
-          )}
-        </div>
-
-        <div className="flex flex-wrap gap-2 mb-6">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-100 text-red-700 text-xs font-semibold rounded-lg">
-            <AlertCircle className="w-3.5 h-3.5" /> Urgent Response Required
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-yellow-100 text-yellow-700 text-xs font-semibold rounded-lg">
-            <Award className="w-3.5 h-3.5" /> Premium Lead
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 text-blue-700 text-xs font-semibold rounded-lg">
-            <Clock className="w-3.5 h-3.5" /> Fast Response Needed
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-cyan-100 text-cyan-700 text-xs font-semibold rounded-lg">
-            <CheckCircle className="w-3.5 h-3.5" /> Verified Lead
-          </span>
-        </div>
 
         {lead.answers && lead.answers.length > 0 && (
           <div className="mt-6">
@@ -379,19 +376,19 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               Lead Questions & Answers
             </h3>
             <div className="space-y-4">
-              {lead.answers.map((ans) => (
+              {lead.answers.map((ans, idx) => (
                 <div
-                  key={ans.question_id}
+                  key={ans.question_id || idx}
                   className="bg-gray-50 border border-gray-200 rounded-xl p-4"
                 >
-                  <div className="flex items-start gap-2 mb-1">
-                    <MessageSquare size={16} className="text-blue-600 mt-0.5" />
+                  <div className="flex items-start gap-2 mb-2">
+                    <MessageSquare size={16} className="text-blue-600 mt-0.5 flex-shrink-0" />
                     <p className="text-sm font-medium text-gray-900">
                       {ans.question || "—"}
                     </p>
                   </div>
-                  <div className="flex items-start gap-2">
-                    <Quote size={16} className="text-cyan-600 mt-0.5" />
+                  <div className="flex items-start gap-2 ml-6">
+                    <Quote size={16} className="text-cyan-600 mt-0.5 flex-shrink-0" />
                     <p className="text-sm text-gray-700 italic">
                       {ans.answer?.trim() ? ans.answer : "Not answered yet"}
                     </p>

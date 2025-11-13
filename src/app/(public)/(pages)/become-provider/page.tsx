@@ -111,7 +111,8 @@ import ChatPage from "@/components/chatPage"
 
 function page() {
   return (
-    <div><ChatPage otherUserId="44"/></div>
+    <div></div>
+    // <div><ChatPage  otherUserId="44"/></div>
   )
 }
 

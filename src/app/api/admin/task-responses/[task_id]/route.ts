@@ -6,7 +6,7 @@ export async function GET(
   req: Request,
   { params }: { params: { task_id: string } }
 ) {
-  const { task_id } = params;
+  const { task_id } = await params;
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });

@@ -3,11 +3,20 @@ import { useSession } from "next-auth/react";
 import ChatWindow from "@/components/chatWindow";
 import { useConversation } from "@/hooks/useConversation";
 
-export default function ChatPage({ otherUserId }: { otherUserId: string | number }) {
+interface ChatPageProps{
+  otherUserId:string | number,
+  taskId: number
+}
+
+export default function ChatPage(
+  { otherUserId , taskId} :ChatPageProps
+ 
+) {
   const { data: session } = useSession();
   const { conversationId, loading, error } = useConversation(
-    [String(otherUserId)], // users involved (excluding self)
-    "Private Chat"
+    [String(otherUserId)],
+    "Private Chat",
+    taskId
   );
 
   if (!session?.user) return <div>Please login</div>;
@@ -19,6 +28,7 @@ export default function ChatPage({ otherUserId }: { otherUserId: string | number
     <ChatWindow
       conversationId={conversationId}
       me={{ id: session.user.id, name: session.user.name || "" }}
-    />
+      taskId ={taskId} 
+        />
   );
 }

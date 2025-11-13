@@ -50,7 +50,7 @@ export default function ModernNavbar() {
     provider: [
       { name: "Home", href: "/", icon: Search },
       { name: "Leads", href: "/provider/leads", icon: Search },
-      { name: "My Responses", href: "/provider/message", icon: MessageSquare },
+      { name: "My Responses", href: "/messages", icon: MessageSquare },
       { name: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
     ],
   };
