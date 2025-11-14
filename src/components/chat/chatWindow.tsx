@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { supabaseServer } from "@/lib/supabase-server";
 import MessageList from "./messageList";
+import { is } from "date-fns/locale";
 
 export type Message = {
   id: string;
@@ -40,14 +41,16 @@ export default function ChatWindow({
 }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [typingUsers, setTypingUsers] = useState<Record<string, number>>({});
+  const [loading ,setLoading]=useState(true)
   const channelRef = useRef<any>(null);
 
 
   useEffect(() => {
     if (!conversationId) return;
     let isMounted = true;
-
+    setLoading(true)
     const fetchMessages = async () => {
+     
       try {
         const res = await fetch(`/api/messages/conversation-read/${conversationId}`);
         if (!res.ok) {
@@ -67,6 +70,9 @@ export default function ChatWindow({
         }
       } catch (err) {
         console.error("Fetch messages error:", err);
+      }
+      finally{
+        if(!isMounted) setLoading(false)
       }
     };
 
@@ -185,7 +191,7 @@ export default function ChatWindow({
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-80px)] border overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-75px)] border overflow-hidden">
  <MessageList 
       messages={messages} 
       otherName={otherName}
@@ -194,6 +200,7 @@ export default function ChatWindow({
       typingUsers={typingUsers}
       onSend={sendMessage}
       onTyping={sendTyping}
+      isLoading={loading}
     />      
     
     </div>

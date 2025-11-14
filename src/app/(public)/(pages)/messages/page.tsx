@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, ArrowLeft } from "lucide-react";
@@ -20,42 +20,78 @@ interface Conversation {
 }
 
 export default function ChatPageInline() {
+  const { data: session } = useSession();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConversation, setActiveConversation] = useState<Conversation | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-
+  const hasFetched = useRef(false);
+  const cacheKey = `chat_conversations_${session?.user?.id}`;
 
   useEffect(() => {
-    const loadConvos = async () => {
-      try {
-        const res = await fetch("/api/messages/myconversations");
-        if (!res.ok) throw new Error("Failed to fetch conversations");
-        const data = await res.json();
-        setConversations(data.conversations || []);
-      } catch (error) {
-        console.error("Error loading conversations:", error);
-      }
-    };
-    loadConvos();
-  }, []);
+    if (!session?.user?.id) return;
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) setConversations(JSON.parse(cached));
+  }, [cacheKey, session?.user?.id]);
 
-  const getOtherParticipantName = (conversation: Conversation) => {
-    const other = conversation.participants.find(
-      (p) => Number(p.user_id) !== Number(session?.user?.id)
-    );
-    return other?.name || "Unknown";
-  };
+  const fetchConversations = useCallback(async () => {
+    if (!session?.user?.id || hasFetched.current) return;
+    hasFetched.current = true;
 
-  const getConversationTitle = (conversation: Conversation) =>
-    conversation.task_title || "Untitled Conversation";
+    setLoading(true);
+    setError(null);
 
-  // Hide sidebar when opening chat on mobile
-  const handleSelectConversation = (conversation: Conversation) => {
-    setActiveConversation(conversation);
-    if (window.innerWidth < 640) setSidebarOpen(false); // sm breakpoint
-  };
+    try {
+      const res = await fetch("/api/messages/myconversations", { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to fetch conversations");
+
+      const data = await res.json();
+      const convos = data.conversations || [];
+
+      // ✅ Save to state + sessionStorage
+      setConversations(convos);
+      // sessionStorage.setItem(cacheKey, JSON.stringify(convos));
+      // sessionStorage.setItem(`${cacheKey}_timestamp`, Date.now().toString());
+    } catch (err: any) {
+      console.error("Error loading conversations:", err);
+      setError(err?.message || "Failed to load conversations");
+    } finally {
+      setLoading(false);
+    }
+  }, [cacheKey, session?.user?.id]);
+
+  // ✅ Auto-refresh cache if older than 5 minutes
+  useEffect(() => {
+    if (!session?.user?.id) return;
+
+    const lastFetched = Number(sessionStorage.getItem(`${cacheKey}_timestamp`));
+    const isExpired = Date.now() - lastFetched > 5 * 60 * 1000; // 5 min
+
+    if (isExpired || !lastFetched) {
+      hasFetched.current = false; // allow fresh fetch
+      fetchConversations();
+    }
+  }, [cacheKey, session?.user?.id, fetchConversations]);
+
+  const getOtherParticipantName = useCallback(
+    (conversation: Conversation) => {
+      const other = conversation.participants.find(
+        (p) => Number(p.user_id) !== Number(session?.user?.id)
+      );
+      return other?.name || "Unknown";
+    },
+    [session?.user?.id]
+  );
+
+  const handleSelectConversation = useCallback(
+    (conversation: Conversation) => {
+      setActiveConversation(conversation);
+      if (window.innerWidth < 640) setSidebarOpen(false);
+    },
+    []
+  );
 
   if (!session?.user) {
     return (
@@ -69,13 +105,11 @@ export default function ChatPageInline() {
   }
 
   const otherName =
-  activeConversation && session?.user?.id
-    ? getOtherParticipantName(activeConversation)
-    : "Unknown";
+    activeConversation && session?.user?.id
+      ? getOtherParticipantName(activeConversation)
+      : "Unknown";
 
-const conversationTitle = activeConversation
-  ? getConversationTitle(activeConversation)
-  : "";
+  const conversationTitle = activeConversation?.task_title || "Untitled Conversation";
 
   return (
     <div className="relative flex h-screen bg-gradient-to-br from-[#faf9ff] via-[#f9fbff] to-[#f4fdff] text-gray-800 overflow-hidden">
@@ -102,6 +136,7 @@ const conversationTitle = activeConversation
         )}
       </AnimatePresence>
 
+      {/* ✅ Chat Section */}
       <div className="flex-1 flex flex-col relative">
         {activeConversation && window.innerWidth < 640 && (
           <div className="p-3 flex items-center gap-3 bg-white/80 border-b border-gray-100 shadow-sm backdrop-blur-md">
@@ -113,30 +148,50 @@ const conversationTitle = activeConversation
               <span className="text-sm font-medium">Back</span>
             </button>
             <div className="flex-1 text-center font-semibold text-gray-800 truncate">
-              {activeConversation.task_title}
+              {conversationTitle}
             </div>
           </div>
         )}
 
         <AnimatePresence mode="wait">
-          {activeConversation ? (
-         <motion.div
-         key={activeConversation.id}
-         initial={{ opacity: 0, x: 20 }}
-         animate={{ opacity: 1, x: 0 }}
-         exit={{ opacity: 0 }}
-         transition={{ duration: 0.25 }}
-         className="flex-1 bg-white overflow-hidden flex flex-col"  // Added overflow-hidden and flex flex-col
-       >
-         <ChatWindow
-
-                       otherName={otherName}
-conversationTitle={conversationTitle}
-           conversationId={activeConversation.id}
-           me={{ id: session.user.id }}
-           taskId={Number(activeConversation.task_id)}
-         />
-       </motion.div>
+          {loading ? (
+            <motion.div
+              key="loading"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center justify-center flex-1 text-gray-400"
+            >
+              <div className="animate-spin border-4 border-[#6C63FF]/20 border-t-[#6C63FF] rounded-full w-10 h-10 mb-3"></div>
+              <p>Loading conversations...</p>
+            </motion.div>
+          ) : error ? (
+            <motion.div
+              key="error"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center justify-center flex-1 text-red-400"
+            >
+              <p className="text-lg font-medium">{error}</p>
+            </motion.div>
+          ) : activeConversation ? (
+            <motion.div
+              key={activeConversation.id}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="flex-1 bg-white overflow-hidden flex flex-col"
+            >
+              <ChatWindow
+                otherName={otherName}
+                conversationTitle={conversationTitle}
+                conversationId={activeConversation.id}
+                me={{ id: session.user.id }}
+                taskId={Number(activeConversation.task_id)}
+              />
+            </motion.div>
           ) : (
             <motion.div
               key="empty"
@@ -146,9 +201,7 @@ conversationTitle={conversationTitle}
               className="flex flex-col items-center justify-center flex-1 text-gray-400"
             >
               <MessageCircle className="w-12 h-12 mb-4 text-[#6C63FF]" />
-              <p className="text-lg font-medium text-gray-600">
-                Select a conversation
-              </p>
+              <p className="text-lg font-medium text-gray-600">Select a conversation</p>
               <p className="text-sm text-gray-400 mt-1">
                 Start chatting with your clients or team
               </p>

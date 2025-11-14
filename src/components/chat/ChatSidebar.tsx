@@ -58,9 +58,10 @@ export default function ChatSidebar({
       initial={{ x: -300, opacity: 0 }}
       animate={{ x: sidebarOpen ? 0 : -300, opacity: sidebarOpen ? 1 : 0 }}
       transition={{ duration: 0.25 }}
-      className="w-full sm:w-80 bg-white/90 h-full backdrop-blur-xl border-r border-gray-100 shadow-lg flex flex-col"
+      className="w-full sm:w-80 bg-white/90 h-[calc(100vh-75px)] backdrop-blur-xl border-r border-gray-100 shadow-lg flex flex-col"
     >
-      <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-white/60">
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-white/60 flex-shrink-0">
         <h1 className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-[#8A2BE2] via-[#6C63FF] to-[#00E5FF] bg-clip-text text-transparent">
           ChatLink
         </h1>
@@ -72,7 +73,8 @@ export default function ChatSidebar({
         </button>
       </div>
 
-      <div className="p-3 border-b border-gray-100 bg-white/40">
+      {/* Search */}
+      <div className="p-3 border-b border-gray-100 bg-white/40 flex-shrink-0">
         <div className="relative">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
           <input
@@ -85,8 +87,12 @@ export default function ChatSidebar({
         </div>
       </div>
 
-      {/* CONVERSATION LIST */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar">
+      <div
+        className="flex-1 overflow-y-auto touch-pan-y scroll-smooth scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
+        style={{
+          WebkitOverflowScrolling: "touch", // makes scroll smooth on iOS
+        }}
+      >
         {filteredConversations.length === 0 ? (
           <div className="p-6 text-center text-gray-400 text-sm">
             No matching conversations
@@ -95,6 +101,7 @@ export default function ChatSidebar({
           filteredConversations.map((c) => {
             const otherName = getOtherParticipantName(c);
             const firstLetter = otherName.charAt(0).toUpperCase();
+
             return (
               <div
                 key={c.id}
@@ -109,7 +116,6 @@ export default function ChatSidebar({
                   <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#8A2BE2] to-[#00E5FF] flex items-center justify-center text-white font-semibold shadow-md group-hover:scale-105 transition-transform">
                     {firstLetter}
                   </div>
-
                   <div className="flex-1 min-w-0">
                     <div className="font-bold text-gray-800 truncate text-base group-hover:text-[#6C63FF] transition-colors">
                       {otherName}
@@ -124,14 +130,6 @@ export default function ChatSidebar({
           })
         )}
       </div>
-
-      {/* FOOTER */}
-      {/* <div className="p-4 border-t border-gray-100 text-xs text-gray-500 bg-white/80 text-center">
-        Logged in as{" "}
-        <span className="font-semibold text-[#6C63FF]">
-          {sessionUserName || "User"}
-        </span>
-      </div> */}
     </motion.aside>
   );
 }

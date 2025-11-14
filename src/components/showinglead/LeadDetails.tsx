@@ -66,10 +66,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   const maxResponses = 5;
 
-  // ✅ Memoized participant IDs
   const participantIds = useMemo(() => (userId ? [String(userId)] : []), [userId]);
 
-  // ✅ Fetch responses with useCallback
   const fetchResponses = useCallback(async () => {
     if (!taskId) return;
     setLoadingResponses(true);
@@ -98,7 +96,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   const { conversationId, loading: convoLoading, error: convoError } = useConversation(
     shouldFetchConversation ? participantIds : [],
     "Private Chat",
-    shouldFetchConversation ? taskId! : ""
+    shouldFetchConversation ? taskId! : "",
+    shouldFetchConversation 
+
   );
 
   const handleGoToChat = useCallback(() => {
@@ -110,7 +110,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       toast.error(convoError);
       return;
     }
-    window.location.href = `/messages?conversation=${conversationId}`;
+    window.location.href = `/messages`;
   }, [convoLoading, convoError, conversationId]);
 
   const handlePurchaseSuccess = useCallback(async () => {
@@ -316,7 +316,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             {leadStatus.purchased ? (
               <button
                 onClick={handleGoToChat}
-                disabled={convoLoading}
+                disabled={convoLoading || !conversationId}
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {convoLoading ? (

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useCredit } from "@/hooks/useCredit";
 import axios from "axios";
-import { useConversation } from "@/hooks/useConversation";
+// import { useConversation } from "@/hooks/useConversation";
 
 interface FAQ {
   id: string;
@@ -77,7 +77,6 @@ export function CreditPurchase({
   const toggleFaq = (id: string) =>
     setExpandedFaq(expandedFaq === id ? null : id);
 
-  // Fetch packages + balance
   useEffect(() => {
     if ((mode === "modal" && open) || mode === "page") {
       fetchPackages();
@@ -85,7 +84,6 @@ export function CreditPurchase({
     }
   }, [mode, open, fetchPackages, fetchBalance]);
 
-  // Fetch lead status
   const fetchResponses = useCallback(async () => {
     if (!taskId) return;
     setLoadingResponses(true);
@@ -189,9 +187,7 @@ export function CreditPurchase({
   const showPackages =
     mode === "page" || (requiredCredits && balance < requiredCredits);
 
-  // ------------------------------
-  // MAIN CONTENT
-  // ------------------------------
+
   const content = (
     <div className="w-full">
       {mode === "modal" && requiredCredits && (
@@ -213,7 +209,6 @@ export function CreditPurchase({
         </p>
       </div>
 
-      {/* FAQ */}
       <div className="space-y-3 mb-6">
         {FAQS.map((faq) => (
           <div key={faq.id} className="border border-gray-200 rounded-lg overflow-hidden">
@@ -237,7 +232,6 @@ export function CreditPurchase({
         ))}
       </div>
 
-      {/* Package Selection */}
       {showPackages && (
         <>
           {loading ? (
@@ -275,7 +269,6 @@ export function CreditPurchase({
         </>
       )}
 
-      {/* Buttons */}
       {requiredCredits && balance >= requiredCredits ? (
         <Button
           onClick={handleDeduct}
@@ -304,9 +297,6 @@ export function CreditPurchase({
     </div>
   );
 
-  // ------------------------------
-  // MODAL OR PAGE WRAPPER
-  // ------------------------------
   if (mode === "modal") {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
@@ -334,9 +324,7 @@ export function CreditPurchase({
   );
 }
 
-// ------------------------------
-// MODAL / PAGE WRAPPERS
-// ------------------------------
+
 export function CreditPurchaseModal(props: Omit<CreditPurchaseProps, "mode">) {
   return <CreditPurchase {...props} mode="modal" />;
 }

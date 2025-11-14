@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, CheckCheck, Clock, AlertCircle, Send, Smile, Paperclip, Phone, Video, MoreVertical, X } from "lucide-react";
+import { Check, CheckCheck, Clock, AlertCircle, Send, Smile, Paperclip, Phone, Video, MoreVertical, X, Loader2 } from "lucide-react";
 
 interface Message {
   id: string;
@@ -21,20 +21,22 @@ export default function MessageList({
   onSend,
   onTyping,
   conversationTitle,
+  isLoading,
 }: {
   messages: Message[];
   me: { id: string; name?: string };
   typingUsers: Record<string, number>;
   onSend: (text: string) => void;
   onTyping: () => void;
-
   conversationTitle?: string;
   otherName?: string;
+  isLoading?: boolean;
 }) {
   const listRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const typingRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     listRef.current?.scrollTo({
@@ -42,6 +44,12 @@ export default function MessageList({
       behavior: "smooth",
     });
   }, [messages]);
+
+  useEffect(() => {
+    if (Object.keys(typingUsers).length > 0) {
+      typingRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  }, [typingUsers]);
 
   const handleSend = () => {
     if (!input.trim()) return;
@@ -58,12 +66,7 @@ export default function MessageList({
       handleSend();
     }
   };
-  const typingRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (Object.keys(typingUsers).length > 0) {
-      typingRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-    }
-  }, [typingUsers]);
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
     onTyping();
@@ -109,40 +112,27 @@ export default function MessageList({
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6C63FF] to-[#8A2BE2] flex items-center justify-center text-white text-sm font-semibold shadow-md">
                 {getInitials(otherName || "User")}
               </div>
-              {/* <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div> */}
             </div>
             <div>
               <p className="font-semibold text-gray-900">{otherName || "User"}</p>
               <p className="text-xs text-gray-500">{conversationTitle || "Chat"}</p>
             </div>
           </div>
-
-          {/* <div className="flex items-center gap-1">
-            <button className="p-2 rounded-full text-gray-500 hover:bg-gray-100 transition-colors">
-              <Phone className="w-4 h-4" />
-            </button>
-            <button className="p-2 rounded-full text-gray-500 hover:bg-gray-100 transition-colors">
-              <Video className="w-4 h-4" />
-            </button>
-            <button className="p-2 rounded-full text-gray-500 hover:bg-gray-100 transition-colors">
-              <MoreVertical className="w-4 h-4" />
-            </button>
-          </div> */}
         </div>
       </div>
 
-      {/* Messages Area */}
       <div
         ref={listRef}
-        className="flex-1 overflow-y-auto mb-4 px-4 py-4 bg-gradient-to-b from-gray-50/50 to-white scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent"
+        className="flex-1 overflow-y-auto px-4 py-4 bg-gradient-to-b from-gray-50/50 to-white scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent"
       >
-        {Object.keys(groupedMessages).length === 0 ? (
+        {isLoading ? (
+          <LoadingState />
+        ) : Object.keys(groupedMessages).length === 0 ? (
           <EmptyState />
         ) : (
           <div className="space-y-4">
             {Object.entries(groupedMessages).map(([date, msgs]) => (
               <div key={date}>
-                {/* Date Divider */}
                 <div className="flex items-center justify-center my-6">
                   <div className="px-3 py-1 bg-gray-100 rounded-full">
                     <span className="text-xs font-medium text-gray-600">
@@ -165,7 +155,6 @@ export default function MessageList({
                         className={`flex mb-3 ${isMe ? "justify-end" : "justify-start"}`}
                       >
                         <div className={`flex items-end gap-2 max-w-[70%] ${isMe ? "flex-row-reverse" : "flex-row"}`}>
-                          {/* Avatar for other user */}
                           {!isMe && (
                             <div className={`flex-shrink-0 w-8 h-8 ${showAvatar ? "opacity-100" : "opacity-0"}`}>
                               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6C63FF] to-[#8A2BE2] flex items-center justify-center text-white text-xs font-semibold shadow">
@@ -174,7 +163,6 @@ export default function MessageList({
                             </div>
                           )}
 
-                          {/* Message Bubble */}
                           <div className="flex flex-col">
                             {!isMe && showAvatar && (
                               <span className="text-xs text-gray-500 mb-1 ml-2">{otherName || "User"}</span>
@@ -217,47 +205,45 @@ export default function MessageList({
               </div>
             ))}
 
-            {/* Typing Indicator */}
             <AnimatePresence>
-  {Object.keys(typingUsers).length > 0 && (
-    <motion.div
-      ref={typingRef}  // ✅ Attach here
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0 }}
-      className="flex items-end gap-2"
-    >
-      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#6C63FF] to-[#8A2BE2] flex items-center justify-center text-white text-xs font-semibold shadow">
-        {getInitials(otherName)}
-      </div>
-      <div className="px-4 py-3 bg-gray-100 rounded-2xl rounded-bl-md shadow-sm">
-        <div className="flex gap-1">
-          <motion.span
-            className="w-2 h-2 bg-gray-500 rounded-full"
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 0.6, repeat: Infinity }}
-          />
-          <motion.span
-            className="w-2 h-2 bg-gray-500 rounded-full"
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
-          />
-          <motion.span
-            className="w-2 h-2 bg-gray-500 rounded-full"
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
-          />
-        </div>
-      </div>
-    </motion.div>
-  )}
-</AnimatePresence>
+              {Object.keys(typingUsers).length > 0 && (
+                <motion.div
+                  ref={typingRef}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="flex items-end gap-2"
+                >
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#6C63FF] to-[#8A2BE2] flex items-center justify-center text-white text-xs font-semibold shadow">
+                    {getInitials(otherName)}
+                  </div>
+                  <div className="px-4 py-3 bg-gray-100 rounded-2xl rounded-bl-md shadow-sm">
+                    <div className="flex gap-1">
+                      <motion.span
+                        className="w-2 h-2 bg-gray-500 rounded-full"
+                        animate={{ y: [0, -6, 0] }}
+                        transition={{ duration: 0.6, repeat: Infinity }}
+                      />
+                      <motion.span
+                        className="w-2 h-2 bg-gray-500 rounded-full"
+                        animate={{ y: [0, -6, 0] }}
+                        transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
+                      />
+                      <motion.span
+                        className="w-2 h-2 bg-gray-500 rounded-full"
+                        animate={{ y: [0, -6, 0] }}
+                        transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         )}
       </div>
 
-      {/* Message Input */}
-      <div className="flex-shrink-0 bg-white border-t border-gray-200 px-4 py-3 ">
+      <div className="flex-shrink-0 bg-white border-t border-gray-200 px-4 py-3">
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -304,6 +290,15 @@ export default function MessageList({
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function LoadingState() {
+  return (
+    <div className="flex flex-col items-center justify-center h-full">
+      <Loader2 className="w-8 h-8 text-[#6C63FF] animate-spin mb-3" />
+      <p className="text-sm text-gray-500">Loading messages...</p>
     </div>
   );
 }

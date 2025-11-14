@@ -65,7 +65,6 @@ export default function MessageInput({
           <Paperclip className="w-5 h-5" />
         </button>
 
-        {/* Textarea */}
         <textarea
           ref={textareaRef}
           value={input}
@@ -79,7 +78,6 @@ export default function MessageInput({
           style={{ minHeight: "24px" }}
         />
 
-        {/* Send/Voice Button - Right */}
         {input.trim() ? (
           <button
             type="button"
@@ -99,7 +97,6 @@ export default function MessageInput({
         )}
       </div>
 
-      {/* Quick hint */}
       <div className="mt-1.5 px-1 text-[10px] text-gray-400 text-center">
         Press Enter to send • Shift+Enter for new line
       </div>
