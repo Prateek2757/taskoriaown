@@ -62,7 +62,6 @@ export default function ChatPageInline() {
     }
   }, [cacheKey, session?.user?.id]);
 
-  // ✅ Auto-refresh cache if older than 5 minutes
   useEffect(() => {
     if (!session?.user?.id) return;
 
@@ -136,7 +135,6 @@ export default function ChatPageInline() {
         )}
       </AnimatePresence>
 
-      {/* ✅ Chat Section */}
       <div className="flex-1 flex flex-col relative">
         {activeConversation && window.innerWidth < 640 && (
           <div className="p-3 flex items-center gap-3 bg-white/80 border-b border-gray-100 shadow-sm backdrop-blur-md">

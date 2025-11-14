@@ -56,6 +56,8 @@ export default function LocationSearch({ onSelect }: Props) {
       );
       const data = await res.json();
       setResults(data);
+      console.log(data);
+      
       cache.current[value] = data;
       setShowDropdown(true);
     } catch (err) {
@@ -132,7 +134,6 @@ export default function LocationSearch({ onSelect }: Props) {
         }
       />
 
-      {/* Loading state */}
       {loading && (
         <div className="absolute top-full left-0 mt-1 w-full flex items-center gap-2 bg-white border border-gray-200 rounded-lg p-2 shadow-md text-gray-500 text-sm z-50">
           <Loader2 className="animate-spin h-4 w-4" /> Searching...

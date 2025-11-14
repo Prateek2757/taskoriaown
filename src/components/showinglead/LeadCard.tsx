@@ -65,14 +65,12 @@ const LeadCard: React.FC<LeadCardProps> = ({
             : "border-gray-200 hover:border-blue-400 hover:shadow-lg hover:bg-gradient-to-br hover:from-white hover:to-blue-50"
         }`}
     >
-      {/* Decorative Accent */}
       <div
         className={`absolute top-0 left-0 h-1 w-full rounded-t-2xl transition-all duration-300 ${
           isSelected ? "bg-blue-500" : "bg-transparent group-hover:bg-blue-400"
         }`}
       />
 
-      {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-start gap-3">
           <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-400 flex items-center justify-center text-white font-semibold text-base shadow-sm">

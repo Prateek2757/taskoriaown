@@ -44,7 +44,7 @@ export default function ModernNavbar() {
     ],
     customer: [
       { name: "Home", href: "/", icon: Search },
-      { name: "My Requests", href: "/customer/my-requests", icon: Search },
+      { name: "My Requests", href: "/customer/dashboard", icon: Search },
       { name: "Discover", href: "/discover", icon: Search },
     ],
     provider: [

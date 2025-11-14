@@ -6,7 +6,6 @@ export function useConversation(
   participantIds: string[],
   title: string,
   taskId: number | string,
-  enabled: boolean 
 ) {
   const { data: session, status } = useSession();
   const [conversationId, setConversationId] = useState<string | null>(null);
@@ -19,7 +18,7 @@ export function useConversation(
   );
 
   const fetchOrCreateConversation = useCallback(async () => {
-    if (!enabled || status !== "authenticated" || !session?.user?.id || !taskId)
+    if ( status !== "authenticated" || !session?.user?.id || !taskId)
       return;
 
     setLoading(true);
@@ -55,11 +54,11 @@ export function useConversation(
     } finally {
       setLoading(false);
     }
-  }, [enabled, status, session?.user?.id, taskId, title, stableParticipants]);
+  }, [ status, session?.user?.id, taskId, title, stableParticipants]);
 
   useEffect(() => {
     fetchOrCreateConversation();
   }, [fetchOrCreateConversation]);
 
-  return { conversationId, loading, error };
+  return { conversationId, loading, error , refetch:fetchOrCreateConversation};
 }

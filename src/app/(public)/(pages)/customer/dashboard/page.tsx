@@ -42,7 +42,6 @@ export default function CustomerDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/40">
       <main className="container mx-auto px-4 sm:px-6 py-12 space-y-16">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center sm:text-left">
             <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent tracking-tight">

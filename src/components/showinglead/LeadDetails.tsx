@@ -85,19 +85,19 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   }, [taskId]);
 
   useEffect(() => {
+
     fetchResponses();
   }, [fetchResponses]);
 
-  const shouldFetchConversation = useMemo(
-    () => leadStatus.purchased && !!taskId && !!userId,
-    [leadStatus.purchased, taskId, userId]
-  );
+  // const shouldFetchConversation = useMemo(
+  //   () => leadStatus.purchased && !!taskId && !!userId,
+  //   [leadStatus.purchased, taskId, userId]
+  // );
 
-  const { conversationId, loading: convoLoading, error: convoError } = useConversation(
-    shouldFetchConversation ? participantIds : [],
+  const { conversationId, loading: convoLoading, error: convoError ,refetch:refetchConversation} = useConversation(
+    participantIds,
     "Private Chat",
-    shouldFetchConversation ? taskId! : "",
-    shouldFetchConversation 
+     taskId! 
 
   );
 
@@ -115,8 +115,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   const handlePurchaseSuccess = useCallback(async () => {
     toast.success("Purchase successful!");
+    await refetchConversation();
     await fetchResponses();
-  }, [fetchResponses]);
+  }, [fetchResponses,refetchConversation]);
 
   const formatTimeAgo = useCallback((timestamp: string): string => {
     const now = new Date();
@@ -158,7 +159,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   return (
     <div className="max-w-4xl mx-auto">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6">
-        {/* Header */}
         <div className="bg-gradient-to-r from-[#8A2BE2] via-[#6C63FF] to-[#00E5FF] px-6 py-8 text-white">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-4">
@@ -205,9 +205,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
           </div>
         </div>
 
-        {/* Contact + Action Section */}
         <div className="p-6">
-          {/* Verified Contact Details */}
           <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-200 p-5 mb-6">
             <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4 flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-cyan-600" /> Verified Contact
@@ -215,7 +213,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </h3>
 
             <div className="space-y-3">
-              {/* Phone */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
@@ -261,7 +258,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
           </div>
 
-          {/* Response Progress */}
           <div className="bg-blue-50 rounded-xl p-5 mb-6">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-gray-900">
@@ -283,7 +279,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </p>
           </div>
 
-          {/* Credits Info */}
           {!leadStatus.purchased && (
             <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl border border-orange-200 p-5 mb-6">
               <div className="flex items-start gap-4">
@@ -311,7 +306,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
           )}
 
-          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             {leadStatus.purchased ? (
               <button
@@ -363,7 +357,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         </div>
       </div>
 
-      {/* Project Details */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
         <h2 className="text-lg font-bold text-gray-900 mb-4">
           Project Details

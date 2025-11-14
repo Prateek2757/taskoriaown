@@ -60,7 +60,6 @@ export default function ChatSidebar({
       transition={{ duration: 0.25 }}
       className="w-full sm:w-80 bg-white/90 h-[calc(100vh-75px)] backdrop-blur-xl border-r border-gray-100 shadow-lg flex flex-col"
     >
-      {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-white/60 flex-shrink-0">
         <h1 className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-[#8A2BE2] via-[#6C63FF] to-[#00E5FF] bg-clip-text text-transparent">
           ChatLink
@@ -73,7 +72,6 @@ export default function ChatSidebar({
         </button>
       </div>
 
-      {/* Search */}
       <div className="p-3 border-b border-gray-100 bg-white/40 flex-shrink-0">
         <div className="relative">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
@@ -90,7 +88,7 @@ export default function ChatSidebar({
       <div
         className="flex-1 overflow-y-auto touch-pan-y scroll-smooth scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
         style={{
-          WebkitOverflowScrolling: "touch", // makes scroll smooth on iOS
+          WebkitOverflowScrolling: "touch", 
         }}
       >
         {filteredConversations.length === 0 ? (
