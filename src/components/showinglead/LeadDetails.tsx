@@ -66,7 +66,10 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   const maxResponses = 5;
 
-  const participantIds = useMemo(() => (userId ? [String(userId)] : []), [userId]);
+  const participantIds = useMemo(
+    () => (userId ? [String(userId)] : []),
+    [userId]
+  );
 
   const fetchResponses = useCallback(async () => {
     if (!taskId) return;
@@ -74,7 +77,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     try {
       const { data } = await axios.get(`/api/admin/task-responses/${taskId}`);
       setLeadStatus((prev) =>
-        prev.purchased === data.purchased && prev.count === data.count ? prev : data
+        prev.purchased === data.purchased && prev.count === data.count
+          ? prev
+          : data
       );
     } catch (err) {
       console.error("Error fetching responses:", err);
@@ -85,7 +90,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   }, [taskId]);
 
   useEffect(() => {
-
     fetchResponses();
   }, [fetchResponses]);
 
@@ -94,12 +98,12 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   //   [leadStatus.purchased, taskId, userId]
   // );
 
-  const { conversationId, loading: convoLoading, error: convoError ,refetch:refetchConversation} = useConversation(
-    participantIds,
-    "Private Chat",
-     taskId! 
-
-  );
+  const {
+    conversationId,
+    loading: convoLoading,
+    error: convoError,
+    refetch: refetchConversation,
+  } = useConversation(participantIds, "Private Chat", taskId!);
 
   const handleGoToChat = useCallback(() => {
     if (convoLoading) {
@@ -117,7 +121,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     toast.success("Purchase successful!");
     await refetchConversation();
     await fetchResponses();
-  }, [fetchResponses,refetchConversation]);
+  }, [fetchResponses, refetchConversation]);
 
   const formatTimeAgo = useCallback((timestamp: string): string => {
     const now = new Date();
@@ -141,7 +145,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   const maskPhone = useCallback((phone: number | string = "") => {
     const s = String(phone);
-    return s.length > 5 ? `${s.slice(0, 3)}${"*".repeat(s.length - 5)}${s.slice(-2)}` : s;
+    return s.length > 5
+      ? `${s.slice(0, 3)}${"*".repeat(s.length - 5)}${s.slice(-2)}`
+      : s;
   }, []);
 
   const maskEmail = useCallback((email?: string) => {
@@ -237,20 +243,30 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 )}
               </div>
 
-              {/* Email */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center">
                     <Mail className="w-5 h-5 text-purple-600" />
                   </div>
-                  <div>
+                  <div className="flex flex-col">
                     <div className="text-xs text-gray-500 mb-0.5">
                       Email Address
                     </div>
-                    <div className="font-mono text-sm text-gray-900">
-                      {leadStatus.purchased
-                        ? lead.customer_email
-                        : maskEmail(lead.customer_email)}
+                    <div className="flex items-center gap-2 font-mono text-sm text-gray-900">
+                      {leadStatus.purchased ? (
+                        <>
+                          <span>{lead.customer_email}</span>
+                          <a
+                            href={`mailto:${lead.customer_email}`}
+                            className="px-2 py-1 bg-purple-600 text-white rounded-md text-xs font-semibold hover:bg-purple-700 transition flex items-center gap-1"
+                          >
+                            <Mail className="w-3 h-3" />
+                            Send Email
+                          </a>
+                        </>
+                      ) : (
+                        maskEmail(lead.customer_email)
+                      )}
                     </div>
                   </div>
                 </div>
@@ -311,7 +327,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               <button
                 onClick={handleGoToChat}
                 disabled={convoLoading || !conversationId}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-60 "
               >
                 {convoLoading ? (
                   <>
@@ -375,13 +391,19 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                   className="bg-gray-50 border border-gray-200 rounded-xl p-4"
                 >
                   <div className="flex items-start gap-2 mb-2">
-                    <MessageSquare size={16} className="text-blue-600 mt-0.5 flex-shrink-0" />
+                    <MessageSquare
+                      size={16}
+                      className="text-blue-600 mt-0.5 flex-shrink-0"
+                    />
                     <p className="text-sm font-medium text-gray-900">
                       {ans.question || "—"}
                     </p>
                   </div>
                   <div className="flex items-start gap-2 ml-6">
-                    <Quote size={16} className="text-cyan-600 mt-0.5 flex-shrink-0" />
+                    <Quote
+                      size={16}
+                      className="text-cyan-600 mt-0.5 flex-shrink-0"
+                    />
                     <p className="text-sm text-gray-700 italic">
                       {ans.answer?.trim() ? ans.answer : "Not answered yet"}
                     </p>

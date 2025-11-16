@@ -46,11 +46,12 @@ export default function ModernNavbar() {
       { name: "Home", href: "/", icon: Search },
       { name: "My Requests", href: "/customer/dashboard", icon: Search },
       { name: "Discover", href: "/discover", icon: Search },
+      { name: "Messages", href: "/messages/null", icon: Search },
     ],
     provider: [
       { name: "Home", href: "/", icon: Search },
       { name: "Leads", href: "/provider/leads", icon: Search },
-      { name: "My Responses", href: "/messages", icon: MessageSquare },
+      { name: "My Responses", href: "/messages/null", icon: MessageSquare },
       { name: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
     ],
   };

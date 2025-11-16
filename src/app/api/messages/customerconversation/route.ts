@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import pool from "@/lib/dbConnect";
+import { getServerSession } from "next-auth";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id)
+  if (!session?.user?.id) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
 
   const userId = session.user.id;
 
@@ -16,7 +17,7 @@ export async function GET() {
     const query = `
       SELECT 
         c.id,
-        c.task_id , 
+        c.task_id,
         c.created_at,
         t.title AS task_title,
         json_agg(
@@ -26,13 +27,13 @@ export async function GET() {
           )
         ) AS participants
       FROM conversations c
-      JOIN conversation_participants cp 
-        ON cp.conversation_id = c.id
-      JOIN user_profiles up 
-        ON up.user_id::text = cp.user_id   
-      LEFT JOIN tasks t 
+      JOIN tasks t 
         ON t.task_id = c.task_id
-    WHERE c.created_by = $1::text
+      JOIN conversation_participants cp
+        ON cp.conversation_id = c.id
+      JOIN user_profiles up
+        ON up.user_id::text = cp.user_id
+      WHERE t.customer_id = $1        
       GROUP BY c.id, t.title
       ORDER BY c.created_at DESC;
     `;
@@ -42,9 +43,9 @@ export async function GET() {
 
     return NextResponse.json({ conversations: result.rows });
   } catch (err) {
-    console.error("Fetch my conversations error:", err);
+    console.error("Customer conversations error:", err);
     return NextResponse.json(
-      { error: "Failed to load conversations" },
+      { error: "Failed to fetch customer conversations" },
       { status: 500 }
     );
   }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, use } from "react";
 import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, ArrowLeft } from "lucide-react";
@@ -18,8 +18,12 @@ interface Conversation {
   task_title: string;
   participants: Participant[];
 }
+type ViewMode = "customer" | "provider" | null;
 
-export default function ChatPageInline() {
+
+export default function ChatPageInline({params}:{params:Promise<{convoId:string}>}) {
+  const paramsWrapped = use(params)
+  const routeConvoId = paramsWrapped?.convoId || null;
   const { data: session } = useSession();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConversation, setActiveConversation] = useState<Conversation | null>(null);
@@ -29,6 +33,28 @@ export default function ChatPageInline() {
 
   const hasFetched = useRef(false);
   const cacheKey = `chat_conversations_${session?.user?.id}`;
+  // const role = typeof window !== "undefined"
+  // ? localStorage.getItem("viewmode")
+  // : "provider";
+  // const [viewMode, setViewMode] = useState<ViewMode>(null);
+
+  
+const [endpoint, setEndpoint] = useState<string | null>(null);
+
+useEffect(() => {
+  if (typeof window === "undefined") return;
+
+  const storedView = localStorage.getItem("viewMode");
+  if (storedView === "customer" || storedView === "provider") {
+    // setViewMode(storedView);
+    setEndpoint(
+      storedView === "customer"
+        ? "/api/messages/customerconversation"
+        : "/api/messages/myconversations"
+    );
+  }
+}, []);
+
 
   useEffect(() => {
     if (!session?.user?.id) return;
@@ -37,30 +63,36 @@ export default function ChatPageInline() {
   }, [cacheKey, session?.user?.id]);
 
   const fetchConversations = useCallback(async () => {
-    if (!session?.user?.id || hasFetched.current) return;
+    if (!session?.user?.id || !endpoint || hasFetched.current) return;
     hasFetched.current = true;
-
+  
     setLoading(true);
     setError(null);
-
+  
     try {
-      const res = await fetch("/api/messages/myconversations", { cache: "no-store" });
+      const res = await fetch(endpoint, { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to fetch conversations");
-
+  
       const data = await res.json();
       const convos = data.conversations || [];
-
-      // ✅ Save to state + sessionStorage
+  
       setConversations(convos);
-      // sessionStorage.setItem(cacheKey, JSON.stringify(convos));
-      // sessionStorage.setItem(`${cacheKey}_timestamp`, Date.now().toString());
     } catch (err: any) {
       console.error("Error loading conversations:", err);
       setError(err?.message || "Failed to load conversations");
     } finally {
       setLoading(false);
     }
-  }, [cacheKey, session?.user?.id]);
+  }, [endpoint, session?.user?.id]);
+
+  useEffect(()=>{
+    if(!routeConvoId) return
+    if(!conversations.length) return
+     const found = conversations.find((c)=>String(c.id)===String(routeConvoId));
+    if(found)
+      setActiveConversation(found)
+
+  },[routeConvoId,conversations])
 
   useEffect(() => {
     if (!session?.user?.id) return;
@@ -69,7 +101,7 @@ export default function ChatPageInline() {
     const isExpired = Date.now() - lastFetched > 5 * 60 * 1000; // 5 min
 
     if (isExpired || !lastFetched) {
-      hasFetched.current = false; // allow fresh fetch
+      hasFetched.current = false; 
       fetchConversations();
     }
   }, [cacheKey, session?.user?.id, fetchConversations]);
