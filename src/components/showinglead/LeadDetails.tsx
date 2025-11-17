@@ -114,7 +114,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       toast.error(convoError);
       return;
     }
-    window.location.href = `/messages`;
+    window.location.href = `/messages/${conversationId}`;
   }, [convoLoading, convoError, conversationId]);
 
   const handlePurchaseSuccess = useCallback(async () => {
