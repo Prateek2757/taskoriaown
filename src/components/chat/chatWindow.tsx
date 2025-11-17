@@ -28,7 +28,7 @@ interface Conversation {
 export default function ChatWindow({
   otherName,
   conversationTitle,
- 
+
   conversationId,
   me,
   taskId,
@@ -36,23 +36,25 @@ export default function ChatWindow({
   conversationId: string;
   me: { id: string; name?: string };
   taskId: number;
-  conversationTitle:string;
-  otherName:string
+  conversationTitle: string;
+  otherName: string;
 }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [typingUsers, setTypingUsers] = useState<Record<string, number>>({});
-  const [loading ,setLoading]=useState(true)
+  const [loading, setLoading] = useState(true);
   const channelRef = useRef<any>(null);
-
 
   useEffect(() => {
     if (!conversationId) return;
     let isMounted = true;
-    setLoading(true)
     const fetchMessages = async () => {
-     
       try {
-        const res = await fetch(`/api/messages/conversation-read/${conversationId}`);
+        setLoading(true);
+        const res = await fetch(
+          `/api/messages/conversation-read/${conversationId}`
+        );
+        console.log(res);
+
         if (!res.ok) {
           const text = await res.text();
           throw new Error(`Failed to fetch messages: ${text}`);
@@ -64,15 +66,17 @@ export default function ChatWindow({
           );
           setMessages(
             uniqueMessages.sort(
-              (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+              (a, b) =>
+                new Date(a.created_at).getTime() -
+                new Date(b.created_at).getTime()
             )
           );
+          setLoading(false);
         }
       } catch (err) {
         console.error("Fetch messages error:", err);
-      }
-      finally{
-        if(!isMounted) setLoading(false)
+      } finally {
+        if (!isMounted) setLoading(false);
       }
     };
 
@@ -92,9 +96,12 @@ export default function ChatWindow({
         if (exists) return prev;
 
         const combined = [...prev, msg];
-        const unique = Array.from(new Map(combined.map((m) => [m.id, m])).values());
+        const unique = Array.from(
+          new Map(combined.map((m) => [m.id, m])).values()
+        );
         return unique.sort(
-          (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+          (a, b) =>
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
         );
       });
     });
@@ -150,7 +157,11 @@ export default function ChatWindow({
       const res = await fetch("/api/messages/message-created", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ conversation_id: conversationId, content: text, taskId }),
+        body: JSON.stringify({
+          conversation_id: conversationId,
+          content: text,
+          taskId,
+        }),
       });
 
       if (!res.ok) throw new Error("Failed to send message");
@@ -168,15 +179,20 @@ export default function ChatWindow({
         const combined = prev.map((msg) =>
           msg.id === tempId ? { ...data.message, status: "sent" } : msg
         );
-        const unique = Array.from(new Map(combined.map((m) => [m.id, m])).values());
+        const unique = Array.from(
+          new Map(combined.map((m) => [m.id, m])).values()
+        );
         return unique.sort(
-          (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+          (a, b) =>
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
         );
       });
     } catch (err) {
       console.error("Send message error:", err);
       setMessages((prev) =>
-        prev.map((msg) => (msg.id === tempId ? { ...msg, status: "failed" } : msg))
+        prev.map((msg) =>
+          msg.id === tempId ? { ...msg, status: "failed" } : msg
+        )
       );
     }
   };
@@ -192,17 +208,16 @@ export default function ChatWindow({
 
   return (
     <div className="flex flex-col h-[calc(100vh-75px)] border overflow-hidden">
- <MessageList 
-      messages={messages} 
-      otherName={otherName}
-      conversationTitle={conversationTitle}
-      me={me} 
-      typingUsers={typingUsers}
-      onSend={sendMessage}
-      onTyping={sendTyping}
-      isLoading={loading}
-    />      
-    
+      <MessageList
+        messages={messages}
+        otherName={otherName}
+        conversationTitle={conversationTitle}
+        me={me}
+        typingUsers={typingUsers}
+        onSend={sendMessage}
+        onTyping={sendTyping}
+        isLoading={loading}
+      />
     </div>
   );
 }
