@@ -46,7 +46,6 @@ export default function ChatWindow({
 
   useEffect(() => {
     if (!conversationId) return;
-    let isMounted = true;
     const fetchMessages = async () => {
       try {
         setLoading(true);
@@ -60,7 +59,7 @@ export default function ChatWindow({
           throw new Error(`Failed to fetch messages: ${text}`);
         }
         const data = await res.json();
-        if (isMounted) {
+       
           const uniqueMessages = Array.from(
             new Map((data.messages as Message[]).map((m) => [m.id, m])).values()
           );
@@ -72,11 +71,11 @@ export default function ChatWindow({
             )
           );
           setLoading(false);
-        }
+        
       } catch (err) {
         console.error("Fetch messages error:", err);
       } finally {
-        if (!isMounted) setLoading(false);
+        setLoading(false);
       }
     };
 
@@ -130,7 +129,6 @@ export default function ChatWindow({
     }, 1000);
 
     return () => {
-      isMounted = false;
       clearInterval(interval);
       if (channelRef.current) {
         supabaseServer.removeChannel(channelRef.current);

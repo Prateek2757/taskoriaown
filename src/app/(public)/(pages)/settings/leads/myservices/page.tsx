@@ -349,7 +349,7 @@ export default function MyServicesPage() {
                     <div className="relative">
                       <LocationSearch
                         onSelect={(data) => {
-                          setLocation(data.city_id, data.city);
+                          setLocation(data.city_id, data.city,);
                           setLocationDialogOpen(false);
                         }}
                       />

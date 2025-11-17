@@ -1,9 +1,12 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
-
-export const config = { api: { bodyParser: false } };
-
+// stripe listen --forward-to localhost:3000/api/stripe/webhook  for locally testing
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-10-29.clover",
 });
@@ -16,14 +19,14 @@ interface SessionMetadata {
 }
 
 export async function POST(req: Request) {
-  // console.log("🔥 Stripe webhook RECEIVED");
-
   const raw = await req.text();
   const signature = req.headers.get("stripe-signature")!;
+
   let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(raw, signature, process.env.STRIPE_WEBHOOK_SECRET!);
+    console.log("✅ Stripe webhook received:", event.type);
   } catch (err) {
     console.error("⚠️ Webhook signature verification failed:", err);
     return new Response("Invalid signature", { status: 400 });
@@ -32,9 +35,11 @@ export async function POST(req: Request) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
 
+    console.log("Checkout session completed:", session.id, session.metadata);
+
     if (!session.metadata) {
-      console.warn("⚠️ Checkout session has no metadata. Ignored.");
-      return NextResponse.json({ ignored: true });
+      console.warn("⚠️ Session metadata missing. Ignored.");
+      return new Response(JSON.stringify({ received: true }), { status: 200 });
     }
 
     const metadata = session.metadata as unknown as SessionMetadata;
@@ -43,11 +48,12 @@ export async function POST(req: Request) {
     const amount = Number(metadata.amount);
 
     if (!professionalId || !credits || !amount) {
-      console.warn("⚠️ Invalid metadata in session. Ignored.");
-      return NextResponse.json({ ignored: true });
+      console.warn("⚠️ Invalid metadata. Ignored.");
+      return new Response(JSON.stringify({ received: true }), { status: 200 });
     }
 
     try {
+      // Check if already processed
       const { rows } = await pool.query(
         `SELECT status FROM credit_topups WHERE transaction_ref=$1`,
         [session.id]
@@ -55,9 +61,10 @@ export async function POST(req: Request) {
 
       if (rows.length && rows[0].status === "completed") {
         console.log("✅ Session already processed. Ignored.");
-        return NextResponse.json({ ignored: true });
+        return new Response(JSON.stringify({ received: true }), { status: 200 });
       }
 
+      // Update topup status
       await pool.query(
         `UPDATE credit_topups
          SET status='completed', updated_at=NOW()
@@ -65,6 +72,7 @@ export async function POST(req: Request) {
         [session.id]
       );
 
+      // Add credits to wallet
       await pool.query(
         `UPDATE credit_wallets
          SET total_credits = total_credits + $1
@@ -72,6 +80,7 @@ export async function POST(req: Request) {
         [credits, professionalId]
       );
 
+      // Record transaction
       await pool.query(
         `INSERT INTO payment_transactions
           (reference_id, professional_id, transaction_type, amount, credits_used, payment_gateway, status, remarks)
@@ -84,7 +93,9 @@ export async function POST(req: Request) {
       console.error("❌ Database update failed:", dbError);
       return new Response("DB update failed", { status: 500 });
     }
+  } else {
+    console.log("⚠️ Ignored event type:", event.type);
   }
 
-  return NextResponse.json({ received: true });
+  return new Response(JSON.stringify({ received: true }), { status: 200 });
 }

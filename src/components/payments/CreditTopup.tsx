@@ -172,6 +172,8 @@ export function CreditPurchase({
       });
 
       const data = await res.json();
+      // console.log(data);
+      
       if (!res.ok) throw new Error(data.error || "Purchase failed");
 
       toast.success("Redirecting to payment...");

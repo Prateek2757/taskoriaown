@@ -115,6 +115,8 @@ export default function PostJobPage() {
       <LocationSearch
         onSelect={(location) => {
           console.log("Selected Location:", location);
+          console.log(location.city_id);
+          
         }}
       />
     </div>
