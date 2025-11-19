@@ -32,7 +32,6 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// PUT: update company name, email, phone for logged-in user
 export async function PUT(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
@@ -61,7 +60,7 @@ export async function PUT(req: NextRequest) {
            about = $8,
            updated_at = NOW()
        WHERE user_id = $9`,
-      [company_name, contact_name, contact_email, contact_phone ,website,company_size ,years_in_business , about || null, userId]
+      [company_name, contact_name, contact_email, contact_phone ,website,company_size===""?"":company_size ,years_in_business===""?"":years_in_business , about===""?"":about || null, userId]
     );
 
     if (rowCount === 0) {

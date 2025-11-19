@@ -10,7 +10,6 @@ import {
 import { useLeadProfile } from "@/hooks/useLeadProfile";
 import { Progress } from "../ui/progress";
 import { useSession } from "next-auth/react";
-// Section Components
 import AboutSection from "./AboutSection";
 import ReviewsSection from "./ReviewSection";
 import ServicesSection from "./ServicesSection";
@@ -21,7 +20,6 @@ import QASection from "./QASection";
 import { useCompanyProfile } from "@/hooks/useCompanyProfile";
 
 
-// ---------------- Types ----------------
 type SectionId =
   | "about"
   | "reviews"
@@ -59,10 +57,8 @@ export default function ProfileSettings() {
 
   const saveAbout = async (payload: any) => {
     try {
-      // 1️⃣ Update profile in your DB
       await updateProfile({ display_name: payload.display_name });
   
-      // 2️⃣ Update company data too
       await updateCompany({
         company_name: payload.company_name,
         contact_name: payload.display_name,
@@ -74,7 +70,6 @@ export default function ProfileSettings() {
         website: payload.website,
       });
   
-      // 3️⃣ Refresh session globally (✅ Proper merge)
         await update({
       name: payload.display_name,
     });
@@ -85,17 +80,15 @@ export default function ProfileSettings() {
     }
   };
   
-  // simulate completion (you can compute dynamically from backend)
   React.useEffect(() => {
     if (profile) {
       const completed = profile.categories?.length ? 15 : 0;
-      setCompletion(completed + 12); // Example logic
+      setCompletion(completed + 12); 
     }
   }, [profile]);
 
   const toggle = (id: SectionId) => setExpanded((e) => (e === id ? null : id));
 
-  // ---------------- Update Function ----------------
   const updateSection = async (section: SectionId, payload: any) => {
     console.log(`Saving ${section}:`, payload);
     // TODO: integrate with your backend update routes
@@ -111,7 +104,6 @@ export default function ProfileSettings() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Header / Progress */}
       <div className="mb-8">
         <button
           onClick={() => window.history.back()}
@@ -153,7 +145,6 @@ export default function ProfileSettings() {
         </a>
       </div>
 
-      {/* Sections */}
       <div className="space-y-4">
         {SECTIONS.map((s) => {
           const isOpen = expanded === s.id;

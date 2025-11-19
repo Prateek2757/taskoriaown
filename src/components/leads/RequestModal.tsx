@@ -1,23 +1,43 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 import StepOneCategoryForm from "./stepOneCategorySelection";
 import StepTwoQuestionsForm from "./StepTwoQuestionSelection";
 
-
 type Props = {
   open: boolean;
   onClose: () => void;
+  presetCategory?: { category_id: number; name: string; slug?: string } | null;
 };
 
-export default function NewRequestModal({ open, onClose }: Props) {
+export default function NewRequestModal({
+  open,
+  onClose,
+  presetCategory,
+}: Props) {
   const [step, setStep] = useState<1 | 2>(1);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
+    presetCategory ? String(presetCategory.category_id) : ""
+  );
+  const [selectedCategoryTitle, setSelectedCategoryTitle] = useState<string>(
+    presetCategory ? presetCategory.name : ""
+  );
   const [selectedLocationId, setSelectedLocationId] = useState<string>("");
-  const [selectedCategoryTitle, setSelectedCategoryTitle] = useState<string>("");
+
+  useEffect(() => {
+    if (presetCategory) {
+      setSelectedCategoryId(String(presetCategory.category_id));
+      setSelectedCategoryTitle(String(presetCategory.name));
+    }
+  }, [presetCategory]);
 
   const next = () => setStep(2);
   const back = () => setStep(1);
@@ -52,6 +72,14 @@ export default function NewRequestModal({ open, onClose }: Props) {
                 <StepOneCategoryForm
                   onNext={next}
                   onClose={close}
+                  presetCategory={
+                    selectedCategoryId && selectedCategoryTitle
+                      ? {
+                          category_id: Number(selectedCategoryId),
+                          name: selectedCategoryTitle,
+                        }
+                      : undefined
+                  }
                   setSelectedCategoryId={setSelectedCategoryId}
                   setSelectedCategoryTitle={setSelectedCategoryTitle}
                   setSelectedLocationId={setSelectedLocationId}

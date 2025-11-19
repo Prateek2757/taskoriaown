@@ -27,8 +27,7 @@ function Footer() {
               </span>
             </Link>
             <p className="text-gray-400 mt-2 text-sm">
-            Taskoria — A Fusion of Australian Design & Nepali Engineering.
-            </p>
+            Redefining How the World Hires Trusted Professionals            </p>
 
             {/* --- Social Icons --- */}
             <div className="flex gap-4 mt-4">
@@ -159,7 +158,7 @@ function Footer() {
             &copy; {new Date().getFullYear()} Taskoria. All rights reserved.
             <br />
             <span className="text-gray-500">
-              Powered by AI • Secured • Driven by Community
+            Taskoria — A Fusion of Australian Design & Nepali Engineering.
             </span>
           </p>
         </div>

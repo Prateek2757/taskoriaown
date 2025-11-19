@@ -39,8 +39,9 @@ export default function ModernNavbar() {
   const navLinks = {
     public: [
       { name: "Home", href: "/", icon: Search },
+      { name: "Community", href: "/providers", icon: Users },
       { name: "Discover", href: "/discover", icon: Search },
-      { name: "Community", href: "/community", icon: Users },
+     
     ],
     customer: [
       { name: "Home", href: "/", icon: Search },

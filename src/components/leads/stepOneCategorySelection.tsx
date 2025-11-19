@@ -15,12 +15,13 @@ import CategorySearch from "../category/CategorySearch";
 type Category = {
   category_id: number;
   name: string;
-  remote_available: boolean;
+  remote_available?: boolean;
 };
 
 type Props = {
   onNext: () => void;
   onClose: () => void;
+  presetCategory?: { category_id: number; name: string; slug?: string };
   setSelectedCategoryId: (id: string) => void;
   setSelectedLocationId: (id: string) => void;
   setSelectedCategoryTitle: (title: string) => void;
@@ -29,6 +30,7 @@ type Props = {
 export default function StepOneCategoryForm({
   onNext,
   onClose,
+  presetCategory,
   setSelectedCategoryId,
   setSelectedCategoryTitle,
   setSelectedLocationId,
@@ -52,7 +54,7 @@ export default function StepOneCategoryForm({
   const categoryId = watch("category_id");
   const location = watch("location");
 
-  const isContinueEnabled = categoryId > 0  && location?.trim() !== "";
+  const isContinueEnabled = categoryId > 0 && location?.trim() !== "";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,6 +70,15 @@ export default function StepOneCategoryForm({
     fetchData();
   }, []);
 
+
+  useEffect(() => {
+    if (presetCategory) {
+      setValue("category_id", presetCategory.category_id);
+      setValue("category_name", presetCategory.name);
+      setSelectedCategoryTitle(presetCategory.name);
+    }
+  }, [presetCategory, setValue]);
+
   useEffect(() => {
     const term = searchCategoryTerm.trim().toLowerCase();
 
@@ -77,20 +88,27 @@ export default function StepOneCategoryForm({
       return;
     }
 
-    const currentlySelected = categories.find((c) => c.category_id === categoryId);
+    const currentlySelected = categories.find(
+      (c) => c.category_id === categoryId
+    );
     if (currentlySelected && term === currentlySelected.name.toLowerCase()) {
       setFilteredCategories([]);
       setShowCategorySuggestions(false);
       return;
     }
 
-    const filtered = categories.filter((c) => c.name.toLowerCase().includes(term));
+    const filtered = categories.filter((c) =>
+      c.name.toLowerCase().includes(term)
+    );
     setFilteredCategories(filtered);
     setShowCategorySuggestions(filtered.length > 0);
   }, [searchCategoryTerm, categories, categoryId]);
 
   const handleSelectCategory = (cat: Category) => {
-    setValue("category_id", cat.category_id, { shouldDirty: true, shouldTouch: true });
+    setValue("category_id", cat.category_id, {
+      shouldDirty: true,
+      shouldTouch: true,
+    });
     setValue("category_name", cat.name);
     setSearchCategoryTerm(cat.name);
     setShowCategorySuggestions(false);
@@ -128,15 +146,26 @@ export default function StepOneCategoryForm({
         </div>
       ) : (
         <>
-          {/* Category Search */}
           <div className="relative">
             <Label className="font-semibold text-gray-800 dark:text-gray-200">
               Service Category <span className="text-red-500">*</span>
             </Label>
             <div className="relative mt-2">
               <CategorySearch
+                presetCategory={
+                  presetCategory
+                    ? {
+                        category_id: presetCategory.category_id,
+                        name: presetCategory.name,
+                        slug: presetCategory.slug || "",
+                      }
+                    : undefined
+                }
                 onSelect={(data) => {
-                  setValue("category_id", data.id, { shouldDirty: true, shouldTouch: true });
+                  setValue("category_id", data.category_id, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                  });
                   setValue("category_name", data.name);
                   setSelectedCategoryTitle(data.name);
                 }}
@@ -169,7 +198,6 @@ export default function StepOneCategoryForm({
             </AnimatePresence>
           </div>
 
-          {/* Location Search */}
           <div className="relative">
             <Label className="font-semibold text-gray-800 dark:text-gray-200">
               Location
@@ -177,8 +205,14 @@ export default function StepOneCategoryForm({
             <div className="relative mt-2">
               <LocationSearch
                 onSelect={(data) => {
-                  setValue("city_id", data.city_id, { shouldDirty: true, shouldTouch: true });
-                  setValue("location", data.city || data.display_name, { shouldDirty: true, shouldTouch: true });
+                  setValue("city_id", data.city_id, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                  });
+                  setValue("location", data.city || data.display_name ||data.municipality, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                  });
                 }}
               />
             </div>

@@ -39,7 +39,6 @@ export default function Navbar() {
     ],
   };
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -53,7 +52,6 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Initialize viewMode from localStorage or session
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -69,11 +67,9 @@ export default function Navbar() {
     }
   }, [session]);
 
-  // Create draft provider account safely
   const handleJoinAsProvider = async () => {
     try {
       if (typeof window !== "undefined") {
-        // Clear old draft if any
         localStorage.removeItem("draftProviderId");
       }
 
@@ -94,7 +90,6 @@ export default function Navbar() {
     }
   };
 
-  // Handle logout safely
   const handleLogout = async () => {
     setIsProfileOpen(false);
     setIsMenuOpen(false);
@@ -103,13 +98,12 @@ export default function Navbar() {
 
     if (typeof window !== "undefined") {
       localStorage.removeItem("viewMode");
-      localStorage.removeItem("draftProviderId"); // clear draft on logout
+      localStorage.removeItem("draftProviderId"); 
     }
 
     router.push("/signin");
   };
 
-  // Switch between customer and provider view
   const handleSwitchView = (newView: "customer" | "provider") => {
     if (!session) return;
 

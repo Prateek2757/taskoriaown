@@ -7,6 +7,7 @@ import { fetchProviders } from "@/utils/api";
 interface Provider {
     user_id: number;
     name: string;
+    public_id?:string;
     services: string[];
     rating: number;
     reviews_count: number;

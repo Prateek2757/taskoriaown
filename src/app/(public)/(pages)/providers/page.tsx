@@ -49,7 +49,7 @@ export default function AllProviders() {
           ) : filteredProviders.length > 0 ? (
             filteredProviders.map((p) => (
               <div
-                key={p.user_id}
+                key={p.user_id + ""+p.name}
                 className="bg-card border rounded-xl p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="flex items-center gap-4">
@@ -107,7 +107,7 @@ export default function AllProviders() {
 
                 <Link
                   href={`/providerprofile/${encodeURIComponent(
-                    p.user_id.toString()
+                    p.public_id.toString()
                   )}`}
                 >
                   <Button

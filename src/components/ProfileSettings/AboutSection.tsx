@@ -22,9 +22,9 @@ type Props = {
 
 const COMPANY_SIZES = [
   "Sole-Trader",
-  "2-10 employees",
-  "10-20 employees",
-  "30-50 employees",
+  "2-10",
+  "10-20",
+  "30-50",
 ];
 
 interface FormState {
@@ -43,7 +43,6 @@ interface FormState {
 }
 
 export default function AboutSection({ companydata, data, onSave }: Props) {
-  // Initialize state with original values
   const initialState: FormState = useMemo(
     () => ({
       name: data?.display_name ?? "",
@@ -67,12 +66,10 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
   const [msg, setMsg] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Update form state when props change
   useEffect(() => {
     setFormState(initialState);
   }, [initialState]);
 
-  // Check if form has changes
   const hasChanges = useMemo(() => {
     return (
       formState.name !== initialState.name ||
@@ -88,7 +85,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
     );
   }, [formState, initialState]);
 
-  // Generic update function
   const updateField = <K extends keyof FormState>(
     field: K,
     value: FormState[K]
@@ -126,13 +122,16 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
     setTimeout(() => setMsg(null), 2000);
   };
 
+  
   const save = async () => {
-    // Validation
-    if (formState.description.trim().length < 30) {
+    
+
+
+    const companyFieldFilled = formState.companyName.trim()
+if (companyFieldFilled &&formState.description.trim().length < 30) {
       setError("Company description must be at least 30 characters long.");
       return;
     }
-
     setSaving(true);
     setMsg(null);
     setError(null);
@@ -154,7 +153,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
       await onSave?.(payload);
       setMsg("Saved successfully!");
 
-      // Reset file states after successful save
       setFormState((prev) => ({
         ...prev,
         avatarFile: null,
@@ -174,7 +172,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
 
   return (
     <div className="max-w-2xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-sm p-8 space-y-10">
-      {/* Personal name & logo */}
       <section>
         <h2 className="text-xl font-semibold text-gray-900">
           Personal name & logo
@@ -354,7 +351,7 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
                 <option value="">Select company size</option>
                 {COMPANY_SIZES.map((size) => (
                   <option key={size} value={size}>
-                    {size}
+                    {size} employee
                   </option>
                 ))}
               </select>
@@ -393,7 +390,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
         </div>
       </section>
 
-      {/* Action Buttons */}
       <div className="flex items-center justify-between pt-4 border-t border-gray-200">
         <button
           onClick={handleCancel}

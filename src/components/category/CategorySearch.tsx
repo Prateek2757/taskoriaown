@@ -1,28 +1,64 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import axios from "axios";
 import { AnimatePresence, motion } from "motion/react";
-import { cn } from "@/lib/utils";
 
 type Category = {
   category_id: number;
   name: string;
-  slug:string;
+  slug?: string;
 };
 
 type Props = {
-  onSelect?: (category: { id: number; name: string ;slug:string}) => void;
+  onSelect?: (category: Category) => void;
   placeholder?: string;
+  presetCategory?:Category
 };
 
-export default function CategorySearch({ onSelect, placeholder }: Props) {
+export default function CategorySearch({ onSelect, placeholder , presetCategory }: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [query, setQuery] = useState("");
   const [filtered, setFiltered] = useState<Category[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selected, setSelected] = useState<Category | null>(null); 
+  const [selected, setSelected] = useState<Category | null>(presetCategory ||null);
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (presetCategory) {
+      setQuery(presetCategory.name);
+      setSelected(presetCategory);
+    }
+  }, [presetCategory]);
+  useEffect(() => {
+    function handleOutside(e: MouseEvent | TouchEvent) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(e.target as Node)
+      ) {
+        setShowSuggestions(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener("touchstart", handleOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener("touchstart", handleOutside);
+    };
+  }, []);
+
+ 
+  useEffect(() => {
+    function handleEsc(e: KeyboardEvent) {
+      if (e.key === "Escape") setShowSuggestions(false);
+    }
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, []);
 
   useEffect(() => {
     const load = async () => {
@@ -40,8 +76,7 @@ export default function CategorySearch({ onSelect, placeholder }: Props) {
     if (selected) return;
 
     if (!query.trim()) {
-      setFiltered([]);
-      setShowSuggestions(false);
+      setFiltered(categories.slice(0, 10));
       return;
     }
 
@@ -49,40 +84,35 @@ export default function CategorySearch({ onSelect, placeholder }: Props) {
       c.name.toLowerCase().includes(query.toLowerCase())
     );
     setFiltered(f);
-    setShowSuggestions(true);
   }, [query, categories, selected]);
-
 
   const handleSelect = (cat: Category) => {
     setQuery(cat.name);
     setSelected(cat);
     setShowSuggestions(false);
-    onSelect?.({ id: cat.category_id, name: cat.name ,slug:cat.slug });
+    onSelect?.({ category_id: cat.category_id, name: cat.name, slug: cat.slug });
   };
-
 
   const handleChange = (value: string) => {
     setQuery(value);
-    if (selected && value !== selected.name) {
-      setSelected(null);
-    }
+    if (selected && value !== selected.name) setSelected(null);
+    setShowSuggestions(true);
   };
 
   return (
-    <div className="relative  w-full">
+    <div ref={wrapperRef} className="relative w-full">
       <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+
       <Input
         type="text"
         value={query}
         onChange={(e) => handleChange(e.target.value)}
         placeholder={placeholder || "Search category..."}
         onFocus={() => {
-          if (!selected && filtered.length > 0) setShowSuggestions(true);
+          setShowSuggestions(true);
+          if (!query) setFiltered(categories.slice(0, 10));
         }}
-        className={cn(
-          "pl-9 rounded-xl py-4 border"
-        )}
-        
+        className="pl-9 rounded-xl py-4 border"
       />
 
       <AnimatePresence>
@@ -91,26 +121,26 @@ export default function CategorySearch({ onSelect, placeholder }: Props) {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute z-30 bg-white border mt-1 w-full rounded-lg shadow-lg max-h-60 overflow-y-auto"
+            className="absolute z-40 bg-white border mt-1 w-full rounded-lg shadow-lg max-h-60 overflow-y-auto"
           >
             {filtered.map((cat) => (
               <li
                 key={cat.category_id}
-                onMouseDown={() => handleSelect(cat)}
-                className={cn(
-                  "p-3 cursor-pointer hover:bg-blue-50 text-gray-700 text-sm"
-                )}
+                onMouseDown={() => handleSelect(cat)} 
+                onTouchStart={() => handleSelect(cat)} 
+                className="p-3 cursor-pointer hover:bg-blue-50 text-gray-700 text-sm"
               >
                 {cat.name}
               </li>
             ))}
           </motion.ul>
         )}
+
         {showSuggestions && filtered.length === 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute z-30 bg-white border mt-1 w-full rounded-lg p-3 text-gray-500 text-sm"
+            className="absolute z-40 bg-white border mt-1 w-full rounded-lg p-3 text-gray-500 text-sm"
           >
             No categories found.
           </motion.div>

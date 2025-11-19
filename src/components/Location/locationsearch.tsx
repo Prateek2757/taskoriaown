@@ -11,7 +11,9 @@ type Location = {
   lon: string;
   address?: {
     city?: string;
+    municipality?:string;
     town?: string;
+    territory?:string;
     village?: string;
     state?: string;
     country?: string;
@@ -20,7 +22,7 @@ type Location = {
 };
 
 type Props = {
-  onSelect?: (data: { city_id: number; city: string ; display_name:string }) => void;
+  onSelect?: (data: { city_id: number; city: string ; display_name:string ; municipality:string}) => void;
 };
 
 export default function LocationSearch({ onSelect }: Props) {
@@ -80,7 +82,9 @@ export default function LocationSearch({ onSelect }: Props) {
       city: r.address?.city || r.address?.town || r.address?.village || "",
       state: r.address?.state || "",
       country: r.address?.country || "",
+      territory:r.address?.territory || "",
       postcode: r.address?.postcode || "",
+      municipality:r.address?.municipality || "",
       lat: parseFloat(r.lat),
       lon: parseFloat(r.lon),
     };
@@ -97,7 +101,7 @@ export default function LocationSearch({ onSelect }: Props) {
         body: JSON.stringify(location),
       });
       const data = await res.json();
-      onSelect?.({ city_id: data.city_id, city: location.city ,display_name:location.display_name});
+      onSelect?.({ city_id: data.city_id, city: location.city ,display_name:location.display_name ,municipality:location.municipality});
     } catch (err) {
       console.error("Failed to save location:", err);
     }
@@ -160,7 +164,7 @@ export default function LocationSearch({ onSelect }: Props) {
               <p className="truncate font-medium">{r.display_name}</p>
               {(r.address?.city || r.address?.town || r.address?.village) && (
                 <span className="text-xs text-gray-400">
-                  {r.address?.city || r.address?.town || r.address?.village},{" "}
+                  {r.address?.city || r.address?.town || r.address?.village || r.address.municipality},{" "}
                   {r.address?.state}
                 </span>
               )}

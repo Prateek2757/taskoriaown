@@ -44,7 +44,6 @@ export default function CategorySelectionPage() {
     else alert("Draft not found! Please start from 'Join as a Provider'.");
   }, []);
 
-  // Filter dynamically when user types
   useEffect(() => {
     if (searchQuery.trim() === "") {
       setFilteredCategories([]);
@@ -81,10 +80,11 @@ export default function CategorySelectionPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white via-cyan-50/40 to-gray-50 p-4">
+      
       <Card className="max-w-2xl w-full shadow-2xl border border-gray-100 rounded-3xl backdrop-blur-sm bg-white/90">
         <CardContent className="p-8">
-          {/* Title */}
           <div className="text-center mb-6">
+            
             <h1 className="text-4xl font-extrabold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
               What service do you provide?
             </h1>
@@ -93,7 +93,6 @@ export default function CategorySelectionPage() {
             </p>
           </div>
 
-          {/* 🔍 Search bar */}
           <div className="relative mb-8">
             <Search className="absolute left-3 top-3.5 text-gray-400 w-5 h-5" />
             <Input
@@ -105,7 +104,6 @@ export default function CategorySelectionPage() {
             />
           </div>
 
-          {/* 🧭 Search results below search bar (only when typing) */}
           <AnimatePresence>
             {searchQuery.trim() !== "" && (
               <motion.div
@@ -143,7 +141,6 @@ export default function CategorySelectionPage() {
             )}
           </AnimatePresence>
 
-          {/* ⭐ Popular Categories (only when not searching) */}
           {searchQuery.trim() === "" && (
             <div className="mt-8">
               <h2 className="text-lg font-semibold text-gray-700 mb-3 text-center">
@@ -155,11 +152,13 @@ export default function CategorySelectionPage() {
                     key={c.category_id}
                     size="sm"
                     variant="outline"
-                    onClick={() => setSelectedCategory(c.category_id)}
+                    onClick={() => {setSelectedCategory(c.category_id);
+                      setSearchQuery(c.name)
+                    }}
                     className={`rounded-full px-4 py-2 text-sm transition ${
                       selectedCategory === c.category_id
                         ? "bg-cyan-600 text-white"
-                        : "hover:bg-cyan-50 text-gray-700"
+                        : "hover:bg-cyan-100 text-gray-700"
                     }`}
                   >
                     {c.name}
@@ -169,7 +168,6 @@ export default function CategorySelectionPage() {
             </div>
           )}
 
-          {/* Continue button */}
           <div className="text-center mt-10">
             <Button
               disabled={isNavigating}

@@ -9,11 +9,15 @@ export async function POST(req: NextRequest) {
     const {
       user_id,
       category_id,
+      distance,
       is_nationwide,
       location_id,
       name,
       email,
       phone,
+      companyName,
+      websiteUrl,
+      companySize,
       password,
     } = await req.json();
 
@@ -25,29 +29,27 @@ export async function POST(req: NextRequest) {
 
     await client.query("BEGIN");
 
-    // Add category
     await client.query(
       `INSERT INTO user_categories (user_id, category_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
       [user_id, category_id]
     );
 
-    // Add or update profile
     await client.query(
       `
-      INSERT INTO user_profiles (user_id, display_name, location_id, is_nationwide, is_onboarded)
-      VALUES ($1, $2, $3, $4, TRUE)
+      INSERT INTO user_profiles (user_id, display_name, location_id, is_nationwide, is_onboarded, distanceMile)
+      VALUES ($1, $2, $3, $4, TRUE,$5)
       ON CONFLICT (user_id)
       DO UPDATE SET
         display_name = $2,
         location_id = $3,
         is_nationwide = $4,
         is_onboarded = TRUE,
+
         updated_at = NOW()
       `,
-      [user_id, name, is_nationwide ? null : location_id || null, is_nationwide]
+      [user_id, name, is_nationwide ? null : location_id || null, is_nationwide ,distance]
     );
 
-    // Update main users table
     await client.query(
       `
       UPDATE users
@@ -61,14 +63,15 @@ export async function POST(req: NextRequest) {
       [email, phone || null, hashedPassword, user_id]
     );
 
-    // ✅ New: insert company record
+
+
     await client.query(
       `
-      INSERT INTO company (user_id, company_name, contact_name, contact_email, contact_phone)
-      VALUES ($1, $2, $3, $4, $5)
+      INSERT INTO company (user_id, company_name, contact_name, contact_email,contact_phone,website,company_size)
+      VALUES ($1, $2, $3, $4, $5,$6,$7)
       ON CONFLICT (user_id) DO NOTHING
       `,
-      [user_id, name, name, email, phone || null]
+      [user_id, companyName || name, name, email, phone || null,websiteUrl || null,companySize||null]
     );
 
     await client.query("COMMIT");

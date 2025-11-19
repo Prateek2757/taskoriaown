@@ -11,9 +11,17 @@ import NewRequestModal from "./leads/RequestModal";
 import CategorySearch from "./category/CategorySearch";
 import { SparklesCore } from "./ui/sparkles";
 
+
+interface Category{
+  category_id: number;
+  name:string,
+  slug?:string
+}
+
 export default function HeroSection() {
   const [openModal, setOpenModal] = useState(false);
   const [slugvalue, setSlugValue] = useState("");
+  const [selectedCategory ,setSelectedCategory] =useState<Category | null>(null)
   const { data: session } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -32,6 +40,11 @@ export default function HeroSection() {
     }
     setOpenModal(true);
   };
+
+  const handleSelectCategory =  (cat: Category)=>{
+    setSelectedCategory(cat);
+    setOpenModal(true);
+  }
 
   const handleJoinAsProvider = async () => {
    
@@ -102,7 +115,7 @@ export default function HeroSection() {
                 />
                 <div className="relative flex items-center bg-white  border-gray-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
                   <CategorySearch
-                    onSelect={(data) => setSlugValue(data.slug)}
+                    onSelect={handleSelectCategory}
                     placeholder="What service you need? (e.g. Cleaning, Web)"
                   />
                 </div>
@@ -139,6 +152,8 @@ export default function HeroSection() {
             <NewRequestModal
               open={openModal}
               onClose={() => setOpenModal(false)}
+              presetCategory={selectedCategory}  
+
             />
             {!session && (
               <Button

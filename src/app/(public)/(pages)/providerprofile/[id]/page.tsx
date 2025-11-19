@@ -32,7 +32,7 @@ export default function ProviderProfile() {
 
   useEffect(() => {
     if (!loading && providers.length > 0) {
-      const found = providers.find((p) => p.user_id.toString() === id);
+      const found = providers.find((p) => p.public_id || "".toString() === id);
       setProvider(found || null);
     }
   }, [providers, id, loading]);
@@ -328,10 +328,7 @@ export default function ProviderProfile() {
                     ))
                   ) : (
                     <>
-                      <li className="flex items-center gap-2 text-cyan-600">
-                        <span className="w-2 h-2 bg-cyan-600 rounded-full" />{" "}
-                        Blockchain identity verified
-                      </li>
+                  
                       <li className="flex items-center gap-2 text-cyan-600">
                         <span className="w-2 h-2 bg-cyan-600 rounded-full" /> AI
                         background check passed

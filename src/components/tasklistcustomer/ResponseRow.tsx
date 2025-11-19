@@ -139,7 +139,6 @@ export default function ResponsesRow({
                   )}
                 </div>
 
-                {/* Action Buttons */}
                 <div className="flex gap-2.5">
                   <Button
                     className="flex-1 rounded-xl bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 shadow-sm hover:shadow transition-all"

@@ -22,9 +22,13 @@ export async function POST(req: Request) {
   const client = await pool.connect();
   try {
     const body = await req.json();
-    const { display_name, city, state, country, postcode, lat,place_id, lon } = body;
+    const { display_name, city, state, country, postcode, territory,municipality,lat,place_id, lon } = body;
 
-    if (!country || !city || !lat || !lon) {
+    const finalState = state || territory || null;
+
+    const finalCity = city || territory || display_name?.split(",")[0] || municipality
+
+    if (!country || !finalCity || !lat || !lon) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
@@ -51,7 +55,7 @@ export async function POST(req: Request) {
 
    
     let stateId: number | null = null;
-    if (state) {
+    if (finalState) {
       const stateRes = await client.query(
         `
         INSERT INTO states (name, country_id)
@@ -59,7 +63,7 @@ export async function POST(req: Request) {
         ON CONFLICT (name, country_id) DO NOTHING
         RETURNING state_id;
         `,
-        [state, countryId]
+        [finalState, countryId]
       );
 
       stateId =
@@ -80,7 +84,7 @@ export async function POST(req: Request) {
       ON CONFLICT (name, state_id, country_id) DO NOTHING
       RETURNING city_id;
       `,
-      [city, countryId, stateId, lat, lon, place_id , display_name , postcode]
+      [finalCity, countryId, stateId, lat, lon, place_id , display_name , postcode]
     );
 
     const cityId =
