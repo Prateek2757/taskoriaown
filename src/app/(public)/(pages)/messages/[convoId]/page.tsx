@@ -63,7 +63,7 @@ useEffect(() => {
   }, [cacheKey, session?.user?.id]);
 
   const fetchConversations = useCallback(async () => {
-    if (!session?.user?.id || !endpoint || hasFetched.current) return;
+    if (!endpoint || hasFetched.current) return;
     hasFetched.current = true;
   
     setLoading(true);

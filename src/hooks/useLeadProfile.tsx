@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export type Category = { category_id: number; name: string };
@@ -21,21 +21,50 @@ export function useLeadProfile() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const api = useMemo(
-    () => axios.create({ baseURL: "", headers: { "Content-Type": "application/json" } }),
-    []
-  );
 
-  // ---------- Fetchers ----------
-  const fetchProfile = async () => {
+  const api = axios; 
+
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      setLoading(true);
+      try {
+        const { data } = await api.get("/api/user_profiles");
+        setProfile({
+          ...data,
+          categories: data.categories || [],
+        });
+      } catch {
+        setError("Failed to load profile.");
+      }
+      setLoading(false);
+    };
+    loadProfile();
+  }, []);
+
+
+
+  const fetchCategories = async () => {
+    if (categories.length) return;
     try {
-      const { data } = await api.get("/api/user_profiles");
-      if (data && typeof data === "object") data.categories = data.categories ?? [];
-      setProfile(data);
+      const { data } = await api.get("/api/signup/category-selection");
+      setCategories(Array.isArray(data) ? data : []);
     } catch {
-      setError("Failed to load profile.");
+      setError("Failed to load categories.");
     }
   };
+
+  const fetchCities = async () => {
+    if (cities.length) return;
+    try {
+      const { data } = await api.get("/api/signup/location");
+      setCities(Array.isArray(data) ? data : []);
+    } catch {
+      setError("Failed to load cities.");
+    }
+  };
+
+
 
   const updateProfile = async (data: { display_name: string }) => {
     if (!profile) return;
@@ -52,33 +81,6 @@ export function useLeadProfile() {
     }
   };
 
-  const fetchCategories = async () => {
-    try {
-      const { data } = await api.get("/api/signup/category-selection");
-      setCategories(Array.isArray(data) ? data : []);
-    } catch {
-      setError("Failed to load categories.");
-    }
-  };
-
-  const fetchCities = async () => {
-    try {
-      const { data } = await api.get("/api/signup/location");
-      setCities(Array.isArray(data) ? data : []);
-    } catch {
-      setError("Failed to load cities.");
-    }
-  };
-
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      await Promise.all([fetchProfile(), fetchCategories(), fetchCities()]);
-      setLoading(false);
-    })();
-  }, []);
-
-  // ---------- Actions ----------
   const notifyAll = () => {
     window.dispatchEvent(new Event("categoriesUpdated"));
     window.dispatchEvent(new Event("locationUpdated"));
@@ -86,14 +88,17 @@ export function useLeadProfile() {
 
   const addCategory = async (category_id: number, category_name: string) => {
     if (!profile || profile.categories.some((c) => c.category_id === category_id)) return;
+
     setSaving(true);
     try {
-      setProfile((p) => (p ? { ...p, categories: [...p.categories, { category_id, category_name }] } : p));
+      setProfile((p) =>
+        p ? { ...p, categories: [...p.categories, { category_id, category_name }] } : p
+      );
+
       await api.post("/api/user_categories", { category_id });
       notifyAll();
     } catch {
       setError("Failed to add category.");
-      await fetchProfile();
     } finally {
       setSaving(false);
     }
@@ -101,14 +106,22 @@ export function useLeadProfile() {
 
   const removeCategory = async (category_id: number) => {
     if (!profile) return;
+
     setSaving(true);
     try {
-      setProfile((p) => (p ? { ...p, categories: p.categories.filter((c) => c.category_id !== category_id) } : p));
+      setProfile((p) =>
+        p
+          ? {
+              ...p,
+              categories: p.categories.filter((c) => c.category_id !== category_id),
+            }
+          : p
+      );
+
       await api.delete("/api/user_categories", { data: { category_id } });
       notifyAll();
     } catch {
       setError("Failed to remove category.");
-      await fetchProfile();
     } finally {
       setSaving(false);
     }
@@ -117,13 +130,22 @@ export function useLeadProfile() {
   const setLocation = async (city_id: number, city_name: string) => {
     if (!profile) return;
     setSaving(true);
+
     try {
-      setProfile((p) => (p ? { ...p, location_id: city_id, location_name: city_name, is_nationwide: false } : p));
-      await api.put("/api/user_profiles", { location_id: city_id, is_nationwide: false });
+      setProfile((p) =>
+        p
+          ? { ...p, location_id: city_id, location_name: city_name, is_nationwide: false }
+          : p
+      );
+
+      await api.put("/api/user_profiles", {
+        location_id: city_id,
+        is_nationwide: false,
+      });
+
       notifyAll();
     } catch {
       setError("Failed to update location.");
-      await fetchProfile();
     } finally {
       setSaving(false);
     }
@@ -131,16 +153,25 @@ export function useLeadProfile() {
 
   const toggleNationwide = async (value: boolean) => {
     if (!profile) return;
+
     setSaving(true);
     try {
       setProfile((p) =>
-        p ? { ...p, is_nationwide: value, location_id: value ? null : p.location_id, location_name: value ? "" : p.location_name } : p
+        p
+          ? {
+              ...p,
+              is_nationwide: value,
+              location_id: value ? null : p.location_id,
+              location_name: value ? "" : p.location_name,
+            }
+          : p
       );
+
       await api.put("/api/user_profiles", { is_nationwide: value });
+
       notifyAll();
     } catch {
       setError("Failed to toggle nationwide.");
-      await fetchProfile();
     } finally {
       setSaving(false);
     }
@@ -148,12 +179,14 @@ export function useLeadProfile() {
 
   return {
     profile,
-    updateProfile,
     categories,
     cities,
     loading,
     saving,
     error,
+    fetchCategories,
+    fetchCities,
+    updateProfile,
     addCategory,
     removeCategory,
     setLocation,

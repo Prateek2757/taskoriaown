@@ -63,6 +63,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   const [showCreditModal, setShowCreditModal] = useState(false);
   const [leadStatus, setLeadStatus] = useState({ count: 0, purchased: false });
   const [loadingResponses, setLoadingResponses] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const maxResponses = 5;
 
@@ -93,34 +94,68 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     fetchResponses();
   }, [fetchResponses]);
 
-  // const shouldFetchConversation = useMemo(
-  //   () => leadStatus.purchased && !!taskId && !!userId,
-  //   [leadStatus.purchased, taskId, userId]
-  // );
+  const shouldFetchConversation = leadStatus.purchased && !!taskId && !!userId;
 
   const {
     conversationId,
     loading: convoLoading,
     error: convoError,
     refetch: refetchConversation,
-  } = useConversation(participantIds, "Private Chat", taskId!);
+  } = useConversation(
+    shouldFetchConversation ? participantIds : [],
+    "Private Chat",
+    shouldFetchConversation ? taskId : null
+  );
 
-  const handleGoToChat = useCallback(() => {
-    if (convoLoading) {
+  const handleGoToChat = useCallback(async () => {
+    if (isNavigating) return;
+
+    if (!conversationId && !convoLoading) {
+      setIsNavigating(true);
       toast.info("Preparing chat...");
+      
+      try {
+        const newConvoId = await refetchConversation();
+        
+        if (newConvoId) {
+          window.location.href = `/messages/${newConvoId}`;
+        } else {
+          toast.error("Failed to create conversation. Please try again.");
+          setIsNavigating(false);
+        }
+      } catch (err) {
+        console.error("Error creating conversation:", err);
+        toast.error("Failed to create conversation. Please try again.");
+        setIsNavigating(false);
+      }
       return;
     }
+
     if (convoError) {
       toast.error(convoError);
       return;
     }
-    window.location.href = `/messages/${conversationId}`;
-  }, [convoLoading, convoError, conversationId]);
+
+    if (conversationId) {
+      setIsNavigating(true);
+      window.location.href = `/messages/${conversationId}`;
+    }
+  }, [conversationId, convoLoading, convoError, refetchConversation, isNavigating]);
 
   const handlePurchaseSuccess = useCallback(async () => {
-    toast.success("Purchase successful!");
-    await refetchConversation();
+    toast.success("Purchase successful! Preparing your chat...");
+    
     await fetchResponses();
+    
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    const newConvoId = await refetchConversation();
+    
+    if (newConvoId) {
+      toast.success("Chat is ready!");
+    } else {
+      toast.info("Click 'Chat' button to start your conversation");
+    }
   }, [fetchResponses, refetchConversation]);
 
   const formatTimeAgo = useCallback((timestamp: string): string => {
@@ -161,6 +196,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   const responseRate = leadStatus.count ?? 0;
   const customerFirstName = (lead.customer_name ?? "Customer").split(" ")[0];
+
+  const isChatButtonDisabled = !leadStatus.purchased || isNavigating;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -326,13 +363,13 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             {leadStatus.purchased ? (
               <button
                 onClick={handleGoToChat}
-                disabled={convoLoading || !conversationId}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-60 "
+                disabled={isChatButtonDisabled}
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {convoLoading ? (
+                {isNavigating || convoLoading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    Preparing Chat...
+                    {isNavigating ? "Opening Chat..." : "Preparing Chat..."}
                   </>
                 ) : (
                   <>

@@ -76,6 +76,7 @@ function OnboardingContent() {
   const params = useSearchParams();
   const userId = params.get("user_id");
   const categoryId = params.get("cn");
+  const categoryPublicId = params.get("cn");
   const { setUser } = useUser();
   const [step, setStep] = useState<"location" | "details">("location");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -109,11 +110,12 @@ function OnboardingContent() {
     setIsSubmitting(true);
     try {
       const payload: any = {
-        user_id: Number(userId),
-        category_id: Number(categoryId),
+        public_id: String(userId),
+        categoryPublic_id: String(categoryId),
         ...data,
         phone: data.phone || null,
       };
+console.log(categoryPublicId);
 
       if (!data.is_nationwide) {
         payload.location_id = data.city_id ? Number(data.city_id) : null;
@@ -122,13 +124,13 @@ function OnboardingContent() {
       await axios.post("/api/signup/final-submit", payload);
       localStorage.removeItem("draftProviderId");
 
-      const res = await axios.get("/api/profiles", {
-        headers: { "x-user-id": userId },
-      });
+      // const res = await axios.get("/api/profiles", {
+      //   headers: { "x-user-id": userId },
+      // });
 
-      const fullUserData = res.data.user;
-      setUser(fullUserData);
-      // sessionStorage.setItem("user_data", JSON.stringify(fullUserData));
+      // const fullUserData = res.data.user;
+      // setUser(fullUserData);
+      // // sessionStorage.setItem("user_data", JSON.stringify(fullUserData));
 
       router.push("/signin");
     } catch (err: any) {

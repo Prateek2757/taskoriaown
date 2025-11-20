@@ -3,7 +3,6 @@ import pool from "@/lib/dbConnect";
 
 export async function POST(req: NextRequest) {
   try {
-    // Create draft user
     const { role = "provider" } = await req.json();
 
     const result = await pool.query(

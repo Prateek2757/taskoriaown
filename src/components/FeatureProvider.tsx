@@ -164,7 +164,7 @@ export const FeatureProvider = () => {
 
                   <Link
                     href={`/providerprofile/${encodeURIComponent(
-                      p.user_id.toString()
+                      String(p.public_id)
                     )}`}
                   >
                     <Button className="w-full h-9 text-sm font-semibold rounded-lg bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] hover:shadow-lg text-white shadow-sm transition-all duration-300 group-hover:scale-[1.02]">

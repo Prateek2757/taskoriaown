@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 export function useConversation(
   participantIds: string[],
   title: string,
-  taskId: number | string,
+  taskId: number | string | null,
 ) {
   const { data: session, status } = useSession();
   const [conversationId, setConversationId] = useState<string | null>(null);
@@ -18,19 +18,25 @@ export function useConversation(
   );
 
   const fetchOrCreateConversation = useCallback(async () => {
-    if ( status !== "authenticated" || !session?.user?.id || !taskId)
-      return;
+    if (!taskId || status !== "authenticated" || !session?.user?.id) {
+      setConversationId(null);
+      return null;
+    }
 
     setLoading(true);
     setError(null);
 
     try {
-      const checkRes = await fetch(`/api/messages/conversation-check/${taskId}`);
+      const checkRes = await fetch(
+        `/api/messages/conversation-check/${taskId}?participants=${stableParticipants.join(",")}`,
+        { cache: "no-store" }
+      );
       const checkData = await checkRes.json();
 
       if (checkRes.ok && checkData.conversationId) {
         setConversationId(checkData.conversationId);
-        return;
+        setLoading(false);
+        return checkData.conversationId;
       }
 
       const createRes = await fetch("/api/messages/create-conversation", {
@@ -45,20 +51,36 @@ export function useConversation(
 
       const createData = await createRes.json();
 
-      if (createRes.ok && createData.conversationId) {
-        setConversationId(createData.conversationId);
-      } 
+      if (createRes.ok && createData.conversation?.id) {
+        const newConvoId = createData.conversation.id;
+        setConversationId(newConvoId);
+        setLoading(false);
+        return newConvoId;
+      } else {
+        const errorMsg = createData.error || createData.message || "Failed to create conversation";
+        setError(errorMsg);
+        setLoading(false);
+        return null;
+      }
     } catch (err: any) {
       console.error("Conversation hook error:", err);
-      setError(err?.message || "Error while preparing conversation");
-    } finally {
+      const errorMsg = err?.message || "Error while preparing conversation";
+      setError(errorMsg);
       setLoading(false);
+      return null;
     }
-  }, [ status, session?.user?.id, taskId, title, stableParticipants]);
+  }, [taskId, stableParticipants.join(","), session?.user?.id, status, title]);
 
   useEffect(() => {
-    fetchOrCreateConversation();
-  }, [fetchOrCreateConversation]);
+    if (taskId && status === "authenticated" && session?.user?.id) {
+      fetchOrCreateConversation();
+    }
+  }, [taskId, status, session?.user?.id]);
 
-  return { conversationId, loading, error , refetch:fetchOrCreateConversation};
+  return {
+    conversationId,
+    loading,
+    error,
+    refetch: fetchOrCreateConversation,
+  };
 }

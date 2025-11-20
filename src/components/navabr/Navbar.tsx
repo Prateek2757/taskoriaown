@@ -96,7 +96,8 @@ export default function ModernNavbar() {
       const data = await res.json();
       if (data?.user?.user_id) {
         localStorage.setItem("draftProviderId", data.user.user_id);
-        router.push(`/create?user_id=${data.user.user_id}`);
+        localStorage.setItem("draftProviderPublicId", data.user.public_id);
+        router.push(`/create?user_id=${data.user.public_id}`);
       }
     } catch (err) {
       console.error("Error creating draft provider:", err);

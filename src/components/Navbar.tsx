@@ -80,9 +80,12 @@ export default function Navbar() {
       });
 
       const data = await res.json();
-      if (data?.user?.user_id) {
+      console.log(data?.user?.public_id);
+      
+      if (data?.user?.user_id || data?.user?.public_id) {
         localStorage.setItem("draftProviderId", data.user.user_id);
-        router.push(`/create?user_id=${data.user.user_id}`);
+        localStorage.setItem("draftProviderPublicId", data.user.public_id);
+        router.push(`/create?userr_id=${data.user.public_id}`);
       }
     } catch (error) {
       console.error("Error creating draft provider:", error);

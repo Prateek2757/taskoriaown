@@ -43,6 +43,7 @@ export async function GET() {
       SELECT 
         category_id, 
         name, 
+        public_id,
         slug, 
         rank
       FROM service_categories

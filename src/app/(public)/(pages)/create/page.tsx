@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 interface Category {
   category_id: number;
   name: string;
+  public_id?:string ;
 }
 
 export default function CategorySelectionPage() {
@@ -19,8 +20,8 @@ export default function CategorySelectionPage() {
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const [draftId, setDraftId] = useState<number | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [draftId, setDraftId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isNavigating, setIsNavigating] = useState(false);
@@ -39,8 +40,8 @@ export default function CategorySelectionPage() {
 
     fetchCategories();
 
-    const savedDraft = localStorage.getItem("draftProviderId");
-    if (savedDraft) setDraftId(Number(savedDraft));
+    const savedDraft = localStorage.getItem("draftProviderPublicId");
+    if (savedDraft) setDraftId(String(savedDraft));
     else alert("Draft not found! Please start from 'Join as a Provider'.");
   }, []);
 
@@ -55,7 +56,7 @@ export default function CategorySelectionPage() {
     setFilteredCategories(filtered);
   }, [searchQuery, categories]);
 
-  const handleSelectCategory = (id: number, name: string) => {
+  const handleSelectCategory = (id:string, name: string) => {
     setSelectedCategory(id);
     setSearchQuery(name);
   };
@@ -117,15 +118,15 @@ export default function CategorySelectionPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {filteredCategories.map((c) => (
                       <motion.div
-                        key={c.category_id}
+                        key={c.public_id}
                         whileHover={{ scale: 1.03 }}
                         className={`cursor-pointer border rounded-xl p-4 text-center font-medium transition-all duration-200 ${
-                          selectedCategory === c.category_id
+                          selectedCategory === String(c.public_id)
                             ? "bg-cyan-600 text-white border-cyan-600 shadow-md"
                             : "bg-white hover:bg-cyan-50 border-gray-200 text-gray-700"
                         }`}
                         onClick={() =>
-                          handleSelectCategory(c.category_id, c.name)
+                          handleSelectCategory(String(c.public_id), c.name)
                         }
                       >
                         {c.name}
@@ -152,11 +153,11 @@ export default function CategorySelectionPage() {
                     key={c.category_id}
                     size="sm"
                     variant="outline"
-                    onClick={() => {setSelectedCategory(c.category_id);
+                    onClick={() => {setSelectedCategory(String(c.public_id));
                       setSearchQuery(c.name)
                     }}
                     className={`rounded-full px-4 py-2 text-sm transition ${
-                      selectedCategory === c.category_id
+                      selectedCategory === String(c.public_id)
                         ? "bg-cyan-600 text-white"
                         : "hover:bg-cyan-100 text-gray-700"
                     }`}

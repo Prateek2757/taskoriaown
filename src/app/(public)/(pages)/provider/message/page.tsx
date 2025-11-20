@@ -13,7 +13,6 @@ const Messages = () => {
   const [selectedConversation, setSelectedConversation] = useState(1);
   const [newMessage, setNewMessage] = useState("");
 
-  // Mock conversations data
   const conversations = [
     {
       id: 1,
@@ -61,7 +60,6 @@ const Messages = () => {
     },
   ];
 
-  // Mock messages for selected conversation
   const messages = [
     {
       id: 1,
@@ -116,12 +114,9 @@ const Messages = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
 
       <div className="h-[calc(100vh-80px)] flex flex-col md:flex-row">
-        {/* Conversations Sidebar */}
         <div className="w-full md:w-1/3 bg-white border-r flex flex-col">
-          {/* Search */}
           <div className="p-4 border-b">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />

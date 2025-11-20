@@ -8,7 +8,8 @@ export async function POST(req: NextRequest) {
   try {
     const {
       user_id,
-      category_id,
+      public_id,
+      categoryPublic_id,
       distance,
       is_nationwide,
       location_id,
@@ -20,8 +21,9 @@ export async function POST(req: NextRequest) {
       companySize,
       password,
     } = await req.json();
+// console.log(categoryPublic_id);
 
-    if (!user_id || !category_id || !name || !email || !password) {
+    if (!public_id || !categoryPublic_id || !name || !email || !password) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
 
@@ -29,9 +31,20 @@ export async function POST(req: NextRequest) {
 
     await client.query("BEGIN");
 
+    const userres = await client.query(`SELECT user_id from users where public_id=$1`,[public_id])
+    const categoryres = await client.query(`SELECT category_id from service_categories where public_id=$1`,[String(categoryPublic_id)])
+console.log(categoryres,"ddddd");
+
+    if(userres.rowCount ===0 && categoryres.rowCount===0){
+      throw new Error("User Not Found and Category ")
+    }
+    const user_idd= userres.rows[0].user_id
+    const category_id= categoryres.rows[0].category_id
+console.log(user_idd,category_id);
+
     await client.query(
       `INSERT INTO user_categories (user_id, category_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
-      [user_id, category_id]
+      [user_idd, category_id]
     );
 
     await client.query(
@@ -47,7 +60,7 @@ export async function POST(req: NextRequest) {
 
         updated_at = NOW()
       `,
-      [user_id, name, is_nationwide ? null : location_id || null, is_nationwide ,distance]
+      [user_idd, name, is_nationwide ? null : location_id || null, is_nationwide ,distance]
     );
 
     await client.query(
@@ -60,7 +73,7 @@ export async function POST(req: NextRequest) {
           updated_at=NOW()
       WHERE user_id=$4
       `,
-      [email, phone || null, hashedPassword, user_id]
+      [email, phone || null, hashedPassword, user_idd]
     );
 
 
@@ -71,7 +84,7 @@ export async function POST(req: NextRequest) {
       VALUES ($1, $2, $3, $4, $5,$6,$7)
       ON CONFLICT (user_id) DO NOTHING
       `,
-      [user_id, companyName || name, name, email, phone || null,websiteUrl || null,companySize||null]
+      [user_idd, companyName || name, name, email, phone || null,websiteUrl || null,companySize||null]
     );
 
     await client.query("COMMIT");
@@ -86,7 +99,7 @@ export async function POST(req: NextRequest) {
       LEFT JOIN company c ON u.user_id = c.user_id
       WHERE u.user_id = $1
       `,
-      [user_id]
+      [user_idd]
     );
 
     return NextResponse.json({ message: "✅ Signup successful!", user: rows[0] });

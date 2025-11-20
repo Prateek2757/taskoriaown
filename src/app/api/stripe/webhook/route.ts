@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 
-// stripe listen --forward-to localhost:3000/api/stripe/webhook
+//stripe listen --forward-to localhost:3000/api/stripe/webhook
 export const config = {
   api: {
     bodyParser: false,
