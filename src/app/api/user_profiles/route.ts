@@ -18,6 +18,7 @@ export async function GET() {
       up.location_id,
       ci.name AS location_name,
       up.is_nationwide,
+      up.profile_image_url,
       json_agg(
         json_build_object(
           'category_id', uc.category_id,
@@ -29,7 +30,7 @@ export async function GET() {
     LEFT JOIN service_categories sc ON sc.category_id = uc.category_id
     LEFT JOIN cities ci ON ci.city_id = up.location_id
     WHERE up.user_id = $1
-    GROUP BY up.display_name, up.location_id, ci.name, up.is_nationwide;
+    GROUP BY up.display_name, up.location_id, ci.name, up.is_nationwide, up.profile_image_url;
     `,
     [userId]
   );
@@ -45,7 +46,7 @@ export async function PUT(req: Request) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const userId = session.user.id;
-  const { display_name, location_id, is_nationwide } = await req.json();
+  const { display_name, location_id, is_nationwide ,profile_image_url} = await req.json();
 
   await pool.query(
     `
@@ -54,16 +55,17 @@ export async function PUT(req: Request) {
       display_name = COALESCE($1, display_name),
       location_id = COALESCE($2, location_id),
       is_nationwide = COALESCE($3, is_nationwide),
+      profile_image_url = COALESCE($4,profile_image_url),
       updated_at = NOW()
-    WHERE user_id = $4
+    WHERE user_id = $5
     `,
-    [display_name, location_id, is_nationwide, userId]
+    [display_name, location_id, is_nationwide, profile_image_url,userId]
   );
 
   // Fetch the updated profile
   const { rows } = await pool.query(
     `
-    SELECT display_name, location_id, is_nationwide
+    SELECT display_name, location_id, is_nationwide , profile_image_url
     FROM user_profiles
     WHERE user_id = $1
     `,

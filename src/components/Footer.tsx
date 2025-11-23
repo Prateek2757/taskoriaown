@@ -22,12 +22,13 @@ function Footer() {
                 width={33}
                 className="rounded-md"
               />
-              <span className="ml-2 text-2xl font-bold bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
+              <span className="ml-2 text-2xl font-bold bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
                 Taskoria
               </span>
             </Link>
             <p className="text-gray-400 mt-2 text-sm">
-            Redefining How the World Hires Trusted Professionals            </p>
+              Redefining How the World Hires Trusted Professionals{" "}
+            </p>
 
             {/* --- Social Icons --- */}
             <div className="flex gap-4 mt-4">
@@ -158,7 +159,7 @@ function Footer() {
             &copy; {new Date().getFullYear()} Taskoria. All rights reserved.
             <br />
             <span className="text-gray-500">
-            Taskoria — A Fusion of Australian Design & Nepali Engineering.
+              Taskoria — A Fusion of Australian Design & Nepali Engineering.
             </span>
           </p>
         </div>

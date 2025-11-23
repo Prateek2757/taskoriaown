@@ -1,8 +1,7 @@
-// middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-const secret = process.env.NEXTAUTH_SECRET; // ensure this is set
+const secret = process.env.NEXTAUTH_SECRET; 
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -24,16 +23,15 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Force all non-/en paths to /en
   if (!pathname.startsWith("/")) {
     const url = req.nextUrl.clone();
     url.pathname = "/";
     return NextResponse.redirect(url);
   }
 
-  // Protect provider & customer dashboards
   const protectedPaths = [
     "/provider/dashboard",
+    "/messages/*",
     "/customer/dashboard",
     "/provider/message",
     "/provider/leads",
@@ -42,15 +40,13 @@ export async function middleware(req: NextRequest) {
   if (pathname.startsWith("/create")) {
     if (token) {
       const url = req.nextUrl.clone();
-      url.pathname = "/provider/dashboard"; // or "/customer/dashboard" depending on role
+      url.pathname = "/provider/dashboard"; 
       return NextResponse.redirect(url);
     }
   }
   if (protectedPaths.some((path) => pathname.startsWith(path))) {
-    // Check if user is logged in via JWT
     const token = await getToken({ req, secret });
     if (!token) {
-      // Not logged in → redirect to signin
       const url = req.nextUrl.clone();
       url.pathname = "/signin";
       return NextResponse.redirect(url);
@@ -60,5 +56,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/:path*", "/"], // applies to all /en routes + root
+  matcher: ["/:path*", "/"], 
 };

@@ -12,22 +12,26 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, BarChart3, Users, Star, Target } from "lucide-react";
+import Image from "next/image";
+import { useLeadProfile } from "@/hooks/useLeadProfile";
 
 const theme = {
   background: "#00E5FF",
   card: "rgba(255,255,255,0.85)",
-  primary: "#CCF9FF",
-  secondary: "#3b82f6",
+  primary: "#3C7DED",
+  secondary: "#46CBEE",
   muted: "#f1f5f9",
   border: "#e2e8f0",
-  gradient: "linear-gradient(to right, #8A2BE2, #3b82f6)",
+  gradient: "linear-gradient(to right, #3C7DED, #46CBEE)",
 };
 
 export default function ProviderDashboard() {
   const router = useRouter();
-  const { data: session, status  } = useSession();
+  const { data: session, status } = useSession();
   const [showStats, setShowStats] = useState(false);
+  const [profileurl, setProfileUrl] = useState<string>("");
   const [totalLeads, setTotalLeads] = useState<number | null>(null);
+  const { profile, loading } = useLeadProfile();
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/signin");
@@ -37,6 +41,9 @@ export default function ProviderDashboard() {
     try {
       const res = await fetch("/api/leads", { cache: "no-store" });
       const data = await res.json();
+      console.log(data);
+
+      setProfileUrl(data.pofile_image_url);
       setTotalLeads(data.length);
     } catch (err) {
       console.error("Failed to fetch leads", err);
@@ -66,15 +73,14 @@ export default function ProviderDashboard() {
     <div
       className="min-h-screen py-10"
       style={{
-        background: "linear-gradient(to bottom right, [#8A2BE2] , #00E5FF)",
+        background: "linear-gradient(to bottom right, [#3C7DED] , #00E5FF)",
         color: "#1e293b",
       }}
     >
       <main className="container mx-auto  rounded-2xl px-6 space-y-10">
-        
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-[#8A2BE2]  via-[#6C63FF] to-[#00E5FF] bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
               {greeting}, {user.name?.split(" ")[0] || "User"}!
             </h1>
             <p className="text-sm text-slate-600">
@@ -98,7 +104,6 @@ export default function ProviderDashboard() {
           </Button>
         </div>
 
-       
         {showStats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5 animate-in fade-in-10">
             {[
@@ -142,26 +147,33 @@ export default function ProviderDashboard() {
           </div>
         )}
 
-    
         <div className="grid gap-8 lg:grid-cols-3">
-         
           <div className="space-y-6">
-           
             <Card
               className="border rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-2xl transition-shadow"
               style={{ background: theme.card, borderColor: theme.border }}
             >
               <CardContent className="pt-6 text-center">
                 <Avatar className="h-24 w-24 mb-4 ring-4 ring-blue-100 mx-auto">
-                  <AvatarFallback className="text-2xl font-semibold bg-cyan-600 text-white">
-                    {user.name
-                      ? user.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          .toUpperCase()
-                      : "U"}
-                  </AvatarFallback>
+                  {profile?.profile_image_url ? (
+                    <Image
+                      height={96}
+                      width={96}
+                      src={profile.profile_image_url} 
+                      alt={user.name ?? "Profile"}
+                      className="object-cover w-full h-full"
+                    />
+                  ) : (
+                    <AvatarFallback className="text-2xl font-semibold bg-cyan-600 text-white">
+                      {user.name
+                        ? user.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .toUpperCase()
+                        : "U"}
+                    </AvatarFallback>
+                  )}
                 </Avatar>
                 <h2 className="text-xl font-semibold">{user.name}</h2>
                 <p className="text-sm text-slate-500">{user.email}</p>
@@ -186,7 +198,6 @@ export default function ProviderDashboard() {
               </CardContent>
             </Card>
 
-        
             <Card
               className="border rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-2xl transition-shadow"
               style={{ background: theme.card, borderColor: theme.border }}
@@ -207,21 +218,18 @@ export default function ProviderDashboard() {
                 <p className="text-sm text-slate-600">
                   Get early exposure and build credibility fast.
                 </p>
-                 <Link href="/settings/billing/my_credits">
-                 
-                <Button className="mt-3 w-full bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]  hover:opacity-90 text-white">
-                  Get Offer
-                </Button>
+                <Link href="/settings/billing/my_credits">
+                  <Button className="mt-3 w-full bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE]  hover:opacity-90 text-white">
+                    Get Offer
+                  </Button>
                 </Link>
               </CardContent>
             </Card>
           </div>
 
-    
           <LeadSettingsCard />
 
           <div className="space-y-6">
-            
             <Card
               className="border rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-2xl transition-shadow"
               style={{ background: theme.card, borderColor: theme.border }}
@@ -248,7 +256,6 @@ export default function ProviderDashboard() {
               </CardContent>
             </Card>
 
-           
             <Card
               className="border rounded-2xl shadow-lg backdrop-blur-sm hover:shadow-2xl transition-shadow"
               style={{ background: theme.card, borderColor: theme.border }}

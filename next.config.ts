@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
 	reactStrictMode: true,
 	images: {
 	  formats: ['image/webp', 'image/avif'],
+	  domains: ["eoicjmcyigolwgjantsl.supabase.co"],
+
 	  remotePatterns: [
 		{
 		  protocol: 'https',

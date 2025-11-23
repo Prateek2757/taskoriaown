@@ -11,6 +11,7 @@ export type Profile = {
   is_nationwide: boolean;
   categories: { category_id: number; category_name: string }[];
   display_name?: string;
+  profile_image_url?:string;
 };
 
 export function useLeadProfile() {
@@ -66,7 +67,7 @@ export function useLeadProfile() {
 
 
 
-  const updateProfile = async (data: { display_name: string }) => {
+  const updateProfile = async (data: { display_name: string , profile_image_url:string}) => {
     if (!profile) return;
     setSaving(true);
     try {

@@ -123,7 +123,7 @@ export default function AddLeadModal({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-lg w-[95%] sm:w-full bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950 border border-gray-200 dark:border-gray-800 shadow-2xl rounded-2xl overflow-y-auto max-h-[90vh] backdrop-blur-md animate-in fade-in-0 zoom-in-95">
         <DialogHeader className="space-y-1">
-          <DialogTitle className="text-center text-2xl font-bold bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
+          <DialogTitle className="text-center text-2xl font-bold bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
             Post a New Lead
           </DialogTitle>
           <p className="text-center text-sm text-muted-foreground">
@@ -286,7 +286,7 @@ export default function AddLeadModal({
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-2 text-white bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] hover:from-blue-700 hover:to-cyan-700 shadow-md hover:shadow-lg rounded-xl"
+              className="w-full py-2 text-white bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] hover:from-blue-700 hover:to-cyan-700 shadow-md hover:shadow-lg rounded-xl"
             >
               {isSubmitting ? "Submitting..." : "Submit Lead"}
             </Button>

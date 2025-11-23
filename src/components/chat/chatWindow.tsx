@@ -52,7 +52,6 @@ export default function ChatWindow({
         const res = await fetch(
           `/api/messages/conversation-read/${conversationId}`
         );
-        console.log(res);
 
         if (!res.ok) {
           const text = await res.text();

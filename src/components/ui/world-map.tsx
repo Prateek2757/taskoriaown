@@ -45,7 +45,6 @@ export default function WorldMap({
 
   return (
     <div className="relative w-full aspect-[2/1] rounded-lg overflow-hidden dark:bg-black">
-   
       <img
         src={`data:image/svg+xml;utf8,${encodeURIComponent(svgMap)}`}
         className="h-full w-full [mask-image:linear-gradient(to_bottom,transparent,white_10%,white_90%,transparent)] pointer-events-none select-none"
@@ -55,7 +54,6 @@ export default function WorldMap({
         draggable={false}
       />
 
-   
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 z-10">
         <motion.p
           className="font-bold text-2xl md:text-5xl dark:text-white text-black"
@@ -65,24 +63,23 @@ export default function WorldMap({
         >
           Remote{" "}
           <motion.span
-        className="bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]  bg-clip-text text-transparent inline-block"
-        style={{
-          backgroundSize: "200% 200%",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          display: "inline-block",
-        }}
-        animate={{
-          backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-        }}
-        transition={{
-          duration: 5,
-          ease: "linear",
-          
-        }}
-      >
-        Connectivity
-      </motion.span>
+            className="bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE]  bg-clip-text text-transparent inline-block"
+            style={{
+              backgroundSize: "200% 200%",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              display: "inline-block",
+            }}
+            animate={{
+              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+            }}
+            transition={{
+              duration: 5,
+              ease: "linear",
+            }}
+          >
+            Connectivity
+          </motion.span>
         </motion.p>
 
         <motion.p
@@ -97,14 +94,12 @@ export default function WorldMap({
         </motion.p>
       </div>
 
-      
       <svg
         ref={svgRef}
         viewBox="0 0 800 400"
         className="w-full h-full absolute inset-0 pointer-events-none select-none"
       >
         <defs>
-          
           <linearGradient id="animated-gradient">
             <stop offset="0%" stopColor="white" stopOpacity="0" />
             <stop offset="10%" stopColor={lineColor} stopOpacity="1">
@@ -120,7 +115,6 @@ export default function WorldMap({
           </linearGradient>
         </defs>
 
-        
         {dots.map((dot, i) => {
           const startPoint = projectPoint(dot.start.lat, dot.start.lng);
           const endPoint = projectPoint(dot.end.lat, dot.end.lng);
@@ -146,7 +140,6 @@ export default function WorldMap({
           );
         })}
 
-        
         {dots.map((dot, i) => (
           <g key={`points-${i}`}>
             {[dot.start, dot.end].map((p, j) => {

@@ -52,17 +52,18 @@ export default function ProfileSettings() {
   const { profile, loading , updateProfile} = useLeadProfile();
   const { company ,loading: companyLoading, updateCompany} = useCompanyProfile();
   const [expanded, setExpanded] = useState<SectionId | null>(null);
-  const [completion, setCompletion] = useState<number>(profile ? 27 : 0); // placeholder until backend provides value
+  const [completion, setCompletion] = useState<number>(profile ? 60 : 0); // placeholder until backend provides value
 
 
   const saveAbout = async (payload: any) => {
     try {
-      await updateProfile({ display_name: payload.display_name });
+      await updateProfile({ display_name: payload.display_name , profile_image_url:payload.avatarUrl });
+  console.log(payload.avatarUrl,"ijoerineoir");
   
       await updateCompany({
         company_name: payload.company_name,
         contact_name: payload.display_name,
-         about:payload.description,
+        about:payload.description,
         company_size:payload.company_size,
         years_in_business:payload.years_in_business,
         contact_email: payload.contact_email,

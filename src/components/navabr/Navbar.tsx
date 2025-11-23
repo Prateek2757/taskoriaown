@@ -41,7 +41,6 @@ export default function ModernNavbar() {
       { name: "Home", href: "/", icon: Search },
       { name: "Community", href: "/providers", icon: Users },
       { name: "Discover", href: "/discover", icon: Search },
-     
     ],
     customer: [
       { name: "Home", href: "/", icon: Search },
@@ -216,7 +215,7 @@ export default function ModernNavbar() {
       <header className="bg-white/95 backdrop-blur-md border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10  bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] rounded-xl animate-pulse" />
+            <div className="w-10 h-10  bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] rounded-xl animate-pulse" />
             <div className="h-8 w-32 bg-gray-200 rounded animate-pulse" />
           </div>
         </div>
@@ -240,7 +239,7 @@ export default function ModernNavbar() {
                 width={33}
               />
             </div>
-            <span className="text-2xl font-bold   bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
+            <span className="text-2xl font-bold   bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
               Taskoria
             </span>
           </Link>
@@ -256,13 +255,23 @@ export default function ModernNavbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-4 py-1.5 rounded-full text-muted-foreground font-medium text-sm transition-all ${
-                    pathname === link.href
-                      ? "bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white shad-sm"
-                      : "text-gray-700 hover:bg-gray-100"
-                  }`}
+                  className={`relative px-4 py-1.5 rounded-full text-muted-foreground font-medium text-sm transition-all
+            
+            `}
                 >
                   {link.name}
+
+                  <span
+                    className={`
+                absolute left-1/2 -bottom-1 h-[2px] bg-[#6C63FF] rounded-full transition-all duration-300
+                transform -translate-x-1/2
+                ${
+                  pathname === link.href
+                    ? "w-3/4 opacity-100"
+                    : "w-0 opacity-0 group-hover:w-3/4 group-hover:opacity-100"
+                }
+              `}
+                  />
                 </Link>
               ))}
             </motion.nav>
@@ -304,9 +313,10 @@ export default function ModernNavbar() {
                   </Button>
                   <Button
                     onClick={handleJoinAsProvider}
-                    className="bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
+                    className="bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
-                    Join as Provider
+                    Join as Provider 
+                    
                   </Button>
                 </>
               )}
@@ -356,7 +366,7 @@ export default function ModernNavbar() {
                         width={33}
                       />
                     </div>
-                    <span className="text-2xl font-bold   bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
+                    <span className="text-2xl font-bold   bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
                       Taskoria
                     </span>
                   </Link>
@@ -494,7 +504,7 @@ export default function ModernNavbar() {
                           handleJoinAsProvider();
                           setIsMenuOpen(false);
                         }}
-                        className="w-full bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-cyan-700 font-medium"
+                        className="w-full bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium"
                       >
                         Join as Provider
                       </Button>

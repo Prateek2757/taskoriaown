@@ -1,11 +1,12 @@
 "use client";
 
+import { uploadToSupabase } from "@/lib/uploadFileToSupabase";
 import React, { useState, ChangeEvent, useEffect, useMemo } from "react";
 
 type Props = {
   data?: {
     display_name?: string;
-    avatarUrl?: string;
+    profile_image_url?: string;
   };
   companydata?: {
     company_name?: string;
@@ -20,12 +21,7 @@ type Props = {
   onSave?: (payload: any) => Promise<void>;
 };
 
-const COMPANY_SIZES = [
-  "Sole-Trader",
-  "2-10",
-  "10-20",
-  "30-50",
-];
+const COMPANY_SIZES = ["Sole-Trader", "2-10", "10-20", "30-50"];
 
 interface FormState {
   name: string;
@@ -43,11 +39,12 @@ interface FormState {
 }
 
 export default function AboutSection({ companydata, data, onSave }: Props) {
+  
   const initialState: FormState = useMemo(
     () => ({
       name: data?.display_name ?? "",
       avatarFile: null,
-      avatarPreview: data?.avatarUrl ?? "",
+      avatarPreview: data?.profile_image_url ?? "",
       companyName: companydata?.company_name ?? "",
       companyLogoFile: null,
       companyLogoPreview: companydata?.company_logo ?? "",
@@ -122,24 +119,37 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
     setTimeout(() => setMsg(null), 2000);
   };
 
-  
   const save = async () => {
-    
-
-
-    const companyFieldFilled = formState.companyName.trim()
-if (companyFieldFilled &&formState.description.trim().length < 30) {
+    const companyFieldFilled = formState.companyName.trim();
+    if (companyFieldFilled && formState.description.trim().length < 30) {
       setError("Company description must be at least 30 characters long.");
       return;
     }
+    console.log(formState.avatarFile)
+    console.log(formState.avatarPreview,"ijoijoin");
+    
     setSaving(true);
     setMsg(null);
     setError(null);
 
     try {
+   
+         let avatarUrl = formState.avatarPreview
+         if (formState.avatarFile) {
+          const uploadedUrl = await uploadToSupabase(formState.avatarFile, "profilepicture");
+          console.log("Uploaded avatar URL:", uploadedUrl);
+          setFormState((prev) => ({
+            ...prev,
+            avatarFile: null,
+            avatarPreview: uploadedUrl, 
+          }));
+          avatarUrl = uploadedUrl;
+        }      
+         
+
       const payload = {
         display_name: formState.name,
-        avatarFile: formState.avatarFile,
+        avatarUrl: avatarUrl,
         company_name: formState.companyName,
         companyLogoFile: formState.companyLogoFile,
         contact_email: formState.contactEmail,
@@ -157,12 +167,14 @@ if (companyFieldFilled &&formState.description.trim().length < 30) {
         ...prev,
         avatarFile: null,
         companyLogoFile: null,
+        avatarPreview:avatarUrl
       }));
     } catch (err: any) {
       if (err?.response?.data?.message?.includes("about")) {
         setError("Company description must be at least 30 characters long.");
       } else {
         setError(err?.response?.data?.message || "Failed to save changes.");
+        
       }
     } finally {
       setSaving(false);

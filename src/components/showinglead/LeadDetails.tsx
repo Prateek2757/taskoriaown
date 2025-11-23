@@ -202,7 +202,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   return (
     <div className="max-w-4xl mx-auto">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6">
-        <div className="bg-gradient-to-r from-[#8A2BE2] via-[#6C63FF] to-[#00E5FF] px-6 py-8 text-white">
+        <div className="bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] px-6 py-8 text-white">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-xl border-2 border-white/30">
@@ -295,7 +295,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                           <span>{lead.customer_email}</span>
                           <a
                             href={`mailto:${lead.customer_email}`}
-                            className="px-2 py-1 bg-purple-600 text-white rounded-md text-xs font-semibold hover:bg-purple-700 transition flex items-center gap-1"
+                            className="px-2 py-1 bg-blue-500 text-white rounded-md text-xs font-semibold hover:bg-blue-700 transition flex items-center gap-1"
                           >
                             <Mail className="w-3 h-3" />
                             Send Email

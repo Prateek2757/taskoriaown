@@ -33,7 +33,6 @@ export async function POST(req: NextRequest) {
 
     const userres = await client.query(`SELECT user_id from users where public_id=$1`,[public_id])
     const categoryres = await client.query(`SELECT category_id from service_categories where public_id=$1`,[String(categoryPublic_id)])
-console.log(categoryres,"ddddd");
 
     if(userres.rowCount ===0 && categoryres.rowCount===0){
       throw new Error("User Not Found and Category ")

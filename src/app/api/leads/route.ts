@@ -23,12 +23,11 @@ export async function POST(req: Request) {
       preferred_date_start,
       preferred_date_end,
 
-      category_answers, // ✅ new: answers object
+      category_answers, 
     } = await req.json();
 
     await client.query("BEGIN");
 
-    // 1️⃣ Insert the task
     const taskResult = await client.query(
       `
       INSERT INTO tasks (
@@ -136,7 +135,7 @@ export async function GET() {
         u.phone,
          up.user_id ,
         up.display_name AS customer_name,
-       
+        up.profile_image_url as image,
         json_agg(
           json_build_object(
             'question_id', ta.category_question_id,
@@ -152,11 +151,11 @@ export async function GET() {
       LEFT JOIN users u ON u.user_id = t.customer_id
       LEFT JOIN user_profiles up ON up.user_id = t.customer_id
       WHERE 
-        t.status IN ('Open', 'Urgent')
+        t.status IN ('Open', 'Urgent','In Progress')
         AND t.category_id = ANY($1::int[])   -- ✅ match any category
         AND t.customer_id <> $2
       GROUP BY 
-        t.task_id, c.name, ci.name, up.user_id ,u.email, u.phone, up.display_name
+        t.task_id, c.name, ci.name, up.user_id ,u.email, u.phone, up.display_name , up.profile_image_url
       ORDER BY 
         t.created_at DESC;
       `,

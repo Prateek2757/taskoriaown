@@ -21,7 +21,6 @@ export async function POST(request: Request) {
     const body: CheckoutRequestBody = await request.json();
     const { professionalId, packageId, amount, credits, packageName } = body;
 
-    console.log("Creating checkout session with body:", body);
 
     // Validation
     if (!professionalId || !packageId || !amount || !credits || !packageName) {

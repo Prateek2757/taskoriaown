@@ -81,7 +81,7 @@ export default function FeaturesPage() {
         <div className="container max-w-7xl mx-auto px-4">
         <h1 className="text-5xl text-center md:text-5xl font-bold text-black mb-6 leading-tight">
               Why Choose{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3C7DED] to-[#41A6EE]">
                 Taskoria
               </span>
               ?

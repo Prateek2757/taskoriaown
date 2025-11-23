@@ -24,7 +24,7 @@ export const FeatureProvider = () => {
             <Award className="w-3.5 h-3.5" />
             Top Talent
           </motion.div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -34,7 +34,7 @@ export const FeatureProvider = () => {
           >
             Featured Providers
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -83,15 +83,17 @@ export const FeatureProvider = () => {
                   <div className="flex items-start gap-3 mb-4">
                     <div className="relative flex-shrink-0">
                       {p.image ? (
-                        <Image
-                          src={p.image}
-                          alt={p.name}
-                          width={56}
-                          height={56}
-                          className="rounded-xl object-cover border border-slate-200"
-                        />
+                        <div className="w-15 h-15 rounded-full overflow-hidden">
+                          <Image
+                            src={p.image}
+                            alt={p.name}
+                            width={56}
+                            height={56}
+                            className="rounded-xl object-cover border border-slate-200"
+                          />
+                        </div>
                       ) : (
-                        <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-white grid place-content-center font-bold uppercase text-lg shadow-sm">
+                        <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white grid place-content-center font-bold uppercase text-lg shadow-sm">
                           {p.name
                             ?.split(" ")
                             .map((w) => w[0])
@@ -118,7 +120,9 @@ export const FeatureProvider = () => {
                         </div>
                         <span className="text-sm font-bold text-slate-900">
                           ${p.hourly_rate}
-                          <span className="text-xs font-normal text-slate-500">/hr</span>
+                          <span className="text-xs font-normal text-slate-500">
+                            /hr
+                          </span>
                         </span>
                       </div>
                     </div>
@@ -128,7 +132,9 @@ export const FeatureProvider = () => {
                     <p className="text-xs text-slate-600 line-clamp-2">
                       {p.services && p.services.length > 0 ? (
                         <>
-                          <span className="font-medium text-slate-700">Specializes: </span>
+                          <span className="font-medium text-slate-700">
+                            Specializes:{" "}
+                          </span>
                           {p.services.slice(0, 2).join(", ")}
                           {p.services.length > 2 && (
                             <span className="text-blue-600 font-medium ml-1">
@@ -155,8 +161,12 @@ export const FeatureProvider = () => {
                             : "bg-slate-50 text-slate-600 border border-slate-200"
                         }`}
                       >
-                        {badge === "Top Rated" && <Award className="w-2.5 h-2.5" />}
-                        {badge === "Verified" && <CheckCircle2 className="w-2.5 h-2.5" />}
+                        {badge === "Top Rated" && (
+                          <Award className="w-2.5 h-2.5" />
+                        )}
+                        {badge === "Verified" && (
+                          <CheckCircle2 className="w-2.5 h-2.5" />
+                        )}
                         {badge}
                       </span>
                     ))}
@@ -167,7 +177,7 @@ export const FeatureProvider = () => {
                       String(p.public_id)
                     )}`}
                   >
-                    <Button className="w-full h-9 text-sm font-semibold rounded-lg bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] hover:shadow-lg text-white shadow-sm transition-all duration-300 group-hover:scale-[1.02]">
+                    <Button className="w-full h-9 text-sm font-semibold rounded-lgbg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] hover:shadow-lg text-white shadow-sm transition-all duration-300 group-hover:scale-[1.02]">
                       View Profile
                       <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-0.5 transition-transform" />
                     </Button>

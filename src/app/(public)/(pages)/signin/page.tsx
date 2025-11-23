@@ -76,7 +76,7 @@ export default function SignInPage() {
         <div className="relative bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 p-10 flex flex-col gap-6">
           {/* Header */}
           <div className="text-center space-y-2">
-            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
+            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
               Welcome Back
             </h1>
             <p className="text-gray-600 text-sm">
@@ -129,8 +129,8 @@ export default function SignInPage() {
               type="submit"
               className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
                 loading
-                  ? "bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]   cursor-not-allowed"
-                  : "bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]   hover:shadow-xl hover:scale-[1.02]"
+                  ? "bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE]   cursor-not-allowed"
+                  : "bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE]   hover:shadow-xl hover:scale-[1.02]"
               }`}
             >
               {loading ? (
@@ -175,8 +175,8 @@ export default function SignInPage() {
             onClick={handleSignUpAsProvider}
             className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
               signupLoading
-                ? "bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]   cursor-not-allowed"
-                : "bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]   hover:shadow-xl hover:scale-[1.02]"
+                ? "bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE]   cursor-not-allowed"
+                : "bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE]   hover:shadow-xl hover:scale-[1.02]"
             }`}
           >
             {signupLoading ? (

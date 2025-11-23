@@ -107,7 +107,6 @@ const Messages = () => {
 
   const sendMessage = () => {
     if (newMessage.trim()) {
-      console.log("Sending message:", newMessage);
       setNewMessage("");
     }
   };

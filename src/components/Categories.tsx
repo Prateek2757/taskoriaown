@@ -188,10 +188,10 @@ export default function Services() {
             transition={{ duration: 0.6, delay: 0.8 }}
           >
             <Link href="/services">
-              <button className="group px-8 py-3 bg-white border-2 border-blue-500 text-blue-500 rounded-full font-medium hover:bg-blue-400 hover:text-white transition-all duration-300 shadow-lg shadow-orange-blue/20 hover:shadow-xl hover:shadow-blue-500/30">
+              <button className="group px-8 py-3 bg-white border-2 border-blue-500 text-blue-500 rounded-full font-medium hover:bg-[#3C7DED] hover:text-white transition-all duration-300 shadow-lg shadow-orange-blue/20 hover:shadow-xl hover:shadow-blue-500/30">
                 <span className="flex items-center gap-2">
                   View All Services
-                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1  duration-300 group-hover:rotate-45" />
                 </span>
               </button>
             </Link>

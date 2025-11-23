@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-// Provider Job Type
 interface ProviderJob {
   id: number;
   title: string;
@@ -24,7 +23,6 @@ interface ProviderJob {
   dueDate: string;
 }
 
-// Sample Data
 const jobs: ProviderJob[] = [
   {
     id: 1,
@@ -52,7 +50,6 @@ const jobs: ProviderJob[] = [
   },
 ];
 
-// Status utilities
 const STATUS_BADGES = {
   open: (
     <Badge

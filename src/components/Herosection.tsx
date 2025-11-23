@@ -11,17 +11,18 @@ import NewRequestModal from "./leads/RequestModal";
 import CategorySearch from "./category/CategorySearch";
 import { SparklesCore } from "./ui/sparkles";
 
-
-interface Category{
+interface Category {
   category_id: number;
-  name:string,
-  slug?:string
+  name: string;
+  slug?: string;
 }
 
 export default function HeroSection() {
   const [openModal, setOpenModal] = useState(false);
   const [slugvalue, setSlugValue] = useState("");
-  const [selectedCategory ,setSelectedCategory] =useState<Category | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
   const { data: session } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -41,13 +42,12 @@ export default function HeroSection() {
     setOpenModal(true);
   };
 
-  const handleSelectCategory =  (cat: Category)=>{
+  const handleSelectCategory = (cat: Category) => {
     setSelectedCategory(cat);
     setOpenModal(true);
-  }
+  };
 
   const handleJoinAsProvider = async () => {
-   
     try {
       localStorage.removeItem("draftProviderId");
       const res = await fetch("/api/signup/draft", {
@@ -78,14 +78,14 @@ export default function HeroSection() {
 
           <h1 className="text-5xl md:text-6xl font-bold  text-foreground leading-tight">
             The Future of{" "}
-            <span className=" relative inline-block  bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
+            <span className=" relative inline-block bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
               Service
               <span className="absolute right-4 bottom-0 translate-y-3 w-full h-5 overflow-hidden">
                 <SparklesCore
                   background="transparent"
                   minSize={0.4}
-                  maxSize={1.7}
-                  particleDensity={900}
+                  maxSize={2.7}
+                  particleDensity={1200}
                   className="w-full h-full"
                   particleColor="#000"
                 />
@@ -95,7 +95,7 @@ export default function HeroSection() {
                 <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
               </span>
             </span>{" "}
-            <span className="relative inline-block bg-gradient-to- from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-trnsparent">
+            <span className="relative inline-block bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] bg-clip-text text-trnsparent">
               Marketplaces
             </span>
           </h1>
@@ -110,7 +110,7 @@ export default function HeroSection() {
             <div className="relative w-full max-w-3xl group flex flex-col sm:flex-row sm:items-center">
               <div className="relative flex-1 sm:mr-4 w-full">
                 <div
-                  className="absolute -inset-[2px] bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2]
+                  className="absolute -inset-[2px]bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE]
                   rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition duration-500"
                 />
                 <div className="relative flex items-center bg-white  border-gray-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
@@ -125,7 +125,7 @@ export default function HeroSection() {
                 href={`/services/${slugvalue}`}
                 className="w-full sm:w-auto mt-4 sm:mt-0"
               >
-                <Button className="w-full sm:w-auto bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-md text-white font-semibold rounded-xl px-7 py-4 shadow-md hover:shadow-lg hover:from-blue-700 hover:to-cyan-700 active:scale-[0.97] transition-all duration-200">
+                <Button className="w-full sm:w-autobg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-md text-white font-semibold rounded-xl px-7 py-4 shadow-md hover:shadow-lg hover:from-blue-700 hover:to-cyan-700 active:scale-[0.97] transition-all duration-200">
                   Search
                 </Button>
               </Link>
@@ -141,7 +141,7 @@ export default function HeroSection() {
             <Button
               onClick={handlePostJob}
               disabled={loading}
-              className={`flex-1 py-4 sm:py-5 rounded-xl bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] ${
+              className={`flex-1 py-4 sm:py-5 rounded-xl bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] ${
                 loading ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
@@ -152,8 +152,7 @@ export default function HeroSection() {
             <NewRequestModal
               open={openModal}
               onClose={() => setOpenModal(false)}
-              presetCategory={selectedCategory}  
-
+              presetCategory={selectedCategory}
             />
             {!session && (
               <Button

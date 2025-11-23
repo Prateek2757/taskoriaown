@@ -54,13 +54,15 @@ export default function AllProviders() {
               >
                 <div className="flex items-center gap-4">
                   {p.image ? (
-                    <Image
-                      src={p.image}
-                      alt={p.name}
-                      width={48}
-                      height={48}
-                      className="rounded-full object-cover border"
-                    />
+                    <div className=" w-16 h-16 rounded-full overflow-hidden">
+                      <Image
+                        src={p.image}
+                        alt={p.name}
+                        width={48}
+                        height={48}
+                        className=" w-full h-full object-cover border"
+                      />
+                    </div>
                   ) : (
                     <div className="h-12 w-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white grid place-content-center font-semibold uppercase">
                       {p.name

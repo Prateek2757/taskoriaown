@@ -70,7 +70,6 @@ export default function StepOneCategoryForm({
     fetchData();
   }, []);
 
-
   useEffect(() => {
     if (presetCategory) {
       setValue("category_id", presetCategory.category_id);
@@ -209,10 +208,14 @@ export default function StepOneCategoryForm({
                     shouldDirty: true,
                     shouldTouch: true,
                   });
-                  setValue("location", data.city || data.display_name ||data.municipality, {
-                    shouldDirty: true,
-                    shouldTouch: true,
-                  });
+                  setValue(
+                    "location",
+                    data.city || data.display_name || data.municipality,
+                    {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                    }
+                  );
                 }}
               />
             </div>
@@ -230,7 +233,7 @@ export default function StepOneCategoryForm({
               onClick={handleSubmit(onContinue)}
               disabled={!isContinueEnabled}
               className={cn(
-                "flex-1 rounded-lg bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-white font-medium shadow-lg hover:shadow-xl",
+                "flex-1 rounded-lgbg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-medium shadow-lg hover:shadow-xl",
                 !isContinueEnabled && "opacity-60 cursor-not-allowed"
               )}
             >

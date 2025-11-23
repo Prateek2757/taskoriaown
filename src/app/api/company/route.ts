@@ -11,9 +11,10 @@ export async function GET(req: NextRequest) {
 
   const userId = session.user.id;
   const client = await pool.connect();
+
   try {
     const { rows } = await client.query(
-      `SELECT user_id, company_name, contact_name, contact_email, website,  contact_phone, about, company_size, years_in_business
+      `SELECT user_id, company_name, contact_name, contact_email, website, contact_phone, about, company_size, years_in_business
        FROM company
        WHERE user_id = $1`,
       [userId]
@@ -42,11 +43,26 @@ export async function PUT(req: NextRequest) {
   const client = await pool.connect();
 
   try {
-    const { company_name, contact_name, contact_email, website ,contact_phone ,company_size, years_in_business ,about } = await req.json();
+    const body = await req.json();
+    const {
+      company_name,
+      contact_name,
+      contact_email,
+      contact_phone,
+      website,
+      company_size,
+      years_in_business,
+      about,
+    } = body;
 
+    // Required fields check
     if (!company_name || !contact_name || !contact_email) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
+
+    // Parse integer safely
+    const yearsInBusinessInt =
+      years_in_business && years_in_business !== "" ? parseInt(years_in_business, 10) : null;
 
     const { rowCount } = await client.query(
       `UPDATE company
@@ -60,7 +76,17 @@ export async function PUT(req: NextRequest) {
            about = $8,
            updated_at = NOW()
        WHERE user_id = $9`,
-      [company_name, contact_name, contact_email, contact_phone ,website,company_size===""?"":company_size ,years_in_business===""?"":years_in_business , about===""?"":about || null, userId]
+      [
+        company_name,
+        contact_name,
+        contact_email,
+        contact_phone?.trim() || null,
+        website?.trim() || null,
+        company_size?.trim() || null,
+        yearsInBusinessInt,
+        about?.trim() || null,
+        userId,
+      ]
     );
 
     if (rowCount === 0) {
@@ -68,13 +94,16 @@ export async function PUT(req: NextRequest) {
     }
 
     const { rows } = await client.query(
-      `SELECT user_id, company_name, contact_name, contact_email, website ,contact_phone, about, company_size, years_in_business,about
+      `SELECT user_id, company_name, contact_name, contact_email, contact_phone, website, company_size, years_in_business, about
        FROM company
        WHERE user_id = $1`,
       [userId]
     );
 
-    return NextResponse.json({ message: "Company updated successfully", company: rows[0] });
+    return NextResponse.json({
+      message: "Company updated successfully",
+      company: rows[0],
+    });
   } catch (err) {
     console.error("Company PUT error:", err);
     return NextResponse.json({ message: "Server error" }, { status: 500 });

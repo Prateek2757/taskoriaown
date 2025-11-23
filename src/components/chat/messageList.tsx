@@ -109,7 +109,7 @@ export default function MessageList({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6C63FF] to-[#8A2BE2] flex items-center justify-center text-white text-sm font-semibold shadow-md">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] flex items-center justify-center text-white text-sm font-semibold shadow-md">
                 {getInitials(otherName || "User")}
               </div>
             </div>

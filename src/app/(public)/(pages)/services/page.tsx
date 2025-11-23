@@ -77,7 +77,7 @@ export default function ServiceCategories() {
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             Explore{" "}
-            <span className="bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
               Service Categories
             </span>
           </h2>
@@ -94,7 +94,7 @@ export default function ServiceCategories() {
               }`}
             >
               <div
-                className={`absolute inset-0 bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] rounded-full blur-xl opacity-0 transition-opacity duration-300 ${
+                className={`absolute inset-0bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] rounded-full blur-xl opacity-0 transition-opacity duration-300 ${
                   isFocused ? "opacity-25" : ""
                 }`}
               />
@@ -146,7 +146,7 @@ export default function ServiceCategories() {
             </p>
             <button
               onClick={clearSearch}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-white font-medium rounded-full hover:opacity-90 transition-all duration-200 shadow-md"
+              className="inline-flex items-center gap-2 px-6 py-3bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-medium rounded-full hover:opacity-90 transition-all duration-200 shadow-md"
             >
               Clear Search
             </button>
@@ -252,7 +252,7 @@ export default function ServiceCategories() {
               <div className="mt-8 text-center">
                 <button
                   onClick={() => setShowAll(true)}
-                  className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-white font-medium rounded-full hover:opacity-90 transition-all duration-200 shadow-md hover:shadow-lg"
+                  className="inline-flex items-center gap-2 px-6 py-2bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-medium rounded-full hover:opacity-90 transition-all duration-200 shadow-md hover:shadow-lg"
                 >
                   Show All {remainingCategories.length} Categories
                   <ChevronRight className="w-4 h-4" />

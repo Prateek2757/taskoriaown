@@ -81,7 +81,7 @@ export default function Navbar() {
 
       const data = await res.json();
       console.log(data?.user?.public_id);
-      
+
       if (data?.user?.user_id || data?.user?.public_id) {
         localStorage.setItem("draftProviderId", data.user.user_id);
         localStorage.setItem("draftProviderPublicId", data.user.public_id);
@@ -101,7 +101,7 @@ export default function Navbar() {
 
     if (typeof window !== "undefined") {
       localStorage.removeItem("viewMode");
-      localStorage.removeItem("draftProviderId"); 
+      localStorage.removeItem("draftProviderId");
     }
 
     router.push("/signin");
@@ -137,7 +137,6 @@ export default function Navbar() {
         transition={{ duration: 0.15 }}
         className="absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-[999]"
       >
-        {/* User Info */}
         <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 border-b border-gray-200">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full flex items-center justify-center shadow-md">
@@ -153,7 +152,6 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-
         <div className="py-2">
           {canSwitchView && (
             <button
@@ -187,7 +185,6 @@ export default function Navbar() {
             Settings
           </Link>
         </div>
-
         <div className="border-t border-gray-200 p-2">
           <button
             onClick={handleLogout}
@@ -237,7 +234,7 @@ export default function Navbar() {
           <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-md">
             <Zap className="w-6 h-6 text-white" />
           </div>
-          <span className="text-2xl font-bold bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] bg-clip-text text-transparent">
+          <span className="text-2xl font-bold bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
             Taskoria
           </span>
         </Link>
@@ -249,7 +246,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-4 py-2 rounded-md font-medium transition-all ${
+                  className={`px-4 py-1 rounded-md font-medium transition-all ${
                     pathname === link.href
                       ? "bg-blue-50 text-blue-600 shadow-sm"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
@@ -294,7 +291,7 @@ export default function Navbar() {
                   </Button>
                   <Button
                     onClick={handleJoinAsProvider}
-                    className="bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
+                    className="bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
                     Join as Provider
                   </Button>
@@ -422,7 +419,7 @@ export default function Navbar() {
                         handleJoinAsProvider();
                         setIsMenuOpen(false);
                       }}
-                      className="w-full rounded-xl bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] text-white hover:from-blue-700 hover:to-cyan-700"
+                      className="w-full rounded-xl bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700"
                     >
                       Join as Provider
                     </Button>

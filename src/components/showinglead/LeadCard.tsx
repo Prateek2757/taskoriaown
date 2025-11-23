@@ -1,9 +1,11 @@
 "use client";
+import Image from "next/image";
 import React from "react";
 
 interface Lead {
   task_id?: number;
   title: string;
+  image?: string;
   location_name: string;
   category_name: string;
   customer_name?: string;
@@ -72,19 +74,31 @@ const LeadCard: React.FC<LeadCardProps> = ({
       />
 
       <div className="flex items-start justify-between mb-4">
-        <div className="flex items-start gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-400 flex items-center justify-center text-white font-semibold text-base shadow-sm">
-            {getInitials(lead.customer_name || "N/A")}
-          </div>
-          <div className="min-w-0">
-            <h3 className="text-gray-900 text-base font-semibold leading-tight line-clamp-1">
-              {lead.customer_name}
-            </h3>
-            <p className="text-sm text-gray-500 line-clamp-1">
-              {lead.location_name}
-            </p>
-          </div>
-        </div>
+      <div className="flex items-start gap-3">
+  {lead.image ? (
+    <div className="w-15 h-15 rounded-full overflow-hidden">
+      <Image
+        src={lead.image}
+        width={56} 
+        height={56}
+        alt="lead image"
+        className="w-full h-full object-cover"
+      />
+    </div>
+  ) : (
+    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-cyan-600 text-white text-2xl font-semibold">
+      {getInitials(lead.customer_name || "N/A")}
+    </div>
+  )}
+  <div className="min-w-0">
+    <h3 className="text-gray-900 text-base font-semibold leading-tight line-clamp-1">
+      {lead.customer_name}
+    </h3>
+    <p className="text-sm text-gray-500 line-clamp-1">
+      {lead.location_name}
+    </p>
+  </div>
+</div>
         <span className="text-xs text-gray-400 whitespace-nowrap font-medium">
           {formatTimeAgo(lead.created_at)}
         </span>

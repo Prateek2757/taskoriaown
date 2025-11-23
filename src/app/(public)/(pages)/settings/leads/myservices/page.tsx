@@ -311,7 +311,6 @@ export default function MyServicesPage() {
           </CardContent>
         </Card>
 
-        {/* Location Card */}
         <Card className="rounded-2xl shadow-lg border border-gray-200 overflow-hidde">
           <CardHeader className="bg-linear-to-r from-blue-50 to-cyan-50 px-6 py-5 border-b">
             <div className="flex items-center justify-between">
@@ -424,7 +423,6 @@ export default function MyServicesPage() {
         </Card>
       </div>
 
-      {/* Status Messages */}
       {error && (
         <div
           className="bg-red-50 border-l-4 border-red-500 text-red-800 px-4 py-3 rounded-lg shadow-sm"
@@ -449,7 +447,6 @@ export default function MyServicesPage() {
         </div>
       )}
 
-      {/* Confirmation Dialog */}
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

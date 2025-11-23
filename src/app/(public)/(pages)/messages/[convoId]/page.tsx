@@ -127,10 +127,10 @@ useEffect(() => {
   if (!session?.user) {
     return (
       <div className="flex items-center justify-center h-screen bg-gradient-to-br from-[#8A2BE2]/10 via-[#6C63FF]/10 to-[#00E5FF]/10">
-        <div className="bg-white/90 backdrop-blur-lg p-8 rounded-2xl shadow-lg border border-gray-100 text-center">
+        {/* <div className="bg-white/90 backdrop-blur-lg p-8 rounded-2xl shadow-lg border border-gray-100 text-center">
           <p className="text-lg font-semibold text-gray-800 mb-2">🔒 Login Required</p>
           <p className="text-gray-500">Please log in to access your chats.</p>
-        </div>
+        </div> */}
       </div>
     );
   }

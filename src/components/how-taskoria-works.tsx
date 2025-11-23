@@ -47,7 +47,7 @@ export default function ServicesShowcase() {
           className="space-y-6"
         >
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight">
-            How <span className="text-indigo-600">Taskoria</span> Works for You
+            How <span className="text-[#3C7DED]">Taskoria</span> Works for You
           </h2>
           <p className="text-gray-600 max-w-md text-base md:text-lg leading-relaxed">
             Find skilled professionals ready to take on your tasks — from small
@@ -55,7 +55,7 @@ export default function ServicesShowcase() {
             verified experts so you can focus on results, not searching.
           </p>
           <Link href="/services">
-            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-6 py-3 text-sm md:text-base flex items-center gap-2 shadow-lg hover:shadow-xl transition-all">
+            <Button className="bg-[#3C7DED] hover:bg-indigo-700 text-white rounded-full px-6 py-3 text-sm md:text-base flex items-center gap-2 shadow-lg hover:shadow-xl transition-all">
               View All Services
               <ArrowRight className="h-4 w-4" />
             </Button>

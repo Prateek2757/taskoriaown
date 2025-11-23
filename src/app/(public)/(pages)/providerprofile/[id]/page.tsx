@@ -26,13 +26,10 @@ import { useProviders } from "@/hooks/useProvider";
 export default function ProviderProfile() {
   const params = useParams();
   const { id } = params;
-  console.log(id);
   
   const { providers, loading } = useProviders();
-console.log(providers);
 
   const [provider, setProvider] = useState<any>(null);
-console.log(provider);
 
   useEffect(() => {
     if (!loading && providers.length > 0) {

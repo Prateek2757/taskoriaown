@@ -94,7 +94,7 @@ const LeadsList: React.FC<LeadsListProps> = ({ search = "" }) => {
           key={lead.task_id}
           className="group border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-[2px] relative"
         >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2]"></div>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE]"></div>
 
           <CardContent className="p-6 space-y-4">
             <div className="flex justify-between items-start">
@@ -146,7 +146,7 @@ const LeadsList: React.FC<LeadsListProps> = ({ search = "" }) => {
               <Button
                 size="sm"
                 asChild
-                className="w-full bg-gradient-to-r from-[#00E5FF]  via-[#6C63FF] to-[#8A2BE2] hover:from-blue-700 hover:to-cyan-700 text-white font-medium rounded-xl shadow-sm hover:shadow-md transition-all"
+                className="w-full bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] hover:from-blue-700 hover:to-cyan-700 text-white font-medium rounded-xl shadow-sm hover:shadow-md transition-all"
               >
                 <Link href={`/leads/${lead.task_id}`}>View Details</Link>
               </Button>

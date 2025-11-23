@@ -27,22 +27,25 @@ const onboardingSchema = z.object({
   companyName: z.string().optional(),
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  phone: z
-    .string()
-    .refine(
-      (val) => {
-        if (!val || val === "") return true; 
-       
-        const cleaned = val.replace(/\s/g, "");
-        return /^(04\d{8}|0[2378]\d{8})$/.test(cleaned);
-      },
-      {
-        message: "Please enter a valid Australian phone number (e.g., 0412345678 or 0298765432)",
-      }
-    ),
+  phone: z.string().refine(
+    (val) => {
+      if (!val || val === "") return true;
+
+      const cleaned = val.replace(/\s/g, "");
+      return /^(04\d{8}|0[2378]\d{8})$/.test(cleaned);
+    },
+    {
+      message:
+        "Please enter a valid Australian phone number (e.g., 0412345678 or 0298765432)",
+    }
+  ),
   password: z.string().min(6, "Password must be at least 6 characters"),
   hasWebsite: z.enum(["yes", "no"]).optional(),
-  websiteUrl: z.string().url("Invalid website URL").optional().or(z.literal("")),
+  websiteUrl: z
+    .string()
+    .url("Invalid website URL")
+    .optional()
+    .or(z.literal("")),
   companySize: z.string().optional(),
 });
 
@@ -103,7 +106,6 @@ function OnboardingContent() {
   const isNationwide = watch("is_nationwide");
   const hasWebsite = watch("hasWebsite");
 
-
   const onSubmit = async (data: OnboardingFormData) => {
     if (!userId || !categoryId) return alert("Missing user info");
 
@@ -115,7 +117,7 @@ function OnboardingContent() {
         ...data,
         phone: data.phone || null,
       };
-console.log(categoryPublicId);
+      console.log(categoryPublicId);
 
       if (!data.is_nationwide) {
         payload.location_id = data.city_id ? Number(data.city_id) : null;
@@ -294,7 +296,7 @@ console.log(categoryPublicId);
 
                   <Button
                     type="button"
-                    className="w-full bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-white hover:opacity-90 py-3 rounded-xl shadow-md"
+                    className="w-fullbg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:opacity-90 py-3 rounded-xl shadow-md"
                     onClick={() => setStep("details")}
                   >
                     Continue
@@ -391,7 +393,9 @@ console.log(categoryPublicId);
                           <FormLabel>Phone Number</FormLabel>
                           <FormControl>
                             <div className="flex items-center border border-gray-300 rounded-xl px-3 py-2.5 shadow-sm focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition">
-                              <span className="text-gray-400 mr-2 flex-shrink-0">📞</span>
+                              <span className="text-gray-400 mr-2 flex-shrink-0">
+                                📞
+                              </span>
                               <input
                                 {...field}
                                 type="tel"
@@ -400,13 +404,19 @@ console.log(categoryPublicId);
                                 onInput={(e) => {
                                   const target = e.target as HTMLInputElement;
                                   let value = target.value.replace(/\D/g, "");
-                                  
+
                                   if (value.length > 4 && value.length <= 7) {
-                                    value = value.slice(0, 4) + " " + value.slice(4);
+                                    value =
+                                      value.slice(0, 4) + " " + value.slice(4);
                                   } else if (value.length > 7) {
-                                    value = value.slice(0, 4) + " " + value.slice(4, 7) + " " + value.slice(7, 10);
+                                    value =
+                                      value.slice(0, 4) +
+                                      " " +
+                                      value.slice(4, 7) +
+                                      " " +
+                                      value.slice(7, 10);
                                   }
-                                  
+
                                   target.value = value;
                                   field.onChange(value);
                                 }}
@@ -526,7 +536,7 @@ console.log(categoryPublicId);
                     )}
                   </AnimatePresence>
 
-            <FormField
+                  <FormField
                     control={control}
                     name="companySize"
                     render={({ field }) => (
@@ -577,7 +587,7 @@ console.log(categoryPublicId);
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="bg-gradient-to-r from-[#00E5FF] via-[#6C63FF] to-[#8A2BE2] text-white hover:opacity-90 px-8 py-6.5 rounded-full shadow-md disabled:opacity-50"
+                      className="bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:opacity-90 px-8 py-6.5 rounded-full shadow-md disabled:opacity-50"
                     >
                       {isSubmitting ? "Saving..." : "Complete Onboarding"}
                     </Button>
