@@ -21,6 +21,7 @@ import { signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { ThemeToggle } from "../theme-toggle";
 
 type ViewMode = "customer" | "provider" | null;
 
@@ -225,7 +226,7 @@ export default function ModernNavbar() {
 
   return (
     <>
-      <header className="backdrop-saturate-150 border-b sticky top-0 z-50 bg-white/70 backdrop-blur-md border border-white/20 shadow-sm">
+      <header className="border-b sticky top-0 z-50 backdrop-blur-md border border-white/20 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between relative">
           <Link
             href="/"
@@ -315,9 +316,9 @@ export default function ModernNavbar() {
                     onClick={handleJoinAsProvider}
                     className="bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
-                    Join as Provider 
-                    
+                    Join as Provider
                   </Button>
+                  <ThemeToggle />
                 </>
               )}
             </div>

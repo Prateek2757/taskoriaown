@@ -4,6 +4,7 @@ import { UserProvider } from "@/context/userContext";
 import AuthProvider from "@/context/AuthProvider";
 import { Toaster } from "sonner";
 import ModernNavbar from "@/components/navabr/Navbar";
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
   title: "Taskoria — Find Trusted Service Providers",
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
     description:
       "Discover and hire top service providers in your area across multiple categories with Taskoria.",
     url: "https://taskoria.com",
-    
+
     siteName: "Taskoria",
     images: [
       {
@@ -73,11 +74,18 @@ export default function RootLayout({
     <html lang="en">
       <AuthProvider>
         <body className="antialiased">
-          <UserProvider>
-            <ModernNavbar />
-            {children}
-            <Toaster position="top-right" richColors expand closeButton />
-          </UserProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <UserProvider>
+              <ModernNavbar />
+              {children}
+              <Toaster position="top-right" richColors expand closeButton />
+            </UserProvider>
+          </ThemeProvider>
         </body>
       </AuthProvider>
     </html>
