@@ -100,7 +100,7 @@ export default function CategorySearch({ onSelect, placeholder , presetCategory 
   };
 
   return (
-    <div ref={wrapperRef} className="relative w-full">
+    <div ref={wrapperRef} className="relative rounded-full  w-full">
       <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
 
       <Input
@@ -112,7 +112,7 @@ export default function CategorySearch({ onSelect, placeholder , presetCategory 
           setShowSuggestions(true);
           if (!query) setFiltered(categories.slice(0, 10));
         }}
-        className="pl-9 rounded-xl py-4 border"
+        className="pl-9 rounded-full py-5 "
       />
 
       <AnimatePresence>
