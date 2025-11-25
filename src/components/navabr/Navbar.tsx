@@ -21,6 +21,7 @@ import { signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { ThemeToggle } from "../theme-toggle";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 
 type ViewMode = "customer" | "provider" | null;
@@ -226,7 +227,7 @@ const{joinAsProvider,loading}=useJoinAsProvider()
 
   return (
     <>
-      <header className="backdrop-saturate-150 border-b sticky top-0 z-50 bg-white/70 backdrop-blur-md border border-white/20 shadow-sm">
+      <header className="border-b sticky top-0 z-50 backdrop-blur-md border border-white/20 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between relative">
           <Link
             href="/"
@@ -292,7 +293,7 @@ const{joinAsProvider,loading}=useJoinAsProvider()
                     </div>
                     <span className="font-medium text-gray-700">
                       {session.user?.name?.split(" ")[0] || "User"}
-                    </span>
+            </span>
                     <ChevronDown
                       className={`w-4 h-4 text-gray-500 transition-transform ${
                         isProfileOpen ? "rotate-180" : ""
@@ -316,9 +317,9 @@ const{joinAsProvider,loading}=useJoinAsProvider()
                     onClick={joinAsProvider}
                     className="bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
-                    Join as Provider 
-                    
+                    Join as Provider
                   </Button>
+                  <ThemeToggle />
                 </>
               )}
             </div>

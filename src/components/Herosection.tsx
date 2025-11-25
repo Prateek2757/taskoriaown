@@ -68,7 +68,10 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative py-16 text-center bg-gradient-to-br from-blue-50 via-white to-cyan-50 overflow-hidden">
+    <section
+      className="relative py-16 text-center bg-gradient-to-br from-blue-50 via-white to-cyan-50 dark:from-gray-700 dark:via-gray-900 dark:to-gray-700
+      overflow-hidden"
+    >
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="inline-flex items-center gap-2 border bg-card rounded-full px-3 py-1 text-xs text-muted-foreground mb-4">
