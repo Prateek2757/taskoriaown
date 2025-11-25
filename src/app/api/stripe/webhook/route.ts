@@ -9,10 +9,7 @@ export const config = {
   },
 };
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-10-29.clover",
-});
-
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 interface SessionMetadata {
   professionalId: string;
   packageId: string;
@@ -60,7 +57,6 @@ export async function POST(req: Request) {
     }
 
     try {
-
       const { rows } = await pool.query(
         `SELECT status FROM credit_topups WHERE transaction_ref = $1`,
         [session.id]
@@ -73,7 +69,6 @@ export async function POST(req: Request) {
         });
       }
 
-    
       const wallet = await pool.query(
         `SELECT total_credits FROM credit_wallets WHERE professional_id = $1`,
         [professionalId]
@@ -98,7 +93,6 @@ export async function POST(req: Request) {
         console.log("💰 Wallet updated:", professionalId);
       }
 
-      
       await pool.query(
         `INSERT INTO payment_transactions
           (reference_id, professional_id, transaction_type, amount, credits_used, payment_gateway, status, remarks)
@@ -112,7 +106,6 @@ export async function POST(req: Request) {
         ]
       );
 
-      
       await pool.query(
         `UPDATE credit_topups
          SET status = 'completed', updated_at = NOW()

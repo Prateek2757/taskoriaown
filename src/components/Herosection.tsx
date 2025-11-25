@@ -69,7 +69,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative py-16 text-center bg-gradient-to-br from-blue-50 via-white to-cyan-50 dark:from-gray-700 dark:via-gray-900 dark:to-gray-700
+      className="relative py-16 text-center bg-gradient-to- from-blue-50 via-white to-cyan-50 dark:from-black dark:via-gray-900 dark:to-black
       overflow-hidden"
     >
       <div className="container mx-auto px-4 relative z-10">

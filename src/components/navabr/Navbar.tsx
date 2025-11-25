@@ -30,7 +30,7 @@ export default function ModernNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>(null);
-const{joinAsProvider,loading}=useJoinAsProvider()
+  const { joinAsProvider, loading } = useJoinAsProvider();
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const router = useRouter();
@@ -85,26 +85,7 @@ const{joinAsProvider,loading}=useJoinAsProvider()
     }
   }, [session]);
 
-  const handleJoinAsProvider = async () => {
-    try {
-      localStorage.removeItem("draftProviderId");
-      const res = await fetch("/api/signup/draft", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ role: "provider" }),
-      });
-
-      const data = await res.json();
-      if (data?.user?.user_id) {
-        localStorage.setItem("draftProviderId", data.user.user_id);
-        localStorage.setItem("draftProviderPublicId", data.user.public_id);
-        router.push(`/create?user_id=${data.user.public_id}`);
-      }
-    } catch (err) {
-      console.error("Error creating draft provider:", err);
-      alert("Something went wrong. Please try again.");
-    }
-  };
+ 
 
   const handleLogout = async () => {
     setIsProfileOpen(false);
@@ -281,6 +262,8 @@ const{joinAsProvider,loading}=useJoinAsProvider()
 
           {!minimalPages.includes(pathname) && (
             <div className="hidden md:flex items-center gap-3">
+                                <ThemeToggle />
+
               {session ? (
                 <div className="relative" ref={profileRef}>
                   <Button
@@ -293,7 +276,7 @@ const{joinAsProvider,loading}=useJoinAsProvider()
                     </div>
                     <span className="font-medium text-gray-700">
                       {session.user?.name?.split(" ")[0] || "User"}
-            </span>
+                    </span>
                     <ChevronDown
                       className={`w-4 h-4 text-gray-500 transition-transform ${
                         isProfileOpen ? "rotate-180" : ""
@@ -500,7 +483,7 @@ const{joinAsProvider,loading}=useJoinAsProvider()
                         Sign In
                       </Button>
                       <Button
-                        onClick={async() => {
+                        onClick={async () => {
                           await joinAsProvider();
                           setIsMenuOpen(false);
                         }}
@@ -508,7 +491,6 @@ const{joinAsProvider,loading}=useJoinAsProvider()
                       >
                         Join as Provider
                       </Button>
-                      
                     </div>
                   </>
                 )}

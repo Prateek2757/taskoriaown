@@ -2,10 +2,7 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-10-29.clover",
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 interface CheckoutRequestBody {
   professionalId: string;
@@ -20,8 +17,6 @@ export async function POST(request: Request) {
     const body: CheckoutRequestBody = await request.json();
     const { professionalId, packageId, amount, credits, packageName } = body;
 
-
-    // Validation
     if (!professionalId || !packageId || !amount || !credits || !packageName) {
       console.warn("Missing required fields:", body);
       return NextResponse.json(
@@ -69,7 +64,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ url: session.url });
   } catch (error: any) {
     // Full detailed logging
-    console.error("❌ Stripe checkout error full:", JSON.stringify(error, Object.getOwnPropertyNames(error), 2));
+    console.error(
+      "❌ Stripe checkout error full:",
+      JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
+    );
 
     // Optional: extract key Stripe error fields
     const errorDetails = {
