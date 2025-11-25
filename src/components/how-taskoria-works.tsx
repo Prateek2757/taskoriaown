@@ -37,7 +37,7 @@ export default function ServicesShowcase() {
   const FirstIcon = first.icon;
 
   return (
-    <section className="relative py-16 px-6 border-t-2 overflow-hidden bg-gradient-to-b bg-white dark:from-gray-900 dark:to-gray-950">
+    <section className="relative py-16 px-6  overflow-hidden  bg-white   dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)] ">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
         <motion.div
           initial={{ opacity: 0, x: -40 }}

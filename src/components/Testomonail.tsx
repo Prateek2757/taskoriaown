@@ -19,7 +19,7 @@ const testimonials = [
 
 function Testomonail() {
   return (
-    <section className="bg-card py-16 px-4" id="community">
+    <section className="bg-card     dark:bg-[radial-gradient(circle_at_top,_rgba(76,112,255,0.18)_0%,_rgba(0,0,0,1)_70%)] py-16 px-4" id="community">
     <h2 className="text-3xl font-semibold text-center text-foreground">What Our Users Say</h2>
     <div className="mt-8 grid gap-6 lg:grid-cols-2 max-w-6xl mx-auto">
       {testimonials.map((t,idx)=>(

@@ -21,7 +21,6 @@ const itemVariants: Variants = {
   },
 };
 
-
 const staticImages = [
   {
     url: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740",
@@ -50,7 +49,10 @@ export default function Services() {
   const { categories, loading } = useCategories(5);
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-orange-50/30 py-10 px-4 sm:px-6 lg:px-8">
+    <section
+      className="min-h-screen 
+ py-10 px-4 sm:px-6 lg:px-8 dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] " 
+    >
       <div className="max-w-7xl relative mx-auto">
         <motion.div
           className="flex gap-3 mb-10 justify-center"
@@ -58,29 +60,28 @@ export default function Services() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          {["Services"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
-                activeTab === tab
-                  ? "bg-white/40 text-gray-900 backdrop-blur-md border border-gray-200 shadow-lg shadow-blue-200/30"
-                  : "bg-white/10 text-gray-700 border border-gray-100 hover:bg-white/20"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+          <button
+            onClick={() => setActiveTab("Services")}
+            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+              activeTab === "Services"
+                ? "bg-white/40 text-gray-900 backdrop-blur-md border border-gray-200 shadow-lg shadow-blue-200/30"
+                : "bg-white/10 text-gray-300 border border-gray-100 hover:bg-white/20"
+            }`}
+          >
+            Services
+          </button>
         </motion.div>
 
         <motion.div
-          className="grid lg:grid-cols-2 gap-8 items-start mb-10 p-8 rounded-3xl bg-white/30 backdrop-blur-xl border border-gray-100 shadow-lg shadow-blue-100/20"
+          className="grid lg:grid-cols-2 gap-8 items-start mb-10 p-8 rounded-3xl 
+          bg-white/30 dark:bg-white/5 backdrop-blur-xl border border-gray-100 
+          dark:border-gray-800 shadow-lg shadow-blue-100/20"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           <div>
-            <h1 className="text-5xl lg:text-5xl font-bold text-gray-900 leading-tight drop-shadow-sm">
+            <h1 className="text-5xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight drop-shadow-sm">
               All Your Skills,
               <br />
               <span className="text-blue-400">Empowered and Rewarded</span>
@@ -88,9 +89,9 @@ export default function Services() {
           </div>
 
           <div className="lg:pt-4">
-            <p className="text-gray-700 text-lg leading-relaxed max-w-xl">
+            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed max-w-xl">
               Connect with trusted experts for every task — from home repairs to
-              creative projects — all in one place on Taskoria.
+              creative work — all in one place on Taskoria.
             </p>
           </div>
         </motion.div>
@@ -188,10 +189,10 @@ export default function Services() {
             transition={{ duration: 0.6, delay: 0.8 }}
           >
             <Link href="/services">
-              <button className="group px-8 py-3 bg-white border-2 border-blue-500 text-blue-500 rounded-full font-medium hover:bg-[#3C7DED] hover:text-white transition-all duration-300 shadow-lg shadow-orange-blue/20 hover:shadow-xl hover:shadow-blue-500/30">
+              <button className="group px-8 py-3 bg-white dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300 rounded-full font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30">
                 <span className="flex items-center gap-2">
                   View All Services
-                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1  duration-300 group-hover:rotate-45" />
+                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 duration-300 group-hover:rotate-45" />
                 </span>
               </button>
             </Link>

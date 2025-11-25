@@ -6,10 +6,9 @@ import Link from "next/link";
 
 function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-12">
+    <footer className=" bg-[radial-gradient(circle_at_center_bottom,_rgba(76,112,255,0.18)_0%,_rgba(0,0,0,1)_70%)] text-white py-12">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
-          {/* --- Brand Section --- */}
           <div>
             <Link
               href="/"
