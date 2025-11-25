@@ -6,6 +6,7 @@ import axios from "axios";
 export type Company = {
   user_id: number;
   company_name: string;
+  company_logo_url:string;
   contact_name: string;
   contact_email: string;
   contact_phone?: string;

@@ -290,7 +290,7 @@ export default function Navbar() {
                     Sign In
                   </Button>
                   <Button
-                    onClick={handleJoinAsProvider}
+                    onClick={JoinAsProvider}
                     className="bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
                     Join as Provider

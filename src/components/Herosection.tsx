@@ -84,8 +84,8 @@ export default function HeroSection() {
                 <SparklesCore
                   background="transparent"
                   minSize={0.4}
-                  maxSize={2.7}
-                  particleDensity={1200}
+                  maxSize={1.7}
+                  particleDensity={900}
                   className="w-full h-full"
                   particleColor="#000"
                 />

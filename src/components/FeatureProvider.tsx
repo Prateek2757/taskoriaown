@@ -54,7 +54,7 @@ export const FeatureProvider = () => {
             <Link href="/providers">
               <Button
                 variant="outline"
-                className="rounded-full px-6 py-2 text-sm font-medium border border-slate-300 hover:border-blue-500 hover:bg-blue-50 hover:text-blue-700 transition-all duration-300"
+                className="rounded-full px-6 py-2 text-sm font-medium border border-slate-300 hover:border-blue-500 hover:bg-blue-50 hover:text-blue-700 transition-all duration-300 "
               >
                 View All Providers
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -83,17 +83,17 @@ export const FeatureProvider = () => {
                   <div className="flex items-start gap-3 mb-4">
                     <div className="relative flex-shrink-0">
                       {p.image ? (
-                        <div className="w-15 h-15 rounded-full overflow-hidden">
+                        <div className="w-16 h-16 flex-shrink-0 rounded-full overflow-hidden">
                           <Image
                             src={p.image}
                             alt={p.name}
                             width={56}
                             height={56}
-                            className="rounded-xl object-cover border border-slate-200"
+                            className=" w-full h-full object-cover "
                           />
                         </div>
                       ) : (
-                        <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white grid place-content-center font-bold uppercase text-lg shadow-sm">
+                        <div className="h-15 w-15 rounded-full bg-gradient-to-br from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white grid place-content-center font-bold uppercase text-lg shadow-sm">
                           {p.name
                             ?.split(" ")
                             .map((w) => w[0])
@@ -148,7 +148,6 @@ export const FeatureProvider = () => {
                     </p>
                   </div>
 
-                  {/* Badges */}
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {p.badges?.slice(0, 3).map((badge) => (
                       <span
@@ -177,7 +176,7 @@ export const FeatureProvider = () => {
                       String(p.public_id)
                     )}`}
                   >
-                    <Button className="w-full h-9 text-sm font-semibold rounded-lgbg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] hover:shadow-lg text-white shadow-sm transition-all duration-300 group-hover:scale-[1.02]">
+                    <Button className="w-full h-9 text-sm font-semibold rounded-lgbg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] hover:shadow-lg text-white shadow-sm transition-all duration-300 group-hover:scale-[1.02] cursor-pointer ">
                       View Profile
                       <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-0.5 transition-transform" />
                     </Button>

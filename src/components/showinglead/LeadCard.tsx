@@ -104,7 +104,6 @@ const LeadCard: React.FC<LeadCardProps> = ({
         </span>
       </div>
 
-      {/* Tags */}
       <div className="flex flex-wrap gap-2 mb-3">
         {lead.status === "Urgent" && (
           <span className="px-2 py-1 text-[11px] font-medium rounded-full bg-red-100 text-red-700 border border-red-200">
@@ -119,7 +118,6 @@ const LeadCard: React.FC<LeadCardProps> = ({
         </span>
       </div>
 
-      {/* Description */}
       <div>
         <h4 className="text-sm font-semibold text-gray-800 mb-1">
           {lead.category_name}
@@ -129,7 +127,6 @@ const LeadCard: React.FC<LeadCardProps> = ({
         </p> */}
       </div>
 
-      {/* Budget + Footer */}
       <div className="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
         <div className="flex flex-col">
           <span className="text-xs text-gray-500 mb-0.5">Budget</span>

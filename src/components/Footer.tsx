@@ -30,7 +30,6 @@ function Footer() {
               Redefining How the World Hires Trusted Professionals{" "}
             </p>
 
-            {/* --- Social Icons --- */}
             <div className="flex gap-4 mt-4">
               <a
                 href="https://www.instagram.com/taskoria.au/"
@@ -59,7 +58,6 @@ function Footer() {
             </div>
           </div>
 
-          {/* --- For Customers --- */}
           <div>
             <h4 className="font-semibold mb-4">For Customers</h4>
             <ul className="space-y-2 text-sm text-gray-400">
@@ -95,7 +93,6 @@ function Footer() {
             </ul>
           </div>
 
-          {/* --- For Providers --- */}
           <div>
             <h4 className="font-semibold mb-4">For Providers</h4>
             <ul className="space-y-2 text-sm text-gray-400">
@@ -125,7 +122,6 @@ function Footer() {
             </ul>
           </div>
 
-          {/* --- Company Section --- */}
           <div>
             <h4 className="font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-sm text-gray-400">
@@ -153,7 +149,6 @@ function Footer() {
           </div>
         </div>
 
-        {/* --- Bottom Section --- */}
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
           <p>
             &copy; {new Date().getFullYear()} Taskoria. All rights reserved.

@@ -54,6 +54,7 @@ export default function ProfileSettings() {
   const [expanded, setExpanded] = useState<SectionId | null>(null);
   const [completion, setCompletion] = useState<number>(profile ? 60 : 0); // placeholder until backend provides value
 
+// console.log(company?.company_logo_url,"url");
 
   const saveAbout = async (payload: any) => {
     try {
@@ -61,8 +62,9 @@ export default function ProfileSettings() {
   console.log(payload.avatarUrl,"ijoerineoir");
   
       await updateCompany({
-        company_name: payload.company_name,
+        company_name: payload.company_name, 
         contact_name: payload.display_name,
+        company_logo_url:payload.companyLogoUrl,
         about:payload.description,
         company_size:payload.company_size,
         years_in_business:payload.years_in_business,

@@ -21,6 +21,7 @@ import { signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 
 type ViewMode = "customer" | "provider" | null;
 
@@ -28,7 +29,7 @@ export default function ModernNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>(null);
-
+const{joinAsProvider,loading}=useJoinAsProvider()
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const router = useRouter();
@@ -312,7 +313,7 @@ export default function ModernNavbar() {
                     Sign In
                   </Button>
                   <Button
-                    onClick={handleJoinAsProvider}
+                    onClick={joinAsProvider}
                     className="bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
                     Join as Provider 
@@ -378,7 +379,6 @@ export default function ModernNavbar() {
                   </button>
                 </div>
 
-                {/* User Info */}
                 {session && (
                   <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-4 mb-4">
                     <div className="flex items-center gap-3 mb-3">
@@ -403,7 +403,6 @@ export default function ModernNavbar() {
                 )}
               </div>
 
-              {/* Mobile Links */}
               <nav className="p-4">
                 {currentLinks.map((link) => {
                   const Icon = link.icon;
@@ -500,14 +499,15 @@ export default function ModernNavbar() {
                         Sign In
                       </Button>
                       <Button
-                        onClick={() => {
-                          handleJoinAsProvider();
+                        onClick={async() => {
+                          await joinAsProvider();
                           setIsMenuOpen(false);
                         }}
                         className="w-full bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium"
                       >
                         Join as Provider
                       </Button>
+                      
                     </div>
                   </>
                 )}
