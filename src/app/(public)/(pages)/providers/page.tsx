@@ -54,13 +54,13 @@ export default function AllProviders() {
               >
                 <div className="flex items-center gap-4">
                   {p.image ? (
-                    <div className=" w-16 h-16 rounded-full overflow-hidden">
+                    <div className="  relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
                       <Image
                         src={p.image}
                         alt={p.name}
-                        width={48}
-                        height={48}
-                        className=" w-full h-full object-cover border"
+                        width={56}
+                        height={56}
+                        className=" w-full h-full object-cover"
                       />
                     </div>
                   ) : (

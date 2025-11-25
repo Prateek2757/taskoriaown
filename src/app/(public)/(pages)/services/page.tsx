@@ -19,7 +19,6 @@ export default function ServiceCategories() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
-  // Mark first 9 categories as popular
   const categoriesWithPopularity = useMemo(() => {
     return categories.map((cat, index) => ({
       ...cat,
@@ -132,7 +131,6 @@ export default function ServiceCategories() {
           </div>
         </div>
 
-        {/* Empty State */}
         {hasSearchResults && filteredCategories.length === 0 && (
           <div className="text-center py-20">
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -153,7 +151,6 @@ export default function ServiceCategories() {
           </div>
         )}
 
-        {/* Popular Services */}
         {popularCategories.length > 0 && (
           <div className="mb-20">
             <div className="flex items-center justify-center gap-2 mb-8">
@@ -196,7 +193,6 @@ export default function ServiceCategories() {
           </div>
         )}
 
-        {/* Remaining Categories */}
         {remainingCategories.length > 0 && (
           <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
             <div className="flex items-center justify-between mb-6">

@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, ArrowLeft } from "lucide-react";
 import ChatSidebar from "@/components/chat/ChatSidebar";
 import ChatWindow from "@/components/chat/chatWindow";
+import { Button } from "@/components/ui/button";
 
 interface Participant {
   user_id: string;
@@ -170,13 +171,13 @@ useEffect(() => {
       <div className="flex-1 flex flex-col relative">
         {activeConversation && window.innerWidth < 640 && (
           <div className="p-3 flex items-center gap-3 bg-white/80 border-b border-gray-100 shadow-sm backdrop-blur-md">
-            <button
+            <Button  
               onClick={() => setSidebarOpen(true)}
               className="text-[#6C63FF] flex items-center gap-1"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="text-sm font-medium">Back</span>
-            </button>
+            </Button>
             <div className="flex-1 text-center font-semibold text-gray-800 truncate">
               {conversationTitle}
             </div>

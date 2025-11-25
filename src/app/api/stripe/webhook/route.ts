@@ -26,7 +26,6 @@ export async function POST(req: Request) {
 
   let event: Stripe.Event;
 
-  // ✅ Verify Stripe signature
   try {
     event = stripe.webhooks.constructEvent(
       raw,
@@ -39,7 +38,6 @@ export async function POST(req: Request) {
     return new Response("Invalid signature", { status: 400 });
   }
 
-  // PROCESS CHECKOUT COMPLETED
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
 
@@ -62,9 +60,7 @@ export async function POST(req: Request) {
     }
 
     try {
-      // ----------------------------------------------------------
-      // 1️⃣ Prevent duplicate processing
-      // ----------------------------------------------------------
+
       const { rows } = await pool.query(
         `SELECT status FROM credit_topups WHERE transaction_ref = $1`,
         [session.id]
@@ -77,18 +73,13 @@ export async function POST(req: Request) {
         });
       }
 
-      // ----------------------------------------------------------
-      // 2️⃣ Create or update credit wallet
-      // ----------------------------------------------------------
-
-      // Check if wallet exists
+    
       const wallet = await pool.query(
         `SELECT total_credits FROM credit_wallets WHERE professional_id = $1`,
         [professionalId]
       );
 
       if (wallet.rows.length === 0) {
-        // Insert new wallet for first-time purchase
         await pool.query(
           `INSERT INTO credit_wallets (professional_id, total_credits)
            VALUES ($1, $2)`,
@@ -97,7 +88,6 @@ export async function POST(req: Request) {
 
         console.log("🆕 New credit wallet created:", professionalId);
       } else {
-        // Update existing wallet
         await pool.query(
           `UPDATE credit_wallets 
            SET total_credits = total_credits + $1
@@ -108,9 +98,7 @@ export async function POST(req: Request) {
         console.log("💰 Wallet updated:", professionalId);
       }
 
-      // ----------------------------------------------------------
-      // 3️⃣ Insert payment transaction record
-      // ----------------------------------------------------------
+      
       await pool.query(
         `INSERT INTO payment_transactions
           (reference_id, professional_id, transaction_type, amount, credits_used, payment_gateway, status, remarks)
@@ -124,9 +112,7 @@ export async function POST(req: Request) {
         ]
       );
 
-      // ----------------------------------------------------------
-      // 4️⃣ Update topup record as completed
-      // ----------------------------------------------------------
+      
       await pool.query(
         `UPDATE credit_topups
          SET status = 'completed', updated_at = NOW()

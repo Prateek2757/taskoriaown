@@ -10,7 +10,7 @@ type Props = {
   };
   companydata?: {
     company_name?: string;
-    company_logo?: string;
+    logo_url?: string;
     company_size?: string;
     years_in_business?: string;
     contact_email?: string;
@@ -47,7 +47,7 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
       avatarPreview: data?.profile_image_url ?? "",
       companyName: companydata?.company_name ?? "",
       companyLogoFile: null,
-      companyLogoPreview: companydata?.company_logo ?? "",
+      companyLogoPreview: companydata?.logo_url ?? "",
       contactEmail: companydata?.contact_email ?? "",
       contactPhone: companydata?.contact_phone ?? "",
       website: companydata?.website ?? "",
@@ -58,6 +58,8 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
     [data, companydata]
   );
 
+  // console.log(companydata?.logo_url,"asdbakjsbc");
+  
   const [formState, setFormState] = useState<FormState>(initialState);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -138,20 +140,24 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
          if (formState.avatarFile) {
           const uploadedUrl = await uploadToSupabase(formState.avatarFile, "profilepicture");
           console.log("Uploaded avatar URL:", uploadedUrl);
-          setFormState((prev) => ({
-            ...prev,
-            avatarFile: null,
-            avatarPreview: uploadedUrl, 
-          }));
+          // setFormState((prev) => ({
+          //   ...prev,
+          //   avatarFile: null,
+          //   avatarPreview: uploadedUrl, 
+          // }));
           avatarUrl = uploadedUrl;
         }      
-         
-
+          let companyUrl = formState.companyLogoPreview
+          if(formState.companyLogoFile){
+            const uploadedCompanyurl = await uploadToSupabase(formState.companyLogoFile,"companyProfile")
+            companyUrl = uploadedCompanyurl
+          }
+      
       const payload = {
         display_name: formState.name,
         avatarUrl: avatarUrl,
         company_name: formState.companyName,
-        companyLogoFile: formState.companyLogoFile,
+        companyLogoUrl:  companyUrl,
         contact_email: formState.contactEmail,
         contact_phone: formState.contactPhone,
         company_size: formState.companySize,
@@ -167,7 +173,8 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
         ...prev,
         avatarFile: null,
         companyLogoFile: null,
-        avatarPreview:avatarUrl
+        avatarPreview:avatarUrl,
+        companyLogoPreview:companyUrl
       }));
     } catch (err: any) {
       if (err?.response?.data?.message?.includes("about")) {
@@ -237,7 +244,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
         </div>
       </section>
 
-      {/* Company name & logo */}
       <section>
         <h2 className="text-xl font-semibold text-gray-900">
           Company name & logo

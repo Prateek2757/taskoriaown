@@ -64,8 +64,11 @@ export function useLeadProfile() {
       setError("Failed to load cities.");
     }
   };
-
-
+    
+  useEffect(() => {
+    fetchCategories();
+    
+  }, []);
 
   const updateProfile = async (data: { display_name: string , profile_image_url:string}) => {
     if (!profile) return;

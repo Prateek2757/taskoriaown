@@ -26,7 +26,7 @@ import { useProviders } from "@/hooks/useProvider";
 export default function ProviderProfile() {
   const params = useParams();
   const { id } = params;
-  
+
   const { providers, loading } = useProviders();
 
   const [provider, setProvider] = useState<any>(null);
@@ -50,12 +50,14 @@ export default function ProviderProfile() {
     <div className="min-h-screen bg-gray-50">
       <div className="h-64 relative">
         {provider.image ? (
-          <Image
-            src={provider.image}
-            alt="Cover"
-            fill
-            className="object-cover"
-          />
+          <div className=" overflow-hidden ">
+            <Image
+              src={provider.image}
+              alt="Cover"
+              fill
+              className="object-cover h-full w-full "
+            />
+          </div>
         ) : (
           <div className="w-full h-full bg-gray-200" />
         )}
@@ -68,18 +70,24 @@ export default function ProviderProfile() {
             <Card>
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row gap-6">
-                  <Avatar className="w-24 h-24 border-4 border-white shadow-md">
-                    {provider.image ? (
-                      <AvatarImage src={provider.image} />
-                    ) : (
-                      <AvatarFallback>
-                        {provider.name
-                          .split(" ")
-                          .map((n: string) => n[0])
-                          .join("")}
-                      </AvatarFallback>
-                    )}
-                  </Avatar>
+                  {provider.image ? (
+                    <div className="w-18 h-18 rounded-full overflow-hidden">
+                      <Image
+                        src={provider.image}
+                        alt={provider.name}
+                        width={56}
+                        height={56}
+                        className=" w-full h-full object-cover "
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-15 w-15 rounded-full bg-gradient-to-br from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white grid place-content-center font-bold uppercase text-lg shadow-sm">
+                      {provider.name
+                        ?.split(" ")
+                        .map((w: string) => w[0])
+                        .join("")}
+                    </div>
+                  )}
 
                   <div className="flex-1 space-y-3">
                     <div className="flex items-center gap-3">
@@ -329,7 +337,6 @@ export default function ProviderProfile() {
                     ))
                   ) : (
                     <>
-                  
                       <li className="flex items-center gap-2 text-cyan-600">
                         <span className="w-2 h-2 bg-cyan-600 rounded-full" /> AI
                         background check passed

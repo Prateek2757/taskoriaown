@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
+import { Button } from "@/components/ui/button";
 
 type FormData = {
   name: string;
@@ -62,12 +63,12 @@ export default function Onboarding() {
   return (
     <div className="max-w-md mx-auto p-4">
       {step === 1 && (
-        <button
+        <Button
           onClick={createDraftUser}
           className="bg-blue-600 text-white px-4 py-2 rounded"
         >
           Become a Professional
-        </button>
+        </Button>
       )}
 
       {step === 2 && (

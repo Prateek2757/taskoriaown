@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const { rows } = await client.query(
-      `SELECT user_id, company_name, contact_name, contact_email, website, contact_phone, about, company_size, years_in_business
+      `SELECT user_id, company_name,logo_url, contact_name, contact_email, website, contact_phone, about, company_size, years_in_business
        FROM company
        WHERE user_id = $1`,
       [userId]
@@ -48,6 +48,7 @@ export async function PUT(req: NextRequest) {
       company_name,
       contact_name,
       contact_email,
+      company_logo_url,
       contact_phone,
       website,
       company_size,
@@ -55,12 +56,10 @@ export async function PUT(req: NextRequest) {
       about,
     } = body;
 
-    // Required fields check
     if (!company_name || !contact_name || !contact_email) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
 
-    // Parse integer safely
     const yearsInBusinessInt =
       years_in_business && years_in_business !== "" ? parseInt(years_in_business, 10) : null;
 
@@ -74,8 +73,9 @@ export async function PUT(req: NextRequest) {
            company_size = $6,
            years_in_business = $7,
            about = $8,
+           logo_url = $9,
            updated_at = NOW()
-       WHERE user_id = $9`,
+       WHERE user_id = $10`,
       [
         company_name,
         contact_name,
@@ -85,6 +85,7 @@ export async function PUT(req: NextRequest) {
         company_size?.trim() || null,
         yearsInBusinessInt,
         about?.trim() || null,
+        company_logo_url,
         userId,
       ]
     );
@@ -94,7 +95,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const { rows } = await client.query(
-      `SELECT user_id, company_name, contact_name, contact_email, contact_phone, website, company_size, years_in_business, about
+      `SELECT user_id, company_name,logo_url, contact_name, contact_email, contact_phone, website, company_size, years_in_business, about
        FROM company
        WHERE user_id = $1`,
       [userId]
