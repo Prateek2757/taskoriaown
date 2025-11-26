@@ -1,134 +1,244 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowRight, Rocket, Shield, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import Link from "next/link";
+import { motion } from "motion/react";
+import { Sparkles, Users, Shield } from "lucide-react";
+import { useRef, useState, useEffect } from "react";
 
-const services = [
+const steps = [
   {
-    id: "job-post",
+    id: 1,
     title: "Post Your Job",
     description:
       "Use our AI assistant to describe your project effortlessly and publish instantly.",
-    icon: Rocket,
-    image: "/images/jobpost.png",
-  },
-  {
-    id: "automation",
-    title: "Get Matched Instantly",
-    description: "AI connects you with top verified providers for your needs.",
     icon: Sparkles,
-    image: "/images/getmatch.png",
   },
   {
-    id: "secure-implementation",
-    title: "Collaborate & Pay Securely",
-    description: "Work, chat, and pay via AI-powered escrow.",
+    id: 2,
+    title: "Get Matched Instantly",
+    description:
+      "Our AI connects you with verified professionals who match your specific needs.",
+    icon: Users,
+  },
+  {
+    id: 3,
+    title: "Start Collaborating",
+    description:
+      "Work seamlessly with real-time chat, milestone tracking, and secure payments.",
     icon: Shield,
-    image: "/images/collabratesecure.png",
   },
 ];
 
-export default function ServicesShowcase() {
-  const first = services[0];
-  const rest = services.slice(1);
-  const FirstIcon = first.icon;
+export default function HowTaskoriaWorks() {
+  const containerRef = useRef(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasAnimated]);
 
   return (
-    <section className="relative py-16 px-6  overflow-hidden  bg-white   dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)] ">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+    <section
+      className="
+        relative py-14 px-4 sm:px-6 lg:px-8 overflow-hidden
+        text-black bg-white 
+        dark:text-white dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
+      "
+    >
+      <div
+        className="absolute inset-0 opacity-30 pointer-events-none"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)
+          `,
+          backgroundSize: "55px 55px",
+        }}
+      />
+
+      <div
+        className="absolute inset-0 opacity-50 pointer-events-none dark:opacity-20 hidden dark:block"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)
+          `,
+          backgroundSize: "55px 55px",
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto relative" ref={containerRef}>
         <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="space-y-6"
+          initial={{ opacity: 0, y: 30 }}
+          animate={hasAnimated ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7 }}
+          className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight tracking-tight">
-            How <span className="text-[#3C7DED]">Taskoria</span> Works for You
+          <h2 className="text-5xl md:text-6xl font-black mb-4">
+            How it works?
           </h2>
-          <p className="text-gray-600 dark:text-gray-300 max-w-md text-base md:text-lg leading-relaxed">
-            Find skilled professionals ready to take on your tasks — from small
-            gigs to big projects. Taskoria’s AI connects you instantly with
-            verified experts so you can focus on results, not searching.
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            "I dream of one URL that sums it all up to share with Business"
           </p>
-          <Link href="/services">
-            <Button className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] hover:from-blue-700 hover:to-cyan-700 text-white  px-6 py-5 text-sm md:text-base flex items-center gap-2 shadow-lg hover:shadow-xl transition-all">
-              View All Services
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="grid gap-6"
-        >
-          <motion.div
-            key={first.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-            className="relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all group bg-white dark:bg-gray-800"
-          >
-            <Image
-              src={first.image}
-              alt={first.title}
-              width={800}
-              height={400}
-              className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent dark:from-black/70 dark:via-black/20 transition-all duration-500 group-hover:from-black/80" />
-            <div className="absolute bottom-6 left-6 text-white">
-              <div className="flex items-center gap-2 mb-2">
-                <FirstIcon className="h-5 w-5 text-indigo-400" />
-                <h3 className="font-semibold text-xl">{first.title}</h3>
-              </div>
-              <p className="text-sm text-gray-200 dark:text-gray-300 max-w-sm leading-relaxed">
-                {first.description}
-              </p>
-            </div>
-          </motion.div>
-
-          <div className="grid sm:grid-cols-2 gap-6">
-            {rest.map(({ id, title, description, icon: Icon, image }, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14 max-w-6xl mx-auto">
+          {steps.map((step, index) => (
+            <div key={step.id} className="flex flex-col items-center relative">
               <motion.div
-                key={id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.4 }}
-                className="relative overflow-hidden rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-all group"
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={hasAnimated ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.6, delay: index * 0.25 }}
+                className="
+                  group relative w-full rounded-3xl p-8 overflow-hidden
+                  bg-white/70 dark:bg-white/5
+                  border border-black/10 dark:border-white/20 
+                  backdrop-blur-2xl shadow-2xl
+                  hover:border-[#41A6EE]/60 hover:shadow-[0px_8px_60px_rgba(65,166,238,0.25)]
+                  hover:scale-[1.02]
+                  transition-all duration-500
+                  before:absolute before:inset-0 before:rounded-3xl
+                  before:bg-gradient-to-br before:from-white/40 before:via-white/10 before:to-transparent
+                  dark:before:from-white/10 dark:before:via-white/5 dark:before:to-transparent
+                  before:pointer-events-none before:transition-opacity before:duration-500
+                  after:absolute after:inset-0 after:rounded-3xl
+                  after:bg-gradient-to-br after:from-[#41A6EE]/20 after:via-[#41A6EE]/5 after:to-transparent
+                  after:opacity-0 after:transition-all after:duration-500
+                  hover:after:opacity-100
+                  after:pointer-events-none
+                "
+                style={{
+                  boxShadow:
+                    "0 8px 32px 0 rgba(0, 0, 0, 0.1), inset 0 1px 1px 0 rgba(255, 255, 255, 0.3)",
+                }}
               >
-                <div className="relative w-full h-40 overflow-hidden">
-                  <Image
-                    src={image}
-                    alt={title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent dark:from-black/60 dark:to-transparent" />
-                </div>
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Icon className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
-                    <h3 className="font-semibold text-gray-900 dark:text-white text-base">
-                      {title}
-                    </h3>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-[#41A6EE] to-[#2d8cd4] text-white font-bold text-2xl mb-6 shadow-lg group-hover:shadow-[0px_0px_30px_rgba(65,166,238,0.6)] group-hover:scale-110 transition-all duration-500">
+                    {step.id}
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-                    {description}
+
+                  <h3 className="text-2xl font-semibold mb-3 text-gray-900 dark:text-white group-hover:text-[#41A6EE] dark:group-hover:text-[#41A6EE] transition-colors duration-500">
+                    {step.title}
+                  </h3>
+
+                  <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+                    {step.description}
                   </p>
                 </div>
               </motion.div>
-            ))}
-          </div>
+
+              {index < steps.length - 1 && (
+                <motion.div
+                  initial={{ opacity: 0, scaleX: 0 }}
+                  animate={hasAnimated ? { opacity: 1, scaleX: 1 } : {}}
+                  transition={{ duration: 0.8, delay: index * 0.3 + 0.5 }}
+                  className="hidden md:block absolute top-1/2 -right-12 lg:-right-16"
+                  style={{ transformOrigin: "left center" }}
+                >
+                  <svg width="100" height="40" viewBox="0 0 100 40" className="lg:w-[130px]">
+                    <defs>
+                      <linearGradient id={`grad-${index}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style={{ stopColor: "#41A6EE", stopOpacity: 0.6 }} />
+                        <stop offset="100%" style={{ stopColor: "#41A6EE", stopOpacity: 1 }} />
+                      </linearGradient>
+                    </defs>
+                    <motion.line
+                      x1="0"
+                      y1="20"
+                      x2="80"
+                      y2="20"
+                      stroke={`url(#grad-${index})`}
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      initial={{ pathLength: 0 }}
+                      animate={hasAnimated ? { pathLength: 1 } : {}}
+                      transition={{ duration: 0.8, delay: index * 0.3 + 0.6 }}
+                    />
+                    <motion.polygon
+                      points="75,12 95,20 75,28"
+                      fill="#41A6EE"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={hasAnimated ? { opacity: 1, x: 0 } : {}}
+                      transition={{ duration: 0.4, delay: index * 0.3 + 1.2 }}
+                    />
+                  </svg>
+                </motion.div>
+              )}
+
+              {index < steps.length - 1 && (
+                <motion.div
+                  initial={{ opacity: 0, scaleY: 0 }}
+                  animate={hasAnimated ? { opacity: 1, scaleY: 1 } : {}}
+                  transition={{ duration: 0.8, delay: index * 0.3 + 0.5 }}
+                  className="md:hidden flex justify-center"
+                  style={{ transformOrigin: "top center" }}
+                >
+                  <svg width="50" height="90" viewBox="0 0 50 100">
+                    <defs>
+                      <linearGradient
+                        id={`grad-mobile-${index}`}
+                        x1="0%"
+                        y1="0%"
+                        x2="0%"
+                        y2="100%"
+                      >
+                        <stop offset="0%" style={{ stopColor: "#41A6EE", stopOpacity: 0.6 }} />
+                        <stop offset="100%" style={{ stopColor: "#41A6EE", stopOpacity: 1 }} />
+                      </linearGradient>
+                    </defs>
+                    <motion.line
+                      x1="25"
+                      y1="0"
+                      x2="25"
+                      y2="60"
+                      stroke={`url(#grad-mobile-${index})`}
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      initial={{ pathLength: 0 }}
+                      animate={hasAnimated ? { pathLength: 1 } : {}}
+                      transition={{ duration: 0.8, delay: index * 0.3 + 0.6 }}
+                    />
+                    <motion.polygon
+                      points="12,55 25,75 38,55"
+                      fill="#41A6EE"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={hasAnimated ? { opacity: 1, y: 0 } : {}}
+                      transition={{ duration: 0.4, delay: index * 0.3 + 1.2 }}
+                    />
+                  </svg>
+                </motion.div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={hasAnimated ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 1 }}
+          className="text-center mt-7"
+        >
+          <button
+            className="
+              px-10 py-4 rounded-full bg-[#41A6EE] hover:bg-[#41A6EE]/80
+              text-black font-bold text-lg shadow-xl 
+              hover:shadow-[#41A6EE]/40 transition-all duration-300 hover:scale-105
+            "
+          >
+            Start my 1-minute setup
+          </button>
         </motion.div>
       </div>
     </section>
