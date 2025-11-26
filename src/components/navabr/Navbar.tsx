@@ -257,7 +257,7 @@ export default function ModernNavbar() {
                   <Button
                     onClick={() => setIsProfileOpen((p) => !p)}
                     variant="ghost"
-                    className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
                     <div className="w-9 h-9 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center">
                       <User className="w-5 h-5 text-blue-600" />
@@ -294,8 +294,7 @@ export default function ModernNavbar() {
               )}
             </div>
           )}
-
-          {/* Mobile Menu Button */}
+     
           <Button
             variant="ghost"
             onClick={() => setIsMenuOpen((p) => !p)}
@@ -342,7 +341,11 @@ export default function ModernNavbar() {
                     <span className="text-2xl font-bold bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
                       Taskoria
                     </span>
+
                   </Link>
+                       <div className="p-1">
+                <ThemeToggle />
+                </div> 
                   <button
                     onClick={() => setIsMenuOpen(false)}
                     className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
@@ -374,6 +377,8 @@ export default function ModernNavbar() {
                   </div>
                 )}
               </div>
+         
+              
 
               <nav className="p-4 space-y-2">
                 {currentLinks.map((link) => {
@@ -384,7 +389,7 @@ export default function ModernNavbar() {
                       key={link.name}
                       href={link.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-full font-medium transition-colors ${
                         isActive
                           ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg"
                           : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"

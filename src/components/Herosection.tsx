@@ -155,7 +155,7 @@ const {theme} =useTheme()
               <Button
                 variant="outline"
                 onClick={handleJoinAsProvider}
-                className="flex-1 py-5 rounded-xl border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+                className="flex-1 py-5 rounded-full border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
               >
                 Join as Provider
               </Button>
