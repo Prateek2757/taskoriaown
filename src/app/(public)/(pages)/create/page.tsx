@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 interface Category {
   category_id: number;
   name: string;
-  public_id?:string ;
+  public_id?: string;
 }
 
 export default function CategorySelectionPage() {
@@ -31,8 +31,6 @@ export default function CategorySelectionPage() {
       try {
         const { data } = await axios.get("/api/signup/category-selection");
         setCategories(data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
       } finally {
         setIsLoading(false);
       }
@@ -42,7 +40,6 @@ export default function CategorySelectionPage() {
 
     const savedDraft = localStorage.getItem("draftProviderPublicId");
     if (savedDraft) setDraftId(String(savedDraft));
-    else alert("Draft not found! Please start from 'Join as a Provider'.");
   }, []);
 
   useEffect(() => {
@@ -50,13 +47,14 @@ export default function CategorySelectionPage() {
       setFilteredCategories([]);
       return;
     }
-    const filtered = categories.filter((c) =>
-      c.name.toLowerCase().includes(searchQuery.toLowerCase())
+    setFilteredCategories(
+      categories.filter((c) =>
+        c.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
     );
-    setFilteredCategories(filtered);
   }, [searchQuery, categories]);
 
-  const handleSelectCategory = (id:string, name: string) => {
+  const handleSelectCategory = (id: string, name: string) => {
     setSelectedCategory(id);
     setSearchQuery(name);
   };
@@ -72,34 +70,32 @@ export default function CategorySelectionPage() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-        <Loader2 className="w-8 h-8 text-cyan-600 animate-spin mb-3" />
-        <p className="text-gray-500">Loading categories...</p>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white via-gray-50 to-gray-100 dark:from-black dark:via-gray-900 dark:to-gray-800 transition-colors">
+        <Loader2 className="w-8 h-8 text-cyan-500 animate-spin mb-3" />
+        <p className="text-gray-600 dark:text-gray-300">Loading categories...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white via-cyan-50/40 to-gray-50 p-4">
-      
-      <Card className="max-w-2xl w-full shadow-2xl border border-gray-100 rounded-3xl backdrop-blur-sm bg-white/90">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-white via-cyan-50/40 to-gray-50 dark:from-black dark:via-gray-900 dark:to-gray-800 transition-colors">
+      <Card className="max-w-2xl w-full shadow-2xl border border-gray-200/40 dark:border-gray-700/40 rounded-3xl backdrop-blur-xl bg-white/80 dark:bg-black/40 transition-colors">
         <CardContent className="p-8">
           <div className="text-center mb-6">
-            
-            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
               What service do you provide?
             </h1>
-            <p className="text-gray-500 mt-2">
+            <p className="text-gray-600 dark:text-gray-300 mt-2">
               Start typing to find your category or choose a popular one below.
             </p>
           </div>
 
           <div className="relative mb-8">
-            <Search className="absolute left-3 top-3.5 text-gray-400 w-5 h-5" />
+            <Search className="absolute left-3 top-3.5 text-gray-400 dark:text-gray-500 w-5 h-5" />
             <Input
               type="text"
-              placeholder="Search for a service (e.g., Photographer, Web Designer, Plumber...)"
-              className="pl-10 py-6 border-gray-300 focus:ring-2 focus:ring-cyan-500 text-gray-700 rounded-xl text-base shadow-sm"
+              placeholder="Search for a service..."
+              className="pl-10 py-6 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 rounded-xl text-base shadow-sm transition"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -112,7 +108,6 @@ export default function CategorySelectionPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ duration: 0.25 }}
-                className="mt-2"
               >
                 {filteredCategories.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -123,7 +118,7 @@ export default function CategorySelectionPage() {
                         className={`cursor-pointer border rounded-xl p-4 text-center font-medium transition-all duration-200 ${
                           selectedCategory === String(c.public_id)
                             ? "bg-cyan-600 text-white border-cyan-600 shadow-md"
-                            : "bg-white hover:bg-cyan-50 border-gray-200 text-gray-700"
+                            : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-100 hover:bg-cyan-50 dark:hover:bg-cyan-900/20"
                         }`}
                         onClick={() =>
                           handleSelectCategory(String(c.public_id), c.name)
@@ -134,7 +129,7 @@ export default function CategorySelectionPage() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-center text-gray-400 mt-3">
+                  <p className="text-center text-gray-400 dark:text-gray-500 mt-3">
                     No matching categories found.
                   </p>
                 )}
@@ -144,7 +139,7 @@ export default function CategorySelectionPage() {
 
           {searchQuery.trim() === "" && (
             <div className="mt-8">
-              <h2 className="text-lg font-semibold text-gray-700 mb-3 text-center">
+              <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-3 text-center">
                 Popular Categories
               </h2>
               <div className="flex flex-wrap justify-center gap-3">
@@ -153,13 +148,14 @@ export default function CategorySelectionPage() {
                     key={c.category_id}
                     size="sm"
                     variant="outline"
-                    onClick={() => {setSelectedCategory(String(c.public_id));
-                      setSearchQuery(c.name)
+                    onClick={() => {
+                      setSelectedCategory(String(c.public_id));
+                      setSearchQuery(c.name);
                     }}
                     className={`rounded-full px-4 py-2 text-sm transition ${
                       selectedCategory === String(c.public_id)
-                        ? "bg-cyan-600 text-white"
-                        : "hover:bg-cyan-100 text-gray-700"
+                        ? "bg-cyan-600 text-white border-cyan-600"
+                        : "hover:bg-cyan-100 dark:hover:bg-cyan-900/20 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700"
                     }`}
                   >
                     {c.name}
@@ -173,12 +169,11 @@ export default function CategorySelectionPage() {
             <Button
               disabled={isNavigating}
               onClick={goNext}
-              className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-10 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-cyan-700 hover:to-blue-700 transition-all w-full"
+              className="bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-500 dark:to-blue-500 text-white px-10 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-cyan-700 hover:to-blue-700 dark:hover:from-cyan-600 dark:hover:to-blue-600 transition-all w-full"
             >
               {isNavigating ? (
                 <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />{" "}
-                  Redirecting...
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" /> Redirecting...
                 </>
               ) : (
                 "Continue"

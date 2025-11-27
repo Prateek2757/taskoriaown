@@ -73,7 +73,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthProvider>
-        <body className="antialiased">
+        <body className="antialiased dark:bg-black">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

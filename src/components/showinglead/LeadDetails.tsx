@@ -113,10 +113,10 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     if (!conversationId && !convoLoading) {
       setIsNavigating(true);
       toast.info("Preparing chat...");
-      
+
       try {
         const newConvoId = await refetchConversation();
-        
+
         if (newConvoId) {
           window.location.href = `/messages/${newConvoId}`;
         } else {
@@ -144,13 +144,13 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   const handlePurchaseSuccess = useCallback(async () => {
     toast.success("Purchase successful! Preparing your chat...");
-    
+
     await fetchResponses();
-    
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     const newConvoId = await refetchConversation();
-    
+
     if (newConvoId) {
       toast.success("Chat is ready!");
     } else {
@@ -201,17 +201,16 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6">
-        <div className="bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] px-6 py-8 text-white">
+      {/* Header Card */}
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
+        <div className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] px-6 py-8 text-white">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-xl border-2 border-white/30">
                 {getInitials(lead.customer_name || "N/A")}
               </div>
               <div>
-                <h1 className="text-2xl font-bold mb-1">
-                  {lead.customer_name}
-                </h1>
+                <h1 className="text-2xl font-bold mb-1">{lead.customer_name}</h1>
                 <div className="flex items-center gap-2 text-blue-100">
                   <MapPin className="w-4 h-4" />
                   <span className="text-sm">{lead.location_name}</span>
@@ -227,69 +226,70 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium border border-white/30">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 dark:bg-gray-800 backdrop-blur-sm rounded-full text-sm font-medium border border-white/30 dark:border-gray-700">
               {lead.category_name}
             </span>
             <span
               className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-semibold shadow-sm border transition-all duration-300 ${
                 lead.status === "Open"
-                  ? "bg-cyan-50 text-cyan-600 border-cyan-200 hover:bg-cyan-100"
+                  ? "bg-cyan-50 text-cyan-600 border-cyan-200 dark:bg-cyan-900 dark:text-cyan-200 dark:border-cyan-700 hover:dark:bg-cyan-800"
                   : lead.status === "Pending"
-                  ? "bg-orange-50 text-orange-600 border-orange-200 hover:bg-orange-100"
-                  : "bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200"
+                  ? "bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-900 dark:text-orange-200 dark:border-orange-700 hover:dark:bg-orange-800"
+                  : "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 hover:dark:bg-gray-700"
               }`}
             >
               {lead.status}
             </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 dark:bg-gray-800 backdrop-blur-sm rounded-full text-sm">
               <Clock className="w-4 h-4" />
               {formatTimeAgo(lead.created_at)}
             </span>
           </div>
         </div>
 
+        {/* Contact & Response */}
         <div className="p-6">
-          <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-200 p-5 mb-6">
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4 flex items-center gap-2">
+          {/* Verified Contact */}
+          <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-6">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wide mb-4 flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-cyan-600" /> Verified Contact
               Details
             </h3>
-
             <div className="space-y-3">
+              {/* Phone */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900 flex items-center justify-center">
+                    <Phone className="w-5 h-5 text-blue-600 dark:text-blue-300" />
                   </div>
                   <div>
-                    <div className="text-xs text-gray-500 mb-0.5">
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
                       Phone Number
                     </div>
-                    <div className="font-mono text-sm text-gray-900">
-                      {leadStatus.purchased
-                        ? lead.phone
-                        : maskPhone(lead.phone)}
+                    <div className="font-mono text-sm text-gray-900 dark:text-gray-100">
+                      {leadStatus.purchased ? lead.phone : maskPhone(lead.phone)}
                     </div>
                   </div>
                 </div>
                 {leadStatus.purchased && (
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-cyan-100 text-cyan-700 text-xs font-semibold rounded-md">
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-cyan-100 dark:bg-cyan-700 text-cyan-700 dark:text-cyan-100 text-xs font-semibold rounded-md">
                     <CheckCircle className="w-3 h-3" />
                     Verified
                   </span>
                 )}
               </div>
 
+              {/* Email */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center">
-                    <Mail className="w-5 h-5 text-purple-600" />
+                  <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900 flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-purple-600 dark:text-purple-300" />
                   </div>
                   <div className="flex flex-col">
-                    <div className="text-xs text-gray-500 mb-0.5">
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
                       Email Address
                     </div>
-                    <div className="flex items-center gap-2 font-mono text-sm text-gray-900">
+                    <div className="flex items-center gap-2 font-mono text-sm text-gray-900 dark:text-gray-100">
                       {leadStatus.purchased ? (
                         <>
                           <span>{lead.customer_email}</span>
@@ -311,54 +311,57 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
           </div>
 
-          <div className="bg-blue-50 rounded-xl p-5 mb-6">
+          {/* Response Progress */}
+          <div className="bg-blue-50 dark:bg-blue-900 rounded-xl p-5 mb-6">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-gray-900">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 Response Progress
               </h3>
-              <span className="text-sm font-semibold text-blue-600">
+              <span className="text-sm font-semibold text-blue-600 dark:text-blue-300">
                 {responseRate}/{maxResponses}
               </span>
             </div>
-            <div className="relative w-full h-2 bg-white rounded-full overflow-hidden shadow-inner">
+            <div className="relative w-full h-2 bg-white dark:bg-gray-800 rounded-full overflow-hidden shadow-inner">
               <div
                 className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500"
                 style={{ width: `${(responseRate / maxResponses) * 100}%` }}
               />
             </div>
-            <p className="text-xs text-gray-600 mt-2">
-              <strong>{maxResponses - responseRate} spots remaining</strong> •
-              Be one of the first to respond
+            <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+              <strong>{maxResponses - responseRate} spots remaining</strong> • Be
+              one of the first to respond
             </p>
           </div>
 
+          {/* Purchase Section */}
           {!leadStatus.purchased && (
-            <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl border border-orange-200 p-5 mb-6">
+            <div className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900 dark:to-orange-900 rounded-xl border border-orange-200 dark:border-orange-700 p-5 mb-6">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
                   <Award className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl font-bold text-gray-900">
+                    <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                       {requiredCredits}
                     </span>
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
                       credits required
                     </span>
                   </div>
-                  <h4 className="text-sm font-semibold text-gray-900 mb-1">
+                  <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">
                     🏆 Protected by Get Hired Guarantee
                   </h4>
-                  <p className="text-xs text-gray-600">
-                    Full credit refund if you're not hired during your starter
-                    pack period
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                    Full credit refund if you're not hired during your starter pack
+                    period
                   </p>
                 </div>
               </div>
             </div>
           )}
 
+          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             {leadStatus.purchased ? (
               <button
@@ -399,49 +402,52 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               onPurchaseSuccess={handlePurchaseSuccess}
             />
 
-            <button className="px-6 py-3.5 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-2">
+            <button className="px-6 py-3.5 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition flex items-center justify-center gap-2">
               <ThumbsDown className="w-5 h-5" />
               Not Interested
             </button>
-            <button className="px-4 py-3.5 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition">
+            <button className="px-4 py-3.5 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition">
               <Share2 className="w-5 h-5" />
             </button>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-4">
+      {/* Project Details */}
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
           Project Details
         </h2>
-        <p className="text-gray-700 leading-relaxed mb-6">{lead.description}</p>
+        <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+          {lead.description}
+        </p>
 
         {lead.answers && lead.answers.length > 0 && (
           <div className="mt-6">
-            <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">
               Lead Questions & Answers
             </h3>
             <div className="space-y-4">
               {lead.answers.map((ans, idx) => (
                 <div
                   key={ans.question_id || idx}
-                  className="bg-gray-50 border border-gray-200 rounded-xl p-4"
+                  className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4"
                 >
                   <div className="flex items-start gap-2 mb-2">
                     <MessageSquare
                       size={16}
-                      className="text-blue-600 mt-0.5 flex-shrink-0"
+                      className="text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
                     />
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                       {ans.question || "—"}
                     </p>
                   </div>
                   <div className="flex items-start gap-2 ml-6">
                     <Quote
                       size={16}
-                      className="text-cyan-600 mt-0.5 flex-shrink-0"
+                      className="text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0"
                     />
-                    <p className="text-sm text-gray-700 italic">
+                    <p className="text-sm text-gray-700 dark:text-gray-300 italic">
                       {ans.answer?.trim() ? ans.answer : "Not answered yet"}
                     </p>
                   </div>

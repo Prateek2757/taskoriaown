@@ -10,7 +10,7 @@ import { Search, SlidersHorizontal } from "lucide-react";
 import { useCredit } from "@/hooks/useCredit";
 
 export interface Lead {
-  user_id?:string | number;
+  user_id?: string | number;
   task_id?: number;
   title: string;
   location_name: string;
@@ -38,7 +38,6 @@ export interface Filters {
 
 const LeadsPage: React.FC = () => {
   const [rawLeads, setRawLeads] = useState<Lead[]>([]);
-  // const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [filters, setFilters] = useState<Filters>({
@@ -53,7 +52,6 @@ const LeadsPage: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [isMobileDetailsOpen, setIsMobileDetailsOpen] = useState(false);
   const { taskCredits, fetchCreditEstimates, loading } = useCredit();
-
   const filtersRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -63,7 +61,7 @@ const LeadsPage: React.FC = () => {
         const leadsData = Array.isArray(data) ? data : [];
         setRawLeads(leadsData);
         if (leadsData.length > 0) setSelectedLead(leadsData[0]);
-        await fetchCreditEstimates(); 
+        await fetchCreditEstimates();
       } catch (err) {
         console.error(err);
         setError("Failed to fetch leads or credits.");
@@ -78,7 +76,6 @@ const LeadsPage: React.FC = () => {
         setShowFilters(false);
       }
     };
-
     if (showFilters) document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showFilters]);
@@ -120,17 +117,18 @@ const LeadsPage: React.FC = () => {
   };
 
   if (loading) return <LoadingSpinner />;
+
   if (error)
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-100">
-        <div className="text-center p-8 bg-white rounded-xl shadow-md">
-          <h2 className="text-2xl font-semibold mb-2 text-gray-800">
+      <div className="flex h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-xl shadow-md">
+          <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-gray-100">
             Unable to load leads
           </h2>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="bg-blue-500 text-white px-5 py-2 rounded-md hover:bg-blue-600 transition"
+            className="bg-cyan-500 text-white px-5 py-2 rounded-md hover:bg-cyan-600 transition"
           >
             Try Again
           </button>
@@ -139,33 +137,33 @@ const LeadsPage: React.FC = () => {
     );
 
   return (
-    <div className="flex flex-col md:flex-row md:h-screen min-h-screen bg-gray-50 font-sans relative">
+    <div className="flex flex-col md:flex-row md:h-screen min-h-screen bg-gray-50 dark:bg-gray-900 font-sans relative">
 
       <div
-        className={`flex flex-col w-full md:w-[380px] border-r border-gray-200 bg-white transition-all duration-300 ${
+        className={`flex flex-col w-full md:w-[380px] border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-300 ${
           isMobileDetailsOpen ? "hidden md:flex" : "flex"
         }`}
       >
-        <div className="sticky top-16 z-30 bg-white border-b border-gray-200 shadow-sm">
+        <div className="sticky top-16 z-30 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 px-2 py-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
-              <h2 className="text-lg font-semibold text-gray-900 leading-none">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 leading-none">
                 {filteredLeads.length} matching leads
               </h2>
-              <p className="text-sm text-gray-500 leading-none">
+              <p className="text-sm text-gray-500 dark:text-gray-400 leading-none">
                 {filters.category || "All services"} • {filters.location || "All locations"}
               </p>
             </div>
 
             <div className="flex items-center gap-3 w-full sm:w-auto">
               <div className="relative flex-1 sm:w-64">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 w-4 h-4" />
                 <input
                   type="text"
                   placeholder="Search leads by category"
                   value={filters.search}
                   onChange={(e) => handleFilterChange({ search: e.target.value })}
-                  className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
+                  className="w-full pl-9 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition"
                 />
               </div>
 
@@ -183,7 +181,7 @@ const LeadsPage: React.FC = () => {
                     !(typeof val === "boolean" && val === null) &&
                     !(val === "Open")
                 ) && (
-                  <span className="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-white text-emerald-700 text-[10px] font-semibold rounded-full shadow-sm border border-emerald-600">
+                  <span className="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-white dark:bg-gray-700 text-emerald-700 dark:text-emerald-400 text-[10px] font-semibold rounded-full shadow-sm border border-emerald-600 dark:border-emerald-500">
                     {Object.values(filters).filter(
                       (val) => val && val !== "" && !(typeof val === "boolean" && val === null) && !(val === "Open")
                     ).length}
@@ -207,7 +205,7 @@ const LeadsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="hidden md:block flex-1 overflow-y-auto p-6 bg-gray-50">
+      <div className="hidden md:block flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-900">
         {selectedLead ? (
           <LeadDetails
             lead={selectedLead}
@@ -216,17 +214,17 @@ const LeadsPage: React.FC = () => {
             requiredCredits={taskCredits[Number(selectedLead.task_id)] || 0}
           />
         ) : (
-          <div className="flex items-center justify-center h-full text-gray-400">
+          <div className="flex items-center justify-center h-full text-gray-400 dark:text-gray-500">
             <h2>Select a lead to view details</h2>
           </div>
         )}
       </div>
 
       {isMobileDetailsOpen && selectedLead && (
-        <div className="fixed inset-0 bg-white z-50 overflow-y-auto animate-slideInUp">
-          <div className="sticky top-0 flex justify-between p-4 border-b bg-gray-50 z-10">
-            <button onClick={() => setIsMobileDetailsOpen(false)}>← Back</button>
-            <h2 className="font-semibold text-gray-800">Lead Details</h2>
+        <div className="fixed inset-0 bg-white dark:bg-gray-800 z-50 overflow-y-auto animate-slideInUp">
+          <div className="sticky top-0 flex justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 z-10">
+            <button onClick={() => setIsMobileDetailsOpen(false)} className="text-gray-700 dark:text-gray-200">← Back</button>
+            <h2 className="font-semibold text-gray-800 dark:text-gray-100">Lead Details</h2>
             <div />
           </div>
           <LeadDetails
@@ -239,10 +237,10 @@ const LeadsPage: React.FC = () => {
 
       {showFilters && (
         <>
-          <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setShowFilters(false)} />
-          <div ref={filtersRef} className="fixed top-0 left-0 z-50 h-full w-80 bg-white shadow-2xl overflow-y-auto">
-            <div className="flex justify-end p-4 border-b border-gray-200">
-              <button onClick={() => setShowFilters(false)} className="text-gray-500 hover:text-gray-700 transition">
+          <div className="fixed inset-0 bg-black/30 dark:bg-black/50 z-40" onClick={() => setShowFilters(false)} />
+          <div ref={filtersRef} className="fixed top-0 left-0 z-50 h-full w-80 bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto">
+            <div className="flex justify-end p-4 border-b border-gray-200 dark:border-gray-700">
+              <button onClick={() => setShowFilters(false)} className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition">
                 ✕ Close
               </button>
             </div>

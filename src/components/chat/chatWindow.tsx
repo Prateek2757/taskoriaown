@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { supabaseServer } from "@/lib/supabase-server";
 import MessageList from "./messageList";
-import { is } from "date-fns/locale";
+import { supabaseServer } from "@/lib/supabase-server";
 
 export type Message = {
   id: string;
@@ -13,6 +12,7 @@ export type Message = {
   created_at: string;
   status?: "sending" | "sent" | "failed";
 };
+
 interface Participant {
   user_id: string;
   name: string;
@@ -26,10 +26,9 @@ interface Conversation {
 }
 
 export default function ChatWindow({
+  conversationId,
   otherName,
   conversationTitle,
-
-  conversationId,
   me,
   taskId,
 }: {
@@ -44,33 +43,31 @@ export default function ChatWindow({
   const [loading, setLoading] = useState(true);
   const channelRef = useRef<any>(null);
 
+  const sortMessages = (arr: Message[]) =>
+    arr.sort(
+      (a, b) =>
+        new Date(a.created_at).getTime() -
+        new Date(b.created_at).getTime()
+    );
+
+  const uniqueMessages = (arr: Message[]) =>
+    Array.from(new Map(arr.map((m) => [m.id, m])).values());
+
   useEffect(() => {
     if (!conversationId) return;
-    const fetchMessages = async () => {
+
+    const loadMessages = async () => {
       try {
         setLoading(true);
         const res = await fetch(
           `/api/messages/conversation-read/${conversationId}`
         );
 
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(`Failed to fetch messages: ${text}`);
-        }
+        if (!res.ok) throw new Error(await res.text());
+
         const data = await res.json();
-       
-          const uniqueMessages = Array.from(
-            new Map((data.messages as Message[]).map((m) => [m.id, m])).values()
-          );
-          setMessages(
-            uniqueMessages.sort(
-              (a, b) =>
-                new Date(a.created_at).getTime() -
-                new Date(b.created_at).getTime()
-            )
-          );
-          setLoading(false);
-        
+        const cleaned = uniqueMessages(data.messages);
+        setMessages(sortMessages(cleaned));
       } catch (err) {
         console.error("Fetch messages error:", err);
       } finally {
@@ -78,60 +75,46 @@ export default function ChatWindow({
       }
     };
 
-    fetchMessages();
+    loadMessages();
 
-    const channelName = `conversation:${conversationId}`;
-    const chan = supabaseServer.channel(channelName, {
+    const chan = supabaseServer.channel(`conversation:${conversationId}`, {
       config: { broadcast: { self: false } },
     });
 
     chan.on("broadcast", { event: "message" }, (payload) => {
-      const msg = payload.payload?.message;
+      const msg: Message = payload.payload?.message;
       if (!msg?.id) return;
 
       setMessages((prev) => {
-        const exists = prev.some((m) => m.id === msg.id);
-        if (exists) return prev;
-
-        const combined = [...prev, msg];
-        const unique = Array.from(
-          new Map(combined.map((m) => [m.id, m])).values()
-        );
-        return unique.sort(
-          (a, b) =>
-            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-        );
+        const merged = uniqueMessages([...prev, msg]);
+        return sortMessages(merged);
       });
     });
 
     chan.on("broadcast", { event: "typing" }, (payload) => {
-      const { user_id } = payload.payload || {};
-      if (!user_id || user_id === me.id) return;
-      setTypingUsers((prev) => ({ ...prev, [user_id]: Date.now() }));
+      const uid = payload.payload?.user_id;
+      if (!uid || uid === me.id) return;
+      setTypingUsers((prev) => ({ ...prev, [uid]: Date.now() }));
     });
 
     chan.subscribe((status) => {
-      if (status === "SUBSCRIBED") {
-        channelRef.current = chan;
-      }
+      if (status === "SUBSCRIBED") channelRef.current = chan;
     });
 
-    const interval = setInterval(() => {
+    const cleanTyping = setInterval(() => {
       const now = Date.now();
       setTypingUsers((prev) => {
-        const cleaned = Object.entries(prev).reduce((acc, [uid, ts]) => {
-          if (now - ts < 1000) acc[uid] = ts;
-          return acc;
-        }, {} as Record<string, number>);
-        return cleaned;
+        const next: Record<string, number> = {};
+        for (const [uid, ts] of Object.entries(prev)) {
+          if (now - ts < 1000) next[uid] = ts;
+        }
+        return next;
       });
     }, 1000);
 
     return () => {
-      clearInterval(interval);
-      if (channelRef.current) {
-        supabaseServer.removeChannel(channelRef.current);
-      }
+      clearInterval(cleanTyping);
+      if (channelRef.current) supabaseServer.removeChannel(channelRef.current);
     };
   }, [conversationId, me.id]);
 
@@ -139,6 +122,7 @@ export default function ChatWindow({
     if (!text.trim()) return;
 
     const tempId = "tmp_" + Math.random().toString(36).slice(2, 11);
+
     const optimistic: Message = {
       id: tempId,
       conversation_id: conversationId,
@@ -162,6 +146,7 @@ export default function ChatWindow({
       });
 
       if (!res.ok) throw new Error("Failed to send message");
+
       const data = await res.json();
 
       if (channelRef.current) {
@@ -172,23 +157,20 @@ export default function ChatWindow({
         });
       }
 
-      setMessages((prev) => {
-        const combined = prev.map((msg) =>
-          msg.id === tempId ? { ...data.message, status: "sent" } : msg
-        );
-        const unique = Array.from(
-          new Map(combined.map((m) => [m.id, m])).values()
-        );
-        return unique.sort(
-          (a, b) =>
-            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-        );
-      });
+      setMessages((prev) =>
+        sortMessages(
+          uniqueMessages(
+            prev.map((m) =>
+              m.id === tempId ? { ...data.message, status: "sent" } : m
+            )
+          )
+        )
+      );
     } catch (err) {
       console.error("Send message error:", err);
       setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === tempId ? { ...msg, status: "failed" } : msg
+        prev.map((m) =>
+          m.id === tempId ? { ...m, status: "failed" } : m
         )
       );
     }
@@ -204,7 +186,7 @@ export default function ChatWindow({
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-75px)] border overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-75px)] overflow-hidden border border-gray-100 dark:border-gray-800 bg-white dark:bg-black/30">
       <MessageList
         messages={messages}
         otherName={otherName}

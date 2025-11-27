@@ -81,11 +81,10 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
   return (
     <div className="flex flex-col  p-5 h-full">
-      {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2">
-          <SlidersHorizontal className="w-5 h-5 text-gray-700" />
-          <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
+        <div className="flex items-center  gap-2">
+          <SlidersHorizontal className="w-5 h-5 text-gray-700 dark:text-white" />
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white ">Filters</h2>
           {activeFiltersCount > 0 && (
             <span className="bg-blue-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
               {activeFiltersCount}
@@ -102,11 +101,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
         )}
       </div>
 
-      {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto space-y-5 pr-2">
-        {/* Search */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
             Search
           </label>
           <div className="relative pl-1">
@@ -121,9 +118,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           </div>
         </div>
 
-        {/* Status Pills */}
+        
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
             Status
           </label>
           <div className="flex gap-2">
@@ -150,9 +147,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           </div>
         </div>
 
-        {/* Category Dropdown with Search */}
+     
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
             Category
           </label>
           <div
@@ -227,9 +224,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           )}
         </div>
 
-        {/* Location Dropdown with Search */}
         <div className="relative">
-          <label className=" text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+          <label className=" text-sm font-medium text-gray-700 dark:text-white mb-2 flex items-center gap-1">
             <MapPin className="w-4 h-4" />
             Location
           </label>
@@ -305,16 +301,14 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           )}
         </div>
 
-        {/* Budget Range */}
         <div>
-          <label className=" text-sm font-medium text-gray-700 mb-2  flex items-center gap-1">
-            <DollarSign className="w-4 h-4" />
-            Budget Range
+          <label className=" text-sm font-medium text-gray-700 dark:text-white mb-2  flex items-center gap-1">
+              A$ Budget Range
           </label>
           <div className="grid grid-cols-2 gap-2">
             <div className="relative ml-1 ">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
-                A$
+               A$
               </span>
               <input
                 type="number"
@@ -339,9 +333,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           </div>
         </div>
 
-        {/* Remote Work Toggle */}
+       
         <div>
-          <label className="flex items-center justify-between p-3 rounded-lg border border-gray-300 cursor-pointer hover:bg-gray-50 transition group">
+          <label className="flex items-center justify-between p-3 rounded-lg border border-gray-300 cursor-pointer  transition group">
             <div className="flex items-center gap-3">
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center transition ${
@@ -355,7 +349,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 />
               </div>
               <div>
-                <div className="text-sm font-medium text-gray-900">
+                <div className="text-sm font-medium dark:text-white text-gray-900">
                   Remote Work
                 </div>
                 <div className="text-xs text-gray-500">
@@ -376,10 +370,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           </label>
         </div>
 
-        {/* Active Filters Summary */}
         {activeFiltersCount > 0 && (
           <div className="pt-4 border-t border-gray-200">
-            <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">
+            <h3 className="text-xs font-semibold text-gray-700 dark:text-gray-400 uppercase tracking-wide mb-2">
               Active Filters
             </h3>
             <div className="flex flex-wrap gap-2">

@@ -11,7 +11,7 @@ import { WorldMapDemo } from "@/components/WorldMap"
 
 function page() {
   return (
-    <div className="dark:bg-black">
+    <div className="">
      
       <HeroSection/>
       <HowItWorks/>
