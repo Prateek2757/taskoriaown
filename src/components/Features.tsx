@@ -48,12 +48,11 @@ export default function FeaturesStacking() {
   });
 
   return (
-    <ReactLenis root>
+    <ReactLenis root options={{ lerp: 0.1, smoothWheel: true, duration: 1.2 }}>
       <main
         ref={container}
         className="bg-white dark:bg-black transition-colors duration-300"
       >
-
         <div className="pt-14 pb-5 md:pt-3 px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -99,14 +98,10 @@ export default function FeaturesStacking() {
             );
           })}
         </section>
-
-
       </main>
     </ReactLenis>
   );
 }
-
-
 
 interface CardProps {
   i: number;
@@ -125,7 +120,6 @@ export const Card = ({
   title,
   description,
   url,
-  color,
   icon,
   progress,
   range,
@@ -138,47 +132,40 @@ export const Card = ({
     offset: ['start end', 'start start'],
   });
 
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1.6, 1]);
+  // Keep transforms at top level - Framer Motion optimizes these internally
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.5, 1]);
   const scale = useTransform(progress, range, [1, targetScale]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.5, 1, 1]);
 
-  return (<>
-
-
+  return (
     <div
       ref={ref}
       className="h-[80vh] flex items-center justify-center sticky top-0 px-4"
     >
-
       <motion.div
-        style={{ scale, opacity }}
+        style={{ 
+          scale,
+          willChange: 'transform'
+        }}
         className="
           w-full max-w-6xl h-auto md:h-[400px] rounded-2xl overflow-hidden
           
-          bg-white/95 backdrop-blur-2xl
+          bg-white/95 backdrop-blur-xl
           shadow-[0_8px_30px_rgb(0,0,0,0.12)]
           border border-gray-200/50
           
-          dark:bg-neutral-900/95 dark:backdrop-blur-2xl
+          dark:bg-neutral-900/95 dark:backdrop-blur-xl
           dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)]
           dark:border-white/10
           
-          transition-all duration-300
+          transition-shadow duration-300
           hover:shadow-[0_20px_60px_rgb(0,0,0,0.15)]
           dark:hover:shadow-[0_20px_60px_rgb(0,0,0,0.6)]
         "
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6 items-center h-full p-6 md:p-8">
-
           <div className="flex flex-col justify-center space-y-4">
             <div className="flex items-center gap-3 mb-1">
               <span className="text-3xl">{icon}</span>
-              {/* <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider
-                bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-blue-700
-                dark:text-white
-                border border-blue-200 dark:border-blue-500/30">
-                Feature {i + 1}
-              </span> */}
             </div>
 
             <h2 className="text-2xl md:text-3xl font-extrabold 
@@ -197,10 +184,10 @@ export const Card = ({
                 href="#"
                 className="group inline-flex items-center gap-2 px-5 py-3.5 rounded-full
                   bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white
-               
                   font-semibold text-sm
                   shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40
-                  transition-all duration-300 transform hover:scale-105"
+                  transition-all duration-300 transform hover:scale-105
+                  active:scale-95"
               >
                 Learn More
                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform"
@@ -215,8 +202,12 @@ export const Card = ({
           <motion.div
             className="relative h-64 md:h-full rounded-xl overflow-hidden
               shadow-2xl shadow-black/20 dark:shadow-black/40
-              border-2 border-white/20 dark:border-white/10"
-            style={{ scale: imageScale }}
+              border-2 border-white/20 dark:border-white/10
+              transform-gpu"
+            style={{ 
+              scale: imageScale,
+              willChange: 'transform'
+            }}
           >
             <Image
               src={url}
@@ -224,11 +215,13 @@ export const Card = ({
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"
+              loading={i === 0 ? "eager" : "lazy"}
+              priority={i === 0}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
           </motion.div>
         </div>
       </motion.div>
     </div>
-  </>);
+  );
 };

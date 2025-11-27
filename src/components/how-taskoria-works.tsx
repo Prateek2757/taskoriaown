@@ -2,7 +2,6 @@
 
 import { motion } from "motion/react";
 import { Sparkles, Users, Shield } from "lucide-react";
-import { useRef, useState, useEffect } from "react";
 
 const steps = [
   {
@@ -28,27 +27,37 @@ const steps = [
   },
 ];
 
+// Define animation variants outside the component 
+// to ensure stable references and cleaner code.
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 }
+};
+
+const cardVariant = {
+  hidden: { opacity: 0, scale: 0.85 },
+  visible: { opacity: 1, scale: 1 }
+};
+
+const lineVariant = {
+  hidden: { pathLength: 0 },
+  visible: { pathLength: 1 }
+};
+
+const arrowVariant = {
+  hidden: { opacity: 0, x: -10 },
+  visible: { opacity: 1, x: 0 }
+};
+
+// Mobile arrow variant
+const arrowMobileVariant = {
+  hidden: { opacity: 0, y: -10 },
+  visible: { opacity: 1, y: 0 }
+};
+
 export default function HowTaskoriaWorks() {
-  const containerRef = useRef(null);
-  const [hasAnimated, setHasAnimated] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated) {
-          setHasAnimated(true);
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [hasAnimated]);
-
+  // No useState, No useEffect, No useRef, No Hooks = No Re-renders
+  
   return (
     <section
       className="
@@ -57,6 +66,7 @@ export default function HowTaskoriaWorks() {
         dark:text-white dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
       "
     >
+      {/* Background patterns */}
       <div
         className="absolute inset-0 opacity-30 pointer-events-none"
         style={{
@@ -79,10 +89,19 @@ export default function HowTaskoriaWorks() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto relative" ref={containerRef}>
+      {/* Main Wrapper
+        We apply the viewport trigger HERE.
+        "once: true" ensures it never toggles back.
+        "initial" and "whileInView" props propagate to all children motion components.
+      */}
+      <motion.div 
+        className="max-w-7xl mx-auto relative"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+      >
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={hasAnimated ? { opacity: 1, y: 0 } : {}}
+          variants={fadeInUp}
           transition={{ duration: 0.7 }}
           className="text-center mb-20"
         >
@@ -98,8 +117,7 @@ export default function HowTaskoriaWorks() {
           {steps.map((step, index) => (
             <div key={step.id} className="flex flex-col items-center relative">
               <motion.div
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={hasAnimated ? { opacity: 1, scale: 1 } : {}}
+                variants={cardVariant}
                 transition={{ duration: 0.6, delay: index * 0.25 }}
                 className="
                   group relative w-full rounded-3xl p-8 overflow-hidden
@@ -139,10 +157,11 @@ export default function HowTaskoriaWorks() {
                 </div>
               </motion.div>
 
+              {/* Desktop Connecting Line */}
               {index < steps.length - 1 && (
                 <motion.div
                   initial={{ opacity: 0, scaleX: 0 }}
-                  animate={hasAnimated ? { opacity: 1, scaleX: 1 } : {}}
+                  variants={{ visible: { opacity: 1, scaleX: 1 } }}
                   transition={{ duration: 0.8, delay: index * 0.3 + 0.5 }}
                   className="hidden md:block absolute top-1/2 -right-12 lg:-right-16"
                   style={{ transformOrigin: "left center" }}
@@ -162,25 +181,24 @@ export default function HowTaskoriaWorks() {
                       stroke={`url(#grad-${index})`}
                       strokeWidth="3"
                       strokeLinecap="round"
-                      initial={{ pathLength: 0 }}
-                      animate={hasAnimated ? { pathLength: 1 } : {}}
+                      variants={lineVariant}
                       transition={{ duration: 0.8, delay: index * 0.3 + 0.6 }}
                     />
                     <motion.polygon
                       points="75,12 95,20 75,28"
                       fill="#41A6EE"
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={hasAnimated ? { opacity: 1, x: 0 } : {}}
+                      variants={arrowVariant}
                       transition={{ duration: 0.4, delay: index * 0.3 + 1.2 }}
                     />
                   </svg>
                 </motion.div>
               )}
 
+              {/* Mobile Connecting Line */}
               {index < steps.length - 1 && (
                 <motion.div
                   initial={{ opacity: 0, scaleY: 0 }}
-                  animate={hasAnimated ? { opacity: 1, scaleY: 1 } : {}}
+                  variants={{ visible: { opacity: 1, scaleY: 1 } }}
                   transition={{ duration: 0.8, delay: index * 0.3 + 0.5 }}
                   className="md:hidden flex justify-center"
                   style={{ transformOrigin: "top center" }}
@@ -206,15 +224,13 @@ export default function HowTaskoriaWorks() {
                       stroke={`url(#grad-mobile-${index})`}
                       strokeWidth="3"
                       strokeLinecap="round"
-                      initial={{ pathLength: 0 }}
-                      animate={hasAnimated ? { pathLength: 1 } : {}}
+                      variants={lineVariant}
                       transition={{ duration: 0.8, delay: index * 0.3 + 0.6 }}
                     />
                     <motion.polygon
                       points="12,55 25,75 38,55"
                       fill="#41A6EE"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={hasAnimated ? { opacity: 1, y: 0 } : {}}
+                      variants={arrowMobileVariant}
                       transition={{ duration: 0.4, delay: index * 0.3 + 1.2 }}
                     />
                   </svg>
@@ -225,8 +241,10 @@ export default function HowTaskoriaWorks() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={hasAnimated ? { opacity: 1, y: 0 } : {}}
+          variants={{
+             hidden: { opacity: 0, y: 20 },
+             visible: { opacity: 1, y: 0 }
+          }}
           transition={{ duration: 0.6, delay: 1 }}
           className="text-center mt-7"
         >
@@ -240,7 +258,7 @@ export default function HowTaskoriaWorks() {
             Start my 1-minute setup
           </button>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }
