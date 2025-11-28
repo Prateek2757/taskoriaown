@@ -119,7 +119,6 @@ export async function POST(req: Request) {
       return new Response("DB update failed", { status: 500 });
     }
   } else {
-    // Non-checkout events → Ignore
     console.log("⚠️ Ignored event type:", event.type);
   }
 

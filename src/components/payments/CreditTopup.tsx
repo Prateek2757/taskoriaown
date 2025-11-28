@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useCredit } from "@/hooks/useCredit";
 import axios from "axios";
-// import { useConversation } from "@/hooks/useConversation";
 
 interface FAQ {
   id: string;
@@ -103,22 +102,7 @@ export function CreditPurchase({
   }, [fetchResponses]);
 
   const selected = packages.find((p) => p.package_id === selectedPackage);
-  // const shouldCreateConvo = leadStatus.purchased && !!userId && !!taskId;
-
-//   const {
-//     conversationId,
-//     loading: convoLoading,
-//     error: convoError,
-//   } = useConversation(
-//     shouldCreateConvo ? [String(userId)] : [],
-//     "Private Chat",
-//     shouldCreateConvo ? taskId : ""
-//   );
-// console.log(taskId, userId);
-
-  // ------------------------------
-  // HANDLE CREDIT DEDUCTION
-  // ------------------------------
+ 
   const handleDeduct = async () => {
     if (!requiredCredits || !taskId) return;
 
@@ -132,17 +116,7 @@ export function CreditPurchase({
       onPurchaseSuccess?.();
       if (mode === "modal" && onOpenChange) onOpenChange(false);
 
-      // Wait until conversation is ready
-      // if (shouldCreateConvo) {
-      //   const checkInterval = setInterval(() => {
-      //     if (conversationId && !convoLoading) {
-      //       clearInterval(checkInterval);
-      //       window.location.href = `/messages?c=${conversationId}`;
-      //     }
-      //   }, 300);
-      // } else {
-      //   window.location.href = "/provider/leads";
-      // }
+
     } catch (err) {
       console.error(err);
       toast.error("Error deducting credits");
@@ -159,23 +133,13 @@ export function CreditPurchase({
 
     setLoadingButton(true);
     try {
-      const res = await fetch("/api/stripe/stripecheckout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          professionalId,
-          packageId: selected.package_id,
-          amount: selected.price,
-          credits: selected.credits,
-          packageName: selected.name,
-        }),
-      });
-
-      const data = await res.json();
-      // console.log(data);
-      
-      if (!res.ok) throw new Error(data.error || "Purchase failed");
-
+     const { data } = await axios.post("/api/stripe/stripecheckout", {
+    professionalId,
+    packageId: selected.package_id,
+    amount: selected.price,
+    credits: selected.credits,
+    packageName: selected.name,
+  });
       toast.success("Redirecting to payment...");
       window.location.href = data.url;
     } catch (error) {

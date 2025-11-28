@@ -15,7 +15,6 @@ export default function DashboardPage() {
     ">
       <div className="container mx-auto px-4 py-8">
 
-        {/* Back Button — Hydration Safe */}
         <Link href="/" className="inline-flex mb-4">
           <Button
             variant="ghost"
@@ -32,7 +31,6 @@ export default function DashboardPage() {
           </Button>
         </Link>
 
-        {/* Provider Dashboard */}
         <ProviderDashboard />
       </div>
     </div>

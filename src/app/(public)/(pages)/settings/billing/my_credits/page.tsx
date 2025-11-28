@@ -11,7 +11,7 @@ const {data:session} = useSession()
   return (
     <div className="p-6">
       <CreditPurchasePage
-      professionalId={session?.user.id} // Get from session/auth 
+      professionalId={session?.user.id}  
       onPurchaseSuccess={() => {
       }}
     />

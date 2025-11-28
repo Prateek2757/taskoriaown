@@ -8,7 +8,7 @@ interface CheckoutRequestBody {
   professionalId: string;
   packageId: string;
   amount: number;
-  credits: number;
+  credits?: number;
   packageName: string;
 }
 
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const body: CheckoutRequestBody = await request.json();
     const { professionalId, packageId, amount, credits, packageName } = body;
 
-    if (!professionalId || !packageId || !amount || !credits || !packageName) {
+    if (!professionalId || !packageId || !amount || !packageName) {
       console.warn("Missing required fields:", body);
       return NextResponse.json(
         { error: "Missing required fields", body },
@@ -41,6 +41,7 @@ export async function POST(request: Request) {
         },
       ],
       metadata: {
+        type: "Pro_Subscription",
         professionalId,
         packageId,
         credits: String(credits),
@@ -50,24 +51,29 @@ export async function POST(request: Request) {
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cancel`,
     });
 
-    await pool.query(
-      `INSERT INTO credit_topups
+    if (credits) {
+      await pool.query(
+        `INSERT INTO credit_topups
         (professional_id, package_id, amount, credits_added, payment_method, transaction_ref, status)
         VALUES ($1, $2, $3, $4, 'stripe', $5, 'pending')`,
-      [professionalId, packageId, amount, credits, session.id]
-    );
-
+        [professionalId, packageId, amount, credits, session.id]
+      );
+    } else {
+      await pool.query(
+        `Insert INTO professional_topups (user_id,package_id, amount,payment_method,transaction_ref,status) 
+        VALUES ($1,$2,$3,'stripe',$4,'pending')`,
+        [professionalId,packageId,amount,session.id]
+      );
+    }
     console.log("✅ Stripe checkout session created successfully:", session.id);
 
     return NextResponse.json({ url: session.url });
   } catch (error: any) {
-    // Full detailed logging
     console.error(
       "❌ Stripe checkout error full:",
       JSON.stringify(error, Object.getOwnPropertyNames(error), 2)
     );
 
-    // Optional: extract key Stripe error fields
     const errorDetails = {
       name: error.name,
       message: error.message,
@@ -76,7 +82,6 @@ export async function POST(request: Request) {
       ...(error.raw && { raw: error.raw }),
     };
 
-    // Return details for development (remove raw info in production)
     return NextResponse.json(
       {
         error: "Checkout failed",

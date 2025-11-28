@@ -172,105 +172,130 @@ export default function ProviderDashboard() {
         )}
 
         <div className="grid gap-8 lg:grid-cols-3">
-          <div className="space-y-6">
-            <Card
-              className="
-                border rounded-2xl shadow-lg backdrop-blur
-                bg-white/80 dark:bg-white/5
-                border-gray-200 dark:border-white/10
-              "
-            >
-              <CardContent className="pt-6 text-center">
-                <Avatar className="h-24 w-24 mb-4 ring-4 ring-blue-100 dark:ring-blue-900 mx-auto">
-                  {profile?.profile_image_url ? (
-                    <Image
-                      height={96}
-                      width={96}
-                      src={profile.profile_image_url}
-                      alt="Profile"
-                      className="object-cover w-full h-full"
-                    />
-                  ) : (
-                    <AvatarFallback
-                      className="text-2xl font-semibold bg-cyan-600 text-white"
-                    >
-                      {user.name
-                        ?.split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        .toUpperCase() || "U"}
-                    </AvatarFallback>
-                  )}
-                </Avatar>
+         <div className="space-y-6">
 
-                <h2 className="text-xl font-semibold dark:text-white">
-                  {user.name}
-                </h2>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
-                  {user.email}
-                </p>
+  <Card
+    className="
+      border rounded-2xl shadow-lg backdrop-blur
+      bg-white/80 dark:bg-white/5
+      border-gray-200 dark:border-white/10
+    "
+  >
+    <CardContent className="pt-6 text-center">
+      <Avatar className="h-24 w-24 mb-4 ring-4 ring-blue-100 dark:ring-blue-900 mx-auto">
+        {profile?.profile_image_url ? (
+          <Image
+            height={96}
+            width={96}
+            src={profile.profile_image_url}
+            alt="Profile"
+            className="object-cover w-full h-full"
+          />
+        ) : (
+          <AvatarFallback className="text-2xl font-semibold bg-cyan-600 text-white">
+            {user.name?.split(" ").map((n) => n[0]).join("").toUpperCase() || "U"}
+          </AvatarFallback>
+        )}
+      </Avatar>
 
-                <p className="text-xs mt-1 text-slate-500 dark:text-slate-400">
-                  Role: <strong>{user.role}</strong>
-                </p>
+      <h2 className="text-xl font-semibold dark:text-white">{user.name}</h2>
+      <p className="text-sm text-slate-500 dark:text-slate-400">{user.email}</p>
 
-                <div className="mt-4 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm dark:text-slate-300">
-                      Profile completion:{" "}
-                      <span className="font-semibold">27%</span>
-                    </span>
-                    <Link
-                      href="/settings/profile/my-profile"
-                      className="text-sm text-blue-700 dark:text-blue-400 font-medium"
-                    >
-                      Edit
-                    </Link>
-                  </div>
-                  <Progress value={27} className="h-2 rounded-md" />
-                </div>
-              </CardContent>
-            </Card>
+      <p className="text-xs mt-1 text-slate-500 dark:text-slate-400">
+        Role: <strong>{user.role}</strong>
+      </p>
 
-            <Card
-              className="
-                border rounded-2xl shadow-lg 
-                bg-white/80 dark:bg-white/5
-                border-gray-200 dark:border-white/10
-              "
-            >
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold dark:text-white">
-                  🎯 Starter Pack
-                </CardTitle>
-              </CardHeader>
+      <div className="mt-4 space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-sm dark:text-slate-300">
+            Profile completion: <span className="font-semibold">27%</span>
+          </span>
+          <Link
+            href="/settings/profile/my-profile"
+            className="text-sm text-blue-700 dark:text-blue-400 font-medium"
+          >
+            Edit
+          </Link>
+        </div>
+        <Progress value={27} className="h-2 rounded-md" />
+      </div>
+    </CardContent>
+  </Card>
 
-              <CardContent>
-                <Badge
-                  className="font-medium mb-2 text-white"
-                  style={{
-                    background:
-                      "linear-gradient(to right, #3C7DED, #46CBEE)",
-                  }}
-                >
-                  20% OFF STARTER PACK
-                </Badge>
+  {/* Combined Subscription Card */}
+  <Card
+    className="
+      border rounded-2xl shadow-lg backdrop-blur-xl
+      bg-white/70 dark:bg-white/5
+      border-gray-200 dark:border-white/10
+      p-4
+    "
+  >
+    <CardHeader className="pb-">
+      <CardTitle className="text-lg font-semibold dark:text-white flex items-center gap-2">
+        💎 Subscriptions
+      </CardTitle>
+    </CardHeader>
 
-                <p className="font-semibold dark:text-white">
-                  Respond to 10 customers
-                </p>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Get early exposure and build credibility fast.
-                </p>
+    <CardContent className="space-y-5">
 
-                <Link href="/settings/billing/my_credits">
-                  <Button className="mt-3 w-full bg-gradient-to-r from-[#3C7DED] to-[#46CBEE] hover:opacity-90 text-white">
-                    Get Offer
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          </div>
+      {/* Taskoria Pro */}
+      <div className="p-4 rounded-xl bg-gradient-to-r from-[#fbd158]/30 to-[#e9a701]/30 dark:from-[#fbd158]/10 dark:to-[#e9a701]/10 border border-yellow-300/40 dark:border-yellow-300/20">
+        <div className="flex items-center justify-between">
+          <p className="font-semibold dark:text-white">⭐ Taskoria Pro</p>
+          <Badge
+            className="text-white"
+            style={{ background: "linear-gradient(to right, #fbd158, #e9a701)" }}
+          >
+            PRO
+          </Badge>
+        </div>
+
+        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+          Verified badge, weekly free leads & more.
+        </p>
+
+        <Link href="/settings/billing/taskoria_pro">
+          <Button
+            className="mt-3 w-full bg-gradient-to-r from-[#fbd158] to-[#e9a701] hover:opacity-90 text-black font-medium"
+            size="sm"
+          >
+            Activate
+          </Button>
+        </Link>
+      </div>
+
+      {/* Starter Pack */}
+      <div className="p-4 rounded-xl bg-gradient-to-r from-[#3C7DED]/20 to-[#46CBEE]/20 dark:from-[#3C7DED]/10 dark:to-[#46CBEE]/10 border border-blue-300/30 dark:border-blue-300/20">
+        <div className="flex items-center justify-between">
+          <p className="font-semibold dark:text-white">🎯 Starter Pack</p>
+          <Badge
+            className="text-white"
+            style={{
+              background: "linear-gradient(to right, #3C7DED, #46CBEE)",
+            }}
+          >
+            -20%
+          </Badge>
+        </div>
+
+        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+          Respond to 10 customers & boost credibility.
+        </p>
+
+        <Link href="/settings/billing/my_credits">
+          <Button
+            className="mt-3 w-full bg-gradient-to-r from-[#3C7DED] to-[#46CBEE] hover:opacity-90 text-white"
+            size="sm"
+          >
+            Get Offer
+          </Button>
+        </Link>
+      </div>
+    </CardContent>
+  </Card>
+</div>
+
 
           <LeadSettingsCard />
 
@@ -312,6 +337,9 @@ export default function ProviderDashboard() {
                 </p>
               </CardContent>
             </Card>
+
+
+
 
             <Card
               className="

@@ -166,12 +166,12 @@ export function useCredit(professionalId?: string) {
   return {
     balance: state.balance,
     packages: state.packages,
-    taskCredits: state.taskCredits, // 🆕 accessible in LeadsPage or others
+    taskCredits: state.taskCredits,
     loading: state.loading,
     fetchBalance,
     fetchPackages,
     estimateCredits,
-    fetchCreditEstimates, // 🆕 added
+    fetchCreditEstimates, 
     deductCredits,
     purchaseCredits,
   };
