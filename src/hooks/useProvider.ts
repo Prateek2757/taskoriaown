@@ -9,6 +9,8 @@ interface Provider {
     name: string;
     public_id?:string;
     services: string[];
+    company_name?:string;
+    logo_url?:string;
     rating: number;
     reviews_count: number;
     image?: string;

@@ -42,7 +42,6 @@ export default function StepTwoQuestionsForm({
     formState: { errors },
   } = useForm();
 
-  // Fetch questions
   useEffect(() => {
     if (!selectedCategoryId) return;
     setLoading(true);
@@ -79,9 +78,13 @@ export default function StepTwoQuestionsForm({
 
   const onSubmit = async (data: any) => {
     setLoading(true);
-    // Validation
     if (!data.budget_min || !data.budget_max) {
       toast.error("Please enter both minimum and maximum budget");
+      setLoading(false);
+      return;
+    }
+    if (data.budget_min < 0 || data.budget_max < 0) {
+      toast.error("Invalid! Budget cannot be negative");
       setLoading(false);
       return;
     }
@@ -126,7 +129,8 @@ export default function StepTwoQuestionsForm({
       }
     } catch (err: any) {
       console.error("Submission error:", err);
-      toast.error("Failed to submit request. Please try again.");
+      toast.error("Failed to submit request. Please Sign In or Sign Up .");
+      router.push("/signin");
     } finally {
       setLoading(false);
     }
@@ -147,7 +151,6 @@ export default function StepTwoQuestionsForm({
       </div>
     );
 
-  // ---------- QUESTION STEP ----------
   if (currentStep === "questions") {
     return (
       <form className="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-4 flex flex-col gap-3">
@@ -195,7 +198,6 @@ export default function StepTwoQuestionsForm({
     );
   }
 
-  // ---------- BUDGET & DATE STEP ----------
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -205,7 +207,6 @@ export default function StepTwoQuestionsForm({
         Budget & Preferred Dates
       </h2>
 
-      {/* BUDGET FIELDS */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 flex flex-col">
           <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
@@ -241,7 +242,6 @@ export default function StepTwoQuestionsForm({
         </div>
       </div>
 
-      {/* DATE FIELDS */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 flex flex-col">
           <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">

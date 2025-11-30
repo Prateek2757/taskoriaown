@@ -144,10 +144,9 @@ export default function LocationSearch({ onSelect }: Props) {
         </div>
       )}
 
-      {/* Dropdown */}
       {showDropdown && !loading && results.length > 0 && (
         <ul
-          className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-68 overflow-y-auto z-50 scroll-smooth"
+          className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto z-50 scroll-smooth"
           onMouseLeave={() => setActiveIndex(-1)}
         >
           {results.map((r, i) => (
@@ -173,7 +172,6 @@ export default function LocationSearch({ onSelect }: Props) {
         </ul>
       )}
 
-      {/* No results */}
       {showDropdown &&
         !loading &&
         query.length >= 3 &&

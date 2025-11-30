@@ -3,7 +3,6 @@ import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
 
-// ✅ GET: Fetch profile
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id)
@@ -13,24 +12,68 @@ export async function GET() {
 
   const { rows } = await pool.query(
     `
-    SELECT 
-      up.display_name,
-      up.location_id,
-      ci.name AS location_name,
-      up.is_nationwide,
-      up.profile_image_url,
-      json_agg(
-        json_build_object(
-          'category_id', uc.category_id,
-          'category_name', sc.name
-        )
-      ) FILTER (WHERE uc.category_id IS NOT NULL) AS categories
-    FROM user_profiles up
-    LEFT JOIN user_categories uc ON uc.user_id = up.user_id
-    LEFT JOIN service_categories sc ON sc.category_id = uc.category_id
-    LEFT JOIN cities ci ON ci.city_id = up.location_id
-    WHERE up.user_id = $1
-    GROUP BY up.display_name, up.location_id, ci.name, up.is_nationwide, up.profile_image_url;
+    WITH profile AS (
+      SELECT 
+        up.user_id,
+        up.display_name,
+        up.location_id,
+        ci.name AS location_name,
+        up.is_nationwide,
+        up.profile_image_url,
+        json_agg(
+          json_build_object(
+            'category_id', uc.category_id,
+            'category_name', sc.name
+          )
+        ) FILTER (WHERE uc.category_id IS NOT NULL) AS categories
+      FROM user_profiles up
+      LEFT JOIN user_categories uc ON uc.user_id = up.user_id
+      LEFT JOIN service_categories sc ON sc.category_id = uc.category_id
+      LEFT JOIN cities ci ON ci.city_id = up.location_id
+      WHERE up.user_id = $1
+      GROUP BY up.user_id, up.display_name, up.location_id, ci.name, up.is_nationwide, up.profile_image_url
+    ),
+
+    company_profile AS (
+      SELECT 
+        c.user_id,
+        c.company_name,
+        c.logo_url,
+        c.about AS company_about,
+        c.company_size,
+        c.years_in_business
+      FROM company c
+      WHERE c.user_id = $1
+    ),
+
+    active_sub AS (
+      SELECT 
+        ps.user_id,
+        ps.package_id,
+        ps.start_date,
+        ps.end_date,
+        ps.status,
+        ps.payment_transaction_id
+      FROM professional_subscriptions ps
+      WHERE ps.user_id = $1
+      AND ps.status = 'active'
+      AND ps.end_date > NOW()
+      ORDER BY ps.end_date DESC
+      LIMIT 1
+    )
+
+    SELECT
+      p.*,
+      cp.company_name,
+      cp.logo_url,
+      cp.company_about,
+      cp.company_size,
+      cp.years_in_business,
+      (cp.user_id IS NOT NULL) AS has_company,
+      EXISTS (SELECT 1 FROM active_sub) AS is_pro,
+      (SELECT row_to_json(s) FROM active_sub s) AS active_subscription
+    FROM profile p
+    LEFT JOIN company_profile cp ON cp.user_id = p.user_id;
     `,
     [userId]
   );
@@ -38,7 +81,6 @@ export async function GET() {
   return NextResponse.json(rows[0] || {});
 }
 
-// ✅ PUT: Update location or is_nationwide
 export async function PUT(req: Request) {
   const session = await getServerSession(authOptions);
 
@@ -62,7 +104,6 @@ export async function PUT(req: Request) {
     [display_name, location_id, is_nationwide, profile_image_url,userId]
   );
 
-  // Fetch the updated profile
   const { rows } = await pool.query(
     `
     SELECT display_name, location_id, is_nationwide , profile_image_url

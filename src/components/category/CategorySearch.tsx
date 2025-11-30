@@ -14,15 +14,15 @@ type Category = {
 type Props = {
   onSelect?: (category: Category) => void;
   placeholder?: string;
-  presetCategory?:Category
+  presetCategory?: Category
 };
 
-export default function CategorySearch({ onSelect, placeholder , presetCategory }: Props) {
+export default function CategorySearch({ onSelect, placeholder, presetCategory }: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [query, setQuery] = useState("");
   const [filtered, setFiltered] = useState<Category[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selected, setSelected] = useState<Category | null>(presetCategory ||null);
+  const [selected, setSelected] = useState<Category | null>(presetCategory || null);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -51,7 +51,7 @@ export default function CategorySearch({ onSelect, placeholder , presetCategory 
     };
   }, []);
 
- 
+
   useEffect(() => {
     function handleEsc(e: KeyboardEvent) {
       if (e.key === "Escape") setShowSuggestions(false);
@@ -100,7 +100,7 @@ export default function CategorySearch({ onSelect, placeholder , presetCategory 
   };
 
   return (
-    <div ref={wrapperRef} className="relative rounded-full  w-full">
+    <div ref={wrapperRef} className="relative overflow-visible  w-full">
       <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
 
       <Input
@@ -117,23 +117,24 @@ export default function CategorySearch({ onSelect, placeholder , presetCategory 
 
       <AnimatePresence>
         {showSuggestions && filtered.length > 0 && (
-          <motion.ul
+          <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute z-40 bg-white border mt-1 w-full rounded-lg shadow-lg max-h-60 overflow-y-auto"
+            className="absolute z-50 bg-white border mt-1 w-full rounded-lg shadow-lg 
+             max-h-60 overflow-y-auto pointer-events-auto overscroll-contain"
           >
             {filtered.map((cat) => (
               <li
                 key={cat.category_id}
-                onMouseDown={() => handleSelect(cat)} 
-                onTouchStart={() => handleSelect(cat)} 
+                onMouseDown={() => handleSelect(cat)}
+                onTouchStart={() => handleSelect(cat)}
                 className="p-3 cursor-pointer hover:bg-blue-50 text-gray-700 text-sm"
               >
                 {cat.name}
               </li>
             ))}
-          </motion.ul>
+          </motion.div>
         )}
 
         {showSuggestions && filtered.length === 0 && (

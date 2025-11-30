@@ -7,74 +7,107 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
   const raw = await req.text();
-  const signature = req.headers.get("stripe-signature")!;
-  let event: Stripe.Event;
+  const sig = req.headers.get("stripe-signature") || "";
 
+  let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(raw, signature, process.env.STRIPE_WEBHOOK_SECRET!);
-  } catch (err) {
-    console.error("Webhook signature fail", err);
+    event = stripe.webhooks.constructEvent(raw, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+  } catch (err: any) {
+    console.error("⚠️ Webhook signature verification failed:", err?.message ?? err);
     return new Response("Invalid signature", { status: 400 });
   }
 
   try {
-    if (event.type === 'checkout.session.completed') {
+    if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
-      const metadata = (session.metadata || {}) as Record<string,string>;
+      const meta = (session.metadata || {}) as Record<string, string>;
 
-      if (metadata.type === 'Pro_Subscription') {
-        await handleProSubscription(session, metadata);
+      const existing = await pool.query(
+        `SELECT transaction_id FROM payment_transactions WHERE reference_id = $1 LIMIT 1`,
+        [session.id]
+      );
+      if (existing.rows.length > 0) {
+        console.log("ℹ️ Session already processed:", session.id);
       } else {
-        console.log("Unknown metadata type:", metadata.type);
+        if (meta.type === "Pro_Subscription") {
+          await handleProSubscription(session, meta);
+        }  else {
+          console.log("⚠️ Unknown session metadata type:", meta.type, meta);
+        }
       }
-    } 
+    } else {
+      console.log("⤴️ Unhandled event type:", event.type);
+    }
 
     return new Response(JSON.stringify({ received: true }), { status: 200 });
   } catch (err) {
-    console.error("Webhook processing error", err);
+    console.error("❌ Webhook handler error:", err);
     return new Response("Webhook processing error", { status: 500 });
   }
 }
 
-async function handleProSubscription(session: Stripe.Checkout.Session, meta: Record<string,string>) {
+
+async function handleProSubscription(session: Stripe.Checkout.Session, meta: Record<string, string>) {
   const ref = session.id;
-  const userId = Number(meta.userId);
+  const professionalId = Number(meta.professionalId || meta.userId); // accept both if sometime different
   const packageId = Number(meta.packageId);
-  const amount = Number(meta.amount) || 0;
+  const amount = Number(meta.amount || 0);
 
-   if (!userId || !packageId || !amount) {
-      console.warn("⚠️ Invalid metadata. Ignoring.");
-      return new Response(JSON.stringify({ received: true }), { status: 200 });
-    }
+  if (!professionalId || !packageId || !amount) {
+    console.warn("⚠️ Invalid metadata for Pro_Subscription:", meta);
+    return;
+  }
 
+  console.log("➡️ Activating Pro subscription:", { professionalId, packageId, amount, ref });
 
   const pkgRes = await pool.query(`SELECT duration_months FROM professional_packages WHERE package_id = $1`, [packageId]);
-  if (!pkgRes.rows.length) throw new Error("Package not found");
-
+  if (!pkgRes.rows.length) {
+    throw new Error("Package not found: " + packageId);
+  }
   const durationMonths = pkgRes.rows[0].duration_months || 1;
 
- const txRes = await pool.query(
+  const txRes = await pool.query(
     `INSERT INTO payment_transactions
       (reference_id, professional_id, transaction_type, amount, credits_used, payment_gateway, status, remarks, created_at)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,NOW())
      RETURNING transaction_id`,
-    [ref, userId, 'subscription', amount, 0, 'stripe', 'completed', `Checkout Session: ${session.payment_intent ?? session.id}`]
+    [ref, professionalId, 'subscription', amount, 0, 'stripe', 'completed', `Checkout session ${session.id}`]
   );
   const txId = txRes.rows[0].transaction_id;
 
-  const startDate = new Date();  await pool.query(
-    `INSERT INTO professional_subscriptions
-      (user_id, package_id, status, start_date, end_date, cancel_at_period_end, payment_transaction_id, created_at)
-     VALUES ($1,$2,$3,$4, (NOW() + ($5 || ' month')::interval), $6, $7, NOW())
-     RETURNING subscription_id`,
-    [userId, packageId, 'active', startDate, durationMonths, false, txId]
+ 
+  const activeRes = await pool.query(
+    `SELECT subscription_id, end_date FROM professional_subscriptions
+     WHERE user_id = $1 AND status = 'active' AND end_date > NOW()
+     ORDER BY end_date DESC LIMIT 1`,
+    [professionalId]
   );
-   await pool.query(
-        `UPDATE professional_topups
-         SET status = 'completed', payment_transaction_id= $1,updated_at = NOW()
-         WHERE transaction_ref = $2`,
-        [txId,ref]
-      );
 
-  console.log("Pro subscription created for user", userId);
+  if (activeRes.rows.length > 0) {
+    const currentEnd = activeRes.rows[0].end_date;
+   await pool.query(
+  `INSERT INTO professional_subscriptions
+     (user_id, package_id, status, start_date, end_date, cancel_at_period_end, payment_transaction_id, created_at)
+   VALUES ($1,$2,$3,NOW(), (NOW() + make_interval(months => $4)), $5, $6, NOW())`,
+  [professionalId, packageId, 'active', durationMonths, false, txId]
+);
+    console.log("🔁 Extended existing subscription for user", professionalId);
+  } else {
+    await pool.query(
+      `INSERT INTO professional_subscriptions
+         (user_id, package_id, status, start_date, end_date, cancel_at_period_end, payment_transaction_id, created_at)
+       VALUES ($1,$2,$3,NOW(), (NOW() + ($4 || ' month')::interval), $5, $6, NOW())`,
+      [professionalId, packageId, 'active', durationMonths, false, txId]
+    );
+    console.log("✅ Created new subscription for user", professionalId);
+  }
+
+  await pool.query(
+    `UPDATE professional_topups
+     SET status = 'completed', payment_transaction_id = $1, updated_at = NOW()
+     WHERE transaction_ref = $2`,
+    [txId, ref]
+  );
+
+  console.log("✅ Pro subscription processed:", ref);
 }

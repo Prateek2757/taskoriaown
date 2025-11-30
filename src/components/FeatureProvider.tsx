@@ -9,7 +9,6 @@ import { useProviders } from "@/hooks/useProvider";
 
 export const FeatureProvider = () => {
   const { providers, loading } = useProviders(3);
-
   return (
     <section
       className="

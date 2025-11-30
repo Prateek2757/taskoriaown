@@ -40,13 +40,13 @@ export default function ModernNavbar() {
   const navLinks = {
     public: [
       { name: "Home", href: "/", icon: Search },
-      { name: "Community", href: "/providers", icon: Users },
-      { name: "Discover", href: "/discover", icon: Search },
+      { name: "Providers", href: "/providers", icon: Users },
+      { name: "Services", href: "/services", icon: Search },
     ],
     customer: [
       { name: "Home", href: "/", icon: Search },
       { name: "My Requests", href: "/customer/dashboard", icon: Search },
-      { name: "Discover", href: "/discover", icon: Search },
+      { name: "Discover", href: "/services", icon: Search },
       { name: "Messages", href: "/messages/null", icon: MessageSquare },
     ],
     provider: [
@@ -127,7 +127,7 @@ export default function ModernNavbar() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.15 }}
-        className="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-900 rounded-xl shadow-xl overflow-hidden z-[999]"
+        className="absolute right-0 mt- w-72 bg-white dark:bg-gray-900 rounded-xl shadow-xl overflow-hidden z-[999]"
       >
         <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
@@ -197,15 +197,22 @@ export default function ModernNavbar() {
             <div className="w-10 h-10 bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] rounded-xl animate-pulse" />
             <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
           </div>
-        </div>
+     </div>
       </header>
     );
   }
 
   return (
     <>
-      <header className="border-b sticky top-0 z-50 backdrop-blur-md border-white/20 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-900 transition-colors">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between relative">
+      <header className="
+  sticky top-0 z-50 
+  backdrop-blur-xl 
+  bg-white/30 dark:bg-gray-900/20 
+  border-b border-white/40 dark:border-white/10
+  shadow-lg shadow-black/5 dark:shadow-white/5
+  transition-colors
+">
+        <div className="container mx-auto px-4 py-2 flex items-center justify-between relative">
           <Link
             href="/"
             className="flex items-center hover:opacity-90 transition-opacity"
@@ -229,19 +236,15 @@ export default function ModernNavbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`relative px-4 py-1.5 rounded-full font-medium text-sm transition-all text-gray-700 dark:text-gray-300`}
+                  className="relative  mx-4  py-3.5 rounded-full font-medium text-sm transition-all text-gray-700 dark:text-gray-300 group inline-block"
                 >
                   {link.name}
                   <span
                     className={`
-                      absolute left-1/2 -bottom-1 h-[2px] bg-[#3C7DED] rounded-full transition-all duration-300
-                      transform -translate-x-1/2
-                      ${
-                        pathname === link.href
-                          ? "w-3/4 opacity-100"
-                          : "w-0 opacity-0 group-hover:w-3/4 group-hover:opacity-100"
-                      }
-                    `}
+          absolute left-0 right-0 bottom-[-3] h-[2px] bg-[#3C7DED] rounded-full
+          scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left
+          ${pathname === link.href ? "scale-x-100" : ""}
+        `}
                   />
                 </Link>
               ))}
@@ -257,7 +260,7 @@ export default function ModernNavbar() {
                   <Button
                     onClick={() => setIsProfileOpen((p) => !p)}
                     variant="ghost"
-                    className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="flex items-center gap-2 px-3 py- rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
                     <div className="w-9 h-9 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center">
                       <User className="w-5 h-5 text-blue-600" />
@@ -266,9 +269,8 @@ export default function ModernNavbar() {
                       {session.user?.name?.split(" ")[0] || "User"}
                     </span>
                     <ChevronDown
-                      className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform ${
-                        isProfileOpen ? "rotate-180" : ""
-                      }`}
+                      className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform ${isProfileOpen ? "rotate-180" : ""
+                        }`}
                     />
                   </Button>
                   <AnimatePresence>
@@ -294,7 +296,7 @@ export default function ModernNavbar() {
               )}
             </div>
           )}
-     
+
           <Button
             variant="ghost"
             onClick={() => setIsMenuOpen((p) => !p)}
@@ -343,9 +345,9 @@ export default function ModernNavbar() {
                     </span>
 
                   </Link>
-                       <div className="p-1">
-                <ThemeToggle />
-                </div> 
+                  <div className="p-1">
+                    <ThemeToggle />
+                  </div>
                   <button
                     onClick={() => setIsMenuOpen(false)}
                     className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
@@ -377,8 +379,8 @@ export default function ModernNavbar() {
                   </div>
                 )}
               </div>
-         
-              
+
+
 
               <nav className="p-4 space-y-2">
                 {currentLinks.map((link) => {
@@ -389,16 +391,14 @@ export default function ModernNavbar() {
                       key={link.name}
                       href={link.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-full font-medium transition-colors ${
-                        isActive
-                          ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg"
-                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-                      }`}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-full font-medium transition-colors ${isActive
+                        ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg"
+                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                        }`}
                     >
                       <Icon
-                        className={`w-5 h-5 ${
-                          isActive ? "text-white" : "text-gray-500 dark:text-gray-400"
-                        }`}
+                        className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-500 dark:text-gray-400"
+                          }`}
                       />
                       <span>{link.name}</span>
                     </Link>

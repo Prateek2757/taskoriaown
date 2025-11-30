@@ -26,7 +26,27 @@ export async function POST(request: Request) {
     }
 
     const amountInCents = Math.round(Number(amount) * 100);
+    if (!credits) {
+      const activeSub = await pool.query(
+        `SELECT subscription_id FROM professional_subscriptions 
+     WHERE user_id = $1 AND status = 'active' AND end_date > NOW()
+     LIMIT 1`,
+        [professionalId]
+      );
 
+      if (activeSub.rows.length > 0) {
+        return NextResponse.json(
+          { error: "You already have an active Taskoria Pro subscription." },
+          { status: 400 }
+        );
+      }
+    }
+
+    let successUrl = `${process.env.NEXT_PUBLIC_APP_URL}/settings/billing/my_credits`;
+
+    if (!credits) {
+      successUrl = `${process.env.NEXT_PUBLIC_APP_URL}/provider/dashboard`;
+    }
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
@@ -41,13 +61,14 @@ export async function POST(request: Request) {
         },
       ],
       metadata: {
-        type: "Pro_Subscription",
+        type: credits ? "Credit_Topup" : "Pro_Subscription",
         professionalId,
         packageId,
-        credits: String(credits),
+        credits: String(credits || 0),
         amount: String(amount),
       },
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings/billing/my_credits`,
+      
+      success_url: successUrl,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cancel`,
     });
 
@@ -62,7 +83,7 @@ export async function POST(request: Request) {
       await pool.query(
         `Insert INTO professional_topups (user_id,package_id, amount,payment_method,transaction_ref,status) 
         VALUES ($1,$2,$3,'stripe',$4,'pending')`,
-        [professionalId,packageId,amount,session.id]
+        [professionalId, packageId, amount, session.id]
       );
     }
     console.log("✅ Stripe checkout session created successfully:", session.id);

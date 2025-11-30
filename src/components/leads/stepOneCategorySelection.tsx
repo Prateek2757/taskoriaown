@@ -128,7 +128,8 @@ export default function StepOneCategoryForm({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl w-full max-w-md mx-auto p-6 sm:p-8 space-y-8">
+    <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl w-full max-w-md mx-auto p-6 sm:p-8 space-y-8
+             ">
       <div className="space-y-2 text-center">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
           What kind of service do you need?
@@ -154,10 +155,10 @@ export default function StepOneCategoryForm({
                 presetCategory={
                   presetCategory
                     ? {
-                        category_id: presetCategory.category_id,
-                        name: presetCategory.name,
-                        slug: presetCategory.slug || "",
-                      }
+                      category_id: presetCategory.category_id,
+                      name: presetCategory.name,
+                      slug: presetCategory.slug || "",
+                    }
                     : undefined
                 }
                 onSelect={(data) => {
@@ -178,7 +179,7 @@ export default function StepOneCategoryForm({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute z-20 w-full mt-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-60 overflow-y-auto"
+                  className="absolute z-50 w-full mt-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-60 overflow-y-ato"
                 >
                   {filteredCategories.map((cat) => (
                     <li

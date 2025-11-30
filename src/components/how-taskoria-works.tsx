@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { Sparkles, Users, Shield } from "lucide-react";
+import Link from "next/link";
 
 const steps = [
   {
@@ -27,8 +28,7 @@ const steps = [
   },
 ];
 
-// Define animation variants outside the component 
-// to ensure stable references and cleaner code.
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0 }
@@ -49,14 +49,12 @@ const arrowVariant = {
   visible: { opacity: 1, x: 0 }
 };
 
-// Mobile arrow variant
 const arrowMobileVariant = {
   hidden: { opacity: 0, y: -10 },
   visible: { opacity: 1, y: 0 }
 };
 
 export default function HowTaskoriaWorks() {
-  // No useState, No useEffect, No useRef, No Hooks = No Re-renders
   
   return (
     <section
@@ -66,7 +64,6 @@ export default function HowTaskoriaWorks() {
         dark:text-white dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
       "
     >
-      {/* Background patterns */}
       <div
         className="absolute inset-0 opacity-30 pointer-events-none"
         style={{
@@ -89,11 +86,7 @@ export default function HowTaskoriaWorks() {
         }}
       />
 
-      {/* Main Wrapper
-        We apply the viewport trigger HERE.
-        "once: true" ensures it never toggles back.
-        "initial" and "whileInView" props propagate to all children motion components.
-      */}
+   
       <motion.div 
         className="max-w-7xl mx-auto relative"
         initial="hidden"
@@ -157,7 +150,6 @@ export default function HowTaskoriaWorks() {
                 </div>
               </motion.div>
 
-              {/* Desktop Connecting Line */}
               {index < steps.length - 1 && (
                 <motion.div
                   initial={{ opacity: 0, scaleX: 0 }}
@@ -194,7 +186,6 @@ export default function HowTaskoriaWorks() {
                 </motion.div>
               )}
 
-              {/* Mobile Connecting Line */}
               {index < steps.length - 1 && (
                 <motion.div
                   initial={{ opacity: 0, scaleY: 0 }}
@@ -247,7 +238,9 @@ export default function HowTaskoriaWorks() {
           }}
           transition={{ duration: 0.6, delay: 1 }}
           className="text-center mt-7"
-        >
+        > 
+        <Link href="/signin" >
+        
           <button
             className="
               px-10 py-4 rounded-full bg-[#41A6EE] hover:bg-[#41A6EE]/80
@@ -257,6 +250,7 @@ export default function HowTaskoriaWorks() {
           >
             Start my 1-minute setup
           </button>
+          </Link>
         </motion.div>
       </motion.div>
     </section>

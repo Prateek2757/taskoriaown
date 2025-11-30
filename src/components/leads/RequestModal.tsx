@@ -51,14 +51,19 @@ export default function NewRequestModal({
 
   return (
     <Dialog open={open} onOpenChange={close}>
-      <DialogContent className="max-w-2xl w-[95%] p-0  rounded-2xl">
-        <DialogHeader className="border-b bg-gray-50 dark:bg-slate-900 rounded-2xl p-4 text-center">
+      <DialogContent
+        className="
+          max-w-2xl w-[95%] p-0 rounded-2xl
+          max-h-[90vh] overflow-hidden flex flex-col
+        "
+      >
+        <DialogHeader className="border-b bg-gray-50 dark:bg-slate-900 rounded-t-2xl p-4 text-center flex-shrink-0">
           <DialogTitle className="text-xl text-center font-semibold">
             {step === 1 ? "Place a new request" : "A few quick questions"}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="relative ">
+        <div className="flex-1  p-4">  
           <AnimatePresence mode="wait">
             {step === 1 ? (
               <motion.div
@@ -67,7 +72,6 @@ export default function NewRequestModal({
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -100, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="p-6"
               >
                 <StepOneCategoryForm
                   onNext={next}
@@ -75,9 +79,9 @@ export default function NewRequestModal({
                   presetCategory={
                     selectedCategoryId && selectedCategoryTitle
                       ? {
-                          category_id: Number(selectedCategoryId),
-                          name: selectedCategoryTitle,
-                        }
+                        category_id: Number(selectedCategoryId),
+                        name: selectedCategoryTitle,
+                      }
                       : undefined
                   }
                   setSelectedCategoryId={setSelectedCategoryId}
@@ -92,7 +96,6 @@ export default function NewRequestModal({
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -100, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="p-4"
               >
                 <StepTwoQuestionsForm
                   onBack={back}

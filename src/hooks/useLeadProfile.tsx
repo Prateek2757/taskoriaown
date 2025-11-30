@@ -3,15 +3,29 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export type Category = { category_id: number; name: string };
+export type Category = { category_id: number; category_name: string };
 export type City = { city_id: number; name: string };
+export type Subscription = {
+  package_id: number;
+  start_date: string;
+  end_date: string;
+  status: string;
+  payment_transaction_id: string;
+};
+
 export type Profile = {
   location_id: number | null;
   location_name?: string;
   is_nationwide: boolean;
-  categories: { category_id: number; category_name: string }[];
+  categories: Category[];
   display_name?: string;
-  profile_image_url?:string;
+  profile_image_url?: string;
+  company_name?:string;
+  company_size?:string;
+  has_company?:boolean;
+  logo_url?:string;
+  is_pro?: boolean;
+  active_subscription?: Subscription | null;
 };
 
 export function useLeadProfile() {
@@ -22,10 +36,8 @@ export function useLeadProfile() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-
-  const api = axios; 
-
-
+  const api = axios;
+ 
   useEffect(() => {
     const loadProfile = async () => {
       setLoading(true);
@@ -34,16 +46,17 @@ export function useLeadProfile() {
         setProfile({
           ...data,
           categories: data.categories || [],
+          is_pro: data.is_pro || false,
+          active_subscription: data.active_subscription || null,
         });
       } catch {
         setError("Failed to load profile.");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     loadProfile();
   }, []);
-
-
 
   const fetchCategories = async () => {
     if (categories.length) return;
@@ -64,13 +77,16 @@ export function useLeadProfile() {
       setError("Failed to load cities.");
     }
   };
-    
+
   useEffect(() => {
     fetchCategories();
-    
+    fetchCities();
   }, []);
 
-  const updateProfile = async (data: { display_name: string , profile_image_url:string}) => {
+  const updateProfile = async (data: {
+    display_name?: string;
+    profile_image_url?: string;
+  }) => {
     if (!profile) return;
     setSaving(true);
     try {
@@ -91,14 +107,14 @@ export function useLeadProfile() {
   };
 
   const addCategory = async (category_id: number, category_name: string) => {
-    if (!profile || profile.categories.some((c) => c.category_id === category_id)) return;
+    if (!profile || profile.categories.some((c) => c.category_id === category_id))
+      return;
 
     setSaving(true);
     try {
       setProfile((p) =>
         p ? { ...p, categories: [...p.categories, { category_id, category_name }] } : p
       );
-
       await api.post("/api/user_categories", { category_id });
       notifyAll();
     } catch {
@@ -110,18 +126,13 @@ export function useLeadProfile() {
 
   const removeCategory = async (category_id: number) => {
     if (!profile) return;
-
     setSaving(true);
     try {
       setProfile((p) =>
         p
-          ? {
-              ...p,
-              categories: p.categories.filter((c) => c.category_id !== category_id),
-            }
+          ? { ...p, categories: p.categories.filter((c) => c.category_id !== category_id) }
           : p
       );
-
       await api.delete("/api/user_categories", { data: { category_id } });
       notifyAll();
     } catch {
@@ -131,22 +142,17 @@ export function useLeadProfile() {
     }
   };
 
+  
   const setLocation = async (city_id: number, city_name: string) => {
     if (!profile) return;
     setSaving(true);
-
     try {
       setProfile((p) =>
         p
           ? { ...p, location_id: city_id, location_name: city_name, is_nationwide: false }
           : p
       );
-
-      await api.put("/api/user_profiles", {
-        location_id: city_id,
-        is_nationwide: false,
-      });
-
+      await api.put("/api/user_profiles", { location_id: city_id, is_nationwide: false });
       notifyAll();
     } catch {
       setError("Failed to update location.");
@@ -157,7 +163,6 @@ export function useLeadProfile() {
 
   const toggleNationwide = async (value: boolean) => {
     if (!profile) return;
-
     setSaving(true);
     try {
       setProfile((p) =>
@@ -170,9 +175,7 @@ export function useLeadProfile() {
             }
           : p
       );
-
       await api.put("/api/user_profiles", { is_nationwide: value });
-
       notifyAll();
     } catch {
       setError("Failed to toggle nationwide.");

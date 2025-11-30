@@ -1,6 +1,6 @@
 "use client";
 
-import { useLeadProfile, Category, City } from "@/hooks/useLeadProfile";
+import { useLeadProfile, Category } from "@/hooks/useLeadProfile";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,6 @@ import {
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import debounce from "lodash.debounce";
-
 import {
   Dialog,
   DialogTrigger,
@@ -42,13 +41,10 @@ export default function MyServicesPage() {
   } = useLeadProfile();
 
   const [catSearch, setCatSearch] = useState("");
-
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
-
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [serviceDialogOpen, setServiceDialogOpen] = useState(false);
   const [locationDialogOpen, setLocationDialogOpen] = useState(false);
-
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [pendingRemove, setPendingRemove] = useState<{
     type: "service" | "location";
@@ -78,10 +74,7 @@ export default function MyServicesPage() {
     }
   }, [categories, serviceDialogOpen]);
 
-  useEffect(
-    () => handleCategorySearch(catSearch),
-    [catSearch, handleCategorySearch]
-  );
+  useEffect(() => handleCategorySearch(catSearch), [catSearch, handleCategorySearch]);
 
   const isCategorySelected = (categoryId: number) => {
     return (
@@ -121,7 +114,7 @@ export default function MyServicesPage() {
       <div className="max-w-6xl mx-auto py-20 flex justify-center items-center">
         <div className="text-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600 mx-auto"></div>
-          <p className="text-gray-500 text-lg">
+          <p className="text-gray-500 dark:text-gray-300 text-lg">
             Loading your services and locations...
           </p>
         </div>
@@ -131,33 +124,32 @@ export default function MyServicesPage() {
 
   return (
     <div className="max-w-6xl mx-auto py-4 px-6 space-y-6">
-      {/* Header */}
       <Link href="/provider/dashboard">
         <Button
           variant="ghost"
           size="lg"
-          className="flex items-center gap-2 text-slate-600 hover:text-cyan-600"
+          className="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400"
         >
           <ArrowLeft className="w-5 h-5" /> Back
         </Button>
       </Link>
+
       <div className="flex items-center justify-center">
-        <h1 className="text-3xl font-extrabold   text-slate-900 tracking-tight">
+        <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
           Manage Your Services & Locations
         </h1>
       </div>
 
-      <p className="text-gray-600 text-lg max-w-3xl">
+      <p className="text-gray-600 dark:text-gray-400 text-lg max-w-3xl">
         Select the services you offer and locations you serve. Choose multiple
         options to build a comprehensive profile.
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Services Card */}
-        <Card className="rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-cyan-50 to-emerald-50 px-6 py-5 border-b">
+        <Card className="rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-cyan-50 to-emerald-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 border-b dark:border-gray-700">
             <div className="flex justify-between items-center">
-              <CardTitle className="text-2xl font-bold text-gray-900">
+              <CardTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                 Your Services
               </CardTitle>
               <Dialog
@@ -174,10 +166,10 @@ export default function MyServicesPage() {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
                   <DialogHeader className="pb-4">
-                    <DialogTitle className="text-2xl font-bold">
+                    <DialogTitle className="text-2xl font-bold dark:text-gray-100">
                       Add Services
                     </DialogTitle>
-                    <DialogDescription className="text-base text-gray-600">
+                    <DialogDescription className="text-base text-gray-600 dark:text-gray-400">
                       Select multiple services to add to your profile. Choose
                       2-6 options at once for best results.
                     </DialogDescription>
@@ -185,16 +177,16 @@ export default function MyServicesPage() {
 
                   <div className="space-y-4 flex-1 overflow-hidden flex flex-col">
                     <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                       <Input
                         placeholder="Search for services..."
                         value={catSearch}
                         onChange={(e) => setCatSearch(e.target.value)}
-                        className="pl-11 h-12 text-base border-gray-300 focus:border-cyan-500 focus:ring-cyan-500"
+                        className="pl-11 h-12 text-base border-gray-300 dark:border-gray-600 focus:border-cyan-500 focus:ring-cyan-500 dark:bg-gray-800 dark:text-gray-100"
                       />
                     </div>
 
-                    <div className="bg-gray-50 rounded-xl p-4 overflow-y-auto flex-1">
+                    <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 overflow-y-auto flex-1">
                       <div className="grid grid-cols-2 gap-3">
                         {filteredCategories.map((c) => {
                           const isSelected = isCategorySelected(c.category_id);
@@ -213,18 +205,16 @@ export default function MyServicesPage() {
                                 flex items-center justify-between p-3.5 rounded-lg cursor-pointer transition-all
                                 ${
                                   isAlreadyAdded
-                                    ? "bg-cyan-100 text-cyan-800 cursor-not-allowed opacity-60"
+                                    ? "bg-cyan-100 dark:bg-cyan-800 text-cyan-800 dark:text-cyan-200 cursor-not-allowed opacity-60"
                                     : isSelected
-                                    ? "bg-cyan-100 text-cyan-800 border-2 border-cyan-500 shadow-sm"
-                                    : "bg-white hover:bg-cyan-50 border border-gray-200 hover:border-cyan-300 hover:shadow-sm"
+                                    ? "bg-cyan-100 dark:bg-cyan-800 text-cyan-800 dark:text-cyan-200 border-2 border-cyan-500 shadow-sm"
+                                    : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200 hover:bg-cyan-50 dark:hover:bg-cyan-900 border border-gray-200 dark:border-gray-700 hover:border-cyan-300 hover:shadow-sm"
                                 }
                               `}
                             >
-                              <span className="font-medium text-sm">
-                                {c.name}
-                              </span>
+                              <span className="font-medium text-sm">{c.name}</span>
                               {(isSelected || isAlreadyAdded) && (
-                                <Check className="w-5 h-5 text-cyan-600 shrink-0" />
+                                <Check className="w-5 h-5 text-cyan-600 dark:text-cyan-300 shrink-0" />
                               )}
                             </div>
                           );
@@ -232,10 +222,10 @@ export default function MyServicesPage() {
                       </div>
                       {filteredCategories.length === 0 && (
                         <div className="text-center py-12">
-                          <p className="text-gray-500 text-base">
+                          <p className="text-gray-500 dark:text-gray-400 text-base">
                             No services found
                           </p>
-                          <p className="text-gray-400 text-sm mt-1">
+                          <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
                             Try a different search term
                           </p>
                         </div>
@@ -243,14 +233,13 @@ export default function MyServicesPage() {
                     </div>
 
                     {selectedCategories.length > 0 && (
-                      <div className="flex items-center justify-between bg-cyan-50 border border-cyan-200 p-4 rounded-xl">
+                      <div className="flex items-center justify-between bg-cyan-50 dark:bg-cyan-900 border border-cyan-200 dark:border-cyan-700 p-4 rounded-xl">
                         <div>
-                          <p className="text-sm font-semibold text-cyan-800">
+                          <p className="text-sm font-semibold text-cyan-800 dark:text-cyan-200">
                             {selectedCategories.length} service
-                            {selectedCategories.length !== 1 ? "s" : ""}{" "}
-                            selected
+                            {selectedCategories.length !== 1 ? "s" : ""} selected
                           </p>
-                          <p className="text-xs text-cyan-700">
+                          <p className="text-xs text-cyan-700 dark:text-cyan-300">
                             Ready to add to your profile
                           </p>
                         </div>
@@ -275,7 +264,7 @@ export default function MyServicesPage() {
                   {profile.categories.map((c) => (
                     <Badge
                       key={c.category_id}
-                      className="bg-cyan-100 text-cyan-800 px-4 py-2 text-sm rounded-full flex items-center gap-2 cursor-pointer hover:bg-red-100 hover:text-red-700 transition-all"
+                      className="bg-cyan-100 dark:bg-cyan-800 text-cyan-800 dark:text-cyan-200 px-4 py-2 text-sm rounded-full flex items-center gap-2 cursor-pointer hover:bg-red-100 dark:hover:bg-red-700 hover:text-red-700 dark:hover:text-red-200 transition-all"
                       onClick={() => {
                         if (!saving) {
                           setPendingRemove({
@@ -291,19 +280,15 @@ export default function MyServicesPage() {
                   ))}
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center h-full text-gray-400 py-8">
-                  <p className="text-base font-medium">
-                    No services selected yet
-                  </p>
-                  <p className="text-sm mt-1">
-                    Click "Add Services" to get started
-                  </p>
+                <div className="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-500 py-8">
+                  <p className="text-base font-medium">No services selected yet</p>
+                  <p className="text-sm mt-1">Click "Add Services" to get started</p>
                 </div>
               )}
             </div>
 
-            <div className="pt-3 border-t border-gray-200">
-              <p className="text-xs text-gray-500">
+            <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 💡 <strong>Tip:</strong> Click on a service badge to remove it
                 from your profile
               </p>
@@ -311,12 +296,12 @@ export default function MyServicesPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl shadow-lg border border-gray-200 overflow-hidde">
-          <CardHeader className="bg-linear-to-r from-blue-50 to-cyan-50 px-6 py-5 border-b">
+v.         <Card className="rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 border-b dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <MapPin className="w-6 h-6 text-blue-600" />
-                <CardTitle className="text-2xl font-bold text-gray-900">
+                <MapPin className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <CardTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   Your Locations
                 </CardTitle>
               </div>
@@ -335,24 +320,22 @@ export default function MyServicesPage() {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-visible flex flex-col">
                   <DialogHeader className="pb-4">
-                    <DialogTitle className="text-2xl font-bold">
+                    <DialogTitle className="text-2xl font-bold dark:text-gray-100">
                       Add Location
                     </DialogTitle>
-                    <DialogDescription className="text-base text-gray-600">
+                    <DialogDescription className="text-base text-gray-600 dark:text-gray-400">
                       Select a city where you provide services. You can change
                       this anytime.
                     </DialogDescription>
                   </DialogHeader>
 
-                  <div className="space-y-4 flex-1 overflow-hiddn flex flex-col">
-                    <div className="relative">
-                      <LocationSearch
-                        onSelect={(data) => {
-                          setLocation(data.city_id, data.city,);
-                          setLocationDialogOpen(false);
-                        }}
-                      />
-                    </div>
+                  <div className="space-y-4 flex-1 overflow-hidden flex flex-col">
+                    <LocationSearch
+                      onSelect={(data) => {
+                        setLocation(data.city_id, data.city);
+                        setLocationDialogOpen(false);
+                      }}
+                    />
                   </div>
                 </DialogContent>
               </Dialog>
@@ -363,14 +346,14 @@ export default function MyServicesPage() {
             <div className="min-h-[120px]">
               {profile.is_nationwide ? (
                 <div className="flex items-center justify-center h-full py-8">
-                  <Badge className="bg-blue-100 text-blue-700 px-6 py-3 rounded-full text-base font-semibold shadow-sm">
+                  <Badge className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-6 py-3 rounded-full text-base font-semibold shadow-sm">
                     🌍 Nationwide Coverage
                   </Badge>
                 </div>
               ) : profile.location_name ? (
                 <div className="flex items-center justify-center h-full py-8">
                   <Badge
-                    className="bg-blue-100 text-blue-800 px-6 py-3 rounded-full flex items-center gap-3 cursor-pointer hover:bg-red-100 hover:text-red-700 transition-all text-base font-medium shadow-sm"
+                    className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 px-6 py-3 rounded-full flex items-center gap-3 cursor-pointer hover:bg-red-100 dark:hover:bg-red-700 hover:text-red-700 dark:hover:text-red-200 transition-all text-base font-medium shadow-sm"
                     onClick={() => {
                       if (!saving) {
                         setPendingRemove({ type: "location", id: null });
@@ -384,24 +367,20 @@ export default function MyServicesPage() {
                   </Badge>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center h-full text-gray-400 py-8">
-                  <p className="text-base font-medium">
-                    No location selected yet
-                  </p>
-                  <p className="text-sm mt-1">
-                    Choose a city or enable nationwide
-                  </p>
+                <div className="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-500 py-8">
+                  <p className="text-base font-medium">No location selected yet</p>
+                  <p className="text-sm mt-1">Choose a city or enable nationwide</p>
                 </div>
               )}
             </div>
 
-            <div className="pt-3 border-t border-gray-200 space-y-3">
-              <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl border border-blue-100">
+            <div className="pt-3 border-t border-gray-200 dark:border-gray-700 space-y-3">
+              <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-gray-800 rounded-xl border border-blue-100 dark:border-gray-700">
                 <div>
-                  <p className="font-semibold text-gray-900">
+                  <p className="font-semibold text-gray-900 dark:text-gray-100">
                     Nationwide Service
                   </p>
-                  <p className="text-xs text-gray-600 mt-0.5">
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
                     Serve customers across the country
                   </p>
                 </div>
@@ -414,9 +393,8 @@ export default function MyServicesPage() {
                 />
               </div>
 
-              <p className="text-xs text-gray-500">
-                💡 <strong>Tip:</strong> Click on your location badge to remove
-                it
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                💡 <strong>Tip:</strong> Click on your location badge to remove it
               </p>
             </div>
           </CardContent>
@@ -425,7 +403,7 @@ export default function MyServicesPage() {
 
       {error && (
         <div
-          className="bg-red-50 border-l-4 border-red-500 text-red-800 px-4 py-3 rounded-lg shadow-sm"
+          className="bg-red-50 dark:bg-red-900 border-l-4 border-red-500 dark:border-red-700 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg shadow-sm"
           role="alert"
         >
           <div className="flex items-center">
@@ -437,11 +415,11 @@ export default function MyServicesPage() {
 
       {saving && (
         <div
-          className="bg-blue-50 border-l-4 border-blue-500 text-blue-800 px-4 py-3 rounded-lg shadow-sm"
+          className="bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-500 dark:border-blue-700 text-blue-800 dark:text-blue-200 px-4 py-3 rounded-lg shadow-sm"
           role="alert"
         >
           <div className="flex items-center">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-3"></div>
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 dark:border-blue-200 mr-3"></div>
             <span className="font-medium">Saving your changes...</span>
           </div>
         </div>
@@ -450,10 +428,10 @@ export default function MyServicesPage() {
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-red-600">
+            <DialogTitle className="text-xl font-bold text-red-600 dark:text-red-400">
               Confirm Removal
             </DialogTitle>
-            <DialogDescription className="text-gray-600">
+            <DialogDescription className="text-gray-600 dark:text-gray-400">
               Are you sure you want to remove this{" "}
               {pendingRemove.type === "service" ? "service" : "location"} ?
             </DialogDescription>
@@ -463,7 +441,7 @@ export default function MyServicesPage() {
               No, Keep it
             </Button>
             <Button
-              className="bg-red-600 hover:bg-red-700 text-white"
+              className="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white"
               onClick={() => {
                 if (pendingRemove.type === "service" && pendingRemove.id) {
                   removeCategory(pendingRemove.id);

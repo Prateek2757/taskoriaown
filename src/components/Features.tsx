@@ -164,9 +164,9 @@ export const Card = ({
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6 items-center h-full p-6 md:p-8">
           <div className="flex flex-col justify-center space-y-4">
-            <div className="flex items-center gap-3 mb-1">
+            {/* <div className="flex items-center gap-3 mb-1">
               <span className="text-3xl">{icon}</span>
-            </div>
+            </div> */}
 
             <h2 className="text-2xl md:text-3xl font-extrabold 
               bg-gradient-to-br from-gray-900 to-gray-700
