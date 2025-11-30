@@ -66,7 +66,7 @@ function CTA() {
                   Find Services
                 </Button>
               </Link>
-              <Link href="/providers/join">
+              <Link href="/providers">
                 <Button className="relative overflow-hidden bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:scale-105 border-0 flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 px-6 py-3 text-sm sm:text-base font-semibold group">
                   <span className="relative z-10">Become a Provider</span>
                   <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
