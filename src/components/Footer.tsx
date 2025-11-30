@@ -91,10 +91,11 @@ const Footer = () => {
 
             <div className="pt-6 w-full sm:w-96">
               <p className="md:text-xl text-lg mb-3">
-                Sign up To Become Professional
+                Contact To Become Professional
               </p>
+              <p className=" underline  text-sm  ">contact@taskoria.com</p>
 
-              <div className="bg-white flex justify-between items-center border-2 overflow-hidden border-white rounded-full text-black hover:text-black">
+              {/* <div className="bg-white flex justify-between items-center border-2 overflow-hidden border-white rounded-full text-black hover:text-black">
                 <form
                   onSubmit={handleNewsLetterData}
                   className="grid grid-cols-6 w-full h-full"
@@ -124,7 +125,7 @@ const Footer = () => {
                     </svg>
                   </button>
                 </form>
-              </div>
+              </div> */}
 
               {openPopup && (
                 <p className="text-green-400 pt-2 text-sm">
@@ -240,7 +241,7 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} Taskoria. All Rights Reserved.
             <br />
             <span className="text-gray-400">
-              Taskoria — A Fusion of Australian Design & Nepali Engineering.
+             ABN: 658 760 831 | GST Registered | QLD 4350, Australia | Proudly Australian Owned & Operated
             </span>
           </span>
 
