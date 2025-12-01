@@ -389,17 +389,17 @@ export default function HeroSection() {
   
 const {theme} =useTheme()
   const handlePostJob = async () => {
-    if (!session) {
-      toast.error("Please sign in first", {
-        description: "Redirecting to Sign In page...",
-        duration: 1000,
-        style: { borderRadius: "8px" },
-        icon: "⚠️",
-      });
-      setTimeout(() => router.push("/signin"));
-      setLoading(true);
-      return;
-    }
+    // if (!session) {
+    //   toast.error("Please sign in first", {
+    //     description: "Redirecting to Sign In page...",
+    //     duration: 1000,
+    //     style: { borderRadius: "8px" },
+    //     icon: "⚠️",
+    //   });
+    //   setTimeout(() => router.push("/signin"));
+    //   setLoading(true);
+    //   return;
+    // }
     setOpenModal(true);
   };
 

@@ -70,19 +70,32 @@ export default function ModernNavbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const storedView = localStorage.getItem("viewMode") as ViewMode | null;
 
-    if (storedView === "customer" || storedView === "provider") {
-      setViewMode(storedView);
-    } else if (session?.user?.role) {
-      const defaultView =
-        session.user.role === "provider" ? "provider" : "customer";
-      setViewMode(defaultView);
-      localStorage.setItem("viewMode", defaultView);
-    }
-  }, [session]);
+  useEffect(() => {
+  if (!session) return;
+
+  const stored = localStorage.getItem("viewMode") as ViewMode;
+
+  if (stored) {
+    setViewMode(stored);
+    return;
+  }
+
+  const defaultView = session.user.role === "provider" ? "provider" : "customer";
+  setViewMode(defaultView);
+  localStorage.setItem("viewMode", defaultView);
+}, [session]);
+
+useEffect(() => {
+  const update = () => {
+    const stored = localStorage.getItem("viewMode") as ViewMode;
+    setViewMode(stored);
+  };
+
+  window.addEventListener("viewModeChanged", update);
+  return () => window.removeEventListener("viewModeChanged", update);
+}, []);
+
 
   const handleLogout = async () => {
     setIsProfileOpen(false);
@@ -197,7 +210,7 @@ export default function ModernNavbar() {
             <div className="w-10 h-10 bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] rounded-xl animate-pulse" />
             <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
           </div>
-     </div>
+        </div>
       </header>
     );
   }
@@ -206,7 +219,7 @@ export default function ModernNavbar() {
     <>
       <header className="
   sticky top-0 z-50 
-  backdrop-blur-xl 
+  backdrop-blur-xl
   bg-white/30 dark:bg-gray-900/20 
   border-b border-white/40 dark:border-white/10
   shadow-lg shadow-black/5 dark:shadow-white/5
@@ -424,16 +437,16 @@ export default function ModernNavbar() {
                   </button>
                 )}
 
-                <Link
+                {/* <Link
                   href="/settings"
                   onClick={() => setIsMenuOpen(false)}
                   className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
                 >
                   <Settings className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                   Settings
-                </Link>
+                </Link> */}
 
-                <Link
+                {/* <Link
                   href="/notifications"
                   onClick={() => setIsMenuOpen(false)}
                   className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
@@ -443,7 +456,7 @@ export default function ModernNavbar() {
                   <span className="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                     23
                   </span>
-                </Link>
+                </Link> */}
 
                 {session ? (
                   <button

@@ -20,9 +20,8 @@ function page() {
       <Testomonail/>
       <FeatureProvider/>
       <CTA/>
+        <SupportChatbot/>
       {/* <WorldMapDemo/> */}
-      <Footer/>
-      <SupportChatbot/>
     </div>
   )
 }

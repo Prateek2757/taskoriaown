@@ -5,14 +5,17 @@ import { signIn } from "next-auth/react";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
+import axios from "axios";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [signupLoading, setSignupLoading] = useState(false);
   const router = useRouter();
+
+  const { joinAsProvider, loading: joinLoading } = useJoinAsProvider();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,37 +29,34 @@ export default function SignInPage() {
     });
 
     setLoading(false);
-
     if (res?.error) setMessage(res.error);
-    else {
-      setMessage("Login successful! Redirecting...");
-      setTimeout(() => router.push("/provider/dashboard"), 800);
-    }
-  };
 
-  const handleSignUpAsProvider = async () => {
-    setSignupLoading(true);
-    try {
-      localStorage.removeItem("draftProviderId");
 
-      const res = await fetch("/api/signup/draft", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ role: "provider" }),
-      });
 
-      const data = await res.json();
-      if (data?.user?.user_id) {
-        localStorage.setItem("draftProviderId", data.user.user_id);
-        router.push(`/create?user_id=${data.user.user_id}`);
-      } else {
-        alert("Failed to create draft account.");
+    const savedLead = localStorage.getItem("pendingpayload");
+    if (savedLead) {
+      try {
+        const payload = JSON.parse(savedLead);
+
+        const submitRes = await axios.post("/api/leads", payload);
+        if (!submitRes.data.error) {
+          localStorage.removeItem("pendingpayload")
+          localStorage.setItem("viewMode" , "customer")
+          window.dispatchEvent(new Event("viewModeChanged"))
+        }
+        setMessage("Request Submit Sucessfully!Redirecting...")
+        setTimeout(() => router.push("/customer/dashboard"))
+       return;
+      } catch (error) {
+        console.error("Auto Submit Failed", error)
       }
-    } catch (error) {
-      alert("Something went wrong. Try again.");
-    } finally {
-      setSignupLoading(false);
     }
+
+
+    setMessage("Login successful! Redirecting...");
+    setTimeout(() => router.push("/provider/dashboard"));
+
+
   };
 
   return (
@@ -120,11 +120,10 @@ export default function SignInPage() {
               whileTap={{ scale: 0.97 }}
               disabled={loading}
               type="submit"
-              className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
-                loading
+              className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${loading
                   ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
                   : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
-              }`}
+                }`}
             >
               {loading ? (
                 <>
@@ -141,11 +140,10 @@ export default function SignInPage() {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className={`text-center text-sm font-medium ${
-                message.includes("successful")
+              className={`text-center text-sm font-medium ${message.includes("successful")
                   ? "text-cyan-500"
                   : "text-red-500"
-              }`}
+                }`}
             >
               {message}
             </motion.p>
@@ -161,15 +159,14 @@ export default function SignInPage() {
 
           <motion.button
             whileTap={{ scale: 0.97 }}
-            disabled={signupLoading}
-            onClick={handleSignUpAsProvider}
-            className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
-              signupLoading
+            disabled={joinLoading}
+            onClick={joinAsProvider}
+            className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${joinLoading
                 ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
                 : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
-            }`}
+              }`}
           >
-            {signupLoading ? (
+            {joinLoading ? (
               <>
                 <Loader2 className="animate-spin h-5 w-5" />
                 Creating Account...

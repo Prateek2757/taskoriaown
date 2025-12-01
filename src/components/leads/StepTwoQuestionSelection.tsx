@@ -114,7 +114,7 @@ export default function StepTwoQuestionsForm({
         preferred_date_start: data.preferred_date_start,
         preferred_date_end: data.preferred_date_end,
       };
-
+    
       const res = await axios.post("/api/leads", payload);
 
       if (res.data.error) {
@@ -128,8 +128,26 @@ export default function StepTwoQuestionsForm({
         }, 800);
       }
     } catch (err: any) {
-      console.error("Submission error:", err);
-      toast.error("Failed to submit request. Please Sign In or Sign Up .");
+  console.warn("User not logged in. Saving task locally...", err);
+
+
+        const payload = {
+        category_id: Number(selectedCategoryId),
+        city_id: Number(selectedLocationId),
+        title: selectedTitle,
+        category_answers: questions.reduce((acc, q) => {
+          acc[q.category_question_id] =
+            data[`q_${q.category_question_id}`] ?? null;
+          return acc;
+        }, {} as any),
+        budget_min: Number(data.budget_min),
+        budget_max: Number(data.budget_max),
+        preferred_date_start: data.preferred_date_start,
+        preferred_date_end: data.preferred_date_end,
+      }; 
+      localStorage.setItem("pendingpayload" , JSON.stringify(payload))
+
+      toast.warning(" Please Sign In or Sign Up to continue.");
       router.push("/signin");
     } finally {
       setLoading(false);

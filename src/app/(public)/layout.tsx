@@ -5,6 +5,7 @@ import AuthProvider from "@/context/AuthProvider";
 import { Toaster } from "sonner";
 import ModernNavbar from "@/components/navabr/Navbar";
 import { ThemeProvider } from "next-themes";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Taskoria — Find Trusted Service Providers",
@@ -84,6 +85,9 @@ export default function RootLayout({
               <ModernNavbar />
               {children}
               <Toaster position="top-right" richColors expand closeButton />
+              <Footer/>
+                  
+
             </UserProvider>
           </ThemeProvider>
         </body>

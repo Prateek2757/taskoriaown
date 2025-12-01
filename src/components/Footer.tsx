@@ -141,7 +141,7 @@ const Footer = () => {
               <li className="mb-2"><Link href="/discover" className="hover:text-white text-gray-300 transition-colors">Find Services</Link></li>
               <li className="mb-2"><Link href="/community" className="hover:text-white text-gray-300 transition-colors">Community</Link></li>
               <li className="mb-2"><Link href="/post-job" className="hover:text-white text-gray-300 transition-colors">Post a Job</Link></li>
-              <li className="mb-2"><Link href="#" className="hover:text-white text-gray-300 transition-colors">Trust & Safety</Link></li>
+              <li className="mb-2"><Link href="/trust-safety" className="hover:text-white text-gray-300 transition-colors">Trust & Safety</Link></li>
             </ul>
 
 
@@ -157,7 +157,7 @@ const Footer = () => {
             <ul>
               <li className="text-2xl pb-4 font-semibold">Company</li>
               <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">About Us</a></li>
-              <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Careers</a></li>
+              <li className="mb-2"><a href="/privacy-policy" className="hover:text-white text-gray-300 transition-colors cursor-pointer">Privacy Policy</a></li>
               <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Press</a></li>
               <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Contact</a></li>
             </ul>
@@ -238,7 +238,7 @@ const Footer = () => {
 
         <div className="flex md:flex-row flex-col gap-3 justify-between py-6 text-gray-300">
           <span className="font-medium">
-            &copy; {new Date().getFullYear()} Taskoria. All Rights Reserved.
+            &copy; {new Date().getFullYear()} Taskoria. All Rights Reserved. <Link href="/privacy-policy" className="   underline">Privacy Policy.</Link>
             <br />
             <span className="text-gray-400">
              ABN: 658 760 831 | GST Registered | QLD 4350, Australia | Proudly Australian Owned & Operated

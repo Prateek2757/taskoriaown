@@ -14,7 +14,6 @@ import "react-datepicker/dist/react-datepicker.css";
 export default function QuestionRenderer({ q, control, register }: any) {
   const name = `q_${q.category_question_id}`;
 
-  // Check if it's multi-checkbox (array)
   const isMultiCheckbox = q.field_type === "checkbox" && Array.isArray(q.options);
 
   return (
@@ -58,7 +57,6 @@ export default function QuestionRenderer({ q, control, register }: any) {
         />
       )}
 
-      {/* Modern Date Picker */}
       {q.field_type === "date" && (
         <Controller
           control={control}
@@ -67,7 +65,7 @@ export default function QuestionRenderer({ q, control, register }: any) {
             <DatePicker
               selected={field.value ? new Date(field.value) : null}
               onChange={(date) => field.onChange(date)}
-              minDate={new Date()} // prevent past dates
+              minDate={new Date()} 
               placeholderText="Select a date"
               dateFormat="MMMM d, yyyy"
               className="w-full rounded-xl border border-gray-300 overflow-visible z-50 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition"
@@ -84,7 +82,6 @@ export default function QuestionRenderer({ q, control, register }: any) {
         />
       )}
 
-      {/* Single Checkbox (boolean) */}
       {!isMultiCheckbox && q.field_type === "checkbox" && (
         <div className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition">
           <Controller
@@ -98,7 +95,6 @@ export default function QuestionRenderer({ q, control, register }: any) {
         </div>
       )}
 
-      {/* Multi-Checkbox */}
       {isMultiCheckbox && (
         <Controller
           control={control}
@@ -128,7 +124,6 @@ export default function QuestionRenderer({ q, control, register }: any) {
         />
       )}
 
-      {/* Select / Radio-like Cards */}
       {(q.field_type === "select" || q.field_type === "radio") && !isMultiCheckbox && (
         <Controller
           control={control}

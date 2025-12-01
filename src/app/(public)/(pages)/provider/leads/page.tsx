@@ -1,5 +1,4 @@
 
-"use client"
 import LeadsPage from "@/components/showinglead/Leadpage"
 
 

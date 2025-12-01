@@ -102,7 +102,7 @@ export function CreditPurchase({
   }, [fetchResponses]);
 
   const selected = packages.find((p) => p.package_id === selectedPackage);
- 
+
   const handleDeduct = async () => {
     if (!requiredCredits || !taskId) return;
 
@@ -115,8 +115,6 @@ export function CreditPurchase({
       toast.success(`Deducted ${requiredCredits} credits`);
       onPurchaseSuccess?.();
       if (mode === "modal" && onOpenChange) onOpenChange(false);
-
-
     } catch (err) {
       console.error(err);
       toast.error("Error deducting credits");
@@ -133,13 +131,13 @@ export function CreditPurchase({
 
     setLoadingButton(true);
     try {
-     const { data } = await axios.post("/api/stripe/stripecheckout", {
-    professionalId,
-    packageId: selected.package_id,
-    amount: selected.price,
-    credits: selected.credits,
-    packageName: selected.name,
-  });
+      const { data } = await axios.post("/api/stripe/stripecheckout", {
+        professionalId,
+        packageId: selected.package_id,
+        amount: selected.price,
+        credits: selected.credits,
+        packageName: selected.name,
+      });
       toast.success("Redirecting to payment...");
       window.location.href = data.url;
     } catch (error) {
@@ -153,46 +151,50 @@ export function CreditPurchase({
   const showPackages =
     mode === "page" || (requiredCredits && balance < requiredCredits);
 
-
   const content = (
-    <div className="w-full">
+    <div className="w-full text-gray-900 dark:text-gray-100">
       {mode === "modal" && requiredCredits && (
         <div className="mb-6 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl md:text-3xl font-bold mb-2">
             You need {requiredCredits} credits to contact {contactName}
           </h2>
-          <p className="text-gray-600 text-sm">
+          <p className="text-gray-600 dark:text-gray-400 text-sm">
             Purchase credits or deduct if you have enough.
           </p>
         </div>
       )}
 
       <div className="text-center mb-6">
-        <p className="text-gray-700 text-sm">
+        <p className="text-gray-700 dark:text-gray-300 text-sm">
           Current Balance:{" "}
-          <span className="font-semibold text-blue-600">{balance ?? 0}</span>{" "}
+          <span className="font-semibold text-blue-600 dark:text-blue-400">{balance ?? 0}</span>{" "}
           credits
         </p>
       </div>
 
       <div className="space-y-3 mb-6">
         {FAQS.map((faq) => (
-          <div key={faq.id} className="border border-gray-200 rounded-lg overflow-hidden">
+          <div
+            key={faq.id}
+            className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
+          >
             <button
               onClick={() => toggleFaq(faq.id)}
-              className="w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 transition flex items-center justify-between text-left"
+              className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center justify-between text-left"
             >
-              <span className="font-semibold text-gray-900 text-sm md:text-base">
+              <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm md:text-base">
                 {faq.question}
               </span>
               <ChevronDown
-                className={`w-5 h-5 text-gray-500 transition-transform ${
+                className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform ${
                   expandedFaq === faq.id ? "rotate-180" : ""
                 }`}
               />
             </button>
             {expandedFaq === faq.id && (
-              <div className="px-4 py-3 bg-white text-gray-600 text-sm">{faq.answer}</div>
+              <div className="px-4 py-3 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 text-sm">
+                {faq.answer}
+              </div>
             )}
           </div>
         ))}
@@ -202,11 +204,13 @@ export function CreditPurchase({
         <>
           {loading ? (
             <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="text-gray-500 mt-4">Loading credit packages...</p>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400 mx-auto"></div>
+              <p className="text-gray-500 dark:text-gray-400 mt-4">Loading credit packages...</p>
             </div>
           ) : packages.length === 0 ? (
-            <div className="text-center text-gray-500 py-8">No credit packages available.</div>
+            <div className="text-center text-gray-500 dark:text-gray-400 py-8">
+              No credit packages available.
+            </div>
           ) : (
             <div className="space-y-4 mb-6">
               {packages.map((pkg) => (
@@ -215,18 +219,18 @@ export function CreditPurchase({
                   onClick={() => setSelectedPackage(pkg.package_id)}
                   className={`border-2 rounded-xl p-4 md:p-6 cursor-pointer transition ${
                     selectedPackage === pkg.package_id
-                      ? "border-blue-600 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-blue-600 dark:border-blue-400 bg-blue-50 dark:bg-blue-900"
+                      : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-500 bg-white dark:bg-gray-800"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">{pkg.name}</h3>
-                      <p className="text-gray-600 text-sm">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{pkg.name}</h3>
+                      <p className="text-gray-600 dark:text-gray-300 text-sm">
                         {pkg.credits} credits • ~{pkg.leads_estimate} leads
                       </p>
                     </div>
-                    <div className="text-lg font-semibold text-gray-900">A${pkg.price}</div>
+                    <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">A${pkg.price}</div>
                   </div>
                 </div>
               ))}
@@ -239,7 +243,7 @@ export function CreditPurchase({
         <Button
           onClick={handleDeduct}
           disabled={loadingButton}
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-6 text-base"
+          className="w-full bg-green-600 hover:bg-green-700 text-white dark:bg-green-500 dark:hover:bg-green-600 font-semibold py-6 text-base"
           size="lg"
         >
           {loadingButton
@@ -251,7 +255,7 @@ export function CreditPurchase({
           <Button
             onClick={handlePurchase}
             disabled={loadingButton}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6 text-base"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600 font-semibold py-6 text-base"
             size="lg"
           >
             {loadingButton
@@ -266,7 +270,7 @@ export function CreditPurchase({
   if (mode === "modal") {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto dark:bg-gray-900">
           <DialogTitle className="sr-only">Credit Purchase</DialogTitle>
           {content}
         </DialogContent>
@@ -279,17 +283,16 @@ export function CreditPurchase({
       <div className="mb-6">
         <button
           onClick={() => window.history.back()}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition mb-4"
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition mb-4"
         >
           ← <span>Settings</span>
         </button>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900">My Credits</h1>
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">My Credits</h1>
       </div>
       {content}
     </div>
   );
 }
-
 
 export function CreditPurchaseModal(props: Omit<CreditPurchaseProps, "mode">) {
   return <CreditPurchase {...props} mode="modal" />;

@@ -54,7 +54,7 @@ export default function NewRequestModal({
       <DialogContent
         className="
           max-w-2xl w-[95%] p-0 rounded-2xl
-          max-h-[90vh] overflow-hiddn flex flex-col
+          max-h-[90vh] overflow-visible flex flex-col
         "
       >
         <DialogHeader className="border-b bg-gray-50 dark:bg-slate-900 rounded-t-2xl p-4 text-center flex-shrink-0">
