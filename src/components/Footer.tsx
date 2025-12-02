@@ -156,7 +156,8 @@ const Footer = () => {
 
             <ul>
               <li className="text-2xl pb-4 font-semibold">Company</li>
-              <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">About Us</a></li>
+              <li className="mb-2"><a href="/about-us
+              " className="hover:text-white text-gray-300 transition-colors cursor-pointer">About Us</a></li>
               <li className="mb-2"><a href="/privacy-policy" className="hover:text-white text-gray-300 transition-colors cursor-pointer">Privacy Policy</a></li>
               <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Press</a></li>
               <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Contact</a></li>
@@ -241,7 +242,7 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} Taskoria. All Rights Reserved. <Link href="/privacy-policy" className="   underline">Privacy Policy.</Link>
             <br />
             <span className="text-gray-400">
-             ABN: 658 760 831 | GST Registered | QLD 4350, Australia | Proudly Australian Owned & Operated
+              ABN: 658 760 831 | GST Registered | QLD 4350, Australia | Proudly Australian Owned & Operated
             </span>
           </span>
 

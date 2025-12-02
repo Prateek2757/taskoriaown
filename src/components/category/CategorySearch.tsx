@@ -112,7 +112,7 @@ export default function CategorySearch({ onSelect, placeholder, presetCategory }
           setShowSuggestions(true);
           if (!query) setFiltered(categories.slice(0, 10));
         }}
-        className="pl-9 rounded-full py-5 "
+        className="pl-9 rounded-lg py-5 "
       />
 
       <AnimatePresence>

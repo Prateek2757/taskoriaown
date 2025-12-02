@@ -114,7 +114,7 @@ export default function StepTwoQuestionsForm({
         preferred_date_start: data.preferred_date_start,
         preferred_date_end: data.preferred_date_end,
       };
-    
+
       const res = await axios.post("/api/leads", payload);
 
       if (res.data.error) {
@@ -128,10 +128,10 @@ export default function StepTwoQuestionsForm({
         }, 800);
       }
     } catch (err: any) {
-  console.warn("User not logged in. Saving task locally...", err);
+      console.warn("User not logged in. Saving task locally...", err);
 
 
-        const payload = {
+      const payload = {
         category_id: Number(selectedCategoryId),
         city_id: Number(selectedLocationId),
         title: selectedTitle,
@@ -144,8 +144,8 @@ export default function StepTwoQuestionsForm({
         budget_max: Number(data.budget_max),
         preferred_date_start: data.preferred_date_start,
         preferred_date_end: data.preferred_date_end,
-      }; 
-      localStorage.setItem("pendingpayload" , JSON.stringify(payload))
+      };
+      localStorage.setItem("pendingpayload", JSON.stringify(payload))
 
       toast.warning(" Please Sign In or Sign Up to continue.");
       router.push("/signin");
@@ -232,6 +232,11 @@ export default function StepTwoQuestionsForm({
           </label>
           <input
             type="number"
+            onKeyDown={(e) => {
+              if (e.key === '-' || e.key === 'Minus') {
+                e.preventDefault();
+              }
+            }}
             {...register("budget_min", { required: true })}
             placeholder="Minimum"
             className="border px-3 py-2 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
@@ -248,6 +253,10 @@ export default function StepTwoQuestionsForm({
           </label>
           <input
             type="number"
+            onKeyDown={(e) => {
+              if (e.key === '-' || e.key === 'Minus')
+                e.preventDefault()
+            }}
             {...register("budget_max", { required: true })}
             placeholder="Maximum"
             className="border px-3 py-2 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
@@ -329,9 +338,8 @@ export default function StepTwoQuestionsForm({
         <Button
           type="submit"
           disabled={loading}
-          className={`rounded-lg bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow hover:shadow-lg ${
-            loading ? "opacity-70 cursor-not-allowed" : ""
-          }`}
+          className={`rounded-lg bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow hover:shadow-lg ${loading ? "opacity-70 cursor-not-allowed" : ""
+            }`}
         >
           {loading ? (
             <span className="flex items-center gap-2">

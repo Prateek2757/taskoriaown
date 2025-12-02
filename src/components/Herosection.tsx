@@ -25,7 +25,7 @@
 //   const router = useRouter();
 //   const [loading, setLoading] = useState(false);
 //   const { theme } = useTheme()
- 
+
 
 //   const stats = [
 //     { value: "1K+", label: "Verified Providers", icon: CheckCircle2, color: "text-blue-600" },
@@ -84,7 +84,7 @@
 //       <div className="container mx-auto px-4 sm:px-6 lg:px-2 py-1  relative z-10 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
 //         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
 //           <div className="space-y-6 lg:space-y-8 order-2 lg:order-1">
-    
+
 //              <h1 className="text-5xl md:text-5xl font-extrabold text-foreground dark:text-white leading-tight">
 //            The Future of{" "}
 //            <span className="relative inline-block bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
@@ -153,7 +153,7 @@
 //             )}
 //           </div>
 
-            
+
 //           </div>
 
 //           <div className="order-1 lg:order- animate-fade-in-up  " style={{ animationDelay: '0.2s' }}>
@@ -161,15 +161,15 @@
 //               <div className="absolute -inset- bg-gradient-to-r from-blue-600/20 via-cyan-600/20 to-blue-600/20 rounded-[3rem] blur-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
 
 //               <div className="relative h-auto bg-gradient-to-br from-white/80 items-center to-white/40 dark:from-gray-800/80 dark:to-gray-900/40 backdrop-blur- p-6 lg:p-8 rounded-[2.5rem] border border-white/50 dark:border-gray-700/50 shadow-2xl  group-hover:scale-[1.02] transition-transform duration-500">
-                
-     
+
+
 //                 <div className="relative h-auto rounded-[2rem] overflow-hidden shadow-2xl">
 //                   <img
 //                     src="/images/collabrate.png"
 //                     alt="Services Illustration"
 //                     className="w-full h-full object-cover object-center"
 //                   />
-                  
+
 //                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
 //                 </div>
 
@@ -385,9 +385,9 @@ export default function HeroSection() {
   const { data: session } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-    const { joinAsProvider } = useJoinAsProvider();
-  
-const {theme} =useTheme()
+  const { joinAsProvider } = useJoinAsProvider();
+
+  const { theme } = useTheme()
   const handlePostJob = async () => {
     // if (!session) {
     //   toast.error("Please sign in first", {
@@ -408,19 +408,20 @@ const {theme} =useTheme()
     setOpenModal(true);
   };
 
-  
+
 
   return (
-    <section className="relative py-14 text-center overflow-hidden   bg-[raial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(255,255,255,1)_30%,rgba(245,245,245,1)_100%)]
+    <section className="relative py-14 text-center overflow-hidden  bg-[raial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(255,255,255,1)_30%,rgba(245,245,245,1)_100%)]
   dark:bg-[radial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)] ">
+      <img src="/images/bglines.png" className="absolute top-0 left-0 w-full h-full object-cover opacity-50" />
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto space-y-8">
-        
+
           <div className="inline-flex items-center gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-4">
             <Sparkles className="h-4 w-4 text-blue-600" /> AI-Powered •
             Community Driven
           </div>
-       <h1 className="text-5xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight">
+          <h1 className="text-5xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight">
             The Future of{" "}
             <span className="relative inline-block bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
               Service
@@ -432,7 +433,7 @@ const {theme} =useTheme()
                   particleDensity={1100}
                   className="w-full h-full"
                   particleColor={theme === "dark" ? "#fff" : "#000"}
-                  />{" "}
+                />{" "}
                 <div className="absolute inset-x-20  top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
                 <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
                 <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
@@ -444,7 +445,7 @@ const {theme} =useTheme()
             </span>
           </h1>
 
-          <p className="mt-4 text-[15px] text-gray-500 dark:text-gray-300">
+          <p className="max-w-xl mx-auto mt-4 text-[15px] text-gray-400 dark:text-gray-300">
             Connect with verified professionals through our AI-powered platform.
             Experience trust, transparency, and innovation in every service
             interaction.
@@ -453,8 +454,8 @@ const {theme} =useTheme()
           <div className="max-w-2xl mx-auto mt-6 px-4">
             <div className="relative w-full max-w-3xl group flex flex-col sm:flex-row sm:items-center">
               <div className="relative flex-1 sm:mr-4 w-full">
-                <div className="absolute -inset-[2px] rounded-2xl bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] blur-md opacity-0 group-hover:opacity-100 transition duration-500" />
-                <div className="relative flex items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-md hover:shadow-lg transition-all duration-300">
+                <div className="absolute -inset-[2px] rounded-lg bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] blur-md opacity-0 group-hover:opacity-100 transition duration-500" />
+                <div className="relative flex items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
                   <CategorySearch
                     onSelect={handleSelectCategory}
                     placeholder="What service you need? (e.g. Cleaning, Web)"
@@ -467,7 +468,7 @@ const {theme} =useTheme()
                 className="w-full sm:w-auto mt-4  sm:mt-0"
               >
                 <Button className="w-full sm:w-auto bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold  px-7 py-5  shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-cyan-700 active:scale-[0.97] transition-all duration-200">
-                  Search 
+                  Search
                 </Button>
               </Link>
             </div>
@@ -481,9 +482,8 @@ const {theme} =useTheme()
             <Button
               onClick={handlePostJob}
               disabled={loading}
-              className={`flex-1 py-4 sm:py-5  bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-lg active:scale-[0.97] transition-all duration-200 ${
-                loading ? "opacity-70 cursor-not-allowed" : ""
-              }`}
+              className={`flex-1 py-4 sm:py-5  bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-lg active:scale-[0.97] transition-all duration-200 ${loading ? "opacity-70 cursor-not-allowed" : ""
+                }`}
             >
               Post a Job <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
@@ -505,28 +505,45 @@ const {theme} =useTheme()
             )}
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto mt-10">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600">1K+</div>
-              <div className="text-gray-600 dark:text-gray-300">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto mt-6 
+             bg-[rgba(255,255,255,.2)] dark:bg-white/5 backdrop-blur-[2px] 
+              border dark:border-white/10 
+               rounded-2xl p-6 shadow-[0_4px_30px_rgba(0,0,0,.1)] border-[rgba(255,255,255,.3)]">
+
+            <div className="text-center hover:scale-[1.04] transition-all">
+              <div className="text-4xl font-extrabold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
+                1K+
+              </div>
+              <div className="text-gray-700 dark:text-gray-300 text-sm">
                 Verified Providers
               </div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-cyan-600">5K+</div>
-              <div className="text-gray-600 dark:text-gray-300">
+
+            <div className="text-center hover:scale-[1.04] transition-all">
+              <div className="text-4xl font-extrabold bg-gradient-to-r from-cyan-500 to-cyan-700 bg-clip-text text-transparent">
+                5K+
+              </div>
+              <div className="text-gray-700 dark:text-gray-300 text-sm">
                 Jobs Completed
               </div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">4.5★</div>
-              <div className="text-gray-600 dark:text-gray-300">
+
+            <div className="text-center hover:scale-[1.04] transition-all">
+              <div className="text-4xl font-extrabold bg-gradient-to-r from-purple-500 to-purple-700 bg-clip-text text-transparent">
+                4.5★
+              </div>
+              <div className="text-gray-700 dark:text-gray-300 text-sm">
                 Average Rating
               </div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-orange-600">24/7</div>
-              <div className="text-gray-600 dark:text-gray-300">AI Support</div>
+
+            <div className="text-center hover:scale-[1.04] transition-all">
+              <div className="text-4xl font-extrabold bg-gradient-to-r from-orange-500 to-orange-700 bg-clip-text text-transparent">
+                24/7
+              </div>
+              <div className="text-gray-700 dark:text-gray-300 text-sm">
+                AI Support
+              </div>
             </div>
           </div>
         </div>

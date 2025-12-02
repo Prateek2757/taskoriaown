@@ -72,29 +72,29 @@ export default function ModernNavbar() {
 
 
   useEffect(() => {
-  if (!session) return;
+    if (!session) return;
 
-  const stored = localStorage.getItem("viewMode") as ViewMode;
-
-  if (stored) {
-    setViewMode(stored);
-    return;
-  }
-
-  const defaultView = session.user.role === "provider" ? "provider" : "customer";
-  setViewMode(defaultView);
-  localStorage.setItem("viewMode", defaultView);
-}, [session]);
-
-useEffect(() => {
-  const update = () => {
     const stored = localStorage.getItem("viewMode") as ViewMode;
-    setViewMode(stored);
-  };
 
-  window.addEventListener("viewModeChanged", update);
-  return () => window.removeEventListener("viewModeChanged", update);
-}, []);
+    if (stored) {
+      setViewMode(stored);
+      return;
+    }
+
+    const defaultView = session.user.role === "provider" ? "provider" : "customer";
+    setViewMode(defaultView);
+    localStorage.setItem("viewMode", defaultView);
+  }, [session]);
+
+  useEffect(() => {
+    const update = () => {
+      const stored = localStorage.getItem("viewMode") as ViewMode;
+      setViewMode(stored);
+    };
+
+    window.addEventListener("viewModeChanged", update);
+    return () => window.removeEventListener("viewModeChanged", update);
+  }, []);
 
 
   const handleLogout = async () => {
@@ -273,23 +273,37 @@ useEffect(() => {
                   <Button
                     onClick={() => setIsProfileOpen((p) => !p)}
                     variant="ghost"
-                    className="flex items-center gap-2 px-3 py- rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="
+    flex items-center gap-2 px py-2 rounded-full transition-all 
+     "
                   >
-                    <div className="w-9 h-9 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full flex items-center justify-center">
-                      <User className="w-5 h-5 text-blue-600" />
+                    <div className="
+      w-9 h-9 rounded-full flex items-center justify-center
+      bg-gradient-to-br from-blue-100 to-cyan-100
+      dark:from-blue-900 dark:to-cyan-900
+      transition-all
+      group-hover:scale-[1.05]
+    ">
+                      <User className="w-5 h-5 text-blue-600 dark:text-blue-300" />
                     </div>
+
                     <span className="font-medium text-gray-700 dark:text-gray-300">
-                      {session.user?.name?.split(" ")[0] || "User"}
+                      {session.user?.name?.split(' ')[0] || 'User'}
                     </span>
+
                     <ChevronDown
-                      className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform ${isProfileOpen ? "rotate-180" : ""
-                        }`}
+                      className={`
+      w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform 
+      ${isProfileOpen ? "rotate-180" : ""}
+    `}
                     />
                   </Button>
                   <AnimatePresence>
                     {isProfileOpen && renderProfileDropdown()}
                   </AnimatePresence>
+
                 </div>
+                
               ) : (
                 <>
                   <Button

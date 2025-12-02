@@ -134,7 +134,7 @@ export default function AboutUs() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 mb-32">
+      <section className="max-w-7xl mx-auto px-6 pb-15  ">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6">Our Journey</h2>
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">

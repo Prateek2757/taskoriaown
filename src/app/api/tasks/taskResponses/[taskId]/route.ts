@@ -6,7 +6,7 @@ export async function GET(req: Request, { params }: { params: { taskId: string }
     const client=await pool.connect();
     const taskId = await  Number(params.taskId);
     const res = await client.query(
-      `SELECT tr.*, up.display_name, up.profile_image_id , c.id,c.title
+      `SELECT tr.*, up.display_name, up.profile_image_url , c.id,c.title
        FROM task_responses tr
        JOIN user_profiles up ON up.user_id = tr.professional_id
        LEFT JOIN conversations c ON c.task_id = tr.task_id
