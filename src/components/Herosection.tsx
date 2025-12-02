@@ -482,7 +482,7 @@ export default function HeroSection() {
             <Button
               onClick={handlePostJob}
               disabled={loading}
-              className={`rounded-full flex-1 py-4 sm:py-5  bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-lg active:scale-[0.97] transition-all duration-200 ${loading ? "opacity-70 cursor-not-allowed" : ""
+              className={`rounded-full xflex-1 py-4 sm:py-5  bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-lg active:scale-[0.97] transition-all duration-200 ${loading ? "opacity-70 cursor-not-allowed" : ""
                 }`}
             >
               Post a Job <ArrowRight className="w-4 h-4 ml-2" />

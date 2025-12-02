@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactLenis } from 'lenis/react';
+// import { ReactLenis } from 'lenis/react';
 import { useTransform, motion, useScroll, MotionValue } from 'motion/react';
 import { useRef } from 'react';
 import Image from 'next/image';
@@ -48,7 +48,6 @@ export default function FeaturesStacking() {
   });
 
   return (
-    <ReactLenis root options={{ lerp: 0.1, smoothWheel: true, duration: 1.2 }}>
       <main
         ref={container}
         className="bg-white dark:bg-black transition-colors duration-300"
@@ -99,7 +98,6 @@ export default function FeaturesStacking() {
           })}
         </section>
       </main>
-    </ReactLenis>
   );
 }
 
@@ -132,7 +130,6 @@ export const Card = ({
     offset: ['start end', 'start start'],
   });
 
-  // Keep transforms at top level - Framer Motion optimizes these internally
   const imageScale = useTransform(scrollYProgress, [0, 1], [1.5, 1]);
   const scale = useTransform(progress, range, [1, targetScale]);
 

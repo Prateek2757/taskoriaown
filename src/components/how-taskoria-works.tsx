@@ -239,7 +239,7 @@ export default function HowTaskoriaWorks() {
           transition={{ duration: 0.6, delay: 1 }}
           className="text-center mt-7"
         > 
-        <Link href="/signin" >
+        <Link href="/sigin" >
         
           <button
             className="
