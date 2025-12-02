@@ -22,6 +22,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ThemeToggle } from "../theme-toggle";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
+import SlidingUnderlineNav from "./slidingUnderline";
 
 type ViewMode = "customer" | "provider" | null;
 
@@ -245,7 +246,7 @@ export default function ModernNavbar() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              {currentLinks.map((link) => (
+              {/* {currentLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
@@ -260,30 +261,26 @@ export default function ModernNavbar() {
         `}
                   />
                 </Link>
-              ))}
+              ))} */}
+              <SlidingUnderlineNav currentLinks={currentLinks} pathname={pathname} />
+
             </motion.nav>
           )}
 
           {!minimalPages.includes(pathname) && (
             <div className="hidden md:flex items-center gap-3">
-              <ThemeToggle />
 
               {session ? (
                 <div className="relative" ref={profileRef}>
                   <Button
                     onClick={() => setIsProfileOpen((p) => !p)}
                     variant="ghost"
-                    className="
-    flex items-center gap-2 px py-2 rounded-full transition-all 
-     "
+                    className=" flex items-center gap-2 px py-2 rounded-full transition-all "
+
                   >
-                    <div className="
-      w-9 h-9 rounded-full flex items-center justify-center
-      bg-gradient-to-br from-blue-100 to-cyan-100
-      dark:from-blue-900 dark:to-cyan-900
-      transition-all
-      group-hover:scale-[1.05]
-    ">
+                    <div className="w-9 h-9 rounded-full flex items-center justify-center  bg-gradient-to-br from-blue-100 to-cyan-100
+                                       dark:from-blue-900 dark:to-cyan-900
+                                                    transition-all  group-hover:scale-[1.05]">
                       <User className="w-5 h-5 text-blue-600 dark:text-blue-300" />
                     </div>
 
@@ -293,9 +290,9 @@ export default function ModernNavbar() {
 
                     <ChevronDown
                       className={`
-      w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform 
-      ${isProfileOpen ? "rotate-180" : ""}
-    `}
+                      w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform 
+                    ${isProfileOpen ? "rotate-180" : ""}
+                     `}
                     />
                   </Button>
                   <AnimatePresence>
@@ -303,7 +300,7 @@ export default function ModernNavbar() {
                   </AnimatePresence>
 
                 </div>
-                
+
               ) : (
                 <>
                   <Button
@@ -315,12 +312,14 @@ export default function ModernNavbar() {
                   </Button>
                   <Button
                     onClick={joinAsProvider}
-                    className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
+                    className="rounded-full bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
                     Join as Provider
                   </Button>
                 </>
               )}
+              <ThemeToggle />
+
             </div>
           )}
 

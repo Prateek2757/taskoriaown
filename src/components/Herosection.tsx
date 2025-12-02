@@ -411,7 +411,7 @@ export default function HeroSection() {
 
 
   return (
-    <section className="relative py-14 text-center overflow-hidden  bg-[raial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(255,255,255,1)_30%,rgba(245,245,245,1)_100%)]
+    <section className="relative py-11 text-center overflow-hidden  bg-[raial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(255,255,255,1)_30%,rgba(245,245,245,1)_100%)]
   dark:bg-[radial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)] ">
       <img src="/images/bglines.png" className="absolute top-0 left-0 w-full h-full object-cover opacity-50" />
       <div className="container mx-auto px-4 relative z-10">
@@ -455,7 +455,7 @@ export default function HeroSection() {
             <div className="relative w-full max-w-3xl group flex flex-col sm:flex-row sm:items-center">
               <div className="relative flex-1 sm:mr-4 w-full">
                 <div className="absolute -inset-[2px] rounded-lg bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] blur-md opacity-0 group-hover:opacity-100 transition duration-500" />
-                <div className="relative flex items-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                <div className="relative flex items-center bg-white dark:bg-gray-800    rounded-lg  hover:shadow-lg transition-all duration-300">
                   <CategorySearch
                     onSelect={handleSelectCategory}
                     placeholder="What service you need? (e.g. Cleaning, Web)"
@@ -482,7 +482,7 @@ export default function HeroSection() {
             <Button
               onClick={handlePostJob}
               disabled={loading}
-              className={`flex-1 py-4 sm:py-5  bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-lg active:scale-[0.97] transition-all duration-200 ${loading ? "opacity-70 cursor-not-allowed" : ""
+              className={`rounded-full flex-1 py-4 sm:py-5  bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-lg active:scale-[0.97] transition-all duration-200 ${loading ? "opacity-70 cursor-not-allowed" : ""
                 }`}
             >
               Post a Job <ArrowRight className="w-4 h-4 ml-2" />
@@ -505,47 +505,39 @@ export default function HeroSection() {
             )}
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto mt-6 
-             bg-[rgba(255,255,255,.2)] dark:bg-white/5 backdrop-blur-[2px] 
-              border dark:border-white/10 
-               rounded-2xl p-6 shadow-[0_4px_30px_rgba(0,0,0,.1)] border-[rgba(255,255,255,.3)]">
-
-            <div className="text-center hover:scale-[1.04] transition-all">
-              <div className="text-4xl font-extrabold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
-                1K+
+          <div
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto mt-6 
+  bg-[rgba(255,255,255,.2)] dark:bg-white/5 backdrop-blur-[2px] 
+  border dark:border-white/10 
+  rounded-2xl p-6 shadow-[0_4px_30px_rgba(0,0,0,.1)] border-[rgba(255,255,255,.3)]"
+          >
+            {[
+              { value: "1K+", label: "Verified Providers", gradient: "from-blue-500 to-blue-700" },
+              { value: "5K+", label: "Jobs Completed", gradient: "from-cyan-500 to-cyan-700" },
+              { value: "4.5★", label: "Average Rating", gradient: "from-purple-500 to-purple-700" },
+              { value: "24/7", label: "AI Support", gradient: "from-orange-500 to-orange-700" },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className={`
+        relative text-center hover:scale-[1.04] transition-all
+        after:content-[''] after:absolute after:top-[10%] after:h-[80%] after:w-px after:bg-gray-200 dark:after:bg-gray-700
+        after:-right-3 md:after:-right-4
+        ${index % 2 !== 0 ? "after:hidden" : "after:block"}
+        ${index === 1 ? "md:after:block" : ""}
+        ${index === 3 ? "md:after:hidden" : ""}
+      `}
+              >
+                <div className={`text-4xl font-extrabold bg-gradient-to-r ${item.gradient} bg-clip-text text-transparent`}>
+                  {item.value}
+                </div>
+                <div className="text-gray-700 dark:text-gray-300 text-sm">
+                  {item.label}
+                </div>
               </div>
-              <div className="text-gray-700 dark:text-gray-300 text-sm">
-                Verified Providers
-              </div>
-            </div>
-
-            <div className="text-center hover:scale-[1.04] transition-all">
-              <div className="text-4xl font-extrabold bg-gradient-to-r from-cyan-500 to-cyan-700 bg-clip-text text-transparent">
-                5K+
-              </div>
-              <div className="text-gray-700 dark:text-gray-300 text-sm">
-                Jobs Completed
-              </div>
-            </div>
-
-            <div className="text-center hover:scale-[1.04] transition-all">
-              <div className="text-4xl font-extrabold bg-gradient-to-r from-purple-500 to-purple-700 bg-clip-text text-transparent">
-                4.5★
-              </div>
-              <div className="text-gray-700 dark:text-gray-300 text-sm">
-                Average Rating
-              </div>
-            </div>
-
-            <div className="text-center hover:scale-[1.04] transition-all">
-              <div className="text-4xl font-extrabold bg-gradient-to-r from-orange-500 to-orange-700 bg-clip-text text-transparent">
-                24/7
-              </div>
-              <div className="text-gray-700 dark:text-gray-300 text-sm">
-                AI Support
-              </div>
-            </div>
+            ))}
           </div>
+
         </div>
       </div>
     </section>
