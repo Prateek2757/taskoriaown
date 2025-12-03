@@ -100,11 +100,14 @@ interface CardProps {
 }
 
 export const Card = ({ i, title, description, url }: CardProps) => {
+  const isEven = i % 2 === 0
   return (
     <>
-      <div className="flex items-center justify-center px-4 mb-30 mt-20">
-        <div
-          className="
+      {isEven ? (
+
+        <div className="flex items-center justify-center px-4 mb-30 mt-20">
+          <div
+            className="
         w-full max-w-7xl  rounded-2xl
         
         bg-white backdrop-blur-xl
@@ -119,35 +122,36 @@ export const Card = ({ i, title, description, url }: CardProps) => {
         hover:shadow-[0_20px_60px_rgb(0,0,0,0.15)]
         dark:hover:shadow-[0_20px_60px_rgb(0,0,0,0.6)]
         "
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6 items-center h-full p-6 md:p-8">
-            <div className="flex flex-col text-end space-y-4">
-              <h2 className="text-2xl md:text-3xl font-extrabold">{title}</h2>
+          >
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6 items-center h-full p-6 md:p-8 `}>
+              <div className="flex flex-col text-end space-y-4">
+                <h2 className="text-2xl md:text-3xl font-extrabold">{title}</h2>
 
-              <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                {description}
-              </p>
+                <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {description}
+                </p>
 
-              <div className="pt-2 pb-3">
-                <Button>Learn More</Button>
+                <div className="pt-2 pb-3">
+                  <Button>Learn More</Button>
+                </div>
               </div>
-            </div>
-            <div className="absolute right-0 to-0  h-85 w-[620px]">
-              <Image
-                fill
-                src={url}
-                alt={title}
-                className="object-cover shadow-2xl border-2 border-white/20 dark:border-white/10 rounded-xl"
-                loading={i === 0 ? "eager" : "lazy"}
-                priority={i === 0}
-              />
+              <div className="absolute   right-0 to-0  h-85 w-[620px]">
+                <Image
+                  fill
+                  src={url}
+                  alt={title}
+                  className="object-cover shadow-2xl border-2 border-white/20 dark:border-white/10 rounded-xl"
+                  loading={i === 0 ? "eager" : "lazy"}
+                  priority={i === 0}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex items-center justify-center px-4 mb-30 mt-20">
-        <div
-          className="
+      ) : (
+        <div className="flex items-center justify-center px-4 mb-30 mt-20">
+          <div
+            className="
           w-full max-w-7xl  rounded-2xl
           
           bg-white backdrop-blur-xl
@@ -162,33 +166,38 @@ export const Card = ({ i, title, description, url }: CardProps) => {
           hover:shadow-[0_20px_60px_rgb(0,0,0,0.15)]
           dark:hover:shadow-[0_20px_60px_rgb(0,0,0,0.6)]
         "
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6 items-center h-full p-6 md:p-8">
-            <div></div>
-            <div className="flex flex-col space-y-4">
-              <h2 className="text-2xl md:text-3xl font-extrabold">{title}</h2>
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6 items-center h-full p-6 md:p-8">
+              <div></div>
+              <div className="flex flex-col space-y-4">
+                <h2 className="text-2xl md:text-3xl font-extrabold">{title}</h2>
 
-              <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                {description}
-              </p>
+                <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {description}
+                </p>
 
-              <div className="pt-2 pb-3">
-                <Button>Learn More</Button>
+                <div className="pt-2 pb-3">
+                  <Button>Learn More</Button>
+                </div>
               </div>
-            </div>
-            <div className="absolute left-0 to-0  h-85 w-[620px]">
-              <Image
-                fill
-                src={url}
-                alt={title}
-                className="object-cover shadow-2xl border-2 border-white/20 dark:border-white/10 rounded-xl"
-                loading={i === 0 ? "eager" : "lazy"}
-                priority={i === 0}
-              />
+              <div className="absolute left-0 to-0  h-85 w-[620px]">
+                <Image
+                  fill
+                  src={url}
+                  alt={title}
+                  className="object-cover shadow-2xl border-2 border-white/20 dark:border-white/10 rounded-xl"
+                  loading={i === 0 ? "eager" : "lazy"}
+                  priority={i === 0}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+
+      )}
+
+
+
     </>
   );
 };
