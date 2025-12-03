@@ -51,7 +51,7 @@ export default function Services() {
   return (
     <section
       className="min-h-screen 
- py-10 px-4 sm:px-6 lg:px-8 dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] " 
+ py-10 px-4 sm:px-6 lg:px-8 dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] "
     >
       <div className="max-w-7xl relative mx-auto">
         {/* <motion.div
@@ -73,14 +73,13 @@ export default function Services() {
         </motion.div> */}
 
         <motion.div
-          className="grid lg:grid-cols-2 gap-8 items-start mb-10 p-8 rounded-3xl 
-          bg-white/30 dark:bg-white/5 backdrop-blur-xl border border-gray-100 
-          dark:border-gray-800 shadow-lg shadow-blue-100/20"
+          className="flex gap-8 items-start mb-10 
+          bg-white/30 dark:bg-white/5 backdrop-blur-xl shadow-lg shadow-blue-100/20"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div>
+          <div className="w-2/3">
             <h1 className="text-5xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight drop-shadow-sm">
               All Your Skills,
               <br />
