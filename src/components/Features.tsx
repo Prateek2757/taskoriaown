@@ -104,7 +104,6 @@ export const Card = ({ i, title, description, url }: CardProps) => {
   return (
     <>
       {isEven ? (
-
         <div className="flex items-center justify-center px-4 mb-30 mt-20">
           <div
             className="
@@ -123,8 +122,19 @@ export const Card = ({ i, title, description, url }: CardProps) => {
         dark:hover:shadow-[0_20px_60px_rgb(0,0,0,0.6)]
         "
           >
-            <div className={`grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6 items-center h-full p-6 md:p-8 `}>
-              <div className="flex flex-col text-end space-y-4">
+            <div className="flex flex-col md:grid md:grid-cols-2 gap-0 md:gap-6 items-center h-full p-6 md:p-8">
+              <div className="relative w-full h-64 md:hidden mb-6 rounded-xl overflow-hidden">
+                <Image
+                  fill
+                  src={url}
+                  alt={title}
+                  className="object-cover shadow-2xl border-2 border-white/20 dark:border-white/10"
+                  loading={i === 0 ? "eager" : "lazy"}
+                  priority={i === 0}
+                />
+              </div>
+              
+              <div className="flex flex-col md:text-end space-y-4">
                 <h2 className="text-2xl md:text-3xl font-extrabold">{title}</h2>
 
                 <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -135,7 +145,9 @@ export const Card = ({ i, title, description, url }: CardProps) => {
                   <Button>Learn More</Button>
                 </div>
               </div>
-              <div className="absolute   right-0 to-0  h-85 w-[620px]">
+              
+              {/* Image for desktop */}
+              <div className="hidden md:block md:absolute right-0 to-0 h-85 w-[620px]">
                 <Image
                   fill
                   src={url}
@@ -167,8 +179,20 @@ export const Card = ({ i, title, description, url }: CardProps) => {
           dark:hover:shadow-[0_20px_60px_rgb(0,0,0,0.6)]
         "
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6 items-center h-full p-6 md:p-8">
-              <div></div>
+            <div className="flex flex-col md:grid md:grid-cols-2 gap-0 md:gap-6 items-center h-full p-6 md:p-8">
+              {/* Image first on mobile */}
+              <div className="relative w-full h-64 md:hidden mb-6 rounded-xl overflow-hidden">
+                <Image
+                  fill
+                  src={url}
+                  alt={title}
+                  className="object-cover shadow-2xl border-2 border-white/20 dark:border-white/10"
+                  loading={i === 0 ? "eager" : "lazy"}
+                  priority={i === 0}
+                />
+              </div>
+              
+              <div className="hidden md:block"></div>
               <div className="flex flex-col space-y-4">
                 <h2 className="text-2xl md:text-3xl font-extrabold">{title}</h2>
 
@@ -180,7 +204,9 @@ export const Card = ({ i, title, description, url }: CardProps) => {
                   <Button>Learn More</Button>
                 </div>
               </div>
-              <div className="absolute left-0 to-0  h-85 w-[620px]">
+              
+              {/* Image for desktop */}
+              <div className="hidden md:block absolute left-0 to-0 h-85 w-[620px]">
                 <Image
                   fill
                   src={url}
@@ -193,11 +219,7 @@ export const Card = ({ i, title, description, url }: CardProps) => {
             </div>
           </div>
         </div>
-
       )}
-
-
-
     </>
   );
 };

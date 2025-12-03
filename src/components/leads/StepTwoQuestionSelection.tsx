@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import QuestionRenderer from "./QuestionRenderer";
 import { AnimatePresence, motion } from "motion/react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+
+import CalendarInput from "../CalenderInput";
 
 export default function StepTwoQuestionsForm({
   onBack,
@@ -234,7 +234,7 @@ export default function StepTwoQuestionsForm({
               }
             }}
             {...register("budget_min", { required: true })}
-            placeholder="Minimum"
+            placeholder="A$ Minimum"
             className="border px-3 py-2 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
           />
           {errors.budget_min && (
@@ -245,7 +245,7 @@ export default function StepTwoQuestionsForm({
         </div>
         <div className="flex-1 flex flex-col">
           <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
-            Budget Max *
+             Budget Max *
           </label>
           <input
             type="number"
@@ -253,7 +253,7 @@ export default function StepTwoQuestionsForm({
               if (e.key === "-" || e.key === "Minus") e.preventDefault();
             }}
             {...register("budget_max", { required: true })}
-            placeholder="Maximum"
+            placeholder="A$ Maximum"
             className="border px-3 py-2 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
           />
           {errors.budget_max && (
@@ -266,56 +266,48 @@ export default function StepTwoQuestionsForm({
 
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 flex flex-col">
-          <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
-            Preferred Start Date *
-          </label>
+
           <Controller
-            control={control}
             name="preferred_date_start"
+            control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <DatePicker
-                selected={field.value ? new Date(field.value) : null}
-                onChange={(date) => field.onChange(date)}
-                minDate={new Date()}
-                placeholderText="Select start date"
-                dateFormat="MMMM d, yyyy"
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-700 px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition"
-                calendarClassName="rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+              <CalendarInput
+                label="Preferred Start Date *"
+                value={field.value ? new Date(field.value) : undefined}
+                onChange={(d) => field.onChange(d)}
+                minDate={new Date()} 
               />
             )}
           />
+
           {errors.preferred_date_start && (
-            <span className="text-red-500 text-sm mt-1">
-              Start date is required
-            </span>
+            <span className="text-red-500 text-sm mt-1">Start date is required</span>
           )}
         </div>
 
         <div className="flex-1 flex flex-col">
-          <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
-            Preferred End Date *
-          </label>
+
           <Controller
-            control={control}
             name="preferred_date_end"
+            control={control}
             rules={{ required: true }}
-            render={({ field }) => (
-              <DatePicker
-                selected={field.value ? new Date(field.value) : null}
-                onChange={(date) => field.onChange(date)}
-                minDate={getValues("preferred_date_start") || new Date()}
-                placeholderText="Select end date"
-                dateFormat="MMMM d, yyyy"
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-700 px-3 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition"
-                calendarClassName="rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
-              />
-            )}
+            render={({ field }) => {
+              const start = getValues("preferred_date_start");
+
+              return (
+                <CalendarInput
+                  label="Preferred End Date *"
+                  value={field.value ? new Date(field.value) : undefined}
+                  onChange={(d) => field.onChange(d)}
+                  minDate={start ? new Date(start) : new Date()}
+                />
+              );
+            }}
           />
+
           {errors.preferred_date_end && (
-            <span className="text-red-500 text-sm mt-1">
-              End date is required
-            </span>
+            <span className="text-red-500 text-sm mt-1">End date is required</span>
           )}
         </div>
       </div>
@@ -333,9 +325,8 @@ export default function StepTwoQuestionsForm({
         <Button
           type="submit"
           disabled={loading}
-          className={`rounded-lg bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow hover:shadow-lg ${
-            loading ? "opacity-70 cursor-not-allowed" : ""
-          }`}
+          className={`rounded-lg bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow hover:shadow-lg ${loading ? "opacity-70 cursor-not-allowed" : ""
+            }`}
         >
           {loading ? (
             <span className="flex items-center gap-2">

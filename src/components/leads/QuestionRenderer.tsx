@@ -8,8 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import CalendarInput from "../CalenderInput";
 
 export default function QuestionRenderer({ q, control, register }: any) {
   const name = `q_${q.category_question_id}`;
@@ -29,7 +28,6 @@ export default function QuestionRenderer({ q, control, register }: any) {
         {q.question}
       </Label>
 
-      {/* Textarea */}
       {q.field_type === "textarea" && (
         <Textarea
           {...register(name)}
@@ -38,7 +36,6 @@ export default function QuestionRenderer({ q, control, register }: any) {
         />
       )}
 
-      {/* Input / Text */}
       {(q.field_type === "text" || q.field_type === "input") && (
         <Input
           {...register(name)}
@@ -47,7 +44,6 @@ export default function QuestionRenderer({ q, control, register }: any) {
         />
       )}
 
-      {/* Number */}
       {q.field_type === "number" && (
         <Input
           type="number"
@@ -57,30 +53,20 @@ export default function QuestionRenderer({ q, control, register }: any) {
         />
       )}
 
-      {q.field_type === "date" && (
-        <Controller
-          control={control}
-          name={name}
-          render={({ field }) => (
-            <DatePicker
-              selected={field.value ? new Date(field.value) : null}
-              onChange={(date) => field.onChange(date)}
-              minDate={new Date()} 
-              placeholderText="Select a date"
-              dateFormat="MMMM d, yyyy"
-              className="w-full rounded-xl border border-gray-300 overflow-visible z-50 dark:border-gray-700 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition"
-              calendarClassName="rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
-              dayClassName={(date) =>
-                `hover:bg-blue-100  dark:hover:bg-blue-900/30 transition ${
-                  date.toDateString() === new Date().toDateString()
-                    ? "bg-blue-50 dark:bg-blue-900/20 font-semibold"
-                    : ""
-                }`
-              }
-            />
-          )}
-        />
-      )}
+     {q.field_type === "date" && (
+  <Controller
+    control={control}
+    name={name}
+    render={({ field }) => (
+      <CalendarInput
+        
+        value={field.value ? new Date(field.value) : undefined}
+        minDate={new Date()}  
+        onChange={(d) => field.onChange(d)}
+      />
+    )}
+  />
+)}
 
       {!isMultiCheckbox && q.field_type === "checkbox" && (
         <div className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition">

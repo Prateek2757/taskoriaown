@@ -98,11 +98,11 @@ export const authOptions: NextAuthOptions = {
         const email = user.email;
 
         const result = await pool.query(
-          `SELECT user_id,
+          `SELECT u.user_id,
           COALESCE(r.role_name, 'customer') AS role
-           FROM users 
+           FROM users u
           LEFT JOIN roles r ON r.role_id = u.default_role_id
-          where  email = $1 AND is_deleted = FALSE`,
+          where  u.email = $1 AND u.is_deleted = FALSE`,
           [email]
         );
 
@@ -112,7 +112,7 @@ export const authOptions: NextAuthOptions = {
         const existingUser = result.rows[0];
 
         user.id = existingUser.user_id.toString();
-        user;
+        user.role = existingUser.role;
       }
 
       return true;

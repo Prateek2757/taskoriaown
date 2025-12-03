@@ -152,7 +152,7 @@ export function CreditPurchase({
     mode === "page" || (requiredCredits && balance < requiredCredits);
 
   const content = (
-    <div className="w-full text-gray-900 dark:text-gray-100">
+    <div className="w-full  text-gray-900 dark:text-gray-100">
       {mode === "modal" && requiredCredits && (
         <div className="mb-6 text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-2">
@@ -164,7 +164,7 @@ export function CreditPurchase({
         </div>
       )}
 
-      <div className="text-center mb-6">
+      <div className="text-center mb-4">
         <p className="text-gray-700 dark:text-gray-300 text-sm">
           Current Balance:{" "}
           <span className="font-semibold text-blue-600 dark:text-blue-400">{balance ?? 0}</span>{" "}
@@ -180,7 +180,7 @@ export function CreditPurchase({
           >
             <button
               onClick={() => toggleFaq(faq.id)}
-              className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center justify-between text-left"
+              className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center justify-between text-left"
             >
               <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm md:text-base">
                 {faq.question}
@@ -279,8 +279,8 @@ export function CreditPurchase({
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-4 md:p-6">
-      <div className="mb-6">
+    <div className="max-w-4xl mx-auto p-4 md:p-4">
+      <div className="mb-3">
         <button
           onClick={() => window.history.back()}
           className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition mb-4"

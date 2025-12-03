@@ -296,7 +296,7 @@ export default function MyServicesPage() {
           </CardContent>
         </Card>
 
-v.         <Card className="rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <Card className="rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
           <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 border-b dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">

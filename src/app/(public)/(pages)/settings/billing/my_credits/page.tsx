@@ -9,7 +9,7 @@ export default function CreditsPage({ professionalId }: { professionalId: number
 const {data:session} = useSession()
 
   return (
-    <div className="p-6">
+    <div className="px-6 min-h-screen">
       <CreditPurchasePage
       professionalId={session?.user.id}  
       onPurchaseSuccess={() => {
