@@ -130,7 +130,6 @@ export default function StepTwoQuestionsForm({
     } catch (err: any) {
       console.warn("User not logged in. Saving task locally...", err);
 
-
       const payload = {
         category_id: Number(selectedCategoryId),
         city_id: Number(selectedLocationId),
@@ -145,7 +144,7 @@ export default function StepTwoQuestionsForm({
         preferred_date_start: data.preferred_date_start,
         preferred_date_end: data.preferred_date_end,
       };
-      localStorage.setItem("pendingpayload", JSON.stringify(payload))
+      localStorage.setItem("pendingpayload", JSON.stringify(payload));
 
       toast.warning(" Please Sign In or Sign Up to continue.");
       router.push("/signin");
@@ -171,7 +170,7 @@ export default function StepTwoQuestionsForm({
 
   if (currentStep === "questions") {
     return (
-      <form className="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-4 flex flex-col gap-3">
+      <form className=" flex flex-col gap-3">
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Step {currentIndex + 1} of {questions.length}
         </p>
@@ -217,10 +216,7 @@ export default function StepTwoQuestionsForm({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-6 flex flex-col gap-6"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <h2 className="text-xl font-bold text-gray-900 dark:text-white">
         Budget & Preferred Dates
       </h2>
@@ -233,7 +229,7 @@ export default function StepTwoQuestionsForm({
           <input
             type="number"
             onKeyDown={(e) => {
-              if (e.key === '-' || e.key === 'Minus') {
+              if (e.key === "-" || e.key === "Minus") {
                 e.preventDefault();
               }
             }}
@@ -254,8 +250,7 @@ export default function StepTwoQuestionsForm({
           <input
             type="number"
             onKeyDown={(e) => {
-              if (e.key === '-' || e.key === 'Minus')
-                e.preventDefault()
+              if (e.key === "-" || e.key === "Minus") e.preventDefault();
             }}
             {...register("budget_max", { required: true })}
             placeholder="Maximum"
@@ -338,8 +333,9 @@ export default function StepTwoQuestionsForm({
         <Button
           type="submit"
           disabled={loading}
-          className={`rounded-lg bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow hover:shadow-lg ${loading ? "opacity-70 cursor-not-allowed" : ""
-            }`}
+          className={`rounded-lg bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow hover:shadow-lg ${
+            loading ? "opacity-70 cursor-not-allowed" : ""
+          }`}
         >
           {loading ? (
             <span className="flex items-center gap-2">

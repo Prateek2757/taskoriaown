@@ -63,7 +63,7 @@ export default function NewRequestModal({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1  p-4">  
+        <div className="flex-1  p-4">
           <AnimatePresence mode="wait">
             {step === 1 ? (
               <motion.div
@@ -79,9 +79,9 @@ export default function NewRequestModal({
                   presetCategory={
                     selectedCategoryId && selectedCategoryTitle
                       ? {
-                        category_id: Number(selectedCategoryId),
-                        name: selectedCategoryTitle,
-                      }
+                          category_id: Number(selectedCategoryId),
+                          name: selectedCategoryTitle,
+                        }
                       : undefined
                   }
                   setSelectedCategoryId={setSelectedCategoryId}

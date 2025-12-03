@@ -128,8 +128,10 @@ export default function StepOneCategoryForm({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl w-full max-w-md mx-auto p-6 sm:p-8 space-y-8
-             ">
+    <div
+      className="space-y-8
+             "
+    >
       <div className="space-y-2 text-center">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
           What kind of service do you need?
@@ -155,10 +157,10 @@ export default function StepOneCategoryForm({
                 presetCategory={
                   presetCategory
                     ? {
-                      category_id: presetCategory.category_id,
-                      name: presetCategory.name,
-                      slug: presetCategory.slug || "",
-                    }
+                        category_id: presetCategory.category_id,
+                        name: presetCategory.name,
+                        slug: presetCategory.slug || "",
+                      }
                     : undefined
                 }
                 onSelect={(data) => {
