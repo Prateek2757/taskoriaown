@@ -1,8 +1,16 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Sparkles, Users, Shield } from "lucide-react";
+import {
+  Sparkles,
+  Users,
+  Shield,
+  ArrowBigDown,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 import Link from "next/link";
+import { Button } from "./ui/button";
 
 const steps = [
   {
@@ -28,34 +36,32 @@ const steps = [
   },
 ];
 
-
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 }
+  visible: { opacity: 1, y: 0 },
 };
 
 const cardVariant = {
   hidden: { opacity: 0, scale: 0.85 },
-  visible: { opacity: 1, scale: 1 }
+  visible: { opacity: 1, scale: 1 },
 };
 
 const lineVariant = {
   hidden: { pathLength: 0 },
-  visible: { pathLength: 1 }
+  visible: { pathLength: 1 },
 };
 
 const arrowVariant = {
   hidden: { opacity: 0, x: -10 },
-  visible: { opacity: 1, x: 0 }
+  visible: { opacity: 1, x: 0 },
 };
 
 const arrowMobileVariant = {
   hidden: { opacity: 0, y: -10 },
-  visible: { opacity: 1, y: 0 }
+  visible: { opacity: 1, y: 0 },
 };
 
 export default function HowTaskoriaWorks() {
-  
   return (
     <section
       className="
@@ -86,9 +92,8 @@ export default function HowTaskoriaWorks() {
         }}
       />
 
-   
-      <motion.div 
-        className="max-w-7xl mx-auto relative"
+      <motion.div
+        className="max-w-8xl mx-auto relative"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -105,20 +110,57 @@ export default function HowTaskoriaWorks() {
             "I dream of one URL that sums it all up to share with Business"
           </p>
         </motion.div>
+        <div className="flex justify-center  mx-auto">
+          <div className="relative h-72 w-72 border-b-6 border-blue-400 rounded-full flex justify-center items-center p-7">
+            <div className="absolute right-1/2 -bottom-3  h-72 w-72 bg-white"></div>
+          </div>
+          <div className="relative h-72 w-72 border-t-6 border-blue-400 rounded-full flex justify-center items-center p-7">
+            <span className="absolute z-10 -left-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
+              <ChevronUp className="text-gray-400" />
+            </span>
+            <div className="flex flex-col gap-3 justify-center items-center bg-blue-200 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
+              <span className="text-blue-500 text-6xl font-bold">1</span>
+              <span className="text-gray-800">Post Your Job</span>
+            </div>
+          </div>
+          <div className="relative h-72 w-72 border-b-6 border-red-400 rounded-full flex justify-center items-center p-7">
+            <span className="absolute z-10 -left-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
+              <ChevronDown className="text-gray-400" />
+            </span>
+            <div className="flex flex-col gap-3 justify-center items-center bg-red-300 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
+              <span className="text-red-500 text-6xl font-bold">2</span>
+              <span className="text-gray--800">Get Matched Instantly</span>
+            </div>
+          </div>
+          <div className="relative h-72 w-72 border-t-6 border-green-400 rounded-full flex justify-center items-center p-7">
+            <span className="absolute z-10 -left-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
+              <ChevronUp className="text-gray-400" />
+            </span>
+            <div className="flex flex-col gap-3 justify-center items-center bg-green-300 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
+              <span className="text-green-600 text-6xl font-bold">3</span>
+              <span className="text-green-800">Start Collaborating</span>
+            </div>
+            <span className="absolute z-10 -right-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
+              <ChevronDown className="text-gray-400" />
+            </span>
+          </div>
+          <div className="relative h-72 w-72 border-b-6 border-green-400 rounded-full flex justify-center items-center p-7">
+            <div className="absolute left-1/2 -bottom-3  h-72 w-72 bg-white"></div>
+          </div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-4 max-w-6xl mx-auto mt-10">
           {steps.map((step, index) => (
             <div key={step.id} className="flex flex-col items-center relative">
               <motion.div
                 variants={cardVariant}
                 transition={{ duration: 0.6, delay: index * 0.25 }}
                 className="
-                  group relative w-full rounded-3xl p-8 overflow-hidden
+                  group relative w-full rounded-3xl
                   bg-white/70 dark:bg-white/5
                   border border-black/10 dark:border-white/20 
                   backdrop-blur-2xl shadow-2xl
-                  hover:border-[#41A6EE]/60 hover:shadow-[0px_8px_60px_rgba(65,166,238,0.25)]
-                  hover:scale-[1.02]
+                  
                   transition-all duration-500
                   before:absolute before:inset-0 before:rounded-3xl
                   before:bg-gradient-to-br before:from-white/40 before:via-white/10 before:to-transparent
@@ -127,30 +169,34 @@ export default function HowTaskoriaWorks() {
                   after:absolute after:inset-0 after:rounded-3xl
                   after:bg-gradient-to-br after:from-[#41A6EE]/20 after:via-[#41A6EE]/5 after:to-transparent
                   after:opacity-0 after:transition-all after:duration-500
-                  hover:after:opacity-100
                   after:pointer-events-none
+                  items-center
                 "
                 style={{
                   boxShadow:
                     "0 8px 32px 0 rgba(0, 0, 0, 0.1), inset 0 1px 1px 0 rgba(255, 255, 255, 0.3)",
                 }}
               >
-                <div className="relative z-10">
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-[#41A6EE] to-[#2d8cd4] text-white font-bold text-2xl mb-6 shadow-lg group-hover:shadow-[0px_0px_30px_rgba(65,166,238,0.6)] group-hover:scale-110 transition-all duration-500">
+                <div className="p-5">
+                  {/* <div
+                    className="absolute top-0  w-16 h-full rounded-xl flex items-center justify-center 
+                  bg-gradient-to-br from-[#96d3ff] to-[#5fbaff]
+                   text-white font-bold text-2xl transition-all duration-500 shadow-[inset_-20px_0px_15px_0px_rgba(0,0,0,.1)]"
+                  >
                     {step.id}
-                  </div>
+                  </div> */}
 
-                  <h3 className="text-2xl font-semibold mb-3 text-gray-900 dark:text-white group-hover:text-[#41A6EE] dark:group-hover:text-[#41A6EE] transition-colors duration-500">
+                  {/* <h3 className="pl-20 text-2xl font-semibold mb-3 text-gray-900 dark:text-white group-hover:text-[#41A6EE] dark:group-hover:text-[#41A6EE] transition-colors duration-500">
                     {step.title}
-                  </h3>
+                  </h3> */}
 
-                  <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <p className=" text-gray-700 dark:text-gray-200 leading-relaxed">
                     {step.description}
                   </p>
                 </div>
               </motion.div>
 
-              {index < steps.length - 1 && (
+              {/* {index < steps.length - 1 && (
                 <motion.div
                   initial={{ opacity: 0, scaleX: 0 }}
                   variants={{ visible: { opacity: 1, scaleX: 1 } }}
@@ -158,11 +204,28 @@ export default function HowTaskoriaWorks() {
                   className="hidden md:block absolute top-1/2 -right-12 lg:-right-16"
                   style={{ transformOrigin: "left center" }}
                 >
-                  <svg width="100" height="40" viewBox="0 0 100 40" className="lg:w-[130px]">
+                  <svg
+                    width="100"
+                    height="40"
+                    viewBox="0 0 100 40"
+                    className="lg:w-[130px]"
+                  >
                     <defs>
-                      <linearGradient id={`grad-${index}`} x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style={{ stopColor: "#41A6EE", stopOpacity: 0.6 }} />
-                        <stop offset="100%" style={{ stopColor: "#41A6EE", stopOpacity: 1 }} />
+                      <linearGradient
+                        id={`grad-${index}`}
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop
+                          offset="0%"
+                          style={{ stopColor: "#41A6EE", stopOpacity: 0.6 }}
+                        />
+                        <stop
+                          offset="100%"
+                          style={{ stopColor: "#41A6EE", stopOpacity: 1 }}
+                        />
                       </linearGradient>
                     </defs>
                     <motion.line
@@ -203,8 +266,14 @@ export default function HowTaskoriaWorks() {
                         x2="0%"
                         y2="100%"
                       >
-                        <stop offset="0%" style={{ stopColor: "#41A6EE", stopOpacity: 0.6 }} />
-                        <stop offset="100%" style={{ stopColor: "#41A6EE", stopOpacity: 1 }} />
+                        <stop
+                          offset="0%"
+                          style={{ stopColor: "#41A6EE", stopOpacity: 0.6 }}
+                        />
+                        <stop
+                          offset="100%"
+                          style={{ stopColor: "#41A6EE", stopOpacity: 1 }}
+                        />
                       </linearGradient>
                     </defs>
                     <motion.line
@@ -226,31 +295,31 @@ export default function HowTaskoriaWorks() {
                     />
                   </svg>
                 </motion.div>
-              )}
+              )} */}
             </div>
           ))}
         </div>
 
         <motion.div
           variants={{
-             hidden: { opacity: 0, y: 20 },
-             visible: { opacity: 1, y: 0 }
+            hidden: { opacity: 0, y: 20 },
+            visible: { opacity: 1, y: 0 },
           }}
           transition={{ duration: 0.6, delay: 1 }}
-          className="text-center mt-7"
-        > 
-        <Link href="/sigin" >
-        
-          <button
-            className="
-              px-10 py-4 rounded-full bg-[#41A6EE] hover:bg-[#41A6EE]/80
-              text-black font-bold text-lg shadow-xl 
-              hover:shadow-[#41A6EE]/40 transition-all duration-300 hover:scale-105
-            "
+          className="text-center mt-17"
+        >
+          {/* <Link href="/sigin" > */}
+
+          <Button
+          // className="
+          //   px-10 py-4 rounded-full bg-[#41A6EE] hover:bg-[#41A6EE]/80
+          //   text-black font-bold text-lg shadow-xl
+          //   hover:shadow-[#41A6EE]/40 transition-all duration-300 hover:scale-105
+          // "
           >
             Start my 1-minute setup
-          </button>
-          </Link>
+          </Button>
+          {/* </Link> */}
         </motion.div>
       </motion.div>
     </section>
