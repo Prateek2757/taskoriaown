@@ -158,10 +158,10 @@ export default function SignInPage() {
           </div>
 <button
   onClick={() => signIn("google", { callbackUrl: "/provider/dashboard" })}
-  className="mt-2 w-full flex items-center justify-center p-3 rounded-xl
-  bg-white border border-gray-300 shadow-sm hover:bg-gray-100"
+  className="mt-2 w-full flex items-center justify-center p-3 dark:text-gray-300 dark:bg-black rounded-xl
+  bg-white border border-gray-500 shadow-sm hover:bg-gray-100"
 >
-  <img src="/google-icon.svg" className="w-5 h-5 mr-2" />
+  <img src="/images/googleicon.svg" className="w-5 h-5 mr-2" />
   Sign in with Google
 </button>
           <motion.button

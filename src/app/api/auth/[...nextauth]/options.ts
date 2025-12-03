@@ -32,7 +32,6 @@ declare module "next-auth/jwt" {
 
 export const authOptions: NextAuthOptions = {
   providers: [
-   
     CredentialsProvider({
       id: "credentials",
       name: "Credentials",
@@ -87,7 +86,6 @@ export const authOptions: NextAuthOptions = {
       },
     }),
 
-
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
@@ -100,16 +98,21 @@ export const authOptions: NextAuthOptions = {
         const email = user.email;
 
         const result = await pool.query(
-          `SELECT user_id FROM users WHERE email = $1 AND is_deleted = FALSE`,
+          `SELECT user_id,
+          COALESCE(r.role_name, 'customer') AS role
+           FROM users 
+          LEFT JOIN roles r ON r.role_id = u.default_role_id
+          where  email = $1 AND is_deleted = FALSE`,
           [email]
         );
 
         if (result.rows.length === 0) {
           return "/error?reason=not_registered";
         }
-           const existingUser = result.rows[0];
+        const existingUser = result.rows[0];
 
-           user.id = existingUser.user_id.toString();
+        user.id = existingUser.user_id.toString();
+        user;
       }
 
       return true;
