@@ -9,7 +9,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Send, Search, Phone, Video, MoreVertical } from "lucide-react";
 
-// Types
 interface Conversation {
   id: number;
   name: string;
@@ -33,7 +32,6 @@ const Messages = () => {
   const [selectedConversation, setSelectedConversation] = useState<number>(1);
   const [newMessage, setNewMessage] = useState<string>("");
 
-  // Mock conversations
   const conversations: Conversation[] = [
     {
       id: 1,
@@ -81,7 +79,6 @@ const Messages = () => {
     },
   ];
 
-  // Mock messages for selected conversation
   const messages: Message[] = [
     {
       id: 1,
@@ -134,7 +131,6 @@ const Messages = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
       <header className="bg-white border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
@@ -160,9 +156,7 @@ const Messages = () => {
       </header>
 
       <div className="flex-1 flex flex-col md:flex-row h-[calc(100vh-80px)]">
-        {/* Conversations Sidebar */}
         <div className="md:w-1/3 w-full bg-white border-r flex flex-col">
-          {/* Search */}
           <div className="p-4 border-b">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -170,7 +164,6 @@ const Messages = () => {
             </div>
           </div>
 
-          {/* Conversations List */}
           <div className="flex-1 overflow-y-auto">
             {conversations.map((conversation) => (
               <div
@@ -227,11 +220,9 @@ const Messages = () => {
           </div>
         </div>
 
-        {/* Chat Area */}
         <div className="flex-1 flex flex-col bg-white">
           {selectedConv ? (
             <>
-              {/* Chat Header */}
               <div className="p-4 border-b flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="relative">
@@ -272,7 +263,6 @@ const Messages = () => {
                 </div>
               </div>
 
-              {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messages.map((message) => (
                   <div
@@ -324,7 +314,6 @@ const Messages = () => {
                 ))}
               </div>
 
-              {/* Message Input */}
               <div className="p-4 border-t">
                 <div className="flex items-center gap-2">
                   <Input

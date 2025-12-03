@@ -50,7 +50,7 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
     }
   }, []);
 
- 
+
   useEffect(() => {
     if (!session?.user?.id) return;
     const cached = sessionStorage.getItem(cacheKey);
@@ -60,7 +60,6 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
 
   const fetchConversations = useCallback(async () => {
     if (!endpoint || hasFetched.current) return;
-    hasFetched.current = true;
 
     setLoading(true);
     setError(null);
@@ -73,9 +72,8 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
       const convos = data.conversations || [];
 
       setConversations(convos);
+      hasFetched.current = true;
 
-      sessionStorage.setItem(cacheKey, JSON.stringify(convos));
-      sessionStorage.setItem(`${cacheKey}_timestamp`, Date.now().toString());
     } catch (err: any) {
       setError(err?.message || "Failed to load conversations");
     } finally {
@@ -84,19 +82,25 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
   }, [endpoint, session?.user?.id]);
 
 
+  // useEffect(() => {
+  //   if (!session?.user?.id) return;
+
+  //   const lastFetched = Number(sessionStorage.getItem(`${cacheKey}_timestamp`));
+  //   const isExpired = Date.now() - lastFetched > 5 * 60 * 1000;
+
+  //   if (isExpired || !lastFetched) {
+  //     hasFetched.current = false;
+  //     fetchConversations();
+  //   }
+  // }, [cacheKey, session?.user?.id, fetchConversations]);
+
   useEffect(() => {
-    if (!session?.user?.id) return;
-
-    const lastFetched = Number(sessionStorage.getItem(`${cacheKey}_timestamp`));
-    const isExpired = Date.now() - lastFetched > 5 * 60 * 1000;
-
-    if (isExpired || !lastFetched) {
+    if (endpoint) {
       hasFetched.current = false;
       fetchConversations();
     }
-  }, [cacheKey, session?.user?.id, fetchConversations]);
+  }, [endpoint]);
 
- 
   useEffect(() => {
     if (!routeConvoId) return;
     if (!conversations.length) return;
@@ -148,7 +152,7 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
       dark:from-[#050507] dark:via-[#0b0c10] dark:to-[#11131a]
       text-gray-800 dark:text-gray-200"
     >
-    
+
       <AnimatePresence mode="wait">
         {(sidebarOpen || typeof window === "undefined" || !window.matchMedia("(max-width: 640px)").matches) && (
           <motion.div
@@ -177,10 +181,10 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
         )}
       </AnimatePresence>
 
-  
+
       <div className="flex-1 flex flex-col relative">
 
-       
+
         {activeConversation && (
           <div className="
             sm:hidden p-3 flex items-center gap-3
@@ -202,7 +206,7 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
         )}
 
         <AnimatePresence mode="wait">
-         
+
           {loading ? (
             <motion.div
               key="loading"
@@ -229,7 +233,7 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
               <p className="text-lg font-medium">{error}</p>
             </motion.div>
           ) : activeConversation ? (
-            
+
             <motion.div
               key={activeConversation.id}
               initial={{ opacity: 0, x: 18 }}
@@ -249,7 +253,7 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
               />
             </motion.div>
           ) : (
-           
+
             <motion.div
               key="empty"
               initial={{ opacity: 0 }}

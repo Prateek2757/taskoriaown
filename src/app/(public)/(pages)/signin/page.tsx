@@ -156,7 +156,14 @@ export default function SignInPage() {
             </span>
             <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
           </div>
-
+<button
+  onClick={() => signIn("google", { callbackUrl: "/provider/dashboard" })}
+  className="mt-2 w-full flex items-center justify-center p-3 rounded-xl
+  bg-white border border-gray-300 shadow-sm hover:bg-gray-100"
+>
+  <img src="/google-icon.svg" className="w-5 h-5 mr-2" />
+  Sign in with Google
+</button>
           <motion.button
             whileTap={{ scale: 0.97 }}
             disabled={joinLoading}

@@ -1,12 +1,9 @@
-// app/api/auth/[...nextauth]/options.ts
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import pool from "@/lib/dbConnect";
 
-//
-// ✅ Type Declarations
-//
 declare module "next-auth" {
   interface User {
     id: string;
@@ -33,11 +30,9 @@ declare module "next-auth/jwt" {
   }
 }
 
-//
-// ✅ Auth Options
-//
 export const authOptions: NextAuthOptions = {
   providers: [
+   
     CredentialsProvider({
       id: "credentials",
       name: "Credentials",
@@ -71,13 +66,13 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (result.rows.length === 0) {
-          throw new Error("Invalid email or user not found");
+          throw new Error("User not found");
         }
 
         const user = result.rows[0];
 
-        const isPasswordValid = await bcrypt.compare(password, user.password_hash);
-        if (!isPasswordValid) {
+        const valid = await bcrypt.compare(password, user.password_hash);
+        if (!valid) {
           throw new Error("Invalid password");
         }
 
@@ -91,13 +86,36 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
+
+
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
   ],
 
-
   callbacks: {
-    
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        const email = user.email;
+
+        const result = await pool.query(
+          `SELECT user_id FROM users WHERE email = $1 AND is_deleted = FALSE`,
+          [email]
+        );
+
+        if (result.rows.length === 0) {
+          return "/error?reason=not_registered";
+        }
+           const existingUser = result.rows[0];
+
+           user.id = existingUser.user_id.toString();
+      }
+
+      return true;
+    },
+
     async jwt({ token, user, trigger, session }) {
-      
       if (user) {
         token.id = user.id;
         token.name = user.name || "";
@@ -107,19 +125,13 @@ export const authOptions: NextAuthOptions = {
         token.isVerified = user.isVerified;
       }
 
-    
       if (trigger === "update" && session) {
-        // Merge the updated data into the token
-        return {
-          ...token,
-          ...session, // This contains the data you pass to update()
-        };
+        return { ...token, ...session };
       }
 
       return token;
     },
 
-    // Populate session.user from JWT
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id;
