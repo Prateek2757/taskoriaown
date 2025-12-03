@@ -118,27 +118,66 @@ export default function HowTaskoriaWorks() {
             <span className="absolute z-10 -left-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
               <ChevronUp className="text-gray-400" />
             </span>
-            <div className="flex flex-col gap-3 justify-center items-center bg-blue-200 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
-              <span className="text-blue-500 text-6xl font-bold">1</span>
-              <span className="text-gray-800">Post Your Job</span>
+            <div className="flex flex-col gap-0 justify-center items-center bg-blue-200 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
+              <span
+                className=" text-white text-[100px] font-bold"
+                style={{
+                  textShadow: "2px 2px 3px rgba(255,255,255,0.5)",
+                  backgroundColor: "#b9b9b9",
+                  backgroundClip: "text",
+                  color: "transparent",
+                  lineHeight: "1",
+                }}
+              >
+                1
+              </span>
+              <span className="text-blue-500 font-bold text-sm">
+                Post Your Job
+              </span>
             </div>
           </div>
           <div className="relative h-72 w-72 border-b-6 border-red-400 rounded-full flex justify-center items-center p-7">
             <span className="absolute z-10 -left-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
               <ChevronDown className="text-gray-400" />
             </span>
-            <div className="flex flex-col gap-3 justify-center items-center bg-red-300 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
-              <span className="text-red-500 text-6xl font-bold">2</span>
-              <span className="text-gray--800">Get Matched Instantly</span>
+            <div className="flex flex-col gap-3 justify-center items-center bg-red-200 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
+              <span
+                className=" text-white text-[100px] font-bold"
+                style={{
+                  textShadow: "2px 2px 3px rgba(255,255,255,0.5)",
+                  backgroundColor: "#b9b9b9",
+                  backgroundClip: "text",
+                  color: "transparent",
+                  lineHeight: "1",
+                }}
+              >
+                2
+              </span>
+              <span className="text-red-400 font-bold text-sm">
+                Get Matched Instantly
+              </span>
             </div>
           </div>
           <div className="relative h-72 w-72 border-t-6 border-green-400 rounded-full flex justify-center items-center p-7">
             <span className="absolute z-10 -left-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
               <ChevronUp className="text-gray-400" />
             </span>
-            <div className="flex flex-col gap-3 justify-center items-center bg-green-300 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
-              <span className="text-green-600 text-6xl font-bold">3</span>
-              <span className="text-green-800">Start Collaborating</span>
+            <div className="flex flex-col gap-3 justify-center items-center bg-green-200 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
+              <span
+                className=" text-white text-[100px] font-bold"
+                style={{
+                  textShadow: "2px 2px 3px rgba(255,255,255,0.5)",
+                  backgroundColor: "#b9b9b9",
+                  backgroundClip: "text",
+                  color: "transparent",
+                  lineHeight: "1",
+                }}
+              >
+                3
+              </span>
+              <span className="text-green-500 font-bold text-sm">
+                Start Collaborating
+              </span>
             </div>
             <span className="absolute z-10 -right-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
               <ChevronDown className="text-gray-400" />
