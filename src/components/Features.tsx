@@ -103,10 +103,10 @@ export default function FeaturesStacking() {
         }
       `}</style>
 
-      <div className="pt-14 pb-5 md:pt-3 px-4">
+      <div className="pt-4 pb-5 md:pt-3 px-4">
         <div className="text-center mx-auto">
           <h1
-            className="text-5xl md:text-xl lg:text-6xl font-extrabold tracking-tight mb-6
+            className="text-4xl md:text-xl lg:text-5xl font-extrabold tracking-tight mb-6
                 bg-gradient-to-br from-gray-900 via-gray-700 to-gray-500
                 dark:from-white dark:via-gray-200 dark:to-gray-500
                 bg-clip-text text-transparent "
