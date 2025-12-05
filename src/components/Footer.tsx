@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { FormEvent, useRef, useState } from "react";
@@ -94,39 +93,7 @@ const Footer = () => {
               <p className="md:text-xl text-lg mb-3">
                 Contact To Become Professional
               </p>
-              <p className=" underline  text-sm  ">contact@taskoria.com</p>
-
-              {/* <div className="bg-white flex justify-between items-center border-2 overflow-hidden border-white rounded-full text-black hover:text-black">
-                <form
-                  onSubmit={handleNewsLetterData}
-                  className="grid grid-cols-6 w-full h-full"
-                >
-                  <input
-                    type="email"
-                    name="newsletter_email"
-                    className="bg-transparent py-3 px-6 col-span-5 text-black placeholder-black focus:outline-none"
-                    placeholder="Your Email *"
-                  />
-                  <button
-                    type="submit"
-                    className="cursor-pointer bg-white h-full flex items-center justify-center hover:bg-gray-100 transition-colors"
-                  >
-                    <svg
-                      width="15"
-                      height="15"
-                      viewBox="0 0 15 15"
-                      fill="none"
-                      className="h-[60%] w-[60%]"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
-                        fill="#000"
-                      />
-                    </svg>
-                  </button>
-                </form>
-              </div> */}
+              <p className="underline text-sm">contact@taskoria.com</p>
 
               {openPopup && (
                 <p className="text-green-400 pt-2 text-sm">
@@ -136,78 +103,89 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-16 w-full lg:w-auto mt-0 lg:mt-0">
+          <div className="sm:grid sm:grid-cols-3 gap-8 lg:gap-16 w-full lg:w-auto mt-0 lg:mt-0">
 
-            <div className="border-b border-gray-700 sm:border-none  sm:pb-0">
+  <div className="sm:border-none">
+    <h2 className="hidden sm:block text-2xl pb-4 font-semibold">For Customers</h2>
 
-              <h2 className="hidden sm:block text-2xl pb-4 font-semibold">For Customers</h2>
+    <button
+      className="sm:hidden w-full flex justify-between items-center text-xl pb-3 font-semibold  border-gray-700"
+      onClick={() => setOpenSection(openSection === 'customers' ? '' : 'customers')}
+    >
+      For Customers
+      <span>{openSection === 'customers' ? <ChevronUp /> : <ChevronDown />}</span>
+    </button>
 
-              <button
-                className="sm:hidden w-full flex justify-between items-center text-xl pb-3 font-semibold"
-                onClick={() => setOpenSection(openSection === 'customers' ? '' : 'customers')}
-              >
-                For Customers
-                <span>{openSection === 'customers' ? <ChevronUp /> : <ChevronDown />}</span>
-              </button>
+    <div
+      className={`sm:block overflow-hidden transition-all duration-300 
+        ${openSection === 'customers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
+    >
+      <Link href="/services" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+        Find Services
+      </Link>
+      <Link href="/community" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+        Community
+      </Link>
+      <Link href="/post-job" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+        Post a Job
+      </Link>
+      <Link href="/trust-safety" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+        Trust & Safety
+      </Link>
+    </div>
+  </div>
 
-              <ul
-                className={`sm:block overflow-hidden transition-all duration-300 
-      ${openSection === 'customers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
-              >
-                <li className="mb-2"><Link href="/services" className="hover:text-white text-gray-600 transition-colors">Find Services</Link></li>
-                <li className="mb-2"><Link href="/community" className="hover:text-white text-gray-600 transition-colors">Community</Link></li>
-                <li className="mb-2"><Link href="/post-job" className="hover:text-white text-gray-600 transition-colors">Post a Job</Link></li>
-                <li className="mb-2"><Link href="/trust-safety" className="hover:text-white text-gray-600 transition-colors">Trust & Safety</Link></li>
-              </ul>
-            </div>
+  <div className="sm:border-none">
+    <h2 className="hidden sm:block text-xl pb-3 font-semibold">For Providers</h2>
 
-            <div className="border-b border-gray-700 sm:border-none  sm:pb-0">
+    <button
+      className="sm:hidden w-full flex justify-between items-center text-xl pb-3 font-semibold  border-gray-700"
+      onClick={() => setOpenSection(openSection === 'providers' ? '' : 'providers')}
+    >
+      For Providers
+      <span>{openSection === 'providers' ? <ChevronUp /> : <ChevronDown />}</span>
+    </button>
 
-              <h2 className="hidden sm:block text-xl pb-3 font-semibold">For Providers</h2>
+    <div
+      className={`sm:block overflow-hidden transition-all duration-300 
+        ${openSection === 'providers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
+    >
+      <Link href="/become-provider" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+        Join as Provider
+      </Link>
+      <a className="block text-gray-600 dark:text-white hover:text-white  mb-2 cursor-pointer">Success Stories</a>
+      <a className="block text-gray-600 dark:text-white hover:text-white  mb-2 cursor-pointer">Resources</a>
+      <a className="block text-gray-600 dark:text-white hover:text-white  mb-2 cursor-pointer">API Documentation</a>
+    </div>
+  </div>
 
-              <button
-                className="sm:hidden w-full flex justify-between items-center text-xl pb-3 font-semibold"
-                onClick={() => setOpenSection(openSection === 'providers' ? '' : 'providers')}
-              >
-                For Providers
-                <span>{openSection === 'providers' ? <ChevronUp /> : <ChevronDown />}</span>
-              </button>
+  <div className="sm:border-none">
+    <h2 className="hidden sm:block text-xl pb-1 font-semibold">Company</h2>
 
-              <ul
-                className={`sm:block overflow-hidden transition-all duration-300 
-      ${openSection === 'providers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
-              >
-                <li className="mb-2"><Link href="/become-provider" className="hover:text-white text-gray-600 transition-colors">Join as Provider</Link></li>
-                <li className="mb-2"><a className="hover:text-white text-gray-600 transition-colors cursor-pointer">Success Stories</a></li>
-                <li className="mb-2"><a className="hover:text-white text-gray-600 transition-colors cursor-pointer">Resources</a></li>
-                <li className="mb-2"><a className="hover:text-white text-gray-600 transition-colors cursor-pointer">API Documentation</a></li>
-              </ul>
-            </div>
+    <button
+      className="sm:hidden w-full flex justify-between items-center text-xl pb-1 font-semibold  border-gray-700"
+      onClick={() => setOpenSection(openSection === 'company' ? '' : 'company')}
+    >
+      Company
+      <span>{openSection === 'company' ? <ChevronUp /> : <ChevronDown />}</span>
+    </button>
 
-            <div className="border-b border-gray-700 sm:border-none pb-3 sm:pb-0">
+    <div
+      className={`sm:block overflow-hidden transition-all duration-300 
+        ${openSection === 'company' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
+    >
+      <Link href="/about-us" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+        About Us
+      </Link>
+      <Link href="/privacy-policy" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+        Privacy Policy
+      </Link>
+      <a className="block text-gray-600 dark:text-white hover:text-white  mb-2 cursor-pointer">Press</a>
+      <a className="block text-gray-600 dark:text-white hover:text-white  mb-2 cursor-pointer">Contact</a>
+    </div>
+  </div>
 
-              <h2 className="hidden sm:block text-xl pb-1 font-semibold">Company</h2>
-
-              <button
-                className="sm:hidden w-full flex justify-between items-center text-xl pb-1 font-semibold"
-                onClick={() => setOpenSection(openSection === 'company' ? '' : 'company')}
-              >
-                Company
-                <span>{openSection === 'company' ? <ChevronUp /> : <ChevronDown />}</span>
-              </button>
-
-              <ul
-                className={`sm:block overflow-hidden transition-all duration-300 
-      ${openSection === 'company' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
-              >
-                <li className="mb-2"><Link href="/about-us" className="hover:text-white text-gray-600 transition-colors cursor-pointer">About Us</Link></li>
-                <li className="mb-2"><Link href="/privacy-policy" className="hover:text-white text-gray-600 transition-colors cursor-pointer">Privacy Policy</Link></li>
-                <li className="mb-2"><a className="hover:text-white text-gray-600 transition-colors cursor-pointer">Press</a></li>
-                <li className="mb-2"><a className="hover:text-white text-gray-600 transition-colors cursor-pointer">Contact</a></li>
-              </ul>
-            </div>
-
-          </div>
+</div>
         </div>
 
         <div className="border-y-2 md:py-4 py-10 border-gray-700 mt-10 flex justify-center items-center">
@@ -269,22 +247,12 @@ const Footer = () => {
                 {letter}
               </motion.text>
             ))}
-
-            {/* <motion.rect
-              x={44}
-              y={70}
-              height={4}
-              rx={4}
-              fill="url(#taskoriaFooterGradient)"
-              variants={barVariants}
-              style={{ width: 360 }}
-            /> */}
           </motion.svg>
         </div>
 
         <div className="flex md:flex-row flex-col gap-3 justify-between py-6 text-gray-600 dark:text-gray-300">
           <span className="font-medium">
-            &copy; {new Date().getFullYear()} Taskoria. All Rights Reserved. <Link href="/privacy-policy" className="   underline">Privacy Policy.</Link>
+            &copy; {new Date().getFullYear()} Taskoria. All Rights Reserved. <Link href="/privacy-policy" className="underline">Privacy Policy.</Link>
             <br />
             <span className="text-gray-400">
               ABN: 658 760 831 | GST Registered | QLD 4350, Australia | Proudly Australian Owned & Operated
@@ -295,7 +263,7 @@ const Footer = () => {
             <a
               href="https://www.instagram.com/taskoria.au/"
               target="_blank"
-              className="p-2 bg-gray-800 hover:bg-blue-500 rounded-full"
+              className="p-2 bg-gray-800 hover:bg-blue-500 rounded-full transition-colors"
             >
               <Instagram className="w-5 h-5 text-gray-300 hover:text-white" />
             </a>
@@ -303,7 +271,7 @@ const Footer = () => {
             <a
               href="https://www.linkedin.com/company/taskoriaa/about/"
               target="_blank"
-              className="p-2 bg-gray-800 hover:bg-blue-600 rounded-full"
+              className="p-2 bg-gray-800 hover:bg-blue-600 rounded-full transition-colors"
             >
               <Linkedin className="w-5 h-5 text-gray-300 hover:text-white" />
             </a>
@@ -311,7 +279,7 @@ const Footer = () => {
             <a
               href="http://facebook.com/profile.php?id=61582506497352"
               target="_blank"
-              className="p-2 bg-gray-800 hover:bg-blue-700 rounded-full"
+              className="p-2 bg-gray-800 hover:bg-blue-700 rounded-full transition-colors"
             >
               <Facebook className="w-5 h-5 text-gray-300 hover:text-white" />
             </a>
