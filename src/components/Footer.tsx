@@ -263,25 +263,25 @@ const Footer = () => {
             <a
               href="https://www.instagram.com/taskoria.au/"
               target="_blank"
-              className="p-2 bg-gray-800 hover:bg-blue-500 rounded-full transition-colors"
+              className="p-2 bg-[#FF2847] hover:bg-black rounded-full transition-colors"
             >
-              <Instagram className="w-5 h-5 text-gray-300 hover:text-white" />
+              <Instagram className="w-5 h-5 text-white  hover:text-[#FF2847]" />
             </a>
 
             <a
               href="https://www.linkedin.com/company/taskoriaa/about/"
               target="_blank"
-              className="p-2 bg-gray-800 hover:bg-blue-600 rounded-full transition-colors"
+              className="p-2  bg-[#0966C2] hover:bg-blue-600 rounded-full transition-colors"
             >
-              <Linkedin className="w-5 h-5 text-gray-300 hover:text-white" />
+              <Linkedin className="w-5 h-5 dark:text-gray-300  text-white hover:text-white" />
             </a>
 
             <a
               href="http://facebook.com/profile.php?id=61582506497352"
               target="_blank"
-              className="p-2 bg-gray-800 hover:bg-blue-700 rounded-full transition-colors"
+              className="p-2 bg-[#0966FF] hover:bg-black rounded-full transition-colors"
             >
-              <Facebook className="w-5 h-5 text-gray-300 hover:text-white" />
+              <Facebook className="w-5 h-5 text-white hover:text-[#0966FF]" />
             </a>
           </div>
         </div>
