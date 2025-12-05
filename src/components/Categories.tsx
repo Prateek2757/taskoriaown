@@ -54,7 +54,6 @@ export default function Services() {
  py-10 px-4 sm:px-6 lg:px-8 dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] "
     >
       <div className="max-w-7xl relative mx-auto">
-        
         {/* <motion.div
           className="flex gap-3 mb-10 justify-center"
           initial={{ opacity: 0, y: -20 }}
@@ -111,7 +110,7 @@ export default function Services() {
           </div>
         ) : categories.length > 0 ? (
           <motion.div
-            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="flex md:grid lg:grid-cols-4 gap-6 max-md:overflow-x-scroll"
             variants={containerVariants}
             initial="hidden"
             whileInView="show"
@@ -121,7 +120,7 @@ export default function Services() {
               <motion.div
                 key={category.category_id}
                 variants={itemVariants}
-                className={`group relative overflow-hidden rounded-3xl ${
+                className={`group relative overflow-hidden rounded-3xl max-md:flex-[1_0_300px] ${
                   index === 0 ? "lg:col-span-2 lg:row-span-" : ""
                 } ${index === 3 ? "lg:col-span-3  " : ""}`}
               >

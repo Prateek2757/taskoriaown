@@ -70,7 +70,7 @@ export const FeatureProvider = () => {
           </motion.div>
         </div>
 
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-6">
+        <div className="flex gap-6 max-md:overflow-x-scroll max-md:py-6">
           {loading
             ? [0, 1, 2].map((i) => (
                 <div
@@ -86,11 +86,12 @@ export const FeatureProvider = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   className="
-                    group relative rounded-2xl overflow-hidden
+                    relative rounded-2xl overflow-hidden
                     bg-white/40 dark:bg-gray-800/40
                     backdrop-blur-md border border-white/20 dark:border-gray-700
                     shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300
-                    flex flex-col
+                   
+                    flex flex-col flex-[1_0_300px] md:flex-1 
                   "
                 >
                   <div className="relative h-56 overflow-hidden rounded-t-2xl">
@@ -169,15 +170,21 @@ export const FeatureProvider = () => {
                             }
                           `}
                         >
-                          {badge === "Top Rated" && <Award className="w-2.5 h-2.5" />}
-                          {badge === "Verified" && <CheckCircle2 className="w-2.5 h-2.5" />}
+                          {badge === "Top Rated" && (
+                            <Award className="w-2.5 h-2.5" />
+                          )}
+                          {badge === "Verified" && (
+                            <CheckCircle2 className="w-2.5 h-2.5" />
+                          )}
                           {badge}
                         </span>
                       ))}
                     </div>
 
                     <Link
-                      href={`/providerprofile/${encodeURIComponent(String(p.public_id))}`}
+                      href={`/providerprofile/${encodeURIComponent(
+                        String(p.public_id)
+                      )}`}
                     >
                       <Button className="w-full h-9 text-sm font-semibold rounded-full bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] hover:shadow-lg text-white shadow-md transition-all duration-300 group-hover:scale-[1.02]">
                         View Profile
