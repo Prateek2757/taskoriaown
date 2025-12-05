@@ -4,6 +4,8 @@ import { useTransform, motion, useScroll, MotionValue } from "motion/react";
 import { useRef } from "react";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import { AnimatedBeam, Circle, Icons } from "./ui/animated-beam";
+import { BrainCircuit, ShieldCheck, Star, Users } from "lucide-react";
 
 const projects = [
   {
@@ -41,8 +43,66 @@ const projects = [
 ];
 
 export default function FeaturesStacking() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const div1Ref = useRef<HTMLDivElement>(null);
+  const div3Ref = useRef<HTMLDivElement>(null);
+  const div4Ref = useRef<HTMLDivElement>(null);
+  const div5Ref = useRef<HTMLDivElement>(null);
+  const div7Ref = useRef<HTMLDivElement>(null);
   return (
     <main className="bg-white dark:bg-black transition-colors duration-300 mt-30">
+      <style>{`
+        @keyframes borderRotate {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+        
+        .animated-border {
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .animated-border::before {
+          content: '';
+          position: absolute;
+          inset: -50%;
+          background: conic-gradient(
+            from 0deg,
+            transparent 0deg,
+            transparent 260deg,
+            #1e40af 270deg,
+            #3b82f6 290deg,
+            #60a5fa 310deg,
+            #93c5fd 330deg,
+            #dbeafe 345deg,
+            transparent 350deg
+          );
+          animation: borderRotate 6s linear infinite;
+        }
+        
+        .animated-border::after {
+          content: '';
+          position: absolute;
+          inset: 2px;
+          background: #ffffff;
+          border-radius: calc(1rem - 2px);
+          z-index: 1;
+        }
+        
+        .dark .animated-border::after {
+          background: #171717;
+        }
+        
+        .animated-border > * {
+          position: relative;
+          z-index: 2;
+        }
+      `}</style>
+
       <div className="pt-14 pb-5 md:pt-3 px-4">
         <div className="text-center mx-auto">
           <h1
@@ -64,24 +124,119 @@ export default function FeaturesStacking() {
         </div>
       </div>
 
-      <section
-        className="relative 
-          bg-gradient-to-b from-transparent via-gray-50/50 to-white
-          dark:via-neutral-950/50 dark:to-black"
-      >
-        {projects.map((project, i) => {
-          return (
-            <Card
-              key={i}
-              i={i}
-              title={project.title}
-              description={project.description}
-              url={project.link}
-              color={project.color}
-              icon={project.icon}
+      <section className="max-w-7xl m-auto relative bg-linear-to-b from-transparent via-gray-50/50 to-white dark:via-neutral-950/50 dark:to-black flex flex-col md:flex-row gap-0 py-20 px-4 md:px-0 items-center">
+        <div className="order-2 md:order-1 flex flex-col gap-8 mb-8 md:mb-0 md:gap-40 flex-1">
+          {projects.map((project, i) => {
+            const isEven = i % 2 === 0;
+            if (!isEven) return;
+            return (
+              <Card
+                key={i}
+                i={i}
+                title={project.title}
+                description={project.description}
+                url={project.link}
+                color={project.color}
+                icon={project.icon}
+                isEven={isEven}
+              />
+            );
+          })}
+        </div>
+        <div className="order-1 mb-8 md:mb-0 md:order-2 -ml-10 -mr-10">
+          <div
+            className="relative flex w-[320px] items-center justify-center"
+            ref={containerRef}
+          >
+            <div className="flex h-full w-full flex-col items-stretch justify-between gap-10">
+              <div className="flex flex-row items-center justify-between">
+                <Circle ref={div1Ref}>
+                  <BrainCircuit className="text-blue-600" />
+                </Circle>
+                <Circle ref={div5Ref} className="p-2">
+                  <ShieldCheck className="text-blue-600" />
+                </Circle>
+              </div>
+              <div className="flex flex-row items-center justify-center">
+                <Circle ref={div4Ref} className="h-16 w-16 p-3">
+                  <Image
+                    src="/taskorianewlogo.png"
+                    alt=""
+                    height={0}
+                    width={33}
+                  />
+                </Circle>
+              </div>
+              <div className="flex flex-row items-center justify-between">
+                <Circle ref={div3Ref} className="p-2">
+                  <Star className="text-blue-600" />
+                </Circle>
+                <Circle ref={div7Ref} className="p-2">
+                  <Users className="text-blue-600" />
+                </Circle>
+              </div>
+            </div>
+
+            <AnimatedBeam
+              containerRef={containerRef}
+              fromRef={div1Ref}
+              toRef={div4Ref}
+              curvature={-75}
+              endYOffset={-10}
+              dotted
+              gradientStartColor="#00ac47"
+              gradientStopColor="#ffba00"
             />
-          );
-        })}
+            <AnimatedBeam
+              containerRef={containerRef}
+              fromRef={div3Ref}
+              toRef={div4Ref}
+              curvature={75}
+              endYOffset={10}
+              dotted
+            />
+            <AnimatedBeam
+              containerRef={containerRef}
+              fromRef={div5Ref}
+              toRef={div4Ref}
+              curvature={-75}
+              endYOffset={-10}
+              reverse
+              gradientStartColor="#48b0d9"
+              gradientStopColor="#67aeff"
+              dotted
+            />
+            <AnimatedBeam
+              containerRef={containerRef}
+              fromRef={div7Ref}
+              toRef={div4Ref}
+              curvature={75}
+              endYOffset={10}
+              reverse
+              dotted
+              gradientStartColor="#48b0d9"
+              gradientStopColor="#67aeff"
+            />
+          </div>
+        </div>
+        <div className="order-3 md:order-3 flex flex-col gap-8 md:gap-40 flex-1">
+          {projects.map((project, i) => {
+            const isEven = i % 2 === 0;
+            if (isEven) return;
+            return (
+              <Card
+                key={i}
+                i={i}
+                title={project.title}
+                description={project.description}
+                url={project.link}
+                color={project.color}
+                icon={project.icon}
+                isEven={isEven}
+              />
+            );
+          })}
+        </div>
       </section>
     </main>
   );
@@ -97,129 +252,50 @@ interface CardProps {
   progress?: MotionValue<number>;
   range?: [number, number];
   targetScale?: number;
+  isEven: boolean;
 }
 
-export const Card = ({ i, title, description, url }: CardProps) => {
-  const isEven = i % 2 === 0
+export const Card = ({ i, title, description, url, isEven }: CardProps) => {
+  console.log("first", isEven);
   return (
     <>
-      {isEven ? (
-        <div className="flex items-center justify-center px-4 mb-30 mt-20">
-          <div
-            className="
-        w-full max-w-7xl  rounded-2xl
-        
+      <div className="flex items-center justify-center">
+        <div
+          className="
+        w-full rounded-2xl
+        animated-border
         bg-white backdrop-blur-xl
         shadow-[0_8px_30px_rgb(0,0,0,0.12)]
-        border border-gray-200/50
         
         dark:bg-neutral-900/95 dark:backdrop-blur-xl
         dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)]
-        dark:border-white/10
         
         transition-shadow duration-300
         hover:shadow-[0_20px_60px_rgb(0,0,0,0.15)]
         dark:hover:shadow-[0_20px_60px_rgb(0,0,0,0.6)]
         "
-          >
-            <div className="flex flex-col md:grid md:grid-cols-2 gap-0 md:gap-6 items-center h-full p-6 md:p-8">
-              <div className="relative w-full h-64 md:hidden mb-6 rounded-xl overflow-hidden">
-                <Image
-                  fill
-                  src={url}
-                  alt={title}
-                  className="object-cover shadow-2xl border-2 border-white/20 dark:border-white/10"
-                  loading={i === 0 ? "eager" : "lazy"}
-                  priority={i === 0}
-                />
-              </div>
-              
-              <div className="flex flex-col md:text-end space-y-4">
-                <h2 className="text-2xl md:text-3xl font-extrabold">{title}</h2>
+        >
+          <div className="flex flex-col gap-0 md:gap-6 h-full p-6 md:p-8">
+            <div
+              className={`flex flex-col space-y-4 ali ${
+                isEven == true ? "text-end" : "text-start"
+              }`}
+            >
+              <h2 className="text-2xl md:text-2xl font-extrabold dark:text-blue-400">
+                {title}
+              </h2>
 
-                <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {description}
-                </p>
+              <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                {description}
+              </p>
 
-                <div className="pt-2 pb-3">
-                  <Button>Learn More</Button>
-                </div>
-              </div>
-              
-              {/* Image for desktop */}
-              <div className="hidden md:block md:absolute right-0 to-0 h-85 w-[620px]">
-                <Image
-                  fill
-                  src={url}
-                  alt={title}
-                  className="object-cover shadow-2xl border-2 border-white/20 dark:border-white/10 rounded-xl"
-                  loading={i === 0 ? "eager" : "lazy"}
-                  priority={i === 0}
-                />
+              <div className="pt-2 pb-3">
+                <Button>Learn More</Button>
               </div>
             </div>
           </div>
         </div>
-      ) : (
-        <div className="flex items-center justify-center px-4 mb-30 mt-20">
-          <div
-            className="
-          w-full max-w-7xl  rounded-2xl
-          
-          bg-white backdrop-blur-xl
-          shadow-[0_8px_30px_rgb(0,0,0,0.12)]
-          border border-gray-200/50
-          
-          dark:bg-neutral-900/95 dark:backdrop-blur-xl
-          dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)]
-          dark:border-white/10
-          
-          transition-shadow duration-300
-          hover:shadow-[0_20px_60px_rgb(0,0,0,0.15)]
-          dark:hover:shadow-[0_20px_60px_rgb(0,0,0,0.6)]
-        "
-          >
-            <div className="flex flex-col md:grid md:grid-cols-2 gap-0 md:gap-6 items-center h-full p-6 md:p-8">
-              {/* Image first on mobile */}
-              <div className="relative w-full h-64 md:hidden mb-6 rounded-xl overflow-hidden">
-                <Image
-                  fill
-                  src={url}
-                  alt={title}
-                  className="object-cover shadow-2xl border-2 border-white/20 dark:border-white/10"
-                  loading={i === 0 ? "eager" : "lazy"}
-                  priority={i === 0}
-                />
-              </div>
-              
-              <div className="hidden md:block"></div>
-              <div className="flex flex-col space-y-4">
-                <h2 className="text-2xl md:text-3xl font-extrabold">{title}</h2>
-
-                <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {description}
-                </p>
-
-                <div className="pt-2 pb-3">
-                  <Button>Learn More</Button>
-                </div>
-              </div>
-              
-              {/* Image for desktop */}
-              <div className="hidden md:block absolute left-0 to-0 h-85 w-[620px]">
-                <Image
-                  fill
-                  src={url}
-                  alt={title}
-                  className="object-cover shadow-2xl border-2 border-white/20 dark:border-white/10 rounded-xl"
-                  loading={i === 0 ? "eager" : "lazy"}
-                  priority={i === 0}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
     </>
   );
 };

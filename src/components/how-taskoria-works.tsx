@@ -70,7 +70,7 @@ export default function HowTaskoriaWorks() {
       className="
         relative py-14 px-4 sm:px-6 lg:px-8 overflow-hidden
         text-black bg-white 
-        dark:text-white dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
+        dark:text-white dark:bg-gray-900
       "
     >
       <div
@@ -115,7 +115,7 @@ export default function HowTaskoriaWorks() {
         </motion.div>
         <div className="relative z-10 -top-48 md:top-0 -mb-80 md:mb-0 flex flex-col md:flex-row justify-center items-center mx-auto">
           <div className="relative h-72 w-72 border-r-6 md:border-b-6 md:border-r-0 border-blue-400 rounded-full flex justify-center items-center p-7">
-            <div className="absolute -right-1/2 bottom-32 md:right-1/2 md:-bottom-3 h-40 md:h-72 w-72 bg-white"></div>
+            <div className="absolute -right-1/2 bottom-32 md:right-1/2 md:-bottom-3 h-40 md:h-72 w-72 bg-white dark:bg-gray-900"></div>
           </div>
           <div className="relative h-72 w-72 border-l-6 md:border-l-0 md:border-t-6 border-blue-400 rounded-full flex justify-center items-center p-7">
             <span className="absolute z-10 -top-4 md:-left-4 md:top-auto border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
@@ -189,7 +189,7 @@ export default function HowTaskoriaWorks() {
             </span>
           </div>
           <div className="relative h-72 w-72 border-r-6 md:border-b-6 border-cyan-500 rounded-full flex justify-center items-center p-7">
-            <div className="absolute -right-1/2 bottom-0 md:left-1/2 md:-bottom-3 h-40 md:h-72 w-72 bg-white"></div>
+            <div className="absolute -right-1/2 bottom-0 md:left-1/2 md:-bottom-3 h-40 md:h-82 w-72 bg-white dark:bg-gray-900"></div>
           </div>
         </div>
 
