@@ -278,7 +278,7 @@ export const Card = ({ i, title, description, url, isEven }: CardProps) => {
           <div className="flex flex-col gap-0 md:gap-6 h-full p-6 md:p-8">
             <div
               className={`flex flex-col space-y-4 ali ${
-                isEven == true ? "text-end" : "text-start"
+                isEven == true ? "md:text-end" : "text-start"
               }`}
             >
               <h2 className="text-2xl md:text-2xl font-extrabold dark:text-blue-400">
