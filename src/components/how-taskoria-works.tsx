@@ -104,7 +104,7 @@ export default function HowTaskoriaWorks() {
         <motion.div
           variants={fadeInUp}
           transition={{ duration: 0.7 }}
-          className="text-center mb-12 md:mb-20"
+          className="text-center mb-20 relative z-20"
         >
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4">
             How it works?
@@ -113,22 +113,21 @@ export default function HowTaskoriaWorks() {
             "I dream of one URL that sums it all up to share with Business"
           </p>
         </motion.div>
-
-        {/* Desktop Circular Flow - Hidden on Mobile */}
-        <div className="hidden md:flex justify-center mx-auto">
-          <div className="relative h-72 w-72 border-b-6 border-blue-400 rounded-full flex justify-center items-center p-7">
-            <div className="absolute right-1/2 -bottom-3 h-72 w-72 bg-white dark:bg-transparent"></div>
+        <div className="relative z-10 -top-48 md:top-0 -mb-80 md:mb-0 flex flex-col md:flex-row justify-center items-center mx-auto">
+          <div className="relative h-72 w-72 border-r-6 md:border-b-6 md:border-r-0 border-blue-400 rounded-full flex justify-center items-center p-7">
+            <div className="absolute -right-1/2 bottom-32 md:right-1/2 md:-bottom-3 h-40 md:h-72 w-72 bg-white"></div>
           </div>
-          <div className="relative h-72 w-72 border-t-6 border-blue-400 rounded-full flex justify-center items-center p-7">
-            <span className="absolute z-10 -left-4 border-2 border-gray-400 rounded-full h-8 w-8 flex justify-center items-center bg-white">
-              <ChevronUp className="text-gray-400" />
+          <div className="relative h-72 w-72 border-l-6 md:border-l-0 md:border-t-6 border-blue-400 rounded-full flex justify-center items-center p-7">
+            <span className="absolute z-10 -top-4 md:-left-4 md:top-auto border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
+              <ChevronUp className="text-gray-400 hidden md:block" />
+              <ChevronDown className="text-gray-400 block md:hidden" />
             </span>
-            <div className="flex flex-col gap-0 justify-center items-center bg-blue-200 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
+            <div className="flex flex-col gap-3 justify-center items-center bg-blue-400 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
               <span
                 className="text-white text-[100px] font-bold"
                 style={{
-                  textShadow: "2px 2px 3px rgba(255,255,255,0.5)",
-                  backgroundColor: "#b9b9b9",
+                  textShadow: "2px 2px 3px rgba(255,255,255,0.8)",
+                  backgroundColor: "#444",
                   backgroundClip: "text",
                   color: "transparent",
                   lineHeight: "1",
@@ -136,46 +135,44 @@ export default function HowTaskoriaWorks() {
               >
                 1
               </span>
-              <span className="text-blue-500 font-bold text-sm">
+              <span className="text-white font-bold text-sm">
                 Post Your Job
               </span>
             </div>
           </div>
-        <div className="relative h-72 w-72 border-b-6 border-red-400 rounded-full flex justify-center items-center p-7">
-  <span className="absolute z-10 -left-4 border-2 border-gray-400 rounded-full h-8 w-8 flex justify-center items-center bg-white">
-    <ChevronDown className="text-gray-400" />
-  </span>
-
-  <div className="flex flex-col  justify-center items-center bg-red-200 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
-    
-    <span
-      className="text-white text-[100px] font-bold leading-none flex justify-center items-center"
-      style={{
-        textShadow: "2px 2px 3px rgba(255,255,255,0.5)",
-        backgroundColor: "#b9b9b9",
-        backgroundClip: "text",
-        color: "transparent",
-      }}
-    >
-      2
-    </span>
-
-    <span className="text-red-400 font-bold text-sm">
-      Get Matched Instantly
-    </span>
-
-  </div>
-</div>
-          <div className="relative h-72 w-72 border-t-6 border-green-400 rounded-full flex justify-center items-center p-7">
-            <span className="absolute z-10 -left-4 border-2 border-gray-400 rounded-full h-8 w-8 flex justify-center items-center bg-white">
-              <ChevronUp className="text-gray-400" />
+          <div className="relative h-72 w-72 border-r-6 md:border-r-0 md:border-b-6 border-green-400 rounded-full flex justify-center items-center p-7">
+            <span className="absolute z-10 -top-4 md:top-auto md:-left-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
+              <ChevronDown className="text-gray-400" />
             </span>
-            <div className="flex flex-col gap-3 justify-center items-center bg-green-200 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
+            <div className="flex flex-col gap-3 justify-center items-center bg-green-400 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
+              <span
+                className=" text-white text-[100px] font-bold"
+                style={{
+                  textShadow: "2px 2px 3px rgba(255,255,255,0.8)",
+                  backgroundColor: "#555",
+                  backgroundClip: "text",
+                  color: "transparent",
+                  lineHeight: "1",
+                }}
+              >
+                2
+              </span>
+              <span className="text-white font-bold text-sm">
+                Get Matched Instantly
+              </span>
+            </div>
+          </div>
+          <div className="relative h-72 w-72 border-l-6 md:border-l-0 md:border-t-6 border-cyan-500 rounded-full flex justify-center items-center p-7">
+            <span className="absolute z-10 -top-4 md:top-auto md:-left-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
+              <ChevronUp className="text-gray-400 hidden md:block" />
+              <ChevronDown className="text-gray-400 block md:hidden" />
+            </span>
+            <div className="flex flex-col gap-3 justify-center items-center bg-cyan-500 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
               <span
                 className="text-white text-[100px] font-bold"
                 style={{
-                  textShadow: "2px 2px 3px rgba(255,255,255,0.5)",
-                  backgroundColor: "#b9b9b9",
+                  textShadow: "2px 2px 3px rgba(255,255,255,0.8)",
+                  backgroundColor: "#555",
                   backgroundClip: "text",
                   color: "transparent",
                   lineHeight: "1",
@@ -183,74 +180,20 @@ export default function HowTaskoriaWorks() {
               >
                 3
               </span>
-              <span className="text-green-500 font-bold text-sm">
+              <span className="text-white font-bold text-sm">
                 Start Collaborating
               </span>
             </div>
-            <span className="absolute z-10 -right-4 border-2 border-gray-400 rounded-full h-8 w-8 flex justify-center items-center bg-white">
+            <span className="absolute z-10 -bottom-4 md:bottom-auto md:-right-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
               <ChevronDown className="text-gray-400" />
             </span>
           </div>
-          <div className="relative h-72 w-72 border-b-6 border-green-400 rounded-full flex justify-center items-center p-7">
-            <div className="absolute left-1/2 -bottom-3 h-72 w-72 bg-white dark:bg-transparent"></div>
+          <div className="relative h-72 w-72 border-r-6 md:border-b-6 border-cyan-500 rounded-full flex justify-center items-center p-7">
+            <div className="absolute -right-1/2 bottom-0 md:left-1/2 md:-bottom-3 h-40 md:h-72 w-72 bg-white"></div>
           </div>
         </div>
 
-        <div className="flex md:hidden flex-col items-center gap-6 mb-8">
-          {steps.map((step, index) => (
-            <motion.div
-              key={step.id}
-              variants={cardVariant}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="relative flex flex-col items-center"
-            >
-              <div
-                className={`
-                  relative h-36 w-36 rounded-full flex flex-col justify-center items-center
-                  ${step.color === 'blue' ? 'bg-blue-200 border-t-4 border-blue-400' : ''}
-                  ${step.color === 'red' ? 'bg-red-200 border-b-4 border-red-400' : ''}
-                  ${step.color === 'green' ? 'bg-green-200 border-t-4 border-green-400' : ''}
-                  shadow-[5px_10px_15px_-8px_rgba(0,0,0,.3)]
-                `}
-              >
-                <span
-                  className="text-white text-5xl font-bold"
-                  style={{
-                    textShadow: "2px 2px 3px rgba(255,255,255,0.5)",
-                    backgroundColor: "#b9b9b9",
-                    backgroundClip: "text",
-                    color: "transparent",
-                    lineHeight: "1",
-                  }}
-                >
-                  {step.id}
-                </span>
-                <span
-                  className={`
-                    font-bold text-xs mt-2
-                    ${step.color === 'blue' ? 'text-blue-500' : ''}
-                    ${step.color === 'red' ? 'text-red-400 pl-8 ' : ''}
-                    ${step.color === 'green' ? 'text-green-500' : ''}
-                  `}
-                >
-                  {step.title}
-                </span>
-              </div>
-              
-              {index < steps.length - 1 && (
-                <motion.div
-                  variants={arrowMobileVariant}
-                  transition={{ duration: 0.5, delay: index * 0.2 + 0.3 }}
-                  className="my-2"
-                >
-                  <ChevronDown className="text-gray-400 h-8 w-8" />
-                </motion.div>
-              )}
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 lg:gap-4 max-w-6xl mx-auto mt-8 md:mt-10">
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-4 max-w-6xl mx-auto mt-10">
           {steps.map((step, index) => (
             <div key={step.id} className="flex flex-col items-center relative">
               <motion.div
@@ -294,7 +237,7 @@ export default function HowTaskoriaWorks() {
             visible: { opacity: 1, y: 0 },
           }}
           transition={{ duration: 0.6, delay: 1 }}
-          className="text-center mt-10 md:mt-17"
+          className="text-center mt-17 relative z-20"
         >
           <Button className="px-8 md:px-10 py-3 md:py-4 text-base md:text-lg">
             Start my 1-minute setup
