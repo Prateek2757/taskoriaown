@@ -6,6 +6,13 @@ import { Toaster } from "sonner";
 import ModernNavbar from "@/components/navabr/Navbar";
 import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
+});
 
 export const metadata: Metadata = {
   title: "Taskoria — Find Trusted Service Providers",
@@ -72,7 +79,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${poppins.variable}`}>
       <AuthProvider>
         <body className="antialiased dark:bg-black">
           <ThemeProvider
@@ -85,9 +92,7 @@ export default function RootLayout({
               <ModernNavbar />
               {children}
               <Toaster position="top-right" richColors expand closeButton />
-              <Footer/>
-                  
-
+              <Footer />
             </UserProvider>
           </ThemeProvider>
         </body>

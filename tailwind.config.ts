@@ -17,6 +17,9 @@ module.exports = {
           DEFAULT: "#F59E0B",
         },
       },
+      fontFamily: {
+        poppins: ["var(--font-poppins)"],
+      },
     },
   },
 };

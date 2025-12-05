@@ -3,12 +3,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
-
 ::-webkit-scrollbar {
   display: none;
-
-  }
-  input[type="number"]::-webkit-inner-spin-button,
+}
+input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
@@ -17,11 +15,10 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
-   
-  html{
-    scroll-behavior:smooth;
-    
-  }
+
+html {
+  scroll-behavior: smooth;
+}
 
 @theme inline {
   --color-background: var(--background);
@@ -64,8 +61,6 @@ input[type="number"] {
 }
 
 :root {
-
- 
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.11 0.03 264);
@@ -187,6 +182,7 @@ input[type="number"] {
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-poppins);
   }
   .bg-gradient-primary {
     background: var(--gradient-primary);
