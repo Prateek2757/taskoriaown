@@ -1,10 +1,8 @@
 import pool from "@/lib/dbConnect";
 import { NextResponse } from "next/server";
 
-
 const calculateCredits = (
-  minBudget: number,
-  maxBudget: number,
+  estimated_budget: number,
   rule: {
     base_credits: number;
     weight_factor: number;
@@ -12,7 +10,7 @@ const calculateCredits = (
     max_credits: number;
   }
 ) => {
-  const avgBudget = (minBudget + maxBudget) / 2;
+  const avgBudget = estimated_budget;
   let estimated =
     Number(rule.base_credits) + avgBudget * Number(rule.weight_factor);
   estimated = Math.max(estimated, Number(rule.min_credits));
@@ -44,9 +42,8 @@ export async function GET(req: Request) {
     const rule = ruleRows[0];
 
     if (task_id) {
-      // 2️⃣ Single task
       const taskQuery = `
-        SELECT task_id,budget_min, budget_max
+        SELECT task_id,estimated_budget
         FROM tasks
         WHERE task_id = $1
         LIMIT 1
@@ -58,27 +55,22 @@ export async function GET(req: Request) {
       }
 
       const task = taskRows[0];
-      const estimated = calculateCredits(
-        Number(task.budget_min),
-        Number(task.budget_max),
-        rule
-      );
+      const estimated = calculateCredits(Number(task.estimated_budget), rule);
 
       return NextResponse.json({
         task_id: task.task_id,
         estimated_credits: estimated,
       });
     } else {
-
       const allTasksQuery = `
         SELECT 
           t.task_id AS task_id,
-          t.budget_min,
-          t.budget_max,
+        
+          t.estimated_budget,
           ROUND(
           LEAST(
             GREATEST(
-              $1 + ((t.budget_min + t.budget_max) / 2) * $2,
+              $1 + ((t.estimated_budget) * $2,
               $3
             ),
             $4

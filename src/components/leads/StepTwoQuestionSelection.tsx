@@ -11,6 +11,7 @@ import QuestionRenderer from "./QuestionRenderer";
 import { AnimatePresence, motion } from "motion/react";
 
 import CalendarInput from "../CalenderInput";
+import { Input } from "../ui/input";
 
 export default function StepTwoQuestionsForm({
   onBack,
@@ -78,12 +79,12 @@ export default function StepTwoQuestionsForm({
 
   const onSubmit = async (data: any) => {
     setLoading(true);
-    if (!data.budget_min || !data.budget_max) {
-      toast.error("Please enter both minimum and maximum budget");
+    if (!data.estimated_budget ) {
+      toast.error("Please enter estimated budget");
       setLoading(false);
       return;
     }
-    if (data.budget_min < 0 || data.budget_max < 0) {
+    if (data.estimated_budget < 0 ) {
       toast.error("Invalid! Budget cannot be negative");
       setLoading(false);
       return;
@@ -109,8 +110,7 @@ export default function StepTwoQuestionsForm({
             data[`q_${q.category_question_id}`] ?? null;
           return acc;
         }, {} as any),
-        budget_min: Number(data.budget_min),
-        budget_max: Number(data.budget_max),
+        estimated_budget :Number(data.estimated_budget),
         preferred_date_start: data.preferred_date_start,
         preferred_date_end: data.preferred_date_end,
       };
@@ -139,8 +139,8 @@ export default function StepTwoQuestionsForm({
             data[`q_${q.category_question_id}`] ?? null;
           return acc;
         }, {} as any),
-        budget_min: Number(data.budget_min),
-        budget_max: Number(data.budget_max),
+        estimated_budget: Number(data.estimated_budget),
+       
         preferred_date_start: data.preferred_date_start,
         preferred_date_end: data.preferred_date_end,
       };
@@ -224,26 +224,26 @@ export default function StepTwoQuestionsForm({
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 flex flex-col">
           <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
-            Budget Min *
+            Estimated Budge *
           </label>
-          <input
+          <Input
             type="number"
             onKeyDown={(e) => {
-              if (e.key === "-" || e.key === "Minus") {
+              if (e.key === "-" || e.key === "Minus" || e.key === "+" || e.key === "ArrowDown" || e.key === "ArrowUp") {
                 e.preventDefault();
               }
             }}
-            {...register("budget_min", { required: true })}
-            placeholder="A$ Minimum"
+            {...register("estimated_budget", { required: true })}
+            placeholder="A$ Estimated Budget"
             className="border px-3 py-2 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
           />
           {errors.budget_min && (
             <span className="text-red-500 text-sm mt-1">
-              Minimum budget is required
+              Estimated budget is required
             </span>
           )}
         </div>
-        <div className="flex-1 flex flex-col">
+        {/* <div className="flex-1 flex flex-col">
           <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
              Budget Max *
           </label>
@@ -261,7 +261,7 @@ export default function StepTwoQuestionsForm({
               Maximum budget is required
             </span>
           )}
-        </div>
+        </div> */}
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">

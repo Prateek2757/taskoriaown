@@ -17,8 +17,7 @@ export async function POST(req: Request) {
       title,
       description,
       category_id,
-      budget_min,
-      budget_max,
+    estimated_budget,
       city_id,
       preferred_date_start,
       preferred_date_end,
@@ -35,15 +34,14 @@ export async function POST(req: Request) {
         category_id,
         title,
         description,
-        budget_min,
-        budget_max,
+      estimated_budget,
         location_id,
         preferred_date_start,
         preferred_date_end,
         
         status
       )
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'Open')
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'Open')
       RETURNING *;
       `,
       [
@@ -51,8 +49,7 @@ export async function POST(req: Request) {
         category_id,
         title,
         description,
-        budget_min || null,
-        budget_max || null,
+       estimated_budget,
         city_id || null,
         preferred_date_start || null,
         preferred_date_end || null,
@@ -101,7 +98,6 @@ export async function GET() {
 
     const userId = session.user.id;
 
-    // 1️⃣ Get all provider's category_ids
     const { rows: categoryRows } = await client.query(
       `SELECT category_id FROM user_categories WHERE user_id = $1`,
       [userId]
@@ -114,10 +110,8 @@ export async function GET() {
       );
     }
 
-    // ✅ Extract all category IDs into an array
     const categoryIds = categoryRows.map((r) => r.category_id);
 
-    // 2️⃣ Fetch leads matching any of these categories
     const result = await client.query(
       `
       SELECT 
@@ -127,6 +121,7 @@ export async function GET() {
         t.is_remote_allowed,
         t.budget_min,
         t.budget_max,
+        t.estimated_budget,
         t.status,
         t.created_at,
         c.name AS category_name,

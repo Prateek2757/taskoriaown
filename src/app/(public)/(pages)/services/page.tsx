@@ -64,12 +64,10 @@ export default function ServiceCategories() {
 
   return (
     <section className="py-20 px-4 bg-gradient-to-b from-[#f8fafc] via-white to-[#eef2ff] dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 relative overflow-hidden">
-      {/* Background blobs */}
       <div className="absolute top-0 left-0 w-[28rem] h-[28rem] bg-blue-100 dark:bg-blue-800 rounded-full blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2"></div>
       <div className="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-purple-100 dark:bg-purple-800 rounded-full blur-3xl opacity-30 translate-x-1/3 translate-y-1/3"></div>
 
       <div className="max-w-7xl mx-auto relative">
-        {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Explore{" "}

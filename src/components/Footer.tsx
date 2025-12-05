@@ -47,6 +47,7 @@ const barVariants = {
 const Footer = () => {
   const container = useRef<HTMLDivElement>(null);
   const [openPopup, setOpenPopUp] = useState(false);
+  const [openSection, setOpenSection] = useState("");
   const ref = useRef(null);
   const isInView = useInView(ref);
 
@@ -136,32 +137,76 @@ const Footer = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-16 w-full lg:w-auto mt-8 lg:mt-0">
-            <ul>
-              <li className="text-2xl pb-4 font-semibold">For Customers</li>
-              <li className="mb-2"><Link href="/discover" className="hover:text-white text-gray-300 transition-colors">Find Services</Link></li>
-              <li className="mb-2"><Link href="/community" className="hover:text-white text-gray-300 transition-colors">Community</Link></li>
-              <li className="mb-2"><Link href="/post-job" className="hover:text-white text-gray-300 transition-colors">Post a Job</Link></li>
-              <li className="mb-2"><Link href="/trust-safety" className="hover:text-white text-gray-300 transition-colors">Trust & Safety</Link></li>
-            </ul>
 
+            <div className="border-b border-gray-700 sm:border-none pb-3 sm:pb-0">
 
-            <ul>
-              <li className="text-2xl pb-4 font-semibold">For Providers</li>
-              <li className="mb-2"><Link href="/become-provider" className="hover:text-white text-gray-300 transition-colors">Join as Provider</Link></li>
-              <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Success Stories</a></li>
-              <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Resources</a></li>
-              <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">API Documentation</a></li>
-            </ul>
+              <h2 className="hidden sm:block text-2xl pb-4 font-semibold">For Customers</h2>
 
+              <button
+                className="sm:hidden w-full flex justify-between items-center text-2xl pb-4 font-semibold"
+                onClick={() => setOpenSection(openSection === 'customers' ? '' : 'customers')}
+              >
+                For Customers
+                <span>{openSection === 'customers' ? "−" : "+"}</span>
+              </button>
 
-            <ul>
-              <li className="text-2xl pb-4 font-semibold">Company</li>
-              <li className="mb-2"><a href="/about-us
-              " className="hover:text-white text-gray-300 transition-colors cursor-pointer">About Us</a></li>
-              <li className="mb-2"><a href="/privacy-policy" className="hover:text-white text-gray-300 transition-colors cursor-pointer">Privacy Policy</a></li>
-              <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Press</a></li>
-              <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Contact</a></li>
-            </ul>
+              <ul
+                className={`sm:block overflow-hidden transition-all duration-300 
+      ${openSection === 'customers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
+              >
+                <li className="mb-2"><Link href="/discover" className="hover:text-white text-gray-300 transition-colors">Find Services</Link></li>
+                <li className="mb-2"><Link href="/community" className="hover:text-white text-gray-300 transition-colors">Community</Link></li>
+                <li className="mb-2"><Link href="/post-job" className="hover:text-white text-gray-300 transition-colors">Post a Job</Link></li>
+                <li className="mb-2"><Link href="/trust-safety" className="hover:text-white text-gray-300 transition-colors">Trust & Safety</Link></li>
+              </ul>
+            </div>
+
+            <div className="border-b border-gray-700 sm:border-none pb-3 sm:pb-0">
+
+              <h2 className="hidden sm:block text-2xl pb-4 font-semibold">For Providers</h2>
+
+              <button
+                className="sm:hidden w-full flex justify-between items-center text-2xl pb-4 font-semibold"
+                onClick={() => setOpenSection(openSection === 'providers' ? '' : 'providers')}
+              >
+                For Providers
+                <span>{openSection === 'providers' ? "−" : "+"}</span>
+              </button>
+
+              <ul
+                className={`sm:block overflow-hidden transition-all duration-300 
+      ${openSection === 'providers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
+              >
+                <li className="mb-2"><Link href="/become-provider" className="hover:text-white text-gray-300 transition-colors">Join as Provider</Link></li>
+                <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Success Stories</a></li>
+                <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Resources</a></li>
+                <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">API Documentation</a></li>
+              </ul>
+            </div>
+
+            <div className="border-b border-gray-700 sm:border-none pb-3 sm:pb-0">
+
+              <h2 className="hidden sm:block text-2xl pb-4 font-semibold">Company</h2>
+
+              <button
+                className="sm:hidden w-full flex justify-between items-center text-2xl pb-4 font-semibold"
+                onClick={() => setOpenSection(openSection === 'company' ? '' : 'company')}
+              >
+                Company
+                <span>{openSection === 'company' ? "−" : "+"}</span>
+              </button>
+
+              <ul
+                className={`sm:block overflow-hidden transition-all duration-300 
+      ${openSection === 'company' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
+              >
+                <li className="mb-2"><Link href="/about-us" className="hover:text-white text-gray-300 transition-colors cursor-pointer">About Us</Link></li>
+                <li className="mb-2"><Link href="/privacy-policy" className="hover:text-white text-gray-300 transition-colors cursor-pointer">Privacy Policy</Link></li>
+                <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Press</a></li>
+                <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Contact</a></li>
+              </ul>
+            </div>
+
           </div>
         </div>
 
