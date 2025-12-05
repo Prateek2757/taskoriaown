@@ -49,7 +49,7 @@ export default function Page() {
             <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">Content Writing</h1>
             <p className="mt-3 text-lg md:text-xl text-slate-700">Blog, website, and article writing services</p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href="/quote?service=content-writing" className="inline-flex items-center rounded-2xl px-5 py-3 font-semibold shadow-md bg-slate-900 text-white hover:opacity-90">Get free quotes</a>
+              {/* <a href="/quote?service=content-writing" className="inline-flex items-center rounded-2xl px-5 py-3 font-semibold shadow-md bg-slate-900 text-white hover:opacity-90">Get free quotes</a> */}
               <a href="/providers?service=content-writing" className="inline-flex items-center rounded-2xl px-5 py-3 font-semibold border border-slate-300 bg-white hover:bg-slate-50">Browse providers</a>
             </div>
           </div>

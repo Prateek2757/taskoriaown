@@ -5,7 +5,7 @@ import React, { FormEvent, useRef, useState } from "react";
 import { motion, useInView } from "motion/react";
 import Link from "next/link";
 import Image from "next/image";
-import { Instagram, Linkedin, Facebook } from "lucide-react";
+import { Instagram, Linkedin, Facebook, CheckIcon, ChevronUp, ChevronDown } from "lucide-react";
 
 
 const letters = "TASKORIA".split("");
@@ -136,41 +136,41 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-16 w-full lg:w-auto mt-8 lg:mt-0">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-16 w-full lg:w-auto mt-0 lg:mt-0">
 
-            <div className="border-b border-gray-700 sm:border-none pb-3 sm:pb-0">
+            <div className="border-b border-gray-700 sm:border-none  sm:pb-0">
 
               <h2 className="hidden sm:block text-2xl pb-4 font-semibold">For Customers</h2>
 
               <button
-                className="sm:hidden w-full flex justify-between items-center text-2xl pb-4 font-semibold"
+                className="sm:hidden w-full flex justify-between items-center text-xl pb-3 font-semibold"
                 onClick={() => setOpenSection(openSection === 'customers' ? '' : 'customers')}
               >
                 For Customers
-                <span>{openSection === 'customers' ? "−" : "+"}</span>
+                <span>{openSection === 'customers' ? <ChevronUp/> : <ChevronDown/>}</span>
               </button>
 
               <ul
                 className={`sm:block overflow-hidden transition-all duration-300 
       ${openSection === 'customers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
               >
-                <li className="mb-2"><Link href="/discover" className="hover:text-white text-gray-300 transition-colors">Find Services</Link></li>
+                <li className="mb-2"><Link href="/services" className="hover:text-white text-gray-300 transition-colors">Find Services</Link></li>
                 <li className="mb-2"><Link href="/community" className="hover:text-white text-gray-300 transition-colors">Community</Link></li>
                 <li className="mb-2"><Link href="/post-job" className="hover:text-white text-gray-300 transition-colors">Post a Job</Link></li>
                 <li className="mb-2"><Link href="/trust-safety" className="hover:text-white text-gray-300 transition-colors">Trust & Safety</Link></li>
               </ul>
             </div>
 
-            <div className="border-b border-gray-700 sm:border-none pb-3 sm:pb-0">
+            <div className="border-b border-gray-700 sm:border-none  sm:pb-0">
 
-              <h2 className="hidden sm:block text-2xl pb-4 font-semibold">For Providers</h2>
+              <h2 className="hidden sm:block text-xl pb-3 font-semibold">For Providers</h2>
 
               <button
-                className="sm:hidden w-full flex justify-between items-center text-2xl pb-4 font-semibold"
+                className="sm:hidden w-full flex justify-between items-center text-xl pb-3 font-semibold"
                 onClick={() => setOpenSection(openSection === 'providers' ? '' : 'providers')}
               >
                 For Providers
-                <span>{openSection === 'providers' ? "−" : "+"}</span>
+                <span>{openSection === 'providers' ? <ChevronUp/> : <ChevronDown/>}</span>
               </button>
 
               <ul
@@ -186,14 +186,14 @@ const Footer = () => {
 
             <div className="border-b border-gray-700 sm:border-none pb-3 sm:pb-0">
 
-              <h2 className="hidden sm:block text-2xl pb-4 font-semibold">Company</h2>
+              <h2 className="hidden sm:block text-xl pb-1 font-semibold">Company</h2>
 
               <button
-                className="sm:hidden w-full flex justify-between items-center text-2xl pb-4 font-semibold"
+                className="sm:hidden w-full flex justify-between items-center text-xl pb-1 font-semibold"
                 onClick={() => setOpenSection(openSection === 'company' ? '' : 'company')}
               >
                 Company
-                <span>{openSection === 'company' ? "−" : "+"}</span>
+                <span>{openSection === 'company' ? <ChevronUp/> : <ChevronDown/>}</span>
               </button>
 
               <ul

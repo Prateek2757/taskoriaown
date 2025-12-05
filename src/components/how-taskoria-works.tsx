@@ -239,7 +239,7 @@ export default function HowTaskoriaWorks() {
           transition={{ duration: 0.6, delay: 1 }}
           className="text-center mt-17 relative z-20"
         >
-          <Button className="px-8 md:px-10 py-3 md:py-4 text-base md:text-lg">
+          <Button className="px-8 md:px-10 py-6 md:py-4 text-base md:text-lg">
             Start my 1-minute setup
           </Button>
         </motion.div>

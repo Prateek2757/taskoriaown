@@ -70,7 +70,7 @@ export async function GET(req: Request) {
           ROUND(
           LEAST(
             GREATEST(
-              $1 + ((t.estimated_budget) * $2,
+              $1 + (t.estimated_budget * $2),
               $3
             ),
             $4

@@ -74,13 +74,13 @@ export default function Services() {
         </motion.div> */}
 
         <motion.div
-          className="flex gap-8 items-start mb-10 
-          bg-white/30 dark:bg-white/5 backdrop-blur-xl shadow-lg shadow-blue-100/20"
+          className="flex gap-8 items-start mb-10 flex-col lg:flex-row
+          bg-white/30 dark:bg-white/5  backdrop-blur-xl shadow-lg shadow-blue-100/20"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="w-2/3">
+          <div className="w-full lg:w-2/3  flex-col  ">
             <h1 className="text-5xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight drop-shadow-sm">
               All Your Skills,
               <br />
@@ -88,8 +88,8 @@ export default function Services() {
             </h1>
           </div>
 
-          <div className="lg:pt-4">
-            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed max-w-xl">
+          <div className="lg:pt-4 flex-col flex-1">
+            <p className="text-gray-700 dark:text-gray-300 pb-3 text-lg leading-relaxed max-w-xl">
               Connect with trusted experts for every task — from home repairs to
               creative work — all in one place on Taskoria.
             </p>

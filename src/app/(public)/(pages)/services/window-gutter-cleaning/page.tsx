@@ -22,24 +22,24 @@ export const metadata = {
 
 export default function Page() {
   const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Service",
-  "name": "Window & Gutter Cleaning",
-  "provider": {
-    "@type": "Organization",
-    "name": "Taskoria"
-  },
-  "areaServed": "AU",
-  "description": "Exterior window and roof gutter cleaning",
-  "serviceType": "Window & Gutter Cleaning",
-  "offers": {
-    "@type": "Offer",
-    "availability": "https://schema.org/InStock"
-  },
-  "dateCreated": "2025-10-17 13:49:28.302677",
-  "isRelatedTo": "Local services marketplace",
-  "url": "https://www.taskoria.com/services/window-gutter-cleaning"
-};
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Window & Gutter Cleaning",
+    "provider": {
+      "@type": "Organization",
+      "name": "Taskoria"
+    },
+    "areaServed": "AU",
+    "description": "Exterior window and roof gutter cleaning",
+    "serviceType": "Window & Gutter Cleaning",
+    "offers": {
+      "@type": "Offer",
+      "availability": "https://schema.org/InStock"
+    },
+    "dateCreated": "2025-10-17 13:49:28.302677",
+    "isRelatedTo": "Local services marketplace",
+    "url": "https://www.taskoria.com/services/window-gutter-cleaning"
+  };
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-slate-50 text-slate-900">
       <section className="relative">
@@ -49,7 +49,7 @@ export default function Page() {
             <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">Window & Gutter Cleaning</h1>
             <p className="mt-3 text-lg md:text-xl text-slate-700">Exterior window and roof gutter cleaning</p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href="/quote?service=window-gutter-cleaning" className="inline-flex items-center rounded-2xl px-5 py-3 font-semibold shadow-md bg-slate-900 text-white hover:opacity-90">Get free quotes</a>
+              <a href="/quote?service=window-gutter-cleaning" className="items-center rounded-2xl px-5 py-3 font-semibold shadow-md bg-slate-900 hidden " > </a>
               <a href="/providers?service=window-gutter-cleaning" className="inline-flex items-center rounded-2xl px-5 py-3 font-semibold border border-slate-300 bg-white hover:bg-slate-50">Browse providers</a>
             </div>
           </div>
@@ -71,19 +71,19 @@ export default function Page() {
           <div className="rounded-2xl border border-slate-200 bg-white p-6">
             <h3 className="text-xl font-bold">What&apos;s included</h3>
             <ul className="mt-4 list-disc pl-6 space-y-2">
-          <li className='leading-7'>All required tools and consumables (unless specified)</li>
-          <li className='leading-7'>Professional-grade equipment for quality results</li>
-          <li className='leading-7'>Clear arrival windows and job-time estimates</li>
-          <li className='leading-7'>Area protection and cleanup at completion</li>
-          <li className='leading-7'>Safety-first approach and polite, uniformed pros</li>
+              <li className='leading-7'>All required tools and consumables (unless specified)</li>
+              <li className='leading-7'>Professional-grade equipment for quality results</li>
+              <li className='leading-7'>Clear arrival windows and job-time estimates</li>
+              <li className='leading-7'>Area protection and cleanup at completion</li>
+              <li className='leading-7'>Safety-first approach and polite, uniformed pros</li>
             </ul>
           </div>
           <div className="rounded-2xl border border-slate-200 bg-white p-6">
             <h3 className="text-xl font-bold">Popular add‑ons</h3>
             <ul className="mt-4 list-disc pl-6 space-y-2">
-          <li className='leading-7'>Eco-friendly supplies on request</li>
-          <li className='leading-7'>Pet-friendly teams</li>
-          <li className='leading-7'>One-off, weekly, or fortnightly schedules</li>
+              <li className='leading-7'>Eco-friendly supplies on request</li>
+              <li className='leading-7'>Pet-friendly teams</li>
+              <li className='leading-7'>One-off, weekly, or fortnightly schedules</li>
             </ul>
           </div>
         </div>
@@ -91,26 +91,26 @@ export default function Page() {
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
           <h3 className="text-xl font-bold">Frequently asked questions</h3>
           <div className="mt-4 grid gap-3">
-        <details className="group rounded-xl border border-gray-200 bg-white/70 p-4 hover:border-gray-300 transition">
-          <summary className="cursor-pointer font-semibold text-gray-900">How do quotes work on Taskoria?</summary>
-          <div className="mt-2 text-gray-700 leading-7">Post your job details, receive quotes from verified providers, compare profiles and reviews, then book your preferred pro. You only proceed when you’re comfortable with the scope and price.</div>
-        </details>
-        <details className="group rounded-xl border border-gray-200 bg-white/70 p-4 hover:border-gray-300 transition">
-          <summary className="cursor-pointer font-semibold text-gray-900">Is the service insured?</summary>
-          <div className="mt-2 text-gray-700 leading-7">Professionals on Taskoria hold relevant insurance for their trade or profession. You can request certificates during quoting or before the job commences.</div>
-        </details>
-        <details className="group rounded-xl border border-gray-200 bg-white/70 p-4 hover:border-gray-300 transition">
-          <summary className="cursor-pointer font-semibold text-gray-900">Do I pay upfront?</summary>
-          <div className="mt-2 text-gray-700 leading-7">Most jobs are pay-on-completion or milestone-based. Some providers may request a small deposit for materials or to secure the date—this will be outlined clearly in your quote.</div>
-        </details>
-        <details className="group rounded-xl border border-gray-200 bg-white/70 p-4 hover:border-gray-300 transition">
-          <summary className="cursor-pointer font-semibold text-gray-900">What areas do you cover?</summary>
-          <div className="mt-2 text-gray-700 leading-7">Available across major Australian cities. We commonly service Sydney, Melbourne, Brisbane, Perth, Adelaide, Canberra, Gold Coast, Hobart, Darwin, Newcastle, Wollongong, Geelong, and many surrounding regions.</div>
-        </details>
-        <details className="group rounded-xl border border-gray-200 bg-white/70 p-4 hover:border-gray-300 transition">
-          <summary className="cursor-pointer font-semibold text-gray-900">What if I’m not satisfied?</summary>
-          <div className="mt-2 text-gray-700 leading-7">Let us know. Taskoria’s support team will assist with resolutions—ranging from follow‑up fixes to partial refunds depending on circumstances and platform policies.</div>
-        </details>
+            <details className="group rounded-xl border border-gray-200 bg-white/70 p-4 hover:border-gray-300 transition">
+              <summary className="cursor-pointer font-semibold text-gray-900">How do quotes work on Taskoria?</summary>
+              <div className="mt-2 text-gray-700 leading-7">Post your job details, receive quotes from verified providers, compare profiles and reviews, then book your preferred pro. You only proceed when you’re comfortable with the scope and price.</div>
+            </details>
+            <details className="group rounded-xl border border-gray-200 bg-white/70 p-4 hover:border-gray-300 transition">
+              <summary className="cursor-pointer font-semibold text-gray-900">Is the service insured?</summary>
+              <div className="mt-2 text-gray-700 leading-7">Professionals on Taskoria hold relevant insurance for their trade or profession. You can request certificates during quoting or before the job commences.</div>
+            </details>
+            <details className="group rounded-xl border border-gray-200 bg-white/70 p-4 hover:border-gray-300 transition">
+              <summary className="cursor-pointer font-semibold text-gray-900">Do I pay upfront?</summary>
+              <div className="mt-2 text-gray-700 leading-7">Most jobs are pay-on-completion or milestone-based. Some providers may request a small deposit for materials or to secure the date—this will be outlined clearly in your quote.</div>
+            </details>
+            <details className="group rounded-xl border border-gray-200 bg-white/70 p-4 hover:border-gray-300 transition">
+              <summary className="cursor-pointer font-semibold text-gray-900">What areas do you cover?</summary>
+              <div className="mt-2 text-gray-700 leading-7">Available across major Australian cities. We commonly service Sydney, Melbourne, Brisbane, Perth, Adelaide, Canberra, Gold Coast, Hobart, Darwin, Newcastle, Wollongong, Geelong, and many surrounding regions.</div>
+            </details>
+            <details className="group rounded-xl border border-gray-200 bg-white/70 p-4 hover:border-gray-300 transition">
+              <summary className="cursor-pointer font-semibold text-gray-900">What if I’m not satisfied?</summary>
+              <div className="mt-2 text-gray-700 leading-7">Let us know. Taskoria’s support team will assist with resolutions—ranging from follow‑up fixes to partial refunds depending on circumstances and platform policies.</div>
+            </details>
           </div>
         </div>
 
@@ -130,6 +130,6 @@ export default function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-    </main>
+    </main >
   );
 }
