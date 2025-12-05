@@ -65,8 +65,8 @@ const Footer = () => {
   return (
     <div
       className="relative h-full overflow-hidden sm:pt-14 pt-8 
-      bg-[radial-gradient(circle_at_bottom,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
-      text-white"
+      dark:bg-[radial-gradient(circle_at_bottom,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
+      dark:text-white text-gray-600 "
       ref={container}
     >
       <div className="sm:container px-4 mx-auto">
@@ -86,7 +86,7 @@ const Footer = () => {
               </span>
             </Link>
 
-            <p className="text-gray-300 text-sm max-w-xs">
+            <p className="text-gray-600 dark:text-white text-sm max-w-xs">
               Redefining How the World Hires Trusted Professionals.
             </p>
 
@@ -147,17 +147,17 @@ const Footer = () => {
                 onClick={() => setOpenSection(openSection === 'customers' ? '' : 'customers')}
               >
                 For Customers
-                <span>{openSection === 'customers' ? <ChevronUp/> : <ChevronDown/>}</span>
+                <span>{openSection === 'customers' ? <ChevronUp /> : <ChevronDown />}</span>
               </button>
 
               <ul
                 className={`sm:block overflow-hidden transition-all duration-300 
       ${openSection === 'customers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
               >
-                <li className="mb-2"><Link href="/services" className="hover:text-white text-gray-300 transition-colors">Find Services</Link></li>
-                <li className="mb-2"><Link href="/community" className="hover:text-white text-gray-300 transition-colors">Community</Link></li>
-                <li className="mb-2"><Link href="/post-job" className="hover:text-white text-gray-300 transition-colors">Post a Job</Link></li>
-                <li className="mb-2"><Link href="/trust-safety" className="hover:text-white text-gray-300 transition-colors">Trust & Safety</Link></li>
+                <li className="mb-2"><Link href="/services" className="hover:text-white text-gray-600 transition-colors">Find Services</Link></li>
+                <li className="mb-2"><Link href="/community" className="hover:text-white text-gray-600 transition-colors">Community</Link></li>
+                <li className="mb-2"><Link href="/post-job" className="hover:text-white text-gray-600 transition-colors">Post a Job</Link></li>
+                <li className="mb-2"><Link href="/trust-safety" className="hover:text-white text-gray-600 transition-colors">Trust & Safety</Link></li>
               </ul>
             </div>
 
@@ -170,17 +170,17 @@ const Footer = () => {
                 onClick={() => setOpenSection(openSection === 'providers' ? '' : 'providers')}
               >
                 For Providers
-                <span>{openSection === 'providers' ? <ChevronUp/> : <ChevronDown/>}</span>
+                <span>{openSection === 'providers' ? <ChevronUp /> : <ChevronDown />}</span>
               </button>
 
               <ul
                 className={`sm:block overflow-hidden transition-all duration-300 
       ${openSection === 'providers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
               >
-                <li className="mb-2"><Link href="/become-provider" className="hover:text-white text-gray-300 transition-colors">Join as Provider</Link></li>
-                <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Success Stories</a></li>
-                <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Resources</a></li>
-                <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">API Documentation</a></li>
+                <li className="mb-2"><Link href="/become-provider" className="hover:text-white text-gray-600 transition-colors">Join as Provider</Link></li>
+                <li className="mb-2"><a className="hover:text-white text-gray-600 transition-colors cursor-pointer">Success Stories</a></li>
+                <li className="mb-2"><a className="hover:text-white text-gray-600 transition-colors cursor-pointer">Resources</a></li>
+                <li className="mb-2"><a className="hover:text-white text-gray-600 transition-colors cursor-pointer">API Documentation</a></li>
               </ul>
             </div>
 
@@ -193,17 +193,17 @@ const Footer = () => {
                 onClick={() => setOpenSection(openSection === 'company' ? '' : 'company')}
               >
                 Company
-                <span>{openSection === 'company' ? <ChevronUp/> : <ChevronDown/>}</span>
+                <span>{openSection === 'company' ? <ChevronUp /> : <ChevronDown />}</span>
               </button>
 
               <ul
                 className={`sm:block overflow-hidden transition-all duration-300 
       ${openSection === 'company' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
               >
-                <li className="mb-2"><Link href="/about-us" className="hover:text-white text-gray-300 transition-colors cursor-pointer">About Us</Link></li>
-                <li className="mb-2"><Link href="/privacy-policy" className="hover:text-white text-gray-300 transition-colors cursor-pointer">Privacy Policy</Link></li>
-                <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Press</a></li>
-                <li className="mb-2"><a className="hover:text-white text-gray-300 transition-colors cursor-pointer">Contact</a></li>
+                <li className="mb-2"><Link href="/about-us" className="hover:text-white text-gray-600 transition-colors cursor-pointer">About Us</Link></li>
+                <li className="mb-2"><Link href="/privacy-policy" className="hover:text-white text-gray-600 transition-colors cursor-pointer">Privacy Policy</Link></li>
+                <li className="mb-2"><a className="hover:text-white text-gray-600 transition-colors cursor-pointer">Press</a></li>
+                <li className="mb-2"><a className="hover:text-white text-gray-600 transition-colors cursor-pointer">Contact</a></li>
               </ul>
             </div>
 
@@ -282,7 +282,7 @@ const Footer = () => {
           </motion.svg>
         </div>
 
-        <div className="flex md:flex-row flex-col gap-3 justify-between py-6 text-gray-300">
+        <div className="flex md:flex-row flex-col gap-3 justify-between py-6 text-gray-600 dark:text-gray-300">
           <span className="font-medium">
             &copy; {new Date().getFullYear()} Taskoria. All Rights Reserved. <Link href="/privacy-policy" className="   underline">Privacy Policy.</Link>
             <br />
