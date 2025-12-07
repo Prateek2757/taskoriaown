@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Star, MapPin, Clock, CheckCircle2, TrendingUp } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 export default function ResponsesRow({
   responses,

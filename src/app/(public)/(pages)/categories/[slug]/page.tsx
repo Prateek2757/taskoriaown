@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { motion, Variants, easeOut } from "framer-motion";
+import { motion, Variants, easeOut } from "motion/react";
 import axios from "axios";
 import { toast } from "sonner";
 

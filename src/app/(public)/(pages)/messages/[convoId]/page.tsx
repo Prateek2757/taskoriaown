@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef, use } from "react";
 import { useSession } from "next-auth/react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { MessageCircle, ArrowLeft } from "lucide-react";
 import ChatSidebar from "@/components/chat/ChatSidebar";
 import ChatWindow from "@/components/chat/chatWindow";

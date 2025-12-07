@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { Send, Paperclip, Smile, Loader2 } from "lucide-react";
 import { supabaseServer } from "@/lib/supabase-server";
 
