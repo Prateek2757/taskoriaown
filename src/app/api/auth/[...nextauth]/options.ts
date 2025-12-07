@@ -107,7 +107,7 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (result.rows.length === 0) {
-          return "/error?reason=not_registered";
+          return "/signin?error=not_registered";
         }
         const existingUser = result.rows[0];
 

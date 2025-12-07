@@ -24,7 +24,7 @@ export interface Lead {
   estimated_budget?: number;
   is_remote_allowed?: boolean;
   is_seen?: boolean;
-  seen_at?: string; // Track when lead was seen
+  seen_at?: string; 
 }
 
 export interface Filters {
