@@ -14,15 +14,21 @@ type Category = {
 type Props = {
   onSelect?: (category: Category) => void;
   placeholder?: string;
-  presetCategory?: Category
+  presetCategory?: Category;
 };
 
-export default function CategorySearch({ onSelect, placeholder, presetCategory }: Props) {
+export default function CategorySearch({
+  onSelect,
+  placeholder,
+  presetCategory,
+}: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [query, setQuery] = useState("");
   const [filtered, setFiltered] = useState<Category[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selected, setSelected] = useState<Category | null>(presetCategory || null);
+  const [selected, setSelected] = useState<Category | null>(
+    presetCategory || null
+  );
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -50,7 +56,6 @@ export default function CategorySearch({ onSelect, placeholder, presetCategory }
       document.removeEventListener("touchstart", handleOutside);
     };
   }, []);
-
 
   useEffect(() => {
     function handleEsc(e: KeyboardEvent) {
@@ -90,7 +95,11 @@ export default function CategorySearch({ onSelect, placeholder, presetCategory }
     setQuery(cat.name);
     setSelected(cat);
     setShowSuggestions(false);
-    onSelect?.({ category_id: cat.category_id, name: cat.name, slug: cat.slug });
+    onSelect?.({
+      category_id: cat.category_id,
+      name: cat.name,
+      slug: cat.slug,
+    });
   };
 
   const handleChange = (value: string) => {
@@ -112,7 +121,7 @@ export default function CategorySearch({ onSelect, placeholder, presetCategory }
           setShowSuggestions(true);
           if (!query) setFiltered(categories.slice(0, 10));
         }}
-        className="pl-9 rounded-lg py-5 "
+        className="pl-9 rounded-lg py-5 max-sm:text-sm"
       />
 
       <AnimatePresence>

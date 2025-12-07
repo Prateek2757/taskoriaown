@@ -50,7 +50,7 @@ export default function FeaturesStacking() {
   const div5Ref = useRef<HTMLDivElement>(null);
   const div7Ref = useRef<HTMLDivElement>(null);
   return (
-    <main className="bg-white dark:bg-black transition-colors duration-300 mt-30">
+    <main className="bg-white dark:bg-black transition-colors duration-300 sm:mt-30">
       <style>{`
         @keyframes borderRotate {
           0% {
@@ -104,7 +104,7 @@ export default function FeaturesStacking() {
       `}</style>
 
       <div className="pt-4 pb-5 md:pt-3 px-4">
-        <div className="text-center mx-auto">
+        <div className="sm:text-center mx-auto">
           <h1
             className="text-4xl md:text-xl lg:text-5xl font-extrabold tracking-tight mb-6
                 bg-gradient-to-br from-gray-900 via-gray-700 to-gray-500

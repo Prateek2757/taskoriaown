@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Sparkles, Users, Shield } from "lucide-react";
+import { Sparkles, Users, Shield, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 const steps = [
@@ -93,9 +93,9 @@ export default function HowTaskoriaWorks() {
         <motion.div
           variants={fadeInUp}
           transition={{ duration: 0.7 }}
-          className="text-center mb-20"
+          className="sm:text-center mb-20"
         >
-          <h2 className="text-5xl md:text-6xl font-black mb-4">
+          <h2 className="text-4xl md:text-6xl font-black mb-4">
             How it works?
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -103,7 +103,7 @@ export default function HowTaskoriaWorks() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-10 lg:gap-8 max-w-6xl mx-auto max-sm:pl-3">
           {steps.map((step, index) => (
             <div key={step.id} className="flex flex-col items-center relative">
               <motion.div
@@ -159,16 +159,24 @@ export default function HowTaskoriaWorks() {
           className="text-center mt-7"
         >
           <Link href="/signin">
+            <button className="group px-8 py-3 bg-white dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300 rounded-full font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30">
+              <span className="flex items-center gap-2">
+                Start My 1-Minute Setup
+                <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 duration-300 group-hover:rotate-45" />
+              </span>
+            </button>
+          </Link>
+          {/* <Link href="/signin">
             <button
-              className="mt-16
+              className="sm:mt-16
               px-10 py-4 rounded-full bg-[#41A6EE] hover:bg-[#41A6EE]/80
-              text-white font-bold text-lg shadow-xl 
+              text-white font-semibold  text-lg shadow-xl 
               hover:shadow-[#41A6EE]/40 transition-all duration-300 hover:scale-105
             "
             >
-              Start my 1-minute setup
+              Start My 1-Minute Setup
             </button>
-          </Link>
+          </Link> */}
         </motion.div>
       </motion.div>
     </section>

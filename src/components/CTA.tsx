@@ -1,4 +1,3 @@
-
 "use client";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -61,13 +60,13 @@ function CTA() {
               <Link href="/services">
                 <Button
                   variant="outline"
-                  className="bg-white/80 border-2 border-gray-300 text-slate-900 dark:text-white hover:bg-white hover:border-gray-400 hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg px-6 py-3 text-sm sm:text-base font-semibold"
+                  className="bg-white/80 border-2 border-gray-300 text-slate-900 dark:text-white hover:bg-white hover:border-gray-400 hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg px-6 py-3 text-xs sm:text-base font-semibold"
                 >
                   Find Services
                 </Button>
               </Link>
               <Link href="/providers">
-                <Button className="relative overflow-hidden bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:scale-105 border-0 flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 px-6 py-3 text-sm sm:text-base font-semibold group">
+                <Button className="relative overflow-hidden bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:scale-105 border-0 flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 px-6 py-3 text-xs sm:text-base font-semibold group">
                   <span className="relative z-10">Become a Provider</span>
                   <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
                   <div className="absolute inset-0 bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -75,7 +74,6 @@ function CTA() {
               </Link>
             </div>
 
-         
             <div className="pt-3">
               <div className="h-1 w-16 bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] rounded-full shadow-lg shadow-purple-500/50 animate-pulse"></div>
             </div>

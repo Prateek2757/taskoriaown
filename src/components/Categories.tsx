@@ -80,7 +80,7 @@ export default function Services() {
           transition={{ duration: 0.8 }}
         >
           <div className="w-full lg:w-2/3  flex-col  ">
-            <h1 className="text-5xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight drop-shadow-sm">
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight drop-shadow-sm">
               All Your Skills,
               <br />
               <span className="text-blue-400">Empowered and Rewarded</span>
