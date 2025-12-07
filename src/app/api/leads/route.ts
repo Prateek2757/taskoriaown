@@ -17,12 +17,12 @@ export async function POST(req: Request) {
       title,
       description,
       category_id,
-    estimated_budget,
+      estimated_budget,
       city_id,
       preferred_date_start,
       preferred_date_end,
 
-      category_answers, 
+      category_answers,
     } = await req.json();
 
     await client.query("BEGIN");
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
         category_id,
         title,
         description,
-       estimated_budget,
+        estimated_budget,
         city_id || null,
         preferred_date_start || null,
         preferred_date_end || null,
@@ -58,7 +58,6 @@ export async function POST(req: Request) {
 
     const taskId = taskResult.rows[0].task_id;
 
-    // 2️⃣ Insert category question answers
     if (category_answers && typeof category_answers === "object") {
       const insertAnswerQuery = `
         INSERT INTO task_answers (task_id, category_question_id, answer)
@@ -114,46 +113,49 @@ export async function GET() {
 
     const result = await client.query(
       `
-      SELECT 
-        t.task_id,
-        t.title,
-        t.description,
-        t.is_remote_allowed,
-        t.budget_min,
-        t.budget_max,
-        t.estimated_budget,
-        t.status,
-        t.created_at,
-        c.name AS category_name,
-        ci.name AS location_name,
-        u.email AS customer_email,
-        u.phone,
-         up.user_id ,
-        up.display_name AS customer_name,
-        up.profile_image_url as image,
-        json_agg(
-          json_build_object(
-            'question_id', ta.category_question_id,
-            'question', q.question,
-            'answer', ta.answer
-          )
-        ) FILTER (WHERE ta.task_answer_id IS NOT NULL) AS answers
-      FROM tasks t
-      JOIN service_categories c ON c.category_id = t.category_id
-      LEFT JOIN cities ci ON ci.city_id = t.location_id
-      LEFT JOIN task_answers ta ON ta.task_id = t.task_id
-      LEFT JOIN category_questions q ON q.category_question_id = ta.category_question_id
-      LEFT JOIN users u ON u.user_id = t.customer_id
-      LEFT JOIN user_profiles up ON up.user_id = t.customer_id
-      WHERE 
-        t.status IN ('Open', 'Urgent','In Progress')
-        AND t.category_id = ANY($1::int[])   -- ✅ match any category
-        AND t.customer_id <> $2
-      GROUP BY 
-        t.task_id, c.name, ci.name, up.user_id ,u.email, u.phone, up.display_name , up.profile_image_url
-      ORDER BY 
-        t.created_at DESC;
-      `,
+     SELECT 
+    t.task_id,
+    t.title,
+    t.description,
+    t.is_remote_allowed,
+    t.budget_min,
+    t.budget_max,
+    t.estimated_budget,
+    t.status,
+    t.created_at,
+    c.name AS category_name,
+    ci.name AS location_name,
+    u.email AS customer_email,
+    u.phone,
+    up.user_id,
+    up.display_name AS customer_name,
+    up.profile_image_url AS image,
+    COALESCE(uts.seen, false) AS is_seen,  
+    json_agg(
+      json_build_object(
+        'question_id', ta.category_question_id,
+        'question', q.question,
+        'answer', ta.answer
+      )
+    ) FILTER (WHERE ta.task_answer_id IS NOT NULL) AS answers
+  FROM tasks t
+  JOIN service_categories c ON c.category_id = t.category_id
+  LEFT JOIN cities ci ON ci.city_id = t.location_id
+  LEFT JOIN task_answers ta ON ta.task_id = t.task_id
+  LEFT JOIN category_questions q ON q.category_question_id = ta.category_question_id
+  LEFT JOIN users u ON u.user_id = t.customer_id
+  LEFT JOIN user_profiles up ON up.user_id = t.customer_id
+  LEFT JOIN user_task_seen uts 
+    ON uts.task_id = t.task_id AND uts.user_id = $2  -- ✅ join per user
+  WHERE 
+    t.status IN ('Open', 'Urgent','In Progress')
+    AND t.category_id = ANY($1::int[])
+    AND t.customer_id <> $2
+  GROUP BY 
+    t.task_id, c.name, ci.name, up.user_id, u.email, u.phone, up.display_name, up.profile_image_url, uts.seen
+  ORDER BY 
+    t.created_at DESC;
+  `,
       [categoryIds, userId]
     );
 

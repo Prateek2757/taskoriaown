@@ -29,6 +29,9 @@ export async function GET() {
     return NextResponse.json({ tasks: result.rows });
   } catch (err) {
     console.error("Fetch customer tasks error:", err);
-    return NextResponse.json({ error: "Failed to load tasks" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to load tasks" },
+      { status: 500 }
+    );
   }
 }

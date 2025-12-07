@@ -7,6 +7,7 @@ import ModernNavbar from "@/components/navabr/Navbar";
 import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
 import { Poppins } from "next/font/google";
+import type { Viewport } from 'next'
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -44,7 +45,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  themeColor: "#8A2BE2",
   openGraph: {
     title: "Taskoria — Find Trusted Service Providers",
     description:
@@ -68,9 +68,13 @@ export const metadata: Metadata = {
     title: "Taskoria — Find Trusted Service Providers",
     description:
       "Discover and hire top service providers in your area across multiple categories with Taskoria.",
-    images: ["https://taskoria.com/og-image.png"], // replace with your OG image
+    images: ["https://taskoria.com/og-image.png"], 
     creator: "@Taskoria",
   },
+};
+
+export const viewport:Viewport = {
+    themeColor: "#8A2BE2",
 };
 
 export default function RootLayout({
@@ -79,7 +83,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable}`}>
+    <html lang="en" className={`${poppins.variable}`} suppressHydrationWarning >
       <AuthProvider>
         <body className="antialiased dark:bg-black">
           <ThemeProvider

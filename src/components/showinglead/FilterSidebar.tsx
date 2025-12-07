@@ -14,8 +14,7 @@ export interface Filters {
   search: string;
   category: string;
   location: string;
-  budgetMin: string;
-  budgetMax: string;
+  estimated_budget?: string;
   status: string;
   isRemoteAllowed: boolean | null;
 }
@@ -59,8 +58,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   const activeFiltersCount = [
     filters.category,
     filters.location,
-    filters.budgetMin,
-    filters.budgetMax,
+    filters.estimated_budget,
     filters.isRemoteAllowed,
     filters.status !== "Open",
   ].filter(Boolean).length;
@@ -70,8 +68,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
       search: "",
       category: "",
       location: "",
-      budgetMin: "",
-      budgetMax: "",
+      estimated_budget: "",
       status: "Open",
       isRemoteAllowed: null,
     });
@@ -313,12 +310,12 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
               <input
                 type="number"
                 placeholder="Min"
-                value={filters.budgetMin}
-                onChange={(e) => onFilterChange({ budgetMin: e.target.value })}
+                value={filters.estimated_budget ?? ""}
+                onChange={(e) => onFilterChange({ estimated_budget: (e.target.value) })}
                 className="w-full pl-7 pr-2 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-400 transition text-sm"
               />
             </div>
-            <div className="relative">
+            {/* <div className="relative">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
                 A$
               </span>
@@ -329,7 +326,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 onChange={(e) => onFilterChange({ budgetMax: e.target.value })}
                 className="w-full pl-7 pr-3 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-400 transition text-sm"
               />
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -394,13 +391,13 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                   />
                 </span>
               )}
-              {(filters.budgetMin || filters.budgetMax) && (
+              {(filters.estimated_budget ) && (
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-md">
-                  A${filters.budgetMin || "0"} - A${filters.budgetMax || "∞"}
+                  A${filters.estimated_budget || "0"}
                   <X
                     className="w-3 h-3 cursor-pointer hover:text-purple-900"
                     onClick={() =>
-                      onFilterChange({ budgetMin: "", budgetMax: "" })
+                      onFilterChange({ estimated_budget: "" })
                     }
                   />
                 </span>

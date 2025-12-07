@@ -24,10 +24,13 @@ export async function POST(req: Request) {
       `SELECT 1 FROM conversation_participants WHERE conversation_id = $1 AND user_id = $2`,
       [conversation_id, senderId]
     );
-    
+
     if (partRes.rowCount === 0) {
       await client.query("ROLLBACK");
-      return NextResponse.json({ message: "Forbidden: Not a participant" }, { status: 403 });
+      return NextResponse.json(
+        { message: "Forbidden: Not a participant" },
+        { status: 403 }
+      );
     }
 
     const purchaseCheck = await client.query(
@@ -74,7 +77,7 @@ export async function POST(req: Request) {
     await channel.send({
       type: "broadcast",
       event: "message",
-      payload: { message }, 
+      payload: { message },
     });
 
     return NextResponse.json({ message }, { status: 201 });

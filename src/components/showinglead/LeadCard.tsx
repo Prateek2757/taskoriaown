@@ -14,8 +14,8 @@ interface Lead {
   created_at: string;
   description: string;
   status?: string;
-  budget_min?: number;
-  budget_max?: number;
+  estimated_budget?: number;
+ is_seen?: boolean;
 }
 
 interface LeadCardProps {
@@ -51,8 +51,8 @@ const LeadCard: React.FC<LeadCardProps> = ({
       .toUpperCase();
 
   const getBudgetDisplay = (): string => {
-    if (lead.budget_min && lead.budget_max) {
-      return `A$${lead.budget_min} - A$${lead.budget_max}`;
+    if (lead.estimated_budget) {
+      return `A$${lead.estimated_budget}`;
     }
     return "Budget not specified";
   };
@@ -60,13 +60,23 @@ const LeadCard: React.FC<LeadCardProps> = ({
   return (
     <div
       onClick={() => onSelect(lead)}
-      className={`group relative p-5 rounded-2xl shadow-sm border transition-all duration-300 cursor-pointer overflow-hidden
+      className={`group relative p-5  rounded-2xl shadow-sm border transition-all duration-300 cursor-pointer overflow-hidden
         ${
           isSelected
             ? "border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-700 dark:to-gray-800 shadow-md"
             : "border-gray-200 dark:border-gray-700 hover:border-blue-400 hover:shadow-lg hover:bg-gradient-to-br hover:from-white dark:hover:from-gray-800 hover:to-blue-50 dark:hover:to-blue-700"
         }`}
     >
+    <div className="absolute top-2 right-3">
+  {!lead.is_seen ? (
+    <span className="relative flex h-3 w-3">
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+      <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600"></span>
+    </span>
+  ) : 
+  ""
+  }
+</div>
       <div
         className={`absolute top-0 left-0 h-1 w-full rounded-t-2xl transition-all duration-300 ${
           isSelected ? "bg-blue-500" : "bg-transparent group-hover:bg-blue-400"
@@ -127,7 +137,7 @@ const LeadCard: React.FC<LeadCardProps> = ({
 
       <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
         <div className="flex flex-col">
-          <span className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Budget</span>
+          <span className="text-xs text-gray-500 dark:text-gray-400 mb-0.5"> Estimated Budget</span>
           <span className="text-sm font-medium text-gray-800 dark:text-gray-100">
             {getBudgetDisplay()}
           </span>

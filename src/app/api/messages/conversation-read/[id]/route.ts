@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { Pool } from "pg";
@@ -18,12 +17,15 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const conversationId =  (await params).id;
-    
+    const conversationId = (await params).id;
+
     const myId = session.user.id;
 
     if (!conversationId) {
-      return NextResponse.json({ error: "Missing conversation ID" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing conversation ID" },
+        { status: 400 }
+      );
     }
 
     const participantCheck = await pool.query(
@@ -33,9 +35,12 @@ export async function GET(
     );
 
     if (participantCheck.rows.length === 0) {
-      return NextResponse.json({ 
-        error: "Access denied. You are not part of this conversation." 
-      }, { status: 403 });
+      return NextResponse.json(
+        {
+          error: "Access denied. You are not part of this conversation.",
+        },
+        { status: 403 }
+      );
     }
 
     const taskCheck = await pool.query(
@@ -44,7 +49,10 @@ export async function GET(
     );
 
     if (taskCheck.rows.length === 0) {
-      return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Conversation not found" },
+        { status: 404 }
+      );
     }
 
     const taskId = taskCheck.rows[0].task_id;
@@ -61,13 +69,17 @@ export async function GET(
       [taskId]
     );
 
-    const isOwner = ownerCheck.rows.length > 0 && ownerCheck.rows[0].customer_id === myId;
+    const isOwner =
+      ownerCheck.rows.length > 0 && ownerCheck.rows[0].customer_id === myId;
     const hasPurchased = purchaseCheck.rows.length > 0;
 
     if (!isOwner && !hasPurchased) {
-      return NextResponse.json({ 
-        error: "Access denied. Lead must be purchased to view messages." 
-      }, { status: 403 });
+      return NextResponse.json(
+        {
+          error: "Access denied. Lead must be purchased to view messages.",
+        },
+        { status: 403 }
+      );
     }
 
     const messagesResult = await pool.query(
@@ -85,8 +97,8 @@ export async function GET(
       [conversationId, myId]
     );
 
-    return NextResponse.json({ 
-      messages: messagesResult.rows 
+    return NextResponse.json({
+      messages: messagesResult.rows,
     });
   } catch (error) {
     console.error("Error fetching messages:", error);

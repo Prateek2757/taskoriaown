@@ -13,10 +13,15 @@ export async function POST(req: Request) {
   const { title = null, participantIds = [], taskId } = body;
 
   if (!taskId) {
-    return NextResponse.json({ message: "taskId is required" }, { status: 400 });
+    return NextResponse.json(
+      { message: "taskId is required" },
+      { status: 400 }
+    );
   }
 
-  const uniqueIds = Array.from(new Set([creatorId, ...(participantIds || [])])).sort();
+  const uniqueIds = Array.from(
+    new Set([creatorId, ...(participantIds || [])])
+  ).sort();
 
   const client = await pool.connect();
 
@@ -51,8 +56,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const otherUserIds = uniqueIds.filter(id => id !== creatorId);
-    
+    const otherUserIds = uniqueIds.filter((id) => id !== creatorId);
+
     for (const otherUserId of otherUserIds) {
       const otherPurchaseCheck = await client.query(
         `SELECT 1 FROM task_responses 
@@ -62,7 +67,8 @@ export async function POST(req: Request) {
       );
 
       const otherIsOwner = taskOwner.rows[0]?.customer_id === otherUserId;
-      const otherHasPurchased = otherPurchaseCheck.rowCount && otherPurchaseCheck.rowCount > 0;
+      const otherHasPurchased =
+        otherPurchaseCheck.rowCount && otherPurchaseCheck.rowCount > 0;
 
       if (!otherHasPurchased && !otherIsOwner) {
         await client.query("ROLLBACK");
@@ -91,7 +97,7 @@ export async function POST(req: Request) {
     );
 
     let conversation;
-    
+
     if ((res.rowCount ?? 0) > 0) {
       conversation = { id: res.rows[0].id };
     } else {

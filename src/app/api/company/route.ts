@@ -21,7 +21,10 @@ export async function GET(req: NextRequest) {
     );
 
     if (rows.length === 0) {
-      return NextResponse.json({ message: "Company not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Company not found" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json(rows[0]);
@@ -57,11 +60,16 @@ export async function PUT(req: NextRequest) {
     } = body;
 
     if (!company_name || !contact_name || !contact_email) {
-      return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
     }
 
     const yearsInBusinessInt =
-      years_in_business && years_in_business !== "" ? parseInt(years_in_business, 10) : null;
+      years_in_business && years_in_business !== ""
+        ? parseInt(years_in_business, 10)
+        : null;
 
     const { rowCount } = await client.query(
       `UPDATE company
@@ -91,7 +99,10 @@ export async function PUT(req: NextRequest) {
     );
 
     if (rowCount === 0) {
-      return NextResponse.json({ message: "Company not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Company not found" },
+        { status: 404 }
+      );
     }
 
     const { rows } = await client.query(

@@ -88,7 +88,8 @@ export async function PUT(req: Request) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const userId = session.user.id;
-  const { display_name, location_id, is_nationwide ,profile_image_url} = await req.json();
+  const { display_name, location_id, is_nationwide, profile_image_url } =
+    await req.json();
 
   await pool.query(
     `
@@ -101,7 +102,7 @@ export async function PUT(req: Request) {
       updated_at = NOW()
     WHERE user_id = $5
     `,
-    [display_name, location_id, is_nationwide, profile_image_url,userId]
+    [display_name, location_id, is_nationwide, profile_image_url, userId]
   );
 
   const { rows } = await pool.query(

@@ -1,10 +1,9 @@
 // // app/api/conversations/get-other-user/route.ts
 
 // import { NextRequest, NextResponse } from "next/server";
-// import { getServerSession } from "next-auth";
+// import  getServerSession  from "next-auth";
 // import { Pool } from "pg";
 // import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-
 
 // const pool = new Pool({
 //   connectionString: process.env.DATABASE_URL,
@@ -27,7 +26,7 @@
 
 //     // 🔒 SECURITY CHECK 1: Verify user has purchased this lead
 //     const purchaseCheck = await pool.query(
-//       `SELECT id FROM task_responses 
+//       `SELECT id FROM task_responses
 //        WHERE task_id = $1 AND professional_id = $2 AND purchased = true
 //        LIMIT 1`,
 //       [taskId, myId]
@@ -44,8 +43,8 @@
 
 //     // User must EITHER be the task owner OR have purchased the lead
 //     if (!isOwner && !hasPurchased) {
-//       return NextResponse.json({ 
-//         error: "Access denied. You must purchase this lead first." 
+//       return NextResponse.json({
+//         error: "Access denied. You must purchase this lead first."
 //       }, { status: 403 });
 //     }
 
@@ -63,21 +62,21 @@
 
 //     // 🔒 SECURITY CHECK 2: Verify I am a participant in this conversation
 //     const participantCheck = await pool.query(
-//       `SELECT user_id FROM conversation_participants 
+//       `SELECT user_id FROM conversation_participants
 //        WHERE conversation_id = $1 AND user_id = $2`,
 //       [conversationId, myId]
 //     );
 
 //     if (participantCheck.rows.length === 0) {
-//       return NextResponse.json({ 
-//         error: "Access denied. You are not part of this conversation." 
+//       return NextResponse.json({
+//         error: "Access denied. You are not part of this conversation."
 //       }, { status: 403 });
 //     }
 
 //     // Get the OTHER participant (not me)
 //     const participantsQuery = await pool.query(
-//       `SELECT user_id 
-//        FROM conversation_participants 
+//       `SELECT user_id
+//        FROM conversation_participants
 //        WHERE conversation_id = $1 AND user_id != $2
 //        LIMIT 1`,
 //       [conversationId, myId]
