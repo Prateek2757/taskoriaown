@@ -74,7 +74,7 @@ export default function Services() {
 
         <motion.div
           className="flex gap-8 items-start mb-10 flex-col lg:flex-row
-          bg-white/30 dark:bg-white/5  backdrop-blur-xl shadow-lg shadow-blue-100/20"
+        "
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}

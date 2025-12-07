@@ -1,16 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
-import {
-  Sparkles,
-  Users,
-  Shield,
-  ArrowBigDown,
-  ChevronUp,
-  ChevronDown,
-} from "lucide-react";
+import { Sparkles, Users, Shield } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./ui/button";
 
 const steps = [
   {
@@ -19,7 +11,6 @@ const steps = [
     description:
       "Use our AI assistant to describe your project effortlessly and publish instantly.",
     icon: Sparkles,
-    color: "blue",
   },
   {
     id: 2,
@@ -27,7 +18,6 @@ const steps = [
     description:
       "Our AI connects you with verified professionals who match your specific needs.",
     icon: Users,
-    color: "red",
   },
   {
     id: 3,
@@ -35,7 +25,6 @@ const steps = [
     description:
       "Work seamlessly with real-time chat, milestone tracking, and secure payments.",
     icon: Shield,
-    color: "green",
   },
 ];
 
@@ -68,9 +57,9 @@ export default function HowTaskoriaWorks() {
   return (
     <section
       className="
-        relative py-14 px-4 sm:px-6 lg:px-8 overflow-hidden
+        relative py-14 px-4 sm:px-6 lg:px-8
         text-black bg-white 
-        dark:text-white dark:bg-gray-900
+        dark:text-white dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
       "
     >
       <div
@@ -96,7 +85,7 @@ export default function HowTaskoriaWorks() {
       />
 
       <motion.div
-        className="max-w-8xl mx-auto relative"
+        className="max-w-7xl mx-auto relative"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -104,125 +93,55 @@ export default function HowTaskoriaWorks() {
         <motion.div
           variants={fadeInUp}
           transition={{ duration: 0.7 }}
-          className="text-center mb-20 relative z-20"
+          className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4">
+          <h2 className="text-5xl md:text-6xl font-black mb-4">
             How it works?
           </h2>
-          <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-4">
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             "I dream of one URL that sums it all up to share with Business"
           </p>
         </motion.div>
-        <div className="relative z-10 -top-48 md:top-0 -mb-80 md:mb-0 flex flex-col md:flex-row justify-center items-center mx-auto">
-          <div className="relative h-72 w-72 border-r-6 md:border-b-6 md:border-r-0 border-blue-400 rounded-full flex justify-center items-center p-7">
-            <div className="absolute -right-1/2 bottom-32 md:right-1/2 md:-bottom-3 h-40 md:h-72 w-72 bg-white dark:bg-gray-900"></div>
-          </div>
-          <div className="relative h-72 w-72 border-l-6 md:border-l-0 md:border-t-6 border-blue-400 rounded-full flex justify-center items-center p-7">
-            <span className="absolute z-10 -top-4 md:-left-4 md:top-auto border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
-              <ChevronUp className="text-gray-400 hidden md:block" />
-              <ChevronDown className="text-gray-400 block md:hidden" />
-            </span>
-            <div className="flex flex-col gap-3 justify-center items-center bg-blue-400 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
-              <span
-                className="text-white text-[100px] font-bold"
-                style={{
-                  textShadow: "2px 2px 3px rgba(255,255,255,0.8)",
-                  backgroundColor: "#444",
-                  backgroundClip: "text",
-                  color: "transparent",
-                  lineHeight: "1",
-                }}
-              >
-                1
-              </span>
-              <span className="text-white font-bold text-sm">
-                Post Your Job
-              </span>
-            </div>
-          </div>
-          <div className="relative h-72 w-72 border-r-6 md:border-r-0 md:border-b-6 border-green-400 rounded-full flex justify-center items-center p-7">
-            <span className="absolute z-10 -top-4 md:top-auto md:-left-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
-              <ChevronDown className="text-gray-400" />
-            </span>
-            <div className="flex flex-col gap-3 justify-center items-center bg-green-400 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
-              <span
-                className=" text-white text-[100px] font-bold"
-                style={{
-                  textShadow: "2px 2px 3px rgba(255,255,255,0.8)",
-                  backgroundColor: "#555",
-                  backgroundClip: "text",
-                  color: "transparent",
-                  lineHeight: "1",
-                }}
-              >
-                2
-              </span>
-              <span className="text-white font-bold text-sm">
-                Get Matched Instantly
-              </span>
-            </div>
-          </div>
-          <div className="relative h-72 w-72 border-l-6 md:border-l-0 md:border-t-6 border-cyan-500 rounded-full flex justify-center items-center p-7">
-            <span className="absolute z-10 -top-4 md:top-auto md:-left-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
-              <ChevronUp className="text-gray-400 hidden md:block" />
-              <ChevronDown className="text-gray-400 block md:hidden" />
-            </span>
-            <div className="flex flex-col gap-3 justify-center items-center bg-cyan-500 w-full h-full rounded-full shadow-[9px_20px_20px_-15px_rgba(0,0,0,.5)]">
-              <span
-                className="text-white text-[100px] font-bold"
-                style={{
-                  textShadow: "2px 2px 3px rgba(255,255,255,0.8)",
-                  backgroundColor: "#555",
-                  backgroundClip: "text",
-                  color: "transparent",
-                  lineHeight: "1",
-                }}
-              >
-                3
-              </span>
-              <span className="text-white font-bold text-sm">
-                Start Collaborating
-              </span>
-            </div>
-            <span className="absolute z-10 -bottom-4 md:bottom-auto md:-right-4 border-2 border-gray-400  rounded-full h-8 w-8 flex justify-center items-center bg-white">
-              <ChevronDown className="text-gray-400" />
-            </span>
-          </div>
-          <div className="relative h-72 w-72 border-r-6 md:border-b-6 border-cyan-500 rounded-full flex justify-center items-center p-7">
-            <div className="absolute -right-1/2 bottom-0 md:left-1/2 md:-bottom-3 h-40 md:h-82 w-72 bg-white dark:bg-gray-900"></div>
-          </div>
-        </div>
 
-        <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-4 max-w-6xl mx-auto mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-8 max-w-6xl mx-auto">
           {steps.map((step, index) => (
             <div key={step.id} className="flex flex-col items-center relative">
               <motion.div
                 variants={cardVariant}
                 transition={{ duration: 0.6, delay: index * 0.25 }}
                 className="
-                  group relative w-full rounded-2xl md:rounded-3xl
+                  group relative w-full rounded-3xl p-8
                   bg-white/70 dark:bg-white/5
                   border border-black/10 dark:border-white/20 
                   backdrop-blur-2xl shadow-2xl
-                  
+                  hover:border-[#41A6EE]/60 hover:shadow-[0px_8px_60px_rgba(65,166,238,0.25)]
+                  hover:scale-[1.02]
                   transition-all duration-500
-                  before:absolute before:inset-0 before:rounded-2xl md:before:rounded-3xl
+                  before:absolute before:inset-0 before:rounded-3xl
                   before:bg-gradient-to-br before:from-white/40 before:via-white/10 before:to-transparent
                   dark:before:from-white/10 dark:before:via-white/5 dark:before:to-transparent
                   before:pointer-events-none before:transition-opacity before:duration-500
-                  after:absolute after:inset-0 after:rounded-2xl md:after:rounded-3xl
+                  after:absolute after:inset-0 after:rounded-3xl
                   after:bg-gradient-to-br after:from-[#41A6EE]/20 after:via-[#41A6EE]/5 after:to-transparent
                   after:opacity-0 after:transition-all after:duration-500
+                  hover:after:opacity-100
                   after:pointer-events-none
-                  items-center
                 "
                 style={{
                   boxShadow:
                     "0 8px 32px 0 rgba(0, 0, 0, 0.1), inset 0 1px 1px 0 rgba(255, 255, 255, 0.3)",
                 }}
               >
-                <div className="p-4 md:p-5">
-                  <p className="text-sm md:text-base text-gray-700 dark:text-gray-200 leading-relaxed">
+                <div className="relative z-10">
+                  <div className="bg-white  dark:bg-accent absolute -left-12 -top-16 w-16 h-16 rounded-lg flex items-center justify-center border-2 border-[#41A6EE]  text-[#41A6EE] font-bold text-2xl mb-6 shadow-lg group-hover:shadow-[0px_0px_30px_rgba(65,166,238,0.6)] group-hover:scale-110 transition-all duration-500">
+                    {step.id}
+                  </div>
+
+                  <h3 className="text-2xl font-semibold mb-3 text-gray-900 dark:text-white group-hover:text-[#41A6EE] dark:group-hover:text-[#41A6EE] transition-colors duration-500">
+                    {step.title}
+                  </h3>
+
+                  <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
                     {step.description}
                   </p>
                 </div>
@@ -237,11 +156,19 @@ export default function HowTaskoriaWorks() {
             visible: { opacity: 1, y: 0 },
           }}
           transition={{ duration: 0.6, delay: 1 }}
-          className="text-center mt-17 relative z-20"
+          className="text-center mt-7"
         >
-          <Button className="px-8 md:px-10 py-6 md:py-4 text-base md:text-lg">
-            Start my 1-minute setup
-          </Button>
+          <Link href="/signin">
+            <button
+              className="mt-16
+              px-10 py-4 rounded-full bg-[#41A6EE] hover:bg-[#41A6EE]/80
+              text-white font-bold text-lg shadow-xl 
+              hover:shadow-[#41A6EE]/40 transition-all duration-300 hover:scale-105
+            "
+            >
+              Start my 1-minute setup
+            </button>
+          </Link>
         </motion.div>
       </motion.div>
     </section>

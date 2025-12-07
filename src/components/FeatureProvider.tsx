@@ -4,11 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { Star, Award, CheckCircle2, ArrowRight } from "lucide-react";
+import { Star, Award, CheckCircle2, ArrowRight, Eye } from "lucide-react";
 import { useProviders } from "@/hooks/useProvider";
 
 export const FeatureProvider = () => {
   const { providers, loading } = useProviders(3);
+  console.log("first", providers);
   return (
     <section
       className="
@@ -51,23 +52,6 @@ export const FeatureProvider = () => {
           >
             Connect with verified professionals delivering exceptional service
           </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-          >
-            <Link href="/providers">
-              <Button
-                variant="outline"
-                className="rounded-full px-6 py-2 text-sm font-medium border border-slate-300 dark:border-gray-700 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900 dark:hover:text-blue-300 transition-all duration-300"
-              >
-                View All Providers
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
-          </motion.div>
         </div>
 
         <div className="flex gap-6 max-md:overflow-x-scroll max-md:py-6">
@@ -88,37 +72,41 @@ export const FeatureProvider = () => {
                   className="
                     relative rounded-2xl overflow-hidden
                     bg-white/40 dark:bg-gray-800/40
-                    backdrop-blur-md border border-white/20 dark:border-gray-700
-                    shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300
-                   
+                    backdrop-blur-md dark:border-gray-700
+                   border-1 border-gray-200
                     flex flex-col flex-[1_0_300px] md:flex-1 
+                    p-4
                   "
                 >
-                  <div className="relative h-56 overflow-hidden rounded-t-2xl">
-                    {p.image ? (
-                      <Image
-                        src={p.image}
-                        alt={p.name}
-                        fill
-                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-bold text-3xl">
-                        {p.name
-                          ?.split(" ")
-                          .map((w) => w[0])
-                          .join("")}
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-pink-400/20 mix-blend-soft-light opacity-40"></div>
-                  </div>
-
-                  <div className="p-6 flex flex-col flex-1 justify-between">
+                  <div className="flex gap-3">
+                    <div className="relative h-20 w-20 overflow-hidden rounded-2xl">
+                      {p.image ? (
+                        <Image src={p.image} alt={p.name} fill />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-white dark:bg-accent border-1 rounded-2xl">
+                          <div className="flex flex-col items-center hover:opacity-90 transition-opacity">
+                            <div>
+                              <Image
+                                src="/taskorianewlogo.png"
+                                alt=""
+                                height={0}
+                                width={33}
+                              />
+                            </div>
+                            <span className="text-sm font-bold bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+                              Taskoria
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                     <div>
-                      <h3 className="font-bold text-slate-900 dark:text-white text-base mb-1.5 truncate group-hover:text-blue-400 dark:group-hover:text-blue-300 transition-colors">
+                      <h3 className="capitalize font-bold text-slate-900 dark:text-white text-base  truncate group-hover:text-blue-400 dark:group-hover:text-blue-300 transition-colors">
                         {p.name}
                       </h3>
+                      <p className="text-sm text-gray-400 dark:text-white mb-1.5 truncate group-hover:text-blue-400 dark:group-hover:text-blue-300 transition-colors">
+                        {p.locationname} Location Name
+                      </p>
                       <div className="flex items-center gap-2 flex-wrap">
                         <div className="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded-md border border-amber-100 dark:border-amber-700">
                           <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
@@ -134,9 +122,11 @@ export const FeatureProvider = () => {
                         </span>
                       </div>
                     </div>
+                  </div>
 
+                  <div className=" flex flex-col flex-1 justify-between">
                     <div className="mt-4 mb-3.5">
-                      <p className="text-xs text-slate-600 dark:text-gray-300 line-clamp-2">
+                      <p className="text-sm text-slate-600 dark:text-gray-300 line-clamp-2">
                         {p.services && p.services.length > 0 ? (
                           <>
                             <span className="font-medium text-slate-700 dark:text-gray-200">
@@ -185,15 +175,38 @@ export const FeatureProvider = () => {
                       href={`/providerprofile/${encodeURIComponent(
                         String(p.public_id)
                       )}`}
+                      className="flex gap-1"
                     >
-                      <Button className="w-full h-9 text-sm font-semibold rounded-full bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] hover:shadow-lg text-white shadow-md transition-all duration-300 group-hover:scale-[1.02]">
-                        View Profile
+                      <Button className="flex-1" variant={"outline"}>
+                        Read More
                         <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-0.5 transition-transform" />
+                      </Button>
+                      <Button className="flex-1">
+                        View Profile
+                        <Eye className="w-4 h-4 ml-1.5 group-hover:translate-x-0.5 transition-transform" />
                       </Button>
                     </Link>
                   </div>
                 </motion.div>
               ))}
+        </div>
+        <div className="text-center my-10">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+          >
+            <Link href="/providers">
+              <Button
+                variant="outline"
+                className="rounded-full px-6 py-2 text-sm font-medium border border-slate-300 dark:border-gray-700 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900 dark:hover:text-blue-300 transition-all duration-300"
+              >
+                View All Providers
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </div>
     </section>
