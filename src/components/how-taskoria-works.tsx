@@ -93,7 +93,7 @@ export default function HowTaskoriaWorks() {
         <motion.div
           variants={fadeInUp}
           transition={{ duration: 0.7 }}
-          className="sm:text-center mb-20"
+          className="sm:text-center mb-10 sm:mb-20"
         >
           <h2 className="text-4xl md:text-6xl font-black mb-4">
             How it works?
@@ -103,14 +103,14 @@ export default function HowTaskoriaWorks() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-10 lg:gap-8 max-w-6xl mx-auto max-sm:pl-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-10 lg:gap-8 max-w-6xl mx-auto">
           {steps.map((step, index) => (
             <div key={step.id} className="flex flex-col items-center relative">
               <motion.div
                 variants={cardVariant}
                 transition={{ duration: 0.6, delay: index * 0.25 }}
                 className="
-                  group relative w-full rounded-3xl p-8
+                  group relative w-full rounded-3xl p-6 sm:p-8
                   bg-white/70 dark:bg-white/5
                   border border-black/10 dark:border-white/20 
                   backdrop-blur-2xl shadow-2xl
@@ -133,15 +133,15 @@ export default function HowTaskoriaWorks() {
                 }}
               >
                 <div className="relative z-10">
-                  <div className="bg-white  dark:bg-accent absolute -left-12 -top-16 w-16 h-16 rounded-lg flex items-center justify-center border-2 border-[#41A6EE]  text-[#41A6EE] font-bold text-2xl mb-6 shadow-lg group-hover:shadow-[0px_0px_30px_rgba(65,166,238,0.6)] group-hover:scale-110 transition-all duration-500">
+                  <div className="bg-white  dark:bg-accent sm:absolute -left-12 -top-16 w-16 h-16 rounded-lg flex items-center justify-center border-1 sm:border-2 border-[#41A6EE]  text-[#41A6EE] font-bold text-2xl mb-6 shadow-lg group-hover:shadow-[0px_0px_30px_rgba(65,166,238,0.6)] group-hover:scale-110 transition-all duration-500">
                     {step.id}
                   </div>
 
-                  <h3 className="text-2xl font-semibold mb-3 text-gray-900 dark:text-white group-hover:text-[#41A6EE] dark:group-hover:text-[#41A6EE] transition-colors duration-500">
+                  <h3 className="text-xl max-sm:mb-0 sm:text-2xl font-semibold mb-3 text-gray-900 dark:text-white group-hover:text-[#41A6EE] dark:group-hover:text-[#41A6EE] transition-colors duration-500">
                     {step.title}
                   </h3>
 
-                  <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <p className="max-sm:text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
                     {step.description}
                   </p>
                 </div>
