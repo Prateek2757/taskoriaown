@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { motion } from "motion/react";
 import { Loader2 } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import axios from "axios";
 import { toast } from "sonner";
@@ -15,12 +15,14 @@ export default function SignInPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-//  const searchParams = useSearchParams();
-//   const error = searchParams.get("error");
+ const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const error = searchParams.get("error");
 
-//     if (error === "not_registered") {
-//       toast.error("This Google account is not registered.");
-//     }
+    if (error === "not_registered") {
+      toast.error("This Google account is not registered.");
+    }
+ 
 
   const { joinAsProvider, loading: joinLoading } = useJoinAsProvider();
 

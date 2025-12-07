@@ -3,10 +3,10 @@ import pool from "@/lib/dbConnect";
 
 export async function GET(
   req: Request,
-  { params }: { params: { category_id: string } }
+   context : { params: Promise<{ category_id: string }> }
 ) {
   try {
-    const categoryId =   parseInt(params.category_id, 10);
+    const categoryId =   parseInt((await context.params).category_id, 10);
     if (isNaN(categoryId)) {
       return NextResponse.json(
         { message: "Invalid category_id" },
