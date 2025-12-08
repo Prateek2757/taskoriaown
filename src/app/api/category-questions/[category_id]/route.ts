@@ -30,7 +30,6 @@ export async function GET(
       [categoryId]
     );
 
-    // Always return an array, even if empty
     return NextResponse.json(result.rows);
   } catch (err: any) {
     console.error("Error fetching category questions:", err);

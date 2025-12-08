@@ -535,7 +535,8 @@ export default function HeroSection() {
               onClick={handlePostJob}
               disabled={loading}
               className="flex-1 py-5
-                bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white "
+                bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white  "
+                
             >
               Post a Job <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

@@ -256,7 +256,6 @@ interface CardProps {
 }
 
 export const Card = ({ i, title, description, url, isEven }: CardProps) => {
-  console.log("first", isEven);
   return (
     <>
       <div className="flex items-center justify-center">

@@ -67,6 +67,8 @@ html {
   --animate-marquee-vertical-reverse: marquee-vertical-reverse var(--duration)
     linear infinite;
 
+    
+
   @keyframes marquee {
     from {
       transform: translateX(0);

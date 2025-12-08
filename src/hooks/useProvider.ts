@@ -16,6 +16,7 @@ interface Provider {
     image?: string;
     joineddate?:string;
     locationname?:string;
+    nationwide?:boolean;
     hourly_rate: number;
     badges?: string[];
   }

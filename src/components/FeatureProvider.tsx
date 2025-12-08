@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { Star, Award, CheckCircle2, ArrowRight, Eye } from "lucide-react";
+import { Star, Award, CheckCircle2, ArrowRight, Eye, LocateIcon, MapPin } from "lucide-react";
 import { useProviders } from "@/hooks/useProvider";
 
 export const FeatureProvider = () => {
@@ -104,9 +104,10 @@ export const FeatureProvider = () => {
                       <h3 className="capitalize font-bold text-slate-900 dark:text-white text-base  truncate group-hover:text-blue-400 dark:group-hover:text-blue-300 transition-colors">
                         {p.name}
                       </h3>
-                      <p className="text-sm text-gray-400 dark:text-white mb-1.5 truncate group-hover:text-blue-400 dark:group-hover:text-blue-300 transition-colors">
-                        {p.locationname} Location Name
-                      </p>
+                      <span className=" flex text-sm text-gray-400 dark:text-white mb-1.5 truncate group-hover:text-blue-400 dark:group-hover:text-blue-300 transition-colors">
+                                              <MapPin className="w-3 h-5 mr-1"/> {p.nationwide ? "Nationwide Serving" : p.locationname}
+
+                      </span>
                       <div className="flex items-center gap-2 flex-wrap">
                         <div className="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded-md border border-amber-100 dark:border-amber-700">
                           <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
