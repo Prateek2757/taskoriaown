@@ -405,105 +405,105 @@ export default function HeroSection() {
   };
 
   return (
-    <section
-      className="relative py-11 text-center overflow-hidden  bg-[raial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(255,255,255,1)_30%,rgba(245,245,245,1)_100%)]
-  dark:bg-[radial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)] "
-    >
+    <section className="relative py-6 sm:py-11 text-center overflow-hidden  bg-[raial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(255,255,255,1)_30%,rgba(245,245,245,1)_100%)]  dark:bg-[radial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)] ">
       <img
         src="/images/bglines.png"
         className="absolute top-0 left-0 w-full h-full object-cover opacity-50"
       />
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto space-y-8">
-          <div className="inline-flex items-center gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-4">
-            <Sparkles className="h-4 w-4 text-blue-600" /> AI-Powered •
-            Community Driven
-          </div>
-          <h1 className="text-3xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
-            The Future of{" "}
-            <span className="relative inline-block bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
-              Service
-              <span className="absolute right-0 bottom-0 translate-y-3 w-full h-5 overflow-hidden">
-                <SparklesCore
-                  background="transparent"
-                  minSize={0.4}
-                  maxSize={1.7}
-                  particleDensity={1100}
-                  className="w-full h-full"
-                  particleColor={theme === "dark" ? "#fff" : "#000"}
-                />{" "}
-                <div className="absolute inset-x-20  top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-                <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
-                <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-                <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
+          <div className="max-sm:min-h-lvh max-sm:flex max-sm:flex-col max-sm:justify-center max-sm:-mt-10">
+            <div className="inline-flex items-center justify-center gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-4">
+              <Sparkles className="h-4 w-4 text-blue-600" /> AI-Powered •
+              Community Driven
+            </div>
+            <h1 className="text-3xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
+              The Future of{" "}
+              <span className="relative inline-block bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+                Service
+                <span className="absolute right-0 bottom-0 translate-y-3 w-full h-5 overflow-hidden">
+                  <SparklesCore
+                    background="transparent"
+                    minSize={0.4}
+                    maxSize={1.7}
+                    particleDensity={1100}
+                    className="w-full h-full"
+                    particleColor={theme === "dark" ? "#fff" : "#000"}
+                  />{" "}
+                  <div className="absolute inset-x-20  top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
+                  <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
+                  <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
+                  <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
+                </span>
+              </span>{" "}
+              <span className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+                Marketplaces
               </span>
-            </span>{" "}
-            <span className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
-              Marketplaces
-            </span>
-          </h1>
+            </h1>
 
-          <p className="max-w-xl mx-auto mt-4 text-[15px] text-gray-400 dark:text-gray-300 hidden sm:block">
-            Connect with verified professionals through our AI-powered platform.
-            Experience trust, transparency, and innovation in every service
-            interaction.
-          </p>
+            <p className="max-w-xl mx-auto mt-4 text-[15px] text-gray-400 dark:text-gray-300 hidden sm:block">
+              Connect with verified professionals through our AI-powered
+              platform. Experience trust, transparency, and innovation in every
+              service interaction.
+            </p>
 
-          <div className="max-w-2xl mx-auto mt-6 sm:px-4">
-            <div className="relative w-full max-w-3xl group flex sm:items-center max-sm:gap-2">
-              <div className="relative flex-1 sm:mr-4 w-full">
-                <div className="absolute -inset-[2px] rounded-lg bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] blur-md opacity-0 group-hover:opacity-100 transition duration-500" />
-                <div className="relative flex items-center bg-white dark:bg-gray-800    rounded-lg  hover:shadow-lg transition-all duration-300">
-                  <CategorySearch
-                    onSelect={handleSelectCategory}
-                    placeholder="What service you need? (e.g. Cleaning, Web)"
-                  />
+            <div className="max-w-2xl mx-auto mt-6 sm:px-4">
+              <div className="relative w-full max-w-3xl group flex sm:items-center max-sm:gap-2">
+                <div className="relative flex-1 sm:mr-4 w-full">
+                  <div className="absolute -inset-[2px] rounded-lg bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] blur-md opacity-0 group-hover:opacity-100 transition duration-500" />
+                  <div className="relative flex items-center bg-white dark:bg-gray-800    rounded-lg  hover:shadow-lg transition-all duration-300">
+                    <CategorySearch
+                      onSelect={handleSelectCategory}
+                      placeholder="What service you need? (e.g. Cleaning, Web)"
+                    />
+                  </div>
                 </div>
+
+                <Link
+                  href={`/services/${slugvalue}`}
+                  className="sm:w-auto sm:mt-0"
+                >
+                  <Button className="w-full sm:w-auto bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold  sm:px-7 py-5  shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-cyan-700 active:scale-[0.97] transition-all duration-200">
+                    <span className="max-sm:hidden">Search</span>
+                    <div className="sm:hidden">
+                      <Search />
+                    </div>
+                  </Button>
+                </Link>
               </div>
 
-              <Link
-                href={`/services/${slugvalue}`}
-                className="sm:w-auto sm:mt-0"
-              >
-                <Button className="w-full sm:w-auto bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold  sm:px-7 py-5  shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-cyan-700 active:scale-[0.97] transition-all duration-200">
-                  <span className="max-sm:hidden">Search</span>
-                  <div className="sm:hidden">
-                    <Search />
-                  </div>
-                </Button>
-              </Link>
+              <div className="flex items-center justify-center gap-2 mt-2 sm:mt-4 text-sm text-gray-500 dark:text-gray-400">
+                <MapPin className="w-4 h-4" /> Serving 50+ cities
+              </div>
             </div>
-
-            <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500 dark:text-gray-400">
-              <MapPin className="w-4 h-4" /> Serving 50+ cities
-            </div>
-          </div>
-          <div className="flex gap-4 justify-center max-w-md mx-auto mt-6">
-            <Button
-              onClick={handlePostJob}
-              disabled={loading}
-              className="flex-1 py-5
-                bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white "
-            >
-              Post a Job <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-
-            <NewRequestModal
-              open={openModal}
-              onClose={() => setOpenModal(false)}
-              presetCategory={selectedCategory}
-            />
-
-            {!session && (
+            <div className="flex gap-2 sm:gap-4 justify-center max-w-md mx-auto mt-6 max-sm:mx-0">
               <Button
-                variant="outline"
-                onClick={joinAsProvider}
-                className="flex-1 py-5"
+                onClick={handlePostJob}
+                disabled={loading}
+                className="flex-1 py-5
+                bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white "
               >
-                Join as Provider
+                Post a Job <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
-            )}
+
+              <NewRequestModal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                presetCategory={selectedCategory}
+              />
+
+              {!session && (
+                <Button
+                  variant="outline"
+                  onClick={joinAsProvider}
+                  className="flex-1 py-5"
+                >
+                  Join as Provider
+                </Button>
+              )}
+            </div>
           </div>
+
           <div
             className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto mt-6 
   bg-[rgba(255,255,255,.2)] dark:bg-white/5 backdrop-blur-[2px] 
