@@ -407,7 +407,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className="bg-gray-50 relative py-11 text-center overflow-hidden 
+      className="relative py-11 text-center overflow-hidden 
   dark:bg-[radial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)] "
     >
       {/* <Earth
