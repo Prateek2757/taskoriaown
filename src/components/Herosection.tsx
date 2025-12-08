@@ -365,6 +365,7 @@ import CategorySearch from "./category/CategorySearch";
 import { SparklesCore } from "./ui/sparkles";
 import { useTheme } from "next-themes";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
+import Earth from "./ui/globe";
 
 interface Category {
   category_id: number;
@@ -406,13 +407,20 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative py-11 text-center overflow-hidden  bg-[raial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(255,255,255,1)_30%,rgba(245,245,245,1)_100%)]
+      className="bg-gray-50 relative py-11 text-center overflow-hidden 
   dark:bg-[radial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)] "
     >
-      <img
+      <Earth
+        mapBrightness={6}
+        dark={0}
+        baseColor={[1, 1, 1]}
+        glowColor={[1, 1, 1]}
+        className="absolute h-[800px] max-w-[900px] left-1/2 bottom-0 -translate-x-1/2 -translate-y-0 opacity-5"
+      />
+      {/* <img
         src="/images/bglines.png"
         className="absolute top-0 left-0 w-full h-full object-cover opacity-50"
-      />
+      /> */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="inline-flex items-center gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-4">
