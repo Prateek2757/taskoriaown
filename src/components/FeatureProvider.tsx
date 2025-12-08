@@ -105,7 +105,7 @@ export const FeatureProvider = () => {
                         {p.name}
                       </h3>
                       <span className=" flex text-sm text-gray-400 dark:text-white mb-1.5 truncate group-hover:text-blue-400 dark:group-hover:text-blue-300 transition-colors">
-                                              <MapPin className="w-3 h-5 mr-1"/> {p.nationwide ? "Nationwide Serving" : p.locationname}
+                                              <MapPin className="w-3 h-5 mr-1"/> {p.nationwide ? "Nationwide Coverage" : p.locationname}
 
                       </span>
                       <div className="flex items-center gap-2 flex-wrap">
