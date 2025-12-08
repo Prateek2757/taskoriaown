@@ -412,7 +412,7 @@ export default function HeroSection() {
       />
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto space-y-8">
-          <div className="max-sm:min-h-lvh max-sm:flex max-sm:flex-col max-sm:justify-center max-sm:-mt-20">
+          <div className="max-sm:min-h-lvh max-sm:flex max-sm:flex-col max-sm:justify-center max-sm:-mt-14">
             <div className="inline-flex items-center justify-center gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-4">
               <Sparkles className="h-4 w-4 text-blue-600" /> AI-Powered •
               Community Driven
