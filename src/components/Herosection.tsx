@@ -443,7 +443,7 @@ export default function HeroSection() {
             </span>
           </h1>
 
-          <p className="max-w-xl mx-auto mt-4 text-[15px] text-gray-400 dark:text-gray-300">
+          <p className="max-w-xl mx-auto mt-4 text-[15px] text-gray-400 dark:text-gray-300 hidden sm:block">
             Connect with verified professionals through our AI-powered platform.
             Experience trust, transparency, and innovation in every service
             interaction.
@@ -478,7 +478,32 @@ export default function HeroSection() {
               <MapPin className="w-4 h-4" /> Serving 50+ cities
             </div>
           </div>
+          <div className="flex gap-4 justify-center max-w-md mx-auto mt-6">
+            <Button
+              onClick={handlePostJob}
+              disabled={loading}
+              className="flex-1 py-5
+                bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white "
+            >
+              Post a Job <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
 
+            <NewRequestModal
+              open={openModal}
+              onClose={() => setOpenModal(false)}
+              presetCategory={selectedCategory}
+            />
+
+            {!session && (
+              <Button
+                variant="outline"
+                onClick={joinAsProvider}
+                className="flex-1 py-5"
+              >
+                Join as Provider
+              </Button>
+            )}
+          </div>
           <div
             className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto mt-6 
   bg-[rgba(255,255,255,.2)] dark:bg-white/5 backdrop-blur-[2px] 
@@ -528,34 +553,6 @@ export default function HeroSection() {
                 </div>
               </div>
             ))}
-          </div>
-
-          <div className="flex gap-4 justify-center max-w-md mx-auto mt-6">
-            <Button
-              onClick={handlePostJob}
-              disabled={loading}
-              className="flex-1 py-5
-                bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white  "
-                
-            >
-              Post a Job <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-
-            <NewRequestModal
-              open={openModal}
-              onClose={() => setOpenModal(false)}
-              presetCategory={selectedCategory}
-            />
-
-            {!session && (
-              <Button
-                variant="outline"
-                onClick={joinAsProvider}
-                className="flex-1 py-5"
-              >
-                Join as Provider
-              </Button>
-            )}
           </div>
         </div>
       </div>
