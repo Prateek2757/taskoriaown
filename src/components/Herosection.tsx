@@ -419,7 +419,7 @@ export default function HeroSection() {
             <Sparkles className="h-4 w-4 text-blue-600" /> AI-Powered •
             Community Driven
           </div>
-          <h1 className="text-3xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-8 md:mt-0">
+          <h1 className="text-3xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
             The Future of{" "}
             <span className="relative inline-block bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
               Service
@@ -544,7 +544,7 @@ export default function HeroSection() {
       `}
               >
                 <div
-                  className={`text-4xl font-extrabold bg-gradient-to-r ${item.gradient} bg-clip-text text-transparent`}
+                  className={`text-xl font-extrabold bg-gradient-to-r ${item.gradient} bg-clip-text text-transparent`}
                 >
                   {item.value}
                 </div>
