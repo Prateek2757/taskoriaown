@@ -412,7 +412,7 @@ export default function HeroSection() {
       />
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto space-y-8">
-          <div className="max-sm:min-h-lvh max-sm:flex max-sm:flex-col max-sm:justify-center max-sm:-mt-10">
+          <div className="max-sm:min-h-lvh max-sm:flex max-sm:flex-col max-sm:justify-center max-sm:-mt-20">
             <div className="inline-flex items-center justify-center gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-4">
               <Sparkles className="h-4 w-4 text-blue-600" /> AI-Powered •
               Community Driven
@@ -508,7 +508,7 @@ export default function HeroSection() {
             className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto mt-6 
   bg-[rgba(255,255,255,.2)] dark:bg-white/5 backdrop-blur-[2px] 
   border dark:border-white/10 
-  rounded-2xl p-6 shadow-[0_4px_30px_rgba(0,0,0,.1)] border-[rgba(255,255,255,.3)]"
+  rounded-2xl p-6 shadow-[0_4px_30px_rgba(0,0,0,.1)] border-[rgba(255,255,255,.3)] max-sm:-mt-20"
           >
             {[
               {
