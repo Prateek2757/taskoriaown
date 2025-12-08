@@ -71,7 +71,6 @@ export default function ModernNavbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
   useEffect(() => {
     if (!session) return;
 
@@ -82,7 +81,8 @@ export default function ModernNavbar() {
       return;
     }
 
-    const defaultView = session.user.role === "provider" ? "provider" : "customer";
+    const defaultView =
+      session.user.role === "provider" ? "provider" : "customer";
     setViewMode(defaultView);
     localStorage.setItem("viewMode", defaultView);
   }, [session]);
@@ -96,7 +96,6 @@ export default function ModernNavbar() {
     window.addEventListener("viewModeChanged", update);
     return () => window.removeEventListener("viewModeChanged", update);
   }, []);
-
 
   const handleLogout = async () => {
     setIsProfileOpen(false);
@@ -218,14 +217,16 @@ export default function ModernNavbar() {
 
   return (
     <>
-      <header className="
+      <header
+        className="
   sticky top-0 z-50 
   backdrop-blur-xl
   bg-white/30 dark:bg-gray-900/20 
   border-b border-white/40 dark:border-white/10
   shadow-lg shadow-black/5 dark:shadow-white/5
   transition-colors
-">
+"
+      >
         <div className="container mx-auto px-4 py-2 flex items-center justify-between relative">
           <Link
             href="/"
@@ -262,30 +263,32 @@ export default function ModernNavbar() {
                   />
                 </Link>
               ))} */}
-              <SlidingUnderlineNav currentLinks={currentLinks} pathname={pathname} />
-
+              <SlidingUnderlineNav
+                currentLinks={currentLinks}
+                pathname={pathname}
+              />
             </motion.nav>
           )}
 
           {!minimalPages.includes(pathname) && (
             <div className="hidden md:flex items-center gap-3">
-
               {session ? (
                 <div className="relative" ref={profileRef}>
                   <Button
                     onClick={() => setIsProfileOpen((p) => !p)}
                     variant="ghost"
                     className=" flex items-center gap-2 px py-2 rounded-full transition-all "
-
                   >
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center  bg-gradient-to-br from-blue-100 to-cyan-100
+                    <div
+                      className="w-9 h-9 rounded-full flex items-center justify-center  bg-gradient-to-br from-blue-100 to-cyan-100
                                        dark:from-blue-900 dark:to-cyan-900
-                                                    transition-all  group-hover:scale-[1.05]">
+                                                    transition-all  group-hover:scale-[1.05]"
+                    >
                       <User className="w-5 h-5 text-blue-600 dark:text-blue-300" />
                     </div>
 
                     <span className="font-medium text-gray-700 dark:text-gray-300">
-                      {session.user?.name?.split(' ')[0] || 'User'}
+                      {session.user?.name?.split(" ")[0] || "User"}
                     </span>
 
                     <ChevronDown
@@ -298,9 +301,7 @@ export default function ModernNavbar() {
                   <AnimatePresence>
                     {isProfileOpen && renderProfileDropdown()}
                   </AnimatePresence>
-
                 </div>
-
               ) : (
                 <>
                   <Button
@@ -312,14 +313,13 @@ export default function ModernNavbar() {
                   </Button>
                   <Button
                     onClick={joinAsProvider}
-                    className="rounded-full bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
+                    className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
                     Join as Provider
                   </Button>
                 </>
               )}
               <ThemeToggle />
-
             </div>
           )}
 
@@ -369,7 +369,6 @@ export default function ModernNavbar() {
                     <span className="text-2xl font-bold bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
                       Taskoria
                     </span>
-
                   </Link>
                   <div className="p-1">
                     <ThemeToggle />
@@ -406,8 +405,6 @@ export default function ModernNavbar() {
                 )}
               </div>
 
-
-
               <nav className="p-4 space-y-2">
                 {currentLinks.map((link) => {
                   const Icon = link.icon;
@@ -417,14 +414,18 @@ export default function ModernNavbar() {
                       key={link.name}
                       href={link.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-full font-medium transition-colors ${isActive
-                        ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg"
-                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-                        }`}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-full font-medium transition-colors ${
+                        isActive
+                          ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg"
+                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                      }`}
                     >
                       <Icon
-                        className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-500 dark:text-gray-400"
-                          }`}
+                        className={`w-5 h-5 ${
+                          isActive
+                            ? "text-white"
+                            : "text-gray-500 dark:text-gray-400"
+                        }`}
                       />
                       <span>{link.name}</span>
                     </Link>

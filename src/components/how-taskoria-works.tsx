@@ -3,6 +3,9 @@
 import { motion } from "motion/react";
 import { Sparkles, Users, Shield, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { useRef } from "react";
+import { AnimatedBeam, Circle, Icons } from "./ui/animated-beam";
+import { Button } from "./ui/button";
 
 const steps = [
   {
@@ -54,6 +57,10 @@ const arrowMobileVariant = {
 };
 
 export default function HowTaskoriaWorks() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const div1Ref = useRef<HTMLDivElement>(null);
+  const div2Ref = useRef<HTMLDivElement>(null);
+  const div3Ref = useRef<HTMLDivElement>(null);
   return (
     <section
       className="
@@ -93,7 +100,7 @@ export default function HowTaskoriaWorks() {
         <motion.div
           variants={fadeInUp}
           transition={{ duration: 0.7 }}
-          className="sm:text-center mb-10 sm:mb-20"
+          className="sm:text-center mb-10 sm:mb-15"
         >
           <h2 className="text-4xl md:text-6xl font-black mb-4">
             How it works?
@@ -102,6 +109,60 @@ export default function HowTaskoriaWorks() {
             "I dream of one URL that sums it all up to share with Business"
           </p>
         </motion.div>
+        <div
+          className="relative flex max-w-6xl h-16 mx-auto items-center justify-center overflow-hidden"
+          ref={containerRef}
+        >
+          <div className="flex h-full w-full items-stretch justify-between gap-10">
+            <div className="flex flex-row justify-between">
+              <Circle
+                className="p-2 shadow-none border-[#41A6EE]"
+                ref={div1Ref}
+              >
+                <span className="dark:text-gray-900 text-[#41A6EE] font-bold text-lg">
+                  1
+                </span>
+              </Circle>
+            </div>
+            <div className="flex flex-row justify-between">
+              <Circle
+                className="p-2 shadow-none border-purple-700"
+                ref={div2Ref}
+              >
+                <span className="dark:text-gray-900 text-purple-700 font-bold text-lg">
+                  2
+                </span>
+              </Circle>
+            </div>
+            <div className="flex flex-row justify-between">
+              <Circle
+                className="p-2 shadow-none border-green-500"
+                ref={div3Ref}
+              >
+                <span className="dark:text-gray-900 text-green-500 font-bold text-lg">
+                  3
+                </span>
+              </Circle>
+            </div>
+          </div>
+
+          <AnimatedBeam
+            duration={6}
+            containerRef={containerRef}
+            fromRef={div1Ref}
+            toRef={div2Ref}
+            gradientStartColor="#41A6EE"
+            gradientStopColor="#41A6EE"
+          />
+          <AnimatedBeam
+            duration={6}
+            containerRef={containerRef}
+            fromRef={div2Ref}
+            toRef={div3Ref}
+            gradientStartColor="oklch(49.6% 0.265 301.924)"
+            gradientStopColor="oklch(49.6% 0.265 301.924)"
+          />
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-10 lg:gap-8 max-w-6xl mx-auto">
           {steps.map((step, index) => (
@@ -110,38 +171,23 @@ export default function HowTaskoriaWorks() {
                 variants={cardVariant}
                 transition={{ duration: 0.6, delay: index * 0.25 }}
                 className="
-                  group relative w-full rounded-3xl p-6 sm:p-8
+                  group relative w-full rounded-xl p-6 sm:p-8
                   bg-white/70 dark:bg-white/5
                   border border-black/10 dark:border-white/20 
-                  backdrop-blur-2xl shadow-2xl
-                  hover:border-[#41A6EE]/60 hover:shadow-[0px_8px_60px_rgba(65,166,238,0.25)]
-                  hover:scale-[1.02]
-                  transition-all duration-500
-                  before:absolute before:inset-0 before:rounded-3xl
-                  before:bg-gradient-to-br before:from-white/40 before:via-white/10 before:to-transparent
                   dark:before:from-white/10 dark:before:via-white/5 dark:before:to-transparent
-                  before:pointer-events-none before:transition-opacity before:duration-500
-                  after:absolute after:inset-0 after:rounded-3xl
-                  after:bg-gradient-to-br after:from-[#41A6EE]/20 after:via-[#41A6EE]/5 after:to-transparent
-                  after:opacity-0 after:transition-all after:duration-500
-                  hover:after:opacity-100
-                  after:pointer-events-none
+                 
                 "
-                style={{
-                  boxShadow:
-                    "0 8px 32px 0 rgba(0, 0, 0, 0.1), inset 0 1px 1px 0 rgba(255, 255, 255, 0.3)",
-                }}
               >
                 <div className="relative z-10">
-                  <div className="bg-white  dark:bg-accent sm:absolute -left-12 -top-16 w-16 h-16 rounded-lg flex items-center justify-center border-1 sm:border-2 border-[#41A6EE]  text-[#41A6EE] font-bold text-2xl mb-6 shadow-lg group-hover:shadow-[0px_0px_30px_rgba(65,166,238,0.6)] group-hover:scale-110 transition-all duration-500">
+                  {/* <div className="bg-white  dark:bg-accent sm:absolute -left-12 -top-16 w-16 h-16 rounded-lg flex items-center justify-center border-1 sm:border-2 border-[#41A6EE]  text-[#41A6EE] font-bold text-2xl mb-6 shadow-lg">
                     {step.id}
-                  </div>
+                  </div> */}
 
-                  <h3 className="text-xl max-sm:mb-0 sm:text-2xl font-semibold mb-3 text-gray-900 dark:text-white group-hover:text-[#41A6EE] dark:group-hover:text-[#41A6EE] transition-colors duration-500">
+                  <h3 className="text-xl max-sm:mb-0 sm:text-xl font-semibold mb-3  dark:text-white ">
                     {step.title}
                   </h3>
 
-                  <p className="max-sm:text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
+                  <p className="max-sm:text-sm  text-gray-700 dark:text-gray-200 leading-relaxed">
                     {step.description}
                   </p>
                 </div>
@@ -156,15 +202,18 @@ export default function HowTaskoriaWorks() {
             visible: { opacity: 1, y: 0 },
           }}
           transition={{ duration: 0.6, delay: 1 }}
-          className="text-center mt-7"
+          className="text-center mt-12"
         >
           <Link href="/signin">
-            <button className="group px-8 py-3 bg-white dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300 rounded-full font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30">
+            <Button
+              size={"lg"}
+              className="group bg-white dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300  font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30"
+            >
               <span className="flex items-center gap-2">
                 Start My 1-Minute Setup
                 <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 duration-300 group-hover:rotate-45" />
               </span>
-            </button>
+            </Button>
           </Link>
           {/* <Link href="/signin">
             <button

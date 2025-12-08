@@ -4,7 +4,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { Star, Award, CheckCircle2, ArrowRight, Eye, LocateIcon, MapPin } from "lucide-react";
+import {
+  Star,
+  Award,
+  CheckCircle2,
+  ArrowRight,
+  Eye,
+  LocateIcon,
+  MapPin,
+  ArrowUpRight,
+} from "lucide-react";
 import { useProviders } from "@/hooks/useProvider";
 
 export const FeatureProvider = () => {
@@ -105,8 +114,8 @@ export const FeatureProvider = () => {
                         {p.name}
                       </h3>
                       <span className=" flex text-sm text-gray-400 dark:text-white mb-1.5 truncate group-hover:text-blue-400 dark:group-hover:text-blue-300 transition-colors">
-                                              <MapPin className="w-3 h-5 mr-1"/> {p.nationwide ? "Nationwide Coverage" : p.locationname}
-
+                        <MapPin className="w-3 h-5 mr-1" />{" "}
+                        {p.nationwide ? "Nationwide Coverage" : p.locationname}
                       </span>
                       <div className="flex items-center gap-2 flex-wrap">
                         <div className="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded-md border border-amber-100 dark:border-amber-700">
@@ -199,12 +208,11 @@ export const FeatureProvider = () => {
             transition={{ duration: 0.4, delay: 0.3 }}
           >
             <Link href="/providers">
-              <Button
-                variant="outline"
-                className="rounded-full px-6 py-2 text-sm font-medium border border-slate-300 dark:border-gray-700 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900 dark:hover:text-blue-300 transition-all duration-300"
-              >
-                View All Providers
-                <ArrowRight className="w-4 h-4 ml-2" />
+              <Button className="group bg-white dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300 font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30">
+                <span className="flex items-center gap-2">
+                  View All Providers
+                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 duration-300 group-hover:rotate-45" />
+                </span>
               </Button>
             </Link>
           </motion.div>

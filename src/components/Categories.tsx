@@ -4,6 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
+import { Button } from "./ui/button";
 
 const containerVariants: Variants = {
   hidden: {},
@@ -188,12 +189,12 @@ export default function Services() {
             transition={{ duration: 0.6, delay: 0.8 }}
           >
             <Link href="/services">
-              <button className="group px-8 py-3 bg-white dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300 rounded-full font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30">
+              <Button className="group bg-white dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300 font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30">
                 <span className="flex items-center gap-2">
                   View All Services
                   <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 duration-300 group-hover:rotate-45" />
                 </span>
-              </button>
+              </Button>
             </Link>
           </motion.div>
         )}

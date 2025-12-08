@@ -544,7 +544,7 @@ export default function HeroSection() {
       `}
               >
                 <div
-                  className={`text-xl font-extrabold bg-gradient-to-r ${item.gradient} bg-clip-text text-transparent`}
+                  className={`text-xl sm:text-4xl font-extrabold bg-gradient-to-r ${item.gradient} bg-clip-text text-transparent`}
                 >
                   {item.value}
                 </div>
