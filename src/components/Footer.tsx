@@ -123,7 +123,7 @@ const Footer = () => {
       <Link href="/services" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
         Find Services
       </Link>
-      <Link href="/community" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
+      <Link href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
         Community
       </Link>
       <Link href="/post-job" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
@@ -150,7 +150,7 @@ const Footer = () => {
       className={`sm:block overflow-hidden transition-all duration-300 
         ${openSection === 'providers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
     >
-      <Link href="/become-provider" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
+      <Link href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
         Join as Provider
       </Link>
       <a className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Success Stories</a>
