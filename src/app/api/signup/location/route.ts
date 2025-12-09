@@ -6,7 +6,7 @@ import pool from "@/lib/dbConnect";
 export async function GET() {
   try {
     const result = await pool.query(`
-      SELECT city_id, name FROM cities ORDER BY name
+      SELECT city_id, name FROM cities ORDER BY popularity DESC ,name ASC
     `);
     return NextResponse.json(result.rows);
   } catch (err: unknown) {

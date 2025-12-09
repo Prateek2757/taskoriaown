@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Script from "next/script";
 import Link from "next/link";
 import { MapPin, ArrowRight, Shield, Zap, Award, Star, Sparkles, TrendingUp, Clock } from "lucide-react";
+import { useLeadProfile } from "@/hooks/useLeadProfile";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,7 @@ interface City {
 }
 
 export default function ServicePage() {
+  const { cities , loading:citiesLoading } = useLeadProfile();
   const params = useParams();
   const slug = params.slug?.join("/") || "";
   const [service, setService] = useState<ServiceData | null>(null);
@@ -45,7 +47,7 @@ export default function ServicePage() {
   const popularCities: City[] = [
     {
       name: "Sydney",
-      image: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800&h=600&fit=crop",
+      image: "https://images.unsplash.com/photo-1523059623039-a9ed027e7fad?w=800&h=600&fit=crop",
       activeProviders: 248,
       providers: [
         { name: "Elite Home Services", rating: 4.9, logo: "🏆", completedJobs: 156 },
@@ -55,7 +57,7 @@ export default function ServicePage() {
     },
     {
       name: "Melbourne",
-      image: "https://images.unsplash.com/photo-1514395462725-fb4566210144?w=800&h=600&fit=crop",
+      image: "https://images.unsplash.com/photo-1609036394821-b63e8168dc64?q=80&w=1548&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       activeProviders: 192,
       providers: [
         { name: "Expert Hands", rating: 4.9, logo: "🎯", completedJobs: 178 },
@@ -65,7 +67,7 @@ export default function ServicePage() {
     },
     {
       name: "Brisbane",
-      image: "https://images.unsplash.com/photo-1523059623039-a9ed027e7fad?w=800&h=600&fit=crop",
+      image: "https://images.unsplash.com/photo-1702252212983-db7e428cc3cf?q=80&w=1880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       activeProviders: 156,
       providers: [
         { name: "Top Tier Pros", rating: 4.8, logo: "🔥", completedJobs: 134 },
@@ -75,7 +77,7 @@ export default function ServicePage() {
     },
     {
       name: "Perth",
-      image: "https://images.unsplash.com/photo-1583783121357-8a9a2a3f3f89?w=800&h=600&fit=crop",
+      image: "https://images.unsplash.com/photo-1574471101497-d958f6e3ebd4?q=80&w=1548&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       activeProviders: 134,
       providers: [
         { name: "Ocean City Services", rating: 4.9, logo: "🌊", completedJobs: 112 },
@@ -319,14 +321,14 @@ export default function ServicePage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {popularCities.map((city) => (
+            {cities.slice(0,4).map((city , index) => (
               <div
                 key={city.name}
                 className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border border-gray-100 hover:border-indigo-200 hover:-translate-y-2"
               >
                 <div className="relative h-52 overflow-hidden">
                   <img
-                    src={city.image}
+                    src={popularCities[index]?.image}
                     alt={city.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -335,14 +337,14 @@ export default function ServicePage() {
                     <h3 className="text-2xl font-bold text-white mb-1">{city.name}</h3>
                     <div className="flex items-center gap-2 text-white/90 text-sm">
                       <TrendingUp className="w-4 h-4" />
-                      <span>{city.activeProviders} Active Providers</span>
+                      {/* <span>{city.activeProviders} Active Providers</span> */}
                     </div>
                   </div>
                 </div>
                 
                 <div className="p-6">
                   <div className="space-y-3 mb-5">
-                    {city.providers.slice(0, 3).map((provider, i) => (
+                    {popularCities[index].providers.slice(0, 3).map((provider, i) => (
                       <div key={i} className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 transition">
                         <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0 shadow-md">
                           {provider.logo}
@@ -374,7 +376,6 @@ export default function ServicePage() {
           </div>
         </div>
 
-        {/* About Section */}
         {service.about && (
           <div className="bg-white rounded-3xl p-10 md:p-12 shadow-lg mb-20 border border-gray-100">
             <div 
@@ -384,7 +385,7 @@ export default function ServicePage() {
           </div>
         )}
 
-        {/* FAQs */}
+        
         {service.faqs && service.faqs.length > 0 && (
           <div className="mb-20">
             <div className="text-center mb-12">
@@ -425,7 +426,6 @@ export default function ServicePage() {
           </div>
         )}
 
-        {/* Final CTA */}
         <div className="rounded-2xl bg-slate-900 text-white p-6 md:p-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
@@ -437,7 +437,6 @@ export default function ServicePage() {
         </div>
       </section>
 
-      {/* JSON-LD */}
       <Script
         id="json-ld-service"
         type="application/ld+json"

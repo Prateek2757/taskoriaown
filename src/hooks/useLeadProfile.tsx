@@ -69,12 +69,15 @@ export function useLeadProfile() {
   };
 
   const fetchCities = async () => {
+    setLoading(true);
     if (cities.length) return;
     try {
       const { data } = await api.get("/api/signup/location");
       setCities(Array.isArray(data) ? data : []);
     } catch {
       setError("Failed to load cities.");
+    } finally {
+      setLoading(false);
     }
   };
 
