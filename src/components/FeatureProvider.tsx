@@ -16,8 +16,22 @@ import {
 } from "lucide-react";
 import { useProviders } from "@/hooks/useProvider";
 
+export const metadata = {
+  title: "Post a Job — Hire Service Providers | Taskoria",
+  description:
+    "Post your job on Taskoria and get connected with trusted service providers. Fast, reliable, and secure hiring platform.",
+  openGraph: {
+    title: "Post a Job — Hire Service Providers | Taskoria",
+    description:
+      "Post your job for free and hire skilled service providers across Nepal.",
+    url: "https://www.taskoria.com/post-job",
+    siteName: "Taskoria",
+    type: "website",
+  },
+};
 export const FeatureProvider = () => {
   const { providers, loading } = useProviders(3);
+  
   console.log("first", providers);
   return (
     <section

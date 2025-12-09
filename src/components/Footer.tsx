@@ -120,16 +120,16 @@ const Footer = () => {
       className={`sm:block overflow-hidden transition-all duration-300 
         ${openSection === 'customers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
     >
-      <Link href="/services" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+      <Link href="/services" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
         Find Services
       </Link>
-      <Link href="/community" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+      <Link href="/community" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
         Community
       </Link>
-      <Link href="/post-job" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+      <Link href="/post-job" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
         Post a Job
       </Link>
-      <Link href="/trust-safety" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+      <Link href="/trust-safety" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
         Trust & Safety
       </Link>
     </div>
@@ -150,12 +150,12 @@ const Footer = () => {
       className={`sm:block overflow-hidden transition-all duration-300 
         ${openSection === 'providers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
     >
-      <Link href="/become-provider" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+      <Link href="/become-provider" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
         Join as Provider
       </Link>
-      <a className="block text-gray-600 dark:text-white hover:text-white  mb-2 cursor-pointer">Success Stories</a>
-      <a className="block text-gray-600 dark:text-white hover:text-white  mb-2 cursor-pointer">Resources</a>
-      <a className="block text-gray-600 dark:text-white hover:text-white  mb-2 cursor-pointer">API Documentation</a>
+      <a className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Success Stories</a>
+      <a className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Resources</a>
+      <a className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">API Documentation</a>
     </div>
   </div>
 
@@ -174,14 +174,14 @@ const Footer = () => {
       className={`sm:block overflow-hidden transition-all duration-300 
         ${openSection === 'company' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
     >
-      <Link href="/about-us" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+      <Link href="/about-us" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
         About Us
       </Link>
-      <Link href="/privacy-policy" className="block text-gray-600 dark:text-white hover:text-white  mb-2">
+      <Link href="/privacy-policy" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
         Privacy Policy
       </Link>
-      <a className="block text-gray-600 dark:text-white hover:text-white  mb-2 cursor-pointer">Press</a>
-      <a className="block text-gray-600 dark:text-white hover:text-white  mb-2 cursor-pointer">Contact</a>
+      <a className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Press</a>
+      <a className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Contact</a>
     </div>
   </div>
 
@@ -273,7 +273,7 @@ const Footer = () => {
               target="_blank"
               className="p-2  bg-[#0966C2] hover:bg-blue-600 rounded-full transition-colors"
             >
-              <Linkedin className="w-5 h-5 dark:text-gray-300  text-white hover:text-white" />
+              <Linkedin className="w-5 h-5 dark:text-gray-300  text-white  hover:text-white " />
             </a>
 
             <a

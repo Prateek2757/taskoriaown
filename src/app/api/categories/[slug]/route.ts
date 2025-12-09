@@ -3,17 +3,15 @@ import pool from "@/lib/dbConnect";
 
 export async function GET(req: Request) {
   try {
-    // Get the slug from the URL
     const { pathname } = new URL(req.url);
-    const slug = pathname.split("/").pop(); // last segment of URL
+    const slug = pathname.split("/").pop(); 
 
     if (!slug) {
       return NextResponse.json({ message: "Missing slug" }, { status: 400 });
     }
 
-    // Fetch category info
     const result = await pool.query(
-      "SELECT category_id, name, slug FROM service_categories WHERE slug = $1",
+      "SELECT category_id, name,main_category, description,faqs,slug FROM service_categories WHERE slug = $1",
       [slug]
     );
 

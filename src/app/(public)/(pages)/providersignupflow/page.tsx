@@ -32,7 +32,6 @@ export default function Onboarding() {
   // Fetch categories and cities from backend
   useEffect(() => {
     axios.get("/api/categories").then((res) => setCategoriesList(res.data));
-    axios.get("/api/cities").then((res) => setCitiesList(res.data));
   }, []);
 
   // Draft user creation

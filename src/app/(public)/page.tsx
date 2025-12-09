@@ -7,7 +7,6 @@ import HeroSection from "@/components/Herosection"
 import HowItWorks from "@/components/how-taskoria-works"
 import SupportChatbot from "@/components/supportChatbox"
 import Testomonail from "@/components/Testomonail"
-import { WorldMapDemo } from "@/components/WorldMap"
 
 function page() {
   return (
@@ -21,7 +20,6 @@ function page() {
       <FeatureProvider/>
       <CTA/>
         <SupportChatbot/>
-      {/* <WorldMapDemo/> */}
     </div>
   )
 }

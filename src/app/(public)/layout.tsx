@@ -16,6 +16,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.taskoria.com"),
+
   title: "Taskoria — Find Trusted Service Providers",
   description:
     "Taskoria helps you discover top service providers across categories like Home, Professional, Creative, Technology, Health & Education. Connect, compare, and hire with confidence.",
@@ -68,13 +70,13 @@ export const metadata: Metadata = {
     title: "Taskoria — Find Trusted Service Providers",
     description:
       "Discover and hire top service providers in your area across multiple categories with Taskoria.",
-    images: ["https://taskoria.com/og-image.png"], 
+    images: ["https://taskoria.com/og-image.png"],
     creator: "@Taskoria",
   },
 };
 
-export const viewport:Viewport = {
-    themeColor: "#8A2BE2",
+export const viewport: Viewport = {
+  themeColor: "#8A2BE2",
 };
 
 export default function RootLayout({

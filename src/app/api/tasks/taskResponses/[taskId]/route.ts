@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 
-export async function GET(req: Request, { params }: { params: { taskId: string } }) {
+export async function GET(req: Request, context: { params: Promise<{ taskId: string }> }) {
   try {
     const client=await pool.connect();
-    const taskId = await  Number(params.taskId);
+    const taskId = await  Number((await context.params).taskId);
     const res = await client.query(
       `SELECT tr.*, up.display_name, up.profile_image_url , c.id,c.title
        FROM task_responses tr

@@ -15,10 +15,6 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
  
-
-   
- 
-
   const { joinAsProvider, loading: joinLoading } = useJoinAsProvider();
 
   const handleSubmit = async (e: React.FormEvent) => {

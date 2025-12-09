@@ -174,15 +174,15 @@ export default function ModernNavbar() {
               <ChevronDown className="w-4 h-4 -rotate-90" />
             </button>
           )}
-          <Link
+          {/* <Link
             href={profilePath}
             onClick={() => setIsProfileOpen(false)}
             className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
           >
             View Profile
-          </Link>
+          </Link> */}
           <Link
-            href="/settings"
+            href="/settings/profile/my-profile"
             onClick={() => setIsProfileOpen(false)}
             className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
           >

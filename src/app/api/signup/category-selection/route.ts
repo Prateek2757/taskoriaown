@@ -44,7 +44,8 @@ export async function GET() {
         category_id, 
         name, 
         public_id,
-        slug, 
+        slug, main_category,
+        faqs,
         rank
       FROM service_categories
       WHERE is_active = true

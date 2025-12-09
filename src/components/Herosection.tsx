@@ -11,7 +11,6 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import NewRequestModal from "./leads/RequestModal";
 import CategorySearch from "./category/CategorySearch";
