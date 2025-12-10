@@ -31,24 +31,27 @@ interface CityProvider {
 }
 
 interface City {
-  name: string;
-  image: string;
-  providers: CityProvider[];
-  activeProviders: number;
+  city_id?: number;
+  display_name?: string;
+  city?: string;
+  name?: string;
+  image?: string;
+  providers?: CityProvider[];
+  activeProviders?: number;
 }
 
 export default function ServicePage() {
-  const { cities , loading:citiesLoading } = useLeadProfile();
+  const { cities, loading: citiesLoading } = useLeadProfile();
 
-    const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const params = useParams();
-  const slug = params.slug?.join("/") || "";
+  const slug = Array.isArray(params.slug) ? params.slug.join("/") : params.slug || "";
   const [service, setService] = useState<ServiceData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [location, setLocation] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState<City | null>(null);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-const [selectedCategory, setSelectedCategory] = useState<ServiceData | null>(
+  const [selectedCategory, setSelectedCategory] = useState<ServiceData | null>(
     null
   );
   const popularCities: City[] = [
@@ -94,15 +97,17 @@ const [selectedCategory, setSelectedCategory] = useState<ServiceData | null>(
     }
   ];
 
-  const handleSelectCategory = ()=>{
-setSelectedCategory(service)
-setOpenModal(true)
+  const handleSelectCategory = () => {
+    setSelectedCategory(service)
+    setOpenModal(true)
   }
 
-  const handleLocationSet =(location)=>{
-setLocation(location)
-setOpenModal(true)
+  const handleLocationSet = (location: City) => {
+    setSelectedLocation(location)
+    setSelectedCategory(service)
+    setOpenModal(true)
   }
+  console.log(selectedLocation);
 
   useEffect(() => {
     async function fetchService() {
@@ -179,12 +184,12 @@ setOpenModal(true)
     <main className="min-h-screen bg-gradient-to-b from-white via-indigo-50/30 to-purple-50/20">
       <section className="relative ">
         <div className="absolute inset-0 bg-gradient-to-br from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] opacity-95"></div>
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-40"
           style={{ backgroundImage: `url(${service.hero_image})` }}
         />
-        
-      
+
+
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 py-15 md:py-15">
           <div className="text-center mb-6">
@@ -211,7 +216,7 @@ setOpenModal(true)
                 </div>
               </div>
               <div className="flex gap-3 ">
-                                <LocationSearch />
+                <LocationSearch onSelect={handleLocationSet} />
 
                 <button
                   onClick={handleSearch}
@@ -221,16 +226,16 @@ setOpenModal(true)
                   <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
-              <NewRequestModal open={openModal} onClose={()=>{setOpenModal(false)}} presetCategory={selectedCategory} />
+              <NewRequestModal open={openModal} onClose={() => { setOpenModal(false) }} presetCategory={selectedCategory} presetLocation={selectedLocation} />
             </div>
           </div>
         </div>
       </section>
 
-     
+
 
       <section className="max-w-6xl mx-auto px-6 py-16">
-        
+
         {/* Value Props */}
         {/* <div className="grid md:grid-cols-3 gap-6 mb-20">
           <div className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all border border-gray-100 group hover:border-indigo-200">
@@ -280,7 +285,7 @@ setOpenModal(true)
 
           <div className="grid md:grid-cols-3 gap-8 relative">
             {/* Connecting line */}
-            
+
             <div className="relative bg-gradient-to-br from-indigo-50 to-indigo-100/50 rounded-3xl p-8 border-2 border-indigo-200">
               <div className="absolute -top-6 left-8 w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
                 1
@@ -333,7 +338,7 @@ setOpenModal(true)
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {cities.slice(0,4).map((city , index) => (
+            {cities.slice(0, 4).map((city, index) => (
               <div
                 key={city.name}
                 className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border border-gray-100 hover:border-indigo-200 hover:-translate-y-2"
@@ -353,7 +358,7 @@ setOpenModal(true)
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="p-6">
                   <div className="space-y-3 mb-5">
                     {popularCities[index].providers.slice(0, 3).map((provider, i) => (
@@ -375,7 +380,7 @@ setOpenModal(true)
                       </div>
                     ))}
                   </div>
-                  
+
                   <Link
                     href={`/providers?service=${service.slug}&city=${city.name.toLowerCase()}`}
                     className="block w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center font-semibold rounded-2xl hover:shadow-lg transition-all group-hover:scale-105"
@@ -390,14 +395,14 @@ setOpenModal(true)
 
         {service.about && (
           <div className="bg-white rounded-3xl p-10 md:p-12 shadow-lg mb-20 border border-gray-100">
-            <div 
+            <div
               className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-strong:text-gray-900 prose-headings:font-bold"
               dangerouslySetInnerHTML={{ __html: service.about }}
             />
           </div>
         )}
 
-        
+
         {service.faqs && service.faqs.length > 0 && (
           <div className="mb-20">
             <div className="text-center mb-12">
@@ -411,7 +416,7 @@ setOpenModal(true)
                 We've got answers to help you get started
               </p>
             </div>
-            
+
             <div className="max-w-3xl mx-auto space-y-4">
               {service.faqs.map((faq, i) => (
                 <div

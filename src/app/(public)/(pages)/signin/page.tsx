@@ -44,7 +44,7 @@ export default function SignInPage() {
           localStorage.setItem("viewMode" , "customer")
           window.dispatchEvent(new Event("viewModeChanged"))
         }
-        setMessage(" Request Submit Sucessfull! Redirecting...")
+        setMessage(" Request Submit Successful! Redirecting...")
         setTimeout(() => router.push("/customer/dashboard"))
        return;
       } catch (error) {
@@ -53,7 +53,7 @@ export default function SignInPage() {
     }
 
 
-    setMessage("Login successful! Redirecting...");
+    setMessage("Login Successful! Redirecting...");
     setTimeout(() => router.push("/provider/dashboard"));
 
 
@@ -140,7 +140,7 @@ export default function SignInPage() {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className={`text-center text-sm font-medium ${message.includes("successful")
+              className={`text-center text-sm font-medium ${message.includes("Successful")
                   ? "text-cyan-500"
                   : "text-red-500"
                 }`}

@@ -132,7 +132,7 @@ export default function LocationSearch({ onSelect }: Props) {
         onChange={(e) => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Search your location"
-        className="w-full border border-gray-300 rounded-xl pl-9 focus:outline-none focus:ring-2 focus:ring-primary text-sm shadow-sm"
+        className="w-full border border-gray-300 dark:text-black rounded-xl pl-9 focus:outline-none focus:ring-2 focus:ring-primary text-sm shadow-sm"
         onFocus={() =>
           query.length >= 3 && results.length > 0 && setShowDropdown(true)
         }
@@ -154,8 +154,8 @@ export default function LocationSearch({ onSelect }: Props) {
               key={r.place_id}
               className={`p-3 cursor-pointer text-sm transition-colors ${
                 i === activeIndex
-                  ? "bg-primary text-white"
-                  : "hover:bg-gray-100 text-gray-700"
+                  ? "bg-blue-500 text-white "
+                  : "hover:bg-primary  text-gray-700"
               }`}
               onClick={() => handleSelect(r)}
               onMouseEnter={() => setActiveIndex(i)}

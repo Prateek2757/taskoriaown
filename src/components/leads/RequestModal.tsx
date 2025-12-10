@@ -16,12 +16,14 @@ type Props = {
   open: boolean;
   onClose: () => void;
   presetCategory?: { category_id: number; name: string; slug?: string } | null;
+  presetLocation?: {city_id?:number , display_name?:string, city?:string}
 };
 
 export default function NewRequestModal({
   open,
   onClose,
   presetCategory,
+  presetLocation
 }: Props) {
   const [step, setStep] = useState<1 | 2>(1);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
