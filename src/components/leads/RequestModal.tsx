@@ -47,7 +47,7 @@ export default function NewRequestModal({
     setSelectedCategoryId("");
     setSelectedLocationId("");
     setSelectedCategoryTitle("");
-  };
+  };``
 
   return (
     <Dialog open={open} onOpenChange={close}>

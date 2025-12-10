@@ -228,10 +228,9 @@ export default function StepTwoQuestionsForm({
           </label>
           <Input
             type="number"
-            onKeyDown={(e) => {
-              if (e.key === "-" || e.key === "Minus" || e.key === "+" || e.key === "ArrowDown" || e.key === "ArrowUp") {
-                e.preventDefault();
-              }
+    
+            onInput={(e)=>{
+              e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '')
             }}
             {...register("estimated_budget", { required: true })}
             placeholder="A$ Estimated Budget"

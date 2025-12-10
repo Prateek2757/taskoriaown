@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export type Category = { category_id: number; category_name: string };
+export type Category = { category_id: number; category_name: string; name?: string};
 export type City = { city_id: number; name: string };
 export type Subscription = {
   package_id: number;

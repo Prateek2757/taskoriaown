@@ -44,7 +44,7 @@ export default function SignInPage() {
           localStorage.setItem("viewMode" , "customer")
           window.dispatchEvent(new Event("viewModeChanged"))
         }
-        setMessage("Request Submit Sucessfully!Redirecting...")
+        setMessage(" Request Submit Sucessfull! Redirecting...")
         setTimeout(() => router.push("/customer/dashboard"))
        return;
       } catch (error) {

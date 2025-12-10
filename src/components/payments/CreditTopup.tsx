@@ -154,7 +154,7 @@ export function CreditPurchase({
   const content = (
     <div className="w-full  text-gray-900 dark:text-gray-100">
       {mode === "modal" && requiredCredits && (
-        <div className="mb-6 text-center">
+        <div className="mb-7 text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-2">
             You need {requiredCredits} credits to contact {contactName}
           </h2>
@@ -165,9 +165,9 @@ export function CreditPurchase({
       )}
 
       <div className="text-center mb-4">
-        <p className="text-gray-700 dark:text-gray-300 text-sm">
+        <p className="text-gray-700 dark:text-gray-300 text-base">
           Current Balance:{" "}
-          <span className="font-semibold text-blue-600 dark:text-blue-400">{balance ?? 0}</span>{" "}
+          <span className="font-semibold  text-blue-600 dark:text-blue-400">{balance ?? 0}</span>{" "}
           credits
         </p>
       </div>

@@ -53,6 +53,9 @@ export default function CalendarInput({
         <Input
           value={inputValue}
           placeholder="Select date"
+          readOnly
+          onClick={() => setOpen(true)}
+          onFocus={() => setOpen(true)}
           className="bg-background pr-10"
           onChange={(e) => {
             const d = parseDate(e.target.value);

@@ -201,7 +201,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Header Card */}
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
         <div className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] px-6 py-8 text-white">
           <div className="flex items-start justify-between mb-4">
@@ -247,16 +246,13 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
           </div>
         </div>
 
-        {/* Contact & Response */}
         <div className="p-6">
-          {/* Verified Contact */}
           <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-6">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wide mb-4 flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-cyan-600" /> Verified Contact
               Details
             </h3>
             <div className="space-y-3">
-              {/* Phone */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900 flex items-center justify-center">
@@ -279,7 +275,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 )}
               </div>
 
-              {/* Email */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900 flex items-center justify-center">
@@ -311,7 +306,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
           </div>
 
-          {/* Response Progress */}
           <div className="bg-blue-50 dark:bg-blue-900 rounded-xl p-5 mb-6">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
@@ -333,7 +327,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </p>
           </div>
 
-          {/* Purchase Section */}
           {!leadStatus.purchased && (
             <div className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900 dark:to-orange-900 rounded-xl border border-orange-200 dark:border-orange-700 p-5 mb-6">
               <div className="flex items-start gap-4">
@@ -361,7 +354,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
           )}
 
-          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             {leadStatus.purchased ? (
               <button
@@ -402,13 +394,13 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               onPurchaseSuccess={handlePurchaseSuccess}
             />
 
-            <button className="px-6 py-3.5 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition flex items-center justify-center gap-2">
+            {/* <button className="px-6 py-3.5 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition flex items-center justify-center gap-2">
               <ThumbsDown className="w-5 h-5" />
               Not Interested
             </button>
             <button className="px-4 py-3.5 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition">
               <Share2 className="w-5 h-5" />
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

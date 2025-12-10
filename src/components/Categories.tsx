@@ -150,7 +150,7 @@ export default function Services() {
 
                     <div className="relative h-full flex flex-col justify-between p-6 lg:p-8">
                       <div className="flex justify-end">
-                        <button className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/30 transition-all duration-300 group-hover:scale-110 group-hover:rotate-45">
+                        <button className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white  transition-all duration-300 group-hover:scale-110 group-hover:rotate-45">
                           <ArrowUpRight className="w-5 h-5" />
                         </button>
                       </div>

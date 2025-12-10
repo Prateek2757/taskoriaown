@@ -329,7 +329,7 @@ export default function MyServicesPage() {
                     </DialogDescription>
                   </DialogHeader>
 
-                  <div className="space-y-4 flex-1 overflow-hidden flex flex-col">
+                  <div className="space-y-4 flex-1  flex flex-col">
                     <LocationSearch
                       onSelect={(data) => {
                         setLocation(data.city_id, data.city);

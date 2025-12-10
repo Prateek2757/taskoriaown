@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -37,7 +37,7 @@ export default function StepOneCategoryForm({
 }: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-
+const [continueLoading, setContinueLoading] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const [showCategorySuggestions, setShowCategorySuggestions] = useState(false);
   const [searchCategoryTerm, setSearchCategoryTerm] = useState("");
@@ -219,6 +219,10 @@ export default function StepOneCategoryForm({
                       shouldTouch: true,
                     }
                   );
+                  setContinueLoading(true);
+                  setTimeout(() => {
+                    setContinueLoading(false);
+                  }, 1000);
                 }}
               />
             </div>
@@ -232,16 +236,20 @@ export default function StepOneCategoryForm({
             >
               Cancel
             </Button>
-            <Button
-              onClick={handleSubmit(onContinue)}
-              disabled={!isContinueEnabled}
-              className={cn(
-                "flex-1 rounded-lg bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-medium shadow-lg hover:shadow-xl dark: ",
-                !isContinueEnabled && "opacity-60 cursor-not-allowed"
-              )}
-            >
-              Continue
-            </Button>
+           <Button
+  onClick={handleSubmit(onContinue)}
+  disabled={!isContinueEnabled || continueLoading}
+  className={cn(
+    "flex-1 rounded-lg bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-medium shadow-lg hover:shadow-xl",
+    (!isContinueEnabled || continueLoading) && "opacity-60 cursor-not-allowed"
+  )}
+>
+  {continueLoading ? (
+    <Loader2 className="h-5 w-5 animate-spin" />
+  ) : (
+    "Continue"
+  )}
+</Button>
           </div>
         </>
       )}

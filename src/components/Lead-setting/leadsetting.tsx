@@ -23,7 +23,6 @@ export default function LeadSettingsCard() {
   if (!profile) {
     return (
       <div className="flex items-center justify-center h-64">
-        <span className="text-red-600 text-lg">Failed to load profile.</span>
       </div>
     );
   }

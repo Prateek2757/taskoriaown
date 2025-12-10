@@ -6,19 +6,21 @@ import Script from "next/script";
 import Link from "next/link";
 import { MapPin, ArrowRight, Shield, Zap, Award, Star, Sparkles, TrendingUp, Clock } from "lucide-react";
 import { useLeadProfile } from "@/hooks/useLeadProfile";
-
+import LocationSearch from "@/components/Location/locationsearch";
+import NewRequestModal from "@/components/leads/RequestModal";
+import { Button } from "@/components/ui/button";
 export const dynamic = "force-dynamic";
 
 interface ServiceData {
   category_id: number;
   name: string;
-  description: string;
-  hero_image: string;
-  about: string;
-  whats_included: string[];
-  add_ons: string[];
-  faqs: { question: string; answer: string }[];
-  slug: string;
+  description?: string;
+  hero_image?: string;
+  about?: string;
+  whats_included?: string[];
+  add_ons?: string[];
+  faqs?: { question: string; answer: string }[];
+  slug?: string;
 }
 
 interface CityProvider {
@@ -37,13 +39,18 @@ interface City {
 
 export default function ServicePage() {
   const { cities , loading:citiesLoading } = useLeadProfile();
+
+    const [openModal, setOpenModal] = useState(false);
+
   const params = useParams();
   const slug = params.slug?.join("/") || "";
   const [service, setService] = useState<ServiceData | null>(null);
   const [loading, setLoading] = useState(true);
   const [location, setLocation] = useState("");
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
+const [selectedCategory, setSelectedCategory] = useState<ServiceData | null>(
+    null
+  );
   const popularCities: City[] = [
     {
       name: "Sydney",
@@ -66,7 +73,7 @@ export default function ServicePage() {
       ]
     },
     {
-      name: "Brisbane",
+      name: "Adelaide",
       image: "https://images.unsplash.com/photo-1702252212983-db7e428cc3cf?q=80&w=1880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       activeProviders: 156,
       providers: [
@@ -86,6 +93,16 @@ export default function ServicePage() {
       ]
     }
   ];
+
+  const handleSelectCategory = ()=>{
+setSelectedCategory(service)
+setOpenModal(true)
+  }
+
+  const handleLocationSet =(location)=>{
+setLocation(location)
+setOpenModal(true)
+  }
 
   useEffect(() => {
     async function fetchService() {
@@ -160,7 +177,7 @@ export default function ServicePage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-white via-indigo-50/30 to-purple-50/20">
-      <section className="relative overflow-hidden">
+      <section className="relative ">
         <div className="absolute inset-0 bg-gradient-to-br from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] opacity-95"></div>
         <div 
           className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-40"
@@ -193,15 +210,9 @@ export default function ServicePage() {
                   <p className="text-sm text-gray-600">Free quotes in minutes</p>
                 </div>
               </div>
-              <div className="flex gap-3">
-                <input
-                  type="text"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Enter your suburb or postcode"
-                  className="flex-1 px-5 py-2 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
-                />
+              <div className="flex gap-3 ">
+                                <LocationSearch />
+
                 <button
                   onClick={handleSearch}
                   className="px-8 py-1 bg-gradient-to-r from-[#3C7DED] to-[#41A6EE] text-white font-bold rounded-2xl hover:shadow-xl transition-all transform hover:scale-105 flex items-center gap-2"
@@ -210,6 +221,7 @@ export default function ServicePage() {
                   <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
+              <NewRequestModal open={openModal} onClose={()=>{setOpenModal(false)}} presetCategory={selectedCategory} />
             </div>
           </div>
         </div>
@@ -432,7 +444,7 @@ export default function ServicePage() {
               <h3 className="text-2xl font-semibold">Ready to get {service.name} done?</h3>
               <p className="opacity-90">Post your job once—receive quotes fast, compare providers, and book with confidence.</p>
             </div>
-            <a href={`/quote?service=${service.slug}`} className="inline-flex items-center rounded-2xl px-5 py-3 font-semibold bg-white text-slate-900 hover:bg-slate-100">Get free quotes</a>
+            <Button onClick={handleSelectCategory} className="inline-flex items-center rounded-2xl px-5 py-3 font-semibold bg-white text-slate-900 hover:bg-slate-100">Get free quotes</Button>
           </div>
         </div>
       </section>
