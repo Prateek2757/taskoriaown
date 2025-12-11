@@ -19,6 +19,7 @@ interface Provider {
     nationwide?:boolean;
     hourly_rate: number;
     badges?: string[];
+    slug?: string;
   }
 
 export const useProviders = (limit?: number) => {

@@ -74,13 +74,13 @@ const Footer = () => {
           <div className="lg:w-1/3">
             <Link href="/" className="flex items-center mb-4 hover:opacity-90">
               <Image
-                src="/taskorianewlogo.png"
+                src="/taskoria-logo.png"
                 alt="Taskoria Logo"
-                width={40}
-                height={40}
+                width={25}
+                height={30}
                 className="rounded-md"
               />
-              <span className="ml-2 text-3xl font-bold bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+              <span className="ml- text-3xl font-bold bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
                 Taskoria
               </span>
             </Link>

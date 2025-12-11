@@ -22,6 +22,7 @@ type Props = {
   onNext: () => void;
   onClose: () => void;
   presetCategory?: { category_id: number; name: string; slug?: string };
+  presetLocation?: {city_id?:number , display_name?:string, city?:string} | null;
   setSelectedCategoryId: (id: string) => void;
   setSelectedLocationId: (id: string) => void;
   setSelectedCategoryTitle: (title: string) => void;
@@ -31,6 +32,7 @@ export default function StepOneCategoryForm({
   onNext,
   onClose,
   presetCategory,
+  presetLocation,
   setSelectedCategoryId,
   setSelectedCategoryTitle,
   setSelectedLocationId,
@@ -50,6 +52,7 @@ const [continueLoading, setContinueLoading] = useState(false);
       location: "",
     },
   });
+console.log(presetLocation , "stepone ");
 
   const categoryId = watch("category_id");
   const location = watch("location");
@@ -77,6 +80,17 @@ const [continueLoading, setContinueLoading] = useState(false);
       setSelectedCategoryTitle(presetCategory.name);
     }
   }, [presetCategory, setValue]);
+
+  useEffect(() => {
+    if (presetLocation) {
+      setValue("city_id", presetLocation.city_id || 0);
+      setValue("location", presetLocation.display_name || "");
+      setSelectedLocationId(String(presetLocation.city_id || 0));
+      onNext();
+    
+    }
+  }, [presetLocation, setValue]);
+  
 
   useEffect(() => {
     const term = searchCategoryTerm.trim().toLowerCase();
@@ -206,6 +220,7 @@ const [continueLoading, setContinueLoading] = useState(false);
             </Label>
             <div className="relative mt-2">
               <LocationSearch
+              presetLocation = {presetLocation}
                 onSelect={(data) => {
                   setValue("city_id", data.city_id, {
                     shouldDirty: true,

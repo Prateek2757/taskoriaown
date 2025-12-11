@@ -110,10 +110,10 @@ export const FeatureProvider = () => {
                           <div className="flex flex-col items-center hover:opacity-90 transition-opacity">
                             <div>
                               <Image
-                                src="/taskorianewlogo.png"
+                                src="/taskoria-logo.png"
                                 alt=""
                                 height={0}
-                                width={33}
+                                width={25}
                               />
                             </div>
                             <span className="text-sm font-bold bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">

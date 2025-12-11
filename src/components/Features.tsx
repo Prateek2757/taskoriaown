@@ -160,10 +160,10 @@ export default function FeaturesStacking() {
               <div className="flex flex-row items-center justify-center">
                 <Circle ref={div4Ref} className="h-16 w-16 p-3">
                   <Image
-                    src="/taskorianewlogo.png"
+                    src="/taskoria-logo.png"
                     alt=""
                     height={0}
-                    width={33}
+                    width={28}
                   />
                 </Circle>
               </div>

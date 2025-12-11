@@ -102,6 +102,8 @@ export default function CategorySearch({
     });
   };
 
+  
+
   const handleChange = (value: string) => {
     setQuery(value);
     if (selected && value !== selected.name) setSelected(null);
@@ -131,14 +133,14 @@ export default function CategorySearch({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="absolute z-50 border mt-1 w-full rounded-lg shadow-lg 
-             max-h-60 overflow-y-auto pointer-events-auto overscroll-contain backdrop-blur-xl bg-[rgba(255,255,255,.2)]  "
+             max-h-60 overflow-y-auto pointer-events-auto backdrop-blur-xl bg-[rgba(255,255,255,.2)]  "
           >
             {filtered.map((cat) => (
               <li
                 key={cat.category_id}
                 onMouseDown={() => handleSelect(cat)}
                 onTouchStart={() => handleSelect(cat)}
-                className="p-3 cursor-pointer hover:bg-blue-100 dark:text-gray-400  text-gray-700 text-sm"
+                className="p-3 cursor-pointer hover:bg-blue-100 dark:text-gray-400  text-gray-700 text-sm relative z-50 "
               >
                 {cat.name}
               </li>
@@ -150,7 +152,7 @@ export default function CategorySearch({
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute z-40 bg-white border mt-1 w-full rounded-lg p-3 text-gray-500 text-sm"
+            className="absolute z-50 bg-white border mt-1 w-full rounded-lg p-3 text-gray-500 text-sm"
           >
             No categories found.
           </motion.div>

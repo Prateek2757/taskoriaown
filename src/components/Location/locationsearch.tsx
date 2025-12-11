@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Loader2, Search } from "lucide-react";
 import { Input } from "../ui/input";
 
 type Location = {
   place_id: number;
+  city_id?:number;
   display_name: string;
   lat: string;
   lon: string;
@@ -20,12 +21,19 @@ type Location = {
     postcode?: string;
   };
 };
+type LocationProp = {
+  city_id?: number;
+  city?: string;
+  display_name?: string;
+  municipality?: string;
+};
 
 type Props = {
   onSelect?: (data: { city_id: number; city: string ; display_name:string ; municipality:string}) => void;
+  presetLocation?:LocationProp | null
 };
 
-export default function LocationSearch({ onSelect }: Props) {
+export default function LocationSearch({ onSelect ,presetLocation}: Props) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Location[]>([]);
   const [loading, setLoading] = useState(false);
@@ -35,6 +43,13 @@ export default function LocationSearch({ onSelect }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cache = useRef<{ [key: string]: Location[] }>({});
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
+
+  useEffect(() => {
+      if (presetLocation) {
+        setQuery(presetLocation.display_name);
+      }
+    }, [presetLocation]);
 
   const fetchAddresses = async (value: string) => {
     if (value.length < 3) {
@@ -132,7 +147,7 @@ export default function LocationSearch({ onSelect }: Props) {
         onChange={(e) => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Search your location"
-        className="w-full border border-gray-300 dark:text-black rounded-xl pl-9 focus:outline-none focus:ring-2 focus:ring-primary text-sm shadow-sm"
+        className="w-full border border-gray-300  rounded-xl pl-9 focus:outline-none focus:ring-2 focus:ring-primary text-sm shadow-sm"
         onFocus={() =>
           query.length >= 3 && results.length > 0 && setShowDropdown(true)
         }

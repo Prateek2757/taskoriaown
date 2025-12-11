@@ -233,9 +233,9 @@ export default function ModernNavbar() {
             className="flex items-center hover:opacity-90 transition-opacity"
           >
             <div>
-              <Image src="/taskorianewlogo.png" alt="" height={0} width={33} />
+              <Image src="/taskoria-logo.png" alt="taskorialogo" height={31} width={18} />
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+            <span className="text-2xl font-bold text-[#434343] dark:bg-gradient-to-t dark:*:from-[#46cdee] dark:via-[#41A6EE] dark:to-[#46CBEE] dark:bg-clip-text dark:text-transparent  ">
               Taskoria
             </span>
           </Link>
@@ -360,10 +360,10 @@ export default function ModernNavbar() {
                   >
                     <div>
                       <Image
-                        src="/taskorianewlogo.png"
+                        src="/taskoria-logo.png"
                         alt=""
                         height={0}
-                        width={33}
+                        width={23}
                       />
                     </div>
                     <span className="text-2xl font-bold bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">

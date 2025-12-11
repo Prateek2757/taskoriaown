@@ -16,6 +16,7 @@ export async function GET() {
         cp.company_name,
         cp.logo_url,
         json_agg(DISTINCT sc.name) FILTER (WHERE sc.name IS NOT NULL) AS services,
+        json_agg(DISTINCT sc.slug) FILTER (WHERE sc.slug IS NOT NULL) AS slug,
         c.name AS locationname
 
       FROM user_profiles up
@@ -25,7 +26,6 @@ export async function GET() {
       LEFT JOIN company cp ON up.user_id = cp.user_id
       LEFT JOIN cities c ON c.city_id = up.location_id
 
-      WHERE up.provider_verified = true
 
       GROUP BY 
         up.user_id,

@@ -6,21 +6,46 @@ import { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useProviders } from "@/hooks/useProvider";
+import { useSearchParams } from "next/navigation";
 
 export default function AllProvidersClient() {
+  const searchParams = useSearchParams();
+  const serviceSlug = searchParams.get("service");
+  const citySlug = searchParams.get("city");
+
   const { providers, loading } = useProviders();
   const [search, setSearch] = useState("");
   const [filteredProviders, setFilteredProviders] = useState<any[]>([]);
 
   useEffect(() => {
     if (!loading) {
-      setFilteredProviders(
-        providers.filter((p) =>
+      let filteredProviders = providers;
+
+      if (serviceSlug) {
+        filteredProviders = filteredProviders.filter(
+          (p) =>
+            Array.isArray(p.slug) &&
+            p.slug?.some(
+              (s: string) => s.toLowerCase() === serviceSlug?.toLowerCase()
+            )
+        );
+      }
+
+      if (citySlug) {
+        filteredProviders = filteredProviders.filter(
+          (p) => p.locationname?.toLowerCase() === citySlug.toLowerCase()
+        );
+      }
+
+      if (search) {
+        filteredProviders = filteredProviders.filter((p) =>
           p.name.toLowerCase().includes(search.toLowerCase())
-        )
-      );
+        );
+      }
+
+      setFilteredProviders(filteredProviders);
     }
-  }, [search, providers, loading]);
+  }, [search, providers, loading, citySlug, serviceSlug]);
 
   return (
     <section className="bg-muted/30 min-h-screen py-16 px-4">
@@ -123,9 +148,7 @@ export default function AllProvidersClient() {
               </div>
             ))
           ) : (
-            <p className="text-gray-500 col-span-full">
-              No providers found.
-            </p>
+            <p className="text-gray-500 col-span-full">No providers found.</p>
           )}
         </div>
       </div>

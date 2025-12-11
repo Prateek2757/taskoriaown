@@ -16,16 +16,19 @@ type Props = {
   open: boolean;
   onClose: () => void;
   presetCategory?: { category_id: number; name: string; slug?: string } | null;
-  presetLocation?: {city_id?:number , display_name?:string, city?:string}
+  presetLocation?: {city_id?:number , display_name?:string, city?:string} | null;
+    initialStep?: 1 | 2; // new prop
+
 };
 
 export default function NewRequestModal({
   open,
   onClose,
   presetCategory,
-  presetLocation
+  presetLocation,
+  initialStep = 1
 }: Props) {
-  const [step, setStep] = useState<1 | 2>(1);
+const [step, setStep] = useState<1 | 2>(initialStep );
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
     presetCategory ? String(presetCategory.category_id) : ""
   );
@@ -33,13 +36,19 @@ export default function NewRequestModal({
     presetCategory ? presetCategory.name : ""
   );
   const [selectedLocationId, setSelectedLocationId] = useState<string>("");
-
   useEffect(() => {
     if (presetCategory) {
-      setSelectedCategoryId(String(presetCategory.category_id));
-      setSelectedCategoryTitle(String(presetCategory.name));
+      setSelectedCategoryId(String(presetCategory?.category_id));
+      setSelectedCategoryTitle(String(presetCategory?.name));
     }
   }, [presetCategory]);
+
+  useEffect(() => {
+    if (presetLocation) {
+      setSelectedLocationId(String(presetLocation?.city_id));
+      
+    } 
+  }, [presetLocation]);
 
   const next = () => setStep(2);
   const back = () => setStep(1);
@@ -86,7 +95,8 @@ export default function NewRequestModal({
                         }
                       : undefined
                   }
-                  setSelectedCategoryId={setSelectedCategoryId}
+                    presetLocation = {presetLocation} 
+                                      setSelectedCategoryId={setSelectedCategoryId}
                   setSelectedCategoryTitle={setSelectedCategoryTitle}
                   setSelectedLocationId={setSelectedLocationId}
                 />

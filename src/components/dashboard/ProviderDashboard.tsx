@@ -12,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 
-import { BarChart3, Users, Star, Target } from "lucide-react";
+import { BarChart3, Users, Star, Target, User } from "lucide-react";
 import LeadSettingsCard from "../Lead-setting/leadsetting";
 import { useLeadProfile } from "@/hooks/useLeadProfile";
 
@@ -199,9 +199,9 @@ export default function ProviderDashboard() {
                       className="rounded-full object-cover h-full w-full"
                     />
                   ) : (
-                    <AvatarFallback className="flex items-center justify-center rounded-full text-3xl font-bold bg-gradient-to-br from-cyan-500 to-blue-600 text-white">
-                      {user.name?.split(" ").map((n) => n[0]).join("").toUpperCase() || "U"}
-                    </AvatarFallback>
+                    <div className="w-30 h-28 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full flex items-center justify-center shadow-md">
+                    <User className="w-15 h-15 text-white" />
+                  </div>
                   )}
 
                   {isPro && (

@@ -127,12 +127,12 @@ export default function HeroSection() {
                   href={`/services/${slugvalue}`}
                   className="sm:w-auto sm:mt-0"
                 >
-                  <Button className="w-full sm:w-auto bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold  sm:px-7 py-5  shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-cyan-700 active:scale-[0.97] transition-all duration-200">
+                  {/* <Button className="w-full sm:w-auto bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold  sm:px-7 py-5  shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-cyan-700 active:scale-[0.97] transition-all duration-200">
                     <span className="max-sm:hidden">Search</span>
                     <div className="sm:hidden">
                       <Search />
                     </div>
-                  </Button>
+                  </Button> */}
                 </Link>
               </div>
 
@@ -219,7 +219,7 @@ export default function HeroSection() {
           </div>
         </div>
         <div className="mt-16 relative overflow-hidden bg-gradient-to-t from-zinc-100 to-transparent  dark:from-black">
-          <div className="mx-auto max-w-4xl relative z-10 ">
+          <div className="mx-auto max-w-4xl relative ">
             <div className="text-center text-3xl text-white">
               <h2 className="text-slate-900 text-2xl sm:text-3xl lg:text-4xl dark:text-white font-bold leading-tight">
                 Trusted by{" "}
