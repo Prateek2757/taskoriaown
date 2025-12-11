@@ -102,12 +102,22 @@ export default function CategorySearch({
     });
   };
 
-  
-
   const handleChange = (value: string) => {
     setQuery(value);
     if (selected && value !== selected.name) setSelected(null);
     setShowSuggestions(true);
+  };
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setShowSuggestions(true);
+    const winwidth = window.innerWidth;
+    if (winwidth < 640) {
+      window.scrollTo({
+        top: (wrapperRef.current?.offsetTop || 0) + 170,
+        behavior: "smooth",
+      });
+    }
+    if (!query) setFiltered(categories.slice(0, 10));
   };
 
   return (
@@ -119,10 +129,7 @@ export default function CategorySearch({
         value={query}
         onChange={(e) => handleChange(e.target.value)}
         placeholder={placeholder || "Search category..."}
-        onFocus={() => {
-          setShowSuggestions(true);
-          if (!query) setFiltered(categories.slice(0, 10));
-        }}
+        onFocus={(e) => handleFocus(e)}
         className="pl-9 rounded-lg py-5 max-sm:text-sm"
       />
 
