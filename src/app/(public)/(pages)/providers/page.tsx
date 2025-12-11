@@ -1,6 +1,7 @@
 import AllProvidersClient from "@/components/providers/provider-list";
 import { fetchProviders } from "@/utils/api";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
   const providers = await fetchProviders();
@@ -16,7 +17,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 
-export default function ProvidersPage() {
-  
-  return <AllProvidersClient />;
+export default function ProvidersPage() {  
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <AllProvidersClient />
+    </Suspense>
+  );
 }

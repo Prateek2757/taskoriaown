@@ -140,14 +140,14 @@ export default function CategorySearch({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="absolute z-50 border mt-1 w-full rounded-lg shadow-lg 
-             max-h-60 overflow-y-auto pointer-events-auto backdrop-blur-xl bg-[rgba(255,255,255,.2)]  "
+             max-h-auto overflow-y-auto pointer-events-auto backdrop-blur-xl bg-[rgba(255,255,255,.2)] touch-pan-y overscroll-auto "
           >
             {filtered.map((cat) => (
               <li
                 key={cat.category_id}
                 onMouseDown={() => handleSelect(cat)}
                 onTouchStart={() => handleSelect(cat)}
-                className="p-3 cursor-pointer hover:bg-blue-100 dark:text-gray-400  text-gray-700 text-sm relative z-50 "
+                className="p-3 cursor-pointer hover:bg-blue-100 dark:text-gray-300  text-gray-700 text-sm relative z-50 "
               >
                 {cat.name}
               </li>
