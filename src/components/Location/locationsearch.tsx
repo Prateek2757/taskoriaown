@@ -48,7 +48,7 @@ export default function LocationSearch({ onSelect ,presetLocation}: Props) {
   useEffect(() => {
       if (presetLocation) {
         setQuery(presetLocation.display_name);
-      }
+      } 
     }, [presetLocation]);
 
   const fetchAddresses = async (value: string) => {

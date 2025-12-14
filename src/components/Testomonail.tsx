@@ -108,13 +108,13 @@ export default function Testomonail() {
       <div className="mt-8  max-w-6xl mx-auto">
         <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden">
           <Marquee pauseOnHover className="[--duration:20s]">
-            {firstRow.map((review) => (
-              <ReviewCard key={review.username} {...review} />
+            {firstRow.map((review , i) => (
+              <ReviewCard key={review.username + i } {...review} />
             ))}
           </Marquee>
           <Marquee reverse pauseOnHover className="[--duration:20s]">
-            {secondRow.map((review) => (
-              <ReviewCard key={review.username} {...review} />
+            {secondRow.map((review , i) => (
+              <ReviewCard key={review.username + i} {...review} />
             ))}
           </Marquee>
           <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-linear-to-r from-white dark:from-background"></div>

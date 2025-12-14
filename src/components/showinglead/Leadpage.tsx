@@ -18,6 +18,8 @@ export interface Lead {
   created_at: string;
   phone: number;
   description: string;
+  latitude?:number;
+  longitude?:number;
   customer_name?: string;
   customer_email?: string;
   status?: string;
@@ -208,7 +210,7 @@ const LeadsPage: React.FC = () => {
         className={`flex flex-col w-full md:w-[380px] border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-300 ${isMobileDetailsOpen ? "hidden md:flex" : "flex"
           }`}
       >
-        <div className="sticky top-16 z-30 mb-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="sticky top-13 z-30 mb-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 px-2 py-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:gap-3 w-full md:w-auto">
               <div className="flex items-center gap-2 flex-wrap">

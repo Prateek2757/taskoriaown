@@ -5,8 +5,7 @@ import {
   Sparkles,
   MapPin,
   ArrowRight,
-  Search,
-  ArrowUpRight,
+  
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -17,7 +16,6 @@ import CategorySearch from "./category/CategorySearch";
 import { SparklesCore } from "./ui/sparkles";
 import { useTheme } from "next-themes";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
-import Earth from "./ui/globe";
 import { SparklesCoreLight } from "./ui/sparklesLight";
 
 interface Category {
@@ -76,7 +74,7 @@ export default function HeroSection() {
           className="absolute top-0 left-0 w-full h-full object-cover opacity-50"
         />
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto space-y-8">
+          <div className="max-w-4xl mx-auto space-y-6">
             <div className="inline-flex items-center gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-4">
               <Sparkles className="h-4 w-4 text-blue-600" /> AI-Powered •
               Community Driven

@@ -15,7 +15,7 @@ interface Lead {
   description: string;
   status?: string;
   estimated_budget?: number;
- is_seen?: boolean;
+  is_seen?: boolean;
 }
 
 interface LeadCardProps {
@@ -67,16 +67,16 @@ const LeadCard: React.FC<LeadCardProps> = ({
             : "border-gray-200 dark:border-gray-700 hover:border-blue-400 hover:shadow-lg hover:bg-gradient-to-br hover:from-white dark:hover:from-gray-800 hover:to-blue-50 dark:hover:to-blue-700"
         }`}
     >
-    <div className="absolute top-2 right-3">
-  {!lead.is_seen ? (
-    <span className="relative flex h-3 w-3">
-      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
-      <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600"></span>
-    </span>
-  ) : 
-  ""
-  }
-</div>
+      <div className="absolute top-2 right-3">
+        {!lead.is_seen ? (
+          <span className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600"></span>
+          </span>
+        ) : (
+          ""
+        )}
+      </div>
       <div
         className={`absolute top-0 left-0 h-1 w-full rounded-t-2xl transition-all duration-300 ${
           isSelected ? "bg-blue-500" : "bg-transparent group-hover:bg-blue-400"
@@ -128,7 +128,6 @@ const LeadCard: React.FC<LeadCardProps> = ({
         </span>
       </div>
 
-    
       <div>
         <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">
           {lead.category_name}
@@ -137,7 +136,10 @@ const LeadCard: React.FC<LeadCardProps> = ({
 
       <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
         <div className="flex flex-col">
-          <span className="text-xs text-gray-500 dark:text-gray-400 mb-0.5"> Estimated Budget</span>
+          <span className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
+            {" "}
+            Estimated Budget
+          </span>
           <span className="text-sm font-medium text-gray-800 dark:text-gray-100">
             {getBudgetDisplay()}
           </span>
@@ -150,7 +152,9 @@ const LeadCard: React.FC<LeadCardProps> = ({
           </div>
           <div className="w-px h-4 bg-gray-200 dark:bg-gray-600" />
           <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
-            <span className="text-blue-500 dark:text-blue-400 font-semibold">•</span>
+            <span className="text-blue-500 dark:text-blue-400 font-semibold">
+              •
+            </span>
             <span>1st to respond</span>
           </div>
         </div>

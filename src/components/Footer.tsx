@@ -252,7 +252,7 @@ const Footer = () => {
 
         <div className="flex md:flex-row flex-col gap-3 justify-between py-6 text-gray-600 dark:text-gray-300">
           <span className="font-medium">
-            &copy; {new Date().getFullYear()} Taskoria. All Rights Reserved. <Link href="/privacy-policy" className="underline">Privacy Policy.</Link>
+            &copy; {new Date().getFullYear()} Taskoria Pty Ltd. All Rights Reserved. <Link href="/privacy-policy" className="underline">Privacy Policy.</Link>
             <br />
             <span className="text-gray-400">
               ABN: 658 760 831 | GST Registered | QLD 4350, Australia | Proudly Australian Owned & Operated

@@ -26,6 +26,8 @@ type Props = {
   setSelectedCategoryId: (id: string) => void;
   setSelectedLocationId: (id: string) => void;
   setSelectedCategoryTitle: (title: string) => void;
+  setSelectedLocation: (location: {city_id?:number , display_name?:string, city?:string} | null) => void;
+
 };
 
 export default function StepOneCategoryForm({
@@ -36,6 +38,8 @@ export default function StepOneCategoryForm({
   setSelectedCategoryId,
   setSelectedCategoryTitle,
   setSelectedLocationId,
+  setSelectedLocation,
+
 }: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,12 +56,14 @@ const [continueLoading, setContinueLoading] = useState(false);
       location: "",
     },
   });
-console.log(presetLocation , "stepone ");
 
   const categoryId = watch("category_id");
   const location = watch("location");
 
   const isContinueEnabled = categoryId > 0 && location?.trim() !== "";
+
+
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -238,6 +244,12 @@ console.log(presetLocation , "stepone ");
                   setTimeout(() => {
                     setContinueLoading(false);
                   }, 1000);
+                   setSelectedLocation({
+                    city_id: data.city_id,
+                    display_name: data.display_name,
+                    city: data.city
+                  });
+
                 }}
               />
             </div>

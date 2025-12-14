@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
-
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/options";
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions);
+    const userId = session?.user.id
+
     const { rows } = await pool.query(`
       SELECT 
         up.user_id,
@@ -25,8 +29,9 @@ export async function GET() {
       LEFT JOIN service_categories sc ON sc.category_id = uc.category_id
       LEFT JOIN company cp ON up.user_id = cp.user_id
       LEFT JOIN cities c ON c.city_id = up.location_id
+     
 
-
+     
       GROUP BY 
         up.user_id,
         up.display_name,
@@ -41,7 +46,7 @@ export async function GET() {
         c.name
 
       ORDER BY up.created_at DESC;
-    `);
+    `,);
 
     return NextResponse.json(rows);
   } catch (error) {

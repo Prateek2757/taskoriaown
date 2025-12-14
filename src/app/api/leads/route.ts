@@ -5,7 +5,7 @@ import { authOptions } from "../auth/[...nextauth]/options";
 
 export async function POST(req: Request) {
   const client = await pool.connect();
-
+  
   try {
     const session = await getServerSession(authOptions);
 
@@ -125,6 +125,8 @@ export async function GET() {
     t.created_at,
     c.name AS category_name,
     ci.name AS location_name,
+    ci.latitude,
+    ci.longitude,
     u.email AS customer_email,
     u.phone,
     up.user_id,
@@ -146,13 +148,13 @@ export async function GET() {
   LEFT JOIN users u ON u.user_id = t.customer_id
   LEFT JOIN user_profiles up ON up.user_id = t.customer_id
   LEFT JOIN user_task_seen uts 
-    ON uts.task_id = t.task_id AND uts.user_id = $2  -- ✅ join per user
+    ON uts.task_id = t.task_id AND uts.user_id = $2 
   WHERE 
     t.status IN ('Open', 'Urgent','In Progress')
     AND t.category_id = ANY($1::int[])
     AND t.customer_id <> $2
   GROUP BY 
-    t.task_id, c.name, ci.name, up.user_id, u.email, u.phone, up.display_name, up.profile_image_url, uts.seen
+    t.task_id, c.name, ci.name,ci.latitude,ci.longitude, up.user_id, u.email, u.phone, up.display_name, up.profile_image_url, uts.seen
   ORDER BY 
     t.created_at DESC;
   `,

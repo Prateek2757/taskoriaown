@@ -8,8 +8,6 @@ import {
   Clock,
   Award,
   MessageSquare,
-  ThumbsDown,
-  Share2,
   Bookmark,
   Quote,
   Loader2,
@@ -19,6 +17,7 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "sonner";
 import { useConversation } from "@/hooks/useConversation";
+import LocationMap from "../map/map";
 
 interface LeadAnswer {
   question_id?: string | number;
@@ -30,6 +29,8 @@ interface Lead {
   user_id?: string | number;
   task_id?: number;
   title: string;
+  longitude?: number;
+  latitude?: number;
   category_name: string;
   customer_name?: string;
   customer_email?: string;
@@ -140,7 +141,13 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       setIsNavigating(true);
       window.location.href = `/messages/${conversationId}`;
     }
-  }, [conversationId, convoLoading, convoError, refetchConversation, isNavigating]);
+  }, [
+    conversationId,
+    convoLoading,
+    convoError,
+    refetchConversation,
+    isNavigating,
+  ]);
 
   const handlePurchaseSuccess = useCallback(async () => {
     toast.success("Purchase successful! Preparing your chat...");
@@ -209,7 +216,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 {getInitials(lead.customer_name || "N/A")}
               </div>
               <div>
-                <h1 className="text-2xl font-bold mb-1">{lead.customer_name}</h1>
+                <h1 className="text-2xl font-bold mb-1">
+                  {lead.customer_name}
+                </h1>
                 <div className="flex items-center gap-2 text-blue-100">
                   <MapPin className="w-4 h-4" />
                   <span className="text-sm">{lead.location_name}</span>
@@ -263,7 +272,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                       Phone Number
                     </div>
                     <div className="font-mono text-sm text-gray-900 dark:text-gray-100">
-                      {leadStatus.purchased ? lead.phone : maskPhone(lead.phone)}
+                      {leadStatus.purchased
+                        ? lead.phone
+                        : maskPhone(lead.phone)}
                     </div>
                   </div>
                 </div>
@@ -322,8 +333,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               />
             </div>
             <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
-              <strong>{maxResponses - responseRate} spots remaining</strong> • Be
-              one of the first to respond
+              <strong>{maxResponses - responseRate} spots remaining</strong> •
+              Be one of the first to respond
             </p>
           </div>
 
@@ -346,8 +357,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                     🏆 Protected by Get Hired Guarantee
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Full credit refund if you're not hired during your starter pack
-                    period
+                    Full credit refund if you're not hired during your starter
+                    pack period
                   </p>
                 </div>
               </div>
@@ -405,7 +416,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         </div>
       </div>
 
-      {/* Project Details */}
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 p-6 mb-6">
         <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
           Project Details
@@ -448,6 +458,11 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
           </div>
         )}
+        <LocationMap
+          name={lead.location_name || lead.customer_name as string} 
+          latitude={lead.latitude as number} 
+          longitude={lead.longitude as number}
+        />
       </div>
     </div>
   );
