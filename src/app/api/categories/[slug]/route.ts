@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 
-export async function GET(req: Request) {
+export async function GET(req: Request ,context:{params:Promise<{slug:string}>} ) {
   try {
-    const { pathname } = new URL(req.url);
-    const slug = pathname.split("/").pop(); 
-
+    const slug = (await context.params).slug
+    
     if (!slug) {
       return NextResponse.json({ message: "Missing slug" }, { status: 400 });
     }
