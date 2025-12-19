@@ -1,7 +1,5 @@
-
 import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
-
 
 export async function GET() {
   try {
@@ -17,19 +15,33 @@ export async function GET() {
   }
 }
 
-
 export async function POST(req: Request) {
   const client = await pool.connect();
   try {
     const body = await req.json();
-    const { display_name, city, state, country, postcode, territory,municipality,lat,place_id, lon } = body;
+    const {
+      display_name,
+      city,
+      state,
+      country,
+      postcode,
+      territory,
+      municipality,
+      lat,
+      place_id,
+      lon,
+    } = body;
 
     const finalState = state || territory || null;
 
-    const finalCity = city || territory || display_name?.split(",")[0] || municipality
+    const finalCity =
+      display_name?.split(",")[0] || city || territory || municipality;
 
     if (!country || !finalCity || !lat || !lon) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
     }
 
     await client.query("BEGIN");
@@ -47,13 +59,11 @@ export async function POST(req: Request) {
     const countryId =
       countryRes.rows[0]?.country_id ||
       (
-        await client.query(
-          `SELECT country_id FROM countries WHERE name = $1`,
-          [country]
-        )
+        await client.query(`SELECT country_id FROM countries WHERE name = $1`, [
+          country,
+        ])
       ).rows[0].country_id;
 
-   
     let stateId: number | null = null;
     if (finalState) {
       const stateRes = await client.query(
@@ -76,15 +86,23 @@ export async function POST(req: Request) {
         ).rows[0]?.state_id;
     }
 
-    
     const cityRes = await client.query(
       `
       INSERT INTO cities (name, country_id, state_id, latitude, longitude,place_id , display_name,postcode)
-      VALUES ($1, $2, $3, $4, $5 , $6,$7,$8)
+      VALUES ($1, $2, $3, $4, $5 , $6, $7, $8)
       ON CONFLICT (name, state_id, country_id) DO NOTHING
       RETURNING city_id;
       `,
-      [finalCity, countryId, stateId, lat, lon, place_id , display_name , postcode]
+      [
+        finalCity,
+        countryId,
+        stateId,
+        lat,
+        lon,
+        place_id,
+        display_name,
+        postcode,
+      ]
     );
 
     const cityId =

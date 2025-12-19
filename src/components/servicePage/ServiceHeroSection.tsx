@@ -33,7 +33,7 @@ export default function ServiceHeroSection({
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-15 md:py-14">
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-6">
-            <span className="bg-gradient-to-r from-indigo-400 via-blue-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-lg">
+            <span className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent drop-shadow-lg">
               {title}
             </span>
             <span className="block mt-3 text-2xl md:text-2xl font-medium text-white/90">
@@ -78,7 +78,7 @@ export default function ServiceHeroSection({
               </div>
             </div>
             <LocationSearch onSelect={onLocationSelect} />
-          </div>
+          </div> 
         </div>
       </div>
     </section>

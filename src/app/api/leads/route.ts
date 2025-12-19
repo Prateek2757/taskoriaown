@@ -21,8 +21,8 @@ export async function POST(req: Request) {
       city_id,
       preferred_date_start,
       preferred_date_end,
-
       category_answers,
+      queries
     } = await req.json();
 
     await client.query("BEGIN");
@@ -34,14 +34,15 @@ export async function POST(req: Request) {
         category_id,
         title,
         description,
-      estimated_budget,
+        estimated_budget,
         location_id,
         preferred_date_start,
         preferred_date_end,
-        
+        queries,
         status
+        
       )
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'Open')
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'Open')
       RETURNING *;
       `,
       [
@@ -53,6 +54,7 @@ export async function POST(req: Request) {
         city_id || null,
         preferred_date_start || null,
         preferred_date_end || null,
+        queries
       ]
     );
 
@@ -123,8 +125,10 @@ export async function GET() {
     t.estimated_budget,
     t.status,
     t.created_at,
+    t.queries,
     c.name AS category_name,
     ci.name AS location_name,
+    ci.postcode,
     ci.latitude,
     ci.longitude,
     u.email AS customer_email,
@@ -154,7 +158,7 @@ export async function GET() {
     AND t.category_id = ANY($1::int[])
     AND t.customer_id <> $2
   GROUP BY 
-    t.task_id, c.name, ci.name,ci.latitude,ci.longitude, up.user_id, u.email, u.phone, up.display_name, up.profile_image_url, uts.seen
+    t.task_id, c.name, ci.name,ci.latitude,ci.longitude,ci.postcode, up.user_id, u.email, u.phone, up.display_name, up.profile_image_url, uts.seen
   ORDER BY 
     t.created_at DESC;
   `,

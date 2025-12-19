@@ -7,6 +7,7 @@ interface Lead {
   title: string;
   image?: string;
   location_name: string;
+  postcode?:number;
   category_name: string;
   customer_name?: string;
   phone: number;
@@ -105,7 +106,7 @@ const LeadCard: React.FC<LeadCardProps> = ({
               {lead.customer_name}
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
-              {lead.location_name}
+              {lead.location_name} {lead.postcode}
             </p>
           </div>
         </div>

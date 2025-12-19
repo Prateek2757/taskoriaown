@@ -38,7 +38,6 @@ export async function GET(req: NextRequest) {
     if (result.rows.length === 0) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-
     return NextResponse.json({ user: result.rows[0] });
   } catch (err: unknown) {
     if (err instanceof Error)

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Loader2, Search } from "lucide-react";
 import { Input } from "../ui/input";
+import axios from "axios";
 
 type Location = {
   place_id: number;
@@ -103,6 +104,7 @@ export default function LocationSearch({ onSelect ,presetLocation}: Props) {
       lat: parseFloat(r.lat),
       lon: parseFloat(r.lon),
     };
+console.log(location);
 
     setQuery(location.display_name);
     setResults([]);
@@ -110,12 +112,10 @@ export default function LocationSearch({ onSelect ,presetLocation}: Props) {
     setActiveIndex(-1);
 
     try {
-      const res = await fetch("/api/signup/location", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(location),
-      });
-      const data = await res.json();
+      const res = await axios.post("/api/signup/location",location);
+      const data = await res.data;
+      console.log(data);
+      
       onSelect?.({ city_id: data.city_id, city: location.city ,display_name:location.display_name ,municipality:location.municipality});
     } catch (err) {
       console.error("Failed to save location:", err);

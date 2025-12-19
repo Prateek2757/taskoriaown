@@ -18,11 +18,11 @@ export default function QuestionRenderer({ q, control, register }: any) {
   return (
     <motion.div
       key={q.category_question_id}
-      initial={{ x: 100, opacity: 0, scale: 0.95 }}
-      animate={{ x: 0, opacity: 1, scale: 1 }}
-      exit={{ x: -100, opacity: 0, scale: 0.95 }}
+      initial={{  opacity: 0, scale: 0.95 }}
+      animate={{  opacity: 1, scale: 1 }}
+      exit={{  opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.45, ease: [0.25, 0.8, 0.25, 1] }}
-      className="space-y-"
+      className="space-y-2"
     >
       <Label className="block text-lg font-semibold text-center pb-2 text-gray-900 dark:text-white">
         {q.question}
@@ -54,10 +54,10 @@ export default function QuestionRenderer({ q, control, register }: any) {
       )}
 
      {q.field_type === "date" && (
-  <Controller
-    control={control}
-    name={name}
-    render={({ field }) => (
+     <Controller
+     control={control}
+     name={name}
+     render={({ field }) => (
       <CalendarInput
         
         value={field.value ? new Date(field.value) : undefined}

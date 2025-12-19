@@ -1,0 +1,113 @@
+
+
+
+
+
+import React from 'react';
+import { ChevronRight, TrendingUp } from 'lucide-react';
+import Marquee from './ui/marquee';
+import { useCategories } from '@/hooks/useCategories';
+
+const staticImages = [
+    {
+      url: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740",
+      gradient: "from-red-500/20 to-orange-500/20",
+    },
+    {
+      url: "https://images.unsplash.com/photo-1728808668131-76d40d112271?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=772",
+      gradient: "from-orange-500/20 to-amber-500/20",
+    },
+    {
+      url: "https://images.unsplash.com/photo-1621460248083-6271cc4437a8?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=774",
+      gradient: "from-slate-500/20 to-gray-500/20",
+    },
+    {
+      url: "https://plus.unsplash.com/premium_photo-1663045495725-89f23b57cfc5?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740",
+      gradient: "from-blue-500/20 to-cyan-500/20",
+    },
+    {
+      url: "https://plus.unsplash.com/premium_photo-1661340932540-c285e730728a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=774",
+      gradient: "from-purple-500/20 to-pink-500/20",
+    },
+  ];
+
+function ScrollPopularSection() {
+    const { categories} = useCategories(5)
+    const marqueeItems = [...categories , ...categories] ;
+
+  return (
+    <div className="bg-gradient-to-br block lg:hidden from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-4 px-4">
+      <section className="max-w-7xl mx-auto">
+      <div className="flex items-center justify-between mb-3 animate-fadeIn">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-400 animate-bounce" style={{ animationDuration: '2s' }} />
+              <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                Trending Now
+              </span>
+            </div>
+            <h2 className="text-xl text-left font-bold lg:text-3xl bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+              
+              Popular Services
+              <span className="absolute left-0 -bottom-2 h-1 w-full rounded-full bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE]" />
+            </h2>
+            {/* <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              Discover what's hot in the marketplace
+            </p> */}
+          </div>
+        </div>
+
+        <Marquee pauseOnHover className="[--duration:25s] ">
+          {marqueeItems.map((category, index) => (
+            <div key={category.category_id}  className="group mx-3">
+              <div className="relative w-[320px] bg-white dark:bg-gray-800 rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-[140px]">
+                
+                <div className="absolute left-0 top-0 bottom-0 w-[50%] p-4 flex flex-col  z-10">
+                  <h3 className="text-lg text-left font-semibold text-gray-900 leading-tight dark:text-white mb-2">
+                    {category.name}
+                  </h3>
+                  
+                  <p className="text-sm text-left text-gray-500 dark:text-gray-400">
+                    Explore top-rated services
+                  </p>
+                </div>
+
+                <div 
+                  className="absolute right-0 top-0 bottom-0 w-[65%] overflow-hidden"
+                  style={{
+                    clipPath: 'ellipse(80% 100% at 100% 50%)'
+                  }}
+                >
+                  <div className="relative w-full h-full">
+                    <img
+                      src={staticImages[index % staticImages.length]?.url}
+                      alt={category.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    
+                    <div className="absolute inset-0 bg-gradient-to-l from-black/30 via-black/10 to-transparent" />
+                  </div>
+                </div>
+
+                <ChevronRight className="absolute right-4 bottom-4 w-4 h-4 text-gray-400 group-hover:text-blue-600 transition z-20" />
+              </div>
+            </div>
+          ))}
+        </Marquee>
+      </section>
+
+      <style jsx>{`
+        @keyframes marquee {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+export default ScrollPopularSection;

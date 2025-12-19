@@ -12,6 +12,7 @@ import { AnimatePresence, motion } from "motion/react";
 
 import CalendarInput from "../CalenderInput";
 import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
 export default function StepTwoQuestionsForm({
   onBack,
@@ -79,12 +80,12 @@ export default function StepTwoQuestionsForm({
 
   const onSubmit = async (data: any) => {
     setLoading(true);
-    if (!data.estimated_budget ) {
+    if (!data.estimated_budget) {
       toast.error("Please enter estimated budget");
       setLoading(false);
       return;
     }
-    if (data.estimated_budget < 0 ) {
+    if (data.estimated_budget < 0) {
       toast.error("Invalid! Budget cannot be negative");
       setLoading(false);
       return;
@@ -110,9 +111,10 @@ export default function StepTwoQuestionsForm({
             data[`q_${q.category_question_id}`] ?? null;
           return acc;
         }, {} as any),
-        estimated_budget :Number(data.estimated_budget),
+        estimated_budget: Number(data.estimated_budget),
         preferred_date_start: data.preferred_date_start,
         preferred_date_end: data.preferred_date_end,
+        queries:data.queries
       };
 
       const res = await axios.post("/api/leads", payload);
@@ -140,9 +142,11 @@ export default function StepTwoQuestionsForm({
           return acc;
         }, {} as any),
         estimated_budget: Number(data.estimated_budget),
-       
+
         preferred_date_start: data.preferred_date_start,
         preferred_date_end: data.preferred_date_end,
+        queries:data.queries
+
       };
       localStorage.setItem("pendingpayload", JSON.stringify(payload));
 
@@ -178,9 +182,9 @@ export default function StepTwoQuestionsForm({
         <AnimatePresence mode="wait">
           <motion.div
             key={currentQuestion?.category_question_id}
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
             <QuestionRenderer
@@ -228,9 +232,11 @@ export default function StepTwoQuestionsForm({
           </label>
           <Input
             type="number"
-    
-            onInput={(e)=>{
-              e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '')
+            onInput={(e) => {
+              e.currentTarget.value = e.currentTarget.value.replace(
+                /[^0-9]/g,
+                ""
+              );
             }}
             {...register("estimated_budget", { required: true })}
             placeholder="A$ Estimated Budget"
@@ -265,7 +271,6 @@ export default function StepTwoQuestionsForm({
 
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 flex flex-col">
-
           <Controller
             name="preferred_date_start"
             control={control}
@@ -275,18 +280,19 @@ export default function StepTwoQuestionsForm({
                 label="Preferred Start Date *"
                 value={field.value ? new Date(field.value) : undefined}
                 onChange={(d) => field.onChange(d)}
-                minDate={new Date()} 
+                minDate={new Date()}
               />
             )}
           />
 
           {errors.preferred_date_start && (
-            <span className="text-red-500 text-sm mt-1">Start date is required</span>
+            <span className="text-red-500 text-sm mt-1">
+              Start date is required
+            </span>
           )}
         </div>
 
         <div className="flex-1 flex flex-col">
-
           <Controller
             name="preferred_date_end"
             control={control}
@@ -305,11 +311,31 @@ export default function StepTwoQuestionsForm({
             }}
           />
 
+         
+
           {errors.preferred_date_end && (
-            <span className="text-red-500 text-sm mt-1">End date is required</span>
+            <span className="text-red-500 text-sm mt-1">
+              End date is required
+            </span>
           )}
         </div>
       </div>
+      <div className="flex-1 flex flex-col">
+            <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
+              Any Other Quries ?
+            </label>
+            <Textarea
+              
+              {...register("queries", { required: true })}
+              placeholder="Type your Queries"
+              className="border px-3 py-6 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
+            />
+            {/* {errors.budget_min && (
+              <span className="text-red-500 text-sm mt-1">
+                Estimated budget is required
+              </span>
+            )} */}
+          </div>
 
       <div className="flex justify-between pt-2">
         <Button
@@ -324,8 +350,9 @@ export default function StepTwoQuestionsForm({
         <Button
           type="submit"
           disabled={loading}
-          className={`rounded-lg bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow hover:shadow-lg ${loading ? "opacity-70 cursor-not-allowed" : ""
-            }`}
+          className={`rounded-lg bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow hover:shadow-lg ${
+            loading ? "opacity-70 cursor-not-allowed" : ""
+          }`}
         >
           {loading ? (
             <span className="flex items-center gap-2">

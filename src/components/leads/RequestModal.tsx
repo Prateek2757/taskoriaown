@@ -26,9 +26,12 @@ type Props = {
   open: boolean;
   onClose: () => void;
   presetCategory?: { category_id: number; name: string; slug?: string } | null;
-  presetLocation?: {city_id?:number , display_name?:string, city?:string} | null;
-    initialStep?: 1 | 2; 
-
+  presetLocation?: {
+    city_id?: number;
+    display_name?: string;
+    city?: string;
+  } | null;
+  initialStep?: 1 | 2;
 };
 
 export default function NewRequestModal({
@@ -36,18 +39,18 @@ export default function NewRequestModal({
   onClose,
   presetCategory,
   presetLocation,
-  initialStep = 1
+  initialStep = 1,
 }: Props) {
   const [showConfirmClose, setShowConfirmClose] = useState(false);
 
-const [step, setStep] = useState<1 | 2>(initialStep );
+  const [step, setStep] = useState<1 | 2>(initialStep);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
     presetCategory ? String(presetCategory.category_id) : ""
   );
   const [selectedCategoryTitle, setSelectedCategoryTitle] = useState<string>(
     presetCategory ? presetCategory.name : ""
   );
-  
+
   const [selectedLocationId, setSelectedLocationId] = useState<string>("");
 
   const [selectedLocation, setSelectedLocation] = useState<{
@@ -66,8 +69,7 @@ const [step, setStep] = useState<1 | 2>(initialStep );
   useEffect(() => {
     if (presetLocation) {
       setSelectedLocationId(String(presetLocation?.city_id));
-      
-    } 
+    }
   }, [presetLocation]);
 
   const next = () => setStep(2);
@@ -78,17 +80,22 @@ const [step, setStep] = useState<1 | 2>(initialStep );
     setSelectedCategoryId("");
     setSelectedLocationId("");
     setSelectedCategoryTitle("");
-  };``
+    setSelectedLocation(null);
+  };
+  ``;
 
   return (
-    <Dialog open={open}   onOpenChange={(isOpen) => {
-    if (!isOpen) {
-      setShowConfirmClose(true);
-    }
-  }}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          setShowConfirmClose(true);
+        }
+      }}
+    >
       <DialogContent
-       onInteractOutside={(e) => e.preventDefault()}
-       onEscapeKeyDown={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
+        onEscapeKeyDown={(e) => e.preventDefault()}
         className="
           max-w-2xl w-[95%] p-0 rounded-2xl
           max-h-[90vh] overflow-visible flex flex-col
@@ -105,9 +112,9 @@ const [step, setStep] = useState<1 | 2>(initialStep );
             {step === 1 ? (
               <motion.div
                 key="step1"
-                initial={{ x: 100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -100, opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
                 <StepOneCategoryForm
@@ -121,20 +128,20 @@ const [step, setStep] = useState<1 | 2>(initialStep );
                         }
                       : undefined
                   }
-                    presetLocation = {presetLocation || selectedLocation} 
-                                      setSelectedCategoryId={setSelectedCategoryId}
+                  presetLocation={presetLocation || selectedLocation}
+                  setSelectedCategoryId={setSelectedCategoryId}
+                  setShowConfirm={setShowConfirmClose}
                   setSelectedCategoryTitle={setSelectedCategoryTitle}
                   setSelectedLocationId={setSelectedLocationId}
                   setSelectedLocation={setSelectedLocation}
-
                 />
               </motion.div>
             ) : (
               <motion.div
                 key="step2"
-                initial={{ x: 100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -100, opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
                 <StepTwoQuestionsForm
@@ -149,33 +156,30 @@ const [step, setStep] = useState<1 | 2>(initialStep );
           </AnimatePresence>
         </div>
         <AlertDialog open={showConfirmClose}>
-  <AlertDialogContent>
-    <AlertDialogHeader>
-      <AlertDialogTitle>Discard changes?</AlertDialogTitle>
-      <AlertDialogDescription>
-        If you close this form, your progress will be lost.
-      </AlertDialogDescription>
-    </AlertDialogHeader>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Discard changes?</AlertDialogTitle>
+              <AlertDialogDescription>
+                If you close this form, your progress will be lost.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
 
-    <AlertDialogFooter>
-      <AlertDialogCancel
-        onClick={() => setShowConfirmClose(false)}
-      >
-        Continue filling
-      </AlertDialogCancel>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setShowConfirmClose(false)}>
+                Continue filling
+              </AlertDialogCancel>
 
-      <AlertDialogAction
-        onClick={() => {
-          setShowConfirmClose(false);
-          close();
-        }}
-      >
-        Close anyway
-      </AlertDialogAction>
-    </AlertDialogFooter>
-  </AlertDialogContent>
-</AlertDialog>
-
+              <AlertDialogAction
+                onClick={() => {
+                  setShowConfirmClose(false);
+                  close();
+                }}
+              >
+                Close anyway
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </DialogContent>
     </Dialog>
   );

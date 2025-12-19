@@ -20,6 +20,7 @@ export interface Lead {
   description: string;
   latitude?:number;
   longitude?:number;
+  postcode?:number;
   customer_name?: string;
   customer_email?: string;
   status?: string;
@@ -27,6 +28,7 @@ export interface Lead {
   is_remote_allowed?: boolean;
   is_seen?: boolean;
   seen_at?: string; 
+  queries?:string;
 }
 
 export interface Filters {

@@ -1,6 +1,6 @@
 "use client";
 
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -22,12 +22,18 @@ type Props = {
   onNext: () => void;
   onClose: () => void;
   presetCategory?: { category_id: number; name: string; slug?: string };
-  presetLocation?: {city_id?:number , display_name?:string, city?:string} | null;
+  presetLocation?: {
+    city_id?: number;
+    display_name?: string;
+    city?: string;
+  } | null;
   setSelectedCategoryId: (id: string) => void;
+  setShowConfirm: (value:boolean)=> void;
   setSelectedLocationId: (id: string) => void;
   setSelectedCategoryTitle: (title: string) => void;
-  setSelectedLocation: (location: {city_id?:number , display_name?:string, city?:string} | null) => void;
-
+  setSelectedLocation: (
+    location: { city_id?: number; display_name?: string; city?: string } | null
+  ) => void;
 };
 
 export default function StepOneCategoryForm({
@@ -36,14 +42,14 @@ export default function StepOneCategoryForm({
   presetCategory,
   presetLocation,
   setSelectedCategoryId,
+  setShowConfirm,
   setSelectedCategoryTitle,
   setSelectedLocationId,
   setSelectedLocation,
-
 }: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-const [continueLoading, setContinueLoading] = useState(false);
+  const [continueLoading, setContinueLoading] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const [showCategorySuggestions, setShowCategorySuggestions] = useState(false);
   const [searchCategoryTerm, setSearchCategoryTerm] = useState("");
@@ -61,9 +67,6 @@ const [continueLoading, setContinueLoading] = useState(false);
   const location = watch("location");
 
   const isContinueEnabled = categoryId > 0 && location?.trim() !== "";
-
-
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,17 +89,14 @@ const [continueLoading, setContinueLoading] = useState(false);
       setSelectedCategoryTitle(presetCategory.name);
     }
   }, [presetCategory, setValue]);
- 
+
   useEffect(() => {
     if (presetLocation) {
       setValue("city_id", presetLocation.city_id || 0);
       setValue("location", presetLocation.display_name || "");
       setSelectedLocationId(String(presetLocation.city_id || 0));
-      onNext();
-    
     }
   }, [presetLocation, setValue]);
-  
 
   useEffect(() => {
     const term = searchCategoryTerm.trim().toLowerCase();
@@ -197,9 +197,9 @@ const [continueLoading, setContinueLoading] = useState(false);
             <AnimatePresence>
               {showCategorySuggestions && filteredCategories.length > 0 && (
                 <motion.ul
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0  }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0  }}
                   transition={{ duration: 0.2 }}
                   className="absolute z-50 w-full mt-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-60 overflow-y-ato"
                 >
@@ -226,7 +226,7 @@ const [continueLoading, setContinueLoading] = useState(false);
             </Label>
             <div className="relative mt-2">
               <LocationSearch
-              presetLocation = {presetLocation}
+                presetLocation={presetLocation}
                 onSelect={(data) => {
                   setValue("city_id", data.city_id, {
                     shouldDirty: true,
@@ -244,12 +244,11 @@ const [continueLoading, setContinueLoading] = useState(false);
                   setTimeout(() => {
                     setContinueLoading(false);
                   }, 1000);
-                   setSelectedLocation({
+                  setSelectedLocation({
                     city_id: data.city_id,
                     display_name: data.display_name,
-                    city: data.city
+                    city: data.city,
                   });
-
                 }}
               />
             </div>
@@ -258,25 +257,28 @@ const [continueLoading, setContinueLoading] = useState(false);
           <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <Button
               variant="outline"
-              onClick={onClose}
+              onClick={()=>{
+                setShowConfirm(true)
+              }}
               className="flex-1 rounded-lg border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
             >
               Cancel
             </Button>
-           <Button
-  onClick={handleSubmit(onContinue)}
-  disabled={!isContinueEnabled || continueLoading}
-  className={cn(
-    "flex-1 rounded-lg bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-medium shadow-lg hover:shadow-xl",
-    (!isContinueEnabled || continueLoading) && "opacity-60 cursor-not-allowed"
-  )}
->
-  {continueLoading ? (
-    <Loader2 className="h-5 w-5 animate-spin" />
-  ) : (
-    "Continue"
-  )}
-</Button>
+            <Button
+              onClick={handleSubmit(onContinue)}
+              disabled={!isContinueEnabled || continueLoading}
+              className={cn(
+                "flex-1 rounded-lg bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-medium shadow-lg hover:shadow-xl",
+                (!isContinueEnabled || continueLoading) &&
+                  "opacity-60 cursor-not-allowed"
+              )}
+            >
+              {continueLoading ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                "Continue"
+              )}
+            </Button>
           </div>
         </>
       )}

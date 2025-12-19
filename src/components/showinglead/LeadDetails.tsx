@@ -11,6 +11,7 @@ import {
   Bookmark,
   Quote,
   Loader2,
+  HelpCircle,
 } from "lucide-react";
 import { CreditPurchaseModal } from "../payments/CreditTopup";
 import { useSession } from "next-auth/react";
@@ -35,6 +36,7 @@ interface Lead {
   customer_name?: string;
   customer_email?: string;
   location_name: string;
+  postcode?:number;
   phone: number;
   created_at: string;
   description: string;
@@ -44,6 +46,7 @@ interface Lead {
   is_remote_allowed?: boolean;
   answers?: LeadAnswer[];
   responses_count?: number;
+  queries?:string;
 }
 
 interface LeadDetailsProps {
@@ -221,7 +224,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 </h1>
                 <div className="flex items-center gap-2 text-blue-100">
                   <MapPin className="w-4 h-4" />
-                  <span className="text-sm">{lead.location_name}</span>
+                  <span className="text-sm">{lead.location_name} {lead.postcode}</span>
                 </div>
               </div>
             </div>
@@ -455,6 +458,25 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                   </div>
                 </div>
               ))}
+              {lead.queries?.trim() && (
+  <div className="mt-6">
+    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">
+      Additional Queries
+    </h3>
+
+    <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+      <div className="flex items-start gap-3">
+        <HelpCircle
+          size={18}
+          className="text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
+        />
+        <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
+          {lead.queries}
+        </p>
+      </div>
+    </div>
+  </div>
+)}
             </div>
           </div>
         )}

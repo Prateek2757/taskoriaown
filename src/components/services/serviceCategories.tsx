@@ -11,6 +11,7 @@ import {
   Flame,
 } from "lucide-react";
 import Link from "next/link";
+import Marquee from "../ui/marquee";
 
 interface ServiceCategoriesProps {
   categories: Array<{
@@ -140,7 +141,9 @@ export default function ServiceCategoriesClient({ categories }: ServiceCategorie
             </button>
           </div>
         )}
+      
 
+    
         {popularCategories.length > 0 && (
           <div className="mb-20">
             <div className="flex items-center justify-center gap-2 mb-8">
@@ -151,6 +154,7 @@ export default function ServiceCategoriesClient({ categories }: ServiceCategorie
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              
               {popularCategories.map((category, index) => (
                 <Link
                   key={category.category_id}
@@ -179,7 +183,7 @@ export default function ServiceCategoriesClient({ categories }: ServiceCategorie
               ))}
             </div>
           </div>
-        )}
+        )}  
 
         {remainingCategories.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 p-8">

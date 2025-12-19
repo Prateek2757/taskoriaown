@@ -5,6 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
 import { Button } from "./ui/button";
+import Marquee from "./ui/marquee";
 
 const containerVariants: Variants = {
   hidden: {},
@@ -74,14 +75,14 @@ export default function Services() {
         </motion.div> */}
 
         <motion.div
-          className="flex gap-8 items-start mb-10 flex-col lg:flex-row
+          className="flex gap-8 items-start mb-5 flex-col lg:flex-row
         "
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           <div className="w-full lg:w-2/3  flex-col  ">
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight drop-shadow-sm">
+            <h1 className="text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight drop-shadow-sm">
               All Your Skills,
               <br />
               <span className="text-blue-400">Empowered and Rewarded</span>
@@ -89,7 +90,7 @@ export default function Services() {
           </div>
 
           <div className="lg:pt-4 flex-col flex-1">
-            <p className="text-gray-700 dark:text-gray-300 pb-3 text-lg leading-relaxed max-w-xl">
+            <p className="text-gray-700  dark:text-gray-300 pb-3 text-lg leading-relaxed max-w-xl">
               Connect with trusted experts for every task — from home repairs to
               creative work — all in one place on Taskoria.
             </p>
@@ -111,12 +112,74 @@ export default function Services() {
           </div>
         ) : categories.length > 0 ? (
           <motion.div
-            className="flex md:grid lg:grid-cols-4 gap-6 max-md:overflow-x-scroll"
+            className="flex md:grid sm:hidden lg:grid-cols-4 gap-6 max-md:overflow-x-scroll"
             variants={containerVariants}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.2 }}
           >
+            {/* <div className="block lg:hidden">
+              <Marquee pauseOnHover className="[--duration:40s]">
+                {categories.map((category, index) => (
+                  <motion.div
+                    key={category.category_id}
+                    variants={itemVariants}
+                    className={`group relative overflow-hidden rounded-3xl max-md:flex-[1_0_300px] ${
+                      index === 0 ? "lg:col-span-2 lg:row-span-" : ""
+                    } ${index === 3 ? "lg:col-span-3  " : ""}`}
+                  >
+                    <Link
+                      href={`/services/${
+                        category.slug ||
+                        category.name.toLowerCase().replace(/\s+/g, "-")
+                      }`}
+                      className="block"
+                    >
+                      <div className="relative h-full min-h-[280px] ">
+                        <div className="absolute inset-0">
+                          <img
+                            src={
+                              staticImages[index]?.url || staticImages[0].url
+                            }
+                            alt={category.name}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                          <div
+                            className={`absolute inset-0 bg-gradient-to-t ${
+                              staticImages[index]?.gradient ||
+                              staticImages[0].gradient
+                            } to-transparent opacity-60`}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                        </div>
+
+                        <div className="relative h-full flex flex-col justify-between p-6 lg:p-8">
+                          <div className="flex justify-end">
+                            <button className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white  transition-all duration-300 group-hover:scale-110 group-hover:rotate-45">
+                              <ArrowUpRight className="w-5 h-5" />
+                            </button>
+                          </div>
+
+                          <div className="space-y-2">
+                            <h3 className="text-white text-2xl lg:text-3xl font-bold leading-tight">
+                              {category.name}
+                            </h3>
+                            <p className="text-white/90 text-sm leading-relaxed max-w-md">
+                              {
+                                "Professional services tailored to your needs "
+                              }
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="absolute inset-0 bg-orange-500/0 group-hover:bg-blue-500/10 transition-colors duration-300" />
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}{" "}
+              </Marquee>
+            </div> */}
+
             {categories.map((category, index) => (
               <motion.div
                 key={category.category_id}

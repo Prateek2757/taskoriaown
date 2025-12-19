@@ -113,7 +113,7 @@ export default function CityProviders({  serviceSlug, citySlug }: CityProvidersP
 
       <div className="text-center mt-10">
         <Link
-          href={`/providers/${serviceSlug}/${citySlug}`}
+          href={`/providers`}
           className="inline-flex items-center gap-2 px-8 py-4 bg-white dark:bg-slate-800 border-2 border-indigo-600 dark:border-indigo-500 text-indigo-600 dark:text-indigo-400 font-semibold rounded-full hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all"
         >
           View All Providers

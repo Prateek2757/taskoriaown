@@ -17,6 +17,7 @@ import { SparklesCore } from "./ui/sparkles";
 import { useTheme } from "next-themes";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import { SparklesCoreLight } from "./ui/sparklesLight";
+import ScrollPopularSection from "./ScrollPopularSection";
 
 interface Category {
   category_id: number;
@@ -25,6 +26,8 @@ interface Category {
 }
 
 export default function HeroSection() {
+  
+
   const [openModal, setOpenModal] = useState(false);
   const [slugvalue, setSlugValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
@@ -59,7 +62,7 @@ export default function HeroSection() {
   return (
     <>
       <section
-        className="relative pt-10 text-center overflow-hidden 
+        className="relative text-center overflow-hidden 
   dark:bg-[radial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)] "
       >
         {/* <Earth
@@ -73,13 +76,14 @@ export default function HeroSection() {
           src="/images/bglines.png"
           className="absolute top-0 left-0 w-full h-full object-cover opacity-50"
         />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-4">
+        <div className="container pt-10  bg-gradient-to-r from-[#3C7DED]/25 via-[#41A6EE]/20 to-[#46CBEE]/25
+      mx-auto  pb-4  px-4 relative z-10">
+          <div className="max-w-4xl mx-auto  space-y-6">
+            <div className="inline-flex gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-2">
               <Sparkles className="h-4 w-4 text-blue-600" /> AI-Powered •
               Community Driven
             </div>
-            <h1 className="text-3xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
+            <h1 className="text-4xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
               The Future of{" "}
               <span className="relative inline-block bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
                 Service
@@ -125,12 +129,7 @@ export default function HeroSection() {
                   href={`/services/${slugvalue}`}
                   className="sm:w-auto sm:mt-0"
                 >
-                  {/* <Button className="w-full sm:w-auto bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold  sm:px-7 py-5  shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-cyan-700 active:scale-[0.97] transition-all duration-200">
-                    <span className="max-sm:hidden">Search</span>
-                    <div className="sm:hidden">
-                      <Search />
-                    </div>
-                  </Button> */}
+                 
                 </Link>
               </div>
 
@@ -164,59 +163,10 @@ export default function HeroSection() {
                 </Button>
               )}
             </div>
-            {/* <div
-              className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto mt-6 
-  bg-[rgba(255,255,255,.2)] dark:bg-white/5 backdrop-blur-[2px] 
-  border dark:border-white/10 
-  rounded-2xl p-6 shadow-[0_4px_30px_rgba(0,0,0,.1)] border-[rgba(255,255,255,.3)]"
-            >
-              {[
-                {
-                  value: "1K+",
-                  label: "Verified Providers",
-                  gradient: "from-blue-500 to-blue-700",
-                },
-                {
-                  value: "5K+",
-                  label: "Jobs Completed",
-                  gradient: "from-cyan-500 to-cyan-700",
-                },
-                {
-                  value: "4.5★",
-                  label: "Average Rating",
-                  gradient: "from-purple-500 to-purple-700",
-                },
-                {
-                  value: "24/7",
-                  label: "AI Support",
-                  gradient: "from-orange-500 to-orange-700",
-                },
-              ].map((item, index) => (
-                <div
-                  key={index}
-                  className={`
-        relative text-center hover:scale-[1.04] transition-all
-        after:content-[''] after:absolute after:top-[10%] after:h-[80%] after:w-px after:bg-gray-200 dark:after:bg-gray-700
-        after:-right-3 md:after:-right-4
-        ${index % 2 !== 0 ? "after:hidden" : "after:block"}
-        ${index === 1 ? "md:after:block" : ""}
-        ${index === 3 ? "md:after:hidden" : ""}
-      `}
-                >
-                  <div
-                    className={`text-xl sm:text-4xl font-extrabold bg-gradient-to-r ${item.gradient} bg-clip-text text-transparent`}
-                  >
-                    {item.value}
-                  </div>
-                  <div className="text-gray-700 dark:text-gray-300 text-sm">
-                    {item.label}
-                  </div>
-                </div>
-              ))}
-            </div> */}
           </div>
         </div>
-        <div className="mt-16 relative overflow-hidden bg-gradient-to-t from-zinc-100 to-transparent  dark:from-black">
+        <ScrollPopularSection/>
+        <div className="mt-10 hidden lg:block relative overflow-hidden bg-gradient-to-t from-zinc-100 to-transparent  dark:from-black">
           <div className="mx-auto max-w-4xl relative ">
             <div className="text-center text-3xl text-white">
               <h2 className="text-slate-900 text-2xl sm:text-3xl lg:text-4xl dark:text-white font-bold leading-tight">

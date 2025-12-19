@@ -13,7 +13,10 @@ import {
   LayoutDashboard,
   MessageSquare,
   LogOut,
+  Home,
+  HandPlatter,
   Settings,
+  Binoculars,
   Bell,
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
@@ -40,18 +43,18 @@ export default function ModernNavbar() {
 
   const navLinks = {
     public: [
-      { name: "Home", href: "/", icon: Search },
+      { name: "Home", href: "/", icon:Home  },
       { name: "Providers", href: "/providers", icon: Users },
-      { name: "Services", href: "/services", icon: Search },
+      { name: "Services", href: "/services", icon:HandPlatter },
     ],
     customer: [
-      { name: "Home", href: "/", icon: Search },
+      { name: "Home", href: "/", icon: Home },
       { name: "My Requests", href: "/customer/dashboard", icon: Search },
-      { name: "Discover", href: "/services", icon: Search },
+      { name: "Discover", href: "/services", icon: Binoculars},
       { name: "Messages", href: "/messages/null", icon: MessageSquare },
     ],
     provider: [
-      { name: "Home", href: "/", icon: Search },
+      { name: "Home", href: "/", icon: Home },
       { name: "Leads", href: "/provider/leads", icon: Search },
       { name: "My Responses", href: "/messages/null", icon: MessageSquare },
       { name: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
@@ -319,7 +322,10 @@ export default function ModernNavbar() {
                   </Button>
                 </>
               )}
+              <div className="">
               <ThemeToggle />
+              </div>
+              
             </div>
           )}
 
@@ -370,7 +376,7 @@ export default function ModernNavbar() {
                       Taskoria
                     </span>
                   </Link>
-                  <div className="p-1">
+                  <div className="pl-16  ">
                     <ThemeToggle />
                   </div>
                   <button

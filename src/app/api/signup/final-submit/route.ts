@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 import bcrypt from "bcryptjs";
+import { sendVerificationEmail } from "@/components/email/helpers/sendVerificationEmail";
 
 export async function POST(req: NextRequest) {
   const client = await pool.connect();
@@ -22,7 +23,6 @@ export async function POST(req: NextRequest) {
       password,
     } = await req.json();
 // console.log(categoryPublic_id);
-
     if (!public_id || !categoryPublic_id || !name || !email || !password) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
@@ -100,6 +100,7 @@ console.log(user_idd,category_id);
       `,
       [user_idd]
     );
+    await sendVerificationEmail(email,name);
 
     return NextResponse.json({ message: "✅ Signup successful!", user: rows[0] });
   } catch (err: unknown) {
