@@ -7,34 +7,36 @@ import axios from "axios";
 
 type Location = {
   place_id: number;
-  city_id?:number;
+  city_id?: number;
   display_name: string;
   lat: string;
   lon: string;
   address?: {
     city?: string;
-    municipality?:string;
+    municipality?: string;
     town?: string;
-    territory?:string;
+    territory?: string;
     village?: string;
     state?: string;
     country?: string;
     postcode?: string;
   };
 };
+
 type LocationProp = {
   city_id?: number;
   city?: string;
   display_name?: string;
   municipality?: string;
+  name?: string;
 };
 
 type Props = {
-  onSelect?: (data: { city_id: number; city: string ; display_name:string ; municipality:string}) => void;
-  presetLocation?:LocationProp | null
+  onSelect?: (data: { city_id: number; city: string; display_name: string; municipality: string }) => void;
+  presetLocation?: LocationProp | null;
 };
 
-export default function LocationSearch({ onSelect ,presetLocation}: Props) {
+export default function LocationSearch({ onSelect, presetLocation }: Props) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Location[]>([]);
   const [loading, setLoading] = useState(false);
@@ -45,12 +47,15 @@ export default function LocationSearch({ onSelect ,presetLocation}: Props) {
   const cache = useRef<{ [key: string]: Location[] }>({});
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
-
   useEffect(() => {
-      if (presetLocation) {
-        setQuery(presetLocation.display_name);
-      } 
-    }, [presetLocation]);
+    if (presetLocation) {
+      const displayText = presetLocation.display_name || 
+                         presetLocation.city || 
+                         presetLocation.name || 
+                         "";
+      setQuery(displayText);
+    }
+  }, [presetLocation]);
 
   const fetchAddresses = async (value: string) => {
     if (value.length < 3) {
@@ -74,8 +79,6 @@ export default function LocationSearch({ onSelect ,presetLocation}: Props) {
       );
       const data = await res.json();
       setResults(data);
-      console.log(data);
-      
       cache.current[value] = data;
       setShowDropdown(true);
     } catch (err) {
@@ -98,13 +101,12 @@ export default function LocationSearch({ onSelect ,presetLocation}: Props) {
       city: r.address?.city || r.address?.town || r.address?.village || "",
       state: r.address?.state || "",
       country: r.address?.country || "",
-      territory:r.address?.territory || "",
+      territory: r.address?.territory || "",
       postcode: r.address?.postcode || "",
-      municipality:r.address?.municipality || "",
+      municipality: r.address?.municipality || "",
       lat: parseFloat(r.lat),
       lon: parseFloat(r.lon),
     };
-console.log(location);
 
     setQuery(location.display_name);
     setResults([]);
@@ -112,11 +114,15 @@ console.log(location);
     setActiveIndex(-1);
 
     try {
-      const res = await axios.post("/api/signup/location",location);
+      const res = await axios.post("/api/signup/location", location);
       const data = await res.data;
-      console.log(data);
       
-      onSelect?.({ city_id: data.city_id, city: location.city ,display_name:location.display_name ,municipality:location.municipality});
+      onSelect?.({
+        city_id: data.city_id,
+        city: location.city,
+        display_name: location.display_name,
+        municipality: location.municipality
+      });
     } catch (err) {
       console.error("Failed to save location:", err);
     }
@@ -147,7 +153,7 @@ console.log(location);
         onChange={(e) => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Search your location"
-        className="w-full border border-gray-300  rounded-xl pl-9 focus:outline-none focus:ring-2 focus:ring-primary text-sm shadow-sm"
+        className="w-full border border-gray-300 rounded-xl pl-9 focus:outline-none focus:ring-2 focus:ring-primary text-sm shadow-sm"
         onFocus={() =>
           query.length >= 3 && results.length > 0 && setShowDropdown(true)
         }
@@ -169,8 +175,8 @@ console.log(location);
               key={r.place_id}
               className={`p-3 cursor-pointer text-sm transition-colors ${
                 i === activeIndex
-                  ? "bg-blue-500 text-white "
-                  : "hover:bg-primary  text-gray-700"
+                  ? "bg-blue-500 text-white"
+                  : "hover:bg-primary text-gray-700"
               }`}
               onClick={() => handleSelect(r)}
               onMouseEnter={() => setActiveIndex(i)}

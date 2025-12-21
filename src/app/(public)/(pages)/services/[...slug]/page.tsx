@@ -47,19 +47,65 @@ interface City {
 
 export default function ServicePage() {
   const { cities, loading: citiesLoading } = useLeadProfile();
-
   const [openModal, setOpenModal] = useState(false);
 
   const params = useParams();
   const slug = Array.isArray(params.slug) ? params.slug : [params.slug || ""];
   const serviceSlug = slug[0];
   const citySlug = slug[1] || null;
+  
   const [service, setService] = useState<ServiceData | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedLocation, setSelectedLocation] = useState<City | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<ServiceData | null>(
-    null
-  );
+  const [selectedCategory, setSelectedCategory] = useState<ServiceData | null>(null);
+
+  useEffect(() => {
+    async function fetchCityData() {
+      if (!citySlug || citiesLoading) return;
+
+      try {
+        const matchedCity = cities?.find(
+          (city) => 
+            city.name?.toLowerCase().replace(/\s+/g, '-') === citySlug.toLowerCase() 
+        );
+
+        if (matchedCity) {
+          setSelectedLocation(matchedCity);
+          return;
+        }
+
+       
+      } catch (error) {
+        console.error("Failed to fetch city data:", error);
+      }
+    }
+
+    fetchCityData();
+  }, [citySlug, cities, citiesLoading]);
+
+  useEffect(() => {
+    async function fetchService() {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/categories/${serviceSlug}`);
+        if (res.ok) {
+          const data = await res.json();
+          setService(data);
+        } else {
+          setService(null);
+        }
+      } catch (error) {
+        console.error("Failed to fetch service:", error);
+        setService(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    if (serviceSlug) {
+      fetchService();
+    }
+  }, [serviceSlug]);
 
   const handleSelectCategory = () => {
     setSelectedCategory(service);
@@ -71,21 +117,6 @@ export default function ServicePage() {
     setSelectedCategory(service);
     setOpenModal(true);
   };
-
-  useEffect(() => {
-    async function fetchService() {
-      setLoading(true);
-      const res = await fetch(`/api/categories/${serviceSlug}`);
-      if (res.ok) {
-        const data = await res.json();
-        setService(data);
-      } else {
-        setService(null);
-      }
-      setLoading(false);
-    }
-    fetchService();
-  }, [slug]);
 
   if (loading) {
     return (
@@ -133,11 +164,11 @@ export default function ServicePage() {
     "@type": "Service",
     name: service.name,
     provider: { "@type": "Organization", name: "Taskoria" },
-    areaServed: "AU",
+    areaServed: citySlug ? selectedLocation?.city || "AU" : "AU",
     description: service.description,
     serviceType: service.name,
     offers: { "@type": "Offer", availability: "https://schema.org/InStock" },
-    url: `/services/${service.slug}`,
+    url: `/services/${service.slug}${citySlug ? `/${citySlug}` : ''}`,
   };
 
   return (
@@ -154,21 +185,22 @@ export default function ServicePage() {
       <ServiceHeroSection
         service={service}
         onLocationSelect={handleLocationSet}
+        presetLocation={selectedLocation}
       />
-      {
-          citySlug &&
-            <ServiceIntro serviceName={serviceSlug} cityName={citySlug} />
-      }
+      {citySlug && (
+        <ServiceIntro serviceName={serviceSlug} cityName={citySlug} />
+      )}
 
       <section className="max-w-6xl mx-auto px-6 py-10">
+        {!citySlug && <HowItWorksSection />}
         
-          { !citySlug && <HowItWorksSection />}
         {citySlug && (
           <>
             {/* <CityStats serviceName={service.name} /> */}
             <CityProviders serviceSlug={serviceSlug} citySlug={citySlug} />
           </>
         )}
+        
         {!citySlug && (
           <PopularLocationsSection serviceSlug={serviceSlug} cities={cities} />
         )}

@@ -8,13 +8,15 @@ interface HeroSectionProps {
   cityData: any;
   citySlug: string | null;
   onLocationSelect: (location: any) => void;
+  presetLocation:any;
 }
 
 export default function ServiceHeroSection({ 
   service, 
   cityData, 
   citySlug, 
-  onLocationSelect 
+  onLocationSelect,
+  presetLocation, 
 }: HeroSectionProps) {
   const title = citySlug 
     ? `${service.name} in ${cityData?.display_name || citySlug}`
@@ -77,7 +79,7 @@ export default function ServiceHeroSection({
                 </p>
               </div>
             </div>
-            <LocationSearch onSelect={onLocationSelect} />
+            <LocationSearch onSelect={onLocationSelect} presetLocation={presetLocation} />
           </div> 
         </div>
       </div>

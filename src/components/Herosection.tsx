@@ -76,7 +76,7 @@ export default function HeroSection() {
           src="/images/bglines.png"
           className="absolute top-0 left-0 w-full h-full object-cover opacity-50"
         />
-        <div className="container pt-10  bg-gradient-to-r from-[#3C7DED]/25 via-[#41A6EE]/20 to-[#46CBEE]/25
+        <div className="container pt-10  max-md:bg-gradient-to-r from-[#3C7DED]/25 via-[#41A6EE]/20 to-[#46CBEE]/25 
       mx-auto  pb-4  px-4 relative z-10">
           <div className="max-w-4xl mx-auto  space-y-6">
             <div className="inline-flex gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-2">

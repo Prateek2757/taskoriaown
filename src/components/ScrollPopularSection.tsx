@@ -1,8 +1,9 @@
-import React from "react";
+"use client";
 import { ChevronRight, TrendingUp } from "lucide-react";
-import Marquee from "./ui/marquee";
 import { useCategories } from "@/hooks/useCategories";
 import { Skeleton } from "./ui/skeleton";
+import { motion } from "motion/react";
+import { useRouter } from "next/navigation";
 
 const staticImages = [
   {
@@ -29,11 +30,12 @@ const staticImages = [
 
 function ScrollPopularSection() {
   const { categories, loading } = useCategories(5);
-  const marqueeItems = [...categories, ...categories];
+  const router = useRouter();
+
 
   if (loading) {
     return (
-      <section className="pt-10">
+      <section className=" md:hidden pt-10">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-6">
             <Skeleton className="h-44 w-full" />
@@ -43,8 +45,14 @@ function ScrollPopularSection() {
     );
   }
 
+  if (categories.length === 0) {
+    return null;
+  }
+
+  const totalWidth = (320 + 16 ) * categories.length;
+
   return (
-    <div className="bg-gradient-to-br block lg:hidden from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-4 px-4">
+    <div className="bg-gradient-to-br block  md:hidden from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-4 px-4">
       <section className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-3 animate-fadeIn">
           <div>
@@ -61,17 +69,24 @@ function ScrollPopularSection() {
               Popular Services
               <span className="absolute left-0 -bottom-2 h-1 w-full rounded-full bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE]" />
             </h2>
-            {/* <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Discover what's hot in the marketplace
-            </p> */}
           </div>
         </div>
 
-        <Marquee pauseOnHover className="[--duration:25s] ">
-          {marqueeItems.map((category, index) => (
-            <div key={category.category_id} className="group mx-3">
-              <div className="relative w-[320px] bg-white dark:bg-gray-800 rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-[140px]">
-                <div className="absolute left-0 top-0 bottom-0 w-[50%] p-4 flex flex-col  z-10">
+        <div className="relative overflow-x-auto">
+          <div
+            className="flex gap-4 w-max cursor-grab"
+                       
+          >
+            {categories.map((category, index) => (
+              <div
+                key={`${category.category_id}`}
+             
+                onClick={() =>
+                  router.push(`/services/${category.slug ?? category.category_id}`)
+                }
+                className="relative w-[320px] flex-shrink-0 bg-white dark:bg-gray-800 rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-[140px] cursor-pointer group"
+              >
+                <div className="absolute left-0 top-0 bottom-0 w-[50%] p-4 flex flex-col z-10">
                   <h3 className="text-lg text-left font-semibold text-gray-900 leading-tight dark:text-white mb-2">
                     {category.name}
                   </h3>
@@ -100,21 +115,10 @@ function ScrollPopularSection() {
 
                 <ChevronRight className="absolute right-4 bottom-4 w-4 h-4 text-gray-400 group-hover:text-blue-600 transition z-20" />
               </div>
-            </div>
-          ))}
-        </Marquee>
+            ))}
+          </div>
+        </div>
       </section>
-
-      <style jsx>{`
-        @keyframes marquee {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-      `}</style>
     </div>
   );
 }

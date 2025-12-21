@@ -158,7 +158,7 @@ export default function PopularLocationsSection({
                     ))}
                   </div>
                     
-                <Button onClick={()=>router.push(`/${serviceSlug}/${city.name}`)} className="flex items-center justify-center py-3 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white text-center font-semibold rounded-2xl group-hover:shadow-lg transition-all">
+                <Button onClick={()=>router.push(`/${serviceSlug}/${city.display_name}`)} className="flex items-center justify-center py-3 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white text-center font-semibold rounded-2xl group-hover:shadow-lg transition-all">
                   Search {city.name}
                 </Button>
               </div>

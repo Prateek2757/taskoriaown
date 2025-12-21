@@ -4,7 +4,7 @@ import pool from "@/lib/dbConnect";
 export async function GET() {
   try {
     const result = await pool.query(`
-      SELECT city_id, name FROM cities ORDER BY popularity DESC ,name ASC
+      SELECT city_id, name ,display_name FROM cities ORDER BY popularity DESC ,name ASC
     `);
     return NextResponse.json(result.rows);
   } catch (err: unknown) {
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     const finalState = state || territory || null;
 
     const finalCity =
-      display_name?.split(",")[0] || city || territory || municipality;
+      city || territory || municipality ||  display_name?.split(",")[0] ;
 
     if (!country || !finalCity || !lat || !lon) {
       return NextResponse.json(
@@ -90,7 +90,7 @@ export async function POST(req: Request) {
       `
       INSERT INTO cities (name, country_id, state_id, latitude, longitude,place_id , display_name,postcode)
       VALUES ($1, $2, $3, $4, $5 , $6, $7, $8)
-      ON CONFLICT (name, state_id, country_id) DO NOTHING
+      ON CONFLICT (display_name) DO NOTHING
       RETURNING city_id;
       `,
       [
@@ -106,11 +106,12 @@ export async function POST(req: Request) {
     );
 
     const cityId =
-      cityRes.rows[0]?.city_id ||
+      cityRes.rows[0]?.city_id 
+      ||
       (
         await client.query(
-          `SELECT city_id FROM cities WHERE name = $1 AND state_id = $2 AND country_id = $3`,
-          [city, stateId, countryId]
+          `SELECT city_id FROM cities WHERE display_name = $1 AND state_id = $2 AND country_id = $3`,
+          [display_name, stateId, countryId]
         )
       ).rows[0].city_id;
 
