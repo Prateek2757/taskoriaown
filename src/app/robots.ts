@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: '/provider/*',
+      disallow: '/provider/*'
     },
     sitemap: 'https://taskoria.com/sitemap.xml',
   }

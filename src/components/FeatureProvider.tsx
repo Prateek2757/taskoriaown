@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
@@ -32,7 +31,6 @@ export const metadata = {
 export const FeatureProvider = () => {
   const { providers, loading } = useProviders(3);
   
-  console.log("first", providers);
   return (
     <section
       className="

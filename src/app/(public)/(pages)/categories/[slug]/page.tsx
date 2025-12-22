@@ -7,6 +7,61 @@ import { motion, Variants, easeOut } from "motion/react";
 import axios from "axios";
 import { toast } from "sonner";
 import Image from "next/image";
+import type { Metadata } from "next";
+
+
+type Props = {
+  params: { slug: string };
+};
+
+// export async function generateMetadata(
+//   { params }: Props
+// ): Promise<Metadata> {
+//   try {
+//     const { slug } = params;
+
+//     const res = await axios.get(
+//       `${process.env.NEXT_PUBLIC_BASE_URL}/api/categories/${slug}`
+//     );
+
+//     const category = res.data;
+
+//     return {
+//       title: `${category.name} Services | Hire Verified Professionals – Taskoria`,
+//       description: `Browse verified ${category.name.toLowerCase()} service providers on Taskoria. Secure booking, trusted professionals, and payment protection guaranteed.`,
+//       keywords: [
+//         `${category.name} services`,
+//         `${category.name} providers`,
+//         "hire professionals",
+//         "verified service providers",
+//         "Taskoria categories",
+//         "secure service marketplace"
+//       ],
+//       openGraph: {
+//         title: `${category.name} Services | Taskoria`,
+//         description: `Find trusted and verified ${category.name.toLowerCase()} professionals on Taskoria.`,
+//         url: `https://www.taskoria.com/categories/${slug}`,
+//         siteName: "Taskoria",
+//         type: "website",
+//         locale: "en_AU",
+//       },
+//       twitter: {
+//         card: "summary_large_image",
+//         title: `${category.name} Services | Taskoria`,
+//         description: `Hire verified ${category.name.toLowerCase()} professionals with secure payments.`,
+//       },
+//       alternates: {
+//         canonical: `https://www.taskoria.com/categories/${slug}`,
+//       },
+//     };
+//   } catch (error) {
+//     return {
+//       title: "Service Categories | Taskoria",
+//       description:
+//         "Browse service categories and hire verified professionals on Taskoria with secure payments and trusted providers.",
+//     };
+//   }
+// }
 
 interface Provider {
   provider_id: number;

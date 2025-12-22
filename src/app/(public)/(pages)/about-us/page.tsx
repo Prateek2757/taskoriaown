@@ -1,6 +1,63 @@
-"use client"
-import { Shield, Lock, Award, Heart, CheckCircle2 } from 'lucide-react';
+import { Shield, Lock, Award, Heart } from 'lucide-react';
 import Image from 'next/image';
+
+
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us | Taskoria – Australia’s Trusted Service Marketplace",
+  description:
+    "Learn how Taskoria is building trust in every connection. Discover our mission, values, secure payment protection, and journey to becoming Australia’s most trusted service marketplace.",
+  keywords: [
+    "Taskoria",
+    "About Taskoria",
+    "Australian service marketplace",
+    "verified service providers Australia",
+    "secure home services",
+    "trusted local professionals",
+    "payment protection marketplace",
+    "home services Australia"
+  ],
+  authors: [{ name: "Taskoria Team" }],
+  creator: "Taskoria",
+  publisher: "Taskoria",
+  metadataBase: new URL("https://www.taskoria.com"),
+
+  openGraph: {
+    title: "About Taskoria – Building Trust in Every Connection",
+    description:
+      "Taskoria connects Australians with verified professionals through secure payments, rigorous verification, and community-driven values.",
+    url: "https://www.taskoria.com/about-us",
+    siteName: "Taskoria",
+    images: [
+      {
+        url: "/images/providers.jpeg",
+        width: 1200,
+        height: 630,
+        alt: "Taskoria verified service providers",
+      },
+    ],
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "About Taskoria – Trusted & Verified Services",
+    description:
+      "Discover how Taskoria makes finding trusted service providers safe, simple, and secure across Australia.",
+    images: ["/images/providers.jpeg"],
+    creator: "@taskoria",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
+  alternates: {
+    canonical: "https://www.taskoria.com/about-us",
+  },
+};
 
 export default function AboutUs() {
   const stats = [

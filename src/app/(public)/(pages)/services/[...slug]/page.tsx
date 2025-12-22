@@ -16,6 +16,12 @@ import CityProviders from "@/components/servicePage/cityProviders";
 import CityStats from "@/components/servicePage/cityStats";
 import ServiceIntro from "@/components/servicePage/IntroSection";
 
+type Props = {
+  params: { slug: string[] };
+};
+
+
+
 interface ServiceData {
   category_id: number;
   name: string;
@@ -44,6 +50,8 @@ interface City {
   providers?: CityProvider[];
   activeProviders?: number;
 }
+
+
 
 export default function ServicePage() {
   const { cities, loading: citiesLoading } = useLeadProfile();
@@ -163,6 +171,7 @@ export default function ServicePage() {
     "@context": "https://schema.org",
     "@type": "Service",
     name: service.name,
+    title:service.name,
     provider: { "@type": "Organization", name: "Taskoria" },
     areaServed: citySlug ? selectedLocation?.city || "AU" : "AU",
     description: service.description,

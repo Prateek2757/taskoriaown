@@ -92,7 +92,6 @@ export default function BookingPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
 
       <div className="container mx-auto px-4 py-8">
         <Button variant="ghost" asChild className="mb-6">
@@ -111,9 +110,7 @@ export default function BookingPage() {
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
-            {/* Booking Form */}
             <div className="lg:col-span-2 space-y-6">
-              {/* Provider Info */}
               <Card>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4 mb-4">
@@ -160,7 +157,6 @@ export default function BookingPage() {
                 </CardContent>
               </Card>
 
-              {/* Service Details */}
               <Card>
                 <CardHeader>
                   <CardTitle>Service Details</CardTitle>

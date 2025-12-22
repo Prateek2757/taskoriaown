@@ -91,7 +91,7 @@ export default function HeroSection() {
               <Sparkles className="h-4 w-4 text-blue-600" /> AI-Powered •
               Community Driven
             </div>
-            <h1 className="text-4xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
+            <div className="text-4xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
               The Future of{" "}
               <span className="relative inline-block bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
                 Service
@@ -113,7 +113,7 @@ export default function HeroSection() {
               <span className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
                 Marketplaces
               </span>
-            </h1>
+            </div>
 
             <p className="max-w-xl mx-auto mt-4 text-[15px] text-gray-400 dark:text-gray-300 hidden sm:block">
               Connect with verified professionals through our AI-powered
