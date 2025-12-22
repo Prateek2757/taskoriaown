@@ -104,7 +104,9 @@ export const FeatureProvider = () => {
                   <div className="flex gap-3">
                     <div className="relative h-20 w-20 overflow-hidden rounded-2xl">
                       {p.image ? (
-                        <Image src={p.image} alt={p.name} fill />
+                        <Image src={p.image} alt={p.name} fill sizes="(max-width: 640px) 100vw,
+                        (max-width: 1024px) 50vw,
+                        33vw"/>
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-white dark:bg-accent border-1 rounded-2xl">
                           <div className="flex flex-col items-center hover:opacity-90 transition-opacity">

@@ -5,8 +5,8 @@ import LocationSearch from "@/components/Location/locationsearch";
 
 interface HeroSectionProps {
   service: any;
-  cityData: any;
-  citySlug: string | null;
+  cityData?: any;
+  citySlug?: string | null;
   onLocationSelect: (location: any) => void;
   presetLocation:any;
 }

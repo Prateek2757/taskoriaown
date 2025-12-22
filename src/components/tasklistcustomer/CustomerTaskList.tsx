@@ -25,6 +25,7 @@ import {
 
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, Calendar, DollarSign, MessageSquare } from "lucide-react";
+import Image from "next/image";
 
 interface Task {
   task_id: number;
@@ -324,7 +325,9 @@ export default function TasksList({ tasks }: { tasks?: Task[] }) {
                                   className="min-w-[320px] p-6 rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
                                 >
                                   <div className="flex items-center gap-3 mb-4">
-                                    <img
+                                    <Image
+                                    width={12}
+                                    height={12}
                                       src={
                                         r.avatar_url ||
                                         "/images/default-avatar.png"

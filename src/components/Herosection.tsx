@@ -18,6 +18,7 @@ import { useTheme } from "next-themes";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import { SparklesCoreLight } from "./ui/sparklesLight";
 import ScrollPopularSection from "./ScrollPopularSection";
+import Image from "next/image";
 
 interface Category {
   category_id: number;
@@ -72,9 +73,16 @@ export default function HeroSection() {
         glowColor={[1, 1, 1]}
         className="absolute h-[800px] max-w-[900px] left-1/2 bottom-0 -translate-x-1/2 -translate-y-0 opacity-5"
       /> */}
-        <img
-          src="/images/bglines.png"
+        <Image
+       fill
+        alt="herosection image"
+          src="/images/bglines.avif"
           className="absolute top-0 left-0 w-full h-full object-cover opacity-50"
+          sizes="(max-width: 640px) 100vw,
+       (max-width: 1024px) 50vw,
+       33vw" 
+       loading="eager"
+
         />
         <div className="container pt-10  max-md:bg-gradient-to-r from-[#3C7DED]/25 via-[#41A6EE]/20 to-[#46CBEE]/25 
       mx-auto  pb-4  px-4 relative z-10">

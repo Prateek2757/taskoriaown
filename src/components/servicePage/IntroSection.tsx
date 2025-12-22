@@ -12,10 +12,10 @@ type Props = {
 
 export default function ServiceIntro({ serviceName , cityName }: Props) {
   return (
-    <section className="relative dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-800    py-20">
+    <section className="relative dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-800  overflow-hidden  py-10">
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
 
-        <div>
+        <div className="text-jus">
           <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-6">
             Find trusted{" "}
             <span className="text-blue-500">{serviceName}</span>{" "}
@@ -28,7 +28,7 @@ export default function ServiceIntro({ serviceName , cityName }: Props) {
                 alt={` Logo`}
                 className="mx-auto"
               /> */}
-          <p className="dark:text-slate-300 text-gray-600 mb-6">
+          <p className="dark:text-slate-300 text-gray-600 text-justify mb-6">
             Searching for reliable {serviceName}s doesn’t have to be difficult.
             We help you connect with experienced local professionals who match
             your needs — quickly and at no cost.
@@ -49,16 +49,16 @@ export default function ServiceIntro({ serviceName , cityName }: Props) {
             </li>
           </ul>
 
-          <div className="flex flex-wrap gap-4">
-            <Button size="lg" className="rounded-xl">
-              Start Your Free Search
+          <div className="flex  flexwrap  gap-2">
+            <Button size="lg" className="rounded-xl ">
+              Start Free Search
             </Button>
             <Button
               size="lg"
               variant="outline"
               className="rounded-xl dark:text-white border-white text-gray-950 hover:bg-white hover:text-slate-900"
             >
-              Browse {serviceName}s
+              Browse {serviceName}
             </Button>
           </div>
         </div>

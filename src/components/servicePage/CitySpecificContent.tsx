@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPin, Clock, DollarSign, TrendingUp, Star, Users, Award } from "lucide-react";
+import { MapPin, Clock, DollarSign, TrendingUp,  Award } from "lucide-react";
 
 interface CitySpecificContentProps {
   service: any;
@@ -11,7 +11,6 @@ interface CitySpecificContentProps {
 export default function CitySpecificContent({
   service,
   cityData,
-  citySlug,
 }: CitySpecificContentProps) {
   return (
     <div className="mb-20">

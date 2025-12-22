@@ -4,6 +4,7 @@ import Link from "next/link";
 import { TrendingUp, Star } from "lucide-react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface PopularLocationsSectionProps {
   cities: any[];
@@ -84,7 +85,9 @@ export default function PopularLocationsSection({
 }: PopularLocationsSectionProps) {
   const displayCities = cities.slice(0, 4);
 
-  const router =useRouter()
+  const router =useRouter();
+
+
 
   return (
     <div className="mb-20">
@@ -116,7 +119,8 @@ export default function PopularLocationsSection({
               } hover:-translate-y-2`}
             >
               <div className="relative h-52 overflow-hidden">
-                <img
+                <Image
+              fill
                   src={popularCities[index]?.image}
                   alt={city.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -135,10 +139,11 @@ export default function PopularLocationsSection({
                   </div>
                 </div>
               </div>
-
+            
+            
               <div className="p-6">
-              <div className="space-y-3 mb-5">
-                    {popularCities[index].providers.slice(0, 3).map((provider, i) => (
+              <div className="space-y-3 mb-5"> 
+                    {popularCities[index]?.providers?.slice(0, 3).map((provider, i) => (
                       <div key={i} className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700/50 transition">
                         <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0 shadow-md">
                           {provider.logo}
@@ -158,8 +163,8 @@ export default function PopularLocationsSection({
                     ))}
                   </div>
                     
-                <Button onClick={()=>router.push(`/${serviceSlug}/${city.display_name}`)} className="flex items-center justify-center py-3 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white text-center font-semibold rounded-2xl group-hover:shadow-lg transition-all">
-                  Search {city.name}
+                <Button onClick={()=>router.push(`/${serviceSlug}/${city.name}`)} className="flex items-center justify-center py-3 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white text-center font-semibold rounded-2xl group-hover:shadow-lg transition-all">
+                  Search  {city.name}
                 </Button>
               </div>
             </Link>

@@ -1,6 +1,7 @@
 "use client";
 
 import { uploadToSupabase } from "@/lib/uploadFileToSupabase";
+import Image from "next/image";
 import React, { useState, ChangeEvent, useEffect, useMemo } from "react";
 
 type Props = {
@@ -206,10 +207,14 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
           <div className="flex flex-col items-center justify-center">
             <div className="w-24 h-24 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center">
               {formState.avatarPreview ? (
-                <img
+                <Image 
+                fill
                   src={formState.avatarPreview}
                   alt="Avatar"
                   className="object-cover w-full h-full"
+                  sizes="(max-width: 640px) 100vw,
+       (max-width: 1024px) 50vw,
+       33vw"
                 />
               ) : (
                 <div className="w-12 h-12 bg-gray-300 rounded-full" />
@@ -257,7 +262,8 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
           <div className="flex flex-col items-center justify-center">
             <div className="w-24 h-24 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center">
               {formState.companyLogoPreview ? (
-                <img
+                <Image
+                fill
                   src={formState.companyLogoPreview}
                   alt="Company Logo"
                   className="object-cover w-full h-full"

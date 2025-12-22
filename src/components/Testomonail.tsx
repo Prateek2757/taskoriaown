@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Quote, QuoteIcon } from "lucide-react";
 import { motion } from "motion/react";
 import Marquee from "./ui/marquee";
+import Image from "next/image";
 
 const reviews = [
   {
@@ -68,7 +69,7 @@ const ReviewCard = ({
       )}
     >
       <div className="flex flex-row items-center gap-2">
-        <img className="rounded-lg" width="32" height="32" alt="" src={img} />
+        <Image  className="rounded-lg" width={32} height={32} alt="mianc" src={img} />
         <div className="flex flex-col">
           <figcaption className="text-sm font-medium dark:text-white">
             {name}

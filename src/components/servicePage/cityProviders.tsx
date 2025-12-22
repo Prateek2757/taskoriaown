@@ -4,13 +4,12 @@ import { Star, Award, MapPin, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 interface CityProvidersProps {
-  cityData: any;
+  cityData?: any;
   serviceSlug: string;
   citySlug: string;
 }
 
 export default function CityProviders({  serviceSlug, citySlug }: CityProvidersProps) {
-  // Mock providers - in production, fetch from API
   const providers =  [
     {
       id: 1,

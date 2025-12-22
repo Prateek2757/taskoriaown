@@ -69,8 +69,11 @@ export default function NewRequestModal({
   useEffect(() => {
     if (presetLocation) {
       setSelectedLocationId(String(presetLocation?.city_id));
+
     }
   }, [presetLocation]);
+
+  
 
   const next = () => setStep(2);
   const back = () => setStep(1);

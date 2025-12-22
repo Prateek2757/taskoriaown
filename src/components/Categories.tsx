@@ -25,23 +25,23 @@ const itemVariants: Variants = {
 
 const staticImages = [
   {
-    url: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740",
+    url: "/images/housecleaning.avif",
     gradient: "from-red-500/20 to-orange-500/20",
   },
   {
-    url: "https://images.unsplash.com/photo-1728808668131-76d40d112271?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=772",
+    url: "images/electrician.avif",
     gradient: "from-orange-500/20 to-amber-500/20",
   },
   {
-    url: "https://images.unsplash.com/photo-1621460248083-6271cc4437a8?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=774",
+    url: "images/gardening.avif",
     gradient: "from-slate-500/20 to-gray-500/20",
   },
   {
-    url: "https://plus.unsplash.com/premium_photo-1663045495725-89f23b57cfc5?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740",
+    url: "images/plumbling.avif",
     gradient: "from-blue-500/20 to-cyan-500/20",
   },
   {
-    url: "https://plus.unsplash.com/premium_photo-1661340932540-c285e730728a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=774",
+    url: "images/weddingphoto.avif",
     gradient: "from-purple-500/20 to-pink-500/20",
   },
 ];

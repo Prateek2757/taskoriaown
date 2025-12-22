@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Star, MapPin, Clock, CheckCircle2, TrendingUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
+import Image from "next/image";
 
 export default function ResponsesRow({
   responses,
@@ -62,7 +63,9 @@ export default function ResponsesRow({
                 
                 <div className="flex items-start gap-4 mb-4">
                   <div className="relative">
-                    <img
+                    <Image 
+                    height={14}
+                    width={14}
                       src={r.avatar_url || "/images/default-avatar.png"}
                       className="w-14 h-14 rounded-xl object-cover ring-2 ring-gray-100 dark:ring-gray-700 group-hover:ring-blue-500 dark:group-hover:ring-blue-400 transition-all"
                       alt={r.display_name}

@@ -8,6 +8,7 @@ import { motion } from "motion/react";
 import TasksList from "@/components/tasklistcustomer/CustomerTaskList";
 import NewRequestModal from "@/components/leads/RequestModal";
 import { useTasks } from "@/hooks/useTasks";
+import Image from "next/image";
 
 interface Task {
   task_id: number;
@@ -129,7 +130,8 @@ const tasks=TaskFromHook ?? []
               >
                 <Card className="group cursor-pointer overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/70 shadow-sm hover:shadow-lg transition-all">
                   <div className="relative h-48 overflow-hidden">
-                    <img
+                    <Image
+                    fill
                       src={category.image}
                       alt={category.title}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"

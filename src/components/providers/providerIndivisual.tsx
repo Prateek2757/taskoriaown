@@ -161,7 +161,9 @@ export default function ProviderProfileClient({ provider }: { provider: any }) {
                       <Card key={item.id} className="overflow-hidden hover:shadow-lg transition">
                         {item.image ? (
                           <div className="h-44 relative">
-                            <Image src={item.image} alt={item.title} fill className="object-cover" />
+                            <Image src={item.image} alt={item.title} fill className="object-cover" sizes="(max-width: 640px) 100vw,
+       (max-width: 1024px) 50vw,
+       33vw" />
                           </div>
                         ) : (
                           <div className="h-44 bg-gray-100 dark:bg-[#0C0D10]" />

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, Variants, easeOut } from "motion/react";
 import axios from "axios";
 import { toast } from "sonner";
+import Image from "next/image";
 
 interface Provider {
   provider_id: number;
@@ -117,7 +118,9 @@ export default function CategoryPage() {
                 href={`/providers/${p.provider_id}`}
                 className="flex items-center gap-4"
               >
-                <img
+                <Image
+                height={12}
+                width={12}
                   src={p.avatar_url || "/default-avatar.png"}
                   alt={p.name}
                   className="w-12 h-12 rounded-full object-cover"
