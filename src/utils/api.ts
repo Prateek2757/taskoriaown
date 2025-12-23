@@ -1,11 +1,11 @@
+const isServer = typeof window === "undefined";
 
+const baseURL = isServer
+  ? process.env.NEXT_PUBLIC_APP_URL || "https://www.taskoria.com"
+  : "";
 export async function fetchProviders(limit?: number) {
   try {
-    const isServer = typeof window === "undefined";
-
-    const baseURL = isServer
-      ? process.env.NEXT_PUBLIC_APP_URL || "https://www.taskoria.com"
-      : "";
+   
 
     const res = await fetch(`${baseURL}/api/providers`);
 
@@ -38,3 +38,14 @@ export async function fetchProviders(limit?: number) {
       throw new Error(error?.message || "Something went wrong fetching categories");
     }
   }
+
+  export async function fetchCategoryBySlug(slug: string) {
+    const res = await fetch(`${baseURL}/api/categories/${slug}`, {
+      next: { revalidate: 3600 }, 
+    });
+  
+    if (!res.ok) return null;
+    return res.json();
+  }
+
+  

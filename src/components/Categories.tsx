@@ -82,11 +82,11 @@ export default function Services() {
           transition={{ duration: 0.8 }}
         >
           <div className="w-full lg:w-2/3  flex-col  ">
-            <h1 className="text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight drop-shadow-sm">
+            <div className="text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight drop-shadow-sm">
               All Your Skills,
               <br />
-              <span className="text-blue-400">Empowered and Rewarded</span>
-            </h1>
+              <span className="text-[#3C7DED]">Empowered and Rewarded</span>
+            </div>
           </div>
 
           <div className="lg:pt-4 flex-col flex-1">

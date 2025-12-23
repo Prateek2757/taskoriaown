@@ -8,7 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: `All Providers (${providers.length}) — Taskoria`,
-    description: "Browse and hire verified service providers across Nepal.",
+    description: "Browse and hire verified service providers across Australia.",
     openGraph: {
       title: `All Providers (${providers.length})`,
       description: "Find trusted service providers.",

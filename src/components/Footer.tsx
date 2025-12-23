@@ -153,9 +153,9 @@ const Footer = () => {
       <Link href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
         Join as Provider
       </Link>
-      <a className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Success Stories</a>
-      <a className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Resources</a>
-      <a className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">API Documentation</a>
+      <a  href="/" className="block  text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Success Stories</a>
+      <a  href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Resources</a>
+      <a  href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">API Documentation</a>
     </div>
   </div>
 
@@ -180,8 +180,8 @@ const Footer = () => {
       <Link href="/privacy-policy" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
         Privacy Policy
       </Link>
-      <a className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Press</a>
-      <a className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Contact</a>
+      <a href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Press</a>
+      <a  href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Contact</a>
     </div>
   </div>
 

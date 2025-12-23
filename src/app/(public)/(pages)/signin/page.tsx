@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { signIn } from "next-auth/react";
 import { motion } from "motion/react";
 import { Loader2 } from "lucide-react";
@@ -161,7 +161,7 @@ export default function SignInPage() {
   className="mt-2 w-full flex items-center justify-center p-3 dark:text-gray-300 dark:bg-black rounded-xl
   bg-white border border-gray-500 shadow-sm hover:bg-gray-100"
 >
-  <img src="/images/googleicon.svg" className="w-5 h-5 mr-2" />
+  <img src="/images/googleicon.svg" alt="siginwith goo" className="w-5 h-5 mr-2" />
   Sign in with Google
 </button>
           <motion.button

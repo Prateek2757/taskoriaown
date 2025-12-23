@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
   title: "Taskoria — Find Trusted Service Providers",
   description:
-    "Taskoria helps you discover top service providers across categories like Home, Professional, Creative, Technology, Health & Education. Connect, compare, and hire with confidence.",
+    "Taskoria helps you discover top service providers across categories like Home, Professional.",
   keywords: [
     "Taskoria",
     "service providers",

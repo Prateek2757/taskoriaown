@@ -2,6 +2,8 @@ import ServiceCategoriesClient from "@/components/services/serviceCategories";
 import { fetchCategories } from "@/utils/api";
 import { Metadata } from "next";
 
+
+
 export async function generateMetadata(): Promise<Metadata> {
   const categories = await fetchCategories();
 
