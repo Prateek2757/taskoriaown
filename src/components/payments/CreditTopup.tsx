@@ -287,7 +287,7 @@ export function CreditPurchase({
         >
           ← <span>Settings</span>
         </button>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">My Credits</h1>
+        <div className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100">My Credits</div>
       </div>
       {content}
     </div>

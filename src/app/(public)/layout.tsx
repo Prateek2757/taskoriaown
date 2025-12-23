@@ -86,6 +86,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${poppins.variable}`} suppressHydrationWarning >
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="48x48" type="image/x-icon" />
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/taskoria-logo.png" />
+      </head>
       <AuthProvider>
         <body className="antialiased dark:bg-black">
           <ThemeProvider

@@ -219,9 +219,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 {getInitials(lead.customer_name || "N/A")}
               </div>
               <div>
-                <h1 className="text-2xl font-bold mb-1">
+                <div className="text-2xl font-bold mb-1">
                   {lead.customer_name}
-                </h1>
+                </div>
                 <div className="flex items-center gap-2 text-blue-100">
                   <MapPin className="w-4 h-4" />
                   <span className="text-sm">{lead.location_name} {lead.postcode}</span>

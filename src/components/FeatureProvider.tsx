@@ -111,7 +111,7 @@ export const FeatureProvider = () => {
                             <div>
                               <Image
                                 src="/taskoria-logo.png"
-                                alt=""
+                                alt="logo taskoria"
                                 height={0}
                                 width={25}
                               />

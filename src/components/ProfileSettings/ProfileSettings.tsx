@@ -116,10 +116,10 @@ export default function ProfileSettings() {
           ← Settings
         </button>
 
-        <h1 className="text-3xl font-semibold text-slate-900">
+        <div className="text-3xl font-semibold text-slate-900">
           Your profile is{" "}
           <span className="text-amber-500">{completion}% complete</span>
-        </h1>
+        </div>
 
         <div className="mt-4 flex items-center gap-4">
           <div className="flex-1">

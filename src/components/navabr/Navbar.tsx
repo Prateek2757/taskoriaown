@@ -367,7 +367,7 @@ export default function ModernNavbar() {
                     <div>
                       <Image
                         src="/taskoria-logo.png"
-                        alt=""
+                        alt="logo taskoria"
                         height={0}
                         width={23}
                       />

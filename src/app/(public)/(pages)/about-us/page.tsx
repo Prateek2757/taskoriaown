@@ -136,10 +136,10 @@ export default function AboutUs() {
             </div>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+          <div className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
             Building Trust in<br />
             <span className="text-blue-200 dark:text-blue-300">Every Connection</span>
-          </h1>
+          </div>
           
           <p className="text-xl md:text-2xl text-blue-100 dark:text-blue-200 max-w-3xl leading-relaxed">
             We're on a mission to make finding trusted service providers safe, simple, and secure for every Australian. Because when it comes to your home and family, trust isn't optional.

@@ -61,9 +61,9 @@ const TrustSafety = () => {
               <Shield className="w-4 h-4" />
               Australian Verified & Protected
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground">
+            <div className="text-4xl md:text-5xl font-bold text-foreground">
               Trust & Safety at Taskoria
-            </h1>
+            </div>
             <p className="text-xl text-muted-foreground">
               Australia's most secure service marketplace. Every provider verified, every payment protected, every job guaranteed.
             </p>

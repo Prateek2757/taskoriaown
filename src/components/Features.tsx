@@ -161,7 +161,7 @@ export default function FeaturesStacking() {
                 <Circle ref={div4Ref} className="h-16 w-16 p-3">
                   <Image
                     src="/taskoria-logo.png"
-                    alt=""
+                    alt="logo taskoria"
                     height={0}
                     width={28}
                   />

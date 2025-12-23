@@ -333,7 +333,7 @@ export default function TasksList({ tasks }: { tasks?: Task[] }) {
                                         "/images/default-avatar.png"
                                       }
                                       className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100 dark:ring-gray-700"
-                                      alt=""
+                                      alt="default avatar"
                                     />
                                     <div className="flex-1 min-w-0">
                                       <h4 className="font-semibold text-gray-900 dark:text-white truncate">
