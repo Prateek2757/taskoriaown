@@ -89,7 +89,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="48x48" type="image/x-icon" />
 
-        <link rel="apple-touch-icon" sizes="180x180" href="/taskoria-logo.png" />
+        <link rel="apple-touch-icon" sizes="140x140" href="/taskoria-logo.png" />
       </head>
       <AuthProvider>
         <body className="antialiased dark:bg-black">

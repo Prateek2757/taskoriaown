@@ -190,6 +190,7 @@ const OSMLocationMap = () => {
           </div>
         </div>
 
+        {/* Map Container */}
         <div className="flex-1 relative">
           <div ref={mapRef} className="w-[400px] h-full" />
 

@@ -11,7 +11,6 @@ import {
   Flame,
 } from "lucide-react";
 import Link from "next/link";
-import Marquee from "../ui/marquee";
 
 interface ServiceCategoriesProps {
   categories: Array<{

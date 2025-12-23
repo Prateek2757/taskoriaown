@@ -76,13 +76,14 @@ export default function HeroSection() {
         <Image
        fill
         alt="herosection image"
-          src="/images/bglines.avif"
+          src="/images/bglines.png"
           className="absolute top-0 left-0 w-full h-full object-cover opacity-50"
           sizes="(max-width: 640px) 100vw,
        (max-width: 1024px) 50vw,
        33vw" 
-       loading="eager"
-
+       loading="eager" 
+       quality={75}
+      fetchPriority="high"
         />
         <div className="container pt-10  max-md:bg-gradient-to-r from-[#3C7DED]/25 via-[#41A6EE]/20 to-[#46CBEE]/25 
       mx-auto  pb-4  px-4 relative z-10">
@@ -279,3 +280,4 @@ export default function HeroSection() {
     </>
   );
 }
+ 

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
 import { Button } from "./ui/button";
 import Marquee from "./ui/marquee";
+import Image from "next/image";
 
 const containerVariants: Variants = {
   hidden: {},
@@ -29,19 +30,19 @@ const staticImages = [
     gradient: "from-red-500/20 to-orange-500/20",
   },
   {
-    url: "images/electrician.avif",
+    url: "/images/electrician.avif",
     gradient: "from-orange-500/20 to-amber-500/20",
   },
   {
-    url: "images/gardening.avif",
+    url: "/images/gardening.avif",
     gradient: "from-slate-500/20 to-gray-500/20",
   },
   {
-    url: "images/plumbling.avif",
+    url: "/images/plumbling.avif",
     gradient: "from-blue-500/20 to-cyan-500/20",
   },
   {
-    url: "images/weddingphoto.avif",
+    url: "/images/weddingphoto.avif",
     gradient: "from-purple-500/20 to-pink-500/20",
   },
 ];
@@ -197,7 +198,8 @@ export default function Services() {
                 >
                   <div className="relative h-full min-h-[320px] lg:min-h-[300px]">
                     <div className="absolute inset-0">
-                      <img
+                      <Image
+                      fill 
                         src={staticImages[index]?.url || staticImages[0].url}
                         alt={category.name}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
