@@ -1,12 +1,7 @@
 "use client";
 
 import { Button } from "../components/ui/button";
-import {
-  Sparkles,
-  MapPin,
-  ArrowRight,
-  
-} from "lucide-react";
+import { Sparkles, MapPin, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
@@ -28,7 +23,6 @@ interface Category {
 }
 
 export default function HeroSection() {
-
   const [openModal, setOpenModal] = useState(false);
   const [slugvalue, setSlugValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
@@ -56,7 +50,7 @@ export default function HeroSection() {
       userId: 4,
       title: "Proposal Accepted 🎉",
       body: "Congratulations! Your proposal was accepted.",
-    })
+    });
     setOpenModal(true);
   };
 
@@ -78,7 +72,7 @@ export default function HeroSection() {
         glowColor={[1, 1, 1]}
         className="absolute h-[800px] max-w-[900px] left-1/2 bottom-0 -translate-x-1/2 -translate-y-0 opacity-5"
       /> */}
-        <Image
+        {/* <Image
        fill
         alt="herosection image"
           src="/images/bglines.png"
@@ -89,9 +83,13 @@ export default function HeroSection() {
        loading="eager" 
        quality={75}
       fetchPriority="high"
-        />
-        <div className="container pt-10  max-md:bg-gradient-to-r from-[#3C7DED]/25 via-[#41A6EE]/20 to-[#46CBEE]/25 
-      mx-auto  pb-4  px-4 relative z-10">
+        /> */}
+        <div className="dark:hidden bg-radial-[at_0%_100%] from-red-100 via-white/0 to-white/0 to-90% h-[100%] w-[100%] absolute left-0 top-0 right-0 bottom-0"></div>
+        <div className="dark:hidden bg-radial-[at_100%_0%] from-sky-100 via-white/0 to-white/0 to-90% h-[100%] w-[100%] absolute left-0 top-0 right-0 bottom-0"></div>
+        <div
+          className="container pt-10  max-md:bg-gradient-to-r from-[#3C7DED]/25 via-[#41A6EE]/20 to-[#46CBEE]/25 
+      mx-auto  pb-4  px-4 relative z-10"
+        >
           <div className="max-w-4xl mx-auto  space-y-6">
             <div className="inline-flex gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-2">
               🇦🇺 Australia's Trusted AI Powered Marketplace
@@ -141,9 +139,7 @@ export default function HeroSection() {
                 <Link
                   href={`/services/${slugvalue}`}
                   className="sm:w-auto sm:mt-0"
-                >
-                 
-                </Link>
+                ></Link>
               </div>
 
               <div className="flex items-center justify-center gap-2 mt-2 sm:mt-4 text-sm text-gray-500 dark:text-gray-400">
@@ -178,7 +174,7 @@ export default function HeroSection() {
             </div>
           </div>
         </div>
-        <ScrollPopularSection/>
+        <ScrollPopularSection />
         <div className="mt-10 hidden lg:block relative overflow-hidden bg-gradient-to-t from-zinc-100 to-transparent  dark:from-black">
           <div className="mx-auto max-w-4xl relative ">
             <div className="text-center text-3xl text-white">
@@ -284,4 +280,3 @@ export default function HeroSection() {
     </>
   );
 }
- 
