@@ -19,6 +19,7 @@ import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import { SparklesCoreLight } from "./ui/sparklesLight";
 import ScrollPopularSection from "./ScrollPopularSection";
 import Image from "next/image";
+import { createNotification } from "@/lib/notifications";
 
 interface Category {
   category_id: number;
@@ -27,7 +28,6 @@ interface Category {
 }
 
 export default function HeroSection() {
-  
 
   const [openModal, setOpenModal] = useState(false);
   const [slugvalue, setSlugValue] = useState("");
@@ -52,6 +52,11 @@ export default function HeroSection() {
     //   setLoading(true);
     //   return;
     // }
+    await createNotification({
+      userId: 4,
+      title: "Proposal Accepted 🎉",
+      body: "Congratulations! Your proposal was accepted.",
+    })
     setOpenModal(true);
   };
 
@@ -89,8 +94,7 @@ export default function HeroSection() {
       mx-auto  pb-4  px-4 relative z-10">
           <div className="max-w-4xl mx-auto  space-y-6">
             <div className="inline-flex gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-2">
-              <Sparkles className="h-4 w-4 text-blue-600" /> AI-Powered •
-              Community Driven
+              🇦🇺 Australia's Trusted AI Powered Marketplace
             </div>
             <div className="text-4xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
               The Future of{" "}

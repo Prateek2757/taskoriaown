@@ -16,7 +16,7 @@ export async function GET() {
     const client = await pool.connect();
 
     const query = `
-      SELECT task_id, title, description, status, created_at, budget_min, budget_max
+      SELECT task_id, title, description, status, created_at, budget_min, budget_max ,estimated_budget
       FROM tasks
       WHERE customer_id = $1
       AND is_deleted = false

@@ -13,6 +13,7 @@ export function ThemeToggle() {
       size="icon"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       title="Change Theme"
+      className="border-none"
     >
       {theme === "light" ? (
         <Moon className="h-[1.2rem] w-[1.2rem]" />

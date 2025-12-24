@@ -16,6 +16,7 @@ interface Task {
   description: string;
   status: string;
   created_at: string;
+  estimated_budget:number;
   budget_min: number | null;
   budget_max: number | null;
 }

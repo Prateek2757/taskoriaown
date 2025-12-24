@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { BarChart3, Users, Star, Target, User } from "lucide-react";
 import LeadSettingsCard from "../Lead-setting/leadsetting";
 import { useLeadProfile } from "@/hooks/useLeadProfile";
+import NotificationBell from "../notification/NotificationBell";
 
 export default function ProviderDashboard() {
   const router = useRouter();
@@ -114,6 +115,9 @@ export default function ProviderDashboard() {
                 bg-clip-text text-transparent
               "
             >
+
+
+
               {greeting}, {user.name?.split(" ")[0] || "User"}!
             </h1>
 
@@ -325,7 +329,6 @@ export default function ProviderDashboard() {
               </CardContent>
             </Card>
           </div>
-
 
           <LeadSettingsCard />
 

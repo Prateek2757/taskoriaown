@@ -76,7 +76,7 @@ export default function AllProvidersClient() {
             filteredProviders.map((p) => (
               <div
                 key={p.public_id}
-                className="bg-card border rounded-xl p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300"
+                className="bg-card  rounded-xl p-5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="flex items-center gap-4">
                   {p.image ? (

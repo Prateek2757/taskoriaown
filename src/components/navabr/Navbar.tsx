@@ -26,6 +26,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { ThemeToggle } from "../theme-toggle";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import SlidingUnderlineNav from "./slidingUnderline";
+import NotificationBell from "../notification/NotificationBell";
 
 type ViewMode = "customer" | "provider" | null;
 
@@ -276,14 +277,23 @@ export default function ModernNavbar() {
           {!minimalPages.includes(pathname) && (
             <div className="hidden md:flex items-center gap-3">
               {session ? (
-                <div className="relative" ref={profileRef}>
+                
+                
+
+                <div className="relative flex" ref={profileRef}>
+                   <div className="">
+                    <NotificationBell userId={ session?.user?.id}/>
+                  </div>
+                  
                   <Button
                     onClick={() => setIsProfileOpen((p) => !p)}
                     variant="ghost"
                     className=" flex items-center gap-2 px py-2 rounded-full transition-all "
                   >
+                    
+
                     <div
-                      className="w-9 h-9 rounded-full flex items-center justify-center  bg-gradient-to-br from-blue-100 to-cyan-100
+                      className="w-9 h-9 rounded-full flex  items-center justify-center  bg-gradient-to-br from-blue-100 to-cyan-100
                                        dark:from-blue-900 dark:to-cyan-900
                                                     transition-all  group-hover:scale-[1.05]"
                     >
@@ -328,7 +338,9 @@ export default function ModernNavbar() {
               
             </div>
           )}
-
+ <div className=" md:hidden block pl-60">
+                    <NotificationBell userId={ session?.user?.id}/>
+                  </div>
           <Button
             variant="ghost"
             onClick={() => setIsMenuOpen((p) => !p)}
@@ -378,7 +390,9 @@ export default function ModernNavbar() {
                   </Link>
                   <div className="pl-16  ">
                     <ThemeToggle />
+                    
                   </div>
+                 
                   <button
                     onClick={() => setIsMenuOpen(false)}
                     className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
