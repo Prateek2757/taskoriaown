@@ -322,7 +322,7 @@ export function ServiceDetailsSection({ serviceDetails }) {
 const exampleHTML = `<h1>House Cleaning in Australia</h1> <p>Professional domestic cleaning services across Australia</p> <h2>Get quotes on Taskoria</h2> <ol><li>Post your job in minutes with photos and a clear description.</li><li>Receive quotes from local, reviewed professionals.</li><li>Compare price, availability and experience, then hire with confidence.</li></ol> <h2>What's typically included</h2> <ul><li>Surface wiping and sanitising</li><li>Kitchen and bathroom cleaning</li><li>Vacuuming and mopping</li><li>Optional add-ons (oven, windows, inside cabinets)</li></ul> <h2>How pricing usually works</h2> <p>Costs vary by job and location. Quotes are usually influenced by:</p> <ul><li>Property size (rooms / m²)</li><li>Condition (standard vs deep clean)</li><li>Add-ons (oven, windows, carpets)</li><li>Preferred date/time (weekend or short notice)</li></ul> <h2>Tips for a faster, accurate quote</h2> <ul><li>Share measurements, photos, and any brand/model details.</li><li>Tell providers about access (parking, stairs, strata rules).</li><li>Be clear on timelines and whether you need disposal/removal.</li></ul>`;
 
 // Demo component
-function Howitwork( {servicedetails }) {
+function Howitwork( {servicedetails }:any) {
   return (
     <div className="min-h-screen ">
       <ServiceDetailsSection serviceDetails={servicedetails} />

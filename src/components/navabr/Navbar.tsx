@@ -240,7 +240,7 @@ export default function ModernNavbar() {
             <Image src="/taskoria-logo.png" alt="taskorialogo"  height={31} width={18} />
 
             <span className="text-2xl font-bold bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent ">
-              Tasoria
+              Taskoria
             </span>
           </Link>
 

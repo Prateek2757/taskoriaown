@@ -16,11 +16,35 @@ export async function GET() {
     const client = await pool.connect();
 
     const query = `
-      SELECT task_id, title, description, status, created_at, budget_min, budget_max ,estimated_budget
-      FROM tasks
-      WHERE customer_id = $1
-      AND is_deleted = false
-      ORDER BY created_at DESC
+      SELECT
+  t.task_id,
+  t.title,
+  t.description,
+  t.status,
+  t.created_at,
+  t.estimated_budget,
+  json_agg(
+    json_build_object(
+      'question_id', ta.category_question_id,
+      'question', q.question,
+      'answer', ta.answer
+    )
+  ) FILTER (WHERE ta.task_answer_id IS NOT NULL) AS answers
+FROM tasks t
+JOIN service_categories c ON c.category_id = t.category_id
+LEFT JOIN task_answers ta ON ta.task_id = t.task_id
+LEFT JOIN category_questions q
+  ON q.category_question_id = ta.category_question_id
+WHERE t.customer_id = $1
+  AND t.is_deleted = false
+GROUP BY
+  t.task_id,
+  t.title,
+  t.description,
+  t.status,
+  t.created_at,
+  t.estimated_budget
+ORDER BY t.created_at DESC;
     `;
 
     const result = await client.query(query, [userId]);

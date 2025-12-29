@@ -27,18 +27,25 @@ import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, Calendar, DollarSign, MessageSquare } from "lucide-react";
 import Image from "next/image";
 
-interface Task {
+type LeadAnswer = {
+  question_id?: string | number;
+  question: string;
+  answer: string;
+};
+
+type Task = {
   task_id: number;
   title: string;
   description: string;
   status: string;
   created_at: string;
-  estimated_budget:number;
+  estimated_budget: number;
+  answers?: LeadAnswer[];
   budget_min?: number | null;
   budget_max?: number | null;
-}
+};
 
-export default function TasksList({ tasks }: { tasks?: Task[] }) {
+export default function TasksListOld({ tasks }: { tasks?: Task[] }) {
   const router = useRouter();
 
   const [openTaskId, setOpenTaskId] = useState<number | null>(null);
@@ -153,18 +160,7 @@ export default function TasksList({ tasks }: { tasks?: Task[] }) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* <div className="mb-8">
-        <motion.h2
-          className="text-4xl font-bold bg-gradient-to-r text-center from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          Your Posted Tasks
-        </motion.h2>
-        <p className="text-gray-500 text-center mt-2">
-          Manage and track all your project postings
-        </p>
-      </div> */}
+     
 
       <div className="space-y-5">
         {tasks.map((task, idx) => {
@@ -253,7 +249,7 @@ export default function TasksList({ tasks }: { tasks?: Task[] }) {
                             <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                               <DollarSign className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                               <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">
-                                ${task.estimated_budget.toLocaleString()} 
+                                ${task.estimated_budget.toLocaleString()}
                               </span>
                             </div>
                           )}
@@ -326,8 +322,8 @@ export default function TasksList({ tasks }: { tasks?: Task[] }) {
                                 >
                                   <div className="flex items-center gap-3 mb-4">
                                     <Image
-                                    width={12}
-                                    height={12}
+                                      width={12}
+                                      height={12}
                                       src={
                                         r.avatar_url ||
                                         "/images/default-avatar.png"

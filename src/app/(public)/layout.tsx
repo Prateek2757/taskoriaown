@@ -85,14 +85,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable}`} suppressHydrationWarning >
+    <html lang="en" className={`${poppins.variable}`}   >
       <head>
         <link rel="icon" href="/favicon.ico" sizes="48x48" type="image/x-icon" />
 
         <link rel="apple-touch-icon" sizes="140x140" href="/taskoria-logo.png" />
       </head>
       <AuthProvider>
-        <body className="antialiased dark:bg-black">
+        <body className="antialiased dark:bg-black " suppressHydrationWarning>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

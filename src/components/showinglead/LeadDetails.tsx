@@ -168,15 +168,14 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
     const newConvoId = await refetchConversation();
 
+    await createNotification({
+      userId: String(userId),
+      title: "Lead Response 🎉",
+      body: `Congratulations! Your Posted ${lead.category_name} Lead Got Response By ${session?.user?.name} ` 
+    })
 
     if (newConvoId) {
       toast.success("Chat is ready!");
-      await createNotification({
-            userId: String(userId),
-            title: "Lead Response 🎉",
-            body: `Congratulations! Your Posted ${lead.category_name} Lead Got Response By ${session?.user?.name} `
-            
-          })
     } else {
       toast.info("Click 'Chat' button to start your conversation");
     }

@@ -9,6 +9,13 @@ import TasksList from "@/components/tasklistcustomer/CustomerTaskList";
 import NewRequestModal from "@/components/leads/RequestModal";
 import { useTasks } from "@/hooks/useTasks";
 import Image from "next/image";
+import TasksListCustomer from "@/components/tasklistcustomer/TasksList";
+
+interface LeadAnswer {
+  question_id?: string | number;
+  question: string;
+  answer: string;
+}
 
 interface Task {
   task_id: number;
@@ -17,6 +24,7 @@ interface Task {
   status: string;
   created_at: string;
   estimated_budget:number;
+  answers?:LeadAnswer[];
   budget_min: number | null;
   budget_max: number | null;
 }
@@ -24,6 +32,7 @@ interface Task {
 export default function CustomerDashboard() {
   const [openModal, setOpenModal] = useState(false);
   const {tasks : TaskFromHook} = useTasks();
+
 const tasks=TaskFromHook ?? []
 
   const serviceCategories = [
@@ -103,7 +112,7 @@ const tasks=TaskFromHook ?? []
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <TasksList tasks={tasks}   />
+            <TasksListCustomer tasks={tasks}   />
           </motion.div>
         )}
         <section>
