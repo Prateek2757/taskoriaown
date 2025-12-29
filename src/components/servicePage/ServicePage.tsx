@@ -11,6 +11,7 @@ import PopularLocationsSection from "@/components/servicePage/PopularLocationSec
 import FAQSection from "@/components/servicePage/Faqs";
 import CityProviders from "@/components/servicePage/cityProviders";
 import ServiceIntro from "@/components/servicePage/IntroSection";
+import Howitwork from "@/components/servicePage/HowItWorks";
 
 interface ServicePageClientProps {
   service: any;
@@ -61,8 +62,8 @@ export default function ServicePageClient({
           <ServiceIntro serviceName={service.slug} cityName={citySlug} />
         )}
 
-        <section className="max-w-6xl mx-auto px-6 py-10">
-          {!citySlug && <HowItWorksSection />}
+        <section className="max-w-6xl mx-auto px-6 py-3">
+          {!citySlug && <Howitwork servicedetails = {service?.service_detail} />}
 
           {citySlug && (
             <CityProviders serviceSlug={service.slug} citySlug={citySlug} />

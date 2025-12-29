@@ -1,3 +1,12 @@
 import {Resend} from "resend"
 
- export const resend = new Resend(process.env.RESEND_API_KEY)
+
+const pratik = process.env.RESEND_API_KEY
+console.log(pratik);
+
+
+// if (!process.env.RESEND_API_KEY) {
+//     throw new Error("RESEND_API_KEY is missing")
+//   }
+
+ export const resend = new Resend(process.env.RESEND_API_KEY);

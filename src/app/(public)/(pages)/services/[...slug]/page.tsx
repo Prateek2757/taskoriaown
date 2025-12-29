@@ -10,6 +10,7 @@ interface ServiceData {
   description?: string;
   hero_image?: string;
   about?: string;
+  service_detail?:string;
   slug?: string;
   faqs?: { question: string; answer: string }[];
 }
@@ -167,6 +168,9 @@ export default async function ServicePage({ params }: Props) {
       </div>
     );
   }
+  console.log(service.description);
+  
+  
 
   const citiesRes = await fetch(
     `${process.env.NEXT_PUBLIC_APP_URL}/api/signup/location`,

@@ -255,7 +255,7 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} Taskoria Pty Ltd. All Rights Reserved. <Link href="/privacy-policy" className="underline">Privacy Policy.</Link>
             <br />
             <span className="text-gray-400">
-              ABN: 658 760 831 | GST Registered | QLD 4350, Australia | Proudly Australian Owned & Operated
+              ABN: 658 760 831 | ACN Registered | QLD 4350, Australia | Proudly Australian Owned & Operated
             </span>
           </span>
 

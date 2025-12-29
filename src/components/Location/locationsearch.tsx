@@ -69,6 +69,7 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
       setShowDropdown(true);
       return;
     }
+console.log(results);
 
     setLoading(true);
     try {
@@ -109,6 +110,8 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
     };
 
     setQuery(location.display_name);
+    console.log(location);
+    
     setResults([]);
     setShowDropdown(false);
     setActiveIndex(-1);

@@ -19,7 +19,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useConversation } from "@/hooks/useConversation";
 import LocationMap from "../map/map";
-
+import { createNotification } from "@/lib/notifications";
 interface LeadAnswer {
   question_id?: string | number;
   question: string;
@@ -156,13 +156,27 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     toast.success("Purchase successful! Preparing your chat...");
 
     await fetchResponses();
+    await createNotification({
+      userId: session?.user?.id,
+      title: "Lead Purchased Sucessfully🎉!",
+      body: `Congratulations ${session?.user?.name}! You have Purchased Lead For ${lead.category_name} `
+      
+    })
 
     await new Promise((resolve) => setTimeout(resolve, 500));
 
+
     const newConvoId = await refetchConversation();
+
 
     if (newConvoId) {
       toast.success("Chat is ready!");
+      await createNotification({
+            userId: String(userId),
+            title: "Lead Response 🎉",
+            body: `Congratulations! Your Posted ${lead.category_name} Lead Got Response By ${session?.user?.name} `
+            
+          })
     } else {
       toast.info("Click 'Chat' button to start your conversation");
     }

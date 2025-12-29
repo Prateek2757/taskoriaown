@@ -11,59 +11,103 @@ import {
   Text,
 } from "@react-email/components";
 
-interface WelcomeEmailProps {
+export type EmailType = "welcome" | "task-posted" | "verification";
+
+interface AppEmailProps {
+  type: EmailType;
   username?: string;
   company?: string;
+  verifyCode?: string;
+  taskTitle?: string;
+  taskLocation?: string;
 }
 
-const WelcomeEmail = ({
-  username ,
-  company = "Taskoria",
-}: WelcomeEmailProps) => {
-  const previewText = `Welcome to ${company}, ${username}!`;
+const getEmailContent = ({
+  type,
+  username,
+  company,
+  verifyCode,
+  taskTitle,
+  taskLocation,
+}: AppEmailProps) => {
+  switch (type) {
+    case "welcome":
+      return {
+        heading: `Welcome to ${company}, ${username}!`,
+        message:
+          "We’re excited to have you onboard. Explore services and get things done faster with trusted local professionals.",
+        buttonText: "Get Started",
+        buttonLink: "https://taskoria.com",
+      };
+
+    case "task-posted":
+      return {
+        heading: "Your task has been posted 🎉",
+        message: `Hi ${username}, your task "${taskTitle}" ${
+          taskLocation ? `in ${taskLocation}` : ""
+        } has been successfully posted. Professionals will start sending offers soon.`,
+        buttonText: "View Task",
+        buttonLink: "https://taskoria.com/provider/dashboard",
+      };
+
+    case "verification":
+      return {
+        heading: "Verify your email address",
+        message:
+          "Use the verification code below to complete your registration.",
+        buttonText: verifyCode || "Verify",
+        buttonLink: "#",
+      };
+
+    default:
+      return {
+        heading: "Taskoria Notification",
+        message: "",
+      };
+  }
+};
+
+const AppEmail = (props: AppEmailProps) => {
+  const company = props.company ?? "Taskoria";
+  const content = getEmailContent({ ...props, company });
 
   return (
     <Html>
+      <Head />
       <Tailwind>
-        <Head />
-        <Body className="bg-gray-50 m-auto font-sans">
-          <Container className="mb-10 mx-auto p-6 max-w-[480px] bg-white rounded-xl shadow-lg">
-            <Section className="mt-6 text-center">
+        <Body className="bg-gray-50 p-4 font-sans">
+          <Container className="max-w-[480px] bg-white p-6 rounded-xl shadow-md">
+            <Section className="text-center mb-6">
               <Img
                 src="https://taskoria.com/taskoria-logo.png"
-                width="60"
-                height="60"
-                alt={`${company} Logo`}
+                width="40"
+                height="40"
+                alt={`${company} logo`}
                 className="mx-auto"
               />
             </Section>
 
-            <Heading className="text-3xl text-gray-900 font-bold text-center mt-6 mb-4">
-              Welcome to <span className="text-blue-600">{company}</span>, {username}!
+            <Heading className="text-2xl font-bold text-gray-900 text-center">
+              {content.heading}
             </Heading>
 
-            <Text className="text-gray-700 text-base leading-relaxed mt-4 mb-4">
-              Hi {username},
-            </Text>
-            <Text className="text-gray-700 text-base leading-relaxed mb-6">
-              We are thrilled to have you join <strong>{company}</strong>! 
-              Our team is here to help you succeed and make the most of your experience. 
-              Explore our platform, get familiar with the features, and don’t hesitate to reach out if you need any assistance.
+            <Text className="text-gray-700 mt-4">Hi {props.username},</Text>
+
+            <Text className="text-gray-700 leading-relaxed">
+              {content.message}
             </Text>
 
-            <Section className="text-center mt-6 mb-6">
+            <Section className="text-center mt-6">
               <Button
-                className="py-3 px-6 bg-blue-600 text-white text-base font-semibold rounded-lg no-underline"
-                href={`https://taskoria.com`}
+                href={content.buttonLink}
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold no-underline"
               >
-                Get Started
+                {content.buttonText}
               </Button>
             </Section>
 
-            <Text className="text-gray-700 text-base leading-relaxed mt-6">
-              Cheers,
-              <br />
-              The <strong>{company}</strong> Team
+            <Text className="text-gray-500 text-sm mt-6">
+              Need help? Contact our support team anytime.
             </Text>
 
             <Text className="text-gray-400 text-xs text-center mt-8">
@@ -76,4 +120,4 @@ const WelcomeEmail = ({
   );
 };
 
-export default WelcomeEmail;
+export default AppEmail;

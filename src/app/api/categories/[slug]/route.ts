@@ -10,7 +10,7 @@ export async function GET(req: Request ,context:{params:Promise<{slug:string}>} 
     }
 
     const result = await pool.query(
-      "SELECT category_id, name,main_category, description,faqs,slug FROM service_categories WHERE slug = $1",
+      "SELECT category_id, name,main_category, description,faqs,slug,service_detail FROM service_categories WHERE slug = $1",
       [slug]
     );
 

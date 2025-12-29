@@ -4,7 +4,7 @@ import pool from "@/lib/dbConnect";
 export async function GET() {
   try {
     const result = await pool.query(`
-      SELECT city_id, name ,display_name FROM cities ORDER BY popularity DESC ,name ASC
+      SELECT city_id, name ,display_name FROM cities ORDER BY popularity DESC 
     `);
     return NextResponse.json(result.rows);
   } catch (err: unknown) {
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
       lon,
     } = body;
 
-    const finalState = state || territory || null;
+    const finalState = state ===""? territory:state || null;
 
     const finalCity =
       city || territory || municipality ||  display_name?.split(",")[0] ;
@@ -81,10 +81,11 @@ export async function POST(req: Request) {
         (
           await client.query(
             `SELECT state_id FROM states WHERE name = $1 AND country_id = $2`,
-            [state, countryId]
+            [state===""?territory : state, countryId]
           )
         ).rows[0]?.state_id;
     }
+console.log(stateId,"srareid");
 
     const cityRes = await client.query(
       `

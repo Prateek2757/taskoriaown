@@ -21,6 +21,7 @@ html {
 }
 
 * {
+  
   @apply border-border outline-ring/50;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);

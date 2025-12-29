@@ -2,16 +2,24 @@ import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
+import { sendEmail } from "@/components/email/helpers/sendVerificationEmail";
 
 export async function POST(req: Request) {
   const client = await pool.connect();
-  
+  const session = await getServerSession(authOptions);
+ 
+
   try {
-    const session = await getServerSession(authOptions);
+
 
     if (!session || !session.user?.id) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
+    
+      let email= session.user?.email
+      const name = session.user?.name
+  
+  
 
     const {
       title,
@@ -74,8 +82,19 @@ export async function POST(req: Request) {
         ]);
       }
     }
+ 
+    const categorynameres = await client.query(`SELECT name from service_categories where category_id=$1`,
+      [category_id]
+    )
+      const categoryname = categorynameres.rows[0].name
 
     await client.query("COMMIT");
+    await sendEmail({
+      username:name,
+      email ,
+      type:"task-posted",
+      taskTitle:categoryname
+    })
 
     return NextResponse.json({ success: true, task: taskResult.rows[0] });
   } catch (err: any) {

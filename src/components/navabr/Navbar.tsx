@@ -228,7 +228,7 @@ export default function ModernNavbar() {
   bg-white/30 dark:bg-gray-900/20 
   border-b border-white/40 dark:border-white/10
   shadow-lg shadow-black/5 dark:shadow-white/5
-  transition-colors
+  transition-colors w-full
 "
       >
         <div className="container mx-auto px-4 py-2 flex items-center justify-between relative">
@@ -236,11 +236,11 @@ export default function ModernNavbar() {
             href="/"
             className="flex items-center hover:opacity-90 transition-opacity"
           >
-            <div>
-              <Image src="/taskoria-logo.png" alt="taskorialogo" height={31} width={18} />
-            </div>
-            <span className="text-2xl font-bold text-[#434343] dark:bg-gradient-to-t dark:*:from-[#46cdee] dark:via-[#41A6EE] dark:to-[#46CBEE] dark:bg-clip-text dark:text-transparent  ">
-              Taskoria
+          
+            <Image src="/taskoria-logo.png" alt="taskorialogo"  height={31} width={18} />
+
+            <span className="text-2xl font-bold bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent ">
+              Tasoria
             </span>
           </Link>
 
@@ -263,7 +263,7 @@ export default function ModernNavbar() {
           absolute left-0 right-0 bottom-[-3] h-[2px] bg-[#3C7DED] rounded-full
           scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left
           ${pathname === link.href ? "scale-x-100" : ""}
-        `}
+         `}
                   />
                 </Link>
               ))} */}
@@ -338,7 +338,7 @@ export default function ModernNavbar() {
               
             </div>
           )}
- <div className=" md:hidden block pl-60">
+ <div className=" md:hidden ml-50 ">
                     <NotificationBell userId={ session?.user?.id}/>
                   </div>
           <Button

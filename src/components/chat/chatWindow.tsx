@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import MessageList from "./messageList";
-import { supabaseServer } from "@/lib/supabase-server";
+import { supabaseBrowser } from "@/lib/supabase-server";
 
 export type Message = {
   id: string;
@@ -35,8 +35,8 @@ export default function ChatWindow({
   conversationId: string;
   me: { id: string; name?: string };
   taskId: number;
-  conversationTitle: string;
-  otherName: string;
+  conversationTitle?: string;
+  otherName?: string;
 }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [typingUsers, setTypingUsers] = useState<Record<string, number>>({});
@@ -77,7 +77,7 @@ export default function ChatWindow({
 
     loadMessages();
 
-    const chan = supabaseServer.channel(`conversation:${conversationId}`, {
+    const chan = supabaseBrowser.channel(`conversation:${conversationId}`, {
       config: { broadcast: { self: false } },
     });
 
@@ -114,7 +114,7 @@ export default function ChatWindow({
 
     return () => {
       clearInterval(cleanTyping);
-      if (channelRef.current) supabaseServer.removeChannel(channelRef.current);
+      if (channelRef.current) supabaseBrowser.removeChannel(channelRef.current);
     };
   }, [conversationId, me.id]);
 

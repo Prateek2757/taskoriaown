@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Send, Paperclip, Smile, Loader2 } from "lucide-react";
-import { supabaseServer } from "@/lib/supabase-server";
+import { supabaseBrowser } from "@/lib/supabase-server";
 
 export type Message = {
   id: string;
@@ -40,11 +40,15 @@ export default function ChatWindow({
     const fetchMessages = async () => {
       try {
         setIsLoading(true);
-        const res = await fetch(`/api/messages/conversation-read/${conversationId}`);
+        const res = await fetch(
+          `/api/messages/conversation-read/${conversationId}`
+        );
         if (!res.ok) throw new Error("Failed to fetch messages");
         const data = await res.json();
         if (isMounted) setMessages(data.messages || []);
-        await fetch(`/api/messages/conversation-read/${conversationId}`, { method: "POST" });
+        await fetch(`/api/messages/conversation-read/${conversationId}`, {
+          method: "POST",
+        });
       } catch (err) {
         console.error("Failed to load messages:", err);
       } finally {
@@ -54,9 +58,12 @@ export default function ChatWindow({
     fetchMessages();
 
     const setupChannel = async () => {
-      const chan = supabaseServer.channel(`conversation:${conversationId}:task:${taskId}`, {
-        config: { broadcast: { self: true } },
-      });
+      const chan = supabaseBrowser.channel(
+        `conversation:${conversationId}:task:${taskId}`,
+        {
+          config: { broadcast: { self: true } },
+        }
+      );
 
       chan.on("broadcast", { event: "message" }, (payload) => {
         const msg = payload.payload?.message;
@@ -66,7 +73,9 @@ export default function ChatWindow({
           const exists = prev.find((m) => m.id === msg.id);
           if (exists) return prev;
           return [...prev, msg].sort(
-            (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+            (a, b) =>
+              new Date(a.created_at).getTime() -
+              new Date(b.created_at).getTime()
           );
         });
       });
@@ -100,7 +109,7 @@ export default function ChatWindow({
     return () => {
       isMounted = false;
       cleanupPromise.then((interval) => clearInterval(interval));
-      if (channelRef.current) supabaseServer.removeChannel(channelRef.current);
+      if (channelRef.current) supabaseBrowser.removeChannel(channelRef.current);
     };
   }, [conversationId, me.id]);
 
@@ -145,7 +154,11 @@ export default function ChatWindow({
       const res = await fetch("/api/messages/message-created", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ conversation_id: conversationId, content: trimmed, taskId }),
+        body: JSON.stringify({
+          conversation_id: conversationId,
+          content: trimmed,
+          taskId,
+        }),
       });
       if (!res.ok) throw new Error("Send failed");
       const data = await res.json();
@@ -166,9 +179,7 @@ export default function ChatWindow({
     } catch (err) {
       console.error("Send failed:", err);
       setMessages((m) =>
-        m.map((msg) =>
-          msg.id === tempId ? { ...msg, status: "failed" } : msg
-        )
+        m.map((msg) => (msg.id === tempId ? { ...msg, status: "failed" } : msg))
       );
     }
   };
@@ -196,7 +207,6 @@ export default function ChatWindow({
         <div className="absolute bottom-1/3 -right-32 w-64 h-64 bg-gradient-to-r from-indigo-400/10 to-pink-400/10 rounded-full blur-3xl" />
       </div>
 
-      {/* Messages Area */}
       <div
         ref={listRef}
         className="flex-1 overflow-y-auto px-6 py-4 space-y-6 relative z-10"
@@ -345,20 +355,35 @@ export default function ChatWindow({
           {/* Emoji Picker (Optional simple mockup) */}
           {showEmojiPicker && (
             <div className="mt-2 bg-white border border-gray-200 rounded-xl p-3 shadow-lg absolute bottom-20 left-10 w-64 grid grid-cols-8 gap-2 text-lg">
-              {["😀", "😁", "😂", "😍", "🥰", "😎", "😢", "👍", "🔥", "💡", "💬", "❤️", "🎉", "🙏", "🌈", "⭐"].map(
-                (e) => (
-                  <button
-                    key={e}
-                    onClick={() => {
-                      setInput((prev) => prev + e);
-                      setShowEmojiPicker(false);
-                    }}
-                    className="hover:scale-125 transition-transform"
-                  >
-                    {e}
-                  </button>
-                )
-              )}
+              {[
+                "😀",
+                "😁",
+                "😂",
+                "😍",
+                "🥰",
+                "😎",
+                "😢",
+                "👍",
+                "🔥",
+                "💡",
+                "💬",
+                "❤️",
+                "🎉",
+                "🙏",
+                "🌈",
+                "⭐",
+              ].map((e) => (
+                <button
+                  key={e}
+                  onClick={() => {
+                    setInput((prev) => prev + e);
+                    setShowEmojiPicker(false);
+                  }}
+                  className="hover:scale-125 transition-transform"
+                >
+                  {e}
+                </button>
+              ))}
             </div>
           )}
         </div>

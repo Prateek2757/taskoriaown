@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import { supabaseServer } from "@/lib/supabase-server";
+import { supabaseBrowser } from "@/lib/supabase-server";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
 
     await client.query("COMMIT");
 
-    const channel = supabaseServer.channel(`conversation:${conversation_id}`);
+    const channel = supabaseBrowser.channel(`conversation:${conversation_id}`);
     await channel.send({
       type: "broadcast",
       event: "message",

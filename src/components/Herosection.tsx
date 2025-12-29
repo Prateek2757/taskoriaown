@@ -1,7 +1,10 @@
 "use client";
 
 import { Button } from "../components/ui/button";
-import { Sparkles, MapPin, ArrowRight } from "lucide-react";
+import {
+  MapPin,
+  ArrowRight 
+} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
@@ -14,7 +17,8 @@ import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import { SparklesCoreLight } from "./ui/sparklesLight";
 import ScrollPopularSection from "./ScrollPopularSection";
 import Image from "next/image";
-import { createNotification } from "@/lib/notifications";
+import { sendEmail } from "./email/helpers/sendVerificationEmail";
+
 
 interface Category {
   category_id: number;
@@ -43,14 +47,13 @@ export default function HeroSection() {
     //     icon: "⚠️",
     //   });
     //   setTimeout(() => router.push("/signin"));
+  
     //   setLoading(true);
     //   return;
     // }
-    await createNotification({
-      userId: 4,
-      title: "Proposal Accepted 🎉",
-      body: "Congratulations! Your proposal was accepted.",
-    });
+  
+    //     })
+    
     setOpenModal(true);
   };
 
@@ -123,6 +126,8 @@ export default function HeroSection() {
               platform. Experience trust, transparency, and innovation in every
               service interaction.
             </p>
+           
+                              
 
             <div className="max-w-2xl mx-auto mt-6 sm:px-4">
               <div className="relative w-full max-w-3xl group flex sm:items-center max-sm:gap-2">
@@ -174,7 +179,8 @@ export default function HeroSection() {
             </div>
           </div>
         </div>
-        <ScrollPopularSection />
+        <ScrollPopularSection/>
+
         <div className="mt-10 hidden lg:block relative overflow-hidden bg-gradient-to-t from-zinc-100 to-transparent  dark:from-black">
           <div className="mx-auto max-w-4xl relative ">
             <div className="text-center text-3xl text-white">
