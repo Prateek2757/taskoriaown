@@ -3,6 +3,7 @@ import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { supabaseBrowser } from "@/lib/supabase-server";
+import { createNotification } from "@/lib/notifications";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -63,7 +64,12 @@ export async function POST(req: Request) {
       [conversation_id, senderId, content, metadata, taskId]
     );
     const message = insertMsg.rows[0];
-
+// await createNotification({
+//       userId: session?.user?.id,
+//       title: `${session?.user?.id} is Messageing You`,
+//       body: ` ! You have Got A Message   `
+      
+//     })
     await client.query(
       `UPDATE conversation_unreads 
        SET unread_count = unread_count + 1 

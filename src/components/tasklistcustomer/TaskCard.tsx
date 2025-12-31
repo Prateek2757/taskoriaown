@@ -1,17 +1,13 @@
-// components/tasks/TaskCard.tsx
 "use client";
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Calendar,
-  DollarSign,
   ChevronDown,
   MessageSquare,
-  User,
   Briefcase,
   HelpCircle,
   CheckCircle2,
@@ -44,6 +40,7 @@ type Task = {
   answers?: LeadAnswer[];
   budget_min?: number | null;
   budget_max?: number | null;
+  response_count?: number;
 };
 
 interface TaskCardProps {
@@ -75,7 +72,7 @@ export function TaskCard({
         return {
           color: "bg-emerald-500/10 text-emerald-700 border-emerald-200",
           icon: "●",
-          label: "Open For Quoting",
+          label: "Open Quoting",
         };
       case "In Progress":
         return {
@@ -106,121 +103,111 @@ export function TaskCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="group hover:shadow-lg transition-all duration-300 border-slate-200/60 bg-gradient-to-br from-white to-slate-50/30">
-        <CardContent className="p-6">
-          <div className="flex items-start justify-between gap-4 mb-4">
+      <Card className="group relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white transition-all duration-300 hover:shadow-lg dark:border-slate-800 dark:bg-slate-950">
+        <CardContent className="p-5 sm:p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-5">
             <div className="flex-1 min-w-0">
-              <h3 className="text-xl font-semibold text-slate-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+              <h3 className="text-lg sm:text-xl font-semibold text-slate-900 dark:text-slate-100 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 {task.title}
               </h3>
-              <p className="text-slate-600 text-sm line-clamp-2 leading-relaxed">
+              <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400 line-clamp-2">
                 {task.description}
               </p>
             </div>
-           
-               
-               <TaskStatusSelector value={currentStatus} onChange={(value)=> onStatusChange(value)} />
-            
+
+            <TaskStatusSelector
+              value={currentStatus}
+              onChange={(value) => onStatusChange(value)}
+            />
           </div>
 
           {task.answers && task.answers.length > 0 && (
-            <div className="mb-4 p-4 rounded-lg bg-blue-50/50 border border-blue-100">
-              <div className="flex items-center justify-between mb-3">
+            <div className="mb-5 rounded-xl border border-blue-100 bg-blue-50/60 p-4 dark:border-blue-900/40 dark:bg-blue-950/40">
+              <div className="mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <HelpCircle className="w-4 h-4 text-blue-600" />
-                  <h4 className="text-sm font-semibold text-blue-900">
+                  <HelpCircle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-300">
                     Task Requirements
                   </h4>
                 </div>
-                {/* {task.answers.length > 2 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-100 h-auto left-0 py-1 px-2"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setanswerssExpanded(!answerssExpanded);
-                    }}
-                  >
-                    {answerssExpanded ? "Show less" : `+${task.answers.length - 2} more`}
-                  </Button>
-                )} */}
               </div>
-              <div className="space-y-2">
-                {task.answers.slice(0, answerssExpanded ? undefined : 2).map((qa, idx) => (
-                  <div key={idx} className="text-sm">
-                    <p className="text-slate-700 font-medium mb-1">
-                      Q: {qa.question}
-                    </p>
-                    <p className="text-slate-600 pl-4 flex items-start gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
-                      <span>{qa.answer}</span>
-                    </p>
-                  
-                  </div>
-                  
-                ))}
-                  {task.answers.length > 2 && (
+
+              <div className="space-y-3">
+                {task.answers
+                  .slice(0, answerssExpanded ? undefined : 2)
+                  .map((qa, idx) => (
+                    <div key={idx} className="text-sm">
+                      <p className="font-medium text-slate-800 dark:text-slate-200">
+                        Q: {qa.question}
+                      </p>
+                      <p className="mt-1 flex items-start gap-2 pl-3 text-slate-600 dark:text-slate-400">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                        <span>{qa.answer}</span>
+                      </p>
+                    </div>
+                  ))}
+
+                {task.answers.length > 2 && (
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-100 h-auto left-0 py-1 px-2"
+                    className="h-auto px-2 py-1 text-xs text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-blue-900/40"
                     onClick={(e) => {
                       e.stopPropagation();
                       setanswerssExpanded(!answerssExpanded);
                     }}
                   >
-                    {answerssExpanded ? "Show less" : `+${task.answers.length - 2} more`}
+                    {answerssExpanded
+                      ? "Show less"
+                      : `+${task.answers.length - 2} more`}
                   </Button>
                 )}
               </div>
             </div>
           )}
 
-          <div className="flex flex-wrap items-center gap-4 mb-4 text-sm">
+          <div className="mb-5 flex flex-wrap items-center gap-4 text-sm">
             {task.estimated_budget > 0 && (
-              <div className="flex items-center gap-2 text-slate-600">
-                <span className="font-semibold text-emerald-700">
-                  ${task.estimated_budget.toLocaleString()}
-                </span>
+              <div className="flex items-center gap-1 text-emerald-700 dark:text-emerald-400 font-semibold">
+                ${task.estimated_budget.toLocaleString()}
                 {task.budget_min && task.budget_max && (
-                  <span className="text-xs text-slate-500">
-                    (${task.budget_min.toLocaleString()} - $
+                  <span className="text-xs font-normal text-slate-500 dark:text-slate-500">
+                    (${task.budget_min.toLocaleString()} – $
                     {task.budget_max.toLocaleString()})
                   </span>
                 )}
               </div>
             )}
-            <div className="flex items-center gap-2 text-slate-600">
-              <Calendar className="w-4 h-4" />
-              <span>
-                {new Date(task.created_at).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </span>
+
+            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+              <Calendar className="h-4 w-4" />
+              {new Date(task.created_at).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
             </div>
-            <div className="flex items-center gap-2 text-slate-600">
-              <MessageSquare className="w-4 h-4" />
+
+            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+              <MessageSquare className="h-4 w-4" />
               <span className="font-medium">
-                {responses.length} {responses.length === 1 ? "Response" : "Responses"}
+                {task.response_count}{" "}
+                {responses.length === 1 ? "Response" : "Responses"}
               </span>
             </div>
           </div>
 
-          {/* Responses Toggle */}
           <Button
             variant="outline"
-            className="w-full justify-between hover:bg-blue-50 transition-colors border-slate-200"
             onClick={onToggle}
+            className="w-full justify-between rounded-xl border-slate-200 hover:bg-blue-50 dark:border-slate-800 dark:hover:bg-slate-900"
           >
             <span className="font-medium">
               {isExpanded ? "Hide" : "View"} Professional Responses
             </span>
             <ChevronDown
               className={cn(
-                "w-4 h-4 transition-transform duration-300",
+                "h-4 w-4 transition-transform",
                 isExpanded && "rotate-180"
               )}
             />
@@ -235,71 +222,58 @@ export function TaskCard({
                 transition={{ duration: 0.3 }}
                 className="overflow-hidden"
               >
-                <div className="mt-4 space-y-3">
-                  {isLoading ? (
-                    <div className="text-center py-8 text-slate-500">
-                      <div className="animate-spin w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-2" />
-                      Loading responses...
-                    </div>
-                  ) : responses.length === 0 ? (
-                    <div className="text-center py-12 text-slate-500">
-                      <MessageSquare className="w-12 h-12 mx-auto mb-3 text-slate-300" />
-                      <p className="font-medium">No responses yet</p>
-                      <p className="text-sm">
-                        Check back soon for professional quotes
-                      </p>
-                    </div>
-                  ) : (
-                    responses.map((response, idx) => (
-                      <motion.div
-                        key={response.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                      >
-                        <Card className="border-slate-200 hover:border-blue-300 hover:shadow-md transition-all duration-200">
-                          <CardContent className="p-4">
-                            <div className="flex items-start gap-4">
-                              <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-blue-400 to-purple-500 shrink-0">
-                                {response.profile_image ? (
-                                  <Image
-                                    src={response.profile_image}
-                                    alt={response.display_name}
-                                    fill
-                                    className="object-cover"
-                                  />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center text-white font-semibold">
-                                    {response.display_name.charAt(0)}
-                                  </div>
-                                )}
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <h4 className="font-semibold text-slate-900 mb-1">
-                                  {response.display_name}
-                                </h4>
-                                <p className="text-sm text-slate-600 mb-2 flex items-center gap-2">
-                                  <Briefcase className="w-3.5 h-3.5" />
-                                  {response.profile_title}
-                                </p>
-                                <p className="text-sm text-slate-700 mb-3 line-clamp-2">
-                                  {response.title}
-                                </p>
-                                <Button
-                                  size="sm"
-                                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                                  onClick={() => onMessageClick(response.id)}
-                                >
-                                  <MessageSquare className="w-4 h-4 mr-2" />
-                                  Send Message
-                                </Button>
-                              </div>
+                <div className="mt-4 space-y-4">
+                  {responses.map((response, idx) => (
+                    <motion.div
+                      key={response.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.06 }}
+                    >
+                      <Card className="rounded-xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-700">
+                        <CardContent className="p-4">
+                          <div className="flex gap-4">
+                            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-blue-500 to-purple-600">
+                              {response.profile_image ? (
+                                <Image
+                                  src={response.profile_image}
+                                  alt={response.display_name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              ) : (
+                                <div className="flex h-full w-full items-center justify-center font-semibold text-white">
+                                  {response.display_name.charAt(0)}
+                                </div>
+                              )}
                             </div>
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    ))
-                  )}
+
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-semibold text-slate-900 dark:text-slate-100">
+                                {response.display_name}
+                              </h4>
+                              <p className="mb-2 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                                <Briefcase className="h-3.5 w-3.5" />
+                                {response.profile_title}
+                              </p>
+                              <p className="mb-3 text-sm text-slate-700 dark:text-slate-300 line-clamp-2">
+                                {response.title}
+                              </p>
+
+                              <Button
+                                size="sm"
+                                className="rounded-lg bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                                onClick={() => onMessageClick(response.id)}
+                              >
+                                <MessageSquare className="mr-2 h-4 w-4" />
+                                Message
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))}
                 </div>
               </motion.div>
             )}

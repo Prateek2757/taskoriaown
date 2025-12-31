@@ -89,6 +89,7 @@ export default function ChatPage({ otherUserId, taskId }: ChatPageProps) {
             
       <ChatWindow
         conversationId={conversationId}
+        OtherUserId={String(otherUserId)}
         me={{ id: session.user.id, name: session.user.name || "" }}
         taskId={taskId}
       />

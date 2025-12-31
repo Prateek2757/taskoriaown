@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight, PlusCircle } from "lucide-react";
 import { motion } from "motion/react";
-import TasksList from "@/components/tasklistcustomer/CustomerTaskList";
 import NewRequestModal from "@/components/leads/RequestModal";
 import { useTasks } from "@/hooks/useTasks";
 import Image from "next/image";

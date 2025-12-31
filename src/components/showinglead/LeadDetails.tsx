@@ -160,7 +160,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       userId: session?.user?.id,
       title: "Lead Purchased Sucessfully🎉!",
       body: `Congratulations ${session?.user?.name}! You have Purchased Lead For ${lead.category_name} `
-      
     })
 
     await new Promise((resolve) => setTimeout(resolve, 500));

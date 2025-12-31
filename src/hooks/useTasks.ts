@@ -17,13 +17,13 @@ export type Task = {
   budget_min?: number | null;
   budget_max?: number | null;
   answers?:Lead_answers[];
+  response_count?:number;
 };
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-console.log(tasks,"fporjfspoj");
 
   const fetchTasks = useCallback(async () => {
     setLoading(true);

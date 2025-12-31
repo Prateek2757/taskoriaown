@@ -20,13 +20,19 @@ interface Conversation {
   participants: Participant[];
 }
 
-export default function ChatPageInline({ params }: { params: Promise<{ convoId: string }> }) {
+export default function ChatPageInline({
+  params,
+}: {
+  params: Promise<{ convoId: string }>;
+}) {
+  
   const paramsWrapped = use(params);
   const routeConvoId = paramsWrapped?.convoId || null;
   const { data: session } = useSession();
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [activeConversation, setActiveConversation] = useState<Conversation | null>(null);
+  const [activeConversation, setActiveConversation] =
+    useState<Conversation | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [endpoint, setEndpoint] = useState<string | null>(null);
 
@@ -35,7 +41,6 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
 
   const hasFetched = useRef(false);
   const cacheKey = `chat_conversations_${session?.user?.id}`;
-
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -50,13 +55,11 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
     }
   }, []);
 
-
   useEffect(() => {
     if (!session?.user?.id) return;
     const cached = sessionStorage.getItem(cacheKey);
     if (cached) setConversations(JSON.parse(cached));
   }, [cacheKey, session?.user?.id]);
-
 
   const fetchConversations = useCallback(async () => {
     if (!endpoint || hasFetched.current) return;
@@ -73,14 +76,12 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
 
       setConversations(convos);
       hasFetched.current = true;
-
     } catch (err: any) {
       setError(err?.message || "Failed to load conversations");
     } finally {
       setLoading(false);
     }
   }, [endpoint, session?.user?.id]);
-
 
   // useEffect(() => {
   //   if (!session?.user?.id) return;
@@ -105,10 +106,11 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
     if (!routeConvoId) return;
     if (!conversations.length) return;
 
-    const found = conversations.find((c) => String(c.id) === String(routeConvoId));
+    const found = conversations.find(
+      (c) => String(c.id) === String(routeConvoId)
+    );
     if (found) setActiveConversation(found);
   }, [routeConvoId, conversations]);
-
 
   const getOtherParticipantName = useCallback(
     (conversation: Conversation) => {
@@ -118,6 +120,15 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
       return other?.name || "Unknown";
     },
     [session?.user?.id]
+  );
+  const getOtherParticipantId = useCallback(
+    (conversation: Conversation) => {
+      const other = conversation.participants.find(
+        (p) => Number(p.user_id) !== Number(session?.user.id)
+      );
+      return other?.user_id || "unknonw Id";
+    },
+    [session?.user.id]
   );
 
   const handleSelectConversation = useCallback((conversation: Conversation) => {
@@ -129,20 +140,26 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
 
   if (!session?.user) {
     return (
-      <div className="flex items-center justify-center h-screen
+      <div
+        className="flex items-center justify-center h-screen
         bg-gradient-to-br from-gray-100 via-white to-gray-50
-        dark:from-[#0a0a0f] dark:via-[#0f1117] dark:to-[#11131a]">
-      </div>
+        dark:from-[#0a0a0f] dark:via-[#0f1117] dark:to-[#11131a]"
+      ></div>
     );
   }
 
-  const otherName =
+  const otherParticipant =
     activeConversation && session?.user?.id
-      ? getOtherParticipantName(activeConversation)
-      : "Unknown";
+      ? {
+          name: getOtherParticipantName(activeConversation),
+          otherId: getOtherParticipantId(activeConversation),
+        }
+      : { name: "Unknown", otherId: null };
+  const otherName = otherParticipant.name;
+  const otherId = otherParticipant.otherId;
+  console.log(otherId, "dkjb");
 
   const conversationTitle = activeConversation?.task_title || "Conversation";
-
 
   return (
     <div
@@ -152,9 +169,10 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
       dark:from-[#050507] dark:via-[#0b0c10] dark:to-[#11131a]
       text-gray-800 dark:text-gray-200"
     >
-
       <AnimatePresence mode="wait">
-        {(sidebarOpen || typeof window === "undefined" || !window.matchMedia("(max-width: 640px)").matches) && (
+        {(sidebarOpen ||
+          typeof window === "undefined" ||
+          !window.matchMedia("(max-width: 640px)").matches) && (
           <motion.div
             key="sidebar"
             initial={{ x: -280, opacity: 0 }}
@@ -181,16 +199,15 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
         )}
       </AnimatePresence>
 
-
       <div className="flex-1 flex flex-col relative">
-
-
         {activeConversation && (
-          <div className="
+          <div
+            className="
             sm:hidden p-3 flex items-center gap-3
             bg-white/80 dark:bg-[#12131a]/80 
             border-b border-gray-200 dark:border-[#1d1f27]
-            backdrop-blur-md shadow-sm">
+            backdrop-blur-md shadow-sm"
+          >
             <Button
               onClick={() => setSidebarOpen(true)}
               className="text-[#6C63FF] dark:text-[#78aaff] flex items-center gap-1"
@@ -206,7 +223,6 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
         )}
 
         <AnimatePresence mode="wait">
-
           {loading ? (
             <motion.div
               key="loading"
@@ -215,11 +231,13 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
               exit={{ opacity: 0 }}
               className="flex flex-col items-center justify-center flex-1 text-gray-500 dark:text-gray-400"
             >
-              <div className="
+              <div
+                className="
                 animate-spin border-4 
                 border-[#6C63FF]/20 border-t-[#6C63FF]
                 rounded-full w-10 h-10 mb-3
-              "></div>
+              "
+              ></div>
               <p>Loading conversations...</p>
             </motion.div>
           ) : error ? (
@@ -233,7 +251,6 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
               <p className="text-lg font-medium">{error}</p>
             </motion.div>
           ) : activeConversation ? (
-
             <motion.div
               key={activeConversation.id}
               initial={{ opacity: 0, x: 18 }}
@@ -246,6 +263,7 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
             >
               <ChatWindow
                 otherName={otherName}
+                OtherUserId={String(otherId)}
                 conversationTitle={conversationTitle}
                 conversationId={activeConversation.id}
                 me={{ id: session.user.id }}
@@ -253,7 +271,6 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
               />
             </motion.div>
           ) : (
-
             <motion.div
               key="empty"
               initial={{ opacity: 0 }}
@@ -265,9 +282,7 @@ export default function ChatPageInline({ params }: { params: Promise<{ convoId: 
             >
               <MessageCircle className="w-12 h-12 mb-4 text-[#6C63FF] dark:text-[#7da2ff]" />
               <p className="text-lg font-medium">Select a conversation</p>
-              <p className="text-sm mt-1">
-                Start chatting with your clients
-              </p>
+              <p className="text-sm mt-1">Start chatting with your clients</p>
             </motion.div>
           )}
         </AnimatePresence>

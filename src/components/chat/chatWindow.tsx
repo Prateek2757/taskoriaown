@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import MessageList from "./messageList";
 import { supabaseBrowser } from "@/lib/supabase-server";
+import { createNotification } from "@/lib/notifications";
+import { useSession } from "next-auth/react";
 
 export type Message = {
   id: string;
@@ -27,6 +29,7 @@ interface Conversation {
 
 export default function ChatWindow({
   conversationId,
+  OtherUserId,
   otherName,
   conversationTitle,
   me,
@@ -35,19 +38,21 @@ export default function ChatWindow({
   conversationId: string;
   me: { id: string; name?: string };
   taskId: number;
+  OtherUserId?: string;
   conversationTitle?: string;
   otherName?: string;
 }) {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [activeUsers, setActiveUsers] = useState<string[]>([]);
   const [typingUsers, setTypingUsers] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const channelRef = useRef<any>(null);
+  const { data: session } = useSession();
 
   const sortMessages = (arr: Message[]) =>
     arr.sort(
       (a, b) =>
-        new Date(a.created_at).getTime() -
-        new Date(b.created_at).getTime()
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
     );
 
   const uniqueMessages = (arr: Message[]) =>
@@ -78,7 +83,9 @@ export default function ChatWindow({
     loadMessages();
 
     const chan = supabaseBrowser.channel(`conversation:${conversationId}`, {
-      config: { broadcast: { self: false } },
+      config: { broadcast: { self: false },
+      presence: { key: me.id },
+    },
     });
 
     chan.on("broadcast", { event: "message" }, (payload) => {
@@ -97,10 +104,33 @@ export default function ChatWindow({
       setTypingUsers((prev) => ({ ...prev, [uid]: Date.now() }));
     });
 
-    chan.subscribe((status) => {
+    chan.subscribe( async(status) => {
       if (status === "SUBSCRIBED") channelRef.current = chan;
+      await chan.track({
+        user_id: me.id,
+        conversation_id: conversationId,
+      });
     });
+    chan.on("presence", { event: "sync" }, () => {
+      const state = chan.presenceState();
+    
+      const users = Object.values(state)
+        .flat()
+        .map((p: any) => p.user_id);
+    
+      setActiveUsers(users);
+    });
+  //   const otherUserIsViewing =
+  // OtherUserId && activeUsers.includes(String(OtherUserId));
 
+// if (!otherUserIsViewing) async{
+//         createNotification({
+//     userId: String(OtherUserId),
+//     title: `${session?.user.name} is messaging you`,
+//     body: `You have received a message from ${session?.user.name}`,
+//   });
+// }
+    
     const cleanTyping = setInterval(() => {
       const now = Date.now();
       setTypingUsers((prev) => {
@@ -144,7 +174,11 @@ export default function ChatWindow({
           taskId,
         }),
       });
-
+      await createNotification({
+        userId: String(OtherUserId),
+        title: ` ${session?.user.name} is messaging you`,
+        body: ` You have Received an Message From ${session?.user.name}   `,
+      });
       if (!res.ok) throw new Error("Failed to send message");
 
       const data = await res.json();
@@ -169,9 +203,7 @@ export default function ChatWindow({
     } catch (err) {
       console.error("Send message error:", err);
       setMessages((prev) =>
-        prev.map((m) =>
-          m.id === tempId ? { ...m, status: "failed" } : m
-        )
+        prev.map((m) => (m.id === tempId ? { ...m, status: "failed" } : m))
       );
     }
   };

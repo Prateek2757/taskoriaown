@@ -19,7 +19,7 @@ function page() {
       <Testomonail/>
       <FeatureProvider/>
       <CTA/>
-        <SupportChatbot/>
+      <SupportChatbot/>
     </div>
   )
 }

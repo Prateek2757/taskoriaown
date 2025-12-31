@@ -17,12 +17,14 @@ export async function GET() {
 
     const query = `
       SELECT
+      t.*,
   t.task_id,
   t.title,
   t.description,
   t.status,
   t.created_at,
   t.estimated_budget,
+  COUNT(DISTINCT r.response_id) AS response_count,
   json_agg(
     json_build_object(
       'question_id', ta.category_question_id,
@@ -33,6 +35,7 @@ export async function GET() {
 FROM tasks t
 JOIN service_categories c ON c.category_id = t.category_id
 LEFT JOIN task_answers ta ON ta.task_id = t.task_id
+LEFT JOIN task_responses r ON r.task_id = t.task_id
 LEFT JOIN category_questions q
   ON q.category_question_id = ta.category_question_id
 WHERE t.customer_id = $1

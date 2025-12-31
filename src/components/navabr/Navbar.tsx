@@ -44,14 +44,14 @@ export default function ModernNavbar() {
 
   const navLinks = {
     public: [
-      { name: "Home", href: "/", icon:Home  },
+      { name: "Home", href: "/", icon: Home },
       { name: "Providers", href: "/providers", icon: Users },
-      { name: "Services", href: "/services", icon:HandPlatter },
+      { name: "Services", href: "/services", icon: HandPlatter },
     ],
     customer: [
       { name: "Home", href: "/", icon: Home },
       { name: "My Requests", href: "/customer/dashboard", icon: Search },
-      { name: "Discover", href: "/services", icon: Binoculars},
+      { name: "Discover", href: "/services", icon: Binoculars },
       { name: "Messages", href: "/messages/null", icon: MessageSquare },
     ],
     provider: [
@@ -236,8 +236,12 @@ export default function ModernNavbar() {
             href="/"
             className="flex items-center hover:opacity-90 transition-opacity"
           >
-          
-            <Image src="/taskoria-logo.png" alt="taskorialogo"  height={31} width={18} />
+            <Image
+              src="/taskoria-logo.png"
+              alt="taskorialogo"
+              height={31}
+              width={18}
+            />
 
             <span className="text-2xl font-bold bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent ">
               Taskoria
@@ -277,21 +281,16 @@ export default function ModernNavbar() {
           {!minimalPages.includes(pathname) && (
             <div className="hidden md:flex items-center gap-3">
               {session ? (
-                
-                
-
                 <div className="relative flex" ref={profileRef}>
-                   <div className="">
-                    <NotificationBell userId={ session?.user?.id}/>
+                  <div className="">
+                    <NotificationBell userId={Number(session?.user?.id)} />
                   </div>
-                  
+
                   <Button
                     onClick={() => setIsProfileOpen((p) => !p)}
                     variant="ghost"
                     className=" flex items-center gap-2 px py-2 rounded-full transition-all "
                   >
-                    
-
                     <div
                       className="w-9 h-9 rounded-full flex  items-center justify-center  bg-gradient-to-br from-blue-100 to-cyan-100
                                        dark:from-blue-900 dark:to-cyan-900
@@ -333,14 +332,13 @@ export default function ModernNavbar() {
                 </>
               )}
               <div className="">
-              <ThemeToggle />
+                <ThemeToggle />
               </div>
-              
             </div>
           )}
- <div className=" md:hidden ml-50 ">
-                    <NotificationBell userId={ session?.user?.id}/>
-                  </div>
+          <div className=" md:hidden ml-50 ">
+            <NotificationBell userId={Number(session?.user?.id)} />
+          </div>
           <Button
             variant="ghost"
             onClick={() => setIsMenuOpen((p) => !p)}
@@ -390,9 +388,8 @@ export default function ModernNavbar() {
                   </Link>
                   <div className="pl-16  ">
                     <ThemeToggle />
-                    
                   </div>
-                 
+
                   <button
                     onClick={() => setIsMenuOpen(false)}
                     className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
@@ -409,7 +406,7 @@ export default function ModernNavbar() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-gray-900 dark:text-gray-100 truncate text-lg">
-                          {session.user?.name || session.user?.display_name}
+                          {session.user?.name}
                         </p>
                         <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
                           {session.user?.email}

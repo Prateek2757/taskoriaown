@@ -1,6 +1,12 @@
 "use client";
 
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
 interface TaskStatusSelectorProps {
@@ -9,7 +15,11 @@ interface TaskStatusSelectorProps {
   disabled?: boolean;
 }
 
-export function TaskStatusSelector({ value, onChange, disabled }: TaskStatusSelectorProps) {
+export function TaskStatusSelector({
+  value,
+  onChange,
+  disabled,
+}: TaskStatusSelectorProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Open":
@@ -25,13 +35,15 @@ export function TaskStatusSelector({ value, onChange, disabled }: TaskStatusSele
 
   return (
     <Select value={value} onValueChange={onChange} disabled={disabled}>
-      <SelectTrigger className={cn("w-[180px] font-medium", getStatusColor(value))}>
+      <SelectTrigger
+        className={cn("w-[180px] font-medium", getStatusColor(value))}
+      >
         <SelectValue placeholder="Select status" />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="Open" className="text-emerald-700">
           <span className="flex items-center gap-1">
-            <span>●</span> Open For Quoting
+            <span>●</span> Open Quoting
           </span>
         </SelectItem>
         <SelectItem value="In Progress" className="text-amber-700">
@@ -39,7 +51,7 @@ export function TaskStatusSelector({ value, onChange, disabled }: TaskStatusSele
             <span>◐</span> In Progress
           </span>
         </SelectItem>
-        <SelectItem value="Closed" className="text-slate-700">
+        <SelectItem value="Closed" className="text-red-600">
           <span className="flex items-center gap-2">
             <span>○</span> Closed
           </span>
