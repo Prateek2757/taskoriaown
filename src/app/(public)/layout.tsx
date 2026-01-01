@@ -8,7 +8,7 @@ import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
 import { Poppins } from "next/font/google";
 import type { Viewport } from "next";
-// import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -109,7 +109,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {/* <Analytics/> */}
+            <Analytics/>
             <UserProvider>
               <ModernNavbar />
               {children}
