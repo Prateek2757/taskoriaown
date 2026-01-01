@@ -157,7 +157,6 @@ export default function ChatPageInline({
       : { name: "Unknown", otherId: null };
   const otherName = otherParticipant.name;
   const otherId = otherParticipant.otherId;
-  console.log(otherId, "dkjb");
 
   const conversationTitle = activeConversation?.task_title || "Conversation";
 

@@ -47,10 +47,8 @@ export default function MessageList({
   const [isFocused, setIsFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // --- 🔥 FIX AUTO-SCROLL ---
   const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
 
-  // detect scroll position / stop auto-scroll when user scrolls up
   useEffect(() => {
     const el = listRef.current;
     if (!el) return;
@@ -65,7 +63,6 @@ export default function MessageList({
     return () => el.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // auto-scroll to bottom only when user is near bottom
   useEffect(() => {
     const el = listRef.current;
     if (!el || !shouldAutoScroll) return;
@@ -135,7 +132,6 @@ export default function MessageList({
   return (
     <div className="flex flex-col h-full bg-white dark:bg-[#0E0F11]">
 
-      {/* HEADER */}
       <div className="flex-shrink-0 px-4 py-3 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0E0F11]">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white flex items-center justify-center font-semibold shadow-md">

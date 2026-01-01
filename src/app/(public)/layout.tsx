@@ -7,7 +7,8 @@ import ModernNavbar from "@/components/navabr/Navbar";
 import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
 import { Poppins } from "next/font/google";
-import type { Viewport } from 'next'
+import type { Viewport } from "next";
+// import { Analytics } from "@vercel/analytics/next"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -85,11 +86,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable}`}   >
+    <html lang="en" className={`${poppins.variable}`}>
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="48x48" type="image/x-icon" />
+        <link
+          rel="icon"
+          href="/favicon.ico"
+          sizes="48x48"
+          type="image/x-icon"
+        />
 
-        <link rel="apple-touch-icon" sizes="140x140" href="/taskoria-logo.png" />
+        <link
+          rel="apple-touch-icon"
+          sizes="140x140"
+          href="/taskoria-logo.png"
+        />
       </head>
       <AuthProvider>
         <body className="antialiased dark:bg-black " suppressHydrationWarning>
@@ -99,6 +109,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            {/* <Analytics/> */}
             <UserProvider>
               <ModernNavbar />
               {children}

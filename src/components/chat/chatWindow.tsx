@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useSession } from "next-auth/react";
 import MessageList from "./messageList";
 import { supabaseBrowser } from "@/lib/supabase-server";
 import { createNotification } from "@/lib/notifications";
-import { useSession } from "next-auth/react";
 
 export type Message = {
   id: string;
@@ -14,18 +14,6 @@ export type Message = {
   created_at: string;
   status?: "sending" | "sent" | "failed";
 };
-
-interface Participant {
-  user_id: string;
-  name: string;
-}
-
-interface Conversation {
-  id: string;
-  task_id: string;
-  task_title: string;
-  participants: Participant[];
-}
 
 export default function ChatWindow({
   conversationId,
@@ -43,20 +31,23 @@ export default function ChatWindow({
   otherName?: string;
 }) {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [activeUsers, setActiveUsers] = useState<string[]>([]);
   const [typingUsers, setTypingUsers] = useState<Record<string, number>>({});
+  const [activeUsers, setActiveUsers] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+
   const channelRef = useRef<any>(null);
   const { data: session } = useSession();
 
   const sortMessages = (arr: Message[]) =>
     arr.sort(
       (a, b) =>
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        new Date(a.created_at).getTime() -
+        new Date(b.created_at).getTime()
     );
 
   const uniqueMessages = (arr: Message[]) =>
     Array.from(new Map(arr.map((m) => [m.id, m])).values());
+
 
   useEffect(() => {
     if (!conversationId) return;
@@ -67,12 +58,10 @@ export default function ChatWindow({
         const res = await fetch(
           `/api/messages/conversation-read/${conversationId}`
         );
-
         if (!res.ok) throw new Error(await res.text());
 
         const data = await res.json();
-        const cleaned = uniqueMessages(data.messages);
-        setMessages(sortMessages(cleaned));
+        setMessages(sortMessages(uniqueMessages(data.messages)));
       } catch (err) {
         console.error("Fetch messages error:", err);
       } finally {
@@ -83,54 +72,47 @@ export default function ChatWindow({
     loadMessages();
 
     const chan = supabaseBrowser.channel(`conversation:${conversationId}`, {
-      config: { broadcast: { self: false },
-      presence: { key: me.id },
-    },
+      config: {
+        broadcast: { self: false },
+        presence: { key: me.id },
+      },
     });
 
     chan.on("broadcast", { event: "message" }, (payload) => {
       const msg: Message = payload.payload?.message;
       if (!msg?.id) return;
+      if (msg.user_id === me.id) return;
 
-      setMessages((prev) => {
-        const merged = uniqueMessages([...prev, msg]);
-        return sortMessages(merged);
-      });
+      setMessages((prev) =>
+        sortMessages(uniqueMessages([...prev, msg]))
+      );
     });
 
     chan.on("broadcast", { event: "typing" }, (payload) => {
       const uid = payload.payload?.user_id;
       if (!uid || uid === me.id) return;
+
       setTypingUsers((prev) => ({ ...prev, [uid]: Date.now() }));
     });
 
-    chan.subscribe( async(status) => {
-      if (status === "SUBSCRIBED") channelRef.current = chan;
-      await chan.track({
-        user_id: me.id,
-        conversation_id: conversationId,
-      });
-    });
     chan.on("presence", { event: "sync" }, () => {
       const state = chan.presenceState();
-    
       const users = Object.values(state)
         .flat()
         .map((p: any) => p.user_id);
-    
       setActiveUsers(users);
     });
-  //   const otherUserIsViewing =
-  // OtherUserId && activeUsers.includes(String(OtherUserId));
 
-// if (!otherUserIsViewing) async{
-//         createNotification({
-//     userId: String(OtherUserId),
-//     title: `${session?.user.name} is messaging you`,
-//     body: `You have received a message from ${session?.user.name}`,
-//   });
-// }
-    
+    chan.subscribe(async (status) => {
+      if (status === "SUBSCRIBED") {
+        channelRef.current = chan;
+        await chan.track({
+          user_id: me.id,
+          conversation_id: conversationId,
+        });
+      }
+    });
+
     const cleanTyping = setInterval(() => {
       const now = Date.now();
       setTypingUsers((prev) => {
@@ -144,25 +126,29 @@ export default function ChatWindow({
 
     return () => {
       clearInterval(cleanTyping);
-      if (channelRef.current) supabaseBrowser.removeChannel(channelRef.current);
+      if (channelRef.current) {
+        supabaseBrowser.removeChannel(channelRef.current);
+      }
     };
   }, [conversationId, me.id]);
 
+ 
   const sendMessage = async (text: string) => {
     if (!text.trim()) return;
 
-    const tempId = "tmp_" + Math.random().toString(36).slice(2, 11);
+    const tempId = "tmp_" + Math.random().toString(36).slice(2);
 
-    const optimistic: Message = {
-      id: tempId,
-      conversation_id: conversationId,
-      user_id: me.id,
-      content: text,
-      created_at: new Date().toISOString(),
-      status: "sending",
-    };
-
-    setMessages((prev) => [...prev, optimistic]);
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: tempId,
+        conversation_id: conversationId,
+        user_id: me.id,
+        content: text,
+        created_at: new Date().toISOString(),
+        status: "sending",
+      },
+    ]);
 
     try {
       const res = await fetch("/api/messages/message-created", {
@@ -174,14 +160,21 @@ export default function ChatWindow({
           taskId,
         }),
       });
-      await createNotification({
-        userId: String(OtherUserId),
-        title: ` ${session?.user.name} is messaging you`,
-        body: ` You have Received an Message From ${session?.user.name}   `,
-      });
+
       if (!res.ok) throw new Error("Failed to send message");
 
       const data = await res.json();
+
+      const otherUserIsViewing =
+        OtherUserId && activeUsers.includes(String(OtherUserId));
+
+      if (!otherUserIsViewing) {
+        await createNotification({
+          userId: String(OtherUserId),
+          title: `${session?.user.name} is messaging you`,
+          body: `You have received a message from ${session?.user.name}`,
+        });
+      }
 
       if (channelRef.current) {
         await channelRef.current.send({
@@ -192,21 +185,20 @@ export default function ChatWindow({
       }
 
       setMessages((prev) =>
-        sortMessages(
-          uniqueMessages(
-            prev.map((m) =>
-              m.id === tempId ? { ...data.message, status: "sent" } : m
-            )
-          )
+        prev.map((m) =>
+          m.id === tempId ? { ...data.message, status: "sent" } : m
         )
       );
     } catch (err) {
       console.error("Send message error:", err);
       setMessages((prev) =>
-        prev.map((m) => (m.id === tempId ? { ...m, status: "failed" } : m))
+        prev.map((m) =>
+          m.id === tempId ? { ...m, status: "failed" } : m
+        )
       );
     }
   };
+
 
   const sendTyping = () => {
     if (!channelRef.current) return;

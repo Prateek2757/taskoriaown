@@ -16,8 +16,6 @@ export default function ChatPage({ otherUserId, taskId }: ChatPageProps) {
     "Private Chat",
     taskId
   );
-
-  // 🟡 Still waiting for session to load
   if (status === "loading") {
     return (
       <div className="flex items-center justify-center h-full">
@@ -26,7 +24,6 @@ export default function ChatPage({ otherUserId, taskId }: ChatPageProps) {
     );
   }
 
-  // 🔐 Not logged in
   if (!session?.user) {
     return (
       <div className="flex items-center justify-center h-full min-h-[400px]">
@@ -40,7 +37,6 @@ export default function ChatPage({ otherUserId, taskId }: ChatPageProps) {
     );
   }
 
-  // ⏳ Loading conversation from backend (checking/creating)
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -49,7 +45,6 @@ export default function ChatPage({ otherUserId, taskId }: ChatPageProps) {
     );
   }
 
-  // ❌ Error while fetching/creating conversation
   if (error) {
     const notPurchased =
       error.toLowerCase().includes("not purchased") ||
@@ -82,7 +77,6 @@ export default function ChatPage({ otherUserId, taskId }: ChatPageProps) {
     );
   }
 
-  // ✅ Conversation created or found
   if (conversationId) {
     return (
       
@@ -96,7 +90,6 @@ export default function ChatPage({ otherUserId, taskId }: ChatPageProps) {
     );
   }
 
-  // ❌ Fallback (very unlikely)
   return (
     <div className="flex items-center justify-center h-full">
       <div className="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
