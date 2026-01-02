@@ -96,6 +96,15 @@ export async function GET(
        WHERE conversation_id = $1 AND user_id = $2`,
       [conversationId, myId]
     );
+await pool.query(
+  `
+  UPDATE conversation_unreads
+  SET unread_count = 0,
+      last_read_at = NOW()
+  WHERE conversation_id = $1 AND user_id = $2
+  `,
+  [conversationId, myId]
+);
 
     return NextResponse.json({
       messages: messagesResult.rows,

@@ -14,27 +14,52 @@ export async function GET() {
     const client = await pool.connect();
 
     const query = `
-      SELECT 
-        c.id,
-        c.task_id , 
-        c.created_at,
-        t.title AS task_title,
-        json_agg(
-          json_build_object(
-            'user_id', up.user_id,
-            'name', up.display_name
-          )
-        ) AS participants
-      FROM conversations c
-      JOIN conversation_participants cp 
-        ON cp.conversation_id = c.id
-      JOIN user_profiles up 
-        ON up.user_id::text = cp.user_id   
-      LEFT JOIN tasks t 
-        ON t.task_id = c.task_id
-    WHERE c.created_by = $1::text
-      GROUP BY c.id, t.title
-      ORDER BY c.created_at DESC;
+     SELECT 
+  c.id,
+  c.task_id, 
+  c.created_at,
+
+  t.title AS task_title,
+
+  -- latest message
+  lm.content AS last_message,
+  lm.created_at AS last_message_at,
+
+  json_agg(
+    json_build_object(
+      'user_id', up.user_id,
+      'name', up.display_name
+    )
+  ) AS participants
+
+FROM conversations c
+
+JOIN conversation_participants cp 
+  ON cp.conversation_id = c.id
+
+JOIN user_profiles up 
+  ON up.user_id::text = cp.user_id   
+
+LEFT JOIN tasks t 
+  ON t.task_id = c.task_id
+
+LEFT JOIN LATERAL (
+  SELECT content, created_at
+  FROM messages
+  WHERE conversation_id = c.id
+  ORDER BY created_at DESC
+  LIMIT 1
+) lm ON TRUE
+
+WHERE c.created_by = $1::text
+
+GROUP BY
+  c.id,
+  t.title,
+  lm.content,
+  lm.created_at
+
+ORDER BY lm.created_at DESC NULLS LAST;
     `;
 
     const result = await client.query(query, [userId]);

@@ -9,6 +9,8 @@ import Footer from "@/components/Footer";
 import { Poppins } from "next/font/google";
 import type { Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next"
+import { useNotificationTitle } from '@/hooks/useNotificationTitle'
+import NotificationHandler from "@/components/NotificationHandler";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -103,6 +105,7 @@ export default function RootLayout({
       </head>
       <AuthProvider>
         <body className="antialiased dark:bg-black " suppressHydrationWarning>
+          <NotificationHandler/>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import MessageList from "./messageList";
 import { supabaseBrowser } from "@/lib/supabase-server";
 import { createNotification } from "@/lib/notifications";
+import axios from "axios";
 
 export type Message = {
   id: string;
@@ -41,13 +42,11 @@ export default function ChatWindow({
   const sortMessages = (arr: Message[]) =>
     arr.sort(
       (a, b) =>
-        new Date(a.created_at).getTime() -
-        new Date(b.created_at).getTime()
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
     );
 
   const uniqueMessages = (arr: Message[]) =>
     Array.from(new Map(arr.map((m) => [m.id, m])).values());
-
 
   useEffect(() => {
     if (!conversationId) return;
@@ -83,9 +82,7 @@ export default function ChatWindow({
       if (!msg?.id) return;
       if (msg.user_id === me.id) return;
 
-      setMessages((prev) =>
-        sortMessages(uniqueMessages([...prev, msg]))
-      );
+      setMessages((prev) => sortMessages(uniqueMessages([...prev, msg])));
     });
 
     chan.on("broadcast", { event: "typing" }, (payload) => {
@@ -132,7 +129,6 @@ export default function ChatWindow({
     };
   }, [conversationId, me.id]);
 
- 
   const sendMessage = async (text: string) => {
     if (!text.trim()) return;
 
@@ -151,19 +147,15 @@ export default function ChatWindow({
     ]);
 
     try {
-      const res = await fetch("/api/messages/message-created", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          conversation_id: conversationId,
-          content: text,
-          taskId,
-        }),
+      const res = await axios.post("/api/messages/message-created", {
+        conversation_id: conversationId,
+        content: text,
+        taskId,
       });
 
-      if (!res.ok) throw new Error("Failed to send message");
+      if (res.data.error) throw new Error("Failed to send message");
 
-      const data = await res.json();
+      const data = res.data;
 
       const otherUserIsViewing =
         OtherUserId && activeUsers.includes(String(OtherUserId));
@@ -171,6 +163,8 @@ export default function ChatWindow({
       if (!otherUserIsViewing) {
         await createNotification({
           userId: String(OtherUserId),
+          type: "message",
+          user_name: `${session?.user.name}`,
           title: `${session?.user.name} is messaging you`,
           body: `You have received a message from ${session?.user.name}`,
         });
@@ -192,13 +186,10 @@ export default function ChatWindow({
     } catch (err) {
       console.error("Send message error:", err);
       setMessages((prev) =>
-        prev.map((m) =>
-          m.id === tempId ? { ...m, status: "failed" } : m
-        )
+        prev.map((m) => (m.id === tempId ? { ...m, status: "failed" } : m))
       );
     }
   };
-
 
   const sendTyping = () => {
     if (!channelRef.current) return;

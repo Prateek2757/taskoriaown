@@ -70,15 +70,18 @@ export async function POST(req: Request) {
 //       body: ` ! You have Got A Message   `
       
 //     })
-    await client.query(
-      `UPDATE conversation_unreads 
-       SET unread_count = unread_count + 1 
-       WHERE conversation_id = $1 AND user_id != $2`,
-      [conversation_id, senderId]
-    );
+// const updateRes = await client.query(
+//   `UPDATE conversation_unreads
+//    SET unread_count = unread_count 
+//    WHERE conversation_id = $1 AND user_id != $2
+//    RETURNING *`, 
+//   [conversation_id, senderId]
+// );
+
+// console.log("Unread updated rows:", updateRes.rowCount);
 
     await client.query("COMMIT");
-
+ 
     const channel = supabaseBrowser.channel(`conversation:${conversation_id}`);
     await channel.send({
       type: "broadcast",

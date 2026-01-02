@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { MessageCircle, ArrowLeft } from "lucide-react";
 import ChatSidebar from "@/components/chat/ChatSidebar";
 import ChatWindow from "@/components/chat/chatWindow";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 interface Participant {
   user_id: string;
@@ -14,14 +14,10 @@ interface Participant {
 }
 
 interface Conversation {
-  id: string
-  task_id: string
-  task_title: string
-  participants: Participant[]
-  last_message?:string;
-
-  unread_count?: number
-  last_message_at?: string
+  id: string;
+  task_id: string;
+  task_title: string;
+  participants: Participant[];
 }
 
 export default function ChatPageInline({
@@ -29,7 +25,6 @@ export default function ChatPageInline({
 }: {
   params: Promise<{ convoId: string }>;
 }) {
-  
   
   const paramsWrapped = use(params);
   const routeConvoId = paramsWrapped?.convoId || null;

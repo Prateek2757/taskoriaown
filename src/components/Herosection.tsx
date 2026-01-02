@@ -95,7 +95,7 @@ export default function HeroSection() {
         >
           <div className="max-w-4xl mx-auto  space-y-6">
             <div className="inline-flex gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-2">
-              🇦🇺 Australia's Trusted AI Powered Marketplace
+              <Image src="/flag-aus.png" alt="aus" width={18} height={5} /> Australia's Trusted AI Powered Marketplace
             </div>
             <div className="text-4xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
               The Future of{" "}
