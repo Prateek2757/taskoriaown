@@ -64,9 +64,8 @@ export default function ChatSidebar({
       transition={{ duration: 0.25 }}
       className="w-full sm:w-80 h-[calc(100vh-75px)] border-r shadow-lg flex flex-col bg-white/90 dark:bg-black/40 backdrop-blur-xl border-gray-100 dark:border-gray-800"
     >
-      {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b bg-white/60 dark:bg-black/30 border-gray-100 dark:border-gray-800">
-        <h1 className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+        <h1 className="text-xl font-extrabold tracking-tight bg-[#3C7DED] bg-clip-text text-transparent">
           ChatLink
         </h1>
         <button

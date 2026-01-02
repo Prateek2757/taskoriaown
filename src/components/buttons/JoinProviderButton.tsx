@@ -43,7 +43,7 @@ export default function JoinAsProviderButton({
     <Button
       variant="outline"
       onClick={handleJoin}
-      className={`bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] 
+      className={`bg-[#3C7DED] 
         text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md ${className}`}
     >
       Join as Provider

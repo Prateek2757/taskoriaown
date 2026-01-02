@@ -21,10 +21,7 @@ export default function LeadSettingsCard() {
   }
 
   if (!profile) {
-    return (
-      <div className="flex items-center justify-center h-64">
-      </div>
-    );
+    return <div className="flex items-center justify-center h-64"></div>;
   }
 
   const location = profile.is_nationwide
@@ -42,7 +39,7 @@ export default function LeadSettingsCard() {
       <CardHeader
         className="
           px-6 py-4 flex items-center justify-between
-          bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] 
+          bg-[#3C7DED] 
           text-white rounded-t-3xl
         "
       >
@@ -101,14 +98,15 @@ export default function LeadSettingsCard() {
             <span className="text-sm">{location}</span>
           </div>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            This is where you'll receive leads from. Update your location on
-            the “Manage Services” page.
+            This is where you'll receive leads from. Update your location on the
+            “Manage Services” page.
           </p>
         </div>
       </CardContent>
 
       <div className="bg-slate-50 dark:bg-white/5 px-6 py-4 text-center text-slate-600 dark:text-slate-400 text-sm rounded-b-3xl">
-        Profile: <span className="font-medium">{profile.display_name ?? "—"}</span>
+        Profile:{" "}
+        <span className="font-medium">{profile.display_name ?? "—"}</span>
       </div>
     </Card>
   );

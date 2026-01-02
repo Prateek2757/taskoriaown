@@ -47,7 +47,7 @@ function CTA() {
 
             <h2 className="text-slate-900 text-2xl sm:text-3xl lg:text-4xl dark:text-white font-bold leading-tight max-w-2xl">
               Ready to Experience the{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] animate-gradient">
+              <span className="bg-clip-text text-transparent bg-[#3C7DED]   animate-gradient">
                 Future?
               </span>
             </h2>
@@ -66,10 +66,10 @@ function CTA() {
                 </Button>
               </Link>
               <Link href="/providers">
-                <Button className="relative overflow-hidden bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:scale-105 border-0 flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 px-6 py-3 text-xs sm:text-base font-semibold group">
+                <Button className="relative overflow-hidden bg-[#3C7DED]   text-white hover:scale-105 border-0 flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 px-6 py-3 text-xs sm:text-base font-semibold group">
                   <span className="relative z-10">Become a Provider</span>
                   <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-[#3C7DED] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Button>
               </Link>
             </div>

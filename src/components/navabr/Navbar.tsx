@@ -211,7 +211,7 @@ export default function ModernNavbar() {
       <header className="bg-white dark:bg-gray-900/95 backdrop-blur-md border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] rounded-xl animate-pulse" />
+            <div className="w-10 h-10 bg-[#3C7DED] rounded-xl animate-pulse" />
             <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
           </div>
         </div>
@@ -243,7 +243,7 @@ export default function ModernNavbar() {
               width={18}
             />
 
-            <span className="text-2xl font-bold bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent ">
+            <span className="text-2xl font-bold bg-[#3C7DED]  bg-clip-text text-transparent ">
               Taskoria
             </span>
           </Link>
@@ -325,7 +325,7 @@ export default function ModernNavbar() {
                   </Button>
                   <Button
                     onClick={joinAsProvider}
-                    className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
+                    className="bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
                     Join as Provider
                   </Button>
@@ -382,7 +382,7 @@ export default function ModernNavbar() {
                         width={23}
                       />
                     </div>
-                    <span className="text-2xl font-bold bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+                    <span className="text-2xl font-bold bg-[#3C7DED] bg-clip-text text-transparent">
                       Taskoria
                     </span>
                   </Link>
@@ -517,7 +517,7 @@ export default function ModernNavbar() {
                         await joinAsProvider();
                         setIsMenuOpen(false);
                       }}
-                      className="w-full bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700 font-medium"
+                      className="w-full bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-medium"
                     >
                       Join as Provider
                     </Button>

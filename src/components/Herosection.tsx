@@ -1,10 +1,7 @@
 "use client";
 
 import { Button } from "../components/ui/button";
-import {
-  MapPin,
-  ArrowRight 
-} from "lucide-react";
+import { MapPin, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
@@ -18,7 +15,6 @@ import { SparklesCoreLight } from "./ui/sparklesLight";
 import ScrollPopularSection from "./ScrollPopularSection";
 import Image from "next/image";
 import { sendEmail } from "./email/helpers/sendVerificationEmail";
-
 
 interface Category {
   category_id: number;
@@ -47,13 +43,12 @@ export default function HeroSection() {
     //     icon: "⚠️",
     //   });
     //   setTimeout(() => router.push("/signin"));
-  
+
     //   setLoading(true);
     //   return;
     // }
-  
+
     //     })
-    
     setOpenModal(true);
   };
 
@@ -95,11 +90,18 @@ export default function HeroSection() {
         >
           <div className="max-w-4xl mx-auto  space-y-6">
             <div className="inline-flex gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-2">
-              <Image src="/flag-aus.png" alt="aus" width={18} height={5} /> Australia's Trusted AI Powered Marketplace
+              <Image
+                src="/flag-aus.png"
+                alt="aus"
+                width={18}
+                height={5}
+                fetchPriority="high"
+              />{" "}
+              Australia's Trusted AI Powered Marketplace
             </div>
             <div className="text-4xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
               The Future of{" "}
-              <span className="relative inline-block bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+              <span className="relative inline-block bg-[#3C7DED] bg-clip-text text-transparent">
                 Service
                 <span className="absolute right-0 bottom-0 translate-y-3 w-full h-5 overflow-hidden">
                   <SparklesCore
@@ -116,7 +118,7 @@ export default function HeroSection() {
                   <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
                 </span>
               </span>{" "}
-              <span className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+              <span className="bg-[#3C7DED] bg-clip-text text-transparent">
                 Marketplaces
               </span>
             </div>
@@ -126,13 +128,11 @@ export default function HeroSection() {
               platform. Experience trust, transparency, and innovation in every
               service interaction.
             </p>
-           
-                              
 
             <div className="max-w-2xl mx-auto mt-6 sm:px-4">
               <div className="relative w-full max-w-3xl group flex sm:items-center max-sm:gap-2">
                 <div className="relative flex-1 sm:mr-4 w-full">
-                  <div className="absolute -inset-[2px] rounded-lg bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] blur-md opacity-0 group-hover:opacity-100 transition duration-500" />
+                  <div className="absolute -inset-[2px] rounded-lg bg-[#3C7DED] blur-md opacity-0 group-hover:opacity-100 transition duration-500" />
                   <div className="relative flex items-center bg-white dark:bg-gray-800    rounded-lg  hover:shadow-lg transition-all duration-300">
                     <CategorySearch
                       onSelect={handleSelectCategory}
@@ -156,7 +156,7 @@ export default function HeroSection() {
                 onClick={handlePostJob}
                 disabled={loading}
                 className="flex-1 py-5
-                bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white "
+                bg-[#3C7DED] text-white "
               >
                 Post a Job <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -179,14 +179,14 @@ export default function HeroSection() {
             </div>
           </div>
         </div>
-        <ScrollPopularSection/>
+        <ScrollPopularSection />
 
         <div className="mt-10 hidden lg:block relative overflow-hidden bg-gradient-to-t from-zinc-100 to-transparent  dark:from-black">
           <div className="mx-auto max-w-4xl relative ">
             <div className="text-center text-3xl text-white">
               <h2 className="text-slate-900 text-2xl sm:text-3xl lg:text-4xl dark:text-white font-bold leading-tight">
                 Trusted by{" "}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] animate-gradient">
+                <span className="bg-clip-text text-transparent bg-[#3C7DED]   animate-gradient">
                   Experts
                 </span>
               </h2>
@@ -276,7 +276,7 @@ export default function HeroSection() {
             <Button
               onClick={handlePostJob}
               disabled={loading}
-              className="py-5 bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white "
+              className="py-5 bg-[#3C7DED] text-white "
             >
               Find Services <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

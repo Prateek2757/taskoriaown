@@ -80,7 +80,7 @@ const Footer = () => {
                 height={30}
                 className="rounded-md"
               />
-              <span className="ml- text-3xl font-bold bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+              <span className="ml- text-3xl font-bold bg-[#3C7DED] bg-clip-text text-transparent">
                 Taskoria
               </span>
             </Link>

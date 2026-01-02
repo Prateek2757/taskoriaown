@@ -36,7 +36,7 @@ interface Lead {
   customer_name?: string;
   customer_email?: string;
   location_name: string;
-  postcode?:number;
+  postcode?: number;
   phone: number;
   created_at: string;
   description: string;
@@ -46,7 +46,7 @@ interface Lead {
   is_remote_allowed?: boolean;
   answers?: LeadAnswer[];
   responses_count?: number;
-  queries?:string;
+  queries?: string;
 }
 
 interface LeadDetailsProps {
@@ -159,19 +159,18 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     await createNotification({
       userId: session?.user?.id,
       title: "Lead Purchased Sucessfully🎉!",
-      body: `Congratulations ${session?.user?.name}! You have Purchased Lead For ${lead.category_name} `
-    })
+      body: `Congratulations ${session?.user?.name}! You have Purchased Lead For ${lead.category_name} `,
+    });
 
     await new Promise((resolve) => setTimeout(resolve, 500));
-
 
     const newConvoId = await refetchConversation();
 
     await createNotification({
       userId: String(userId),
       title: "Lead Response 🎉",
-      body: `Congratulations! Your Posted ${lead.category_name} Lead Got Response By ${session?.user?.name} ` 
-    })
+      body: `Congratulations! Your Posted ${lead.category_name} Lead Got Response By ${session?.user?.name} `,
+    });
 
     if (newConvoId) {
       toast.success("Chat is ready!");
@@ -224,7 +223,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   return (
     <div className="max-w-4xl mx-auto">
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
-        <div className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] px-6 py-8 text-white">
+        <div className="bg-[#3C7DED] px-6 py-8 text-white">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-xl border-2 border-white/30">
@@ -236,7 +235,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 </div>
                 <div className="flex items-center gap-2 text-blue-100">
                   <MapPin className="w-4 h-4" />
-                  <span className="text-sm">{lead.location_name} {lead.postcode}</span>
+                  <span className="text-sm">
+                    {lead.location_name} {lead.postcode}
+                  </span>
                 </div>
               </div>
             </div>
@@ -257,8 +258,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 lead.status === "Open"
                   ? "bg-cyan-50 text-cyan-600 border-cyan-200 dark:bg-cyan-900 dark:text-cyan-200 dark:border-cyan-700 hover:dark:bg-cyan-800"
                   : lead.status === "Pending"
-                  ? "bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-900 dark:text-orange-200 dark:border-orange-700 hover:dark:bg-orange-800"
-                  : "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 hover:dark:bg-gray-700"
+                    ? "bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-900 dark:text-orange-200 dark:border-orange-700 hover:dark:bg-orange-800"
+                    : "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 hover:dark:bg-gray-700"
               }`}
             >
               {lead.status}
@@ -471,30 +472,30 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 </div>
               ))}
               {lead.queries?.trim() && (
-  <div className="mt-6">
-    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">
-      Additional Queries
-    </h3>
+                <div className="mt-6">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">
+                    Additional Queries
+                  </h3>
 
-    <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
-      <div className="flex items-start gap-3">
-        <HelpCircle
-          size={18}
-          className="text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
-        />
-        <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
-          {lead.queries}
-        </p>
-      </div>
-    </div>
-  </div>
-)}
+                  <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+                    <div className="flex items-start gap-3">
+                      <HelpCircle
+                        size={18}
+                        className="text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
+                      />
+                      <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
+                        {lead.queries}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
         <LocationMap
-          name={lead.location_name || lead.customer_name as string} 
-          latitude={lead.latitude as number} 
+          name={lead.location_name || (lead.customer_name as string)}
+          latitude={lead.latitude as number}
           longitude={lead.longitude as number}
         />
       </div>

@@ -33,7 +33,6 @@ function ScrollPopularSection() {
   const { categories, loading } = useCategories(5);
   const router = useRouter();
 
-
   if (loading) {
     return (
       <section className=" md:hidden pt-10">
@@ -50,7 +49,7 @@ function ScrollPopularSection() {
     return null;
   }
 
-  const totalWidth = (320 + 16 ) * categories.length;
+  const totalWidth = (320 + 16) * categories.length;
 
   return (
     <div className="bg-gradient-to-br block  md:hidden from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-4 px-4">
@@ -66,24 +65,22 @@ function ScrollPopularSection() {
                 Trending Now
               </span>
             </div>
-            <h2 className="text-xl text-left font-bold lg:text-3xl bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+            <h2 className="text-xl text-left font-bold lg:text-3xl bg-[#3C7DED] bg-clip-text text-transparent">
               Popular Services
-              <span className="absolute left-0 -bottom-2 h-1 w-full rounded-full bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE]" />
+              <span className="absolute left-0 -bottom-2 h-1 w-full rounded-full bg-[#3C7DED]" />
             </h2>
           </div>
         </div>
 
         <div className="relative overflow-x-auto">
-          <div
-            className="flex gap-4 w-max cursor-grab"
-                       
-          >
+          <div className="flex gap-4 w-max cursor-grab">
             {categories.map((category, index) => (
               <div
                 key={`${category.category_id}`}
-             
                 onClick={() =>
-                  router.push(`/services/${category.slug ?? category.category_id}`)
+                  router.push(
+                    `/services/${category.slug ?? category.category_id}`
+                  )
                 }
                 className="relative w-[320px] flex-shrink-0 bg-white dark:bg-gray-800 rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-[140px] cursor-pointer group"
               >
@@ -104,15 +101,15 @@ function ScrollPopularSection() {
                   }}
                 >
                   <div className="relative w-full h-full">
-                    <Image 
-                    fill
+                    <Image
+                      fill
                       src={staticImages[index % staticImages.length]?.url}
                       alt={category.name}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       sizes="(max-width: 640px) 100vw,
                        (max-width: 1024px) 50vw,   33vw"
-                       quality={75}
-                       fetchPriority="high"
+                      quality={75}
+                      fetchPriority="high"
                     />
 
                     <div className="absolute inset-0 bg-gradient-to-l from-black/30 via-black/10 to-transparent" />

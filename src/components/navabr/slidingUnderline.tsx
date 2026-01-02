@@ -8,7 +8,6 @@ function SlidingUnderlineNav({ currentLinks, pathname }: { currentLinks: any; pa
     const [positions, setPositions] = useState<Record<string, { width: number; left: number }>>({});
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // measure item widths + offsets
     useEffect(() => {
         if (!containerRef.current) return;
 

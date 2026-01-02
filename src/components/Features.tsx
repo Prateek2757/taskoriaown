@@ -113,7 +113,7 @@ export default function FeaturesStacking() {
           >
             Discover Amazing
             <br />
-            <span className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE]  bg-clip-text text-transparent">
+            <span className="bg-[#3C7DED]  bg-clip-text text-transparent">
               Features Below
             </span>
           </h1>

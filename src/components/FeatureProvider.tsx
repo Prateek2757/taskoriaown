@@ -30,7 +30,7 @@ export const metadata = {
 };
 export const FeatureProvider = () => {
   const { providers, loading } = useProviders(3);
-  
+
   return (
     <section
       className="
@@ -102,9 +102,14 @@ export const FeatureProvider = () => {
                   <div className="flex gap-3">
                     <div className="relative h-20 w-20 overflow-hidden rounded-2xl">
                       {p.image ? (
-                        <Image src={p.image} alt={p.name} fill sizes="(max-width: 640px) 100vw,
+                        <Image
+                          src={p.image}
+                          alt={p.name}
+                          fill
+                          sizes="(max-width: 640px) 100vw,
                         (max-width: 1024px) 50vw,
-                        33vw"/>
+                        33vw"
+                        />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-white dark:bg-accent border-1 rounded-2xl">
                           <div className="flex flex-col items-center hover:opacity-90 transition-opacity">
@@ -116,7 +121,7 @@ export const FeatureProvider = () => {
                                 width={25}
                               />
                             </div>
-                            <span className="text-sm font-bold bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+                            <span className="text-sm font-bold bg-[#3C7DED] bg-clip-text text-transparent">
                               Taskoria
                             </span>
                           </div>
@@ -179,8 +184,8 @@ export const FeatureProvider = () => {
                               badge === "Top Rated"
                                 ? "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-600"
                                 : badge === "Verified"
-                                ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-600"
-                                : "bg-slate-50 dark:bg-gray-800 text-slate-600 dark:text-gray-400 border border-slate-200 dark:border-gray-700"
+                                  ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-600"
+                                  : "bg-slate-50 dark:bg-gray-800 text-slate-600 dark:text-gray-400 border border-slate-200 dark:border-gray-700"
                             }
                           `}
                         >

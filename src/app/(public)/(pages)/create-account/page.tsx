@@ -37,7 +37,11 @@ const onboardingSchema = z.object({
   ),
   password: z.string().min(6, "Password must be at least 6 characters"),
   hasWebsite: z.enum(["yes", "no"]).optional(),
-  websiteUrl: z.string().url("Invalid website URL").optional().or(z.literal("")),
+  websiteUrl: z
+    .string()
+    .url("Invalid website URL")
+    .optional()
+    .or(z.literal("")),
   companySize: z.string().optional(),
 });
 
@@ -46,10 +50,10 @@ const conditionalSchema = onboardingSchema
     message: "Distance and City are required if you are not nationwide",
     path: ["distance"],
   })
-  .refine(
-    (data) => (data.hasWebsite === "yes" ? !!data.websiteUrl : true),
-    { message: "Website URL is required when you select 'Yes'", path: ["websiteUrl"] }
-  );
+  .refine((data) => (data.hasWebsite === "yes" ? !!data.websiteUrl : true), {
+    message: "Website URL is required when you select 'Yes'",
+    path: ["websiteUrl"],
+  });
 
 type OnboardingFormData = z.infer<typeof conditionalSchema>;
 
@@ -95,14 +99,18 @@ function OnboardingContent() {
         ...data,
         phone: data.phone || null,
       };
-      if (!data.is_nationwide) payload.location_id = data.city_id ? Number(data.city_id) : null;
+      if (!data.is_nationwide)
+        payload.location_id = data.city_id ? Number(data.city_id) : null;
 
       await axios.post("/api/signup/final-submit", payload);
       localStorage.removeItem("draftProviderId");
       router.push("/signin");
     } catch (err: any) {
       console.error("Onboarding error:", err.response?.data || err.message);
-      alert(err.response?.data?.message || "Failed to complete onboarding. Try again.");
+      alert(
+        err.response?.data?.message ||
+          "Failed to complete onboarding. Try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -128,7 +136,9 @@ function OnboardingContent() {
         className="bg-white dark:bg-gray-900 shadow-2xl rounded-3xl w-full max-w-3xl p-8 sm:p-12"
       >
         <h1 className="text-3xl sm:text-4xl font-bold text-center mb-3 text-gray-900 dark:text-gray-100">
-          {step === "location" ? "Where do you offer your services?" : "Tell us about yourself"}
+          {step === "location"
+            ? "Where do you offer your services?"
+            : "Tell us about yourself"}
         </h1>
         <p className="text-center text-gray-500 dark:text-gray-400 mb-8 max-w-xl mx-auto">
           {step === "location"
@@ -156,10 +166,11 @@ function OnboardingContent() {
                         <motion.div
                           whileHover={{ scale: 1.03 }}
                           whileTap={{ scale: 0.98 }}
-                          className={`relative border-2 rounded-2xl p-6 cursor-pointer shadow-sm transition-all duration-300 ${field.value
+                          className={`relative border-2 rounded-2xl p-6 cursor-pointer shadow-sm transition-all duration-300 ${
+                            field.value
                               ? "border-blue-600 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-700"
                               : "border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500"
-                            }`}
+                          }`}
                           onClick={() => setValue("is_nationwide", true)}
                         >
                           <div className="flex flex-col items-center text-center space-y-3">
@@ -170,7 +181,8 @@ function OnboardingContent() {
                               I serve customers nationwide
                             </h3>
                             <p className="text-gray-500 dark:text-gray-400 text-sm">
-                              Your services are available anywhere in the country.
+                              Your services are available anywhere in the
+                              country.
                             </p>
                             <input
                               type="radio"
@@ -184,10 +196,11 @@ function OnboardingContent() {
                         <motion.div
                           whileHover={{ scale: 1.03 }}
                           whileTap={{ scale: 0.98 }}
-                          className={`relative border-2 rounded-2xl p-6 cursor-pointer shadow-sm transition-all duration-300 ${!field.value
+                          className={`relative border-2 rounded-2xl p-6 cursor-pointer shadow-sm transition-all duration-300 ${
+                            !field.value
                               ? "border-cyan-600 bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-gray-800 dark:to-gray-700"
                               : "border-gray-200 dark:border-gray-600 hover:border-cyan-300 dark:hover:border-cyan-500"
-                            }`}
+                          }`}
                           onClick={() => setValue("is_nationwide", false)}
                         >
                           <div className="flex flex-col items-center text-center space-y-3">
@@ -235,10 +248,17 @@ function OnboardingContent() {
                                 name="city_id"
                                 render={() => (
                                   <FormItem>
-                                    <FormLabel className="dark:text-gray-200">Select your city</FormLabel>
+                                    <FormLabel className="dark:text-gray-200">
+                                      Select your city
+                                    </FormLabel>
                                     <FormControl>
                                       <LocationSearch
-                                        onSelect={(data) => setValue("city_id", String(data.city_id))}
+                                        onSelect={(data) =>
+                                          setValue(
+                                            "city_id",
+                                            String(data.city_id)
+                                          )
+                                        }
                                       />
                                     </FormControl>
                                     <FormMessage />
@@ -259,7 +279,7 @@ function OnboardingContent() {
 
                   <Button
                     type="button"
-                    className="w-full bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white hover:opacity-90 py-3 rounded-xl shadow-md"
+                    className="w-full bg-[#3C7DED] text-white hover:opacity-90 py-3 rounded-xl shadow-md"
                     onClick={() => setStep("details")}
                   >
                     Continue
@@ -267,7 +287,7 @@ function OnboardingContent() {
                 </motion.div>
               )}
 
-               {step === "details" && (
+              {step === "details" && (
                 <motion.div
                   key="step2"
                   initial={{ opacity: 0, y: 10 }}
@@ -282,11 +302,17 @@ function OnboardingContent() {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="dark:text-gray-200">Full Name</FormLabel>
+                          <FormLabel className="dark:text-gray-200">
+                            Full Name
+                          </FormLabel>
                           <FormControl>
                             <div className={inputWrapperClasses}>
                               <User className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
-                              <input {...field} placeholder="Full Name" className={inputClasses} />
+                              <input
+                                {...field}
+                                placeholder="Full Name"
+                                className={inputClasses}
+                              />
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -294,17 +320,23 @@ function OnboardingContent() {
                       )}
                     />
 
-                   
                     <FormField
                       control={control}
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="dark:text-gray-200">Email Address</FormLabel>
+                          <FormLabel className="dark:text-gray-200">
+                            Email Address
+                          </FormLabel>
                           <FormControl>
                             <div className={inputWrapperClasses}>
                               <Mail className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
-                              <input {...field} type="email" placeholder="youremail@gmail.com" className={inputClasses} />
+                              <input
+                                {...field}
+                                type="email"
+                                placeholder="youremail@gmail.com"
+                                className={inputClasses}
+                              />
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -313,17 +345,22 @@ function OnboardingContent() {
                     />
                   </div>
 
-                
                   <FormField
                     control={control}
                     name="companyName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="dark:text-gray-200">Company Name</FormLabel>
+                        <FormLabel className="dark:text-gray-200">
+                          Company Name
+                        </FormLabel>
                         <FormControl>
                           <div className={inputWrapperClasses}>
                             <Building2 className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
-                            <input {...field} placeholder="Your Company Name" className={inputClasses} />
+                            <input
+                              {...field}
+                              placeholder="Your Company Name"
+                              className={inputClasses}
+                            />
                           </div>
                         </FormControl>
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
@@ -340,10 +377,14 @@ function OnboardingContent() {
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="dark:text-gray-200">Phone Number</FormLabel>
+                          <FormLabel className="dark:text-gray-200">
+                            Phone Number
+                          </FormLabel>
                           <FormControl>
                             <div className={inputWrapperClasses}>
-                              <span className="text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0">📞</span>
+                              <span className="text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0">
+                                📞
+                              </span>
                               <input
                                 {...field}
                                 type="tel"
@@ -353,9 +394,15 @@ function OnboardingContent() {
                                   const target = e.target as HTMLInputElement;
                                   let value = target.value.replace(/\D/g, "");
                                   if (value.length > 4 && value.length <= 7) {
-                                    value = value.slice(0, 4) + " " + value.slice(4);
+                                    value =
+                                      value.slice(0, 4) + " " + value.slice(4);
                                   } else if (value.length > 7) {
-                                    value = value.slice(0, 4) + " " + value.slice(4, 7) + " " + value.slice(7, 10);
+                                    value =
+                                      value.slice(0, 4) +
+                                      " " +
+                                      value.slice(4, 7) +
+                                      " " +
+                                      value.slice(7, 10);
                                   }
                                   target.value = value;
                                   field.onChange(value);
@@ -374,11 +421,18 @@ function OnboardingContent() {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="dark:text-gray-200">Password</FormLabel>
+                          <FormLabel className="dark:text-gray-200">
+                            Password
+                          </FormLabel>
                           <FormControl>
                             <div className={inputWrapperClasses}>
                               <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
-                              <input {...field} type="password" placeholder="Enter password" className={inputClasses} />
+                              <input
+                                {...field}
+                                type="password"
+                                placeholder="Enter password"
+                                className={inputClasses}
+                              />
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -402,8 +456,11 @@ function OnboardingContent() {
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                               onClick={() => setValue("hasWebsite", "yes")}
-                              className={`px-8 py-2 rounded-full font-semibold transition-all shadow-sm ${field.value === "yes" ? buttonSelected : buttonUnselected
-                                }`}
+                              className={`px-8 py-2 rounded-full font-semibold transition-all shadow-sm ${
+                                field.value === "yes"
+                                  ? buttonSelected
+                                  : buttonUnselected
+                              }`}
                             >
                               Yes
                             </motion.button>
@@ -415,10 +472,11 @@ function OnboardingContent() {
                                 setValue("hasWebsite", "no");
                                 setValue("websiteUrl", "");
                               }}
-                              className={`px-8 py-2 rounded-full font-semibold transition-all shadow-sm ${field.value === "no"
+                              className={`px-8 py-2 rounded-full font-semibold transition-all shadow-sm ${
+                                field.value === "no"
                                   ? "bg-gray-600 text-white shadow-lg ring-2 ring-gray-400"
                                   : buttonUnselected
-                                }`}
+                              }`}
                             >
                               No
                             </motion.button>
@@ -429,7 +487,6 @@ function OnboardingContent() {
                     )}
                   />
 
-                  
                   <AnimatePresence>
                     {hasWebsite === "yes" && (
                       <motion.div
@@ -443,7 +500,9 @@ function OnboardingContent() {
                           name="websiteUrl"
                           render={({ field }) => (
                             <FormItem className="mt-3">
-                              <FormLabel className="dark:text-gray-200">Website URL</FormLabel>
+                              <FormLabel className="dark:text-gray-200">
+                                Website URL
+                              </FormLabel>
                               <FormControl>
                                 <div className={inputWrapperClasses}>
                                   <Globe className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
@@ -462,13 +521,14 @@ function OnboardingContent() {
                     )}
                   </AnimatePresence>
 
-
                   <FormField
                     control={control}
                     name="companySize"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="dark:text-gray-200">Company Size</FormLabel>
+                        <FormLabel className="dark:text-gray-200">
+                          Company Size
+                        </FormLabel>
                         <FormControl>
                           <select
                             {...field}
@@ -490,7 +550,7 @@ function OnboardingContent() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white hover:opacity-90 py-3 rounded-xl shadow-md mt-4"
+                    className="w-full bg-[#3C7DED] text-white hover:opacity-90 py-3 rounded-xl shadow-md mt-4"
                   >
                     {isSubmitting ? "Submitting..." : "Finish Onboarding"}
                   </Button>

@@ -79,8 +79,6 @@ export default function ChatPage({ otherUserId, taskId }: ChatPageProps) {
 
   if (conversationId) {
     return (
-      
-            
       <ChatWindow
         conversationId={conversationId}
         OtherUserId={String(otherUserId)}

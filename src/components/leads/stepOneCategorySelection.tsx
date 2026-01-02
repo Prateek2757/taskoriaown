@@ -28,7 +28,7 @@ type Props = {
     city?: string;
   } | null;
   setSelectedCategoryId: (id: string) => void;
-  setShowConfirm: (value:boolean)=> void;
+  setShowConfirm: (value: boolean) => void;
   setSelectedLocationId: (id: string) => void;
   setSelectedCategoryTitle: (title: string) => void;
   setSelectedLocation: (
@@ -197,9 +197,9 @@ export default function StepOneCategoryForm({
             <AnimatePresence>
               {showCategorySuggestions && filteredCategories.length > 0 && (
                 <motion.ul
-                  initial={{ opacity: 0  }}
+                  initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  exit={{ opacity: 0  }}
+                  exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
                   className="absolute z-50 w-full mt-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-60 overflow-y-ato"
                 >
@@ -257,8 +257,8 @@ export default function StepOneCategoryForm({
           <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <Button
               variant="outline"
-              onClick={()=>{
-                setShowConfirm(true)
+              onClick={() => {
+                setShowConfirm(true);
               }}
               className="flex-1 rounded-lg border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
             >
@@ -268,7 +268,7 @@ export default function StepOneCategoryForm({
               onClick={handleSubmit(onContinue)}
               disabled={!isContinueEnabled || continueLoading}
               className={cn(
-                "flex-1 rounded-lg bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-medium shadow-lg hover:shadow-xl",
+                "flex-1 rounded-lg bg-[#3C7DED] text-white font-medium shadow-lg hover:shadow-xl",
                 (!isContinueEnabled || continueLoading) &&
                   "opacity-60 cursor-not-allowed"
               )}

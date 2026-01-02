@@ -50,7 +50,7 @@ const tasks=TaskFromHook ?? []
       <main className="container mx-auto px-4 sm:px-6 py-12 space-y-16">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center sm:text-left">
-            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent tracking-tight">
+            <h1 className="text-4xl font-extrabold bg-[#3C7DED] bg-clip-text text-transparent tracking-tight">
               Your Requests
             </h1>
             <p className="text-muted-foreground text-sm">

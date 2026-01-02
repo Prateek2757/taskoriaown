@@ -20,8 +20,9 @@ interface ServiceCategoriesProps {
   }>;
 }
 
-export default function ServiceCategoriesClient({ categories }: ServiceCategoriesProps) {
-    
+export default function ServiceCategoriesClient({
+  categories,
+}: ServiceCategoriesProps) {
   const [showAll, setShowAll] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -78,16 +79,19 @@ export default function ServiceCategoriesClient({ categories }: ServiceCategorie
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Explore{" "}
-            <span className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+            <span className="bg-[#3C7DED] bg-clip-text text-transparent">
               Service Categories
             </span>
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10">
-            Discover skilled professionals across diverse categories – from creative design to expert development.
+            Discover skilled professionals across diverse categories – from
+            creative design to expert development.
           </p>
 
           <div className="max-w-2xl mx-auto">
-            <div className={`relative transition-transform duration-300 ${isFocused ? "scale-95" : "scale-90"}`}>
+            <div
+              className={`relative transition-transform duration-300 ${isFocused ? "scale-95" : "scale-90"}`}
+            >
               <div className="relative">
                 <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                 <input
@@ -114,7 +118,8 @@ export default function ServiceCategoriesClient({ categories }: ServiceCategorie
               <div className="mt-4 flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                 <TrendingUp className="w-4 h-4" />
                 <span>
-                  Found {filteredCategories.length} {filteredCategories.length === 1 ? "category" : "categories"}
+                  Found {filteredCategories.length}{" "}
+                  {filteredCategories.length === 1 ? "category" : "categories"}
                 </span>
               </div>
             )}
@@ -134,15 +139,13 @@ export default function ServiceCategoriesClient({ categories }: ServiceCategorie
             </p>
             <button
               onClick={clearSearch}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-medium rounded-full hover:opacity-90 transition-all shadow-md"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#3C7DED] text-white font-medium rounded-full hover:opacity-90 transition-all shadow-md"
             >
               Clear Search
             </button>
           </div>
         )}
-      
 
-    
         {popularCategories.length > 0 && (
           <div className="mb-20">
             <div className="flex items-center justify-center gap-2 mb-8">
@@ -153,18 +156,19 @@ export default function ServiceCategoriesClient({ categories }: ServiceCategorie
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              
               {popularCategories.map((category, index) => (
                 <Link
                   key={category.category_id}
                   href={`/services/${category.slug}`}
                   className="group relative bg-white dark:bg-gray-800 border border-transparent hover:border-blue-300 dark:hover:border-blue-500 rounded-3xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                  style={{ animation: `fadeIn 0.4s ease-out ${index * 0.05}s both` }}
+                  style={{
+                    animation: `fadeIn 0.4s ease-out ${index * 0.05}s both`,
+                  }}
                 >
                   <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="relative">
                     <div className="flex items-center justify-between mb-4">
-                      <div className="w-14 h-14 bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] rounded-full flex items-center justify-center shadow-md">
+                      <div className="w-14 h-14 bg-[#3C7DED] rounded-full flex items-center justify-center shadow-md">
                         <span className="text-xl font-bold text-white">
                           {category.name.charAt(0).toUpperCase()}
                         </span>
@@ -182,7 +186,7 @@ export default function ServiceCategoriesClient({ categories }: ServiceCategorie
               ))}
             </div>
           </div>
-        )}  
+        )}
 
         {remainingCategories.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 p-8">
@@ -195,7 +199,9 @@ export default function ServiceCategoriesClient({ categories }: ServiceCategorie
                   onClick={() => setShowAll(!showAll)}
                   className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium flex items-center gap-2 transition-colors duration-200"
                 >
-                  {showAll ? "Show Less" : `View All (${remainingCategories.length})`}
+                  {showAll
+                    ? "Show Less"
+                    : `View All (${remainingCategories.length})`}
                   <ChevronRight
                     className={`w-4 h-4 transition-transform duration-300 ${showAll ? "rotate-90" : ""}`}
                   />
@@ -205,7 +211,9 @@ export default function ServiceCategoriesClient({ categories }: ServiceCategorie
 
             <div
               className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 transition-all duration-500 ${
-                !showAll && remainingCategories.length > 12 ? "max-h-72 overflow-hidden" : "max-h-[4500px]"
+                !showAll && remainingCategories.length > 12
+                  ? "max-h-72 overflow-hidden"
+                  : "max-h-[4500px]"
               }`}
             >
               {(showAll || remainingCategories.length <= 12
@@ -233,7 +241,7 @@ export default function ServiceCategoriesClient({ categories }: ServiceCategorie
               <div className="mt-8 text-center">
                 <button
                   onClick={() => setShowAll(true)}
-                  className="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-medium rounded-full hover:opacity-90 transition-shadow shadow-md hover:shadow-lg"
+                  className="inline-flex items-center gap-2 px-6 py-2 bg-[#3C7DED] text-white font-medium rounded-full hover:opacity-90 transition-shadow shadow-md hover:shadow-lg"
                 >
                   Show All {remainingCategories.length} Categories
                   <ChevronRight className="w-4 h-4" />
@@ -268,7 +276,10 @@ function highlightMatch(text: string, query: string) {
     <>
       {parts.map((part, i) =>
         regex.test(part) ? (
-          <span key={i} className="bg-blue-300 dark:bg-blue-600 text-gray-900 dark:text-gray-100 rounded px-1">
+          <span
+            key={i}
+            className="bg-blue-300 dark:bg-blue-600 text-gray-900 dark:text-gray-100 rounded px-1"
+          >
             {part}
           </span>
         ) : (

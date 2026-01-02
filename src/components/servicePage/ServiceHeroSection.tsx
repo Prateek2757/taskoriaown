@@ -8,17 +8,17 @@ interface HeroSectionProps {
   cityData?: any;
   citySlug?: string | null;
   onLocationSelect: (location: any) => void;
-  presetLocation:any;
+  presetLocation: any;
 }
 
-export default function ServiceHeroSection({ 
-  service, 
-  cityData, 
-  citySlug, 
+export default function ServiceHeroSection({
+  service,
+  cityData,
+  citySlug,
   onLocationSelect,
-  presetLocation, 
+  presetLocation,
 }: HeroSectionProps) {
-  const title = citySlug 
+  const title = citySlug
     ? `${service.name} in ${cityData?.display_name || citySlug}`
     : service.name;
 
@@ -35,7 +35,7 @@ export default function ServiceHeroSection({
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-15 md:py-14">
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-6">
-            <span className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent drop-shadow-lg">
+            <span className="bg-[#3C7DED] bg-clip-text text-transparent drop-shadow-lg">
               {title}
             </span>
             <span className="block mt-3 text-2xl md:text-2xl font-medium text-white/90">
@@ -73,14 +73,19 @@ export default function ServiceHeroSection({
                 <MapPin className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 dark:text-white text-xl">Get Started Now</h3>
+                <h3 className="font-bold text-gray-900 dark:text-white text-xl">
+                  Get Started Now
+                </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Free quotes in minutes • No commitment
                 </p>
               </div>
             </div>
-            <LocationSearch onSelect={onLocationSelect} presetLocation={presetLocation} />
-          </div> 
+            <LocationSearch
+              onSelect={onLocationSelect}
+              presetLocation={presetLocation}
+            />
+          </div>
         </div>
       </div>
     </section>
