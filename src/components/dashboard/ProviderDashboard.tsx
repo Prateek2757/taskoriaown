@@ -15,7 +15,6 @@ import { Badge } from "@/components/ui/badge";
 import { BarChart3, Users, Star, Target, User } from "lucide-react";
 import LeadSettingsCard from "../Lead-setting/leadsetting";
 import { useLeadProfile } from "@/hooks/useLeadProfile";
-import NotificationBell from "../notification/NotificationBell";
 
 export default function ProviderDashboard() {
   const router = useRouter();
@@ -181,10 +180,10 @@ export default function ProviderDashboard() {
           <div className="space-y-6">
             <Card
               className="
-      border rounded-2xl shadow-lg backdrop-blur
-      bg-white/80 dark:bg-white/5 py-0
-      border-gray-200 dark:border-white/10
-    "
+    border rounded-2xl shadow-lg backdrop-blur
+    bg-white/80 dark:bg-white/5 py-0
+    border-gray-200 dark:border-white/10
+  "
             >
               <CardContent className="pt-6 text-center relative overflow-hidden">
                 {isPro && (
@@ -196,48 +195,67 @@ export default function ProviderDashboard() {
                 )}
 
                 <div className="relative z-10">
-                  <Avatar className="relative h-28 w-28 mx-auto mb-4 group">
+                  <div className="relative h-28 w-28 mx-auto mb-4 group">
                     {isPro && (
                       <>
                         <div
-                          className="absolute -inset-2 rounded-full opacity-75 group-hover:opacity-100 transition-opacity duration-300"
+                          className="absolute -inset-4 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-500"
                           style={{
                             background:
-                              "conic-gradient(from 0deg, #eab308, #f59e0b, #eab308)",
-                            animation: "spin 3s linear infinite",
-                            filter: "blur(8px)",
+                              "conic-gradient(from 0deg, #eab308, #f59e0b, #d97706, #ca8a04, #eab308)",
+                            animation: "spin 5s linear infinite",
+                            filter: "blur(16px)",
                           }}
                         ></div>
 
-                        <div className="absolute -inset-1 rounded-full border-4 border-yellow-400 animate-pulse shadow-[0_0_30px_rgba(234,179,8,0.8),0_0_60px_rgba(234,179,8,0.4)] pointer-events-none"></div>
+                        <div className="absolute -inset-2 rounded-full border-[3px] border-yellow-400/70 animate-pulse shadow-[0_0_50px_rgba(234,179,8,0.8),0_0_100px_rgba(234,179,8,0.4)] pointer-events-none"></div>
+                        <div className="absolute -inset-1 rounded-full border-2 border-amber-400/80 pointer-events-none shadow-[0_0_30px_rgba(245,158,11,0.6)]"></div>
+                        <div className="absolute -inset-0.5 rounded-full border border-yellow-500/60 pointer-events-none"></div>
 
-                        <div className="absolute -inset-0.5 rounded-full border-2 border-yellow-500/50 pointer-events-none"></div>
+                        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-30">
+                          <div className="relative group/star">
+                            <div className="absolute inset-0 scale-150 rounded-full bg-yellow-400 blur-xl opacity-50 animate-pulse"></div>
+                            <div className="absolute inset-0 scale-125 rounded-full bg-amber-500 blur-lg opacity-60 group-hover/star:opacity-80 transition-opacity"></div>
+
+                            <div
+                              className="absolute inset-0 animate-pulse"
+                              style={{ animationDuration: "3s" }}
+                            >
+                              <div className="absolute top-1/2 left-1/2 w-20 h-0.5 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent -translate-x-1/2 -translate-y-1/2 rotate-0"></div>
+                              <div className="absolute top-1/2 left-1/2 w-20 h-0.5 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent -translate-x-1/2 -translate-y-1/2 rotate-45"></div>
+                              <div className="absolute top-1/2 left-1/2 w-20 h-0.5 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent -translate-x-1/2 -translate-y-1/2 rotate-90"></div>
+                              <div className="absolute top-1/2 left-1/2 w-20 h-0.5 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent -translate-x-1/2 -translate-y-1/2 rotate-[135deg]"></div>
+                            </div>
+                          </div>
+                        </div>
                       </>
                     )}
 
-                    {imageToShow ? (
-                      <Image
-                        src={imageToShow as string}
-                        width={112}
-                        height={112}
-                        alt="Profile"
-                        className="rounded-full object-cover h-full w-full relative z-10 ring-2 ring-white/10"
-                      />
-                    ) : (
-                      <div
-                        className={`w-28 h-28 rounded-full flex items-center justify-center shadow-2xl relative z-10 ${
-                          isPro
-                            ? "bg-gradient-to-br from-yellow-500 via-amber-500 to-yellow-600"
-                            : "bg-gradient-to-br from-blue-600 to-cyan-500"
-                        }`}
-                      >
-                        <User className="w-14 h-14 text-white drop-shadow-lg" />
-                      </div>
-                    )}
+                    <Avatar className="relative h-28 w-28 mx-auto">
+                      {imageToShow ? (
+                        <Image
+                          src={imageToShow as string}
+                          width={112}
+                          height={112}
+                          alt="Profile"
+                          className="rounded-full object-cover h-full w-full relative z-10 ring-2 ring-white/10"
+                        />
+                      ) : (
+                        <div
+                          className={`w-28 h-28 rounded-full flex items-center justify-center shadow-2xl relative z-10 ${
+                            isPro
+                              ? "bg-gradient-to-br from-yellow-500 via-amber-500 to-yellow-600"
+                              : "bg-gradient-to-br from-blue-600 to-cyan-500"
+                          }`}
+                        >
+                          <User className="w-14 h-14 text-white drop-shadow-lg" />
+                        </div>
+                      )}
+                    </Avatar>
 
                     {isPro && (
                       <div
-                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full shadow-2xl backdrop-blur-sm border border-yellow-500/30 hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_25px_rgba(234,179,8,0.6)]"
+                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full shadow-2xl backdrop-blur-sm border border-yellow-500/30 hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_25px_rgba(234,179,8,0.6)] z-20"
                         style={{
                           background:
                             "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #eab308 100%)",
@@ -258,7 +276,7 @@ export default function ProviderDashboard() {
                         <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent to-white/20 pointer-events-none"></div>
                       </div>
                     )}
-                  </Avatar>
+                  </div>
 
                   <h2
                     className={`text-xl font-semibold mb-1 ${
@@ -296,7 +314,7 @@ export default function ProviderDashboard() {
                     </strong>
                   </p>
 
-                  <div className="m-6  space-y-2">
+                  <div className="m-6 space-y-2">
                     <div className="flex items-center justify-between">
                       <span
                         className={`text-sm ${
@@ -362,7 +380,7 @@ export default function ProviderDashboard() {
 
                   {isPro && (
                     <div className="mt-6 p-3 mb-4 rounded-xl bg-gradient-to-r from-yellow-500/10 via-amber-500/10 to-yellow-500/10 border border-yellow-500/20 backdrop-blur-sm">
-                      <div className="flex  items-center justify-center gap-2 text-xs text-yellow-500/90 font-medium">
+                      <div className="flex items-center justify-center gap-2 text-xs text-yellow-500/90 font-medium">
                         <svg
                           className="w-4 h-4"
                           fill="currentColor"

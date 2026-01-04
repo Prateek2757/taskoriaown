@@ -1,15 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ChevronDown,
   ChevronUp,
   CheckCircle,
   Pencil,
 } from "lucide-react";
-import { useLeadProfile } from "@/hooks/useLeadProfile";
-import { Progress } from "../ui/progress";
 import { useSession } from "next-auth/react";
+
+import { Progress } from "../ui/progress";
+import { useLeadProfile } from "@/hooks/useLeadProfile";
+import { useCompanyProfile } from "@/hooks/useCompanyProfile";
+
 import AboutSection from "./AboutSection";
 import ReviewsSection from "./ReviewSection";
 import ServicesSection from "./ServicesSection";
@@ -17,8 +20,6 @@ import PhotosSection from "./PhotosSection";
 import SocialLinksSection from "./SocialLinksSection";
 import AccreditationsSection from "./AccreditationsSection";
 import QASection from "./QASection";
-import { useCompanyProfile } from "@/hooks/useCompanyProfile";
-
 
 type SectionId =
   | "about"
@@ -45,197 +46,191 @@ const SECTIONS: Section[] = [
   { id: "qa", title: "Q&A" },
 ];
 
-
-
 export default function ProfileSettings() {
-  const {  update } = useSession();
-  const { profile, loading , updateProfile} = useLeadProfile();
-  const { company ,loading: companyLoading, updateCompany} = useCompanyProfile();
-  const [expanded, setExpanded] = useState<SectionId | null>(null);
-  const [completion, setCompletion] = useState<number>(profile ? 60 : 0); // placeholder until backend provides value
+  const { update } = useSession();
+  const { profile, loading, updateProfile } = useLeadProfile();
+  const { company, loading: companyLoading, updateCompany } =
+    useCompanyProfile();
 
-// console.log(company?.company_logo_url,"url");
+  const [expanded, setExpanded] = useState<SectionId | null>(null);
+  const [completion, setCompletion] = useState<number>(profile ? 60 : 0);
+
+  const toggle = (id: SectionId) =>
+    setExpanded((prev) => (prev === id ? null : id));
 
   const saveAbout = async (payload: any) => {
     try {
-      await updateProfile({ display_name: payload.display_name , profile_image_url:payload.avatarUrl });
-  
+      await updateProfile({
+        display_name: payload.display_name,
+        profile_image_url: payload.avatarUrl,
+      });
+
       await updateCompany({
-        company_name: payload.company_name, 
+        company_name: payload.company_name,
         contact_name: payload.display_name,
-        company_logo_url:payload.companyLogoUrl,
-        about:payload.description,
-        company_size:payload.company_size,
-        years_in_business:payload.years_in_business,
+        company_logo_url: payload.companyLogoUrl,
+        about: payload.description,
+        company_size: payload.company_size,
+        years_in_business: payload.years_in_business,
         contact_email: payload.contact_email,
         contact_phone: payload.contact_phone,
         website: payload.website,
       });
-  
-        await update({
-      name: payload.display_name,
-    });
-  
-      console.log("✅ Session updated instantly");
+
+      await update({ name: payload.display_name });
     } catch (err) {
       console.error("❌ Failed to update profile:", err);
     }
   };
-  
-  React.useEffect(() => {
+
+  useEffect(() => {
     if (profile) {
       const completed = profile.categories?.length ? 15 : 0;
-      setCompletion(completed + 12); 
+      setCompletion(completed + 12);
     }
   }, [profile]);
 
-  const toggle = (id: SectionId) => setExpanded((e) => (e === id ? null : id));
-
-  const updateSection = async (section: SectionId, payload: any) => {
-    console.log(`Saving ${section}:`, payload);
-    // TODO: integrate with your backend update routes
-  };
-
-  if (loading  && companyLoading) {
+  if (loading && companyLoading) {
     return (
-      <div className="max-w-4xl mx-auto mt-12 text-slate-600">
+      <div className="max-w-4xl mx-auto mt-12 text-center text-slate-600 dark:text-slate-400">
         Loading profile…
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
+    <div className="max-w-4xl mx-auto px-4 pb-16 text-slate-900 dark:text-slate-100">
+      {/* Header */}
+      <div className="mb-10">
         <button
           onClick={() => window.history.back()}
-          className="text-gray-500 hover:text-gray-700 mb-4"
-          aria-label="Back"
+          className="mb-4 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
         >
           ← Settings
         </button>
 
-        <div className="text-3xl font-semibold text-slate-900">
+        <h1 className="text-3xl font-semibold">
           Your profile is{" "}
           <span className="text-amber-500">{completion}% complete</span>
-        </div>
+        </h1>
 
-        <div className="mt-4 flex items-center gap-4">
+        <div className="mt-5 flex items-center gap-4">
           <div className="flex-1">
             <Progress value={completion} />
           </div>
-          <div className="min-w-[64px] text-sm text-slate-600">
+          <span className="text-sm text-slate-600 dark:text-slate-400 min-w-[48px]">
             {completion}%
-          </div>
+          </span>
         </div>
 
-        <p className="mt-4 text-sm text-amber-600 font-medium">
+        <p className="mt-4 text-sm font-medium text-amber-600 dark:text-amber-400">
           Take two minutes to improve your profile
         </p>
 
-        <p className="mt-2 text-sm text-slate-700 max-w-2xl">
-          Make the best first impression with a great profile — this is what
-          customers will look at first when choosing which professional to
-          hire.
+        <p className="mt-2 text-sm text-slate-700 dark:text-slate-400 max-w-2xl">
+          Make the best first impression — this is the first thing customers see
+          before hiring you.
         </p>
 
         <a
           href="/public-profile"
-          className="inline-block mt-3 text-sm text-blue-600 underline"
+          className="inline-block mt-3 text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
         >
           View public profile
         </a>
       </div>
 
+      {/* Sections */}
       <div className="space-y-4">
-        {SECTIONS.map((s) => {
-          const isOpen = expanded === s.id;
+        {SECTIONS.map((section) => {
+          const isOpen = expanded === section.id;
           const done =
-            (profile as any)?.completedSections?.includes(s.id) ?? false;
+            (profile as any)?.completedSections?.includes(section.id) ?? false;
 
           return (
             <section
-              key={s.id}
-              className="border rounded-xl overflow-hidden bg-white shadow-sm"
+              key={section.id}
+              className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm"
             >
               <header
-                className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50"
-                onClick={() => toggle(s.id)}
-                aria-expanded={isOpen}
+                onClick={() => toggle(section.id)}
+                className="flex items-center justify-between p-4 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-start gap-3">
                   <div>
-                    <h3 className="text-lg font-medium text-slate-900">
-                      {s.title}
+                    <h3 className="text-lg font-medium">
+                      {section.title}
                     </h3>
-                    {s.description && (
-                      <p className="text-xs text-slate-500">{s.description}</p>
+                    {section.description && (
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        {section.description}
+                      </p>
                     )}
                   </div>
+
                   {done && (
-                    <span className="flex items-center gap-1 text-sm text-emerald-600">
-                      <CheckCircle size={16} /> Completed
+                    <span className="flex items-center gap-1 text-sm text-emerald-600 dark:text-emerald-400">
+                      <CheckCircle size={16} />
+                      Completed
                     </span>
                   )}
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggle(s.id);
+                      toggle(section.id);
                     }}
-                    className="text-sm inline-flex items-center gap-2 px-2 py-1 rounded-md bg-slate-50 hover:bg-slate-100"
+                    className="inline-flex items-center gap-1 rounded-md bg-slate-100 dark:bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700"
                   >
                     <Pencil size={14} />
                     Edit
                   </button>
-                  {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+
+                  {isOpen ? (
+                    <ChevronUp className="text-slate-500 dark:text-slate-400" />
+                  ) : (
+                    <ChevronDown className="text-slate-500 dark:text-slate-400" />
+                  )}
                 </div>
               </header>
 
               {isOpen && (
-                <div className="p-4 border-t bg-gray-50">
-                  {s.id === "about" && (
+                <div className="border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-4">
+                  {section.id === "about" && (
                     <AboutSection
-                      data={(profile as any)}
-                      companydata={(company as any)}
+                      data={profile as any}
+                      companydata={company as any}
                       onSave={saveAbout}
                     />
                   )}
-                  {s.id === "reviews" && (
+                  {section.id === "reviews" && (
                     <ReviewsSection data={(profile as any)?.reviews} />
                   )}
-                  {s.id === "services" && (
+                  {section.id === "services" && (
                     <ServicesSection
                       data={(profile as any)?.services}
-                      onSave={(payload) => updateSection("services", payload)}
                     />
                   )}
-                  {s.id === "photos" && (
+                  {section.id === "photos" && (
                     <PhotosSection
                       data={(profile as any)?.photos}
-                      onSave={(payload) => updateSection("photos", payload)}
                     />
                   )}
-                  {s.id === "social" && (
+                  {section.id === "social" && (
                     <SocialLinksSection
                       data={(profile as any)?.social}
-                      onSave={(payload) => updateSection("social", payload)}
                     />
                   )}
-                  {s.id === "accreditations" && (
+                  {section.id === "accreditations" && (
                     <AccreditationsSection
                       data={(profile as any)?.accreditations}
-                      onSave={(payload) =>
-                        updateSection("accreditations", payload)
-                      }
                     />
                   )}
-                  {s.id === "qa" && (
+                  {section.id === "qa" && (
                     <QASection
                       data={(profile as any)?.qa}
-                      onSave={(payload) => updateSection("qa", payload)}
                     />
                   )}
                 </div>

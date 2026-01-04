@@ -3,7 +3,6 @@ import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
 
-// ✅ Add new category
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id)
@@ -24,7 +23,6 @@ export async function POST(req: Request) {
   return NextResponse.json({ success: true });
 }
 
-// ✅ Remove category
 export async function DELETE(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id)

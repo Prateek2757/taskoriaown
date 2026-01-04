@@ -54,10 +54,12 @@ export const authOptions: NextAuthOptions = {
             u.email,
             u.password_hash,
             up.display_name,
+            ps.status,
             COALESCE(r.role_name, 'customer') AS role,
             u.is_email_verified
           FROM users u
           LEFT JOIN user_profiles up ON u.user_id = up.user_id
+          LEFT JOIN professional_subscriptions ps u.user_id = ps.user_id
           LEFT JOIN roles r ON r.role_id = u.default_role_id
           WHERE u.email = $1 AND u.is_deleted = FALSE
           `,

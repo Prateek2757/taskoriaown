@@ -322,7 +322,7 @@ export default function StepTwoQuestionsForm({
       </div>
       <div className="flex-1 flex flex-col">
             <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
-              Any Other Quries ?
+              Any Other Queries ?
             </label>
             <Textarea
               
