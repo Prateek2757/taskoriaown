@@ -73,7 +73,6 @@ export default function MessageList({
     });
   }, [messages, typingUsers, shouldAutoScroll]);
 
-  // ------------------------------
 
   const handleSend = () => {
     if (!input.trim()) return;

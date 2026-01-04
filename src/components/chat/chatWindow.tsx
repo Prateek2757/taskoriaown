@@ -72,7 +72,7 @@ export default function ChatWindow({
 
     const chan = supabaseBrowser.channel(`conversation:${conversationId}`, {
       config: {
-        broadcast: { self: false },
+        broadcast: { self: true },
         presence: { key: me.id },
       },
     });
@@ -80,9 +80,12 @@ export default function ChatWindow({
     chan.on("broadcast", { event: "message" }, (payload) => {
       const msg: Message = payload.payload?.message;
       if (!msg?.id) return;
-      if (msg.user_id === me.id) return;
 
-      setMessages((prev) => sortMessages(uniqueMessages([...prev, msg])));
+      console.log("💬 ChatWindow received broadcast:", msg);
+
+      if (msg.user_id !== me.id) {
+        setMessages((prev) => sortMessages(uniqueMessages([...prev, msg])));
+      }
     });
 
     chan.on("broadcast", { event: "typing" }, (payload) => {
@@ -102,6 +105,7 @@ export default function ChatWindow({
 
     chan.subscribe(async (status) => {
       if (status === "SUBSCRIBED") {
+        console.log(`✅ ChatWindow subscribed to conversation:${conversationId}`);
         channelRef.current = chan;
         await chan.track({
           user_id: me.id,
@@ -124,7 +128,9 @@ export default function ChatWindow({
     return () => {
       clearInterval(cleanTyping);
       if (channelRef.current) {
+        channelRef.current.untrack();
         supabaseBrowser.removeChannel(channelRef.current);
+        channelRef.current = null;
       }
     };
   }, [conversationId, me.id]);
@@ -133,18 +139,18 @@ export default function ChatWindow({
     if (!text.trim()) return;
 
     const tempId = "tmp_" + Math.random().toString(36).slice(2);
+    const now = new Date().toISOString();
 
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: tempId,
-        conversation_id: conversationId,
-        user_id: me.id,
-        content: text,
-        created_at: new Date().toISOString(),
-        status: "sending",
-      },
-    ]);
+    const optimisticMessage: Message = {
+      id: tempId,
+      conversation_id: conversationId,
+      user_id: me.id,
+      content: text,
+      created_at: now,
+      status: "sending",
+    };
+
+    setMessages((prev) => [...prev, optimisticMessage]);
 
     try {
       const res = await axios.post("/api/messages/message-created", {
@@ -155,12 +161,62 @@ export default function ChatWindow({
 
       if (res.data.error) throw new Error("Failed to send message");
 
-      const data = res.data;
+      const savedMessage = res.data.message;
 
+      console.log("📤 Message saved to DB:", savedMessage);
+
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === tempId ? { ...savedMessage, status: "sent" } : m
+        )
+      );
+
+      const broadcastPromises = [];
+
+      if (channelRef.current) {
+        const broadcastPayload = {
+          type: "broadcast",
+          event: "message",
+          payload: { message: savedMessage },
+        };
+
+        console.log("📡 Broadcasting to conversation channel");
+        broadcastPromises.push(channelRef.current.send(broadcastPayload));
+      }
+
+      const sidebarChannelName = `sidebar:${conversationId}`;
+      console.log(`📡 Broadcasting to ${sidebarChannelName}`);
+      
+      const sidebarChannel = supabaseBrowser.channel(sidebarChannelName, {
+        config: {
+          broadcast: { self: true, ack: true },
+        },
+      });
+
+      await sidebarChannel.subscribe();
+      
+      const sidebarBroadcast = sidebarChannel.send({
+        type: "broadcast",
+        event: "message",
+        payload: { message: savedMessage },
+      });
+
+      broadcastPromises.push(sidebarBroadcast);
+
+      // Wait for both broadcasts
+      const results = await Promise.all(broadcastPromises);
+      console.log("✅ Broadcast results:", results);
+
+      // Clean up sidebar channel after short delay
+      setTimeout(() => {
+        supabaseBrowser.removeChannel(sidebarChannel);
+      }, 100);
+
+      // Send notification if other user is not viewing
       const otherUserIsViewing =
         OtherUserId && activeUsers.includes(String(OtherUserId));
 
-      if (!otherUserIsViewing) {
+      if (!otherUserIsViewing && OtherUserId) {
         await createNotification({
           userId: String(OtherUserId),
           type: "message",
@@ -169,20 +225,6 @@ export default function ChatWindow({
           body: `You have received a message from ${session?.user.name}`,
         });
       }
-
-      if (channelRef.current) {
-        await channelRef.current.send({
-          type: "broadcast",
-          event: "message",
-          payload: { message: data.message },
-        });
-      }
-
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === tempId ? { ...data.message, status: "sent" } : m
-        )
-      );
     } catch (err) {
       console.error("Send message error:", err);
       setMessages((prev) =>

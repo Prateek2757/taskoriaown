@@ -31,8 +31,8 @@ export default function LeadSettingsCard() {
   return (
     <Card
       className="
-        border rounded-3xl shadow-2xl backdrop-blur-sm overflow-hidden 
-        hover:shadow-3xl transition-shadow duration-300 w-full
+        border rounded-3xl shadow-2xl backdrop-blur-sm overflow-hidden  
+        hover:shadow-3xl transition-shadow duration-300 w-full py-0 self-start
         bg-white/80 dark:bg-white/5 border-gray-200 dark:border-white/10
       "
     >

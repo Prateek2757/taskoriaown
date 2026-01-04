@@ -3,14 +3,26 @@
 import useSWR from "swr";
 import { useMemo } from "react";
 
-
-interface ProfessionalPackage {
+export interface ProfessionalPackage {
   package_id: number;
   name: string;
+  description: string;
   price: number;
-    description?: string;
+  duration_months: number | null;
+  visibility_stars: number;
+  visibility_description: string;
+  badge: string | null;
+  free_enquiries: number;
+  enquiry_price: number;
+  discount_percentage: number;
+  has_performance_insights: boolean;
+  has_verified_badge: boolean;
+  has_unlocked_inbox: boolean;
+  display_order: number;
 }
+
 interface PackageResponse {
+  success: boolean;
   packages: ProfessionalPackage[];
 }
 

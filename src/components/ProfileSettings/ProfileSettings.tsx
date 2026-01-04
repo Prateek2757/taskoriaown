@@ -59,7 +59,6 @@ export default function ProfileSettings() {
   const saveAbout = async (payload: any) => {
     try {
       await updateProfile({ display_name: payload.display_name , profile_image_url:payload.avatarUrl });
-  console.log(payload.avatarUrl,"ijoerineoir");
   
       await updateCompany({
         company_name: payload.company_name, 

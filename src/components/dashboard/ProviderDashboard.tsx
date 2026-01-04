@@ -28,11 +28,17 @@ export default function ProviderDashboard() {
   const activeSubscription = profile?.active_subscription;
   console.log(profile?.company_size);
 
-  const imageToShow = profile?.has_company && profile?.company_size !== "Sole-Trader" ? profile?.logo_url : profile?.profile_image_url
+  const imageToShow =
+    profile?.has_company && profile?.company_size !== "Sole-Trader"
+      ? profile?.logo_url
+      : profile?.profile_image_url;
   useEffect(() => {
     if (status === "unauthenticated") router.push("/signin");
   }, [status, router]);
-  const nameToShow = profile?.has_company && profile?.company_size !== "Sole-Trader" ? profile?.company_name : profile?.display_name
+  const nameToShow =
+    profile?.has_company && profile?.company_size !== "Sole-Trader"
+      ? profile?.company_name
+      : profile?.display_name;
 
   const fetchLeads = async () => {
     try {
@@ -59,7 +65,6 @@ export default function ProviderDashboard() {
         ? "Good afternoon"
         : "Good evening";
   }, []);
-
 
   const stats = useMemo(
     () => [
@@ -94,9 +99,6 @@ export default function ProviderDashboard() {
 
   const user = session.user;
 
-
-
-
   return (
     <div
       className="
@@ -115,9 +117,6 @@ export default function ProviderDashboard() {
                 bg-clip-text text-transparent
               "
             >
-
-
-
               {greeting}, {user.name?.split(" ")[0] || "User"}!
             </h1>
 
@@ -180,133 +179,281 @@ export default function ProviderDashboard() {
 
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="space-y-6">
-
             <Card
               className="
       border rounded-2xl shadow-lg backdrop-blur
-      bg-white/80 dark:bg-white/5
+      bg-white/80 dark:bg-white/5 py-0
       border-gray-200 dark:border-white/10
     "
             >
-              <CardContent className="pt-6 text-center">
-                <Avatar className="relative h-28 w-28 mx-auto mb-4 group">
-                  {isPro && (
-                    <div className="absolute inset-0 rounded-full border-4 border-yellow-500 dark:border-yellow-500 animate-puse shadow-[0_0_25px_rgba(255,204,0,0.7)] pointer-events-none"></div>
-                  )}
+              <CardContent className="pt-6 text-center relative overflow-hidden">
+                {isPro && (
+                  <>
+                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-amber-500/5 to-yellow-600/5 pointer-events-none"></div>
+                    <div className="absolute top-0 right-0 w-full h-32 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                  </>
+                )}
 
-                  {imageToShow ? (
-                    <Image
-                      src={imageToShow as string}
-                      width={112}
-                      height={112}
-                      alt="Profile"
-                      className="rounded-full object-cover h-full w-full"
-                    />
-                  ) : (
-                    <div className="w-30 h-28 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full flex items-center justify-center shadow-md">
-                    <User className="w-15 h-15 text-white" />
-                  </div>
-                  )}
+                <div className="relative z-10">
+                  <Avatar className="relative h-28 w-28 mx-auto mb-4 group">
+                    {isPro && (
+                      <>
+                        <div
+                          className="absolute -inset-2 rounded-full opacity-75 group-hover:opacity-100 transition-opacity duration-300"
+                          style={{
+                            background:
+                              "conic-gradient(from 0deg, #eab308, #f59e0b, #eab308)",
+                            animation: "spin 3s linear infinite",
+                            filter: "blur(8px)",
+                          }}
+                        ></div>
 
-                  {isPro && (
-                    <div
-                      className="absolute bottom-0 right-7 flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full shadow-lg "
-                      style={{
-                        background: "linear-gradient(135deg,#EAB308)",
-                        color: "#000",
-                      }}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-3 w-3"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
+                        <div className="absolute -inset-1 rounded-full border-4 border-yellow-400 animate-pulse shadow-[0_0_30px_rgba(234,179,8,0.8),0_0_60px_rgba(234,179,8,0.4)] pointer-events-none"></div>
+
+                        <div className="absolute -inset-0.5 rounded-full border-2 border-yellow-500/50 pointer-events-none"></div>
+                      </>
+                    )}
+
+                    {imageToShow ? (
+                      <Image
+                        src={imageToShow as string}
+                        width={112}
+                        height={112}
+                        alt="Profile"
+                        className="rounded-full object-cover h-full w-full relative z-10 ring-2 ring-white/10"
+                      />
+                    ) : (
+                      <div
+                        className={`w-28 h-28 rounded-full flex items-center justify-center shadow-2xl relative z-10 ${
+                          isPro
+                            ? "bg-gradient-to-br from-yellow-500 via-amber-500 to-yellow-600"
+                            : "bg-gradient-to-br from-blue-600 to-cyan-500"
+                        }`}
                       >
-                        <path d="M12 2l3 7h7l-5.5 4.1L18 21l-6-4-6 4 1.5-7.9L2 9h7z" />
+                        <User className="w-14 h-14 text-white drop-shadow-lg" />
+                      </div>
+                    )}
+
+                    {isPro && (
+                      <div
+                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full shadow-2xl backdrop-blur-sm border border-yellow-500/30 hover:scale-110 transition-transform duration-300 group-hover:shadow-[0_0_25px_rgba(234,179,8,0.6)]"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #eab308 100%)",
+                          color: "#000",
+                          boxShadow:
+                            "0 8px 20px rgba(234, 179, 8, 0.4), inset 0 1px 2px rgba(255,255,255,0.3)",
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-3.5 w-3.5 drop-shadow-sm"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path d="M12 2l3 7h7l-5.5 4.1L18 21l-6-4-6 4 1.5-7.9L2 9h7z" />
+                        </svg>
+                        <span className="drop-shadow-sm">PRO</span>
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent to-white/20 pointer-events-none"></div>
+                      </div>
+                    )}
+                  </Avatar>
+
+                  <h2
+                    className={`text-xl font-semibold mb-1 ${
+                      isPro
+                        ? "bg-gradient-to-r from-yellow-600 via-amber-400 to-yellow-400 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(234,179,8,0.3)]"
+                        : "dark:text-white"
+                    }`}
+                  >
+                    {nameToShow}
+                    {isPro && (
+                      <svg
+                        className="inline-block ml-2 w-5 h-5 text-yellow-500 drop-shadow-lg"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
                       </svg>
-                      PRO
+                    )}
+                  </h2>
+
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    {user.email}
+                  </p>
+
+                  <p
+                    className={`text-xs mt-1 ${
+                      isPro
+                        ? "text-yellow-500/70 font-medium"
+                        : "text-slate-500 dark:text-slate-400"
+                    }`}
+                  >
+                    Role:{" "}
+                    <strong className={isPro ? "text-yellow-400" : ""}>
+                      {user.role}
+                    </strong>
+                  </p>
+
+                  <div className="m-6  space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={`text-sm ${
+                          isPro
+                            ? "text-slate-600 font-medium"
+                            : "dark:text-slate-300"
+                        }`}
+                      >
+                        Profile completion:{" "}
+                        <span
+                          className={`font-bold ${
+                            isPro ? "text-yellow-400" : "font-semibold"
+                          }`}
+                        >
+                          27%
+                        </span>
+                      </span>
+                      <Link
+                        href="/settings/profile/my-profile"
+                        className={`text-sm font-medium flex items-center gap-1 group/link transition-all ${
+                          isPro
+                            ? "text-yellow-400 hover:text-yellow-300"
+                            : "text-blue-700 dark:text-blue-400"
+                        }`}
+                      >
+                        Edit
+                        <svg
+                          className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </Link>
+                    </div>
+
+                    <div className="relative">
+                      {isPro && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-full blur-md"></div>
+                      )}
+                      <Progress
+                        value={27}
+                        className={`h-2 rounded-full relative ${
+                          isPro ? "bg-slate-700/50" : ""
+                        }`}
+                        style={
+                          isPro
+                            ? {
+                                background:
+                                  "linear-gradient(to right, rgba(234, 179, 8, 0.2), rgba(245, 158, 11, 0.2))",
+                              }
+                            : {}
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  {isPro && (
+                    <div className="mt-6 p-3 mb-4 rounded-xl bg-gradient-to-r from-yellow-500/10 via-amber-500/10 to-yellow-500/10 border border-yellow-500/20 backdrop-blur-sm">
+                      <div className="flex  items-center justify-center gap-2 text-xs text-yellow-500/90 font-medium">
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        <span>Exclusive PRO Features Unlocked</span>
+                        <svg
+                          className="w-4 h-4 animate-pulse"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M9 11.75a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-4.5a.75.75 0 01-.75-.75zm0 3.5a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-4.5a.75.75 0 01-.75-.75z" />
+                          <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                        </svg>
+                      </div>
                     </div>
                   )}
-                </Avatar>
-
-                <h2 className="text-xl font-semibold dark:text-white">{nameToShow}</h2>
-                <p className="text-sm text-slate-500 dark:text-slate-400">{user.email}</p>
-
-                <p className="text-xs mt-1 text-slate-500 dark:text-slate-400">
-                  Role: <strong>{user.role}</strong>
-                </p>
-
-                <div className="mt-4 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm dark:text-slate-300">
-                      Profile completion: <span className="font-semibold">27%</span>
-                    </span>
-                    <Link
-                      href="/settings/profile/my-profile"
-                      className="text-sm text-blue-700 dark:text-blue-400 font-medium"
-                    >
-                      Edit
-                    </Link>
-                  </div>
-                  <Progress value={27} className="h-2 rounded-md" />
                 </div>
+
+                <style jsx>{`
+                  @keyframes spin {
+                    from {
+                      transform: rotate(0deg);
+                    }
+                    to {
+                      transform: rotate(360deg);
+                    }
+                  }
+                `}</style>
               </CardContent>
             </Card>
 
             <Card
               className="
       border rounded-2xl shadow-lg backdrop-blur-xl
-      bg-white/70 dark:bg-white/5
+      bg-white/70 dark:bg-white/5 
       border-gray-200 dark:border-white/10
-      p-4
+      
     "
             >
-              <CardHeader className="pb-">
+              <CardHeader className="pb-3">
                 <CardTitle className="text-lg font-semibold dark:text-white flex items-center gap-2">
                   💎 Subscriptions
                 </CardTitle>
               </CardHeader>
 
               <CardContent className="space-y-5">
-
-
-                {
-                  !isPro && (
-                    <div className="p-4 rounded-xl bg-gradient-to-r from-[#fbd158]/30 to-[#e9a701]/30 dark:from-[#fbd158]/10 dark:to-[#e9a701]/10 border border-yellow-300/40 dark:border-yellow-300/20">
-                      <div className="flex items-center justify-between">
-                        <p className="font-semibold dark:text-white">⭐ Taskoria Pro</p>
-                        <Badge
-                          className="text-white"
-                          style={{ background: "linear-gradient(to right, #fbd158, #e9a701)" }}
-                        >
-                          PRO
-                        </Badge>
-                      </div>
-
-                      <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                        Verified badge, weekly free leads & more.
+                {!isPro && (
+                  <div className="p-4 rounded-xl bg-gradient-to-r from-[#fbd158]/30 to-[#e9a701]/30 dark:from-[#fbd158]/10 dark:to-[#e9a701]/10 border border-yellow-300/40 dark:border-yellow-300/20">
+                    <div className="flex items-center justify-between">
+                      <p className="font-semibold dark:text-white">
+                        ⭐ Taskoria Pro
                       </p>
-
-                      <Link href="/settings/billing/taskoria_pro">
-                        <Button
-                          className="mt-3 w-full bg-gradient-to-r from-[#fbd158] to-[#e9a701] hover:opacity-90 text-black font-medium"
-                          size="sm"
-                        >
-                          Activate
-                        </Button>
-                      </Link>
+                      <Badge
+                        className="text-white"
+                        style={{
+                          background:
+                            "linear-gradient(to right, #fbd158, #e9a701)",
+                        }}
+                      >
+                        PRO
+                      </Badge>
                     </div>
-                  )
-                }
 
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+                      Verified badge, weekly free leads & more.
+                    </p>
+
+                    <Link href="/settings/billing/taskoria_pro">
+                      <Button
+                        className="mt-3 w-full bg-gradient-to-r from-[#fbd158] to-[#e9a701] hover:opacity-90 text-black font-medium"
+                        size="sm"
+                      >
+                        Activate
+                      </Button>
+                    </Link>
+                  </div>
+                )}
 
                 <div className="p-4 rounded-xl bg-gradient-to-r from-[#3C7DED]/20 to-[#46CBEE]/20 dark:from-[#3C7DED]/10 dark:to-[#46CBEE]/10 border border-blue-300/30 dark:border-blue-300/20">
                   <div className="flex items-center justify-between">
-                    <p className="font-semibold dark:text-white">🎯 Starter Pack</p>
+                    <p className="font-semibold dark:text-white">
+                      🎯 Starter Pack
+                    </p>
                     <Badge
                       className="text-white"
                       style={{
-                        background: "linear-gradient(to right, #3C7DED, #46CBEE)",
+                        background:
+                          "linear-gradient(to right, #3C7DED, #46CBEE)",
                       }}
                     >
                       -20%
@@ -370,9 +517,6 @@ export default function ProviderDashboard() {
                 </p>
               </CardContent>
             </Card>
-
-
-
 
             <Card
               className="

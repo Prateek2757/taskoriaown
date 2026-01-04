@@ -208,7 +208,8 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
             <div className="w-24 h-24 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center">
               {formState.avatarPreview ? (
                 <Image 
-                fill
+                height={20}
+                width={30}
                   src={formState.avatarPreview}
                   alt="Avatar"
                   className="object-cover w-full h-full"
@@ -263,7 +264,8 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
             <div className="w-24 h-24 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center">
               {formState.companyLogoPreview ? (
                 <Image
-                fill
+                height={30}
+                width={30}
                   src={formState.companyLogoPreview}
                   alt="Company Logo"
                   className="object-cover w-full h-full"

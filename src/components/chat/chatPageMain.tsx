@@ -8,43 +8,27 @@ import ChatSidebar from "@/components/chat/ChatSidebar";
 import ChatWindow from "@/components/chat/chatWindow";
 import { Button } from "@/components/ui/button";
 
-interface Participant {
-  user_id: string;
-  name: string;
-}
-
-interface Conversation {
-  id: string;
-  task_id: string;
-  task_title: string;
-  participants: Participant[];
-}
-
 export default function ChatPageInline({
   params,
 }: {
   params: Promise<{ convoId: string }>;
 }) {
-  
   const paramsWrapped = use(params);
   const routeConvoId = paramsWrapped?.convoId || null;
   const { data: session } = useSession();
 
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [activeConversation, setActiveConversation] =
-    useState<Conversation | null>(null);
+  const [conversations, setConversations] = useState([]);
+  const [activeConversation, setActiveConversation] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [endpoint, setEndpoint] = useState<string | null>(null);
-
+  const [endpoint, setEndpoint] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   const hasFetched = useRef(false);
   const cacheKey = `chat_conversations_${session?.user?.id}`;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-
     const storedView = localStorage.getItem("viewMode");
     if (storedView === "customer" || storedView === "provider") {
       setEndpoint(
@@ -63,37 +47,19 @@ export default function ChatPageInline({
 
   const fetchConversations = useCallback(async () => {
     if (!endpoint || hasFetched.current) return;
-
     setLoading(true);
     setError(null);
-
     try {
       const res = await fetch(endpoint, { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to fetch conversations");
-
       const data = await res.json();
-      const convos = data.conversations || [];
-
-      setConversations(convos);
+      setConversations(data.conversations || []);
       hasFetched.current = true;
-    } catch (err: any) {
+    } catch (err) {
       setError(err?.message || "Failed to load conversations");
     } finally {
       setLoading(false);
     }
-  }, [endpoint, session?.user?.id]);
-
-  // useEffect(() => {
-  //   if (!session?.user?.id) return;
-
-  //   const lastFetched = Number(sessionStorage.getItem(`${cacheKey}_timestamp`));
-  //   const isExpired = Date.now() - lastFetched > 5 * 60 * 1000;
-
-  //   if (isExpired || !lastFetched) {
-  //     hasFetched.current = false;
-  //     fetchConversations();
-  //   }
-  // }, [cacheKey, session?.user?.id, fetchConversations]);
+  }, [endpoint]);
 
   useEffect(() => {
     if (endpoint) {
@@ -105,7 +71,6 @@ export default function ChatPageInline({
   useEffect(() => {
     if (!routeConvoId) return;
     if (!conversations.length) return;
-
     const found = conversations.find(
       (c) => String(c.id) === String(routeConvoId)
     );
@@ -113,40 +78,24 @@ export default function ChatPageInline({
   }, [routeConvoId, conversations]);
 
   const getOtherParticipantName = useCallback(
-    (conversation: Conversation) => {
-      const other = conversation.participants.find(
+    (conversation) =>
+      conversation.participants.find(
         (p) => Number(p.user_id) !== Number(session?.user?.id)
-      );
-      return other?.name || "Unknown";
-    },
+      )?.name || "Unknown",
     [session?.user?.id]
   );
   const getOtherParticipantId = useCallback(
-    (conversation: Conversation) => {
-      const other = conversation.participants.find(
-        (p) => Number(p.user_id) !== Number(session?.user.id)
-      );
-      return other?.user_id || "unknonw Id";
-    },
-    [session?.user.id]
+    (conversation) =>
+      conversation.participants.find(
+        (p) => Number(p.user_id) !== Number(session?.user?.id)
+      )?.user_id || null,
+    [session?.user?.id]
   );
 
-  const handleSelectConversation = useCallback((conversation: Conversation) => {
+  const handleSelectConversation = useCallback((conversation) => {
     setActiveConversation(conversation);
-    if (window.matchMedia("(max-width: 640px)").matches) {
-      setSidebarOpen(false);
-    }
+    if (window.matchMedia("(max-width: 640px)").matches) setSidebarOpen(false);
   }, []);
-
-  if (!session?.user) {
-    return (
-      <div
-        className="flex items-center justify-center h-screen
-        bg-gradient-to-br from-gray-100 via-white to-gray-50
-        dark:from-[#0a0a0f] dark:via-[#0f1117] dark:to-[#11131a]"
-      ></div>
-    );
-  }
 
   const otherParticipant =
     activeConversation && session?.user?.id
@@ -157,17 +106,26 @@ export default function ChatPageInline({
       : { name: "Unknown", otherId: null };
   const otherName = otherParticipant.name;
   const otherId = otherParticipant.otherId;
-
   const conversationTitle = activeConversation?.task_title || "Conversation";
 
+  useEffect(() => {
+    if (!routeConvoId) return;
+    fetch("/api/notifications/mark-read", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ conversationId: routeConvoId }),
+    }).then(() => {
+      document.title = conversationTitle;
+    });
+  }, [routeConvoId]);
+
+  if (!session?.user)
+    return (
+      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-gray-100 via-white to-gray-50 dark:from-[#0a0a0f] dark:via-[#0f1117] dark:to-[#11131a]"></div>
+    );
+
   return (
-    <div
-      className="
-      relative flex h-screen overflow-hidden
-      bg-gradient-to-br from-gray-50 via-white to-gray-100
-      dark:from-[#050507] dark:via-[#0b0c10] dark:to-[#11131a]
-      text-gray-800 dark:text-gray-200"
-    >
+    <div className="relative flex h-screen overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-[#050507] dark:via-[#0b0c10] dark:to-[#11131a] text-gray-800 dark:text-gray-200">
       <AnimatePresence mode="wait">
         {(sidebarOpen ||
           typeof window === "undefined" ||
@@ -178,12 +136,7 @@ export default function ChatPageInline({
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -280, opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="
-              absolute sm:relative 
-              w-full sm:w-80 h-full z-10
-              bg-white dark:bg-[#0f1015]
-              border-r border-gray-200 dark:border-[#1d1f27]
-              shadow-md dark:shadow-lg"
+            className="absolute sm:relative w-full sm:w-80 h-full z-10 bg-white dark:bg-[#0f1015] border-r border-gray-200 dark:border-[#1d1f27] shadow-md dark:shadow-lg"
           >
             <ChatSidebar
               conversations={conversations}
@@ -200,13 +153,7 @@ export default function ChatPageInline({
 
       <div className="flex-1 flex flex-col relative">
         {activeConversation && (
-          <div
-            className="
-            sm:hidden p-3 flex items-center gap-3
-            bg-white/80 dark:bg-[#12131a]/80 
-            border-b border-gray-200 dark:border-[#1d1f27]
-            backdrop-blur-md shadow-sm"
-          >
+          <div className="sm:hidden p-3 flex items-center gap-3 bg-white/80 dark:bg-[#12131a]/80 border-b border-gray-200 dark:border-[#1d1f27] backdrop-blur-md shadow-sm">
             <Button
               onClick={() => setSidebarOpen(true)}
               className="text-[#6C63FF] dark:text-[#78aaff] flex items-center gap-1"
@@ -214,7 +161,6 @@ export default function ChatPageInline({
               <ArrowLeft className="w-5 h-5" />
               <span className="text-sm font-medium">Back</span>
             </Button>
-
             <div className="flex-1 text-center font-semibold truncate dark:text-gray-200">
               {conversationTitle}
             </div>
@@ -230,13 +176,7 @@ export default function ChatPageInline({
               exit={{ opacity: 0 }}
               className="flex flex-col items-center justify-center flex-1 text-gray-500 dark:text-gray-400"
             >
-              <div
-                className="
-                animate-spin border-4 
-                border-[#6C63FF]/20 border-t-[#6C63FF]
-                rounded-full w-10 h-10 mb-3
-              "
-              ></div>
+              <div className="animate-spin border-4 border-[#6C63FF]/20 border-t-[#6C63FF] rounded-full w-10 h-10 mb-3"></div>
               <p>Loading conversations...</p>
             </motion.div>
           ) : error ? (
@@ -256,9 +196,7 @@ export default function ChatPageInline({
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="
-                flex-1 overflow-hidden flex flex-col
-                bg-white dark:bg-[#0e0f14]"
+              className="flex-1 overflow-hidden flex flex-col bg-white dark:bg-[#0e0f14]"
             >
               <ChatWindow
                 otherName={otherName}
@@ -275,9 +213,7 @@ export default function ChatPageInline({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="
-                flex flex-col items-center justify-center flex-1
-                text-gray-500 dark:text-gray-400"
+              className="flex flex-col items-center justify-center flex-1 text-gray-500 dark:text-gray-400"
             >
               <MessageCircle className="w-12 h-12 mb-4 text-[#6C63FF] dark:text-[#7da2ff]" />
               <p className="text-lg font-medium">Select a conversation</p>
