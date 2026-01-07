@@ -18,6 +18,7 @@ import {
   Settings,
   Binoculars,
   Bell,
+  Star,
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
@@ -148,9 +149,29 @@ export default function ModernNavbar() {
       >
         <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full flex items-center justify-center shadow-md">
-              <User className="w-7 h-7 text-white" />
+            <div className="relative">
+              <div
+                className={`w-13 h-13 rounded-full flex items-center justify-center
+      bg-gradient-to-br from-blue-100 to-cyan-100
+      dark:from-blue-900 dark:to-cyan-900
+      transition-all group-hover:scale-[1.05] overflow-hidden
+      `}
+              >
+                <User className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+              </div>
+
+              {/* {session?.user.status === "active" && (
+                <div
+                  className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full
+                 bg-gradient-to-br from-yellow-400 to-orange-500
+                 flex items-center justify-center
+                 ring-2 ring-white dark:ring-slate-900 shadow-md"
+                >
+                  <Star className="w-3 h-3 text-white fill-white" />
+                </div>
+              )} */}
             </div>
+
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-gray-900 dark:text-gray-100 truncate">
                 {session?.user?.name || "User"}
@@ -178,13 +199,17 @@ export default function ModernNavbar() {
               <ChevronDown className="w-4 h-4 -rotate-90" />
             </button>
           )}
-          {/* <Link
-            href={profilePath}
-            onClick={() => setIsProfileOpen(false)}
+          <Link
+            href="/settings/billing/taskoria_pro"
+            onClick={() => {
+              setIsMenuOpen(false);
+              setIsProfileOpen(false);
+            }}
             className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
           >
-            View Profile
-          </Link> */}
+            Taskoria Plans & Pricing{" "}
+          </Link>
+
           <Link
             href="/settings/profile/my-profile"
             onClick={() => setIsProfileOpen(false)}
@@ -291,12 +316,27 @@ export default function ModernNavbar() {
                     variant="ghost"
                     className=" flex items-center gap-2 px py-2 rounded-full transition-all "
                   >
-                    <div
-                      className="w-9 h-9 rounded-full flex  items-center justify-center  bg-gradient-to-br from-blue-100 to-cyan-100
-                                       dark:from-blue-900 dark:to-cyan-900
-                                                    transition-all  group-hover:scale-[1.05]"
-                    >
-                      <User className="w-5 h-5 text-blue-600 dark:text-blue-300" />
+                    <div className="relative">
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center
+      bg-gradient-to-br from-blue-100 to-cyan-100
+      dark:from-blue-900 dark:to-cyan-900
+      transition-all group-hover:scale-[1.05] overflow-hidden
+      `}
+                      >
+                        <User className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                      </div>
+                      {/* 
+                      {session?.user.status === "active" && (
+                        <div
+                          className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full
+                 bg-gradient-to-br from-yellow-400 to-orange-500
+                 flex items-center justify-center
+                 ring-2 ring-white dark:ring-slate-900 shadow-md"
+                        >
+                          <Star className="w-1 h-1 text-white fill-white" />
+                        </div>
+                      )} */}
                     </div>
 
                     <span className="font-medium text-gray-700 dark:text-gray-300">
@@ -401,8 +441,27 @@ export default function ModernNavbar() {
                 {session && (
                   <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-4 mb-4">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full flex items-center justify-center shadow-lg ring-4 ring-white">
-                        <User className="w-7 h-7 text-white" />
+                      <div className="relative">
+                        <div
+                          className={`w-13 h-13 rounded-full flex items-center justify-center
+      bg-gradient-to-br from-blue-100 to-cyan-100
+      dark:from-blue-900 dark:to-cyan-900
+      transition-all group-hover:scale-[1.05] overflow-hidden
+      `}
+                        >
+                          <User className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                        </div>
+
+                        {/* {session?.user.status === "active" && (
+                          <div
+                            className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full
+                 bg-gradient-to-br from-yellow-400 to-orange-500
+                 flex items-center justify-center
+                 ring-2 ring-white dark:ring-slate-900 shadow-md"
+                          >
+                            <Star className="w-3 h-3 text-white fill-white" />
+                          </div>
+                        )} */}
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-gray-900 dark:text-gray-100 truncate text-lg">

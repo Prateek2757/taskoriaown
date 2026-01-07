@@ -115,7 +115,11 @@ export default function RootLayout({
             <Analytics/>
             <UserProvider>
               <ModernNavbar />
+              <main className="">
+
               {children}
+              </main>
+
               <Toaster position="top-right" richColors expand closeButton />
               <Footer />
             </UserProvider>

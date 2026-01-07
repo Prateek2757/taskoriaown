@@ -13,6 +13,8 @@ import { AnimatePresence, motion } from "motion/react";
 import CalendarInput from "../CalenderInput";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { Label } from "../ui/label";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
 export default function StepTwoQuestionsForm({
   onBack,
@@ -39,7 +41,9 @@ export default function StepTwoQuestionsForm({
     register,
     handleSubmit,
     control,
+    setValue,
     getValues,
+    watch,
     reset,
     formState: { errors },
   } = useForm();
@@ -80,11 +84,15 @@ export default function StepTwoQuestionsForm({
 
   const onSubmit = async (data: any) => {
     setLoading(true);
-    if (!data.estimated_budget) {
-      toast.error("Please enter estimated budget");
-      setLoading(false);
-      return;
+    if(data.has_budget ==="yes")
+    {
+      if (data.estimated_budget === null || data.estimated_budget === undefined || data.estimated_budget === "" || data.estimated_budget <= 0 ) {
+        toast.error("Please enter estimated budget");
+        setLoading(false);
+        return;
+      }
     }
+
     if (data.estimated_budget < 0) {
       toast.error("Invalid! Budget cannot be negative");
       setLoading(false);
@@ -114,7 +122,7 @@ export default function StepTwoQuestionsForm({
         estimated_budget: Number(data.estimated_budget),
         preferred_date_start: data.preferred_date_start,
         preferred_date_end: data.preferred_date_end,
-        queries:data.queries
+        queries: data.queries,
       };
 
       const res = await axios.post("/api/leads", payload);
@@ -145,8 +153,7 @@ export default function StepTwoQuestionsForm({
 
         preferred_date_start: data.preferred_date_start,
         preferred_date_end: data.preferred_date_end,
-        queries:data.queries
-
+        queries: data.queries,
       };
       localStorage.setItem("pendingpayload", JSON.stringify(payload));
 
@@ -226,28 +233,72 @@ export default function StepTwoQuestionsForm({
       </h2>
 
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 flex flex-col">
-          <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
-            Estimated Budge *
-          </label>
-          <Input
-            type="number"
-            onInput={(e) => {
-              e.currentTarget.value = e.currentTarget.value.replace(
-                /[^0-9]/g,
-                ""
-              );
-            }}
-            {...register("estimated_budget", { required: true })}
-            placeholder="A$ Estimated Budget"
-            className="border px-3 py-2 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
-          />
-          {errors.budget_min && (
-            <span className="text-red-500 text-sm mt-1">
-              Estimated budget is required
-            </span>
-          )}
-        </div>
+      <div className="flex-1 flex flex-col">
+  <label className="text-gray-700 text-l  dark:text-gray-300 font-medium mb-2">
+    Do you have a budget in mind? *
+  </label>
+
+  <RadioGroup
+    className="flex gap-6"
+    onValueChange={(value) => {
+      setValue("has_budget", value, { shouldValidate: true });
+      if (value === "no") {
+        setValue("estimated_budget", "");
+      }
+    }}
+  >
+   <div className="flex items-center space-x-2">
+      <RadioGroupItem value="yes" id="yes" />
+      <Label htmlFor="yes">Yes</Label>
+    </div>
+
+    <div className="flex items-center space-x-2">
+      <RadioGroupItem value="no" id="no" />
+      <Label htmlFor="no">
+        No, I’d like to discuss with a professional
+      </Label>
+    </div>
+  </RadioGroup>
+
+  {errors.has_budget && (
+    <span className="text-red-500 text-sm mt-1">
+      Please select an option
+    </span>
+  )}
+
+  {watch("has_budget") === "yes" && (
+    <div className="mt-4">
+      <Label className="mb-1 block">
+        Estimated Budget *
+      </Label>
+
+      <Input
+        type="text"
+        placeholder="A$ Estimated Budget"
+        onInput={(e) => {
+          e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, "");
+        }}
+        {...register("estimated_budget", {
+          required: "Estimated budget is required",
+        })}
+      />
+
+      {errors.estimated_budget && (
+        <span className="text-red-500 text-sm mt-1">
+          {errors.estimated_budget.message as any}
+        </span>
+      )}
+    </div>
+  )}
+
+  {watch("has_budget") === "no" && (
+    <p className="mt-4 text-xs text-gray-600 dark:text-gray-400">
+      No worries! Our professional will help you plan the right budget.
+    </p>
+  )}
+</div>
+
+
         {/* <div className="flex-1 flex flex-col">
           <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
              Budget Max *
@@ -311,8 +362,6 @@ export default function StepTwoQuestionsForm({
             }}
           />
 
-         
-
           {errors.preferred_date_end && (
             <span className="text-red-500 text-sm mt-1">
               End date is required
@@ -321,21 +370,20 @@ export default function StepTwoQuestionsForm({
         </div>
       </div>
       <div className="flex-1 flex flex-col">
-            <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
-              Any Other Queries ?
-            </label>
-            <Textarea
-              
-              {...register("queries", { required: true })}
-              placeholder="Type your Queries"
-              className="border px-3 py-6 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
-            />
-            {/* {errors.budget_min && (
+        <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
+          Any Other Queries ?
+        </label>
+        <Textarea
+          {...register("queries", { required: true })}
+          placeholder="Type your Queries"
+          className="border px-3 py-6 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
+        />
+        {/* {errors.budget_min && (
               <span className="text-red-500 text-sm mt-1">
                 Estimated budget is required
               </span>
             )} */}
-          </div>
+      </div>
 
       <div className="flex justify-between pt-2">
         <Button

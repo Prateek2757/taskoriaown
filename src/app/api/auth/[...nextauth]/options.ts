@@ -9,7 +9,9 @@ declare module "next-auth" {
     id: string;
     name: string;
     email?: string;
+    image?: string;
     role: string;
+    status?: string;
     serviceCategory: string;
     isVerified?: boolean;
   }
@@ -25,6 +27,8 @@ declare module "next-auth/jwt" {
     name: string;
     email?: string;
     role: string;
+    image?: string;
+    status?: string;
     serviceCategory: string;
     isVerified?: boolean;
   }
@@ -53,11 +57,14 @@ export const authOptions: NextAuthOptions = {
             u.user_id,
             u.email,
             u.password_hash,
+            ps.status,
             up.display_name,
+            up.profile_image_url AS image,
             COALESCE(r.role_name, 'customer') AS role,
             u.is_email_verified
           FROM users u
           LEFT JOIN user_profiles up ON u.user_id = up.user_id
+          LEFT JOIN professional_subscriptions ps ON u.user_id = ps.user_id
           LEFT JOIN roles r ON r.role_id = u.default_role_id
           WHERE u.email = $1 AND u.is_deleted = FALSE
           `,
@@ -69,6 +76,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         const user = result.rows[0];
+        console.log(user);
 
         const valid = await bcrypt.compare(password, user.password_hash);
         if (!valid) {
@@ -79,6 +87,8 @@ export const authOptions: NextAuthOptions = {
           id: user.user_id.toString(),
           email: user.email,
           name: user.display_name || "",
+          status: user.status,
+          image: user.image,
           role: user.role,
           serviceCategory: "",
           isVerified: user.is_email_verified || false,
@@ -99,9 +109,14 @@ export const authOptions: NextAuthOptions = {
 
         const result = await pool.query(
           `SELECT u.user_id,
-          COALESCE(r.role_name, 'customer') AS role
-           FROM users u
+          ps.status,
+          COALESCE(r.role_name, 'customer') AS role,
+          up.profile_image_url AS image,
+
+          FROM users u
           LEFT JOIN roles r ON r.role_id = u.default_role_id
+          LEFT JOIN user_profiles up ON u.user_id = up.user_id
+          LEFT JOIN professional_subscriptions ps ON u.user_id = ps.user_id
           where  u.email = $1 AND u.is_deleted = FALSE`,
           [email]
         );
@@ -110,9 +125,12 @@ export const authOptions: NextAuthOptions = {
           return "/signin?error=not_registered";
         }
         const existingUser = result.rows[0];
+        console.log(existingUser);
 
         user.id = existingUser.user_id.toString();
         user.role = existingUser.role;
+        user.status = existingUser.status;
+        user.image = existingUser.image;
       }
 
       return true;
@@ -124,6 +142,8 @@ export const authOptions: NextAuthOptions = {
         token.name = user.name || "";
         token.email = user.email || "";
         token.role = user.role;
+        token.image = user.image;
+        token.status = user.status;
         token.serviceCategory = user.serviceCategory;
         token.isVerified = user.isVerified;
       }
@@ -138,8 +158,10 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id;
+        session.user.status = token.status;
         session.user.name = token.name;
         session.user.email = token.email;
+        session.user.image = token.image;
         session.user.role = token.role;
         session.user.serviceCategory = token.serviceCategory;
         session.user.isVerified = token.isVerified;

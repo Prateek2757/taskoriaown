@@ -7,19 +7,14 @@ import { sendEmail } from "@/components/email/helpers/sendVerificationEmail";
 export async function POST(req: Request) {
   const client = await pool.connect();
   const session = await getServerSession(authOptions);
- 
 
   try {
-
-
     if (!session || !session.user?.id) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
-    
-      let email= session.user?.email
-      const name = session.user?.name
-  
-  
+
+    let email = session.user?.email;
+    const name = session.user?.name;
 
     const {
       title,
@@ -30,7 +25,7 @@ export async function POST(req: Request) {
       preferred_date_start,
       preferred_date_end,
       category_answers,
-      queries
+      queries,
     } = await req.json();
 
     await client.query("BEGIN");
@@ -62,7 +57,7 @@ export async function POST(req: Request) {
         city_id || null,
         preferred_date_start || null,
         preferred_date_end || null,
-        queries
+        queries,
       ]
     );
 
@@ -82,19 +77,20 @@ export async function POST(req: Request) {
         ]);
       }
     }
- 
-    const categorynameres = await client.query(`SELECT name from service_categories where category_id=$1`,
+
+    const categorynameres = await client.query(
+      `SELECT name from service_categories where category_id=$1`,
       [category_id]
-    )
-      const categoryname = categorynameres.rows[0].name
+    );
+    const categoryname = categorynameres.rows[0].name;
 
     await client.query("COMMIT");
     await sendEmail({
-      username:name,
-      email ,
-      type:"task-posted",
-      taskTitle:categoryname
-    })
+      username: name,
+      email,
+      type: "task-posted",
+      taskTitle: categoryname,
+    });
 
     return NextResponse.json({ success: true, task: taskResult.rows[0] });
   } catch (err: any) {
@@ -176,6 +172,8 @@ export async function GET() {
     t.status IN ('Open', 'Urgent','In Progress')
     AND t.category_id = ANY($1::int[])
     AND t.customer_id <> $2
+    AND t.estimated_budget IS NOT NULL
+    AND t.estimated_budget > 0
   GROUP BY 
     t.task_id, c.name, ci.name,ci.latitude,ci.longitude,ci.postcode, up.user_id, u.email, u.phone, up.display_name, up.profile_image_url, uts.seen
   ORDER BY 

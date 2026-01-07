@@ -56,10 +56,17 @@ export default function LocationMap({ name, latitude, longitude }:{name:string ,
           scrollWheelZoom: true,
         });
 
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          maxZoom: 19,
-          attribution: "© OSM contributors",
-        }).addTo(map);
+        const satellite = L.tileLayer(
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          { maxZoom: 19 }
+        );
+        
+        const labels = L.tileLayer(
+          "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
+        );
+        
+        satellite.addTo(map);
+        labels.addTo(map);
 
         mapInstance.current = map;
 

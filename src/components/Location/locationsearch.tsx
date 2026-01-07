@@ -32,7 +32,12 @@ type LocationProp = {
 };
 
 type Props = {
-  onSelect?: (data: { city_id: number; city: string; display_name: string; municipality: string }) => void;
+  onSelect?: (data: {
+    city_id: number;
+    city: string;
+    display_name: string;
+    municipality: string;
+  }) => void;
   presetLocation?: LocationProp | null;
 };
 
@@ -49,10 +54,11 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
 
   useEffect(() => {
     if (presetLocation) {
-      const displayText = presetLocation.display_name || 
-                         presetLocation.city || 
-                         presetLocation.name || 
-                         "";
+      const displayText =
+        presetLocation.display_name ||
+        presetLocation.city ||
+        presetLocation.name ||
+        "";
       setQuery(displayText);
     }
   }, [presetLocation]);
@@ -69,7 +75,7 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
       setShowDropdown(true);
       return;
     }
-console.log(results);
+    console.log(results);
 
     setLoading(true);
     try {
@@ -111,7 +117,7 @@ console.log(results);
 
     setQuery(location.display_name);
     console.log(location);
-    
+
     setResults([]);
     setShowDropdown(false);
     setActiveIndex(-1);
@@ -119,12 +125,12 @@ console.log(results);
     try {
       const res = await axios.post("/api/signup/location", location);
       const data = await res.data;
-      
+
       onSelect?.({
         city_id: data.city_id,
         city: location.city,
         display_name: location.display_name,
-        municipality: location.municipality
+        municipality: location.municipality,
       });
     } catch (err) {
       console.error("Failed to save location:", err);
@@ -155,7 +161,7 @@ console.log(results);
         value={query}
         onChange={(e) => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Search your location"
+        placeholder="Enter your postcode or town"
         className="w-full border border-gray-300 rounded-xl pl-9 focus:outline-none focus:ring-2 focus:ring-primary text-sm shadow-sm"
         onFocus={() =>
           query.length >= 3 && results.length > 0 && setShowDropdown(true)
@@ -184,11 +190,16 @@ console.log(results);
               onClick={() => handleSelect(r)}
               onMouseEnter={() => setActiveIndex(i)}
             >
-              <p className="truncate font-medium">{r.display_name}</p>
+              <p className="truncate font-medium">{
+              r.display_name || r.address?.postcode 
+              }</p>
               {(r.address?.city || r.address?.town || r.address?.village) && (
                 <span className="text-xs text-gray-400">
-                  {r.address?.city || r.address?.town || r.address?.village || r.address.municipality},{" "}
-                  {r.address?.state}
+                  {r.address?.city ||
+                    r.address?.town ||
+                    r.address?.village ||
+                    r.address.municipality}
+                  , {r.address?.state}
                 </span>
               )}
             </li>

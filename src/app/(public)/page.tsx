@@ -10,7 +10,7 @@ import Testomonail from "@/components/Testomonail"
 
 function page() {
   return (
-    <div className="">
+    <div className="p">
      
       <HeroSection/>
       <HowItWorks/>

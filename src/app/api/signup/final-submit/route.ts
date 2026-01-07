@@ -10,7 +10,6 @@ export async function POST(req: NextRequest) {
 
   try {
     const {
-      user_id,
       public_id,
       categoryPublic_id,
       distance,
@@ -24,6 +23,7 @@ export async function POST(req: NextRequest) {
       companySize,
       password,
     } = await req.json();
+    
     // console.log(categoryPublic_id);
     if (!public_id || !categoryPublic_id || !name || !email || !password) {
       return NextResponse.json(
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
+const normalizationemail = await email.trim().toLowerCase()
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await client.query("BEGIN");
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
           updated_at=NOW()
       WHERE user_id=$4
       `,
-      [email, phone || null, hashedPassword, user_idd]
+      [normalizationemail, phone || null, hashedPassword, user_idd]
     );
 
     await client.query(
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
         user_idd,
         companyName || name,
         name,
-        email,
+        normalizationemail,
         phone || null,
         websiteUrl || null,
         companySize || null,
@@ -123,7 +123,7 @@ export async function POST(req: NextRequest) {
       `,
       [user_idd]
     );
-    await sendEmail({ email, username: name, type: "welcome" });
+    await sendEmail({ email:normalizationemail, username: name, type: "welcome" });
 
     return NextResponse.json({
       message: "✅ Signup successful!",

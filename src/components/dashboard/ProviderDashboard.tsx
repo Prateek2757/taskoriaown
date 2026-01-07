@@ -272,7 +272,7 @@ export default function ProviderDashboard() {
                         >
                           <path d="M12 2l3 7h7l-5.5 4.1L18 21l-6-4-6 4 1.5-7.9L2 9h7z" />
                         </svg>
-                        <span className="drop-shadow-sm">PRO</span>
+                        <span className="drop-shadow-sm">Plus</span>
                         <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent to-white/20 pointer-events-none"></div>
                       </div>
                     )}

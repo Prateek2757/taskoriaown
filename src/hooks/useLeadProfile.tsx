@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import useSWR from "swr";
 import axios from "axios";
 
-export type Category = { category_id: number; category_name: string; name?: string};
+export type Category = { category_id: number; category_name: string; name?: string };
 export type City = { city_id: number; name: string };
 export type Subscription = {
   package_id: number;
@@ -20,87 +20,36 @@ export type Profile = {
   categories: Category[];
   display_name?: string;
   profile_image_url?: string;
-  company_name?:string;
-  company_size?:string;
-  has_company?:boolean;
-  logo_url?:string;
+  company_name?: string;
+  company_size?: string;
+  has_company?: boolean;
+  logo_url?: string;
   is_pro?: boolean;
   active_subscription?: Subscription | null;
 };
 
+const fetcher = (url: string) => axios.get(url).then(res => res.data);
+
 export function useLeadProfile() {
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [cities, setCities] = useState<City[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { data: profile, error, isLoading, mutate } = useSWR<Profile>("/api/user_profiles", fetcher);
 
-  const api = axios;
- 
-  useEffect(() => {
-    const loadProfile = async () => {
-      setLoading(true);
-      try {
-        const { data } = await api.get("/api/user_profiles");
-        setProfile({
-          ...data,
-          categories: data.categories || [],
-          is_pro: data.is_pro || false,
-          active_subscription: data.active_subscription || null,
-        });
-      } catch {
-        setError("Failed to load profile.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProfile();
-  }, []);
+  const { data: categories = [], mutate: mutateCategories } = useSWR<Category[]>(
+    "/api/signup/category-selection",
+    fetcher
+  );
 
-  const fetchCategories = async () => {
-    if (categories.length) return;
-    try {
-      const { data } = await api.get("/api/signup/category-selection");
-      setCategories(Array.isArray(data) ? data : []);
-    } catch {
-      setError("Failed to load categories.");
-    }
-  };
+  const { data: cities = [], mutate: mutateCities } = useSWR<City[]>("/api/signup/location", fetcher);
 
-  const fetchCities = async () => {
-    setLoading(true);
-    if (cities.length) return;
-    try {
-      const { data } = await api.get("/api/signup/location");
-      setCities(Array.isArray(data) ? data : []);
-    } catch {
-      setError("Failed to load cities.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const saving = useSWR(() => null); 
 
-  useEffect(() => {
-    fetchCategories();
-    fetchCities();
-  }, []);
-
-  const updateProfile = async (data: {
-    display_name?: string;
-    profile_image_url?: string;
-  }) => {
+  const updateProfile = async (data: Partial<Profile>) => {
     if (!profile) return;
-    setSaving(true);
     try {
-      const res = await api.put("/api/user_profiles", data);
-      setProfile((p) => (p ? { ...p, ...res.data.profile } : p));
+      const res = await axios.put("/api/user_profiles", data);
+      mutate({ ...profile, ...res.data.profile }, { revalidate: true });
       return res.data.profile;
     } catch (err: any) {
-      setError(err.message || "Failed to update profile");
-      throw err;
-    } finally {
-      setSaving(false);
+      throw new Error(err.message || "Failed to update profile");
     }
   };
 
@@ -110,80 +59,58 @@ export function useLeadProfile() {
   };
 
   const addCategory = async (category_id: number, category_name: string) => {
-    if (!profile || profile.categories.some((c) => c.category_id === category_id))
-      return;
-
-    setSaving(true);
+    if (!profile || profile.categories.some((c) => c.category_id === category_id)) return;
     try {
-      setProfile((p) =>
-        p ? { ...p, categories: [...p.categories, { category_id, category_name }] } : p
-      );
-      await api.post("/api/user_categories", { category_id });
+      mutate({ ...profile, categories: [...profile.categories, { category_id, category_name }] }, false);
+      await axios.post("/api/user_categories", { category_id });
+      mutate(undefined, true); 
       notifyAll();
     } catch {
-      setError("Failed to add category.");
-    } finally {
-      setSaving(false);
+      throw new Error("Failed to add category");
     }
   };
 
   const removeCategory = async (category_id: number) => {
     if (!profile) return;
-    setSaving(true);
     try {
-      setProfile((p) =>
-        p
-          ? { ...p, categories: p.categories.filter((c) => c.category_id !== category_id) }
-          : p
-      );
-      await api.delete("/api/user_categories", { data: { category_id } });
+      mutate({ ...profile, categories: profile.categories.filter((c) => c.category_id !== category_id) }, false);
+      await axios.delete("/api/user_categories", { data: { category_id } });
+      mutate(undefined, true);
       notifyAll();
     } catch {
-      setError("Failed to remove category.");
-    } finally {
-      setSaving(false);
+      throw new Error("Failed to remove category");
     }
   };
 
-  
   const setLocation = async (city_id: number, city_name: string) => {
     if (!profile) return;
-    setSaving(true);
     try {
-      setProfile((p) =>
-        p
-          ? { ...p, location_id: city_id, location_name: city_name, is_nationwide: false }
-          : p
-      );
-      await api.put("/api/user_profiles", { location_id: city_id, is_nationwide: false });
+      mutate({ ...profile, location_id: city_id, location_name: city_name, is_nationwide: false }, false);
+      await axios.put("/api/user_profiles", { location_id: city_id, is_nationwide: false });
+      mutate(undefined, true);
       notifyAll();
     } catch {
-      setError("Failed to update location.");
-    } finally {
-      setSaving(false);
+      throw new Error("Failed to update location");
     }
   };
 
   const toggleNationwide = async (value: boolean) => {
     if (!profile) return;
-    setSaving(true);
     try {
-      setProfile((p) =>
-        p
-          ? {
-              ...p,
-              is_nationwide: value,
-              location_id: value ? null : p.location_id,
-              location_name: value ? "" : p.location_name,
-            }
-          : p
+      mutate(
+        {
+          ...profile,
+          is_nationwide: value,
+          location_id: value ? null : profile.location_id,
+          location_name: value ? "" : profile.location_name,
+        },
+        false
       );
-      await api.put("/api/user_profiles", { is_nationwide: value });
+      await axios.put("/api/user_profiles", { is_nationwide: value });
+      mutate(undefined, true);
       notifyAll();
     } catch {
-      setError("Failed to toggle nationwide.");
-    } finally {
-      setSaving(false);
+      throw new Error("Failed to toggle nationwide");
     }
   };
 
@@ -191,11 +118,8 @@ export function useLeadProfile() {
     profile,
     categories,
     cities,
-    loading,
-    saving,
+    loading: isLoading,
     error,
-    fetchCategories,
-    fetchCities,
     updateProfile,
     addCategory,
     removeCategory,

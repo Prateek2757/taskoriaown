@@ -91,7 +91,7 @@ const AppEmail = (props: AppEmailProps) => {
               {content.heading}
             </Heading>
 
-            <Text className="text-gray-700 mt-4">Hi {props.username},</Text>
+            {/* <Text className="text-gray-700 mt-4">Hi {props.username},</Text> */}
 
             <Text className="text-gray-700 leading-relaxed">
               {content.message}

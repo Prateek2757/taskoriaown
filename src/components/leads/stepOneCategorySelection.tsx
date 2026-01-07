@@ -222,7 +222,7 @@ export default function StepOneCategoryForm({
 
           <div className="relative">
             <Label className="font-semibold text-gray-800 dark:text-gray-200">
-              Location
+              Location 
             </Label>
             <div className="relative mt-2">
               <LocationSearch

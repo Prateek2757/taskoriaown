@@ -70,7 +70,7 @@ export default function TaskoriaProPage() {
     }
 
     if (pkg.enquiry_price) {
-      features.push(`Then from $${pkg.enquiry_price} per enquiry`);
+      features.push(`Then from A$${pkg.enquiry_price} per enquiry`);
     }
 
     if (pkg.discount_percentage > 0) {
