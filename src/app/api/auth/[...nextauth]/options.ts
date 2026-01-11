@@ -111,7 +111,7 @@ export const authOptions: NextAuthOptions = {
           `SELECT u.user_id,
           ps.status,
           COALESCE(r.role_name, 'customer') AS role,
-          up.profile_image_url AS image,
+          up.profile_image_url AS image
 
           FROM users u
           LEFT JOIN roles r ON r.role_id = u.default_role_id

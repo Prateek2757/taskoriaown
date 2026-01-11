@@ -12,6 +12,8 @@ import {
   Quote,
   Loader2,
   HelpCircle,
+  Lock,
+  AlertCircle,
 } from "lucide-react";
 import { CreditPurchaseModal } from "../payments/CreditTopup";
 import { useSession } from "next-auth/react";
@@ -20,6 +22,8 @@ import { toast } from "sonner";
 import { useConversation } from "@/hooks/useConversation";
 import LocationMap from "../map/map";
 import { createNotification } from "@/lib/notifications";
+import { useSubscription } from "@/hooks/useSubcription";
+
 interface LeadAnswer {
   question_id?: string | number;
   question: string;
@@ -69,6 +73,12 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   const [loadingResponses, setLoadingResponses] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
 
+  const {
+    hasActiveSubscription,
+    subscriptionDetails,
+    loading: subscriptionLoading,
+  } = useSubscription();
+
   const maxResponses = 5;
 
   const participantIds = useMemo(
@@ -98,7 +108,11 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     fetchResponses();
   }, [fetchResponses]);
 
-  const shouldFetchConversation = leadStatus.purchased && !!taskId && !!userId;
+  const shouldFetchConversation = 
+    leadStatus.purchased && 
+    hasActiveSubscription && 
+    !!taskId && 
+    !!userId;
 
   const {
     conversationId,
@@ -113,6 +127,11 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   const handleGoToChat = useCallback(async () => {
     if (isNavigating) return;
+
+    if (!hasActiveSubscription) {
+      toast.error("Active subscription required to use chat functionality");
+      return;
+    }
 
     if (!conversationId && !convoLoading) {
       setIsNavigating(true);
@@ -150,34 +169,39 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     convoError,
     refetchConversation,
     isNavigating,
+    hasActiveSubscription,
   ]);
 
   const handlePurchaseSuccess = useCallback(async () => {
-    toast.success("Purchase successful! Preparing your chat...");
+    toast.success("Purchase successful!");
 
     await fetchResponses();
     await createNotification({
       userId: session?.user?.id,
-      title: "Lead Purchased Sucessfully🎉!",
-      body: `Congratulations ${session?.user?.name}! You have Purchased Lead For ${lead.category_name} `,
+      title: "Lead Purchased Successfully🎉!",
+      body: `Congratulations ${session?.user?.name}! You have Purchased Lead For ${lead.category_name}`,
     });
-
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    const newConvoId = await refetchConversation();
 
     await createNotification({
       userId: String(userId),
       title: "Lead Response 🎉",
-      body: `Congratulations! Your Posted ${lead.category_name} Lead Got Response By ${session?.user?.name} `,
+      body: `Congratulations! Your Posted ${lead.category_name} Lead Got Response By ${session?.user?.name}`,
     });
 
-    if (newConvoId) {
-      toast.success("Chat is ready!");
+    // Only prepare chat if user has active subscription
+    if (hasActiveSubscription) {
+      toast.info("Preparing your chat...");
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const newConvoId = await refetchConversation();
+      if (newConvoId) {
+        toast.success("Chat is ready!");
+      } else {
+        toast.info("Click 'Chat' button to start your conversation");
+      }
     } else {
-      toast.info("Click 'Chat' button to start your conversation");
+      toast.info("Contact details unlocked! Subscribe to use chat feature.");
     }
-  }, [fetchResponses, refetchConversation]);
+  }, [fetchResponses, refetchConversation, hasActiveSubscription, session, userId, lead]);
 
   const formatTimeAgo = useCallback((timestamp: string): string => {
     const now = new Date();
@@ -218,7 +242,12 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   const responseRate = leadStatus.count ?? 0;
   const customerFirstName = (lead.customer_name ?? "Customer").split(" ")[0];
 
-  const isChatButtonDisabled = !leadStatus.purchased || isNavigating;
+  // Chat button is disabled if not purchased, no subscription, or navigating
+  const isChatButtonDisabled = 
+    !leadStatus.purchased || 
+    !hasActiveSubscription || 
+    isNavigating || 
+    subscriptionLoading;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -274,8 +303,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         <div className="p-6">
           <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-6">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wide mb-4 flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-cyan-600" /> Verified Contact
-              Details
+              <CheckCircle className="w-4 h-4 text-cyan-600" /> 
+              {leadStatus.purchased ? "Verified Contact Details" : "Contact Details (Hidden)"}
             </h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -297,7 +326,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 {leadStatus.purchased && (
                   <span className="inline-flex items-center gap-1 px-2 py-1 bg-cyan-100 dark:bg-cyan-700 text-cyan-700 dark:text-cyan-100 text-xs font-semibold rounded-md">
                     <CheckCircle className="w-3 h-3" />
-                    Verified
+                    Unlocked
                   </span>
                 )}
               </div>
@@ -332,6 +361,23 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Subscription warning for chat - only show if purchased but no subscription */}
+          {leadStatus.purchased && !hasActiveSubscription && !subscriptionLoading && (
+            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-4 mb-6">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-sm font-semibold text-amber-900 dark:text-amber-100 mb-1">
+                    Subscription Required for Chat
+                  </h4>
+                  <p className="text-xs text-amber-700 dark:text-amber-300">
+                    You've unlocked the contact details! To use the chat feature, please subscribe to a professional plan.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="bg-blue-50 dark:bg-blue-900 rounded-xl p-5 mb-6">
             <div className="flex items-center justify-between mb-3">
@@ -386,12 +432,23 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               <button
                 onClick={handleGoToChat}
                 disabled={isChatButtonDisabled}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed relative"
+                title={!hasActiveSubscription ? "Active subscription required" : ""}
               >
-                {isNavigating || convoLoading ? (
+                {subscriptionLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Checking subscription...
+                  </>
+                ) : isNavigating || convoLoading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
                     {isNavigating ? "Opening Chat..." : "Preparing Chat..."}
+                  </>
+                ) : !hasActiveSubscription ? (
+                  <>
+                    <Lock className="w-5 h-5" />
+                    Chat (Subscription Required)
                   </>
                 ) : (
                   <>
@@ -420,14 +477,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               professionalId={session?.user?.id}
               onPurchaseSuccess={handlePurchaseSuccess}
             />
-
-            {/* <button className="px-6 py-3.5 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition flex items-center justify-center gap-2">
-              <ThumbsDown className="w-5 h-5" />
-              Not Interested
-            </button>
-            <button className="px-4 py-3.5 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-              <Share2 className="w-5 h-5" />
-            </button> */}
           </div>
         </div>
       </div>

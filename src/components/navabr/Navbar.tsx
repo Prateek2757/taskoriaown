@@ -155,12 +155,23 @@ export default function ModernNavbar() {
       bg-gradient-to-br from-blue-100 to-cyan-100
       dark:from-blue-900 dark:to-cyan-900
       transition-all group-hover:scale-[1.05] overflow-hidden
-      `}
+      ${session?.user.status === "active" ? "ring-2 ring-yellow-400" : ""}`}
               >
-                <User className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                {session?.user?.image ? (
+                  <Image
+                    src={session.user.image}
+                    alt="profile pic"
+                    fill
+                    className="object-cover rounded-full"
+                    sizes="52px"
+                    priority
+                  />
+                ) : (
+                  <User className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                )}
               </div>
 
-              {/* {session?.user.status === "active" && (
+              {session?.user.status === "active" && (
                 <div
                   className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full
                  bg-gradient-to-br from-yellow-400 to-orange-500
@@ -169,7 +180,7 @@ export default function ModernNavbar() {
                 >
                   <Star className="w-3 h-3 text-white fill-white" />
                 </div>
-              )} */}
+              )}
             </div>
 
             <div className="flex-1 min-w-0">
@@ -322,21 +333,33 @@ export default function ModernNavbar() {
       bg-gradient-to-br from-blue-100 to-cyan-100
       dark:from-blue-900 dark:to-cyan-900
       transition-all group-hover:scale-[1.05] overflow-hidden
+      ${session?.user.status === "active" ? "ring-2 ring-yellow-400" : ""}
       `}
                       >
-                        <User className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                        {session?.user?.image ? (
+                          <Image
+                            src={session.user.image}
+                            alt="profile pic"
+                            fill
+                            className="object-cover rounded-full"
+                            sizes="52px"
+                            priority
+                          />
+                        ) : (
+                          <User className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                        )}
                       </div>
-                      {/* 
+                      
                       {session?.user.status === "active" && (
                         <div
-                          className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full
+                          className="absolute -bottom-1 -right-1 w-5 h-5 py-1 rounded-full
                  bg-gradient-to-br from-yellow-400 to-orange-500
                  flex items-center justify-center
                  ring-2 ring-white dark:ring-slate-900 shadow-md"
                         >
-                          <Star className="w-1 h-1 text-white fill-white" />
+                          <Star className=" text-white fill-white" />
                         </div>
-                      )} */}
+                      )}
                     </div>
 
                     <span className="font-medium text-gray-700 dark:text-gray-300">
@@ -447,12 +470,23 @@ export default function ModernNavbar() {
       bg-gradient-to-br from-blue-100 to-cyan-100
       dark:from-blue-900 dark:to-cyan-900
       transition-all group-hover:scale-[1.05] overflow-hidden
-      `}
+      ${session?.user.status === "active" ? "ring-2 ring-yellow-400" : ""}`}
                         >
-                          <User className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                          {session?.user?.image ? (
+                            <Image
+                              src={session.user.image}
+                              alt="profile pic"
+                              fill
+                              className="object-cover rounded-full"
+                              sizes="52px"
+                              priority
+                            />
+                          ) : (
+                            <User className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                          )}
                         </div>
 
-                        {/* {session?.user.status === "active" && (
+                        {session?.user.status === "active" && (
                           <div
                             className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full
                  bg-gradient-to-br from-yellow-400 to-orange-500
@@ -461,7 +495,7 @@ export default function ModernNavbar() {
                           >
                             <Star className="w-3 h-3 text-white fill-white" />
                           </div>
-                        )} */}
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-gray-900 dark:text-gray-100 truncate text-lg">
