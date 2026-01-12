@@ -147,7 +147,7 @@ export default function CategorySearch({
                 key={cat.category_id}   
                 onMouseDown={() => handleSelect(cat)}
                 onTouchStart={() => handleSelect(cat)}
-                className="p-3 cursor-pointer hover:bg-blue-100 dark:text-gray-400  text-gray-700 text-sm relative z-50 "
+                className="p-3 cursor-pointer font-semibold hover:bg-blue-200 dark:hover:bg-gray-500 dark:text-gray-300  text-gray-700 text-sm relative z-50 "
               >
                 {cat.name}
               </li>

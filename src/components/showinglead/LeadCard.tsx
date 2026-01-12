@@ -1,4 +1,5 @@
 "use client";
+import { MapPin } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
@@ -7,7 +8,7 @@ interface Lead {
   title: string;
   image?: string;
   location_name: string;
-  postcode?:number;
+  postcode?: number;
   category_name: string;
   customer_name?: string;
   phone: number;
@@ -102,11 +103,15 @@ const LeadCard: React.FC<LeadCardProps> = ({
             </div>
           )}
           <div className="min-w-0">
-            <h3 className="text-gray-900 dark:text-gray-100 text-base font-semibold leading-tight line-clamp-1">
+            <h3 className="text-gray-900 dark:text-gray-100 text-base font-semibold leading-tight ">
               {lead.customer_name}
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
-              {lead.location_name} {lead.postcode}
+            <p className=" flex items-center p-1 gap-1 text-sm text-gray-500 dark:text-gray-400 ">
+            <MapPin className="w-3 h-3" />
+
+              <span>
+                {lead.postcode ? lead.postcode : lead.location_name}
+              </span>
             </p>
           </div>
         </div>
@@ -141,7 +146,7 @@ const LeadCard: React.FC<LeadCardProps> = ({
             {" "}
             Estimated Budget
           </span>
-          <span className="text-sm font-medium text-gray-800 dark:text-gray-100">
+          <span className="text-sm font-medium  text-gray-800 dark:text-gray-100 blur-xs">
             {getBudgetDisplay()}
           </span>
         </div>

@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import QuestionRenderer from "./QuestionRenderer";
 import { AnimatePresence, motion } from "motion/react";
-
 import CalendarInput from "../CalenderInput";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
@@ -68,6 +67,24 @@ export default function StepTwoQuestionsForm({
         return;
       }
     }
+
+    const value = getValues(`q_${currentQuestion.category_question_id}`);
+    const otherValue = getValues(`q_${currentQuestion.category_question_id}_other`);
+
+    if (value === "other") {
+      if (!otherValue || otherValue.trim() === "") {
+        toast.error("Please specify your answer in the text field");
+        return;
+      }
+    }
+
+    if (Array.isArray(value) && value.includes("other")) {
+      if (!otherValue || otherValue.trim() === "") {
+        toast.error("Please specify your answer in the text field");
+        return;
+      }
+    }
+
     if (currentIndex < questions.length - 1) setCurrentIndex((i) => i + 1);
     else setCurrentStep("budget");
   };
@@ -115,8 +132,17 @@ export default function StepTwoQuestionsForm({
         city_id: Number(selectedLocationId),
         title: selectedTitle,
         category_answers: questions.reduce((acc, q) => {
-          acc[q.category_question_id] =
-            data[`q_${q.category_question_id}`] ?? null;
+          const mainAnswer = data[`q_${q.category_question_id}`];
+          const otherAnswer = data[`q_${q.category_question_id}_other`];
+          
+          if (mainAnswer === "other" && otherAnswer) {
+            acc[q.category_question_id] = otherAnswer;
+          } else if (Array.isArray(mainAnswer) && mainAnswer.includes("other") && otherAnswer) {
+            const filtered = mainAnswer.filter((v: string) => v !== "other");
+            acc[q.category_question_id] = [...filtered, otherAnswer];
+          } else {
+            acc[q.category_question_id] = mainAnswer ?? null;
+          }
           return acc;
         }, {} as any),
         estimated_budget: Number(data.estimated_budget),
@@ -126,7 +152,7 @@ export default function StepTwoQuestionsForm({
       };
 
       const res = await axios.post("/api/leads", payload);
-
+                       
       if (res.data.error) {
         toast.error(res.data.error);
       } else {
@@ -145,17 +171,26 @@ export default function StepTwoQuestionsForm({
         city_id: Number(selectedLocationId),
         title: selectedTitle,
         category_answers: questions.reduce((acc, q) => {
-          acc[q.category_question_id] =
-            data[`q_${q.category_question_id}`] ?? null;
+          const mainAnswer = data[`q_${q.category_question_id}`];
+          const otherAnswer = data[`q_${q.category_question_id}_other`];
+          
+          if (mainAnswer === "other" && otherAnswer) {
+            acc[q.category_question_id] = otherAnswer;
+          } else if (Array.isArray(mainAnswer) && mainAnswer.includes("other") && otherAnswer) {
+            const filtered = mainAnswer.filter((v: string) => v !== "other");
+            acc[q.category_question_id] = [...filtered, otherAnswer];
+          } else {
+            acc[q.category_question_id] = mainAnswer ?? null;
+          }
           return acc;
         }, {} as any),
         estimated_budget: Number(data.estimated_budget),
-
         preferred_date_start: data.preferred_date_start,
         preferred_date_end: data.preferred_date_end,
         queries: data.queries,
       };
-      localStorage.setItem("pendingpayload", JSON.stringify(payload));
+      
+      sessionStorage.setItem("pendingpayload", JSON.stringify(payload));
 
       toast.warning(" Please Sign In or Sign Up to continue.");
       router.push("/signin");
@@ -181,28 +216,32 @@ export default function StepTwoQuestionsForm({
 
   if (currentStep === "questions") {
     return (
-      <form className=" flex flex-col gap-3">
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          Step {currentIndex + 1} of {questions.length}
-        </p>
+      <div className="flex flex-col h-full max-h-[calc(90vh-8rem)]">
+        <div className="flex-1 overflow-y-auto px-1">
+          <form className="flex flex-col gap-3">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Step {currentIndex + 1} of {questions.length}
+            </p>
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentQuestion?.category_question_id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <QuestionRenderer
-              q={currentQuestion}
-              control={control}
-              register={register}
-            />
-          </motion.div>
-        </AnimatePresence>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentQuestion?.category_question_id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <QuestionRenderer
+                  q={currentQuestion}
+                  control={control}
+                  register={register}
+                />
+              </motion.div>
+            </AnimatePresence>
+          </form>
+        </div>
 
-        <div className="flex justify-between pt-">
+        <div className="flex justify-between pt-4 border-t mt-4">
           <Button
             variant="outline"
             type="button"
@@ -215,177 +254,158 @@ export default function StepTwoQuestionsForm({
           <Button
             type="button"
             onClick={handleNextQuestion}
-            className="rounded-lg bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow hover:shadow-lg"
+            className="rounded-lg bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow hover:shadow-lg"
           >
             {currentIndex === questions.length - 1
               ? "Next: Budget & Dates"
               : "Next Question"}
           </Button>
         </div>
-      </form>
+      </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-        Budget & Preferred Dates
-      </h2>
+    <div className="flex flex-col h-full max-h-[calc(90vh-8rem)]">
+      <div className="flex-1 overflow-y-auto px-1">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            Budget & Preferred Dates
+          </h2>
 
-      <div className="flex flex-col sm:flex-row gap-4">
-      <div className="flex-1 flex flex-col">
-  <label className="text-gray-700 text-l  dark:text-gray-300 font-medium mb-2">
-    Do you have a budget in mind? *
-  </label>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1 flex flex-col">
+              <label className="text-gray-700 text-l dark:text-gray-300 font-medium mb-2">
+                Do you have a budget in mind? *
+              </label>
 
-  <RadioGroup
-    className="flex gap-6"
-    onValueChange={(value) => {
-      setValue("has_budget", value, { shouldValidate: true });
-      if (value === "no") {
-        setValue("estimated_budget", "");
-      }
-    }}
-  >
-   <div className="flex items-center space-x-2">
-      <RadioGroupItem value="yes" id="yes" />
-      <Label htmlFor="yes">Yes</Label>
-    </div>
+              <RadioGroup
+                className="flex gap-6"
+                onValueChange={(value) => {
+                  setValue("has_budget", value, { shouldValidate: true });
+                  if (value === "no") {
+                    setValue("estimated_budget", "");
+                  }
+                }}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="yes" id="yes" />
+                  <Label htmlFor="yes">Yes</Label>
+                </div>
 
-    <div className="flex items-center space-x-2">
-      <RadioGroupItem value="no" id="no" />
-      <Label htmlFor="no">
-        No, I’d like to discuss with a professional
-      </Label>
-    </div>
-  </RadioGroup>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="no" id="no" />
+                  <Label htmlFor="no">
+                    No, I'd like to discuss with a professional
+                  </Label>
+                </div>
+              </RadioGroup>
 
-  {errors.has_budget && (
-    <span className="text-red-500 text-sm mt-1">
-      Please select an option
-    </span>
-  )}
+              {errors.has_budget && (
+                <span className="text-red-500 text-sm mt-1">
+                  Please select an option
+                </span>
+              )}
 
-  {watch("has_budget") === "yes" && (
-    <div className="mt-4">
-      <Label className="mb-1 block">
-        Estimated Budget *
-      </Label>
+              {watch("has_budget") === "yes" && (
+                <div className="mt-4">
+                  <Label className="mb-1 block">Estimated Budget *</Label>
 
-      <Input
-        type="text"
-        placeholder="A$ Estimated Budget"
-        onInput={(e) => {
-          e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, "");
-        }}
-        {...register("estimated_budget", {
-          required: "Estimated budget is required",
-        })}
-      />
+                  <Input
+                    type="text"
+                    placeholder="A$ Estimated Budget"
+                    onInput={(e) => {
+                      e.currentTarget.value = e.currentTarget.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                    }}
+                    {...register("estimated_budget", {
+                      required: "Estimated budget is required",
+                    })}
+                  />
 
-      {errors.estimated_budget && (
-        <span className="text-red-500 text-sm mt-1">
-          {errors.estimated_budget.message as any}
-        </span>
-      )}
-    </div>
-  )}
+                  {errors.estimated_budget && (
+                    <span className="text-red-500 text-sm mt-1">
+                      {errors.estimated_budget.message as any}
+                    </span>
+                  )}
+                </div>
+              )}
 
-  {watch("has_budget") === "no" && (
-    <p className="mt-4 text-xs text-gray-600 dark:text-gray-400">
-      No worries! Our professional will help you plan the right budget.
-    </p>
-  )}
-</div>
+              {watch("has_budget") === "no" && (
+                <p className="mt-4 text-xs text-gray-600 dark:text-gray-400">
+                  No worries! Our professional will help you plan the right
+                  budget.
+                </p>
+              )}
+            </div>
+          </div>
 
-
-        {/* <div className="flex-1 flex flex-col">
-          <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
-             Budget Max *
-          </label>
-          <input
-            type="number"
-            onKeyDown={(e) => {
-              if (e.key === "-" || e.key === "Minus") e.preventDefault();
-            }}
-            {...register("budget_max", { required: true })}
-            placeholder="A$ Maximum"
-            className="border px-3 py-2 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
-          />
-          {errors.budget_max && (
-            <span className="text-red-500 text-sm mt-1">
-              Maximum budget is required
-            </span>
-          )}
-        </div> */}
-      </div>
-
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 flex flex-col">
-          <Controller
-            name="preferred_date_start"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <CalendarInput
-                label="Preferred Start Date *"
-                value={field.value ? new Date(field.value) : undefined}
-                onChange={(d) => field.onChange(d)}
-                minDate={new Date()}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1 flex flex-col">
+              <Controller
+                name="preferred_date_start"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <CalendarInput
+                    label="Preferred Start Date *"
+                    value={field.value ? new Date(field.value) : undefined}
+                    onChange={(d) => field.onChange(d)}
+                    minDate={new Date()}
+                  />
+                )}
               />
-            )}
-          />
 
-          {errors.preferred_date_start && (
-            <span className="text-red-500 text-sm mt-1">
-              Start date is required
-            </span>
-          )}
-        </div>
+              {errors.preferred_date_start && (
+                <span className="text-red-500 text-sm mt-1">
+                  Start date is required
+                </span>
+              )}
+            </div>
 
-        <div className="flex-1 flex flex-col">
-          <Controller
-            name="preferred_date_end"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => {
-              const start = getValues("preferred_date_start");
+            <div className="flex-1 flex flex-col">
+              <Controller
+                name="preferred_date_end"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => {
+                  const start = getValues("preferred_date_start");
 
-              return (
-                <CalendarInput
-                  label="Preferred End Date *"
-                  value={field.value ? new Date(field.value) : undefined}
-                  onChange={(d) => field.onChange(d)}
-                  minDate={start ? new Date(start) : new Date()}
-                />
-              );
-            }}
-          />
+                  return (
+                    <CalendarInput
+                      label="Preferred End Date *"
+                      value={field.value ? new Date(field.value) : undefined}
+                      onChange={(d) => field.onChange(d)}
+                      minDate={start ? new Date(start) : new Date()}
+                    />
+                  );
+                }}
+              />
 
-          {errors.preferred_date_end && (
-            <span className="text-red-500 text-sm mt-1">
-              End date is required
-            </span>
-          )}
-        </div>
-      </div>
-      <div className="flex-1 flex flex-col">
-        <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
-          Any Other Queries ?
-        </label>
-        <Textarea
-          {...register("queries", { required: true })}
-          placeholder="Type your Queries"
-          className="border px-3 py-6 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
-        />
-        {/* {errors.budget_min && (
-              <span className="text-red-500 text-sm mt-1">
-                Estimated budget is required
-              </span>
-            )} */}
+              {errors.preferred_date_end && (
+                <span className="text-red-500 text-sm mt-1">
+                  End date is required
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="flex-1 flex flex-col">
+            <label className="text-gray-700 dark:text-gray-300 font-medium mb-1">
+              Any Other Queries ?
+            </label>
+            <Textarea
+              {...register("queries")}
+              placeholder="Type your Queries"
+              className="border px-3 py-6 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700"
+            />
+          </div>
+        </form>
       </div>
 
-      <div className="flex justify-between pt-2">
+      <div className="flex justify-between pt-4 border-t mt-4">
         <Button
           variant="outline"
           type="button"
@@ -398,7 +418,8 @@ export default function StepTwoQuestionsForm({
         <Button
           type="submit"
           disabled={loading}
-          className={`rounded-lg bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow hover:shadow-lg ${
+          onClick={handleSubmit(onSubmit)}
+          className={`rounded-lg bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow hover:shadow-lg ${
             loading ? "opacity-70 cursor-not-allowed" : ""
           }`}
         >
@@ -411,6 +432,6 @@ export default function StepTwoQuestionsForm({
           )}
         </Button>
       </div>
-    </form>
+    </div>
   );
 }

@@ -188,7 +188,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       body: `Congratulations! Your Posted ${lead.category_name} Lead Got Response By ${session?.user?.name}`,
     });
 
-    // Only prepare chat if user has active subscription
     if (hasActiveSubscription) {
       toast.info("Preparing your chat...");
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -254,18 +253,18 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
         <div className="bg-[#3C7DED] px-6 py-8 text-white">
           <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-xl border-2 border-white/30">
+            <div className="flex items-center gap-4 ">
+              <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-xl border-2  border-white/30 ">
                 {getInitials(lead.customer_name || "N/A")}
               </div>
               <div>
                 <div className="text-2xl font-bold mb-1">
                   {lead.customer_name}
                 </div>
-                <div className="flex items-center gap-2 text-blue-100">
+                <div className="flex items-center gap-2 text-blue-100 line-clamp-1">
                   <MapPin className="w-4 h-4" />
                   <span className="text-sm">
-                    {lead.location_name} {lead.postcode}
+                    {lead.postcode ? lead.postcode : lead.location_name}
                   </span>
                 </div>
               </div>
@@ -362,7 +361,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
           </div>
 
-          {/* Subscription warning for chat - only show if purchased but no subscription */}
           {leadStatus.purchased && !hasActiveSubscription && !subscriptionLoading && (
             <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-4 mb-6">
               <div className="flex items-start gap-3">
