@@ -1,33 +1,33 @@
 import { resend } from "@/lib/resend";
-import AppEmail from "../VerificationEmail";
-
-type EmailType = "welcome" | "task-posted" | "verification";
+import AppEmail, { EmailType } from "../VerificationEmail";
 
 interface SendEmailProps {
   email: string;
-  username?: string;
   type: EmailType;
+  username?: string;
   verifyCode?: string;
   taskTitle?: string;
+  category?:string;
   taskLocation?: string;
 }
 
 export async function sendEmail({
   email,
-  username,
   type,
+  username,
   verifyCode,
   taskTitle,
   taskLocation,
+  
 }: SendEmailProps) {
   try {
-    if (!email) {
-      throw new Error("Email is required");
-    }
+    if (!email) return;
 
     const subjectMap: Record<EmailType, string> = {
       welcome: "Welcome to Taskoria 🎉",
-      "task-posted": "Your task has been posted",
+      "task-posted": "Your task has been posted 🎉",
+      "task-posted-no-budget": "⚠️ Task Posted Without Budget",
+      "provider-new-task": "🚨 New task available in your category",
       verification: "Verify your email address",
     };
 
@@ -42,18 +42,9 @@ export async function sendEmail({
         taskTitle,
         taskLocation,
       }),
-      replyTo:"support@taskoria.com"
+      replyTo: "support@taskoria.com",
     });
-
-    return {
-      success: true,
-      message: "Email sent successfully",
-    };
-  } catch (error) {
-    console.error("Email send error:", error);
-    return {
-      success: false,
-      message: "Failed to send email",
-    };
+  } catch (err) {
+    console.error("EMAIL ERROR:", err);
   }
 }

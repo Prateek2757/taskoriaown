@@ -161,7 +161,7 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
         value={query}
         onChange={(e) => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Enter your postcode or town"
+        placeholder="Enter your postcode or suburbs"
         className="w-full border border-gray-300 rounded-xl pl-9 focus:outline-none focus:ring-2 focus:ring-primary text-sm shadow-sm"
         onFocus={() =>
           query.length >= 3 && results.length > 0 && setShowDropdown(true)

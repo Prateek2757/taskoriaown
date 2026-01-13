@@ -86,6 +86,18 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     [userId]
   );
 
+  const formatAnswerValue = (value?: string) => {
+    if (!value) return "Not answered yet";
+  
+    // Detect ISO date string
+    const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/;
+  
+    if (isoDateRegex.test(value)) {
+      return value.split("T")[0]; // YYYY-MM-DD
+    }
+  
+    return value;
+  };
   const fetchResponses = useCallback(async () => {
     if (!taskId) return;
     setLoadingResponses(true);
@@ -241,7 +253,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   const responseRate = leadStatus.count ?? 0;
   const customerFirstName = (lead.customer_name ?? "Customer").split(" ")[0];
 
-  // Chat button is disabled if not purchased, no subscription, or navigating
   const isChatButtonDisabled = 
     !leadStatus.purchased || 
     !hasActiveSubscription || 
@@ -513,8 +524,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                       className="text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0"
                     />
                     <p className="text-sm text-gray-700 dark:text-gray-300 italic">
-                      {ans.answer?.trim() ? ans.answer : "Not answered yet"}
-                    </p>
+  {formatAnswerValue(ans.answer)}
+</p>
                   </div>
                 </div>
               ))}

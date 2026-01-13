@@ -70,10 +70,20 @@ export async function POST(req: Request) {
       `;
 
       for (const [questionId, answer] of Object.entries(category_answers)) {
+        let answerToStore;
+        
+        if (Array.isArray(answer)) {
+          answerToStore = JSON.stringify(answer);
+        } else if (answer === null || answer === undefined) {
+          answerToStore = null;
+        } else {
+          answerToStore = String(answer);
+        }
+
         await client.query(insertAnswerQuery, [
           taskId,
           questionId,
-          String(answer),
+          answerToStore,
         ]);
       }
     }
@@ -84,14 +94,59 @@ export async function POST(req: Request) {
     );
     const categoryname = categorynameres.rows[0].name;
 
+    const adminemailres = await client.query(
+      `SELECT email from users where role ='admin'`
+    );
+    const adminEmails = adminemailres.rows.map(r=>r.email);
+    console.log(adminEmails);
+
     await client.query("COMMIT");
+      
+    const hasBudget =
+      typeof estimated_budget === "number" &&
+      !isNaN(estimated_budget) &&
+      estimated_budget > 0;
+
+    if (!hasBudget) {
+      for (const adminEmail of adminEmails) {
+        await sendEmail({
+          username: "Admin",
+          email: adminEmail,
+          type: "task-posted-no-budget",
+          taskTitle: categoryname,
+        });
+      }
+    }
+
     await sendEmail({
       username: name,
       email,
       type: "task-posted",
       taskTitle: categoryname,
     });
-
+    const providersRes = await client.query(
+      `
+      SELECT u.email, up.display_name
+      FROM user_categories uc
+      JOIN users u ON u.user_id = uc.user_id
+      LEFT JOIN user_profiles up ON up.user_id = u.user_id
+      WHERE uc.category_id = $1
+        
+      `,
+      [category_id]
+    );
+    await Promise.all(
+      providersRes.rows.map((p) =>
+        sendEmail({
+          email: p.email,
+          username: p.display_name || "Provider",
+          type: "provider-new-task",
+          taskTitle: title,
+          category: categoryname,
+          
+        })
+      )
+    );
     return NextResponse.json({ success: true, task: taskResult.rows[0] });
   } catch (err: any) {
     await client.query("ROLLBACK");

@@ -5,7 +5,6 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -83,7 +82,6 @@ export default function AdminBudgetManager() {
       if (response.data.success) {
         toast.success('Budget set successfully! Task is now visible to professionals.');
         
-        // Remove the budget value for this task
         setBudgetValues(prev => {
           const newValues = { ...prev };
           delete newValues[taskId];

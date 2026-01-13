@@ -10,6 +10,7 @@ declare module "next-auth" {
     name: string;
     email?: string;
     image?: string;
+    adminrole?:string;
     role: string;
     status?: string;
     serviceCategory: string;
@@ -27,6 +28,7 @@ declare module "next-auth/jwt" {
     name: string;
     email?: string;
     role: string;
+    adminrole?:string;
     image?: string;
     status?: string;
     serviceCategory: string;
@@ -56,6 +58,7 @@ export const authOptions: NextAuthOptions = {
           SELECT 
             u.user_id,
             u.email,
+            u.role AS adminrole,
             u.password_hash,
             ps.status,
             up.display_name,
@@ -76,7 +79,6 @@ export const authOptions: NextAuthOptions = {
         }
 
         const user = result.rows[0];
-        console.log(user);
 
         const valid = await bcrypt.compare(password, user.password_hash);
         if (!valid) {
@@ -85,6 +87,7 @@ export const authOptions: NextAuthOptions = {
 
         return {
           id: user.user_id.toString(),
+          adminrole:user.adminrole,
           email: user.email,
           name: user.display_name || "",
           status: user.status,
@@ -109,6 +112,7 @@ export const authOptions: NextAuthOptions = {
 
         const result = await pool.query(
           `SELECT u.user_id,
+          u.role AS adminrole,
           ps.status,
           COALESCE(r.role_name, 'customer') AS role,
           up.profile_image_url AS image
@@ -125,9 +129,9 @@ export const authOptions: NextAuthOptions = {
           return "/signin?error=not_registered";
         }
         const existingUser = result.rows[0];
-        console.log(existingUser);
 
         user.id = existingUser.user_id.toString();
+        user.adminrole = existingUser.adminrole;
         user.role = existingUser.role;
         user.status = existingUser.status;
         user.image = existingUser.image;
@@ -142,6 +146,7 @@ export const authOptions: NextAuthOptions = {
         token.name = user.name || "";
         token.email = user.email || "";
         token.role = user.role;
+        token.adminrole=user.adminrole;
         token.image = user.image;
         token.status = user.status;
         token.serviceCategory = user.serviceCategory;
@@ -163,6 +168,7 @@ export const authOptions: NextAuthOptions = {
         session.user.email = token.email;
         session.user.image = token.image;
         session.user.role = token.role;
+        session.user.adminrole = token.adminrole;
         session.user.serviceCategory = token.serviceCategory;
         session.user.isVerified = token.isVerified;
       }

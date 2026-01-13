@@ -15,9 +15,7 @@ import {
   LogOut,
   Home,
   HandPlatter,
-  Settings,
   Binoculars,
-  Bell,
   Star,
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
@@ -124,6 +122,7 @@ export default function ModernNavbar() {
       newView === "provider" ? "/provider/dashboard" : "/customer/dashboard"
     );
   };
+  console.log(session?.user.adminrole, "adinsdnoinas");
 
   const getCurrentLinks = () => {
     if (!session) return navLinks.public;
@@ -220,6 +219,20 @@ export default function ModernNavbar() {
           >
             Taskoria Plans & Pricing{" "}
           </Link>
+          {session?.user.adminrole === "admin" ? (
+            <Link
+              href="/adminbudgetmanager"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsProfileOpen(false);
+              }}
+              className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+            >
+              Admin Menu
+            </Link>
+          ) : (
+            ""
+          )}
 
           <Link
             href="/settings/profile/my-profile"
@@ -349,7 +362,7 @@ export default function ModernNavbar() {
                           <User className="w-6 h-6 text-blue-600 dark:text-blue-300" />
                         )}
                       </div>
-                      
+
                       {session?.user.status === "active" && (
                         <div
                           className="absolute -bottom-1 -right-1 w-5 h-5 py-1 rounded-full
@@ -541,6 +554,18 @@ export default function ModernNavbar() {
                     </Link>
                   );
                 })}
+                {session?.user.adminrole === "admin" ? (
+                  <Link
+                    href="/adminbudgetmanager"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
+                  >
+                    <LayoutDashboard className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    Adminmenu
+                  </Link>
+                ) : (
+                  ""
+                )}
 
                 {session?.user?.role === "provider" && (
                   <button
@@ -562,15 +587,6 @@ export default function ModernNavbar() {
                 )}
 
                 {/* <Link
-                  href="/settings"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
-                >
-                  <Settings className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                  Settings
-                </Link> */}
-
-                {/* <Link
                   href="/notifications"
                   onClick={() => setIsMenuOpen(false)}
                   className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
@@ -583,16 +599,18 @@ export default function ModernNavbar() {
                 </Link> */}
 
                 {session ? (
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setIsMenuOpen(false);
-                    }}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 font-medium"
-                  >
-                    <LogOut className="w-5 h-5" />
-                    Sign Out
-                  </button>
+                  <>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 font-medium"
+                    >
+                      <LogOut className="w-5 h-5" />
+                      Sign Out
+                    </button>
+                  </>
                 ) : (
                   <>
                     <Button

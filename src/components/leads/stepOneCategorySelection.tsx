@@ -152,14 +152,14 @@ export default function StepOneCategoryForm({
       className="space-y-8
              "
     >
-      <div className="space-y-2 text-center">
+      {/* <div className="space-y-2 text-center">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
           What kind of service do you need?
         </h2>
         <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
           Start typing to find your category.
         </p>
-      </div>
+      </div> */}
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-10 gap-3 text-gray-500 dark:text-gray-400">

@@ -141,7 +141,7 @@ const LeadCard: React.FC<LeadCardProps> = ({
       </div>
 
       <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
-        <div className="flex flex-col">
+        {/* <div className="flex flex-col">
           <span className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
             {" "}
             Estimated Budget
@@ -149,7 +149,7 @@ const LeadCard: React.FC<LeadCardProps> = ({
           <span className="text-sm font-medium  text-gray-800 dark:text-gray-100 blur-xs">
             {getBudgetDisplay()}
           </span>
-        </div>
+        </div> */}
 
         <div className="flex items-center mt-3 gap-2">
           <div className="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 font-medium">

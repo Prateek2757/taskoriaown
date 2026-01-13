@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,19 +15,6 @@ export default function QuestionRenderer({ q, control, register }: any) {
   const otherFieldName = `q_${q.category_question_id}_other`;
   
   const [showOtherTextarea, setShowOtherTextarea] = useState(false);
-  const otherTextareaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    if (showOtherTextarea && otherTextareaRef.current) {
-      setTimeout(() => {
-        otherTextareaRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-        otherTextareaRef.current?.focus();
-      }, 100);
-    }
-  }, [showOtherTextarea]);
 
   const isMultiCheckbox = q.field_type === "checkbox" && Array.isArray(q.options);
 
@@ -152,9 +139,9 @@ export default function QuestionRenderer({ q, control, register }: any) {
                     >
                       <Textarea
                         {...register(otherFieldName)}
-                        ref={otherTextareaRef}
                         placeholder="Please specify..."
                         className="border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 min-h-[80px]"
+                        autoFocus
                       />
                     </motion.div>
                   )}
@@ -241,9 +228,9 @@ export default function QuestionRenderer({ q, control, register }: any) {
                   >
                     <Textarea
                       {...register(otherFieldName)}
-                      ref={otherTextareaRef}
                       placeholder="Please specify..."
                       className="border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 min-h-[80px]"
+                      autoFocus
                     />
                   </motion.div>
                 )}

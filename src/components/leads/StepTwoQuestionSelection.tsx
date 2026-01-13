@@ -59,17 +59,23 @@ export default function StepTwoQuestionsForm({
 
   const currentQuestion = questions[currentIndex];
 
-  const handleNextQuestion = () => {
-    if (currentQuestion?.is_required) {
-      const value = getValues(`q_${currentQuestion.category_question_id}`);
-      if (!value || (typeof value === "string" && value.trim() === "")) {
-        toast.error("Please answer the question");
-        return;
-      }
+  const handleNextQuestion = (e?: React.MouseEvent | React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
     }
 
     const value = getValues(`q_${currentQuestion.category_question_id}`);
     const otherValue = getValues(`q_${currentQuestion.category_question_id}_other`);
+
+ 
+
+    if (currentQuestion?.is_required) {
+      if (!value || (typeof value === "string" && value.trim() === "") || (Array.isArray(value) && value.length === 0)) {
+        toast.error("Please answer the question");
+        return;
+      }
+    }
 
     if (value === "other") {
       if (!otherValue || otherValue.trim() === "") {
@@ -135,20 +141,27 @@ export default function StepTwoQuestionsForm({
           const mainAnswer = data[`q_${q.category_question_id}`];
           const otherAnswer = data[`q_${q.category_question_id}_other`];
           
+          // Handle single-select "other" option
           if (mainAnswer === "other" && otherAnswer) {
-            acc[q.category_question_id] = otherAnswer;
-          } else if (Array.isArray(mainAnswer) && mainAnswer.includes("other") && otherAnswer) {
+            acc[q.category_question_id] = otherAnswer.trim();
+          } 
+          else if (Array.isArray(mainAnswer) && mainAnswer.includes("other")) {
             const filtered = mainAnswer.filter((v: string) => v !== "other");
-            acc[q.category_question_id] = [...filtered, otherAnswer];
-          } else {
+            if (otherAnswer && otherAnswer.trim()) {
+              acc[q.category_question_id] = [...filtered, otherAnswer.trim()];
+            } else {
+              acc[q.category_question_id] = filtered.length > 0 ? filtered : null;
+            }
+          } 
+          else {
             acc[q.category_question_id] = mainAnswer ?? null;
           }
           return acc;
         }, {} as any),
-        estimated_budget: Number(data.estimated_budget),
+        estimated_budget: data.has_budget === "yes" ? Number(data.estimated_budget) : 0,
         preferred_date_start: data.preferred_date_start,
         preferred_date_end: data.preferred_date_end,
-        queries: data.queries,
+        queries: data.queries || "",
       };
 
       const res = await axios.post("/api/leads", payload);
@@ -175,19 +188,25 @@ export default function StepTwoQuestionsForm({
           const otherAnswer = data[`q_${q.category_question_id}_other`];
           
           if (mainAnswer === "other" && otherAnswer) {
-            acc[q.category_question_id] = otherAnswer;
-          } else if (Array.isArray(mainAnswer) && mainAnswer.includes("other") && otherAnswer) {
+            acc[q.category_question_id] = otherAnswer.trim();
+          } 
+          else if (Array.isArray(mainAnswer) && mainAnswer.includes("other")) {
             const filtered = mainAnswer.filter((v: string) => v !== "other");
-            acc[q.category_question_id] = [...filtered, otherAnswer];
-          } else {
+            if (otherAnswer && otherAnswer.trim()) {
+              acc[q.category_question_id] = [...filtered, otherAnswer.trim()];
+            } else {
+              acc[q.category_question_id] = filtered.length > 0 ? filtered : null;
+            }
+          } 
+          else {
             acc[q.category_question_id] = mainAnswer ?? null;
           }
           return acc;
         }, {} as any),
-        estimated_budget: Number(data.estimated_budget),
+        estimated_budget: data.has_budget === "yes" ? Number(data.estimated_budget) : 0,
         preferred_date_start: data.preferred_date_start,
         preferred_date_end: data.preferred_date_end,
-        queries: data.queries,
+        queries: data.queries || "",
       };
       
       sessionStorage.setItem("pendingpayload", JSON.stringify(payload));
@@ -218,7 +237,7 @@ export default function StepTwoQuestionsForm({
     return (
       <div className="flex flex-col h-full max-h-[calc(90vh-8rem)]">
         <div className="flex-1 overflow-y-auto px-1">
-          <form className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3">
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Step {currentIndex + 1} of {questions.length}
             </p>
@@ -238,7 +257,7 @@ export default function StepTwoQuestionsForm({
                 />
               </motion.div>
             </AnimatePresence>
-          </form>
+          </div>
         </div>
 
         <div className="flex justify-between pt-4 border-t mt-4">
@@ -253,7 +272,7 @@ export default function StepTwoQuestionsForm({
 
           <Button
             type="button"
-            onClick={handleNextQuestion}
+            onClick={(e) => handleNextQuestion(e)}
             className="rounded-lg bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow hover:shadow-lg"
           >
             {currentIndex === questions.length - 1
