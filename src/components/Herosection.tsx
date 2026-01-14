@@ -179,6 +179,10 @@ export default function HeroSection() {
             </div>
           </div>
         </div>
+        <div className="z-0">
+
+        </div>
+
         <ScrollPopularSection />
 
         <div className="mt-10 hidden lg:block relative overflow-hidden bg-gradient-to-t from-zinc-100 to-transparent  dark:from-black">

@@ -139,7 +139,7 @@ export default function CategorySearch({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute z-50 border mt-1 w-full rounded-lg shadow-lg 
+            className="absolute z-auto border mt-1 w-full rounded-lg shadow-lg 
              max-h-auto overflow-y-auto pointer-events-auto backdrop-blur-xl bg-[rgba(255,255,255,.2)] touch-pan-y overscroll-auto "
           >
             {filtered.map((cat) => (

@@ -84,7 +84,7 @@ function ScrollPopularSection() {
                 }
                 className="relative w-[320px] flex-shrink-0 bg-white dark:bg-gray-800 rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-[140px] cursor-pointer group"
               >
-                <div className="absolute left-0 top-0 bottom-0 w-[50%] p-4 flex flex-col z-10">
+                <div className="absolute left-0 top-0 bottom-0 w-[50%] p-4 flex flex-col ">
                   <h3 className="text-lg text-left font-semibold text-gray-900 leading-tight dark:text-white mb-2">
                     {category.name}
                   </h3>

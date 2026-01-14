@@ -135,18 +135,20 @@ export async function POST(req: Request) {
       `,
       [category_id]
     );
-    await Promise.all(
-      providersRes.rows.map((p) =>
-        sendEmail({
-          email: p.email,
-          username: p.display_name || "Provider",
-          type: "provider-new-task",
-          taskTitle: title,
-          category: categoryname,
-          
-        })
-      )
-    );
+    const delay = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+    
+    for (const p of providersRes.rows) {
+      await sendEmail({
+        email: p.email,
+        username: p.display_name || "Provider",
+        type: "provider-new-task",
+        taskTitle: title,
+        taskLocation: categoryname,
+      });
+    
+      await delay(600);
+    }
     return NextResponse.json({ success: true, task: taskResult.rows[0] });
   } catch (err: any) {
     await client.query("ROLLBACK");
