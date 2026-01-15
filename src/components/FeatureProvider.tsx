@@ -115,10 +115,10 @@ export const FeatureProvider = () => {
                           <div className="flex flex-col items-center hover:opacity-90 transition-opacity">
                             <div>
                               <Image
-                                src="/taskoria-logo.png"
+                                src="/taskorialogonew.png"
                                 alt="logo taskoria"
                                 height={0}
-                                width={25}
+                                width={35}
                               />
                             </div>
                             <span className="text-sm font-bold bg-[#3C7DED] bg-clip-text text-transparent">

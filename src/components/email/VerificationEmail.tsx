@@ -107,7 +107,7 @@ const AppEmail = (props: AppEmailProps) => {
           <Container className="max-w-[500px] bg-white p-6 rounded-xl shadow">
             <Section className="text-center mb-6">
               <Img
-                src="https://taskoria.com/taskoria-logo.png"
+                src="https://taskoria.com/taskorialogonew.png"
                 width="48"
                 height="48"
                 alt="Taskoria Logo"

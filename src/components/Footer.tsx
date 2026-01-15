@@ -74,10 +74,10 @@ const Footer = () => {
           <div className="lg:w-1/3">
             <Link href="/" className="flex items-center mb-4 hover:opacity-90">
               <Image
-                src="/taskoria-logo.png"
+                src="/taskorialogonew.png"
                 alt="Taskoria Logo"
-                width={25}
-                height={30}
+                width={35}
+                height={35}
                 className="rounded-md"
               />
               <span className="ml- text-3xl font-bold bg-[#3C7DED] bg-clip-text text-transparent">
@@ -180,7 +180,7 @@ const Footer = () => {
       <Link href="/privacy-policy" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
         Privacy Policy
       </Link>
-      <a href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Press</a>
+      <a href="/carrers" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Carrers</a>
       <a  href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Contact</a>
     </div>
   </div>

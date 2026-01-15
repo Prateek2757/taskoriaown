@@ -286,10 +286,10 @@ export default function ModernNavbar() {
             className="flex items-center hover:opacity-90 transition-opacity"
           >
             <Image
-              src="/taskoria-logo.png"
+              src="/taskorialogonew.png"
               alt="taskorialogo"
-              height={31}
-              width={18}
+              height={41}
+              width={28}
             />
 
             <span className="text-2xl font-bold bg-[#3C7DED]  bg-clip-text text-transparent ">
@@ -452,7 +452,7 @@ export default function ModernNavbar() {
                   >
                     <div>
                       <Image
-                        src="/taskoria-logo.png"
+                        src="/taskorialogonew.png"
                         alt="logo taskoria"
                         height={0}
                         width={23}

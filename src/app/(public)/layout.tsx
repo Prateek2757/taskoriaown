@@ -100,7 +100,7 @@ export default function RootLayout({
         <link
           rel="apple-touch-icon"
           sizes="140x140"
-          href="/taskoria-logo.png"
+          href="/taskorialogonew.png"
         />
       </head>
       <AuthProvider>
