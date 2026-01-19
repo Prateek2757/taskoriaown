@@ -81,7 +81,7 @@ export default function ChatWindow({
       const msg: Message = payload.payload?.message;
       if (!msg?.id) return;
 
-      console.log("💬 ChatWindow received broadcast:", msg);
+      // console.log("💬 ChatWindow received broadcast:", msg);
 
       if (msg.user_id !== me.id) {
         setMessages((prev) => sortMessages(uniqueMessages([...prev, msg])));
@@ -105,7 +105,7 @@ export default function ChatWindow({
 
     chan.subscribe(async (status) => {
       if (status === "SUBSCRIBED") {
-        console.log(`✅ ChatWindow subscribed to conversation:${conversationId}`);
+        // console.log(`✅ ChatWindow subscribed to conversation:${conversationId}`);
         channelRef.current = chan;
         await chan.track({
           user_id: me.id,
@@ -163,7 +163,7 @@ export default function ChatWindow({
 
       const savedMessage = res.data.message;
 
-      console.log("📤 Message saved to DB:", savedMessage);
+      // console.log("📤 Message saved to DB:", savedMessage);
 
       setMessages((prev) =>
         prev.map((m) =>
@@ -180,13 +180,13 @@ export default function ChatWindow({
           payload: { message: savedMessage },
         };
 
-        console.log("📡 Broadcasting to conversation channel");
+        // console.log("📡 Broadcasting to conversation channel");
         broadcastPromises.push(channelRef.current.send(broadcastPayload));
       }
 
       const sidebarChannelName = `sidebar:${conversationId}`;
-      console.log(`📡 Broadcasting to ${sidebarChannelName}`);
-      
+      // console.log(`📡 Broadcasting to ${sidebarChannelName}`);
+
       const sidebarChannel = supabaseBrowser.channel(sidebarChannelName, {
         config: {
           broadcast: { self: true, ack: true },
@@ -194,7 +194,7 @@ export default function ChatWindow({
       });
 
       await sidebarChannel.subscribe();
-      
+
       const sidebarBroadcast = sidebarChannel.send({
         type: "broadcast",
         event: "message",
@@ -205,7 +205,7 @@ export default function ChatWindow({
 
       // Wait for both broadcasts
       const results = await Promise.all(broadcastPromises);
-      console.log("✅ Broadcast results:", results);
+      // console.log("✅ Broadcast results:", results);
 
       // Clean up sidebar channel after short delay
       setTimeout(() => {

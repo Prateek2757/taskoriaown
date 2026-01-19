@@ -1,6 +1,6 @@
 "use client";
 
-import {  useState } from "react";
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { motion } from "motion/react";
 import { Loader2 } from "lucide-react";
@@ -14,7 +14,7 @@ export default function SignInPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
- 
+
   const { joinAsProvider, loading: joinLoading } = useJoinAsProvider();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -24,14 +24,12 @@ export default function SignInPage() {
 
     const res = await signIn("credentials", {
       redirect: false,
-      email:email.trim().toLowerCase(),
+      email: email.trim().toLowerCase(),
       password,
     });
 
     setLoading(false);
     if (res?.error) setMessage(res.error);
-
-
 
     const savedLead = localStorage.getItem("pendingpayload");
     if (savedLead) {
@@ -40,23 +38,20 @@ export default function SignInPage() {
 
         const submitRes = await axios.post("/api/leads", payload);
         if (!submitRes.data.error) {
-          localStorage.removeItem("pendingpayload")
-          localStorage.setItem("viewMode" , "customer")
-          window.dispatchEvent(new Event("viewModeChanged"))
+          localStorage.removeItem("pendingpayload");
+          localStorage.setItem("viewMode", "customer");
+          window.dispatchEvent(new Event("viewModeChanged"));
         }
-        setMessage(" Request Submit Successful! Redirecting...")
-        setTimeout(() => router.push("/customer/dashboard"))
-       return;
+        setMessage(" Request Submit Successful! Redirecting...");
+        setTimeout(() => router.push("/customer/dashboard"));
+        return;
       } catch (error) {
-        console.error("Auto Submit Failed", error)
+        console.error("Auto Submit Failed", error);
       }
     }
 
-
     setMessage("Login Successful! Redirecting...");
     setTimeout(() => router.push("/provider/dashboard"));
-
-
   };
 
   return (
@@ -120,10 +115,11 @@ export default function SignInPage() {
               whileTap={{ scale: 0.97 }}
               disabled={loading}
               type="submit"
-              className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${loading
+              className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
+                loading
                   ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
                   : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
-                }`}
+              }`}
             >
               {loading ? (
                 <>
@@ -140,10 +136,11 @@ export default function SignInPage() {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className={`text-center text-sm font-medium ${message.includes("Successful")
+              className={`text-center text-sm font-medium ${
+                message.includes("Successful")
                   ? "text-cyan-500"
                   : "text-red-500"
-                }`}
+              }`}
             >
               {message}
             </motion.p>
@@ -156,22 +153,29 @@ export default function SignInPage() {
             </span>
             <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
           </div>
-<button
-  onClick={() => signIn("google", { callbackUrl: "/provider/dashboard" })}
-  className="mt-2 w-full flex items-center justify-center p-3 dark:text-gray-300 dark:bg-black rounded-xl
+          <button
+            onClick={() =>
+              signIn("google", { callbackUrl: "/provider/dashboard" })
+            }
+            className="mt-2 w-full flex items-center justify-center p-3 dark:text-gray-300 dark:bg-black rounded-xl
   bg-white border border-gray-500 shadow-sm hover:bg-gray-100"
->
-  <img src="/images/googleicon.svg" alt="siginwith google" className="w-5 h-5 mr-2" />
-  Sign in with Google
-</button>
+          >
+            <img
+              src="/images/googleicon.svg"
+              alt="siginwith google"
+              className="w-5 h-5 mr-2"
+            />
+            Sign in with Google
+          </button>
           <motion.button
             whileTap={{ scale: 0.97 }}
             disabled={joinLoading}
             onClick={joinAsProvider}
-            className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${joinLoading
+            className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
+              joinLoading
                 ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
                 : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
-              }`}
+            }`}
           >
             {joinLoading ? (
               <>

@@ -32,10 +32,10 @@ export async function POST(req: Request) {
       lon,
     } = body;
 
-    const finalState = state ===""? territory:state || null;
+    const finalState = state === "" ? territory : state || null;
 
     const finalCity =
-      city || territory || municipality ||  display_name?.split(",")[0] ;
+      city || territory || municipality || display_name?.split(",")[0];
 
     if (!country || !finalCity || !lat || !lon) {
       return NextResponse.json(
@@ -81,11 +81,11 @@ export async function POST(req: Request) {
         (
           await client.query(
             `SELECT state_id FROM states WHERE name = $1 AND country_id = $2`,
-            [state===""?territory : state, countryId]
+            [state === "" ? territory : state, countryId]
           )
         ).rows[0]?.state_id;
     }
-console.log(stateId,"srareid");
+    // console.log(stateId,"srareid");
 
     const cityRes = await client.query(
       `
@@ -107,8 +107,7 @@ console.log(stateId,"srareid");
     );
 
     const cityId =
-      cityRes.rows[0]?.city_id 
-      ||
+      cityRes.rows[0]?.city_id ||
       (
         await client.query(
           `SELECT city_id FROM cities WHERE display_name = $1 AND state_id = $2 AND country_id = $3`,

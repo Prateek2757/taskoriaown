@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -149,8 +148,7 @@ export default function StepOneCategoryForm({
 
   return (
     <div
-      className="space-y-8
-             "
+      className="space-y-8"
     >
       {/* <div className="space-y-2 text-center">
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">

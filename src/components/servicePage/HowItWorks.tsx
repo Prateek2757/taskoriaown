@@ -75,7 +75,7 @@ export function ServiceDetailsSection({ serviceDetails }) {
         }
       }
     });
-    console.log(sections.pricing.factors);
+    // console.log(sections.pricing.factors);
 
     // Extract FAQs
     const details = doc.querySelectorAll("details");

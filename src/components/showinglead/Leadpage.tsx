@@ -18,17 +18,17 @@ export interface Lead {
   created_at: string;
   phone: number;
   description: string;
-  latitude?:number;
-  longitude?:number;
-  postcode?:number;
+  latitude?: number;
+  longitude?: number;
+  postcode?: number;
   customer_name?: string;
   customer_email?: string;
   status?: string;
   estimated_budget?: number;
   is_remote_allowed?: boolean;
   is_seen?: boolean;
-  seen_at?: string; 
-  queries?:string;
+  seen_at?: string;
+  queries?: string;
 }
 
 export interface Filters {
@@ -63,7 +63,7 @@ const LeadsPage: React.FC = () => {
         const { data } = await axios.get<Lead[]>("/api/leads");
         const leadsData = Array.isArray(data) ? data : [];
         setRawLeads(leadsData);
-        console.log(leadsData, "leadsData");
+        // console.log(leadsData, "leadsData");
 
         if (leadsData.length > 0) setSelectedLead(leadsData[0]);
         await fetchCreditEstimates();
@@ -77,7 +77,10 @@ const LeadsPage: React.FC = () => {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (filtersRef.current && !filtersRef.current.contains(e.target as Node)) {
+      if (
+        filtersRef.current &&
+        !filtersRef.current.contains(e.target as Node)
+      ) {
         setShowFilters(false);
       }
     };
@@ -96,19 +99,25 @@ const LeadsPage: React.FC = () => {
         if (a.is_seen && !b.is_seen) return 1;
 
         if (!a.is_seen && !b.is_seen) {
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+          return (
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          );
         }
 
         if (a.is_seen && b.is_seen) {
-          const aSeenTime = a.seen_at ? new Date(a.seen_at).getTime() : new Date(a.created_at).getTime();
-          const bSeenTime = b.seen_at ? new Date(b.seen_at).getTime() : new Date(b.created_at).getTime();
+          const aSeenTime = a.seen_at
+            ? new Date(a.seen_at).getTime()
+            : new Date(a.created_at).getTime();
+          const bSeenTime = b.seen_at
+            ? new Date(b.seen_at).getTime()
+            : new Date(b.created_at).getTime();
           return bSeenTime - aSeenTime;
         }
 
         return 0;
       });
 
-      setInitialOrder(sorted.map(l => l.task_id!));
+      setInitialOrder(sorted.map((l) => l.task_id!));
     }
   }, [rawLeads, initialOrder.length]);
 
@@ -136,13 +145,20 @@ const LeadsPage: React.FC = () => {
         !filters.search ||
         lead.title.toLowerCase().includes(filters.search.toLowerCase()) ||
         (lead.customer_name &&
-          lead.customer_name.toLowerCase().includes(filters.search.toLowerCase()));
-      const matchesBudget = !filters.estimated_budget || (lead.estimated_budget ?? 0) >= +filters.estimated_budget;
-      const matchesCategory = !filters.category || lead.category_name === filters.category;
-      const matchesLocation = !filters.location || lead.location_name === filters.location;
+          lead.customer_name
+            .toLowerCase()
+            .includes(filters.search.toLowerCase()));
+      const matchesBudget =
+        !filters.estimated_budget ||
+        (lead.estimated_budget ?? 0) >= +filters.estimated_budget;
+      const matchesCategory =
+        !filters.category || lead.category_name === filters.category;
+      const matchesLocation =
+        !filters.location || lead.location_name === filters.location;
       const matchesStatus = !filters.status || lead.status === filters.status;
       const matchesRemote =
-        filters.isRemoteAllowed === null || lead.is_remote_allowed === filters.isRemoteAllowed;
+        filters.isRemoteAllowed === null ||
+        lead.is_remote_allowed === filters.isRemoteAllowed;
 
       return (
         matchesSearch &&
@@ -209,8 +225,9 @@ const LeadsPage: React.FC = () => {
   return (
     <div className="flex flex-col md:flex-row md:h-screen min-h-screen bg-gray-50 dark:bg-gray-900 font-sans relative">
       <div
-        className={`flex flex-col w-full md:w-[380px] border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-300 ${isMobileDetailsOpen ? "hidden md:flex" : "flex"
-          }`}
+        className={`flex flex-col w-full md:w-[380px] border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-300 ${
+          isMobileDetailsOpen ? "hidden md:flex" : "flex"
+        }`}
       >
         <div className="sticky top-13 z-30 mb-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 px-2 py-3">
@@ -228,7 +245,8 @@ const LeadsPage: React.FC = () => {
               </div>
 
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 sm:mt-0">
-                {filters.category || "All services"} • {filters.location || "All locations"}
+                {filters.category || "All services"} •{" "}
+                {filters.location || "All locations"}
               </p>
             </div>
 
@@ -239,7 +257,9 @@ const LeadsPage: React.FC = () => {
                   type="text"
                   placeholder="Search leads by category"
                   value={filters.search}
-                  onChange={(e) => handleFilterChange({ search: e.target.value })}
+                  onChange={(e) =>
+                    handleFilterChange({ search: e.target.value })
+                  }
                   className="w-full pl-9 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition"
                 />
               </div>
@@ -258,18 +278,18 @@ const LeadsPage: React.FC = () => {
                     !(typeof val === "boolean" && val === null) &&
                     !(val === "Open")
                 ) && (
-                    <span className="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-white dark:bg-gray-700 text-emerald-700 dark:text-emerald-400 text-[10px] font-semibold rounded-full shadow-sm border border-emerald-600 dark:border-emerald-500">
-                      {
-                        Object.values(filters).filter(
-                          (val) =>
-                            val &&
-                            val !== "" &&
-                            !(typeof val === "boolean" && val === null) &&
-                            !(val === "Open")
-                        ).length
-                      }
-                    </span>
-                  )}
+                  <span className="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 bg-white dark:bg-gray-700 text-emerald-700 dark:text-emerald-400 text-[10px] font-semibold rounded-full shadow-sm border border-emerald-600 dark:border-emerald-500">
+                    {
+                      Object.values(filters).filter(
+                        (val) =>
+                          val &&
+                          val !== "" &&
+                          !(typeof val === "boolean" && val === null) &&
+                          !(val === "Open")
+                      ).length
+                    }
+                  </span>
+                )}
               </button>
             </div>
           </div>
@@ -312,7 +332,9 @@ const LeadsPage: React.FC = () => {
             >
               ← Back
             </button>
-            <h2 className="font-semibold text-gray-800 dark:text-gray-100">Lead Details</h2>
+            <h2 className="font-semibold text-gray-800 dark:text-gray-100">
+              Lead Details
+            </h2>
             <div />
           </div>
           <LeadDetails
@@ -341,7 +363,11 @@ const LeadsPage: React.FC = () => {
                 ✕ Close
               </button>
             </div>
-            <FilterSidebar filters={filters} leads={rawLeads} onFilterChange={handleFilterChange} />
+            <FilterSidebar
+              filters={filters}
+              leads={rawLeads}
+              onFilterChange={handleFilterChange}
+            />
           </div>
         </>
       )}

@@ -95,29 +95,24 @@ export default function ChatPageInline({
     }
   }, [endpoint, fetchConversations]);
 
-  // REAL-TIME SIDEBAR UPDATES - PEAK LEVEL WhatsApp STYLE
   useEffect(() => {
     if (!conversations.length || !session?.user?.id) {
-      console.log("⏸️ Skipping sidebar subscriptions - no conversations or session");
       return;
     }
 
-    console.log(`🔄 Setting up sidebar subscriptions for ${conversations.length} conversations`);
 
-    // Clean up existing channels first
     sidebarChannelsRef.current.forEach((ch) => {
       supabaseBrowser.removeChannel(ch);
     });
     sidebarChannelsRef.current = [];
 
-    // Subscribe to ALL conversation sidebar channels
     conversations.forEach((convo) => {
       const channelName = `sidebar:${convo.id}`;
       
       const channel = supabaseBrowser.channel(channelName, {
         config: {
           broadcast: { 
-            self: true,  // CRITICAL: Receive own messages
+            self: true,  
             ack: true,
           },
         },
@@ -126,17 +121,16 @@ export default function ChatPageInline({
       channel.on("broadcast", { event: "message" }, (payload) => {
         const msg = payload.payload?.message;
         if (!msg?.id) {
-          console.log("❌ Sidebar received invalid message payload");
           return;
         }
 
-        console.log("📨 SIDEBAR RECEIVED MESSAGE:", {
-          conversationId: msg.conversation_id,
-          from: msg.user_id,
-          content: msg.content?.substring(0, 40),
-          currentUser: session.user.id,
-          timestamp: new Date().toISOString(),
-        });
+        // console.log("📨 SIDEBAR RECEIVED MESSAGE:", {
+        //   conversationId: msg.conversation_id,
+        //   from: msg.user_id,
+        //   content: msg.content?.substring(0, 40),
+        //   currentUser: session.user.id,
+        //   timestamp: new Date().toISOString(),
+        // });
 
         const isMyMessage = String(msg.user_id) === String(session.user.id);
         const isActiveConvo = activeConversation?.id === msg.conversation_id;

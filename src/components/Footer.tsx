@@ -106,10 +106,10 @@ const Footer = () => {
           <div className="sm:grid sm:grid-cols-3 gap-8 lg:gap-16 w-full lg:w-auto mt-0 lg:mt-0">
 
   <div className="sm:border-none">
-    <h2 className="hidden sm:block text-2xl pb-4 font-semibold">For Customers</h2>
+    <h2 className="hidden sm:block text-2xl pb-3 font-semibold">For Customers</h2>
 
     <button
-      className="sm:hidden w-full flex justify-between items-center text-xl pb-3 font-semibold  border-gray-700"
+      className="sm:hidden w-full flex justify-between items-center text-xl  font-semibold  border-gray-700"
       onClick={() => setOpenSection(openSection === 'customers' ? '' : 'customers')}
     >
       For Customers
@@ -160,7 +160,7 @@ const Footer = () => {
   </div>
 
   <div className="sm:border-none">
-    <h2 className="hidden sm:block text-xl pb-1 font-semibold">Company</h2>
+    <h2 className="hidden sm:block text-xl pb-3 font-semibold">Company</h2>
 
     <button
       className="sm:hidden w-full flex justify-between items-center text-xl pb-1 font-semibold  border-gray-700"

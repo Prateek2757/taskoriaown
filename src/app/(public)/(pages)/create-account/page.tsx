@@ -104,6 +104,7 @@ function OnboardingContent() {
 
       await axios.post("/api/signup/final-submit", payload);
       localStorage.removeItem("draftProviderId");
+      localStorage.removeItem("draftProviderPublicId");
       router.push("/signin");
     } catch (err: any) {
       console.error("Onboarding error:", err.response?.data || err.message);

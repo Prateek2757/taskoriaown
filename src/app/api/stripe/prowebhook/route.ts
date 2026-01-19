@@ -1,7 +1,6 @@
 import Stripe from "stripe";
 import pool from "@/lib/dbConnect";
 
-
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
@@ -10,9 +9,16 @@ export async function POST(req: Request) {
 
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(raw, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+    event = stripe.webhooks.constructEvent(
+      raw,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
   } catch (err: any) {
-    console.error("⚠️ Webhook signature verification failed:", err?.message ?? err);
+    console.error(
+      "⚠️ Webhook signature verification failed:",
+      err?.message ?? err
+    );
     return new Response("Invalid signature", { status: 400 });
   }
 
@@ -26,16 +32,16 @@ export async function POST(req: Request) {
         [session.id]
       );
       if (existing.rows.length > 0) {
-        console.log("ℹ️ Session already processed:", session.id);
+        // console.log("ℹ️ Session already processed:", session.id);
       } else {
         if (meta.type === "Pro_Subscription") {
           await handleProSubscription(session, meta);
-        }  else {
-          console.log("⚠️ Unknown session metadata type:", meta.type, meta);
+        } else {
+          // console.log("⚠️ Unknown session metadata type:", meta.type, meta);
         }
       }
     } else {
-      console.log("⤴️ Unhandled event type:", event.type);
+      // console.log("⤴️ Unhandled event type:", event.type);
     }
 
     return new Response(JSON.stringify({ received: true }), { status: 200 });
@@ -45,8 +51,10 @@ export async function POST(req: Request) {
   }
 }
 
-
-async function handleProSubscription(session: Stripe.Checkout.Session, meta: Record<string, string>) {
+async function handleProSubscription(
+  session: Stripe.Checkout.Session,
+  meta: Record<string, string>
+) {
   const ref = session.id;
   const professionalId = Number(meta.professionalId || meta.userId); // accept both if sometime different
   const packageId = Number(meta.packageId);
@@ -57,9 +65,12 @@ async function handleProSubscription(session: Stripe.Checkout.Session, meta: Rec
     return;
   }
 
-  console.log("➡️ Activating Pro subscription:", { professionalId, packageId, amount, ref });
+  // console.log("➡️ Activating Pro subscription:", { professionalId, packageId, amount, ref });
 
-  const pkgRes = await pool.query(`SELECT duration_months FROM professional_packages WHERE package_id = $1`, [packageId]);
+  const pkgRes = await pool.query(
+    `SELECT duration_months FROM professional_packages WHERE package_id = $1`,
+    [packageId]
+  );
   if (!pkgRes.rows.length) {
     throw new Error("Package not found: " + packageId);
   }
@@ -70,11 +81,19 @@ async function handleProSubscription(session: Stripe.Checkout.Session, meta: Rec
       (reference_id, professional_id, transaction_type, amount, credits_used, payment_gateway, status, remarks, created_at)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,NOW())
      RETURNING transaction_id`,
-    [ref, professionalId, 'subscription', amount, 0, 'stripe', 'completed', `Checkout session ${session.id}`]
+    [
+      ref,
+      professionalId,
+      "subscription",
+      amount,
+      0,
+      "stripe",
+      "completed",
+      `Checkout session ${session.id}`,
+    ]
   );
   const txId = txRes.rows[0].transaction_id;
 
- 
   const activeRes = await pool.query(
     `SELECT subscription_id, end_date FROM professional_subscriptions
      WHERE user_id = $1 AND status = 'active' AND end_date > NOW()
@@ -84,21 +103,21 @@ async function handleProSubscription(session: Stripe.Checkout.Session, meta: Rec
 
   if (activeRes.rows.length > 0) {
     const currentEnd = activeRes.rows[0].end_date;
-   await pool.query(
-  `INSERT INTO professional_subscriptions
+    await pool.query(
+      `INSERT INTO professional_subscriptions
      (user_id, package_id, status, start_date, end_date, cancel_at_period_end, payment_transaction_id, created_at)
    VALUES ($1,$2,$3,NOW(), (NOW() + make_interval(months => $4)), $5, $6, NOW())`,
-  [professionalId, packageId, 'active', durationMonths, false, txId]
-);
-    console.log("🔁 Extended existing subscription for user", professionalId);
+      [professionalId, packageId, "active", durationMonths, false, txId]
+    );
+    // console.log("🔁 Extended existing subscription for user", professionalId);
   } else {
     await pool.query(
       `INSERT INTO professional_subscriptions
          (user_id, package_id, status, start_date, end_date, cancel_at_period_end, payment_transaction_id, created_at)
        VALUES ($1,$2,$3,NOW(), (NOW() + ($4 || ' month')::interval), $5, $6, NOW())`,
-      [professionalId, packageId, 'active', durationMonths, false, txId]
+      [professionalId, packageId, "active", durationMonths, false, txId]
     );
-    console.log("✅ Created new subscription for user", professionalId);
+    // console.log("✅ Created new subscription for user", professionalId);
   }
 
   await pool.query(
@@ -108,5 +127,5 @@ async function handleProSubscription(session: Stripe.Checkout.Session, meta: Rec
     [txId, ref]
   );
 
-  console.log("✅ Pro subscription processed:", ref);
+  // console.log("✅ Pro subscription processed:", ref);
 }

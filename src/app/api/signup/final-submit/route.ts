@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 import bcrypt from "bcryptjs";
-import {
-  sendEmail
-} from "@/components/email/helpers/sendVerificationEmail";
+import { sendEmail } from "@/components/email/helpers/sendVerificationEmail";
 
 export async function POST(req: NextRequest) {
   const client = await pool.connect();
@@ -23,15 +21,15 @@ export async function POST(req: NextRequest) {
       companySize,
       password,
     } = await req.json();
-    
-    // console.log(categoryPublic_id);
+
+    //  // console.log(categoryPublic_id);
     if (!public_id || !categoryPublic_id || !name || !email || !password) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
       );
     }
-const normalizationemail = await email.trim().toLowerCase()
+    const normalizationemail = await email.trim().toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await client.query("BEGIN");
@@ -50,7 +48,7 @@ const normalizationemail = await email.trim().toLowerCase()
     }
     const user_idd = userres.rows[0].user_id;
     const category_id = categoryres.rows[0].category_id;
-    console.log(user_idd, category_id);
+    // console.log(user_idd, category_id);
 
     await client.query(
       `INSERT INTO user_categories (user_id, category_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
@@ -123,7 +121,11 @@ const normalizationemail = await email.trim().toLowerCase()
       `,
       [user_idd]
     );
-    await sendEmail({ email:normalizationemail, username: name, type: "welcome" });
+    await sendEmail({
+      email: normalizationemail,
+      username: name,
+      type: "welcome",
+    });
 
     return NextResponse.json({
       message: "✅ Signup successful!",

@@ -71,7 +71,7 @@ export async function POST(req: Request) {
 
       for (const [questionId, answer] of Object.entries(category_answers)) {
         let answerToStore;
-        
+
         if (Array.isArray(answer)) {
           answerToStore = JSON.stringify(answer);
         } else if (answer === null || answer === undefined) {
@@ -97,11 +97,11 @@ export async function POST(req: Request) {
     const adminemailres = await client.query(
       `SELECT email from users where role ='admin'`
     );
-    const adminEmails = adminemailres.rows.map(r=>r.email);
-    console.log(adminEmails);
+    const adminEmails = adminemailres.rows.map((r) => r.email);
+    // console.log(adminEmails);
 
     await client.query("COMMIT");
-      
+
     const hasBudget =
       typeof estimated_budget === "number" &&
       !isNaN(estimated_budget) &&
@@ -131,13 +131,13 @@ export async function POST(req: Request) {
       JOIN users u ON u.user_id = uc.user_id
       LEFT JOIN user_profiles up ON up.user_id = u.user_id
       WHERE uc.category_id = $1
-        
+      AND u.user_id <> $2    
       `,
-      [category_id]
+      [category_id, session.user.id]
     );
     const delay = (ms: number) =>
       new Promise((resolve) => setTimeout(resolve, ms));
-    
+
     for (const p of providersRes.rows) {
       await sendEmail({
         email: p.email,
@@ -146,8 +146,8 @@ export async function POST(req: Request) {
         taskTitle: title,
         taskLocation: categoryname,
       });
-    
-      await delay(600);
+
+      await delay(1000);
     }
     return NextResponse.json({ success: true, task: taskResult.rows[0] });
   } catch (err: any) {

@@ -1,7 +1,6 @@
 import Stripe from "stripe";
 import pool from "@/lib/dbConnect";
 
-
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
@@ -10,8 +9,12 @@ export async function POST(req: Request) {
 
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(raw, sig, process.env.STRIPE_WEBHOOK_SECRET!);
-    console.log("✅ Stripe webhook:", event.type);
+    event = stripe.webhooks.constructEvent(
+      raw,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
+    // console.log("✅ Stripe webhook:", event.type);
   } catch (err: any) {
     console.error("❌ Invalid webhook signature:", err?.message ?? err);
     return new Response("Invalid signature", { status: 400 });
@@ -21,7 +24,7 @@ export async function POST(req: Request) {
     const session = event.data.object as Stripe.Checkout.Session;
     const meta = session.metadata || {};
 
-    console.log("➡️ Processing checkout session:", session.id, meta);
+    // console.log("➡️ Processing checkout session:", session.id, meta);
 
     const existing = await pool.query(
       `SELECT transaction_id FROM payment_transactions WHERE reference_id = $1 LIMIT 1`,
@@ -29,7 +32,7 @@ export async function POST(req: Request) {
     );
 
     if (existing.rows.length > 0) {
-      console.log("⭕ Already processed:", session.id);
+      // console.log("⭕ Already processed:", session.id);
       return new Response(JSON.stringify({ received: true }), { status: 200 });
     }
 
@@ -43,17 +46,17 @@ export async function POST(req: Request) {
         break;
 
       default:
-        console.log("⚠️ Unknown metadata.type:", meta.type);
+      // console.log("⚠️ Unknown metadata.type:", meta.type);
     }
   } else {
-    console.log("⤴️ Ignored event type:", event.type);
+    // console.log("⤴️ Ignored event type:", event.type);
   }
 
   return new Response(JSON.stringify({ received: true }), { status: 200 });
 }
 
 async function handleCreditTopup(session: Stripe.Checkout.Session, meta: any) {
-  console.log("💳 Handling credit topup...");
+  // console.log("💳 Handling credit topup...");
 
   const professionalId = meta.professionalId;
   const credits = Number(meta.credits);
@@ -75,7 +78,7 @@ async function handleCreditTopup(session: Stripe.Checkout.Session, meta: any) {
        VALUES ($1, $2)`,
       [professionalId, credits]
     );
-    console.log("🆕 Wallet created for:", professionalId);
+    // console.log("🆕 Wallet created for:", professionalId);
   } else {
     await pool.query(
       `UPDATE credit_wallets 
@@ -83,7 +86,7 @@ async function handleCreditTopup(session: Stripe.Checkout.Session, meta: any) {
        WHERE professional_id = $2`,
       [credits, professionalId]
     );
-    console.log("💰 Wallet updated for:", professionalId);
+    // console.log("💰 Wallet updated for:", professionalId);
   }
 
   await pool.query(
@@ -106,11 +109,14 @@ async function handleCreditTopup(session: Stripe.Checkout.Session, meta: any) {
     [session.id]
   );
 
-  console.log("✅ Credit topup processed:", session.id);
+  // console.log("✅ Credit topup processed:", session.id);
 }
 
-async function handleProSubscription(session: Stripe.Checkout.Session, meta: any) {
-  console.log("🟣 Handling Pro subscription...");
+async function handleProSubscription(
+  session: Stripe.Checkout.Session,
+  meta: any
+) {
+  // console.log("🟣 Handling Pro subscription...");
 
   const ref = session.id;
   const professionalId = Number(meta.professionalId || meta.userId);
@@ -159,7 +165,7 @@ async function handleProSubscription(session: Stripe.Checkout.Session, meta: any
       [professionalId, packageId, currentEnd, durationMonths, txId]
     );
 
-    console.log("🔁 Subscription extended for:", professionalId);
+    // console.log("🔁 Subscription extended for:", professionalId);
   } else {
     await pool.query(
       `INSERT INTO professional_subscriptions
@@ -168,7 +174,7 @@ async function handleProSubscription(session: Stripe.Checkout.Session, meta: any
       [professionalId, packageId, durationMonths, txId]
     );
 
-    console.log("✅ New subscription created for:", professionalId);
+    // console.log("✅ New subscription created for:", professionalId);
   }
 
   await pool.query(
@@ -178,5 +184,5 @@ async function handleProSubscription(session: Stripe.Checkout.Session, meta: any
     [txId, ref]
   );
 
-  console.log("🎉 Pro subscription processed:", ref);
+  // console.log("🎉 Pro subscription processed:", ref);
 }

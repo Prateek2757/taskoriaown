@@ -3,7 +3,7 @@ export async function uploadToSupabase(file: File, folder: string) {
   const safeFileName = file.name.normalize("NFKD").replace(/[^\w.-]/g, "_");
 
   const filePath = `${folder}/${Date.now()}-${safeFileName}`;
-  console.log("Uploading file as:", filePath);
+  // console.log("Uploading file as:", filePath);
 
   const { error } = await supabaseBrowser.storage
     .from("taskoria")
@@ -15,7 +15,7 @@ export async function uploadToSupabase(file: File, folder: string) {
     .from("taskoria")
     .getPublicUrl(filePath);
 
-  console.log("Supabase public URL:", data.publicUrl);
+  // console.log("Supabase public URL:", data.publicUrl);
 
   return encodeURI(data.publicUrl);
 }

@@ -122,7 +122,7 @@ export default function ModernNavbar() {
       newView === "provider" ? "/provider/dashboard" : "/customer/dashboard"
     );
   };
-  console.log(session?.user.adminrole, "adinsdnoinas");
+  // console.log(session?.user.adminrole, "adinsdnoinas");
 
   const getCurrentLinks = () => {
     if (!session) return navLinks.public;

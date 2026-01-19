@@ -8,8 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Loader2, DollarSign, Calendar, MapPin, User, CheckCircle, Search, Filter, Eye } from 'lucide-react';
+import { Loader2, DollarSign, Calendar, MapPin, User, CheckCircle, Search, Filter, Eye, Mail, Phone, CalendarRange, Clock, MessageSquare, HelpCircle, Wallet, Send } from 'lucide-react';
 import { Label } from '@/components/ui/label';
+
 
 interface Task {
   task_id: number;
@@ -147,7 +148,6 @@ export default function AdminBudgetManager() {
         </p>
       </div>
 
-      {/* Filters */}
       <div className="mb-6 flex flex-col sm:flex-row gap-4">
         <div className="flex-1 relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -175,7 +175,6 @@ export default function AdminBudgetManager() {
         </div>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <Card>
           <CardContent className="pt-6">
@@ -203,7 +202,6 @@ export default function AdminBudgetManager() {
         </Card>
       </div>
 
-      {/* Tasks List */}
       {filteredTasks.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
@@ -221,14 +219,13 @@ export default function AdminBudgetManager() {
             <Card key={task.task_id} className="hover:shadow-lg transition-shadow">
               <CardContent className="p-6">
                 <div className="flex flex-col lg:flex-row gap-6">
-                  {/* Left Section - Task Info */}
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                        {/* <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                           {task.title}
-                        </h3>
-                        <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                        </h3> */}
+                        <Badge className="bg-blue-100 text-md text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                           {task.category_name}
                         </Badge>
                       </div>
@@ -278,7 +275,7 @@ export default function AdminBudgetManager() {
                       onClick={() => openDetailsModal(task)}
                       className="mt-2"
                     >
-                      <Eye className="w-4 h-4 mr-2" />
+                      <Eye className="w-4 h-4 " />
                       View Full Details
                     </Button>
                   </div>
@@ -311,12 +308,12 @@ export default function AdminBudgetManager() {
                       >
                         {processing === task.task_id ? (
                           <>
-                            <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                            <Loader2 className="animate-spin w-4 h-4 " />
                             Processing...
                           </>
                         ) : (
                           <>
-                            <CheckCircle className="w-4 h-4 mr-2" />
+                            <CheckCircle className="w-4 h-4 " />
                             Set Budget & Publish
                           </>
                         )}
@@ -334,116 +331,158 @@ export default function AdminBudgetManager() {
         </div>
       )}
 
-      {/* Details Modal */}
-      <Dialog open={showDetailsModal} onOpenChange={setShowDetailsModal}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">{selectedTask?.title}</DialogTitle>
-          </DialogHeader>
 
-          {selectedTask && (
-            <div className="space-y-6">
-              <div>
-                <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                  {selectedTask.category_name}
-                </Badge>
+
+<Dialog open={showDetailsModal} onOpenChange={setShowDetailsModal}>
+  <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+    <DialogHeader>
+      <DialogTitle className="text-xl font-semibold flex items-center gap-2">
+        <Eye className="w-5 h-5 text-blue-600" />
+        {selectedTask?.title}
+      </DialogTitle>
+    </DialogHeader>
+
+    {selectedTask && (
+      <div className="space-y-6">
+
+        <div className="grid grid-cols-2 gap-5">
+          <div className="space-y-1">
+            <Label className="flex items-center gap-2 text-sm font-semibold">
+              <User className="w-4 h-4 text-gray-500" />
+              Customer
+            </Label>
+            <p className="font-medium">{selectedTask.customer_name}</p>
+
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+              <Mail className="w-4 h-4" />
+              {selectedTask.customer_email}
+            </div>
+
+            {selectedTask.phone && (
+              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                <Phone className="w-4 h-4" />
+                {selectedTask.phone}
               </div>
+            )}
+          </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-sm font-semibold">Customer</Label>
-                  <p className="text-gray-900 dark:text-white">{selectedTask.customer_name}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{selectedTask.customer_email}</p>
-                  {selectedTask.phone && (
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{selectedTask.phone}</p>
-                  )}
-                </div>
+          <div className="space-y-1">
+            <Label className="flex items-center gap-2 text-sm font-semibold">
+              <MapPin className="w-4 h-4 text-gray-500" />
+              Location
+            </Label>
+            <p className="font-medium">{selectedTask.location_name}</p>
+          </div>
 
-                <div>
-                  <Label className="text-sm font-semibold">Location</Label>
-                  <p className="text-gray-900 dark:text-white">{selectedTask.location_name}</p>
-                </div>
+          <div>
+            <Label className="flex items-center gap-2 text-sm font-semibold">
+              <CalendarRange className="w-4 h-4 text-gray-500" />
+              Preferred Dates
+            </Label>
+            <p>
+              {formatDate(selectedTask.preferred_date_start)} –{" "}
+              {formatDate(selectedTask.preferred_date_end)}
+            </p>
+          </div>
 
-                <div>
-                  <Label className="text-sm font-semibold">Preferred Dates</Label>
-                  <p className="text-gray-900 dark:text-white">
-                    {formatDate(selectedTask.preferred_date_start)} - {formatDate(selectedTask.preferred_date_end)}
+          <div>
+            <Label className="flex items-center gap-2 text-sm font-semibold">
+              <Clock className="w-4 h-4 text-gray-500" />
+              Posted Date
+            </Label>
+            <p>{formatDate(selectedTask.created_at)}</p>
+          </div>
+        </div>
+
+        {selectedTask.queries && (
+          <div>
+            <Label className="flex items-center gap-2 text-sm font-semibold mb-2">
+              <MessageSquare className="w-4 h-4 text-blue-500" />
+              Customer Query
+            </Label>
+            <div className="bg-gray-50 dark:bg-slate-800 p-4 rounded-lg text-sm whitespace-pre-wrap">
+              {selectedTask.queries}
+            </div>
+          </div>
+        )}
+
+        {selectedTask.answers?.length > 0 && (
+          <div>
+            <Label className="flex items-center gap-2 text-sm font-semibold mb-3">
+              <HelpCircle className="w-4 h-4 text-purple-500" />
+              Question Answers
+            </Label>
+
+            <div className="space-y-3 max-h-64 overflow-y-auto">
+              {selectedTask.answers.map((qa, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-50 dark:bg-slate-800 p-4 rounded-lg"
+                >
+                  <p className="font-medium mb-1">{qa.question}</p>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                    {qa.answer}
                   </p>
                 </div>
-
-                <div>
-                  <Label className="text-sm font-semibold">Posted Date</Label>
-                  <p className="text-gray-900 dark:text-white">{formatDate(selectedTask.created_at)}</p>
-                </div>
-              </div>
-
-              {selectedTask.queries && (
-                <div>
-                  <Label className="text-sm font-semibold mb-2 block">Customer Queries</Label>
-                  <div className="bg-gray-50 dark:bg-slate-800 p-4 rounded-lg">
-                    <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{selectedTask.queries}</p>
-                  </div>
-                </div>
-              )}
-
-              {selectedTask.answers && selectedTask.answers.length > 0 && (
-                <div>
-                  <Label className="text-sm font-semibold mb-3 block">Question Answers</Label>
-                  <div className="space-y-3 max-h-64 overflow-y-auto">
-                    {selectedTask.answers.map((qa, index) => (
-                      <div key={index} className="bg-gray-50 dark:bg-slate-800 p-4 rounded-lg">
-                        <p className="font-medium text-gray-900 dark:text-white mb-1">
-                          {qa.question}
-                        </p>
-                        <p className="text-gray-700 dark:text-gray-300">{qa.answer}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="border-t pt-6">
-                <Label className="text-sm font-semibold mb-3 block">Set Estimated Budget</Label>
-                <div className="flex gap-3">
-                  <div className="relative flex-1">
-                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
-                      A$
-                    </span>
-                    <Input
-                      type="text"
-                      placeholder="Enter budget amount"
-                      value={budgetValues[selectedTask.task_id] || ''}
-                      onChange={(e) => handleBudgetChange(selectedTask.task_id, e.target.value)}
-                      className="pl-10"
-                      disabled={processing === selectedTask.task_id}
-                    />
-                  </div>
-                  <Button
-                    onClick={() => handleSetBudget(selectedTask.task_id)}
-                    disabled={processing === selectedTask.task_id || !budgetValues[selectedTask.task_id]}
-                    className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold px-6"
-                  >
-                    {processing === selectedTask.task_id ? (
-                      <>
-                        <Loader2 className="animate-spin w-4 h-4 mr-2" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle className="w-4 h-4 mr-2" />
-                        Set & Publish
-                      </>
-                    )}
-                  </Button>
-                </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
-                  Once set, this task will be visible to all relevant professionals
-                </p>
-              </div>
+              ))}
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+          </div>
+        )}
+
+        <div className="border-t pt-6">
+          <Label className="flex items-center gap-2 text-sm font-semibold mb-3">
+            <Wallet className="w-4 h-4 text-green-600" />
+            Set Estimated Budget
+          </Label>
+
+          <div className="flex gap-3">
+            <div className="relative flex-1">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 font-medium text-gray-500">
+                A$
+              </span>
+              <Input
+                type="text"
+                placeholder="Enter budget amount"
+                value={budgetValues[selectedTask.task_id] || ""}
+                onChange={(e) =>
+                  handleBudgetChange(selectedTask.task_id, e.target.value)
+                }
+                className="pl-10"
+                disabled={processing === selectedTask.task_id}
+              />
+            </div>
+
+            <Button
+              onClick={() => handleSetBudget(selectedTask.task_id)}
+              disabled={
+                processing === selectedTask.task_id ||
+                !budgetValues[selectedTask.task_id]
+              }
+              className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold px-6"
+            >
+              {processing === selectedTask.task_id ? (
+                <>
+                  <Loader2 className="w-4 h-4  animate-spin" />
+                  Processing
+                </>
+              ) : (
+                <>
+                  <Send className="w-4 h-4 " />
+                  Set & Publish
+                </>
+              )}
+            </Button>
+          </div>
+
+          <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+            Once published, this task becomes visible to relevant professionals.
+          </p>
+        </div>
+      </div>
+    )}
+  </DialogContent>
+</Dialog>
+
     </div>
   );
 }

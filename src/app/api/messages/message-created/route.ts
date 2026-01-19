@@ -64,24 +64,24 @@ export async function POST(req: Request) {
       [conversation_id, senderId, content, metadata, taskId]
     );
     const message = insertMsg.rows[0];
-// await createNotification({
-//       userId: session?.user?.id,
-//       title: `${session?.user?.id} is Messageing You`,
-//       body: ` ! You have Got A Message   `
-      
-//     })
-// const updateRes = await client.query(
-//   `UPDATE conversation_unreads
-//    SET unread_count = unread_count 
-//    WHERE conversation_id = $1 AND user_id != $2
-//    RETURNING *`, 
-//   [conversation_id, senderId]
-// );
+    // await createNotification({
+    //       userId: session?.user?.id,
+    //       title: `${session?.user?.id} is Messageing You`,
+    //       body: ` ! You have Got A Message   `
 
-// console.log("Unread updated rows:", updateRes.rowCount);
+    //     })
+    // const updateRes = await client.query(
+    //   `UPDATE conversation_unreads
+    //    SET unread_count = unread_count
+    //    WHERE conversation_id = $1 AND user_id != $2
+    //    RETURNING *`,
+    //   [conversation_id, senderId]
+    // );
+
+    //  // console.log("Unread updated rows:", updateRes.rowCount);
 
     await client.query("COMMIT");
- 
+
     const channel = supabaseBrowser.channel(`conversation:${conversation_id}`);
     await channel.send({
       type: "broadcast",

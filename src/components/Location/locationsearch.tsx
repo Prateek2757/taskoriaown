@@ -75,7 +75,7 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
       setShowDropdown(true);
       return;
     }
-    console.log(results);
+    // console.log(results);
 
     setLoading(true);
     try {
@@ -116,7 +116,7 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
     };
 
     setQuery(location.display_name);
-    console.log(location);
+    // console.log(location);
 
     setResults([]);
     setShowDropdown(false);
@@ -190,9 +190,9 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
               onClick={() => handleSelect(r)}
               onMouseEnter={() => setActiveIndex(i)}
             >
-              <p className="truncate font-medium">{
-              r.display_name || r.address?.postcode 
-              }</p>
+              <p className="truncate font-medium">
+                {r.display_name || r.address?.postcode}
+              </p>
               {(r.address?.city || r.address?.town || r.address?.village) && (
                 <span className="text-xs text-gray-400">
                   {r.address?.city ||

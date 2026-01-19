@@ -67,7 +67,7 @@ export async function POST(request: Request) {
         credits: String(credits || 0),
         amount: String(amount),
       },
-      
+
       success_url: successUrl,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cancel`,
     });
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
         [professionalId, packageId, amount, session.id]
       );
     }
-    console.log("✅ Stripe checkout session created successfully:", session.id);
+    // console.log("✅ Stripe checkout session created successfully:", session.id);
 
     return NextResponse.json({ url: session.url });
   } catch (error: any) {

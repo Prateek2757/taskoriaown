@@ -5,7 +5,7 @@ import { authOptions } from "../auth/[...nextauth]/options";
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-    const userId = session?.user.id
+    const userId = session?.user.id;
 
     const { rows } = await pool.query(`
       SELECT 
@@ -24,6 +24,8 @@ export async function GET() {
         c.name AS locationname
 
       FROM user_profiles up
+      JOIN professional_subscriptions ps ON ps.user_id = up.user_id AND ps.status = 'active'
+
       LEFT JOIN users u ON up.user_id = u.user_id
       LEFT JOIN user_categories uc ON up.user_id = uc.user_id
       LEFT JOIN service_categories sc ON sc.category_id = uc.category_id
@@ -46,7 +48,7 @@ export async function GET() {
         c.name
 
       ORDER BY up.created_at DESC;
-    `,);
+    `);
 
     return NextResponse.json(rows);
   } catch (error) {

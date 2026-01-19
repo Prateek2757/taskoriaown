@@ -86,7 +86,6 @@ export default function NotificationBell({ userId }: { userId: number }) {
     if (!userId || initializedRef.current) return;
     initializedRef.current = true;
 
-
     const fetchNotifications = async () => {
       try {
         const res = await axios.get("/api/notifications");
@@ -141,10 +140,10 @@ export default function NotificationBell({ userId }: { userId: number }) {
           handleUpdateNotification
         )
         .subscribe((status) => {
-          console.log(`📊 Status: ${status}`);
+          // console.log(`📊 Status: ${status}`);
 
           if (status === "SUBSCRIBED") {
-            console.log("✅ Realtime active");
+            // console.log("✅ Realtime active");
           }
         });
 
@@ -152,7 +151,7 @@ export default function NotificationBell({ userId }: { userId: number }) {
     }
 
     return () => {
-      console.log("🔄 Component unmounting");
+      // console.log("🔄 Component unmounting");
       initializedRef.current = false;
     };
   }, [userId, handleNewNotification, handleUpdateNotification]);
@@ -195,10 +194,7 @@ export default function NotificationBell({ userId }: { userId: number }) {
     );
 
     try {
-      await axios.post(
-        "/api/notifications",
-        { notificationId: id }
-      );
+      await axios.post("/api/notifications", { notificationId: id });
     } catch (err) {
       console.error("Error marking as read:", err);
       setNotifications((prev) =>
@@ -228,7 +224,7 @@ export default function NotificationBell({ userId }: { userId: number }) {
   };
 
   const handleAction = async (notificationId: number, action: string) => {
-    console.log(`Action: ${action} for notification: ${notificationId}`);
+    // console.log(`Action: ${action} for notification: ${notificationId}`);
     await markAsRead(notificationId);
   };
 

@@ -578,7 +578,7 @@ export function ContactLeadButton({ lead, currentCredits, professionalId }) {
 
   const contactLead = async () => {
     // Your contact logic
-    console.log("Contacting lead...");
+     // console.log("Contacting lead...");
   };
 
   return (

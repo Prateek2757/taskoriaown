@@ -2,7 +2,6 @@ import {Resend} from "resend"
 
 
 const pratik = process.env.RESEND_API_KEY
-console.log(pratik);
 
 
 // if (!process.env.RESEND_API_KEY) {

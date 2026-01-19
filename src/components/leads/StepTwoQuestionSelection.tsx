@@ -141,7 +141,6 @@ export default function StepTwoQuestionsForm({
           const mainAnswer = data[`q_${q.category_question_id}`];
           const otherAnswer = data[`q_${q.category_question_id}_other`];
           
-          // Handle single-select "other" option
           if (mainAnswer === "other" && otherAnswer) {
             acc[q.category_question_id] = otherAnswer.trim();
           } 
@@ -209,7 +208,7 @@ export default function StepTwoQuestionsForm({
         queries: data.queries || "",
       };
       
-      sessionStorage.setItem("pendingpayload", JSON.stringify(payload));
+      localStorage.setItem("pendingpayload", JSON.stringify(payload));
 
       toast.warning(" Please Sign In or Sign Up to continue.");
       router.push("/signin");

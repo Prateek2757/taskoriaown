@@ -25,7 +25,7 @@ export default function ProviderDashboard() {
   const [totalLeads, setTotalLeads] = useState<number | null>(null);
   const isPro = profile?.is_pro;
   const activeSubscription = profile?.active_subscription;
-  console.log(profile?.company_size);
+  // console.log(profile?.company_size);
 
   const imageToShow =
     profile?.has_company && profile?.company_size !== "Sole-Trader"
