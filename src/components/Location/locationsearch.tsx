@@ -4,8 +4,9 @@ import { useState, useRef, useEffect } from "react";
 import { Loader2, Search } from "lucide-react";
 import { Input } from "../ui/input";
 import axios from "axios";
-
-
+const sessionToken = useRef(
+  typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
+);
 type Location = {
   place_id: number;
   city_id?: number;
@@ -43,9 +44,6 @@ type Props = {
 };
 
 export default function LocationSearch({ onSelect, presetLocation }: Props) {
-  const sessionToken = useRef(
-    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
-  );
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Location[]>([]);
   const [loading, setLoading] = useState(false);
@@ -68,30 +66,31 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
   }, [presetLocation]);
 
   const fetchAddresses = async (value: string) => {
-    if (value.length < 3) return;
-  
+    if (value.length < 3) {
+      setResults([]);
+      setShowDropdown(false);
+      return;
+    }
+
+    if (cache.current[value]) {
+      setResults(cache.current[value]);
+      setShowDropdown(true);
+      return;
+    }
+
     setLoading(true);
     try {
-      const res = await fetch("/api/google/autocomplete", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          input: value,
-          session: sessionToken.current,
-        }),
-      });
-  
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=au&q=${encodeURIComponent(
+          value
+        )}`
+      );
       const data = await res.json();
-  console.log(data,"my location");
-  
-      const predictions =
-        data.suggestions?.map((s: any) => ({
-          place_id: s.placePrediction.placeId,
-          description: s.placePrediction.text.text,
-        })) || [];
-  
-      setResults(predictions);
+      setResults(data);
+      cache.current[value] = data;
       setShowDropdown(true);
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
