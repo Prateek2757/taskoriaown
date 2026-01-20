@@ -31,16 +31,16 @@ export default function LeadSettingsCard() {
   return (
     <Card
       className="
-        border rounded-3xl shadow-2xl backdrop-blur-sm overflow-hidden  
+        border rounded-3xl shadow-2xl backdrop-blur-sm overflow-hidden   gap-4
         hover:shadow-3xl transition-shadow duration-300 w-full py-0 self-start
         bg-white/80 dark:bg-white/5 border-gray-200 dark:border-white/10
       "
     >
       <CardHeader
         className="
-          px-6 py-4 flex items-center justify-between
-          bg-[#3C7DED] 
-          text-white rounded-t-3xl
+          px-6 py-3 flex items-center justify-between
+          border-b 
+          text-black dark:text-white rounded-t-3xl
         "
       >
         <div className="flex items-center gap-3">
@@ -53,8 +53,8 @@ export default function LeadSettingsCard() {
             size="lg"
             variant="outline"
             className="
-              border-white text-black hover:bg-white/20
-              dark:border-cyan-400 dark:text-white dark:hover:bg-cyan-500/10
+              border-white text-black hover:bg-blue-500 hover:text-white bg-blue
+              dark:border-cyan-400 dark:text-white dark:hover:bg-blue-500
             "
           >
             Manage Services
@@ -62,8 +62,8 @@ export default function LeadSettingsCard() {
         </Link>
       </CardHeader>
 
-      <CardContent className="grid gap-8 p-6">
-        <div className="space-y-4">
+      <CardContent className="grid gap-8 p-3">
+        <div className="space-y-3">
           <h3 className="text-lg font-semibold text-slate-800 dark:text-white">
             Your Services
           </h3>

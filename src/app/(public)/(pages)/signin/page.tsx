@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import axios from "axios";
+import Link from "next/link";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -98,9 +99,17 @@ export default function SignInPage() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-gray-700 dark:text-gray-300 text-sm font-medium">
-                Password
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="text-gray-700 dark:text-gray-300 text-sm font-medium">
+                  Password
+                </label>
+                <Link
+                  href="/forgot-password"
+                  className="text-xs text-blue-500 hover:text-cyan-500 dark:text-cyan-400 dark:hover:text-cyan-300 transition-colors font-medium"
+                >
+                  Forgot password?
+                </Link>
+              </div>
               <input
                 type="password"
                 placeholder="••••••••••"

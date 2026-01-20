@@ -43,7 +43,6 @@ export async function POST(req: Request) {
         preferred_date_end,
         queries,
         status
-        
       )
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'Open')
       RETURNING *;
@@ -135,20 +134,23 @@ export async function POST(req: Request) {
       `,
       [category_id, session.user.id]
     );
-    const delay = (ms: number) =>
-      new Promise((resolve) => setTimeout(resolve, ms));
+    if (hasBudget) {
+      const delay = (ms: number) =>
+        new Promise((resolve) => setTimeout(resolve, ms));
 
-    for (const p of providersRes.rows) {
-      await sendEmail({
-        email: p.email,
-        username: p.display_name || "Provider",
-        type: "provider-new-task",
-        taskTitle: title,
-        taskLocation: categoryname,
-      });
+      for (const p of providersRes.rows) {
+        await sendEmail({
+          email: p.email,
+          username: p.display_name || "Provider",
+          type: "provider-new-task",
+          taskTitle: title,
+          taskLocation: categoryname,
+        });
 
-      await delay(1000);
+        await delay(1000);
+      }
     }
+
     return NextResponse.json({ success: true, task: taskResult.rows[0] });
   } catch (err: any) {
     await client.query("ROLLBACK");

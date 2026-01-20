@@ -204,7 +204,7 @@ export const FeatureProvider = () => {
                       href={`/providerprofile/${encodeURIComponent(
                         String(p.public_id)
                       )}`}
-                      className="flex gap-1"
+                      className="flex gap-2"
                     >
                       <Button className="flex-1" variant={"outline"}>
                         Read More

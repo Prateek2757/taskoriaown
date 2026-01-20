@@ -11,7 +11,7 @@ const projects = [
   {
     title: "AI-Powered Matching",
     description:
-      "Experience the future of service discovery with our intelligent matching algorithm. Our AI analyzes thousands of data points to connect you with providers who perfectly match your specific requirements, budget, and timeline.",
+      "Experience the future of service discovery with our intelligent matching algorithm. Our AI analyzes thousands of data points to connect you with providers who perfectly match your specific requirements, budget.",
     link: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop&q=80",
     color: "#5196fd",
     icon: "🤖",

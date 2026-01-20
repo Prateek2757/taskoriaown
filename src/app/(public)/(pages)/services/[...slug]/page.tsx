@@ -180,7 +180,7 @@ export default async function ServicePage({ params }: Props) {
     ? cities.find(
         (city: any) =>
           city.name?.toLowerCase().replace(/\s+/g, "-") ===
-          citySlug.toLowerCase()
+          citySlug.toLowerCase().replace(/\s+/g,"-")
       )
     : null;
 

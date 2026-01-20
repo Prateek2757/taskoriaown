@@ -14,6 +14,7 @@ import {
   HelpCircle,
   Lock,
   AlertCircle,
+  Forward,
 } from "lucide-react";
 import { CreditPurchaseModal } from "../payments/CreditTopup";
 import { useSession } from "next-auth/react";
@@ -88,14 +89,13 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   const formatAnswerValue = (value?: string) => {
     if (!value) return "Not answered yet";
-  
-    // Detect ISO date string
+
     const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/;
-  
+
     if (isoDateRegex.test(value)) {
       return value.split("T")[0]; // YYYY-MM-DD
     }
-  
+
     return value;
   };
   const fetchResponses = useCallback(async () => {
@@ -120,11 +120,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     fetchResponses();
   }, [fetchResponses]);
 
-  const shouldFetchConversation = 
-    leadStatus.purchased && 
-    hasActiveSubscription && 
-    !!taskId && 
-    !!userId;
+  const shouldFetchConversation =
+    leadStatus.purchased && hasActiveSubscription && !!taskId && !!userId;
 
   const {
     conversationId,
@@ -212,7 +209,14 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     } else {
       toast.info("Contact details unlocked! Subscribe to use chat feature.");
     }
-  }, [fetchResponses, refetchConversation, hasActiveSubscription, session, userId, lead]);
+  }, [
+    fetchResponses,
+    refetchConversation,
+    hasActiveSubscription,
+    session,
+    userId,
+    lead,
+  ]);
 
   const formatTimeAgo = useCallback((timestamp: string): string => {
     const now = new Date();
@@ -253,10 +257,10 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   const responseRate = leadStatus.count ?? 0;
   const customerFirstName = (lead.customer_name ?? "Customer").split(" ")[0];
 
-  const isChatButtonDisabled = 
-    !leadStatus.purchased || 
-    !hasActiveSubscription || 
-    isNavigating || 
+  const isChatButtonDisabled =
+    !leadStatus.purchased ||
+    !hasActiveSubscription ||
+    isNavigating ||
     subscriptionLoading;
 
   return (
@@ -313,8 +317,10 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         <div className="p-6">
           <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-6">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wide mb-4 flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-cyan-600" /> 
-              {leadStatus.purchased ? "Verified Contact Details" : "Contact Details (Hidden)"}
+              <CheckCircle className="w-4 h-4 text-cyan-600" />
+              {leadStatus.purchased
+                ? "Verified Contact Details"
+                : "Contact Details (Hidden)"}
             </h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -372,21 +378,24 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
           </div>
 
-          {leadStatus.purchased && !hasActiveSubscription && !subscriptionLoading && (
-            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-4 mb-6">
-              <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="text-sm font-semibold text-amber-900 dark:text-amber-100 mb-1">
-                    Subscription Required for Chat
-                  </h4>
-                  <p className="text-xs text-amber-700 dark:text-amber-300">
-                    You've unlocked the contact details! To use the chat feature, please subscribe to a professional plan.
-                  </p>
+          {leadStatus.purchased &&
+            !hasActiveSubscription &&
+            !subscriptionLoading && (
+              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-4 mb-6">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-sm font-semibold text-amber-900 dark:text-amber-100 mb-1">
+                      Subscription Required for Chat
+                    </h4>
+                    <p className="text-xs text-amber-700 dark:text-amber-300">
+                      You've unlocked the contact details! To use the chat
+                      feature, please subscribe to a professional plan.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
           <div className="bg-blue-50 dark:bg-blue-900 rounded-xl p-5 mb-6">
             <div className="flex items-center justify-between mb-3">
@@ -442,7 +451,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 onClick={handleGoToChat}
                 disabled={isChatButtonDisabled}
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed relative"
-                title={!hasActiveSubscription ? "Active subscription required" : ""}
+                title={
+                  !hasActiveSubscription ? "Active subscription required" : ""
+                }
               >
                 {subscriptionLoading ? (
                   <>
@@ -510,22 +521,22 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                   className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4"
                 >
                   <div className="flex items-start gap-2 mb-2">
-                    <MessageSquare
+                    {/* <MessageSquare
                       size={16}
                       className="text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
-                    />
+                    /> */}
                     <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                       {ans.question || "—"}
                     </p>
                   </div>
-                  <div className="flex items-start gap-2 ml-6">
-                    <Quote
+                  <div className="flex items-start gap-2 ">
+                    {/* <Forward
                       size={16}
                       className="text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0"
-                    />
+                    /> */}
                     <p className="text-sm text-gray-700 dark:text-gray-300 italic">
-  {formatAnswerValue(ans.answer)}
-</p>
+                      {formatAnswerValue(ans.answer)}
+                    </p>
                   </div>
                 </div>
               ))}
