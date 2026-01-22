@@ -232,12 +232,12 @@ export default function StepOneCategoryForm({
                   });
                   setValue(
                     "location",
-                    data.city || data.display_name || data.municipality,
+                    data.city || data.display_name ,
                     {
                       shouldDirty: true,
                       shouldTouch: true,
                     }
-                  );
+                  ); 
                   setContinueLoading(true);
                   setTimeout(() => {
                     setContinueLoading(false);

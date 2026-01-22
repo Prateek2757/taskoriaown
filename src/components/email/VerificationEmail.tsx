@@ -16,7 +16,8 @@ export type EmailType =
   | "task-posted"
   | "task-posted-no-budget"
   | "provider-new-task"
-  | "verification";
+  | "verification"
+  | "password-reset-code";
 
 interface AppEmailProps {
   type: EmailType;
@@ -40,7 +41,7 @@ const getEmailContent = ({
       return {
         heading: `Welcome to ${company}, ${username ?? "there"}!`,
         message:
-          "We’re excited to have you onboard. Find trusted professionals and get tasks faster.",
+          "We're excited to have you onboard. Find trusted professionals and get tasks faster.",
         buttonText: "Get Started",
         buttonLink: "https://taskoria.com",
       };
@@ -90,6 +91,18 @@ Please review it.`,
         buttonLink: "#",
       };
 
+    case "password-reset-code":
+      return {
+        heading: "Reset Your Password",
+        message: `Hi ${username ?? "there"},
+
+You requested to reset your password. Use the code below to reset your password.
+
+This code will expire in 10 minutes.`,
+        buttonText: verifyCode || "123456",
+        buttonLink: "#",
+      };
+
     default:
       return { heading: "", message: "" };
   }
@@ -123,15 +136,37 @@ const AppEmail = (props: AppEmailProps) => {
               {content.message}
             </Text>
 
-            {content.buttonText && (
-              <Section className="text-center mt-6">
-                <Button
-                  href={content.buttonLink}
-                  className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold"
-                >
-                  {content.buttonText}
-                </Button>
-              </Section>
+            {(props.type === "verification" ||
+              props.type === "password-reset-code") &&
+              props.verifyCode && (
+                <Section className="text-center mt-6">
+                  <div className="bg-gradient-to-r from-blue-500 to-cyan-500 p-6 rounded-xl inline-block">
+                    <Text className="text-4xl font-bold text-white dark:text-black tracking-widest font-mono">
+                      {props.verifyCode}
+                    </Text>
+                  </div>
+                </Section>
+              )}
+
+            {content.buttonText &&
+              content.buttonLink !== "#" &&
+              props.type !== "verification" &&
+              props.type !== "password-reset-code" && (
+                <Section className="text-center mt-6">
+                  <Button
+                    href={content.buttonLink}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold"
+                  >
+                    {content.buttonText}
+                  </Button>
+                </Section>
+              )}
+
+            {props.type === "password-reset-code" && (
+              <Text className="text-gray-500 text-sm mt-4 text-center">
+                If you didn't request this code, you can safely ignore this
+                email.
+              </Text>
             )}
 
             <Text className="text-gray-400 text-xs text-center mt-8">

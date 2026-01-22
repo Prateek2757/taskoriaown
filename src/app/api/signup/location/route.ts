@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       municipality,
       lat,
       place_id,
-      lon,
+      lng,
     } = body;
 
     const finalState = state === "" ? territory : state || null;
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     const finalCity =
       city || territory || municipality || display_name?.split(",")[0];
 
-    if (!country || !finalCity || !lat || !lon) {
+    if (!country || !finalCity || !lat || !lng) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -99,8 +99,8 @@ export async function POST(req: Request) {
         countryId,
         stateId,
         lat,
-        lon,
-        place_id,
+        lng,
+        String(place_id),
         display_name,
         postcode,
       ]

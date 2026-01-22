@@ -1,190 +1,210 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { MapPin, Maximize2, Minimize2 } from "lucide-react";
+import  { useEffect, useRef, useState } from "react";
+import { MapPin, Maximize2, Minimize2, AlertCircle } from "lucide-react";
 
-export default function LocationMap({ name, latitude, longitude }:{name:string , latitude:number,longitude:number}) {
-  const mapRef = useRef(null);
-  const mapInstance = useRef(null);
-  const markersRef = useRef([]);
+declare global {
+  interface Window {
+    google: any;
+  }
+}
+
+export default function LocationMap({
+  name,
+  latitude,
+  longitude,
+}: {
+  name: string;
+  latitude: number;
+  longitude: number;
+  apiKey?: string;
+}) {
+  const mapRef = useRef<HTMLDivElement | null>(null);
+  const mapInstance = useRef<any>(null);
+  const markerRef = useRef<any>(null);
+  const circleRef = useRef<any>(null);
+
   const [isExpanded, setIsExpanded] = useState(false);
-  const [mapReady, setMapReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  const GOOGLE_MAPS_API_KEY =  process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
-  useEffect(() => {
-    const loadLeaflet = async () => {
+  const initMap = () => {
+    if (!mapRef.current || mapInstance.current || !window.google) return;
 
-      if (!document.getElementById("leaflet-css")) {
-        const link = document.createElement("link");
-        link.id = "leaflet-css";
-        link.rel = "stylesheet";
-        link.href =
-          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css";
-        document.head.appendChild(link);
-      }
+    try {
+      mapInstance.current = new window.google.maps.Map(mapRef.current, {
+        center: { lat: latitude, lng: longitude },
+        zoom: 13,
+        mapId: "DEMO_MAP_ID", 
+        mapTypeId: "satellite",
+        disableDefaultUI: false,
+        mapTypeControl: true,
+        streetViewControl: true,
+        zoomControl: true,
+      });
 
-      if (!window.L) {
-        const script = document.createElement("script");
-        script.src =
-          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js";
-        script.async = true;
-        script.onload = () => setMapReady(true);
-        document.body.appendChild(script);
-      } else {
-        setMapReady(true);
-      }
-    };
+      circleRef.current = new window.google.maps.Circle({
+        map: mapInstance.current,
+        center: { lat: latitude, lng: longitude },
+        radius: 800,
+        fillColor: "#3b82f6",
+        fillOpacity: 0.2,
+        strokeColor: "#3b82f6",
+        strokeWeight: 2,
+      });
 
-    loadLeaflet();
-  }, []);
-
-
-  useEffect(() => {
-    if (!mapReady || !mapRef.current || mapInstance.current) return;
-
-    const init = () => {
-      try {
-        const L = window.L;
-
-        mapRef.current.style.height = isExpanded ? "384px" : "256px";
-
-        const map = L.map(mapRef.current, {
-          center: [latitude, longitude],
-          zoom: 13,
-          zoomControl: true,
-          scrollWheelZoom: true,
-        });
-
-        const satellite = L.tileLayer(
-          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-          { maxZoom: 19 }
-        );
-        
-        const labels = L.tileLayer(
-          "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
-        );
-        
-        satellite.addTo(map);
-        labels.addTo(map);
-
-        mapInstance.current = map;
-
-        setTimeout(() => {
-          map.invalidateSize();
-          setIsLoading(false);
-          updateMarkers();
-        }, 200);
-      } catch (e) {
-        console.error("Map Init Error:", e);
-        setIsLoading(false);
-      }
-    };
-
-    init();
-
-    return () => {
-      if (mapInstance.current) {
-        mapInstance.current.remove();
-        mapInstance.current = null;
-      }
-    };
-  }, [mapReady]);
-
-  useEffect(() => {
-    if (mapInstance.current && latitude && longitude) {
-      mapInstance.current.setView([latitude, longitude], 13);
-      updateMarkers();
+      setIsLoading(false);
+      setError(null);
+    } catch (error: any) {
+      console.error("Error initializing map:", error);
+      setError(error.message || "Failed to initialize map");
+      setIsLoading(false);
     }
-  }, [latitude, longitude]);
-
-  
-  const updateMarkers = () => {
-    if (!window.L || !mapInstance.current) return;
-
-    const L = window.L;
-    const map = mapInstance.current;
-
-    markersRef.current.forEach((m) => map.removeLayer(m));
-    markersRef.current = [];
-
-    const circle = L.circle([latitude, longitude], {
-      color: "#3b82f6",
-      fillColor: "#3b82f6",
-      fillOpacity: 0.15,
-      radius: 800,
-      weight: 2,
-    }).addTo(map);
-
-    // const centerMarker = L.circleMarker([latitude, longitude], {
-    //   radius: 8,
-    //   fillColor: "#3b82f6",
-    //   color: "#ffffff",
-    //   weight: 3,
-    //   fillOpacity: 1,
-    // }).addTo(map);
-
-    markersRef.current = [circle];
-
-    const popupHTML = `
-      <div style="padding:2px;text-align:center">
-        <div style="font-weight:600;color:#1f2937">${name}</div>
-        <div style="font-size:11px;color:#6b7280;font-family:monospace">
-        </div>
-      </div>
-    `;
-
-    const popup = L.popup({
-      className: "custom-popup",
-      closeOnClick: true,
-      autoClose: true,
-    }).setContent(popupHTML);
-
-    // centerMarker.bindPopup(popup);
-    circle.bindPopup(popup);
-
-    // centerMarker.on("click", () => {
-    //   if (map.hasLayer(centerMarker.getPopup())) map.closePopup();
-    //   else centerMarker.openPopup();
-    // });
-
-    circle.on("mouseover", () => {
-      circle.setStyle({ fillOpacity: 0.25 });
-      // centerMarker.openPopup();
-    });
-
-    circle.on("mouseout", () => {
-      circle.setStyle({ fillOpacity: 0.15 });
-    });
   };
 
+  useEffect(() => {
+    if (!GOOGLE_MAPS_API_KEY || GOOGLE_MAPS_API_KEY === 'undefined') {
+      setError("Google Maps API key is missing. Please add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to your .env.local file");
+      setIsLoading(false);
+      return;
+    }
+
+    if (window.google && window.google.maps) {
+      initMap();
+      return;
+    }
+
+    const existingScript = document.querySelector(
+      'script[src*="maps.googleapis.com"]'
+    );
+    
+    if (existingScript) {
+      const checkGoogle = setInterval(() => {
+        if (window.google && window.google.maps) {
+          clearInterval(checkGoogle);
+          initMap();
+        }
+      }, 100);
+
+      setTimeout(() => {
+        if (!window.google || !window.google.maps) {
+          clearInterval(checkGoogle);
+          setError("Failed to load Google Maps - timeout");
+          setIsLoading(false);
+        }
+      }, 10000);
+      
+      return () => clearInterval(checkGoogle);
+    }
+
+    // Load the script for the first time
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&loading=async`;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      // Wait a bit for libraries to load
+      setTimeout(initMap, 100);
+    };
+    script.onerror = () => {
+      console.error("Failed to load Google Maps script");
+      setError("Failed to load Google Maps. Please check your API key and internet connection.");
+      setIsLoading(false);
+    };
+    
+    document.head.appendChild(script);
+
+    return () => {
+      // Cleanup handled by browser
+    };
+  }, [latitude, longitude, name, GOOGLE_MAPS_API_KEY]);
+
+  useEffect(() => {
+    if (!mapInstance.current || !window.google) return;
+
+    const pos = { lat: latitude, lng: longitude };
+    mapInstance.current.setCenter(pos);
+    
+    if (circleRef.current) {
+      circleRef.current.setCenter(pos);
+    }
+  }, [latitude, longitude]);
 
   const toggleExpand = () => {
     const next = !isExpanded;
     setIsExpanded(next);
 
     setTimeout(() => {
-      if (mapInstance.current && mapRef.current) {
-        mapRef.current.style.height = next ? "384px" : "256px";
-        mapInstance.current.invalidateSize();
-        mapInstance.current.setView([latitude, longitude], next ? 14 : 13);
+      if (mapInstance.current && window.google) {
+        window.google.maps.event.trigger(mapInstance.current, "resize");
+        mapInstance.current.setZoom(next ? 14 : 13);
       }
-    }, 200);
+    }, 300);
   };
 
-  if (!latitude || !longitude) return null;
+  if (!latitude || !longitude) {
+    return (
+      <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <div className="flex items-center gap-2">
+          <AlertCircle className="w-5 h-5 text-yellow-600" />
+          <p className="text-sm text-yellow-800 font-medium">
+            Location coordinates not provided
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mt-6">
+        <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2 mb-3">
+          <MapPin className="w-4 h-4 text-blue-600" />
+          Project Location
+        </h3>
+        <div className="p-6 bg-red-50 border-2 border-red-200 rounded-xl">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+            <div>
+              <p className="text-sm text-red-800 font-semibold mb-2">
+                Failed to load map
+              </p>
+              <p className="text-sm text-red-700 mb-3">{error}</p>
+              <div className="bg-white border border-red-300 rounded-lg p-3 text-xs">
+                <p className="font-semibold text-gray-800 mb-2">Setup Instructions:</p>
+                <ol className="list-decimal list-inside space-y-1 text-gray-700">
+                  <li>Go to <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Google Cloud Console</a></li>
+                  <li>Create a project or select existing one</li>
+                  <li>Enable "Maps JavaScript API"</li>
+                  <li>Create API credentials (API Key)</li>
+                  <li>Add to <code className="bg-gray-100 px-1 rounded">.env.local</code>:</li>
+                </ol>
+                <pre className="bg-gray-800 text-green-400 p-2 rounded mt-2 overflow-x-auto">
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_api_key_here
+                </pre>
+                <p className="mt-2 text-gray-600">Then restart your Next.js dev server</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-6">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold tracking-wide text-gray-800 dark:text-gray-300 flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+        <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+          <MapPin className="w-4 h-4 text-blue-600" />
           Project Location
         </h3>
 
         <button
           onClick={toggleExpand}
-          className="p-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition"
+          className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+          aria-label={isExpanded ? "Minimize map" : "Expand map"}
         >
           {isExpanded ? (
             <Minimize2 className="w-4 h-4" />
@@ -195,52 +215,26 @@ export default function LocationMap({ name, latitude, longitude }:{name:string ,
       </div>
 
       <div
-        className={`relative rounded-xl overflow-hidden border-2 transition-all duration-300 ${
+        className={`relative rounded-xl overflow-hidden border-2 border-gray-200 transition-all duration-300 ${
           isExpanded ? "h-96" : "h-64"
         }`}
       >
         {isLoading && (
-          <div className="absolute inset-0 z-20 bg-gray-100 dark:bg-gray-800 flex flex-col items-center justify-center">
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-gray-100">
             <div className="w-10 h-10 border-4 border-blue-300 border-t-blue-600 rounded-full animate-spin"></div>
-            <p className="text-sm mt-2 text-gray-600 dark:text-gray-400">
-              Loading map…
-            </p>
+            <p className="text-sm mt-2 text-gray-600">Loading map…</p>
           </div>
         )}
 
         <div ref={mapRef} className="w-full h-full" />
 
-        {!isLoading && (
-          <>
-            <div className="absolute bottom-4 left-4 z-[999] bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-lg px-3 py-2 rounded-lg">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-blue-600" />
-                <div>
-                  <div className="text-xs font-semibold">{name}</div>
-                  {/* <div className="text-xs font-mono text-gray-500">
-                    {latitude.toFixed(4)}, {longitude.toFixed(4)}
-                  </div> */}
-                </div>
-              </div>
+        {!isLoading && !error && (
+          <div className="absolute bottom-4 left-4 bg-white border border-gray-300 shadow-lg px-3 py-2 rounded-lg">
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-blue-600" />
+              <div className="text-xs font-semibold text-gray-800">{name}</div>
             </div>
-            {/* <div className="absolute top-4 right-4 z-[9999] flex gap-2">
-              <a
-                href={`https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=16/${latitude}/${longitude}`}
-                target="_blank"
-                className="px-3 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-xs shadow"
-              >
-                View on OSM
-              </a>
-
-              <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`}
-                target="_blank"
-                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs shadow"
-              >
-                Get Directions
-              </a>
-            </div> */}
-          </>
+          </div>
         )}
       </div>
     </div>

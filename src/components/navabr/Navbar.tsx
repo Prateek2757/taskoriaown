@@ -44,7 +44,7 @@ export default function ModernNavbar() {
   const navLinks = {
     public: [
       { name: "Home", href: "/", icon: Home },
-      { name: "Providers", href: "/providers", icon: Users },
+      // { name: "Providers", href: "/providers", icon: Users },
       { name: "Services", href: "/services", icon: HandPlatter },
     ],
     customer: [
@@ -56,7 +56,7 @@ export default function ModernNavbar() {
     provider: [
       { name: "Home", href: "/", icon: Home },
       { name: "Leads", href: "/provider/leads", icon: Search },
-      { name: "My Responses", href: "/messages/null", icon: MessageSquare },
+      { name: "Inbox", href: "/messages/null", icon: MessageSquare },
       { name: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
     ],
   };

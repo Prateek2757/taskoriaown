@@ -4,46 +4,30 @@ import { useState, useRef, useEffect } from "react";
 import { Loader2, Search } from "lucide-react";
 import { Input } from "../ui/input";
 import axios from "axios";
-const sessionToken = useRef(
-  typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
-);
+
 type Location = {
-  place_id: number;
+  place_id: string;
   city_id?: number;
   display_name: string;
-  lat: string;
-  lon: string;
-  address?: {
-    city?: string;
-    municipality?: string;
-    town?: string;
-    territory?: string;
-    village?: string;
-    state?: string;
-    country?: string;
-    postcode?: string;
-  };
-};
-
-type LocationProp = {
-  city_id?: number;
   city?: string;
-  display_name?: string;
-  municipality?: string;
-  name?: string;
+  suburb?: string;
+  state?: string;
+  postcode?: string;
+  country?: string;
+  lat?: number;
+  lng?: number;
 };
 
 type Props = {
-  onSelect?: (data: {
-    city_id: number;
-    city: string;
-    display_name: string;
-    municipality: string;
-  }) => void;
-  presetLocation?: LocationProp | null;
+  onSelect?: (data: Location) => void;
+  presetLocation?: Location | null;
 };
 
 export default function LocationSearch({ onSelect, presetLocation }: Props) {
+  const sessionToken = useRef(
+    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
+  );
+
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Location[]>([]);
   const [loading, setLoading] = useState(false);
@@ -56,86 +40,125 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
 
   useEffect(() => {
     if (presetLocation) {
-      const displayText =
-        presetLocation.display_name ||
-        presetLocation.city ||
-        presetLocation.name ||
-        "";
-      setQuery(displayText);
+      const cleanName = (presetLocation.display_name || "")
+        .replace(/,?\s*Australia$/i, "")
+        .trim();
+      setQuery(cleanName);
     }
   }, [presetLocation]);
 
-  const fetchAddresses = async (value: string) => {
-    if (value.length < 3) {
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const fetchAutocomplete = async (input: string) => {
+    if (input.length < 3) {
       setResults([]);
       setShowDropdown(false);
       return;
     }
 
-    if (cache.current[value]) {
-      setResults(cache.current[value]);
+    if (cache.current[input]) {
+      setResults(cache.current[input]);
       setShowDropdown(true);
       return;
     }
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=au&q=${encodeURIComponent(
-          value
-        )}`
-      );
-      const data = await res.json();
-      setResults(data);
-      cache.current[value] = data;
+      const res = await axios.post("/api/googlemap/autocomplete", {
+        input,
+        session: sessionToken.current,
+      });
+
+      const suggestions = res.data.suggestions || [];
+
+      const mapped = suggestions.map((s: any) => ({
+        place_id: s.placePrediction.placeId,
+        display_name: s.placePrediction.text.text,
+      }));
+
+      setResults(mapped);
+      cache.current[input] = mapped;
       setShowDropdown(true);
     } catch (err) {
-      console.error(err);
+      console.error("Autocomplete error:", err);
+      setResults([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchPlaceDetails = async (
+    placeId: string
+  ): Promise<Location | null> => {
+    try {
+      const res = await axios.get("/api/googlemap/place-details", {
+        params: { place_id: placeId, session: sessionToken.current },
+      });
+
+      const data = res.data;
+      console.log("Place details received:", data);
+
+      return {
+        place_id: data.place_id,
+        display_name: data.display_name,
+        city: data.city,
+        suburb: data.suburb,
+        state: data.state,
+        postcode: data.postcode,
+        country: data.country,
+        lat: data.lat,
+        lng: data.lng,
+      };
+    } catch (err) {
+      console.error("Place details error:", err);
+      return null;
+    }
+  };
+
+  const handleSelect = async (loc: Location) => {
+    setQuery(loc.display_name);
+    setResults([]);
+    setShowDropdown(false);
+    setActiveIndex(-1);
+
+    setLoading(true);
+    const details = await fetchPlaceDetails(loc.place_id);
+    setLoading(false);
+
+    if (!details) return;
+
+    try {
+      const reslocation = await axios.post("/api/signup/location", details);
+
+      const city_id = reslocation.data.city_id;
+
+      const fullLocation = {
+        ...details,
+        display_name: loc.display_name,
+        city_id,
+      };
+
+      onSelect?.(fullLocation);
+    } catch (error) {
+      console.error("Failed to save location:", error);
     }
   };
 
   const handleChange = (value: string) => {
     setQuery(value);
     if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
-    debounceTimeout.current = setTimeout(() => fetchAddresses(value), 400);
-  };
-
-  const handleSelect = async (r: Location) => {
-    const location = {
-      place_id: r.place_id,
-      display_name: r.display_name,
-      city: r.address?.city || r.address?.town || r.address?.village || "",
-      state: r.address?.state || "",
-      country: r.address?.country || "",
-      territory: r.address?.territory || "",
-      postcode: r.address?.postcode || "",
-      municipality: r.address?.municipality || "",
-      lat: parseFloat(r.lat),
-      lon: parseFloat(r.lon),
-    };
-
-    setQuery(location.display_name);
-    // console.log(location);
-
-    setResults([]);
-    setShowDropdown(false);
-    setActiveIndex(-1);
-
-    try {
-      const res = await axios.post("/api/signup/location", location);
-      const data = await res.data;
-
-      onSelect?.({
-        city_id: data.city_id,
-        city: location.city,
-        display_name: location.display_name,
-        municipality: location.municipality,
-      });
-    } catch (err) {
-      console.error("Failed to save location:", err);
-    }
+    debounceTimeout.current = setTimeout(() => fetchAutocomplete(value), 300);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -148,15 +171,16 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
       setActiveIndex((prev) => (prev - 1 + results.length) % results.length);
     } else if (e.key === "Enter") {
       e.preventDefault();
-      if (activeIndex >= 0 && activeIndex < results.length) {
-        handleSelect(results[activeIndex]);
-      }
+      if (activeIndex >= 0) handleSelect(results[activeIndex]);
+    } else if (e.key === "Escape") {
+      setShowDropdown(false);
+      setActiveIndex(-1);
     }
   };
 
   return (
     <div className="relative w-full" ref={containerRef}>
-      <Search className="absolute left-3 mr-4 top-3 text-gray-400 w-4 h-4" />
+      <Search className="absolute left-3 top-3 text-gray-400 w-4 h-4" />
       <Input
         type="text"
         value={query}
@@ -170,12 +194,12 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
       />
 
       {loading && (
-        <div className="absolute top-full left-0 mt-1 w-full flex items-center gap-2 bg-white border border-gray-200 rounded-lg p-2 shadow-md text-gray-500 text-sm z-50">
-          <Loader2 className="animate-spin h-4 w-4" /> Searching...
+        <div className="absolute right-3 top-3">
+          <Loader2 className="animate-spin h-4 w-4 text-gray-400" />
         </div>
       )}
 
-      {showDropdown && !loading && results.length > 0 && (
+      {showDropdown && results.length > 0 && (
         <ul
           className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto z-50 scroll-smooth"
           onMouseLeave={() => setActiveIndex(-1)}
@@ -183,35 +207,24 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
           {results.map((r, i) => (
             <li
               key={r.place_id}
-              className={`p-3 cursor-pointer text-sm transition-colors ${
+              className={`p-3 cursor-pointer text-sm font-semibold transition-colors ${
                 i === activeIndex
                   ? "bg-blue-500 text-white"
-                  : "hover:bg-primary text-gray-700"
+                  : "hover:bg-primary  text-gray-700"
               }`}
               onClick={() => handleSelect(r)}
               onMouseEnter={() => setActiveIndex(i)}
             >
-              <p className="truncate font-medium">
-                {r.display_name || r.address?.postcode}
-              </p>
-              {(r.address?.city || r.address?.town || r.address?.village) && (
-                <span className="text-xs text-gray-400">
-                  {r.address?.city ||
-                    r.address?.town ||
-                    r.address?.village ||
-                    r.address.municipality}
-                  , {r.address?.state}
-                </span>
-              )}
+              {r.display_name}
             </li>
           ))}
         </ul>
       )}
 
       {showDropdown &&
-        !loading &&
         query.length >= 3 &&
-        results.length === 0 && (
+        results.length === 0 &&
+        !loading && (
           <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg p-2 text-gray-400 text-sm shadow-md z-50">
             No results found.
           </div>

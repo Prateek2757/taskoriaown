@@ -29,6 +29,7 @@ export async function sendEmail({
       "task-posted-no-budget": "⚠️ Task Posted Without Budget",
       "provider-new-task": "🚨 New task available in your category",
       verification: "Verify your email address",
+      "password-reset-code":"Reset Your Password"
     };
 
     await resend.emails.send({
