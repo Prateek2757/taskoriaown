@@ -4,17 +4,18 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 export async function generateMetadata(): Promise<Metadata> {
 
-// Force dynamic rendering to prevent build-time fetch errors
-export const dynamic = 'force-dynamic';
+  const providers = await fetchProviders();
 
-export const metadata: Metadata = {
-  title: "All Providers — Taskoria",
-  description: "Browse and hire verified service providers across Australia.",
-  openGraph: {
-    title: "All Providers — Taskoria",
-    description: "Find trusted service providers.",
-  },
-};
+  return {
+    title: `All Providers (${providers.length}) — Taskoria`,
+    description: "Browse and hire verified service providers across Australia.",
+    openGraph: {
+      title: `All Providers (${providers.length})`,
+      description: "Find trusted service providers.",
+    },
+  };
+}
+
 
 export default function ProvidersPage() {
   return (
