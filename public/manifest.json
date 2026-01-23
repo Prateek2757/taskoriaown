@@ -1,7 +1,7 @@
 {
-    "name": "Life Insurance Portal",
-    "short_name": "Life Insurance",
-    "description": "Life Insurance Management Portal",
+    "name": "Taskoria",
+    "short_name": "Taskoria",
+    "description": "Taskoria",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
