@@ -48,7 +48,7 @@ export default function StepOneCategoryForm({
 }: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [continueLoading, setContinueLoading] = useState(false);
+  const [locationLoading, setLocationLoading] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const [showCategorySuggestions, setShowCategorySuggestions] = useState(false);
   const [searchCategoryTerm, setSearchCategoryTerm] = useState("");
@@ -65,6 +65,7 @@ export default function StepOneCategoryForm({
   const categoryId = watch("category_id");
   const location = watch("location");
 
+  // Enable continue button immediately when both fields are filled
   const isContinueEnabled = categoryId > 0 && location?.trim() !== "";
 
   useEffect(() => {
@@ -87,7 +88,7 @@ export default function StepOneCategoryForm({
       setValue("category_name", presetCategory.name);
       setSelectedCategoryTitle(presetCategory.name);
     }
-  }, [presetCategory, setValue]);
+  }, [presetCategory, setValue, setSelectedCategoryTitle]);
 
   useEffect(() => {
     if (presetLocation) {
@@ -95,7 +96,7 @@ export default function StepOneCategoryForm({
       setValue("location", presetLocation.display_name || "");
       setSelectedLocationId(String(presetLocation.city_id || 0));
     }
-  }, [presetLocation, setValue]);
+  }, [presetLocation, setValue, setSelectedLocationId]);
 
   useEffect(() => {
     const term = searchCategoryTerm.trim().toLowerCase();
@@ -147,18 +148,7 @@ export default function StepOneCategoryForm({
   };
 
   return (
-    <div
-      className="space-y-8"
-    >
-      {/* <div className="space-y-2 text-center">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-          What kind of service do you need?
-        </h2>
-        <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
-          Start typing to find your category.
-        </p>
-      </div> */}
-
+    <div className="space-y-8">
       {loading ? (
         <div className="flex flex-col items-center justify-center py-10 gap-3 text-gray-500 dark:text-gray-400">
           <Loader2 className="w-6 h-6 animate-spin" />
@@ -199,7 +189,7 @@ export default function StepOneCategoryForm({
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute z-50 w-full mt-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-60 overflow-y-ato"
+                  className="absolute z-50 w-full mt-2 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-60 overflow-y-auto"
                 >
                   {filteredCategories.map((cat) => (
                     <li
@@ -220,33 +210,32 @@ export default function StepOneCategoryForm({
 
           <div className="relative">
             <Label className="font-semibold text-gray-800 dark:text-gray-200">
-              Location 
+              Location <span className="text-red-500">*</span>
             </Label>
             <div className="relative mt-2">
               <LocationSearch
                 presetLocation={presetLocation}
                 onSelect={(data) => {
+                  setLocationLoading(true);
+
                   setValue("city_id", data.city_id, {
                     shouldDirty: true,
                     shouldTouch: true,
                   });
-                  setValue(
-                    "location",
-                    data.city || data.display_name ,
-                    {
-                      shouldDirty: true,
-                      shouldTouch: true,
-                    }
-                  ); 
-                  setContinueLoading(true);
-                  setTimeout(() => {
-                    setContinueLoading(false);
-                  }, 1000);
+                  setValue("location", data.city || data.display_name, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                  });
+
                   setSelectedLocation({
                     city_id: data.city_id,
                     display_name: data.display_name,
                     city: data.city,
                   });
+
+                  setSelectedLocationId(String(data.city_id || 0));
+
+                  setLocationLoading(false);
                 }}
               />
             </div>
@@ -264,15 +253,18 @@ export default function StepOneCategoryForm({
             </Button>
             <Button
               onClick={handleSubmit(onContinue)}
-              disabled={!isContinueEnabled || continueLoading}
+              disabled={!isContinueEnabled || locationLoading}
               className={cn(
-                "flex-1 rounded-lg bg-[#3C7DED] text-white font-medium shadow-lg hover:shadow-xl",
-                (!isContinueEnabled || continueLoading) &&
+                "flex-1 rounded-lg bg-[#3C7DED] text-white font-medium shadow-lg hover:shadow-xl transition-all",
+                (!isContinueEnabled || locationLoading) &&
                   "opacity-60 cursor-not-allowed"
               )}
             >
-              {continueLoading ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
+              {locationLoading ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                  Processing...
+                </>
               ) : (
                 "Continue"
               )}

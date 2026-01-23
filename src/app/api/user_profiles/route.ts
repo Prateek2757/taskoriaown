@@ -34,6 +34,23 @@ export async function GET() {
       GROUP BY up.user_id, up.display_name, up.location_id, ci.name, up.is_nationwide, up.profile_image_url
     ),
 
+    user_locations AS (
+      SELECT 
+        ul.user_id,
+        json_agg(
+          json_build_object(
+            'id', ul.id,
+            'city_id', ul.city_id,
+            'city_name', c.name,
+            'created_at', ul.created_at
+          ) ORDER BY ul.created_at DESC
+        ) AS locations
+      FROM user_locations ul
+      JOIN cities c ON c.city_id = ul.city_id
+      WHERE ul.user_id = $1
+      GROUP BY ul.user_id
+    ),
+
     company_profile AS (
       SELECT 
         c.user_id,
@@ -64,6 +81,7 @@ export async function GET() {
 
     SELECT
       p.*,
+      COALESCE(ul.locations, '[]'::json) AS locations,
       cp.company_name,
       cp.logo_url,
       cp.company_about,
@@ -73,6 +91,7 @@ export async function GET() {
       EXISTS (SELECT 1 FROM active_sub) AS is_pro,
       (SELECT row_to_json(s) FROM active_sub s) AS active_subscription
     FROM profile p
+    LEFT JOIN user_locations ul ON ul.user_id = p.user_id
     LEFT JOIN company_profile cp ON cp.user_id = p.user_id;
     `,
     [userId]
@@ -98,7 +117,7 @@ export async function PUT(req: Request) {
       display_name = COALESCE($1, display_name),
       location_id = COALESCE($2, location_id),
       is_nationwide = COALESCE($3, is_nationwide),
-      profile_image_url = COALESCE($4,profile_image_url),
+      profile_image_url = COALESCE($4, profile_image_url),
       updated_at = NOW()
     WHERE user_id = $5
     `,
@@ -107,7 +126,7 @@ export async function PUT(req: Request) {
 
   const { rows } = await pool.query(
     `
-    SELECT display_name, location_id, is_nationwide , profile_image_url
+    SELECT display_name, location_id, is_nationwide, profile_image_url
     FROM user_profiles
     WHERE user_id = $1
     `,

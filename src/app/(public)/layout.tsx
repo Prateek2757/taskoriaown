@@ -22,6 +22,15 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.taskoria.com"),
 
   title: "Taskoria — Find Trusted Service Providers",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Taskoria",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   description:
     "Taskoria helps you discover top service providers across categories like Home, Professional.",
   keywords: [
@@ -80,6 +89,10 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#8A2BE2",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({

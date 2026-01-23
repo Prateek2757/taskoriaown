@@ -31,12 +31,14 @@ export default function MyServicesPage() {
   const {
     profile,
     categories,
+    userLocations,
     loading,
     saving,
     error,
     addCategory,
     removeCategory,
-    setLocation,
+    addLocation,
+    removeLocation,
     toggleNationwide,
   } = useLeadProfile();
 
@@ -46,6 +48,8 @@ export default function MyServicesPage() {
   const [serviceDialogOpen, setServiceDialogOpen] = useState(false);
   const [locationDialogOpen, setLocationDialogOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
+  const [locationSuccess, setLocationSuccess] = useState<string | null>(null);
   const [pendingRemove, setPendingRemove] = useState<{
     type: "service" | "location";
     id: number | null;
@@ -61,7 +65,7 @@ export default function MyServicesPage() {
         return;
       }
       const filtered = categories.filter((c) =>
-        c.name.toLowerCase().includes(query.toLowerCase())
+        c.name.toLowerCase().includes(query.toLowerCase()) 
       );
       setFilteredCategories(filtered);
     }, 250),
@@ -101,12 +105,33 @@ export default function MyServicesPage() {
         category &&
         !profile?.categories.some((c) => c.category_id === categoryId)
       ) {
-        addCategory(category.category_id, category.name);
+        addCategory(category.category_id, category.name as any);
       }
     });
     setSelectedCategories([]);
     setServiceDialogOpen(false);
     setCatSearch("");
+  };
+
+  const handleAddLocation = async (data: { city_id?: number; city?: string }) => {
+    setLocationError(null); 
+    setLocationSuccess(null); 
+    try {
+      await addLocation(data.city_id as any, data.city as any);
+      setLocationSuccess(`${data.city} added successfully!`);
+      
+      setTimeout(() => {
+        setLocationDialogOpen(false);
+        setLocationSuccess(null);
+      }, 1500);
+    } catch (err: any) {
+      const errorMessage = err.message || "Failed to add location";
+      setLocationError(errorMessage);
+      
+      setTimeout(() => {
+        setLocationError(null);
+      }, 5000);
+    }
   };
 
   if (loading || !profile) {
@@ -296,7 +321,8 @@ export default function MyServicesPage() {
           </CardContent>
         </Card>
 
-      <Card className="rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+        {/* LOCATIONS CARD */}
+        <Card className="rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
           <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 border-b dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -307,7 +333,13 @@ export default function MyServicesPage() {
               </div>
               <Dialog
                 open={locationDialogOpen}
-                onOpenChange={setLocationDialogOpen}
+                onOpenChange={(open) => {
+                  setLocationDialogOpen(open);
+                  if (!open) {
+                    setLocationError(null); 
+                    setLocationSuccess(null); 
+                  }
+                }}
               >
                 <DialogTrigger asChild>
                   <Button
@@ -324,18 +356,43 @@ export default function MyServicesPage() {
                       Add Location
                     </DialogTitle>
                     <DialogDescription className="text-base text-gray-600 dark:text-gray-400">
-                      Select a city where you provide services. You can change
-                      this anytime.
+                      Select cities where you provide services. You can add multiple locations.
                     </DialogDescription>
                   </DialogHeader>
 
-                  <div className="space-y-4 flex-1  flex flex-col">
-                    <LocationSearch
-                      onSelect={(data) => {
-                        setLocation(data.city_id, data.city);
-                        setLocationDialogOpen(false);
-                      }}
-                    />
+                  {locationSuccess && (
+                    <div
+                      className="bg-green-50 dark:bg-green-900/50 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 px-4 py-3 rounded-lg flex items-start gap-3"
+                      role="alert"
+                    >
+                      <Check className="w-5 h-5 shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="font-semibold text-sm">{locationSuccess}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {locationError && (
+                    <div
+                      className="bg-red-50 dark:bg-red-900/50 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg flex items-start gap-3"
+                      role="alert"
+                    >
+                      <XCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="font-semibold text-sm">Cannot add location</p>
+                        <p className="text-sm mt-0.5">{locationError}</p>
+                      </div>
+                      <button
+                        onClick={() => setLocationError(null)}
+                        className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200"
+                      >
+                        <XCircle className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="space-y-4 flex-1 flex flex-col">
+                    <LocationSearch onSelect={handleAddLocation} />
                   </div>
                 </DialogContent>
               </Dialog>
@@ -350,26 +407,32 @@ export default function MyServicesPage() {
                     🌍 Nationwide Coverage
                   </Badge>
                 </div>
-              ) : profile.location_name ? (
-                <div className="flex items-center justify-center h-full py-8">
-                  <Badge
-                    className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 px-6 py-3 rounded-full flex items-center gap-3 cursor-pointer hover:bg-red-100 dark:hover:bg-red-700 hover:text-red-700 dark:hover:text-red-200 transition-all text-base font-medium shadow-sm"
-                    onClick={() => {
-                      if (!saving) {
-                        setPendingRemove({ type: "location", id: null });
-                        setConfirmOpen(true);
-                      }
-                    }}
-                  >
-                    <MapPin className="w-4 h-4" />
-                    {profile.location_name}
-                    <XCircle className="w-4 h-4" />
-                  </Badge>
+              ) : userLocations.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {userLocations.map((loc) => (
+                    <Badge
+                      key={loc.id}
+                      className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 px-4 py-2 rounded-full flex items-center gap-2 cursor-pointer hover:bg-red-100 dark:hover:bg-red-700 hover:text-red-700 dark:hover:text-red-200 transition-all text-sm font-medium shadow-sm"
+                      onClick={() => {
+                        if (!saving) {
+                          setPendingRemove({ 
+                            type: "location", 
+                            id: loc.city_id 
+                          });
+                          setConfirmOpen(true);
+                        }
+                      }}
+                    >
+                      <MapPin className="w-3.5 h-3.5" />
+                      {loc.city_name}
+                      <XCircle className="w-3.5 h-3.5" />
+                    </Badge>
+                  ))}
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-500 py-8">
-                  <p className="text-base font-medium">No location selected yet</p>
-                  <p className="text-sm mt-1">Choose a city or enable nationwide</p>
+                  <p className="text-base font-medium">No locations selected yet</p>
+                  <p className="text-sm mt-1">Choose cities or enable nationwide</p>
                 </div>
               )}
             </div>
@@ -394,7 +457,7 @@ export default function MyServicesPage() {
               </div>
 
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                💡 <strong>Tip:</strong> Click on your location badge to remove it
+                💡 <strong>Tip:</strong> Click on a location badge to remove it. Add multiple cities to expand your reach.
               </p>
             </div>
           </CardContent>
@@ -425,6 +488,7 @@ export default function MyServicesPage() {
         </div>
       )}
 
+      {/* Confirmation Dialog */}
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -433,7 +497,7 @@ export default function MyServicesPage() {
             </DialogTitle>
             <DialogDescription className="text-gray-600 dark:text-gray-400">
               Are you sure you want to remove this{" "}
-              {pendingRemove.type === "service" ? "service" : "location"} ?
+              {pendingRemove.type === "service" ? "service" : "location"}?
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-3 mt-4">
@@ -445,8 +509,8 @@ export default function MyServicesPage() {
               onClick={() => {
                 if (pendingRemove.type === "service" && pendingRemove.id) {
                   removeCategory(pendingRemove.id);
-                } else if (pendingRemove.type === "location") {
-                  setLocation(0, "");
+                } else if (pendingRemove.type === "location" && pendingRemove.id) {
+                  removeLocation(pendingRemove.id);
                 }
                 setConfirmOpen(false);
               }}

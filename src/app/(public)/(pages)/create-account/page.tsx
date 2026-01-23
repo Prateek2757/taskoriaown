@@ -3,7 +3,7 @@
 import { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
-import { MapPin, Mail, User, Info, Lock, Building2, Globe } from "lucide-react";
+import { MapPin, Mail, User, Info, Lock, Building2, Globe, EyeOff, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/userContext";
 import axios from "axios";
@@ -65,7 +65,7 @@ function OnboardingContent() {
   const { setUser } = useUser();
   const [step, setStep] = useState<"location" | "details">("location");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<OnboardingFormData>({
     resolver: zodResolver(conditionalSchema),
     defaultValues: {
@@ -425,17 +425,34 @@ function OnboardingContent() {
                           <FormLabel className="dark:text-gray-200">
                             Password
                           </FormLabel>
+
                           <FormControl>
-                            <div className={inputWrapperClasses}>
+                            <div className={`${inputWrapperClasses} relative`}>
                               <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
+
                               <input
                                 {...field}
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 placeholder="Enter password"
-                                className={inputClasses}
+                                className={`${inputClasses} pr-10`}
                               />
+
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 border-0  hover:text-gray-600 dark:hover:text-gray-300"
+                                tabIndex={-1}
+                              >
+                                {showPassword ? (
+                                  <EyeOff className="w-5  h-5" />
+                                ) : (
+                                  <Eye className="w-5 h-5" />
+                                )}
+                              </Button>
                             </div>
                           </FormControl>
+
                           <FormMessage />
                         </FormItem>
                       )}

@@ -8,7 +8,7 @@ import { MapPin, Wrench } from "lucide-react";
 import Link from "next/link";
 
 export default function LeadSettingsCard() {
-  const { profile, loading } = useLeadProfile();
+  const { profile, userLocations,loading } = useLeadProfile();
 
   if (loading) {
     return (
@@ -26,7 +26,7 @@ export default function LeadSettingsCard() {
 
   const location = profile.is_nationwide
     ? "Nationwide"
-    : profile.location_name || "Not set";
+    : userLocations || "Not set";
 
   return (
     <Card
@@ -95,7 +95,11 @@ export default function LeadSettingsCard() {
           </h3>
           <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
             <MapPin className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
-            <span className="text-sm">{location}</span>
+            <span className="text-sm">
+              {Array.isArray(location)
+                ? location.map((loc) => loc.city_name).join(", ")
+                : location}
+            </span>
           </div>
           <p className="text-sm text-slate-500 dark:text-slate-400">
             This is where you'll receive leads from. Update your location on the

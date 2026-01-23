@@ -1,5 +1,13 @@
 import type { NextConfig } from "next";
+import withSerwistInit from "@serwist/next";
 
+const withSerwist = withSerwistInit({
+  swSrc: "src/app/sw.ts",
+  swDest: "public/sw.js",
+  cacheOnNavigation: true,
+  reloadOnOnline: true,
+  disable: false, // Enable PWA in all environments
+});
 const nextConfig: NextConfig = {
 	reactStrictMode: true,
 	images: {
@@ -54,4 +62,4 @@ const nextConfig: NextConfig = {
 	/* config options here */
 };
 
-export default nextConfig;
+export default withSerwist(nextConfig);

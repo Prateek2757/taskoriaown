@@ -65,7 +65,6 @@ export async function POST(req: NextRequest) {
         location_id = $3,
         is_nationwide = $4,
         is_onboarded = TRUE,
-
         updated_at = NOW()
       `,
       [
@@ -76,6 +75,13 @@ export async function POST(req: NextRequest) {
         distance,
       ]
     );
+
+    if (location_id) {
+      await client.query(
+        `INSERT INTO user_locations (user_id , city_id, distance_mile) VALUES($1,$2,$3)`,
+        [user_idd, location_id, distance]
+      );
+    }
 
     await client.query(
       `

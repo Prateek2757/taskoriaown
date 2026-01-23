@@ -100,7 +100,6 @@ export default function ProfileSettings() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 pb-16 text-slate-900 dark:text-slate-100">
-      {/* Header */}
       <div className="mb-10">
         <button
           onClick={() => window.history.back()}
@@ -132,15 +131,14 @@ export default function ProfileSettings() {
           before hiring you.
         </p>
 
-        <a
+        {/* <a
           href="/public-profile"
           className="inline-block mt-3 text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
         >
           View public profile
-        </a>
+        </a> */}
       </div>
 
-      {/* Sections */}
       <div className="space-y-4">
         {SECTIONS.map((section) => {
           const isOpen = expanded === section.id;

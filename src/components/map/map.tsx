@@ -1,6 +1,6 @@
 "use client";
 
-import  { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MapPin, Maximize2, Minimize2, AlertCircle } from "lucide-react";
 
 declare global {
@@ -28,7 +28,7 @@ export default function LocationMap({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const GOOGLE_MAPS_API_KEY =  process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
   const initMap = () => {
     if (!mapRef.current || mapInstance.current || !window.google) return;
@@ -37,7 +37,7 @@ export default function LocationMap({
       mapInstance.current = new window.google.maps.Map(mapRef.current, {
         center: { lat: latitude, lng: longitude },
         zoom: 13,
-        mapId: "DEMO_MAP_ID", 
+        mapId: "DEMO_MAP_ID",
         mapTypeId: "satellite",
         disableDefaultUI: false,
         mapTypeControl: true,
@@ -65,8 +65,10 @@ export default function LocationMap({
   };
 
   useEffect(() => {
-    if (!GOOGLE_MAPS_API_KEY || GOOGLE_MAPS_API_KEY === 'undefined') {
-      setError("Google Maps API key is missing. Please add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to your .env.local file");
+    if (!GOOGLE_MAPS_API_KEY || GOOGLE_MAPS_API_KEY === "undefined") {
+      setError(
+        "Google Maps API key is missing. Please add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to your .env.local file"
+      );
       setIsLoading(false);
       return;
     }
@@ -79,7 +81,7 @@ export default function LocationMap({
     const existingScript = document.querySelector(
       'script[src*="maps.googleapis.com"]'
     );
-    
+
     if (existingScript) {
       const checkGoogle = setInterval(() => {
         if (window.google && window.google.maps) {
@@ -95,7 +97,7 @@ export default function LocationMap({
           setIsLoading(false);
         }
       }, 10000);
-      
+
       return () => clearInterval(checkGoogle);
     }
 
@@ -110,10 +112,12 @@ export default function LocationMap({
     };
     script.onerror = () => {
       console.error("Failed to load Google Maps script");
-      setError("Failed to load Google Maps. Please check your API key and internet connection.");
+      setError(
+        "Failed to load Google Maps. Please check your API key and internet connection."
+      );
       setIsLoading(false);
     };
-    
+
     document.head.appendChild(script);
 
     return () => {
@@ -126,7 +130,7 @@ export default function LocationMap({
 
     const pos = { lat: latitude, lng: longitude };
     mapInstance.current.setCenter(pos);
-    
+
     if (circleRef.current) {
       circleRef.current.setCenter(pos);
     }
@@ -160,7 +164,7 @@ export default function LocationMap({
   if (error) {
     return (
       <div className="mt-6">
-        <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2 mb-3">
+        <h3 className="text-sm font-semibold text-gray-200 flex items-center gap-2 mb-3">
           <MapPin className="w-4 h-4 text-blue-600" />
           Project Location
         </h3>
@@ -173,18 +177,36 @@ export default function LocationMap({
               </p>
               <p className="text-sm text-red-700 mb-3">{error}</p>
               <div className="bg-white border border-red-300 rounded-lg p-3 text-xs">
-                <p className="font-semibold text-gray-800 mb-2">Setup Instructions:</p>
+                <p className="font-semibold text-gray-800 mb-2">
+                  Setup Instructions:
+                </p>
                 <ol className="list-decimal list-inside space-y-1 text-gray-700">
-                  <li>Go to <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Google Cloud Console</a></li>
+                  <li>
+                    Go to{" "}
+                    <a
+                      href="https://console.cloud.google.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      Google Cloud Console
+                    </a>
+                  </li>
                   <li>Create a project or select existing one</li>
                   <li>Enable "Maps JavaScript API"</li>
                   <li>Create API credentials (API Key)</li>
-                  <li>Add to <code className="bg-gray-100 px-1 rounded">.env.local</code>:</li>
+                  <li>
+                    Add to{" "}
+                    <code className="bg-gray-100 px-1 rounded">.env.local</code>
+                    :
+                  </li>
                 </ol>
                 <pre className="bg-gray-800 text-green-400 p-2 rounded mt-2 overflow-x-auto">
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_api_key_here
+                  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_api_key_here
                 </pre>
-                <p className="mt-2 text-gray-600">Then restart your Next.js dev server</p>
+                <p className="mt-2 text-gray-600">
+                  Then restart your Next.js dev server
+                </p>
               </div>
             </div>
           </div>
@@ -196,7 +218,7 @@ NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_api_key_here
   return (
     <div className="mt-6">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+        <h3 className="text-sm font-semibold  flex items-center gap-2">
           <MapPin className="w-4 h-4 text-blue-600" />
           Project Location
         </h3>

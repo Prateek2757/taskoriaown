@@ -3,8 +3,18 @@
 import useSWR from "swr";
 import axios from "axios";
 
-export type Category = { category_id: number; category_name: string; name?: string };
+export type Category = {
+  category_id: number;
+  category_name: string;
+  name?: string;
+};
 export type City = { city_id: number; name: string };
+export type UserLocation = {
+  id: number;
+  city_id: number;
+  city_name: string;
+  created_at: string;
+};
 export type Subscription = {
   package_id: number;
   start_date: string;
@@ -20,6 +30,7 @@ export type Profile = {
   categories: Category[];
   display_name?: string;
   profile_image_url?: string;
+  locations: UserLocation[];
   company_name?: string;
   company_size?: string;
   has_company?: boolean;
@@ -28,19 +39,28 @@ export type Profile = {
   active_subscription?: Subscription | null;
 };
 
-const fetcher = (url: string) => axios.get(url).then(res => res.data);
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export function useLeadProfile() {
-  const { data: profile, error, isLoading, mutate } = useSWR<Profile>("/api/user_profiles", fetcher);
+  const {
+    data: profile,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR<Profile>("/api/user_profiles", fetcher);
 
-  const { data: categories = [], mutate: mutateCategories } = useSWR<Category[]>(
-    "/api/signup/category-selection",
+  const { data: categories = [], mutate: mutateCategories } = useSWR<
+    Category[]
+  >("/api/signup/category-selection", fetcher);
+
+  const { data: cities = [], mutate: mutateCities } = useSWR<City[]>(
+    "/api/signup/location",
     fetcher
   );
-
-  const { data: cities = [], mutate: mutateCities } = useSWR<City[]>("/api/signup/location", fetcher);
-
-  const saving = useSWR(() => null); 
+  const { data: userLocations = [], mutate: mutateLocations } = useSWR<
+    UserLocation[]
+  >("/api/user_locations", fetcher);
+  const saving = useSWR(() => null);
 
   const updateProfile = async (data: Partial<Profile>) => {
     if (!profile) return;
@@ -59,11 +79,21 @@ export function useLeadProfile() {
   };
 
   const addCategory = async (category_id: number, category_name: string) => {
-    if (!profile || profile.categories.some((c) => c.category_id === category_id)) return;
+    if (
+      !profile ||
+      profile.categories.some((c) => c.category_id === category_id)
+    )
+      return;
     try {
-      mutate({ ...profile, categories: [...profile.categories, { category_id, category_name }] }, false);
+      mutate(
+        {
+          ...profile,
+          categories: [...profile.categories, { category_id, category_name }],
+        },
+        false
+      );
       await axios.post("/api/user_categories", { category_id });
-      mutate(undefined, true); 
+      mutate(undefined, true);
       notifyAll();
     } catch {
       throw new Error("Failed to add category");
@@ -73,7 +103,15 @@ export function useLeadProfile() {
   const removeCategory = async (category_id: number) => {
     if (!profile) return;
     try {
-      mutate({ ...profile, categories: profile.categories.filter((c) => c.category_id !== category_id) }, false);
+      mutate(
+        {
+          ...profile,
+          categories: profile.categories.filter(
+            (c) => c.category_id !== category_id
+          ),
+        },
+        false
+      );
       await axios.delete("/api/user_categories", { data: { category_id } });
       mutate(undefined, true);
       notifyAll();
@@ -82,11 +120,60 @@ export function useLeadProfile() {
     }
   };
 
+  const addLocation = async (city_id: number, city_name: string) => {
+    if (userLocations.some((loc) => loc.city_id === city_id)) {
+      throw new Error("Location already added");
+    }
+    try {
+      const newLocation = {
+        id: Date.now(),
+        city_id,
+        city_name,
+        created_at: new Date().toISOString(),
+      };
+      mutateLocations([...userLocations, newLocation], false);
+
+      await axios.post("/api/user_locations", { city_id });
+      mutateLocations(undefined, true);
+      notifyAll();
+    } catch (err: any) {
+      mutateLocations(userLocations, false); 
+      throw new Error(err.response?.data?.message || "Failed to add location");
+    }
+  };
+
+  const removeLocation = async (city_id: number) => {
+    try {
+      mutateLocations(
+        userLocations.filter((loc) => loc.city_id !== city_id),
+        false
+      );
+
+      await axios.delete("/api/user_locations", { data: { city_id } });
+      mutateLocations(undefined, true);
+      notifyAll();
+    } catch (err: any) {
+      mutateLocations(userLocations, false); // Revert on error
+      throw new Error("Failed to remove location");
+    }
+  };
+
   const setLocation = async (city_id: number, city_name: string) => {
     if (!profile) return;
     try {
-      mutate({ ...profile, location_id: city_id, location_name: city_name, is_nationwide: false }, false);
-      await axios.put("/api/user_profiles", { location_id: city_id, is_nationwide: false });
+      mutate(
+        {
+          ...profile,
+          location_id: city_id,
+          location_name: city_name,
+          is_nationwide: false,
+        },
+        false
+      );
+      await axios.put("/api/user_profiles", {
+        location_id: city_id,
+        is_nationwide: false,
+      });
       mutate(undefined, true);
       notifyAll();
     } catch {
@@ -118,11 +205,15 @@ export function useLeadProfile() {
     profile,
     categories,
     cities,
+    userLocations,
     loading: isLoading,
     error,
+
     updateProfile,
     addCategory,
     removeCategory,
+    addLocation,
+    removeLocation,
     setLocation,
     toggleNationwide,
   };
