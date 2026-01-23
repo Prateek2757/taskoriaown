@@ -11,7 +11,7 @@ for size in "${SIZES[@]}"; do
   cat > "icon-${size}x${size}.svg" << SVGEOF
 <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
   <rect width="${size}" height="${size}" fill="${COLOR}"/>
-  <text x="50%" y="50%" font-size="$((size/3))" fill="white" text-anchor="middle" dy=".35em">SL</text>
+  <text x="50%" y="50%" font-size="$((size/3))" fill="white" text-anchor="middle" dy=".35em">T</text>
 </svg>
 SVGEOF
 
