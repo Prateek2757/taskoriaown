@@ -4,8 +4,14 @@ import React, { FormEvent, useRef, useState } from "react";
 import { motion, useInView } from "motion/react";
 import Link from "next/link";
 import Image from "next/image";
-import { Instagram, Linkedin, Facebook, CheckIcon, ChevronUp, ChevronDown } from "lucide-react";
-
+import {
+  Instagram,
+  Linkedin,
+  Facebook,
+  CheckIcon,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 
 const letters = "TASKORIA".split("");
 const letterPositions = [35, 75, 125, 175, 225, 275, 325, 355];
@@ -41,8 +47,6 @@ const barVariants = {
   },
 };
 
-
-
 const Footer = () => {
   const container = useRef<HTMLDivElement>(null);
   const [openPopup, setOpenPopUp] = useState(false);
@@ -60,7 +64,6 @@ const Footer = () => {
     setTimeout(() => setOpenPopUp(false), 2000);
   };
 
-
   return (
     <div
       className="relative h-full overflow-hidden sm:pt-14 pt-8 
@@ -70,7 +73,6 @@ const Footer = () => {
     >
       <div className="sm:container px-4 mx-auto">
         <div className="flex flex-col lg:flex-row justify-between w-full gap-10 lg:gap-10">
-
           <div className="lg:w-1/3">
             <Link href="/" className="flex items-center mb-4 hover:opacity-90">
               <Image
@@ -104,88 +106,158 @@ const Footer = () => {
           </div>
 
           <div className="sm:grid sm:grid-cols-3 gap-8 lg:gap-16 w-full lg:w-auto mt-0 lg:mt-0">
+            <div className="sm:border-none">
+              <h2 className="hidden sm:block text-2xl pb-3 font-semibold">
+                For Customers
+              </h2>
 
-  <div className="sm:border-none">
-    <h2 className="hidden sm:block text-2xl pb-3 font-semibold">For Customers</h2>
+              <button
+                className="sm:hidden w-full flex justify-between items-center text-xl  font-semibold  border-gray-700"
+                onClick={() =>
+                  setOpenSection(openSection === "customers" ? "" : "customers")
+                }
+              >
+                For Customers
+                <span>
+                  {openSection === "customers" ? (
+                    <ChevronUp />
+                  ) : (
+                    <ChevronDown />
+                  )}
+                </span>
+              </button>
 
-    <button
-      className="sm:hidden w-full flex justify-between items-center text-xl  font-semibold  border-gray-700"
-      onClick={() => setOpenSection(openSection === 'customers' ? '' : 'customers')}
-    >
-      For Customers
-      <span>{openSection === 'customers' ? <ChevronUp /> : <ChevronDown />}</span>
-    </button>
+              <div
+                className={`sm:block overflow-hidden transition-all duration-300 
+        ${openSection === "customers" ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
+              >
+                <Link
+                  href="/services"
+                  className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2"
+                >
+                  Find Services
+                </Link>
+                <Link
+                  href="/"
+                  className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2"
+                >
+                  Community
+                </Link>
+                <Link
+                  href="/post-job"
+                  className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2"
+                >
+                  Post a Job
+                </Link>
+                <Link
+                  href="/trust-safety"
+                  className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2"
+                >
+                  Trust & Safety
+                </Link>
+              </div>
+            </div>
 
-    <div
-      className={`sm:block overflow-hidden transition-all duration-300 
-        ${openSection === 'customers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
-    >
-      <Link href="/services" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
-        Find Services
-      </Link>
-      <Link href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
-        Community
-      </Link>
-      <Link href="/post-job" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
-        Post a Job
-      </Link>
-      <Link href="/trust-safety" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
-        Trust & Safety
-      </Link>
-    </div>
-  </div>
+            <div className="sm:border-none">
+              <h2 className="hidden sm:block text-xl pb-3 font-semibold">
+                For Providers
+              </h2>
 
-  <div className="sm:border-none">
-    <h2 className="hidden sm:block text-xl pb-3 font-semibold">For Providers</h2>
+              <button
+                className="sm:hidden w-full flex justify-between items-center text-xl pb-3 font-semibold  border-gray-700"
+                onClick={() =>
+                  setOpenSection(openSection === "providers" ? "" : "providers")
+                }
+              >
+                For Providers
+                <span>
+                  {openSection === "providers" ? (
+                    <ChevronUp />
+                  ) : (
+                    <ChevronDown />
+                  )}
+                </span>
+              </button>
 
-    <button
-      className="sm:hidden w-full flex justify-between items-center text-xl pb-3 font-semibold  border-gray-700"
-      onClick={() => setOpenSection(openSection === 'providers' ? '' : 'providers')}
-    >
-      For Providers
-      <span>{openSection === 'providers' ? <ChevronUp /> : <ChevronDown />}</span>
-    </button>
+              <div
+                className={`sm:block overflow-hidden transition-all duration-300 
+        ${openSection === "providers" ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
+              >
+                <Link
+                  href="/"
+                  className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2"
+                >
+                  Join as Provider
+                </Link>
+                <a
+                  href="/"
+                  className="block  text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer"
+                >
+                  Success Stories
+                </a>
+                <a
+                  href="/"
+                  className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer"
+                >
+                  Resources
+                </a>
+                <a
+                  href="/"
+                  className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer"
+                >
+                  API Documentation
+                </a>
+              </div>
+            </div>
 
-    <div
-      className={`sm:block overflow-hidden transition-all duration-300 
-        ${openSection === 'providers' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
-    >
-      <Link href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
-        Join as Provider
-      </Link>
-      <a  href="/" className="block  text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Success Stories</a>
-      <a  href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Resources</a>
-      <a  href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">API Documentation</a>
-    </div>
-  </div>
+            <div className="sm:border-none">
+              <h2 className="hidden sm:block text-xl pb-3 font-semibold">
+                Company
+              </h2>
 
-  <div className="sm:border-none">
-    <h2 className="hidden sm:block text-xl pb-3 font-semibold">Company</h2>
+              <button
+                className="sm:hidden w-full flex justify-between items-center text-xl pb-1 font-semibold  border-gray-700"
+                onClick={() =>
+                  setOpenSection(openSection === "company" ? "" : "company")
+                }
+              >
+                Company
+                <span>
+                  {openSection === "company" ? <ChevronUp /> : <ChevronDown />}
+                </span>
+              </button>
 
-    <button
-      className="sm:hidden w-full flex justify-between items-center text-xl pb-1 font-semibold  border-gray-700"
-      onClick={() => setOpenSection(openSection === 'company' ? '' : 'company')}
-    >
-      Company
-      <span>{openSection === 'company' ? <ChevronUp /> : <ChevronDown />}</span>
-    </button>
-
-    <div
-      className={`sm:block overflow-hidden transition-all duration-300 
-        ${openSection === 'company' ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
-    >
-      <Link href="/about-us" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
-        About Us
-      </Link>
-      <Link href="/privacy-policy" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2">
-        Privacy Policy
-      </Link>
-      <a href="/carrers" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Carrers</a>
-      <a  href="/" className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer">Contact</a>
-    </div>
-  </div>
-
-</div>
+              <div
+                className={`sm:block overflow-hidden transition-all duration-300 
+        ${openSection === "company" ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
+              >
+                <Link
+                  href="/about-us"
+                  className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2"
+                >
+                  About Us
+                </Link>
+                <Link
+                  href="/privacy-policy"
+                  className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2"
+                >
+                  Privacy Policy
+                </Link>
+                <a
+                  href="/carrers"
+                  className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer"
+                >
+                  Carrers
+                </a>
+                <a
+                  href="/"
+                  className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer"
+                >
+                  Contact
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="border-y-2 md:py-4 py-10 border-gray-700 mt-10 flex justify-center items-center">
@@ -210,8 +282,18 @@ const Footer = () => {
                 <stop offset="100%" stopColor="#46CBEE" />
               </linearGradient>
 
-              <filter id="taskoriaGlow" x="-20%" y="-50%" width="140%" height="200%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur" />
+              <filter
+                id="taskoriaGlow"
+                x="-20%"
+                y="-50%"
+                width="140%"
+                height="200%"
+              >
+                <feGaussianBlur
+                  in="SourceGraphic"
+                  stdDeviation="2.5"
+                  result="blur"
+                />
                 <feColorMatrix
                   in="blur"
                   type="matrix"
@@ -252,10 +334,23 @@ const Footer = () => {
 
         <div className="flex md:flex-row flex-col gap-3 justify-between py-6 text-gray-600 dark:text-gray-300">
           <span className="font-medium">
-            &copy; {new Date().getFullYear()} Taskoria Pty Ltd. All Rights Reserved. <Link href="/privacy-policy" className="underline">Privacy Policy.</Link>
+            &copy; {new Date().getFullYear()} Taskoria Pty Ltd. All Rights
+            Reserved.{" "}
+            <Link href="/privacy-policy" className="hover:underline">
+              Privacy Policy
+            </Link>
+            {" "}/{" "}
+            <Link href="/terms-and-conditions" className="hover:underline">
+              Terms & Conditions
+            </Link>
+            {" "} /{" "}
+            <Link href="/cookie-policy" className="hover:underline">
+               Cookie Policy
+            </Link>
             <br />
             <span className="text-gray-400">
-              ABN: 658 760 831 | ACN Registered | QLD 4350, Australia | Proudly Australian Owned & Operated
+              ABN: 658 760 831 | ACN Registered | QLD 4350, Australia | Proudly
+              Australian Owned & Operated
             </span>
           </span>
 

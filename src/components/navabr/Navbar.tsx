@@ -57,6 +57,7 @@ export default function ModernNavbar() {
       { name: "Home", href: "/", icon: Home },
       { name: "Leads", href: "/provider/leads", icon: Search },
       { name: "Inbox", href: "/messages/null", icon: MessageSquare },
+      { name: "My Responses", href: "/provider-responses", icon: MessageSquare },
       { name: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
     ],
   };
