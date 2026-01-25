@@ -99,7 +99,6 @@ export default function TasksList({ tasks }: { tasks?: Task[] }) {
 
   const loadResponses = useCallback(
     async (taskId: number) => {
-      if (responseCache[taskId]) return;
       setLoadingTaskId(taskId);
       try {
         const res = await axios.get(`/api/tasks/taskResponses/${taskId}`);

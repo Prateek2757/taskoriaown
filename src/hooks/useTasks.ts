@@ -1,4 +1,5 @@
 
+import axios from "axios";
 import { useEffect, useState, useCallback } from "react";
 
 type Lead_answers ={
@@ -28,8 +29,8 @@ export function useTasks() {
   const fetchTasks = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/tasks/mytasks");
-      const json = await res.json();
+      const res = await axios.get("/api/tasks/mytasks");
+      const json = await res.data;
       setTasks(json.tasks || []);
     } catch (err: any) {
       setError(err.message || "Failed to load tasks");

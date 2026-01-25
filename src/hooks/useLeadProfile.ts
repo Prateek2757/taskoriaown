@@ -153,7 +153,7 @@ export function useLeadProfile() {
       mutateLocations(undefined, true);
       notifyAll();
     } catch (err: any) {
-      mutateLocations(userLocations, false); // Revert on error
+      mutateLocations(userLocations, false); 
       throw new Error("Failed to remove location");
     }
   };

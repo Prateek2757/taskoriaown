@@ -51,8 +51,10 @@ export default function SignInPage() {
       }
     }
 
-    setMessage("Login Successful! Redirecting...");
-    setTimeout(() => router.push("/provider/dashboard"));
+    if (!res?.error) {
+      setMessage("Login Successful! Redirecting...");
+      setTimeout(() => router.push("/provider/dashboard"));
+    }
   };
 
   return (
