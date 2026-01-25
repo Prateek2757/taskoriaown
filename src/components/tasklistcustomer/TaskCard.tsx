@@ -223,58 +223,59 @@ export function TaskCard({
                 className="overflow-hidden"
               >
                 <div className="mt-4 space-y-4">
-                  {responses.map((response, idx) => (
-                    <motion.div
-                      key={response.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.06 }}
-                    >
-                      <Card className="rounded-xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-700">
-                        <CardContent className="p-4">
-                          <div className="flex gap-4">
-                            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-blue-500 to-purple-600">
-                              {response.profile_image ? (
-                                <Image
-                                  src={response.profile_image}
-                                  alt={response.display_name}
-                                  fill
-                                  className="object-cover"
-                                />
-                              ) : (
-                                <div className="flex h-full w-full items-center justify-center font-semibold text-white">
-                                  {response.display_name.charAt(0)}
+                  {responses.length === 0
+                    ? "No Responses Yet"
+                    : responses.map((response, idx) => (
+                        <motion.div
+                          key={response.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.06 }}
+                        >
+                          <Card className="rounded-xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-700">
+                            <CardContent className="p-4">
+                              <div className="flex gap-4">
+                                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-blue-500 to-purple-600">
+                                  {response.profile_image ? (
+                                    <Image
+                                      src={response.profile_image}
+                                      alt={response.display_name}
+                                      fill
+                                      className="object-cover"
+                                    />
+                                  ) : (
+                                    <div className="flex h-full w-full items-center justify-center font-semibold text-white">
+                                      {response.display_name.charAt(0)}
+                                    </div>
+                                  )}
                                 </div>
-                              )}
-                            </div>
 
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-semibold text-slate-900 dark:text-slate-100">
-                                {response.display_name}
-                              </h4>
-                              <p className="mb-2 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                                <Briefcase className="h-3.5 w-3.5" />
-                                {response.profile_title}
-                              </p>
-                              <p className="mb-3 text-sm text-slate-700 dark:text-slate-300 line-clamp-2">
-                                {response.title}
-                              </p>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-semibold text-slate-900 dark:text-slate-100">
+                                    {response.display_name}
+                                  </h4>
+                                  <p className="mb-2 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                                    <Briefcase className="h-3.5 w-3.5" />
+                                    {response.profile_title}
+                                  </p>
+                                  <p className="mb-3 text-sm text-slate-700 dark:text-slate-300 line-clamp-2">
+                                    {response.title}
+                                  </p>
 
-                              <Button
-                                size="sm"
-                                className="rounded-lg bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-                                onClick={() => onMessageClick(response.id)}
-                              >
-                                <MessageSquare className="mr-2 h-4 w-4" />
-                                Message
-                              </Button>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  ))}
-                
+                                  <Button
+                                    size="sm"
+                                    className="rounded-lg bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                                    onClick={() => onMessageClick(response.id)}
+                                  >
+                                    <MessageSquare className="mr-2 h-4 w-4" />
+                                    Message
+                                  </Button>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        </motion.div>
+                      ))}
                 </div>
               </motion.div>
             )}
