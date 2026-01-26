@@ -143,7 +143,6 @@ export default function NotificationBell({ userId }: { userId: number }) {
           // console.log(`📊 Status: ${status}`);
 
           if (status === "SUBSCRIBED") {
-            // console.log("✅ Realtime active");
           }
         });
 

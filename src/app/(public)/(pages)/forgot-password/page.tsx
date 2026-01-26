@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { motion } from "motion/react";
-import { Loader2, ArrowLeft, Mail, Lock } from "lucide-react";
+import { Loader2, ArrowLeft, Mail, Lock, EyeOff, Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
 
 export default function ForgotPasswordPage() {
-  const [step, setStep] = useState(1); 
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -16,6 +16,8 @@ export default function ForgotPasswordPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
 
   const handleSendCode = async (e: React.FormEvent) => {
@@ -69,7 +71,7 @@ export default function ForgotPasswordPage() {
 
       if (res.data.success) {
         setMessage("Password reset successful! Redirecting...");
-        setTimeout(() => router.push("/signin"),400);
+        setTimeout(() => router.push("/signin"), 400);
       } else {
         setError(res.data.message || "Invalid code or failed to reset");
       }
@@ -137,11 +139,10 @@ export default function ForgotPasswordPage() {
                 whileTap={{ scale: 0.97 }}
                 disabled={loading}
                 type="submit"
-                className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
-                  loading
+                className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${loading
                     ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
                     : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
-                }`}
+                  }`}
               >
                 {loading ? (
                   <>
@@ -178,47 +179,69 @@ export default function ForgotPasswordPage() {
                 />
               </div>
 
-              <div className="space-y-1">
+              <div className="space-y-1 relative">
                 <label className="text-gray-700 dark:text-gray-300 text-sm font-medium">
                   New Password
                 </label>
-                <input
-                  type="password"
-                  placeholder="••••••••••"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full p-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent shadow-sm transition"
-                  required
-                  minLength={8}
-                />
+
+                <div className="relative">
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    placeholder="••••••••••"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full p-2.5 pr-12 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent shadow-sm transition"
+                    required
+                    minLength={8}
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-500 dark:hover:text-cyan-400 transition"
+                    aria-label="Toggle password visibility"
+                  >
+                    {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   Must be at least 8 characters
                 </p>
               </div>
-
               <div className="space-y-1">
                 <label className="text-gray-700 dark:text-gray-300 text-sm font-medium">
                   Confirm Password
                 </label>
-                <input
-                  type="password"
-                  placeholder="••••••••••"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full p-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/60 focus:border-transparent shadow-sm transition"
-                  required
-                />
-              </div>
 
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="••••••••••"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full p-2.5 pr-12 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/60 focus:border-transparent shadow-sm transition"
+                    required
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-500 dark:hover:text-cyan-400 transition"
+                    aria-label="Toggle confirm password visibility"
+                  >
+                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
               <motion.button
                 whileTap={{ scale: 0.97 }}
                 disabled={loading}
                 type="submit"
-                className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
-                  loading
+                className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${loading
                     ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
                     : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
-                }`}
+                  }`}
               >
                 {loading ? (
                   <>

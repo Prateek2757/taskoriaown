@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { motion } from "motion/react";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import axios from "axios";
@@ -14,6 +14,8 @@ export default function SignInPage() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const router = useRouter();
 
   const { joinAsProvider, loading: joinLoading } = useJoinAsProvider();
@@ -62,7 +64,7 @@ export default function SignInPage() {
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
+        transition={{ duration: 0.4 }}
         className="relative w-full max-w-md"
       >
         <div className="absolute -inset-0.5 bg-gradient-to-tr from-blue-500 to-cyan-500 rounded-3xl blur-2xl opacity-20 dark:opacity-30"></div>
@@ -112,25 +114,35 @@ export default function SignInPage() {
                   Forgot password?
                 </Link>
               </div>
-              <input
-                type="password"
-                placeholder="••••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/60 focus:border-transparent shadow-sm transition"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full  p-3.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/60 focus:border-transparent shadow-sm transition"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-500 dark:hover:text-cyan-400 transition"
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+
             </div>
 
             <motion.button
               whileTap={{ scale: 0.97 }}
               disabled={loading}
               type="submit"
-              className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
-                loading
-                  ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
-                  : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
-              }`}
+              className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${loading
+                ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
+                : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
+                }`}
             >
               {loading ? (
                 <>
@@ -147,11 +159,10 @@ export default function SignInPage() {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className={`text-center text-sm font-medium ${
-                message.includes("Successful")
-                  ? "text-cyan-500"
-                  : "text-red-500"
-              }`}
+              className={`text-center text-sm font-medium ${message.includes("Successful")
+                ? "text-cyan-500"
+                : "text-red-500"
+                }`}
             >
               {message}
             </motion.p>
@@ -182,11 +193,10 @@ export default function SignInPage() {
             whileTap={{ scale: 0.97 }}
             disabled={joinLoading}
             onClick={joinAsProvider}
-            className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
-              joinLoading
-                ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
-                : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
-            }`}
+            className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${joinLoading
+              ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
+              : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
+              }`}
           >
             {joinLoading ? (
               <>

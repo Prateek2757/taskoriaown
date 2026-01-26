@@ -22,6 +22,8 @@ export function TaskStatusSelector({
 }: TaskStatusSelectorProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
+      case "all":
+      return "text-gray-700";
       case "Open":
         return "text-emerald-700";
       case "In Progress":
@@ -29,6 +31,7 @@ export function TaskStatusSelector({
       case "Closed":
         return "text-slate-700";
       default:
+
         return "text-gray-700";
     }
   };
@@ -40,23 +43,31 @@ export function TaskStatusSelector({
       >
         <SelectValue placeholder="Select status" />
       </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="Open" className="text-emerald-700">
-          <span className="flex items-center gap-1">
-            <span>●</span> Open Quoting
-          </span>
-        </SelectItem>
-        <SelectItem value="In Progress" className="text-amber-700">
-          <span className="flex items-center gap-2">
-            <span>◐</span> In Progress
-          </span>
-        </SelectItem>
-        <SelectItem value="Closed" className="text-red-600">
-          <span className="flex items-center gap-2">
-            <span>○</span> Closed
-          </span>
-        </SelectItem>
-      </SelectContent>
+    <SelectContent>
+  <SelectItem value="all" className="text-gray-700">
+    <span className="flex items-center gap-2">
+      <span>⬤</span> All Status
+    </span>
+  </SelectItem>
+
+  <SelectItem value="Open" className="text-emerald-700">
+    <span className="flex items-center gap-2">
+      <span>●</span> Open Quoting
+    </span>
+  </SelectItem>
+
+  <SelectItem value="In Progress" className="text-amber-700">
+    <span className="flex items-center gap-2">
+      <span>◐</span> In Progress
+    </span>
+  </SelectItem>
+
+  <SelectItem value="Closed" className="text-red-600">
+    <span className="flex items-center gap-2">
+      <span>○</span> Closed
+    </span>
+  </SelectItem>
+</SelectContent>
     </Select>
   );
 }

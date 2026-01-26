@@ -442,7 +442,7 @@ export default function ModernNavbar() {
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              transition={{ type: "spring", damping: 40, stiffness: 300 }}
               className="fixed left-0 top-0 bottom-0 w-80 bg-white dark:bg-gray-900 shadow-2xl z-[9999] overflow-y-auto"
             >
               <div className="p-6 border-b border-gray-100 dark:border-gray-800">

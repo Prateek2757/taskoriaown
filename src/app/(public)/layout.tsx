@@ -101,7 +101,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable}`}>
+    <html lang="en" className={`${poppins.variable}`} suppressHydrationWarning>
       <head>
         <link
           rel="icon"
@@ -117,7 +117,7 @@ export default function RootLayout({
         />
       </head>
       <AuthProvider>
-        <body className="antialiased dark:bg-black " suppressHydrationWarning>
+        <body className="antialiased dark:bg-black " >
           <NotificationHandler/>
           <ThemeProvider
             attribute="class"
