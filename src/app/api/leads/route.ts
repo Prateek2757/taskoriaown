@@ -3,6 +3,7 @@ import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
 import { sendEmail } from "@/components/email/helpers/sendVerificationEmail";
+import { createNotification } from "@/lib/notifications";
 
 export async function POST(req: Request) {
   const client = await pool.connect();
@@ -101,31 +102,13 @@ export async function POST(req: Request) {
 
     await client.query("COMMIT");
 
-    const hasBudget =
-      typeof estimated_budget === "number" &&
-      !isNaN(estimated_budget) &&
-      estimated_budget > 0;
-
-    if (!hasBudget) {
-      for (const adminEmail of adminEmails) {
-        await sendEmail({
-          username: "Admin",
-          email: adminEmail,
-          type: "task-posted-no-budget",
-          taskTitle: categoryname,
-        });
-      }
-    }
-
-    await sendEmail({
-      username: name,
-      email,
-      type: "task-posted",
-      taskTitle: categoryname,
+    const response = NextResponse.json({
+      success: true,
+      task: taskResult.rows[0],
     });
     const providersRes = await client.query(
       `
-      SELECT u.email, up.display_name
+      SELECT u.email,u.user_id,up.display_name
       FROM user_categories uc
       JOIN users u ON u.user_id = uc.user_id
       LEFT JOIN user_profiles up ON up.user_id = u.user_id
@@ -134,24 +117,55 @@ export async function POST(req: Request) {
       `,
       [category_id, session.user.id]
     );
-    if (hasBudget) {
-      const delay = (ms: number) =>
-        new Promise((resolve) => setTimeout(resolve, ms));
 
-      for (const p of providersRes.rows) {
-        await sendEmail({
-          email: p.email,
-          username: p.display_name || "Provider",
-          type: "provider-new-task",
-          taskTitle: title,
-          taskLocation: categoryname,
-        });
+    setImmediate(async () => {
+      try {
+        const hasBudget =
+          typeof estimated_budget === "number" && estimated_budget > 0;
 
-        await delay(1000);
+        if (!hasBudget) {
+          for (const adminEmail of adminEmails) {
+            sendEmail({
+              username: "Admin",
+              email: adminEmail,
+              type: "task-posted-no-budget",
+              taskTitle: categoryname,
+            }).catch(console.error);
+          }
+        }
+
+        sendEmail({
+          username: name,
+          email,
+          type: "task-posted",
+          taskTitle: categoryname,
+        }).catch(console.error);
+
+        if (hasBudget) {
+          for (const p of providersRes.rows) {
+            sendEmail({
+              email: p.email,
+              username: p.display_name || "Provider",
+              type: "provider-new-task",
+              taskTitle: title,
+              taskLocation: categoryname,
+            }).catch(console.error);
+
+            createNotification({
+              userId: String(p.user_id),
+              type: "task_posted",
+              user_name: String(session?.user.name),
+              title: `${session?.user.name} posted a task`,
+              body: `New ${categoryname} task available`,
+            }).catch(console.error);
+          }
+        }
+      } catch (err) {
+        console.error("Background job failed:", err);
       }
-    }
+    });
 
-    return NextResponse.json({ success: true, task: taskResult.rows[0] });
+    return response;
   } catch (err: any) {
     await client.query("ROLLBACK");
     console.error("Task creation error:", err);

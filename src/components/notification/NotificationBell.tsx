@@ -5,7 +5,7 @@ import { supabaseBrowser } from "@/lib/supabase-server";
 import { toast } from "sonner";
 import axios from "axios";
 
-type NotificationType = "post" | "comment" | "request" | "file" | "system";
+type NotificationType = "post" | "comment" | "request" | "file" | "system" | "lead_purchased" | "lead_response";
 
 type Notification = {
   notification_id: number;

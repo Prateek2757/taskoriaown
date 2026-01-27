@@ -205,7 +205,6 @@ export default function BookingPage() {
                 </CardContent>
               </Card>
 
-              {/* Date & Time Selection */}
               <Card>
                 <CardHeader>
                   <CardTitle>Schedule</CardTitle>
@@ -270,7 +269,6 @@ export default function BookingPage() {
                 </CardContent>
               </Card>
 
-              {/* Contact Information */}
               <Card>
                 <CardHeader>
                   <CardTitle>Contact Information</CardTitle>

@@ -5,7 +5,7 @@ type CreateNotificationParams = {
   title: string
   body: string
   channel?: 'inapp' | 'email' | 'push'
-  type?: 'post' | 'comment' | 'request' | 'file' | 'system'|'message'
+  type?: 'post' | 'comment' | 'request' | 'file' | 'system'|'message' | 'lead_purchased' | 'lead_response' | 'task_posted'
   user_name?: string
   user_avatar?: string
   action_buttons?: { label: string, action: string }[]

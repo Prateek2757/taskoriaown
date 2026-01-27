@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Loader2, Search } from "lucide-react";
+import { Loader2, Search, X } from "lucide-react";
 import { Input } from "../ui/input";
 import axios from "axios";
 
@@ -19,7 +19,7 @@ type Location = {
 };
 
 type Props = {
-  onSelect?: (data: Location) => void;
+  onSelect?: (data: Location | null) => void;
   presetLocation?: Location | null;
 };
 
@@ -57,7 +57,8 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const fetchAutocomplete = async (input: string) => {
@@ -87,8 +88,8 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
         display_name: s.placePrediction.text.text,
       }));
 
-      setResults(mapped);
       cache.current[input] = mapped;
+      setResults(mapped);
       setShowDropdown(true);
     } catch (err) {
       console.error("Autocomplete error:", err);
@@ -107,7 +108,6 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
       });
 
       const data = res.data;
-      console.log("Place details received:", data);
 
       return {
         place_id: data.place_id,
@@ -139,36 +139,58 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
     if (!details) return;
 
     try {
-      const reslocation = await axios.post("/api/signup/location", details);
+      const reslocation = await axios.post(
+        "/api/signup/location",
+        details
+      );
 
       const city_id = reslocation.data.city_id;
 
-      const fullLocation = {
+      onSelect?.({
         ...details,
-        display_name: loc.display_name,
         city_id,
-      };
-
-      onSelect?.(fullLocation);
+        display_name: loc.display_name,
+      });
     } catch (error) {
       console.error("Failed to save location:", error);
     }
   };
 
-  const handleChange = (value: string) => {
-    setQuery(value);
-    if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
-    debounceTimeout.current = setTimeout(() => fetchAutocomplete(value), 300);
+  const handleClear = () => {
+    setQuery("");
+    setResults([]);
+    setShowDropdown(false);
+    setActiveIndex(-1);
+    // Pass null to indicate clearing
+    if (onSelect) {
+      onSelect(null);
+    }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleChange = (value: string) => {
+    setQuery(value);
+    if (debounceTimeout.current)
+      clearTimeout(debounceTimeout.current);
+
+    debounceTimeout.current = setTimeout(
+      () => fetchAutocomplete(value),
+      300
+    );
+  };
+
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (!results.length) return;
+
     if (e.key === "ArrowDown") {
       e.preventDefault();
       setActiveIndex((prev) => (prev + 1) % results.length);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setActiveIndex((prev) => (prev - 1 + results.length) % results.length);
+      setActiveIndex(
+        (prev) => (prev - 1 + results.length) % results.length
+      );
     } else if (e.key === "Enter") {
       e.preventDefault();
       if (activeIndex >= 0) handleSelect(results[activeIndex]);
@@ -180,40 +202,50 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
 
   return (
     <div className="relative w-full" ref={containerRef}>
-      <Search className="absolute left-3 top-3 text-gray-400 w-4 h-4" />
+      <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+
       <Input
         type="text"
         value={query}
+        placeholder="Enter your postcode or suburbs"
         onChange={(e) => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Enter your postcode or suburbs"
-        className="w-full border border-gray-300 rounded-xl pl-9 focus:outline-none focus:ring-2 focus:ring-primary text-sm shadow-sm"
         onFocus={() =>
-          query.length >= 3 && results.length > 0 && setShowDropdown(true)
+          query.length >= 3 &&
+          results.length > 0 &&
+          setShowDropdown(true)
         }
+        className="w-full border border-gray-300 rounded-xl pl-9 pr-9 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
       />
 
-      {loading && (
-        <div className="absolute right-3 top-3">
-          <Loader2 className="animate-spin h-4 w-4 text-gray-400" />
-        </div>
-      )}
+      {/* Show loader OR clear button, not both */}
+      <div className="absolute right-3 top-3">
+        {loading ? (
+          <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+        ) : query ? (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="text-gray-400 hover:text-gray-600 transition"
+            aria-label="Clear search"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        ) : null}
+      </div>
 
       {showDropdown && results.length > 0 && (
-        <ul
-          className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto z-50 scroll-smooth"
-          onMouseLeave={() => setActiveIndex(-1)}
-        >
+        <ul className="absolute top-full left-0 z-50 mt-1 max-h-64 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
           {results.map((r, i) => (
             <li
               key={r.place_id}
-              className={`p-3 cursor-pointer text-sm font-semibold transition-colors ${
-                i === activeIndex
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-primary  text-gray-700"
-              }`}
               onClick={() => handleSelect(r)}
               onMouseEnter={() => setActiveIndex(i)}
+              className={`cursor-pointer p-3 text-sm font-semibold transition ${
+                i === activeIndex
+                  ? "bg-blue-500 text-white"
+                  : "text-gray-700 hover:bg-primary"
+              }`}
             >
               {r.display_name}
             </li>
@@ -225,7 +257,7 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
         query.length >= 3 &&
         results.length === 0 &&
         !loading && (
-          <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-200 rounded-lg p-2 text-gray-400 text-sm shadow-md z-50">
+          <div className="absolute top-full left-0 z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white p-2 text-sm text-gray-400 shadow-md">
             No results found.
           </div>
         )}

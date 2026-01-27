@@ -282,7 +282,7 @@ export default function ProviderProfileClient({ provider }: { provider: any }) {
 
               <div className="mt-4 grid gap-3">
                 <Button asChild className="w-full">
-                  <Link href={`/book/${provider.user_id}`}>
+                  <Link href="/">
                     <div className="flex items-center justify-center gap-2">
                       <Calendar className="w-4 h-4" /> Book Now
                     </div>

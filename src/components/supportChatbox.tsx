@@ -77,8 +77,7 @@ export default function SupportChatbot() {
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             className="fixed bottom-24 right-4 w-96 max-w-[calc(100vw-2rem)] h-[500px] bg-card  rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden"
           >
-            {/* 🌈 Chat Header */}
-            <div className="text-white p-4 rounded-t-2xl bg-gradient-primary animate-gradient flex items-center justify-between">
+            <div className="text-white p-4 rounded-t-2xl bg-blue-600 animate-gradient flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-white/20 grid place-content-center">
                   <MessageCircle className="h-4 w-4" />
@@ -98,7 +97,6 @@ export default function SupportChatbot() {
               </Button>
             </div>
 
-            {/* 💬 Scrollable Chat Body */}
             <ScrollArea className="flex-1 min-h-0 p-4" ref={scrollRef}>
               <div className="space-y-4 break-words">
                 {messages.map((msg) => (
@@ -141,7 +139,6 @@ export default function SupportChatbot() {
               </div>
             </ScrollArea>
 
-            {/* ✍️ Input */}
             <div className="p-4 border-t">
               <div className="flex gap-2">
                 <Input
@@ -151,7 +148,7 @@ export default function SupportChatbot() {
                   placeholder="Type your message..."
                   className="flex-1"
                 />
-                <Button onClick={handleSend} size="icon" className="bg-gradient-primary animate-gradient text-white">
+                <Button onClick={handleSend} size="icon" className="bg-blue-600 animate-gradient text-white">
                   <Send className="h-5 w-4" />
                 </Button>
               </div>
@@ -163,12 +160,11 @@ export default function SupportChatbot() {
         )}
       </AnimatePresence>
 
-      {/* 🟢 Floating Chat Button */}
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-4 right-4 h-14 w-14 rounded-full bg-gradient-primary animate-gradient text-white shadow-glow-lg z-50 grid place-content-center"
+        className="fixed bottom-3 right-2 h-14 w-14 rounded-full bg-blue-700 animate-gradient text-white shadow-glow-lg z-50 grid place-content-center"
         aria-label="Open support chat"
       >
         {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}

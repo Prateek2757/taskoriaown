@@ -9,7 +9,9 @@ import {
   Clock,
   CheckCircle2,
   ShieldQuestion,
-  ForwardIcon
+  ForwardIcon,
+  PhoneCall,
+  Mail
 } from "lucide-react";
 
 interface ResponseCardProps {
@@ -17,6 +19,18 @@ interface ResponseCardProps {
   isExpanded: boolean;
   onToggleExpand: (taskId: number) => void;
 }
+
+const normalizePhone = (phone?: string) =>
+  phone ? phone.replace(/\D/g, "") : null;
+
+const whatsappLink = (phone?: string) =>
+  phone ? `https://wa.me/${normalizePhone(phone)}` : null;
+
+const smsLink = (phone?: string) =>
+  phone ? `sms:${normalizePhone(phone)}` : null;
+
+const emailLink = (email?: string) =>
+  email ? `mailto:${email}` : null;
 
 
 export default function ResponseCard({
@@ -110,16 +124,35 @@ export default function ResponseCard({
         <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-5 gap-4">
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-2.5 mb-3">
-              <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <h3 className="text-lg md:text-2xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 {response.title}
               </h3>
               <span className={`px-3 py-1.5 rounded-full text-xs font-bold border ${statusConfig.bg} ${statusConfig.text} ${statusConfig.border} uppercase tracking-wide`}>
                 {response.status?.replace("_", " ")}
               </span>
+              <div className=" flex  z-10  p-3  gap-4">
+                {response.customer_phone && (
+                  <a
+                    href={smsLink(response.customer_phone)!}
+                    className="px-4 py-2 flex rounded-lg bg-green-600 text-white"
+                  >
+                    <MessageSquare className="h-6" />  <span className="ml-2">Sms</span>     </a>
+                )}
+                {response.customer_email && (
+                  <a
+                    href={emailLink(response.customer_email)!}
+                    className="px-4 py-2 flex rounded-lg bg-blue-600 text-white"
+                  >
+                    <Mail className="h-6" />  <span className="ml-2"> Email</span>
+                  </a>
+                )}
+              </div>
+
             </div>
             <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
               {response.description}
             </p>
+
           </div>
         </div>
 
@@ -149,6 +182,7 @@ export default function ResponseCard({
             <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 flex items-center justify-center">
               <Users className="w-5 h-5 text-white" />
             </div>
+
             <div>
               <p className="text-sm font-bold text-gray-900 dark:text-white">
                 {response.total_responses}
@@ -245,7 +279,7 @@ export default function ResponseCard({
                     <span className="flex-1">{answer.question}</span>
                   </p>
                   <p className="text-sm md:text-base text-gray-900 flex dark:text-white break-words pl-4 leading-relaxed">
-                    <ForwardIcon/>
+                    <ForwardIcon />
                     <span className="ml-3">
                       {formatAnswerValue(answer.answer)}
                     </span>

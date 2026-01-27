@@ -144,7 +144,7 @@ const Footer = () => {
                   Community
                 </Link>
                 <Link
-                  href="/post-job"
+                  href="/"
                   className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2"
                 >
                   Post a Job
@@ -244,10 +244,10 @@ const Footer = () => {
                   Privacy Policy
                 </Link>
                 <a
-                  href="/carrers"
+                  href="/careers"
                   className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer"
                 >
-                  Carrers
+                  Careers
                 </a>
                 <a
                   href="/"
@@ -354,7 +354,7 @@ const Footer = () => {
             </span>
           </span>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mr-4">
             <a
               href="https://www.instagram.com/taskoria.au/"
               target="_blank"

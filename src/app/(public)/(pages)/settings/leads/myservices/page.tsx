@@ -113,9 +113,22 @@ export default function MyServicesPage() {
     setCatSearch("");
   };
 
-  const handleAddLocation = async (data: { city_id?: number; city?: string }) => {
+  const handleAddLocation = async (data: { city_id?: number; city?: string } | null) => {
+    if (!data) {
+      setLocationError(null);
+      setLocationSuccess(null);
+      return;
+    }
+
+    if (!data.city_id || !data.city) {
+      setLocationError("Invalid location data. Please select a valid location.");
+      setTimeout(() => setLocationError(null), 5000);
+      return;
+    }
+
     setLocationError(null); 
     setLocationSuccess(null); 
+    
     try {
       await addLocation(data.city_id as any, data.city as any);
       setLocationSuccess(`${data.city} added successfully!`);
@@ -321,7 +334,6 @@ export default function MyServicesPage() {
           </CardContent>
         </Card>
 
-        {/* LOCATIONS CARD */}
         <Card className="rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
           <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 border-b dark:border-gray-700">
             <div className="flex items-center justify-between">
@@ -488,7 +500,6 @@ export default function MyServicesPage() {
         </div>
       )}
 
-      {/* Confirmation Dialog */}
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

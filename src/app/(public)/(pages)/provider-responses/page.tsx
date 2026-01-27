@@ -38,6 +38,8 @@ export interface ProviderResponse {
   category_id: number;
   category_name: string;
   customer_id: number;
+  customer_email: string;
+  customer_phone: string;
   customer_name: string;
   customer_profile_picture: string | null;
   total_responses: number;

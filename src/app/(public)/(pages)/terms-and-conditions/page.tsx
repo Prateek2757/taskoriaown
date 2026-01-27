@@ -268,7 +268,6 @@ export default function TermsAndConditionsPage() {
             <p>Misrepresentation may result in suspension or termination.</p>
           </section>
 
-          {/* Section 7 */}
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold">
               7. Credits, Fees & Payments
@@ -294,7 +293,6 @@ export default function TermsAndConditionsPage() {
             </ul>
           </section>
 
-          {/* Section 8 */}
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold">8. Reviews & Ratings</h2>
             <p>Users may leave reviews based on genuine experiences.</p>
@@ -306,7 +304,6 @@ export default function TermsAndConditionsPage() {
             <p>Taskoria may remove reviews that breach these Terms.</p>
           </section>
 
-          {/* Section 9 */}
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold">9. Prohibited Conduct</h2>
             <p>You must not:</p>
@@ -320,7 +317,6 @@ export default function TermsAndConditionsPage() {
             </ul>
           </section>
 
-          {/* Section 10 */}
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold">
               10. Content & Intellectual Property
@@ -344,7 +340,6 @@ export default function TermsAndConditionsPage() {
             </p>
           </section>
 
-          {/* Section 11 */}
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold">11. Privacy</h2>
             <p>
@@ -359,7 +354,6 @@ export default function TermsAndConditionsPage() {
             </p>
           </section>
 
-          {/* Section 12 */}
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold">
               12. Suspension & Termination
@@ -373,7 +367,6 @@ export default function TermsAndConditionsPage() {
             <p className="mt-3">You may close your Account at any time.</p>
           </section>
 
-          {/* Section 13 */}
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold">13. Disclaimers</h2>
             <p>To the maximum extent permitted by law:</p>
@@ -390,7 +383,6 @@ export default function TermsAndConditionsPage() {
             </ul>
           </section>
 
-          {/* Section 14 */}
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold">
               14. Limitation of Liability
@@ -407,7 +399,6 @@ export default function TermsAndConditionsPage() {
             </p>
           </section>
 
-          {/* Section 15 */}
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold">15. Indemnity</h2>
             <p>
@@ -421,7 +412,6 @@ export default function TermsAndConditionsPage() {
             </ul>
           </section>
 
-          {/* Section 16 */}
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold">16. Dispute Resolution</h2>
             <p>Users are encouraged to resolve disputes directly.</p>
@@ -433,7 +423,6 @@ export default function TermsAndConditionsPage() {
             </ul>
           </section>
 
-          {/* Section 17 */}
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold">17. Changes to Terms</h2>
             <p>We may update these Terms from time to time.</p>
@@ -441,7 +430,6 @@ export default function TermsAndConditionsPage() {
             <p>Continued use constitutes acceptance.</p>
           </section>
 
-          {/* Section 18 */}
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold">18. Governing Law</h2>
             <p>
@@ -451,7 +439,6 @@ export default function TermsAndConditionsPage() {
             <p>You submit to the exclusive jurisdiction of NSW courts.</p>
           </section>
 
-          {/* Section 19 */}
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold">19. Contact Us</h2>
             <p>
@@ -479,7 +466,6 @@ export default function TermsAndConditionsPage() {
             </p>
           </section>
 
-          {/* Section 20 */}
           <section className="space-y-4 border-t border-gray-200 dark:border-gray-700 pt-6">
             <h2 className="text-2xl font-semibold">20. Acceptance</h2>
             <p>By using Taskoria, you confirm that you:</p>
@@ -489,7 +475,6 @@ export default function TermsAndConditionsPage() {
             </ul>
           </section>
 
-          {/* Footer Notice */}
           <footer className="mt-12 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
             <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
               These Terms & Conditions are effective as of {new Date().getFullYear()}. For

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import axios from "axios";
 import { AnimatePresence, motion } from "motion/react";
 
@@ -12,7 +12,7 @@ type Category = {
 };
 
 type Props = {
-  onSelect?: (category: Category) => void;
+  onSelect?: (category: Category | null) => void;
   placeholder?: string;
   presetCategory?: Category;
 };
@@ -38,6 +38,7 @@ export default function CategorySearch({
       setSelected(presetCategory);
     }
   }, [presetCategory]);
+
   useEffect(() => {
     function handleOutside(e: MouseEvent | TouchEvent) {
       if (
@@ -102,6 +103,14 @@ export default function CategorySearch({
     });
   };
 
+  const handleClear = () => {
+    setQuery("");
+    setSelected(null);
+    setShowSuggestions(false);
+    setFiltered(categories.slice(0, 10));
+    onSelect?.(null);
+  };
+
   const handleChange = (value: string) => {
     setQuery(value);
     if (selected && value !== selected.name) setSelected(null);
@@ -121,7 +130,7 @@ export default function CategorySearch({
   };
 
   return (
-    <div ref={wrapperRef} className="relative overflow-visible  w-full">
+    <div ref={wrapperRef} className="relative overflow-visible w-full">
       <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
 
       <Input
@@ -130,8 +139,19 @@ export default function CategorySearch({
         onChange={(e) => handleChange(e.target.value)}
         placeholder={placeholder || "Search category..."}
         onFocus={(e) => handleFocus(e)}
-        className="pl-9 rounded-lg py-5 max-sm:text-sm"
+        className="pl-9 pr-9 rounded-lg py-5 max-sm:text-sm"
       />
+
+      {query && (
+        <button
+          type="button"
+          onClick={handleClear}
+          className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition"
+          aria-label="Clear search"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      )}
 
       <AnimatePresence>
         {showSuggestions && filtered.length > 0 && (
@@ -140,14 +160,14 @@ export default function CategorySearch({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="absolute z-10 border mt-1 w-full rounded-lg shadow-lg 
-             max-h-auto overflow-y-auto pointer-events-auto backdrop-blur-xl bg-[rgba(255,255,255,.2)] touch-pan-y overscroll-auto "
+             max-h-auto overflow-y-auto pointer-events-auto backdrop-blur-xl bg-[rgba(255,255,255,.2)] touch-pan-y overscroll-auto"
           >
             {filtered.map((cat) => (
               <li
-                key={cat.category_id}   
+                key={cat.category_id}
                 onMouseDown={() => handleSelect(cat)}
                 onTouchStart={() => handleSelect(cat)}
-                className="p-3 cursor-pointer font-semibold hover:bg-blue-200 dark:hover:bg-gray-500 dark:text-gray-300  text-gray-700 text-sm relative z-50 "
+                className="p-3 cursor-pointer font-semibold hover:bg-blue-200 dark:hover:bg-gray-500 dark:text-gray-300 text-gray-700 text-sm relative z-50"
               >
                 {cat.name}
               </li>
@@ -155,11 +175,11 @@ export default function CategorySearch({
           </motion.div>
         )}
 
-        {showSuggestions && filtered.length === 0 && (
+        {showSuggestions && filtered.length === 0 && query.trim() && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute z-50 bg-white border mt-1 w-full rounded-lg p-3 text-gray-500 text-sm"
+            className="absolute z-50 bg-white dark:bg-gray-800 border mt-1 w-full rounded-lg p-3 text-gray-500 dark:text-gray-400 text-sm shadow-lg"
           >
             No categories found.
           </motion.div>

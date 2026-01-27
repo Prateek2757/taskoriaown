@@ -30,6 +30,8 @@ export async function GET() {
         c.category_id,
         c.name AS category_name,
         u.user_id AS customer_id,
+        u.email AS customer_email,
+        u.phone AS customer_phone,
         up.display_name AS customer_name,
         up.profile_image_url AS customer_profile_picture,
         (
@@ -67,6 +69,8 @@ export async function GET() {
         c.category_id,
         c.name,
         u.user_id,
+        u.email,
+        u.phone,
         up.display_name ,
         up.profile_image_url 
       ORDER BY tr.created_at DESC;

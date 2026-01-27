@@ -65,7 +65,6 @@ export default function StepOneCategoryForm({
   const categoryId = watch("category_id");
   const location = watch("location");
 
-  // Enable continue button immediately when both fields are filled
   const isContinueEnabled = categoryId > 0 && location?.trim() !== "";
 
   useEffect(() => {
@@ -172,6 +171,13 @@ export default function StepOneCategoryForm({
                     : undefined
                 }
                 onSelect={(data) => {
+                  if (!data) {
+                    setValue("category_id", 0);
+                    setValue("category_name", "");
+                    setSelectedCategoryTitle("");
+                    return;
+                  }
+                
                   setValue("category_id", data.category_id, {
                     shouldDirty: true,
                     shouldTouch: true,
@@ -216,6 +222,15 @@ export default function StepOneCategoryForm({
               <LocationSearch
                 presetLocation={presetLocation}
                 onSelect={(data) => {
+                  if (!data) {
+                    setValue("city_id", 0);
+                    setValue("location", "");
+                    setSelectedLocation(null);
+                    setSelectedLocationId("0");
+                    setLocationLoading(false);
+                    return;
+                  }
+
                   setLocationLoading(true);
 
                   setValue("city_id", data.city_id, {

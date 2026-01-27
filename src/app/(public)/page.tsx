@@ -17,7 +17,7 @@ function page() {
       <Categories/>
       <FeaturesPage/>
       <Testomonail/>
-      <FeatureProvider/>
+      {/* <FeatureProvider/> */}
       <CTA/>
       <SupportChatbot/>
     </div>

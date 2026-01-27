@@ -14,7 +14,7 @@ interface SendEmailProps {
 
 const EMAIL_CONFIG = {
   from: "Taskoria <noreply@taskoria.com>",
-  replyTo: "support@taskoria.com",
+  replyTo: "contact@taskoria.com",
 };
 
 const subjectMap: Record<EmailType, string> = {
