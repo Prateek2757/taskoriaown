@@ -8,9 +8,10 @@ import {
   AlertCircle,
   Send,
   Smile,
-  Paperclip,
   Loader2,
 } from "lucide-react";
+import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
+import { useTheme } from "next-themes";
 
 interface Message {
   id: string;
@@ -40,6 +41,8 @@ export default function MessageList({
   otherName?: string;
   isLoading?: boolean;
 }) {
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+ const {resolvedTheme}=useTheme()
   const listRef = useRef<HTMLDivElement>(null);
   const typingRef = useRef<HTMLDivElement>(null);
 
@@ -54,8 +57,7 @@ export default function MessageList({
     if (!el) return;
 
     const handleScroll = () => {
-      const isAtBottom =
-        el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+      const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
       setShouldAutoScroll(isAtBottom);
     };
 
@@ -72,7 +74,6 @@ export default function MessageList({
       behavior: "smooth",
     });
   }, [messages, typingUsers, shouldAutoScroll]);
-
 
   const handleSend = () => {
     if (!input.trim()) return;
@@ -116,29 +117,50 @@ export default function MessageList({
     return d.toLocaleDateString([], { month: "short", day: "numeric" });
   };
 
-  const groupedMessages = messages.reduce((acc, msg) => {
-    const date = new Date(msg.created_at).toDateString();
-    if (!acc[date]) acc[date] = [];
-    acc[date].push(msg);
-    return acc;
-  }, {} as Record<string, Message[]>);
+  const groupedMessages = messages.reduce(
+    (acc, msg) => {
+      const date = new Date(msg.created_at).toDateString();
+      if (!acc[date]) acc[date] = [];
+      acc[date].push(msg);
+      return acc;
+    },
+    {} as Record<string, Message[]>
+  );
 
   const getInitials = (name?: string) => {
     if (!name) return "U";
-    return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    setInput((prev) => prev + emojiData.emoji);
+    setShowEmojiPicker(false);
+
+    requestAnimationFrame(() => {
+      textareaRef.current?.focus();
+    });
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-[#0E0F11]">
-
-      <div className="flex-shrink-0 px-4 py-3 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0E0F11]">
-        <div className="flex items-center gap-3">
+    <div className="flex flex-col w-full h-full bg-white dark:bg-[#0E0F11]">
+      <div className="flex-shrink-0 px-4 py-[10px] border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0E0F11]">
+        <div className="flex items-center gap-4">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white flex items-center justify-center font-semibold shadow-md">
             {getInitials(otherName)}
           </div>
           <div>
-            <p className="font-semibold text-gray-900 dark:text-white">{otherName}</p>
-            <p className="text-xs text-gray-500">{conversationTitle || "Chat"}</p>
+            <p className="font-semibold text-gray-900 dark:text-white">
+              {otherName}
+            </p>
+            <p className="text-xs text-gray-500">
+              {conversationTitle || "Chat"}
+            </p>
+            
           </div>
         </div>
       </div>
@@ -167,7 +189,8 @@ export default function MessageList({
                   {msgs.map((m, index) => {
                     const isMe = m.user_id === me.id;
                     const prev = msgs[index - 1];
-                    const showAvatar = !isMe && (!prev || prev.user_id !== m.user_id);
+                    const showAvatar =
+                      !isMe && (!prev || prev.user_id !== m.user_id);
 
                     return (
                       <motion.div
@@ -176,10 +199,13 @@ export default function MessageList({
                         animate={{ opacity: 1, y: 0 }}
                         className={`flex mb-3 ${isMe ? "justify-end" : "justify-start"}`}
                       >
-                        <div className={`flex items-end gap-2 max-w-[70%] ${isMe ? "flex-row-reverse" : ""}`}>
-
+                        <div
+                          className={`flex items-end gap-2 max-w-[70%] ${isMe ? "flex-row-reverse" : ""}`}
+                        >
                           {!isMe && (
-                            <div className={`w-8 h-8 ${showAvatar ? "opacity-100" : "opacity-0"}`}>
+                            <div
+                              className={`w-8 h-8 ${showAvatar ? "opacity-100" : "opacity-0"}`}
+                            >
                               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white flex items-center justify-center text-xs font-semibold shadow">
                                 {getInitials(otherName)}
                               </div>
@@ -205,7 +231,9 @@ export default function MessageList({
                               </p>
                             </div>
 
-                            <div className={`flex gap-1 mt-1 ${isMe ? "justify-end" : ""}`}>
+                            <div
+                              className={`flex gap-1 mt-1 ${isMe ? "justify-end" : ""}`}
+                            >
                               <span className="text-[10px] text-gray-500">
                                 {formatTime(m.created_at)}
                               </span>
@@ -253,7 +281,11 @@ export default function MessageList({
                           key={i}
                           className="w-2 h-2 bg-gray-500 dark:bg-gray-300 rounded-full"
                           animate={{ y: [0, -6, 0] }}
-                          transition={{ duration: 0.6, repeat: Infinity, delay }}
+                          transition={{
+                            duration: 0.6,
+                            repeat: Infinity,
+                            delay,
+                          }}
                         />
                       ))}
                     </div>
@@ -265,17 +297,29 @@ export default function MessageList({
         )}
       </div>
 
-      <div className="flex-shrink-0 bg-white dark:bg-[#0E0F11] border-t border-gray-200 dark:border-gray-800 px-4 py-3">
+      <div className=" relative flex-shrink-0 bg-white dark:bg-[#0E0F11] border-t border-gray-200 dark:border-gray-800 px-4 py-3">
         <div className="flex items-center gap-2">
-
-          <button className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800">
+          <button
+            onClick={() => setShowEmojiPicker((v) => !v)}
+            className=" p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
             <Smile className="w-5 h-5" />
           </button>
 
-          <button className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800">
+          {/* <button className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800">
             <Paperclip className="w-5 h-5" />
-          </button>
-
+          </button> */}
+          {showEmojiPicker && (
+            <div className="absolute bottom-16 left-4 z-50">
+              <EmojiPicker
+                onEmojiClick={handleEmojiClick}
+                autoFocusSearch={false}
+                theme={resolvedTheme ==='dark' ? Theme.DARK :Theme.LIGHT }
+                height={350}
+                width={300}
+              />
+            </div>
+          )}
           <textarea
             ref={textareaRef}
             value={input}
@@ -303,19 +347,19 @@ export default function MessageList({
           >
             <Send className="w-5 h-5" />
           </button>
-
         </div>
       </div>
     </div>
   );
 }
 
-
 function LoadingState() {
   return (
     <div className="flex flex-col items-center justify-center h-full">
       <Loader2 className="w-8 h-8 text-[#3C7DED] animate-spin mb-2" />
-      <p className="text-sm text-gray-500 dark:text-gray-400">Loading messages...</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400">
+        Loading messages...
+      </p>
     </div>
   );
 }
@@ -323,17 +367,27 @@ function LoadingState() {
 function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center">
-    <div className="w-20 h-20 rounded-full bg-[#3C7DED]/10 flex items-center justify-center mb-4">
-      <svg className="w-10 h-10 text-[#3C7DED]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-        />
-      </svg>
+      <div className="w-20 h-20 rounded-full bg-[#3C7DED]/10 flex items-center justify-center mb-4">
+        <svg
+          className="w-10 h-10 text-[#3C7DED]"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+          />
+        </svg>
+      </div>
+      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
+        No messages yet
+      </h3>
+      <p className="text-gray-500 dark:text-gray-400 text-sm max-w-xs">
+        Say hello to start the conversation!
+      </p>
     </div>
-    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">No messages yet</h3>
-    <p className="text-gray-500 dark:text-gray-400 text-sm max-w-xs">
-      Say hello to start the conversation!
-    </p>
-  </div>
   );
 }

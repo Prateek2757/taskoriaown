@@ -53,6 +53,7 @@
     "date-picker-np": "^1.0.37",
     "dotenv": "^16.4.7",
     "dotted-map": "^2.2.3",
+    "emoji-picker-react": "^4.17.1",
     "input-otp": "^1.4.2",
     "js-yaml": "^4.1.1",
     "jsonwebtoken": "^9.0.2",

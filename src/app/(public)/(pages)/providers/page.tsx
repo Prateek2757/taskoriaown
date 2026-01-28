@@ -7,11 +7,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const providers = await fetchProviders();
 
   return {
-    title: `All Providers (${providers.length}) — Taskoria`,
-    description: "Browse and hire verified service providers across Australia.",
+    title: `Become a Service Provider | Grow Your Business with Taskoria`,
+    description: "Join Taskoria as a verified service provider. Get quality job leads, flexible work, and AI-powered matching to grow your business faster.",
     openGraph: {
-      title: `All Providers (${providers.length})`,
-      description: "Find trusted service providers.",
+      title: `Become a Service Provider | Grow Your Business with Taskoria`,
+      description: "Join Taskoria as a verified service provider. Get quality job leads, flexible work, and AI-powered matching to grow your business faster.",
     },
   };
 }

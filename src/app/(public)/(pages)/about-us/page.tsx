@@ -5,9 +5,9 @@ import Image from 'next/image';
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us | Taskoria – Australia’s Trusted Service Marketplace",
+  title: "About Taskoria | Building a Trusted Local Services Marketplace",
   description:
-    "Learn how Taskoria is building trust in every connection. Discover our mission, values, secure payment protection, and journey to becoming Australia’s most trusted service marketplace.",
+    "Taskoria is on a mission to make hiring local professionals simple, transparent, and reliable through technology and community trust.",
   keywords: [
     "Taskoria",
     "About Taskoria",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.taskoria.com"),
 
   openGraph: {
-    title: "About Taskoria – Building Trust in Every Connection",
+    title: "About Taskoria | Building a Trusted Local Services Marketplace",
     description:
-      "Taskoria connects Australians with verified professionals through secure payments, rigorous verification, and community-driven values.",
+      "Taskoria is on a mission to make hiring local professionals simple, transparent, and reliable through technology and community trust",
     url: "https://www.taskoria.com/about-us",
     siteName: "Taskoria",
     images: [
@@ -40,14 +40,14 @@ export const metadata: Metadata = {
     type: "website",
   },
 
-  twitter: {
-    card: "summary_large_image",
-    title: "About Taskoria – Trusted & Verified Services",
-    description:
-      "Discover how Taskoria makes finding trusted service providers safe, simple, and secure across Australia.",
-    images: ["/images/providers.jpeg"],
-    creator: "@taskoria",
-  },
+  // twitter: {
+  //   card: "summary_large_image",
+  //   title: "About Taskoria – Trusted & Verified Services",
+  //   description:
+  //     "Discover how Taskoria makes finding trusted service providers safe, simple, and secure across Australia.",
+  //   images: ["/images/providers.jpeg"],
+  //   creator: "@taskoria",
+  // },
 
   robots: {
     index: true,

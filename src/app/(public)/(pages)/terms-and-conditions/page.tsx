@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Taskoria Pty Ltd",
+  title: "Terms & Conditions | Taskoria",
   description:
-    "Read Taskoria's Terms & Conditions governing the use of our on-demand services marketplace. Understand your rights, responsibilities, and legal obligations when using our platform.",
+    "Review Taskoria’s Terms and Conditions governing the use of our platform and services.",
   keywords: [
     "Taskoria terms and conditions",
     "terms of service Australia",
@@ -20,9 +20,9 @@ export const metadata: Metadata = {
   publisher: "Taskoria Pty Ltd",
   metadataBase: new URL("https://www.taskoria.com"),
   openGraph: {
-    title: "Terms & Conditions | Taskoria Pty Ltd",
+    title: "Terms & Conditions | Taskoria",
     description:
-      "Comprehensive terms governing the use of Taskoria's on-demand services marketplace platform in Australia.",
+      "Review Taskoria’s Terms and Conditions governing the use of our platform and services.",
     url: "https://www.taskoria.com/terms-and-conditions",
     siteName: "Taskoria",
     type: "article",

@@ -40,13 +40,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       .replace(/\b\w/g, (l) => l.toUpperCase());
 
     const title = cityName
-      ? `${service.name} in ${cityName} | Get Free Quotes | Taskoria`
-      : `${service.name} Services | Compare Quotes & Book Online | Taskoria`;
+      ? `${service.name} in ${cityName} Near You |Trusted ${service.name} | Get Free Quotes | Taskoria`
+      : `${service.name} Services Near You | Trusted ${service.name}  – Taskoria`;
 
     const description = cityName
-      ? `Find trusted ${service.name.toLowerCase()} professionals in ${cityName}. Get free quotes, compare prices, read reviews, and book online. 100% verified providers.`
+      ? `Hire trusted ${service.name.toLowerCase()} professionals near you in ${cityName}.Compare verified ${service.name.toLowerCase()}  check reviews, and get fast quotes with Taskoria`
       : `${service.description || `Professional ${service.name.toLowerCase()} services`}. Get instant quotes from verified professionals. Compare prices, read reviews, and book with confidence.`;
-
     const keywords = cityName
       ? [
           `${service.name.toLowerCase()} ${cityName}`,

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Careers at Taskoria | Build the Future of Local Services",
   description:
-    "Careers at Taskoria are launching soon. Join us to build technology that connects people with trusted local professionals.",
+    "Explore career opportunities at Taskoria. Join our team and help shape the future of AI-powered service marketplaces.",
   keywords: [
     "Taskoria careers",
     "jobs at Taskoria",
@@ -12,9 +12,9 @@ export const metadata: Metadata = {
     "remote jobs",
   ],
   openGraph: {
-    title: "Careers at Taskoria",
+    title: "Careers at Taskoria | Build the Future of Local Services",
     description:
-      "We're opening careers at Taskoria soon. Follow us and be the first to apply when roles go live.",
+      "Explore career opportunities at Taskoria. Join our team and help shape the future of AI-powered service marketplaces",
     url: "https://taskoria.com/careers",
     siteName: "Taskoria",
     images: [

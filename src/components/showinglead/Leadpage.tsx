@@ -203,7 +203,7 @@ const LeadsPage: React.FC = () => {
   };
 
   if (loading) return <LoadingSpinner />;
-
+  
   if (error)
     return (
       <div className="flex h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">

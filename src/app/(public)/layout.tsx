@@ -8,8 +8,8 @@ import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
 import { Poppins } from "next/font/google";
 import type { Viewport } from "next";
-import { Analytics } from "@vercel/analytics/next"
-import { useNotificationTitle } from '@/hooks/useNotificationTitle'
+import { Analytics } from "@vercel/analytics/next";
+import { useNotificationTitle } from "@/hooks/useNotificationTitle";
 import NotificationHandler from "@/components/NotificationHandler";
 
 const poppins = Poppins({
@@ -21,7 +21,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.taskoria.com"),
 
-  title: "Taskoria — Find Trusted Service Providers",
+  title: "Taskoria | Find Trusted Local Professionals for Any Job",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   description:
-    "Taskoria helps you discover top service providers across categories like Home, Professional.",
+    "Taskoria connects you with verified local professionals for home, business, and digital services. AI-powered matching, transparent pricing, and secure payments.",
   keywords: [
     "Taskoria",
     "service providers",
@@ -60,9 +60,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Taskoria — Find Trusted Service Providers",
+    title: "Taskoria | Find Trusted Local Professionals for Any Job",
     description:
-      "Discover and hire top service providers in your area across multiple categories with Taskoria.",
+      "Taskoria connects you with verified local professionals for home, business, and digital services. AI-powered matching, transparent pricing, and secure payments.",
     url: "https://taskoria.com",
 
     siteName: "Taskoria",
@@ -117,21 +117,18 @@ export default function RootLayout({
         />
       </head>
       <AuthProvider>
-        <body className="antialiased dark:bg-black " >
-          <NotificationHandler/>
+        <body className="antialiased dark:bg-black ">
+          <NotificationHandler />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-            <Analytics/>
+            <Analytics />
             <UserProvider>
               <ModernNavbar />
-              <main className=" " >
-
-              {children}
-              </main>
+              <main className=" ">{children}</main>
 
               <Toaster position="top-right" richColors expand closeButton />
               <Footer />

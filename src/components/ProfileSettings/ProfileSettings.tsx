@@ -131,12 +131,7 @@ export default function ProfileSettings() {
           before hiring you.
         </p>
 
-        {/* <a
-          href="/public-profile"
-          className="inline-block mt-3 text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
-        >
-          View public profile
-        </a> */}
+       
       </div>
 
       <div className="space-y-4">

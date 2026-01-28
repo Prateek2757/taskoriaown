@@ -118,51 +118,53 @@ export async function POST(req: Request) {
       [category_id, session.user.id]
     );
 
-    setImmediate(async () => {
-      try {
-        const hasBudget =
-          typeof estimated_budget === "number" && estimated_budget > 0;
-
-        if (!hasBudget) {
-          for (const adminEmail of adminEmails) {
-            sendEmail({
-              username: "Admin",
-              email: adminEmail,
-              type: "task-posted-no-budget",
-              taskTitle: categoryname,
-            }).catch(console.error);
+    setImmediate(() => {
+      setTimeout(async () => {
+        try {
+          const hasBudget =
+            typeof estimated_budget === "number" && estimated_budget > 0;
+    
+          if (!hasBudget) {
+            for (const adminEmail of adminEmails) {
+              sendEmail({
+                username: "Admin",
+                email: adminEmail,
+                type: "task-posted-no-budget",
+                taskTitle: categoryname,
+              }).catch(console.error);
+            }
           }
-        }
-
-        sendEmail({
-          username: name,
-          email,
-          type: "task-posted",
-          taskTitle: categoryname,
-        }).catch(console.error);
-
-        if (hasBudget) {
-          for (const p of providersRes.rows) {
-            sendEmail({
-              email: p.email,
-              username: p.display_name || "Provider",
-              type: "provider-new-task",
-              taskTitle: title,
-              taskLocation: categoryname,
-            }).catch(console.error);
-
-            createNotification({
-              userId: String(p.user_id),
-              type: "task_posted",
-              user_name: String(session?.user.name),
-              title: `${session?.user.name} posted a task`,
-              body: `New ${categoryname} task available`,
-            }).catch(console.error);
+    
+          sendEmail({
+            username: name,
+            email,
+            type: "task-posted",
+            taskTitle: categoryname,
+          }).catch(console.error);
+    
+          if (hasBudget) {
+            for (const p of providersRes.rows) {
+              sendEmail({
+                email: p.email,
+                username: p.display_name || "Provider",
+                type: "provider-new-task",
+                taskTitle: title,
+                taskLocation: categoryname,
+              }).catch(console.error);
+    
+              createNotification({
+                userId: String(p.user_id),
+                type: "task_posted",
+                user_name: String(session?.user.name),
+                title: `${session?.user.name} posted a task`,
+                body: `New ${categoryname} task available`,
+              }).catch(console.error);
+            }
           }
+        } catch (err) {
+          console.error("Background job failed:", err);
         }
-      } catch (err) {
-        console.error("Background job failed:", err);
-      }
+      }, 1000); 
     });
 
     return response;

@@ -15,11 +15,11 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
   }
 
   return {
-    title: `${provider.name} — Taskoria`,
-    description: provider.description ?? "View provider details.",
-    openGraph: {
-      title: provider.name,
-      description: provider.description,
+    title: `${provider.name} | ${provider.services.slice(0,1)} Services on Taskoria` ,
+    description: provider.description ?? `View ${provider.name} ${provider.services.slice(0,1)} profile on Taskoria. See services offered, reviews, ratings, and hire with confidence.`,
+    openGraph: { 
+      title: `${provider.name} | ${provider.services.slice(0,1)} Services on Taskoria`,
+      description: `View ${provider.name} ${provider.services.slice(0,1)} profile on Taskoria. See services offered, reviews, ratings, and hire with confidence.`,
       images: provider.image ? [provider.image] : [],
     },
   };

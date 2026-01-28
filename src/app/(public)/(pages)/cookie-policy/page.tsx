@@ -1,72 +1,72 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// import type { Metadata } from "next";
+import type { Metadata } from "next";
 
 
 
-// export const metadata: Metadata = {
-//   title: "Cookie Policy | Taskoria Pty Ltd - How We Use Cookies",
-//   description:
-//     "Learn how Taskoria uses cookies and similar technologies to improve your experience, ensure security, and provide personalized services on our platform.",
-//   keywords: [
-//     "Taskoria cookie policy",
-//     "cookies Australia",
-//     "privacy cookies",
-//     "website cookies",
-//     "cookie consent",
-//     "cookie preferences",
-//     "tracking technologies",
-//     "web analytics cookies",
-//     "marketing cookies Australia",
-//   ],
-//   authors: [{ name: "Taskoria Pty Ltd" }],
-//   creator: "Taskoria Pty Ltd",
-//   publisher: "Taskoria Pty Ltd",
-//   metadataBase: new URL("https://www.taskoria.com"),
-//   openGraph: {
-//     title: "Cookie Policy | Taskoria",
-//     description:
-//       "Understand how Taskoria uses cookies to enhance your experience and protect your privacy.",
-//     url: "https://www.taskoria.com/cookie-policy",
-//     siteName: "Taskoria",
-//     type: "article",
-//     locale: "en_AU",
-//     images: [
-//       {
-//         url: "https://www.taskoria.com/og-image.jpg",
-//         width: 1200,
-//         height: 630,
-//         alt: "Taskoria Cookie Policy",
-//       },
-//     ],
-//   },
-//   twitter: {
-//     card: "summary_large_image",
-//     title: "Cookie Policy | Taskoria",
-//     description:
-//       "How Taskoria uses cookies and tracking technologies on our platform.",
-//     images: ["https://www.taskoria.com/twitter-image.jpg"],
-//   },
-//   robots: {
-//     index: true,
-//     follow: true,
-//     googleBot: {
-//       index: true,
-//       follow: true,
-//       "max-video-preview": -1,
-//       "max-image-preview": "large",
-//       "max-snippet": -1,
-//     },
-//   },
-//   alternates: {
-//     canonical: "https://www.taskoria.com/cookie-policy",
-//   },
-//   other: {
-//     "article:published_time": "2026-01-25T00:00:00Z",
-//     "article:modified_time": new Date().toISOString(),
-//   },
-// };
+export const metadata: Metadata = {
+  title: "Cookie Policy | Taskoria ",
+  description:
+    "Learn how Taskoria uses cookies and similar technologies to improve your experience on our platform.",
+  keywords: [
+    "Taskoria cookie policy",
+    "cookies Australia",
+    "privacy cookies",
+    "website cookies",
+    "cookie consent",
+    "cookie preferences",
+    "tracking technologies",
+    "web analytics cookies",
+    "marketing cookies Australia",
+  ],
+  authors: [{ name: "Taskoria Pty Ltd" }],
+  creator: "Taskoria Pty Ltd",
+  publisher: "Taskoria Pty Ltd",
+  metadataBase: new URL("https://www.taskoria.com"),
+  openGraph: {
+    title: "Cookie Policy | Taskoria",
+    description:
+      "Learn how Taskoria uses cookies and similar technologies to improve your experience on our platform.",
+    url: "https://www.taskoria.com/cookie-policy",
+    siteName: "Taskoria",
+    type: "article",
+    locale: "en_AU",
+    images: [
+      {
+        url: "https://www.taskoria.com/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Taskoria Cookie Policy",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Cookie Policy | Taskoria",
+    description:
+      "How Taskoria uses cookies and tracking technologies on our platform.",
+    images: ["https://www.taskoria.com/twitter-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://www.taskoria.com/cookie-policy",
+  },
+  other: {
+    "article:published_time": "2026-01-25T00:00:00Z",
+    "article:modified_time": new Date().toISOString(),
+  },
+};
 
 type CookieCategory = "necessary" | "analytics" | "functionality" | "marketing";
 

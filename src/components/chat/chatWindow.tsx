@@ -5,7 +5,9 @@ import { useSession } from "next-auth/react";
 import MessageList from "./messageList";
 import { supabaseBrowser } from "@/lib/supabase-server";
 import { createNotification } from "@/lib/notifications";
+import { Info } from "lucide-react";
 import axios from "axios";
+import TaskDetailsPanel from "./task-details";
 
 export type Message = {
   id: string;
@@ -35,6 +37,7 @@ export default function ChatWindow({
   const [typingUsers, setTypingUsers] = useState<Record<string, number>>({});
   const [activeUsers, setActiveUsers] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showTaskDetails, setShowTaskDetails] = useState(false);
 
   const channelRef = useRef<any>(null);
   const { data: session } = useSession();
@@ -54,12 +57,12 @@ export default function ChatWindow({
     const loadMessages = async () => {
       try {
         setLoading(true);
-        const res = await fetch(
+        const res = await axios.get(
           `/api/messages/conversation-read/${conversationId}`
         );
-        if (!res.ok) throw new Error(await res.text());
+        if (!res.status) throw new Error(await res.statusText);
 
-        const data = await res.json();
+        const data = await res.data;
         setMessages(sortMessages(uniqueMessages(data.messages)));
       } catch (err) {
         console.error("Fetch messages error:", err);
@@ -80,8 +83,6 @@ export default function ChatWindow({
     chan.on("broadcast", { event: "message" }, (payload) => {
       const msg: Message = payload.payload?.message;
       if (!msg?.id) return;
-
-      // console.log("💬 ChatWindow received broadcast:", msg);
 
       if (msg.user_id !== me.id) {
         setMessages((prev) => sortMessages(uniqueMessages([...prev, msg])));
@@ -105,7 +106,6 @@ export default function ChatWindow({
 
     chan.subscribe(async (status) => {
       if (status === "SUBSCRIBED") {
-        // console.log(`✅ ChatWindow subscribed to conversation:${conversationId}`);
         channelRef.current = chan;
         await chan.track({
           user_id: me.id,
@@ -163,8 +163,6 @@ export default function ChatWindow({
 
       const savedMessage = res.data.message;
 
-      // console.log("📤 Message saved to DB:", savedMessage);
-
       setMessages((prev) =>
         prev.map((m) =>
           m.id === tempId ? { ...savedMessage, status: "sent" } : m
@@ -180,12 +178,10 @@ export default function ChatWindow({
           payload: { message: savedMessage },
         };
 
-        // console.log("📡 Broadcasting to conversation channel");
         broadcastPromises.push(channelRef.current.send(broadcastPayload));
       }
 
       const sidebarChannelName = `sidebar:${conversationId}`;
-      // console.log(`📡 Broadcasting to ${sidebarChannelName}`);
 
       const sidebarChannel = supabaseBrowser.channel(sidebarChannelName, {
         config: {
@@ -203,16 +199,12 @@ export default function ChatWindow({
 
       broadcastPromises.push(sidebarBroadcast);
 
-      // Wait for both broadcasts
-      const results = await Promise.all(broadcastPromises);
-      // console.log("✅ Broadcast results:", results);
+      await Promise.all(broadcastPromises);
 
-      // Clean up sidebar channel after short delay
       setTimeout(() => {
         supabaseBrowser.removeChannel(sidebarChannel);
       }, 100);
 
-      // Send notification if other user is not viewing
       const otherUserIsViewing =
         OtherUserId && activeUsers.includes(String(OtherUserId));
 
@@ -243,16 +235,50 @@ export default function ChatWindow({
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-75px)] overflow-hidden border border-gray-100 dark:border-gray-800 bg-white dark:bg-black/30">
-      <MessageList
-        messages={messages}
-        otherName={otherName}
-        conversationTitle={conversationTitle}
-        me={me}
-        typingUsers={typingUsers}
-        onSend={sendMessage}
-        onTyping={sendTyping}
-        isLoading={loading}
+    <div className="flex h-[calc(100vh-75px)] w-full overflow-hidden">
+      <div className="flex-1 flex flex-col border border-gray-100 dark:border-gray-800 bg-white dark:bg-black/30">
+        <div className=" absolute right-0 items-center justify-between p-4  dark:border-gray-800  dark:bg-[#0f1015]">
+          {/* <div>
+            <h2 className="font-semibold text-gray-900 dark:text-gray-100">
+              {conversationTitle}
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              with {otherName}
+            </p>
+          </div> */}
+          
+          <button
+            onClick={() => setShowTaskDetails(!showTaskDetails)}
+            className={`
+              flex items-cente gap-2 px-4 py-2 rounded-lg transition
+              ${
+                showTaskDetails
+                  ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+              }
+            `}
+          >
+            <Info className="w-4 h-4" />
+            <span className="text-sm font-medium">Task Details</span>
+          </button>
+        </div>
+
+        <MessageList
+          messages={messages}
+          otherName={otherName}
+          conversationTitle={conversationTitle}
+          me={me}
+          typingUsers={typingUsers}
+          onSend={sendMessage}
+          onTyping={sendTyping}
+          isLoading={loading}
+        />
+      </div>
+
+      <TaskDetailsPanel
+        taskId={taskId}
+        isOpen={showTaskDetails}
+        onClose={() => setShowTaskDetails(false)}
       />
     </div>
   );

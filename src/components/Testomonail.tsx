@@ -7,44 +7,27 @@ import Image from "next/image";
 
 const reviews = [
   {
-    name: "Maria Santos",
-    username: "Startup Founder",
-    body: "I've never seen anything like this before. It's amazing. I love it.",
-    img: "https://avatar.vercel.sh/jack",
+    name: "Pranika",
+    username: "Brisbane, QLD",
+    body: "This was my first time using Taskoria and I was a bit unsure at first, but it turned out great. The process was straightforward, and I liked that everything was handled in one place. The service provider was professional and responsive. Overall, a very positive experience.",
+    img: "/pranika.png",
   },
   {
-    name: "David Thompson",
-    username: "Business Owner",
-    body: "I don't know what to say. I'm speechless. This is amazing.",
-    img: "https://avatar.vercel.sh/jill",
+    name: "Aayuskha",
+    username: "Gold Coast, QLD",
+    body: "Taskoria saved me a lot of time. I needed an electrician urgently and didn’t want to call around. Within a short time, I had a couple of good options and could compare them easily. The job was completed on time and communication was solid throughout. Very convenient platform.",
+    img: "/aayushka.png",
   },
   {
-    name: "Maria Santos",
-    username: "Startup Founder",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/john",
+    name: "Zaya",
+    username: "Sydney, NSW",
+    body: "I hired a graphic designer through Taskoria for a small business project. What stood out was how relevant the matches were — I didn’t get random quotes. The designer understood the brief well and delivered exactly what I needed. The platform feels well thought out and easy to use.",
+    img: "/zaya.png",
   },
-  {
-    name: "Maria Santos",
-    username: "Business Owner",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/jane",
-  },
-  {
-    name: "David Thompson",
-    username: "Startup Founder",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/jenny",
-  },
-  {
-    name: "Maria Santos",
-    username: "Business Owner",
-    body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/james",
-  },
+
 ];
 
-const firstRow = reviews.slice(0, reviews.length / 2);
+const firstRow = reviews.slice(0, reviews.length );
 const secondRow = reviews.slice(reviews.length / 2);
 
 const ReviewCard = ({
@@ -69,12 +52,12 @@ const ReviewCard = ({
       )}
     >
       <div className="flex flex-row items-center gap-2">
-        <Image  className="rounded-lg" width={32} height={32} alt="mianc" src={img} />
+        <Image  className="rounded-lg" width={42} height={42} alt="mianc" src={img} />
         <div className="flex flex-col">
           <figcaption className="text-sm font-medium dark:text-white">
             {name}
           </figcaption>
-          <p className="text-[11px] text-gray-500 dark:text-gray-300">
+          <p className="text-[11px] text-gray-500 text-justify dark:text-gray-300">
             - {username}
           </p>
         </div>
@@ -113,11 +96,11 @@ export default function Testomonail() {
               <ReviewCard key={review.username + i } {...review} />
             ))}
           </Marquee>
-          <Marquee reverse pauseOnHover className="[--duration:20s]">
+          {/* <Marquee reverse pauseOnHover className="[--duration:20s]">
             {secondRow.map((review , i) => (
               <ReviewCard key={review.username + i} {...review} />
             ))}
-          </Marquee>
+          </Marquee> */}
           <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-linear-to-r from-white dark:from-background"></div>
           <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-linear-to-l from-white dark:from-background"></div>
         </div>

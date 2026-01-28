@@ -88,7 +88,7 @@ export default function ProviderProfileClient({ provider }: { provider: any }) {
                       </div>
                       <p className="text-sm text-cyan-600 font-medium">
                         {Array.isArray(provider.services) && provider.services.length
-                          ? provider.services.slice(0, 4).join(", ")
+                          ? provider.services.slice(0, provider.services.length ).join(", ")
                           : "No services listed"}
                       </p>
                     </div>

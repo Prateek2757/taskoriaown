@@ -8,6 +8,7 @@ import ChatSidebar from "@/components/chat/ChatSidebar";
 import ChatWindow from "@/components/chat/chatWindow";
 import { Button } from "@/components/ui/button";
 import { supabaseBrowser } from "@/lib/supabase-server";
+import axios from "axios";
 
 interface Participant {
   user_id: string;
@@ -100,7 +101,6 @@ export default function ChatPageInline({
       return;
     }
 
-
     sidebarChannelsRef.current.forEach((ch) => {
       supabaseBrowser.removeChannel(ch);
     });
@@ -108,11 +108,11 @@ export default function ChatPageInline({
 
     conversations.forEach((convo) => {
       const channelName = `sidebar:${convo.id}`;
-      
+
       const channel = supabaseBrowser.channel(channelName, {
         config: {
-          broadcast: { 
-            self: true,  
+          broadcast: {
+            self: true,
             ack: true,
           },
         },
@@ -124,18 +124,9 @@ export default function ChatPageInline({
           return;
         }
 
-        // console.log("📨 SIDEBAR RECEIVED MESSAGE:", {
-        //   conversationId: msg.conversation_id,
-        //   from: msg.user_id,
-        //   content: msg.content?.substring(0, 40),
-        //   currentUser: session.user.id,
-        //   timestamp: new Date().toISOString(),
-        // });
-
         const isMyMessage = String(msg.user_id) === String(session.user.id);
         const isActiveConvo = activeConversation?.id === msg.conversation_id;
 
-        // Determine sender name (WhatsApp style)
         let senderName;
         if (isMyMessage) {
           senderName = "You";
@@ -146,20 +137,9 @@ export default function ChatPageInline({
           senderName = sender?.name || "Unknown";
         }
 
-        console.log("📊 Message processing:", {
-          isMyMessage,
-          isActiveConvo,
-          senderName,
-          willUpdateUnread: !isMyMessage && !isActiveConvo,
-        });
-
         setConversations((prev) => {
           const updated = prev.map((c) => {
             if (c.id === msg.conversation_id) {
-              // Unread count logic:
-              // - My message: set to 0 (I sent it, so it's "read")
-              // - Other's message + viewing: set to 0 (I'm reading it)
-              // - Other's message + NOT viewing: increment
               let newUnread = 0;
               if (isMyMessage) {
                 newUnread = 0;
@@ -168,13 +148,6 @@ export default function ChatPageInline({
               } else {
                 newUnread = (c.unread_count || 0) + 1;
               }
-
-              console.log(`📝 Updating conversation ${c.id}:`, {
-                oldUnread: c.unread_count,
-                newUnread,
-                senderName,
-                preview: msg.content?.substring(0, 40),
-              });
 
               return {
                 ...c,
@@ -197,7 +170,6 @@ export default function ChatPageInline({
             return timeB - timeA;
           });
 
-          console.log("✅ Sidebar state updated and re-rendering");
           return sorted;
         });
       });
@@ -205,16 +177,11 @@ export default function ChatPageInline({
       channel.subscribe((status) => {
         if (status === "SUBSCRIBED") {
           console.log(`✅ Sidebar subscribed to ${channelName}`);
-        } else if (status === "CHANNEL_ERROR") {
-          console.error(`❌ Sidebar subscription error for ${channelName}`);
-        } else if (status === "TIMED_OUT") {
-          console.error(`⏱️ Sidebar subscription timeout for ${channelName}`);
         }
       });
 
       sidebarChannelsRef.current.push(channel);
     });
-
 
     return () => {
       sidebarChannelsRef.current.forEach((ch) => {
@@ -255,20 +222,17 @@ export default function ChatPageInline({
   );
 
   const handleSelectConversation = useCallback((conversation: Conversation) => {
-    console.log("👆 Conversation selected:", conversation.id);
     setActiveConversation(conversation);
-    
-    // Clear unread count IMMEDIATELY in UI
+
     setConversations((prev) =>
       prev.map((c) =>
         c.id === conversation.id ? { ...c, unread_count: 0 } : c
       )
     );
 
-    // Mark as read on backend (fire and forget)
-    fetch(`/api/messages/mark-read/${conversation.id}`, {
-      method: "POST",
-    }).catch((err) => console.error("Failed to mark as read:", err));
+    axios
+      .get(`/api/messages/conversation-read/${conversation.id}`, {})
+      .catch((err) => console.error("Failed to mark as read:", err));
 
     if (window.matchMedia("(max-width: 640px)").matches) {
       setSidebarOpen(false);
@@ -335,7 +299,7 @@ export default function ChatPageInline({
         )}
       </AnimatePresence>
 
-      <div className="flex-1 flex flex-col relative">
+      <div className="flex-1 flex flex-col relative overflow-hidden">
         {activeConversation && (
           <div
             className="
@@ -394,7 +358,7 @@ export default function ChatPageInline({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
               className="
-                flex-1 overflow-hidden flex flex-col
+                flex-1 overflow-hidden flex
                 bg-white dark:bg-[#0e0f14]"
             >
               <ChatWindow

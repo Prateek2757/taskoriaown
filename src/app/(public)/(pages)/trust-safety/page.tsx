@@ -1,7 +1,17 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Shield, CheckCircle, FileText, Lock, Users, AlertCircle, Phone, Award } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
+
+
+export const metadata: Metadata = {
+  title: "Trust & Safety | How Taskoria Protects Customers and Providers",
+  description:"Taskoria is on a mission to make hiring local professionals simple, transparent, and reliable through technology and community trust.",
+  openGraph: {
+    title: `Trust & Safety | How Taskoria Protects Customers and Providers`,
+    description: "Taskoria is on a mission to make hiring local professionals simple, transparent, and reliable through technology and community trust.",
+  },
+ }
 
 const TrustSafety = () => {
   const verificationSteps = [

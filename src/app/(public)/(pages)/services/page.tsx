@@ -6,10 +6,9 @@ import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
   const categories = await fetchCategories();
-
   return {
-    title: `Explore Service Categories — Taskoria`,
-    description: `Browse ${categories.length} service categories and find skilled professionals.`,
+    title: `Browse Services | Hire Local Professionals Across Australia – Taskoria`,
+    description: `Explore  ${categories.length}  of services on Taskoria—from cleaning and trades to digital and creative work. Compare verified providers and hire with confidence.`,
     openGraph: {
       title: "Service Categories — Taskoria",
       description: "Discover top-rated professionals across diverse categories.",

@@ -242,10 +242,10 @@ const Notification = ({
 export default function CustomerDashboard() {
   return (
     <div className="space-y-6">
-      <QuickActions />
+      {/* <QuickActions />
       <StatsOverview />
       <MyJobs />
-      <RecentNotifications />
+      <RecentNotifications /> */}
     </div>
   );
 }
