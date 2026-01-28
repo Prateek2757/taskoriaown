@@ -6,11 +6,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     {
-      url: `${baseUrl}/sitemap-static.xml`,
+      url: `${baseUrl}/sitemapstatic.xml`,
       lastModified: new Date(),
     },
     {
-      url: `${baseUrl}/sitemap-services.xml`,
+      url: `${baseUrl}/sitemapservices.xml`,
       lastModified: new Date(),
     },
   ];
