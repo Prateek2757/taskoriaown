@@ -1,6 +1,4 @@
-"use client";
 
-import { useState, useEffect } from "react";
 import type { Metadata } from "next";
 
 
@@ -27,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Cookie Policy | Taskoria",
     description:
-      "Learn how Taskoria uses cookies and similar technologies to improve your experience on our platform.",
+      "Understand how Taskoria uses cookies to enhance your experience and protect your privacy.",
     url: "https://www.taskoria.com/cookie-policy",
     siteName: "Taskoria",
     type: "article",
@@ -68,80 +66,72 @@ export const metadata: Metadata = {
   },
 };
 
-type CookieCategory = "necessary" | "analytics" | "functionality" | "marketing";
-
-interface CookiePreferences {
-  necessary: boolean;
-  analytics: boolean;
-  functionality: boolean;
-  marketing: boolean;
-}
 
 export default function CookiePolicyPage() {
-  const [showPreferences, setShowPreferences] = useState(false);
-  const [preferences, setPreferences] = useState<CookiePreferences>({
-    necessary: true, 
-    analytics: false,
-    functionality: false,
-    marketing: false,
-  });
-  const [saved, setSaved] = useState(false);
+  // const [showPreferences, setShowPreferences] = useState(false);
+  // const [preferences, setPreferences] = useState<CookiePreferences>({
+  //   necessary: true, 
+  //   analytics: false,
+  //   functionality: false,
+  //   marketing: false,
+  // });
+  // const [saved, setSaved] = useState(false);
 
   
-  useEffect(() => {
-    const savedPrefs = localStorage.getItem("taskoria_cookie_preferences");
-    if (savedPrefs) {
-      try {
-        setPreferences({ ...preferences, ...JSON.parse(savedPrefs) });
-      } catch (e) {
-        console.error("Failed to load cookie preferences", e);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   const savedPrefs = localStorage.getItem("taskoria_cookie_preferences");
+  //   if (savedPrefs) {
+  //     try {
+  //       setPreferences({ ...preferences, ...JSON.parse(savedPrefs) });
+  //     } catch (e) {
+  //       console.error("Failed to load cookie preferences", e);
+  //     }
+  //   }
+  // }, []);
 
-  const handleToggle = (category: CookieCategory) => {
-    if (category === "necessary") return; // Cannot disable necessary cookies
+  // const handleToggle = (category: CookieCategory) => {
+  //   if (category === "necessary") return; // Cannot disable necessary cookies
 
-    setPreferences((prev) => ({
-      ...prev,
-      [category]: !prev[category],
-    }));
-  };
+  //   setPreferences((prev) => ({
+  //     ...prev,
+  //     [category]: !prev[category],
+  //   }));
+  // };
 
-  const handleSave = () => {
-    localStorage.setItem("taskoria_cookie_preferences", JSON.stringify(preferences));
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
-    setShowPreferences(false);
-  };
+  // const handleSave = () => {
+  //   localStorage.setItem("taskoria_cookie_preferences", JSON.stringify(preferences));
+  //   setSaved(true);
+  //   setTimeout(() => setSaved(false), 3000);
+  //   setShowPreferences(false);
+  // };
 
-  const handleAcceptAll = () => {
-    const allAccepted: CookiePreferences = {
-      necessary: true,
-      analytics: true,
-      functionality: true,
-      marketing: true,
-    };
-    setPreferences(allAccepted);
-    localStorage.setItem("taskoria_cookie_preferences", JSON.stringify(allAccepted));
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
-    setShowPreferences(false);
-  };
+  // const handleAcceptAll = () => {
+  //   const allAccepted: CookiePreferences = {
+  //     necessary: true,
+  //     analytics: true,
+  //     functionality: true,
+  //     marketing: true,
+  //   };
+  //   setPreferences(allAccepted);
+  //   localStorage.setItem("taskoria_cookie_preferences", JSON.stringify(allAccepted));
+  //   setSaved(true);
+  //   setTimeout(() => setSaved(false), 3000);
+  //   setShowPreferences(false);
+  // };
 
-  const handleRejectAll = () => {
-    const onlyNecessary: CookiePreferences = {
-      necessary: true,
-      analytics: false,
-      functionality: false,
-      marketing: false,
-    };
-    setPreferences(onlyNecessary);
-    localStorage.setItem("taskoria_cookie_preferences", JSON.stringify(onlyNecessary));
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
-    setShowPreferences(false);
-  };
+  // const handleRejectAll = () => {
+  //   const onlyNecessary: CookiePreferences = {
+  //     necessary: true,
+  //     analytics: false,
+  //     functionality: false,
+  //     marketing: false,
+  //   };
+  //   setPreferences(onlyNecessary);
+  //   localStorage.setItem("taskoria_cookie_preferences", JSON.stringify(onlyNecessary));
+  //   setSaved(true);
+  //   setTimeout(() => setSaved(false), 3000);
+  //   setShowPreferences(false);
+  // };
 
   return (
     <>
@@ -189,14 +179,14 @@ export default function CookiePolicyPage() {
                 🍪 Manage Cookie Preferences
               </button> */}
             </div>
-
+{/* 
             {saved && (
               <div className="mt-4 p-4 bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-600 rounded-lg">
                 <p className="text-green-800 dark:text-green-200 font-medium">
                   ✓ Your cookie preferences have been saved successfully
                 </p>
               </div>
-            )}
+            )} */}
           </header>
 
           {/* {showPreferences && (
@@ -533,7 +523,6 @@ export default function CookiePolicyPage() {
               Preferences are device- and browser-specific. You can manage your
               preferences using the{" "}
               <button
-                onClick={() => setShowPreferences(true)}
                 className="text-blue-600 dark:text-blue-400 underline hover:text-blue-700 dark:hover:text-blue-300 font-medium"
               >
                 Cookie Preferences
@@ -664,7 +653,6 @@ export default function CookiePolicyPage() {
                 <p className="text-sm text-blue-800 dark:text-blue-200">
                   You can update your cookie preferences at any time using the{" "}
                   <button
-                    onClick={() => setShowPreferences(true)}
                     className="underline font-medium hover:text-blue-600 dark:hover:text-blue-300"
                   >
                     Manage Cookie Preferences
