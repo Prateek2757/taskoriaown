@@ -38,7 +38,7 @@ const staticImages = [
     gradient: "from-slate-500/20 to-gray-500/20",
   },
   {
-    url: "/images/plumbling.avif",
+    url: "/images/plumber.png",
     gradient: "from-blue-500/20 to-cyan-500/20",
   },
   {
