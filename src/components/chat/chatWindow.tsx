@@ -215,6 +215,7 @@ export default function ChatWindow({
           user_name: `${session?.user.name}`,
           title: `${session?.user.name} is messaging you`,
           body: `You have received a message from ${session?.user.name}`,
+          action_url:`/messages/${conversationId}`
         });
       }
     } catch (err) {

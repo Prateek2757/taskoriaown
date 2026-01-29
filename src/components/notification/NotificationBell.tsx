@@ -4,6 +4,7 @@ import { Bell, FileText, X } from "lucide-react";
 import { supabaseBrowser } from "@/lib/supabase-server";
 import { toast } from "sonner";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 type NotificationType = "post" | "comment" | "request" | "file" | "system" | "lead_purchased" | "lead_response";
 
@@ -14,6 +15,7 @@ type Notification = {
   is_read: boolean;
   created_at: string;
   type?: NotificationType;
+  action_url?: string;
   user_name?: string;
   user_avatar?: string;
   action_buttons?: { label: string; action: string }[];
@@ -24,6 +26,7 @@ let globalChannelRef: any = null;
 let globalUserId: number | null = null;
 
 export default function NotificationBell({ userId }: { userId: number }) {
+  const router = useRouter();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"inbox" | "general">("inbox");
@@ -315,10 +318,14 @@ export default function NotificationBell({ userId }: { userId: number }) {
                 {notifications.map((notification) => (
                   <div
                     key={notification.notification_id}
-                    onClick={() =>
-                      !notification.is_read &&
-                      markAsRead(notification.notification_id)
-                    }
+                    onClick={() => {
+                      if (!notification.is_read) {
+                        markAsRead(notification.notification_id);
+                      }
+                      if(notification.action_url){
+                        router.push(notification.action_url)
+                      }
+                    }}
                     className={`px-4 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${
                       !notification.is_read
                         ? "bg-blue-50/30 dark:bg-blue-900/10"

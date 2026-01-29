@@ -4,7 +4,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.taskoria.com";
   const currentDate = new Date();
 
-  /* ---------------- CORE PAGES ---------------- */
   const corePages: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/`,
@@ -26,7 +25,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  /* ---------------- COMPANY ---------------- */
   const companyPages: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/trust-safety`,
@@ -48,7 +46,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  /* ---------------- LEGAL ---------------- */
   const legalPages: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/privacy-policy`,

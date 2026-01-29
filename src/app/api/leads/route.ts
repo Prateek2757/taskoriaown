@@ -158,6 +158,7 @@ export async function POST(req: Request) {
                 user_name: String(session?.user.name),
                 title: `${session?.user.name} posted a task`,
                 body: `New ${categoryname} task available`,
+                action_url:`/provider/leads`
               }).catch(console.error);
             }
           }

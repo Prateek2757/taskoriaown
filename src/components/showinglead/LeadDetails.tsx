@@ -190,6 +190,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       title: "Lead Purchased Successfully🎉!",
       type:"lead_purchased",
       body: `Congratulations ${session?.user?.name}! You have Purchased Lead For ${lead.category_name}`,
+      action_url:`/provider-responses`
     });
 
     await createNotification({
@@ -197,6 +198,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       title: "Lead Response 🎉",
       type:"lead_response",
       body: `Congratulations! Your Posted ${lead.category_name} Lead Got Response By ${session?.user?.name}`,
+      action_url:`/customer/dashboard`
     });
 
     if (hasActiveSubscription) {
