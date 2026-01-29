@@ -50,9 +50,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // ==========================================
-  // LEGAL PAGES
-  // ==========================================
+
   const legalPages: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/privacy-policy`,
@@ -74,11 +72,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // ==========================================
-  // ALL SERVICE PAGES (140+ services)
-  // ==========================================
+  const response = await fetch("/api/signup/category-selection");
+const allservices = await response.json();
+
+
   const services = [
-    // Home & Property Services
     "house-cleaning",
     "electricians",
     "gardening-lawn-mowing",
@@ -116,7 +114,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "home-theatre",
     "interior-designer",
     
-    // Professional & Business Services
     "accounting-taxation",
     "accounting",
     "business-consulting",
@@ -143,7 +140,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "draftsman",
     "architects",
     
-    // Events & Creative Services
     "wedding-photography",
     "videography",
     "makeup-hair-styling",
@@ -159,7 +155,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "chef",
     "cooking",
     
-    // Health & Wellness
     "nutritionists",
     "yoga-pilates",
     "massage-therapy",
@@ -176,20 +171,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "barbers",
     "hair-removal",
     
-    // Education & Learning
     "tutoring",
     "english-lessons",
     "music-lessons",
     "dance-lessons",
     
-    // Pet Services
     "pet-grooming",
     "dog-walking",
     "pet-sitting",
     "dog-care",
     "cat-care",
     
-    // Automotive Services
     "car-servicing",
     "car-service",
     "car-wash-detailing",
@@ -202,7 +194,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "car-body-work",
     "auto-electricians",
     
-    // Delivery & Transportation
     "courier-services",
     "delivery",
     "balloon-delivery",
@@ -216,7 +207,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "grocery-delivery",
     "driving",
     
-    // Specialized Services
     "alterations",
     "bakers",
     "bicycle-service",
@@ -226,10 +216,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "home-and-lifestyle",
   ];
 
-  // Remove duplicates from services array
-  const uniqueServices = [...new Set(services)];
+  const uniqueServices = [...new Set(allservices.name)];
   
-  // Generate service page entries
   const servicePages: MetadataRoute.Sitemap = uniqueServices.map((service) => ({
     url: `${baseUrl}/services/${service}`,
     lastModified: currentDate,
@@ -237,13 +225,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // ==========================================
-  // COMBINE ALL PAGES
-  // ==========================================
+ 
   return [
-    ...corePages,      // 3 pages
-    ...companyPages,   // 3 pages
-    ...legalPages,     // 3 pages
-    ...servicePages,   // 140+ pages
+    ...corePages,      
+    ...companyPages,   
+    ...legalPages,     
+    ...servicePages,   
   ];
 }
