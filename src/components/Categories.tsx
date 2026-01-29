@@ -30,11 +30,11 @@ const staticImages = [
     gradient: "from-red-500/20 to-orange-500/20",
   },
   {
-    url: "/images/electrician.avif",
+    url: "/images/electrician.png",
     gradient: "from-orange-500/20 to-amber-500/20",
   },
   {
-    url: "/images/gardening.avif",
+    url: "/images/gardening.png",
     gradient: "from-slate-500/20 to-gray-500/20",
   },
   {
@@ -42,7 +42,7 @@ const staticImages = [
     gradient: "from-blue-500/20 to-cyan-500/20",
   },
   {
-    url: "/images/weddingphoto.avif",
+    url: "/images/weddingphoto.png",
     gradient: "from-purple-500/20 to-pink-500/20",
   },
 ];

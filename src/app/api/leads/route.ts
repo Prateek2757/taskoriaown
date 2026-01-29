@@ -5,6 +5,14 @@ import { authOptions } from "../auth/[...nextauth]/options";
 import { sendEmail } from "@/components/email/helpers/sendVerificationEmail";
 import { createNotification } from "@/lib/notifications";
 
+async function sendEmailsWithRateLimit(emails: any[], ratePerSec: number = 1) {
+  const delay = 1000 / ratePerSec;
+  for (const emailData of emails) {
+    await sendEmail(emailData).catch(console.error);
+    await new Promise((res) => setTimeout(res, delay));
+  }
+}
+
 export async function POST(req: Request) {
   const client = await pool.connect();
   const session = await getServerSession(authOptions);
@@ -14,8 +22,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    let email = session.user?.email;
-    const name = session.user?.name;
+    const email = session.user.email;
+    const name = session.user.name;
 
     const {
       title,
@@ -58,47 +66,47 @@ export async function POST(req: Request) {
         preferred_date_start || null,
         preferred_date_end || null,
         queries,
-      ]
+      ],
     );
 
     const taskId = taskResult.rows[0].task_id;
 
+    // Save category answers
     if (category_answers && typeof category_answers === "object") {
       const insertAnswerQuery = `
         INSERT INTO task_answers (task_id, category_question_id, answer)
         VALUES ($1, $2, $3)
       `;
-
       for (const [questionId, answer] of Object.entries(category_answers)) {
-        let answerToStore;
+        let answerToStore =
+          Array.isArray(answer) ? JSON.stringify(answer) : answer ?? null;
 
-        if (Array.isArray(answer)) {
-          answerToStore = JSON.stringify(answer);
-        } else if (answer === null || answer === undefined) {
-          answerToStore = null;
-        } else {
-          answerToStore = String(answer);
-        }
-
-        await client.query(insertAnswerQuery, [
-          taskId,
-          questionId,
-          answerToStore,
-        ]);
+        await client.query(insertAnswerQuery, [taskId, questionId, answerToStore]);
       }
     }
 
-    const categorynameres = await client.query(
-      `SELECT name from service_categories where category_id=$1`,
-      [category_id]
+    const categoryRes = await client.query(
+      `SELECT name FROM service_categories WHERE category_id=$1`,
+      [category_id],
     );
-    const categoryname = categorynameres.rows[0].name;
+    const categoryname = categoryRes.rows[0]?.name || "Task";
 
-    const adminemailres = await client.query(
-      `SELECT email from users where role ='admin'`
+    // Get admin 
+    const adminRes = await client.query(`SELECT email FROM users WHERE role='admin'`);
+    const adminEmails = adminRes.rows.map((r) => r.email);
+
+    // Get providers for this category
+    const providersRes = await client.query(
+      `
+      SELECT u.email, u.user_id, up.display_name
+      FROM user_categories uc
+      JOIN users u ON u.user_id = uc.user_id
+      LEFT JOIN user_profiles up ON up.user_id = u.user_id
+      WHERE uc.category_id = $1
+      AND u.user_id <> $2
+      `,
+      [category_id, session.user.id],
     );
-    const adminEmails = adminemailres.rows.map((r) => r.email);
-    // console.log(adminEmails);
 
     await client.query("COMMIT");
 
@@ -106,67 +114,50 @@ export async function POST(req: Request) {
       success: true,
       task: taskResult.rows[0],
     });
-    const providersRes = await client.query(
-      `
-      SELECT u.email,u.user_id,up.display_name
-      FROM user_categories uc
-      JOIN users u ON u.user_id = uc.user_id
-      LEFT JOIN user_profiles up ON up.user_id = u.user_id
-      WHERE uc.category_id = $1
-      AND u.user_id <> $2    
-      `,
-      [category_id, session.user.id]
-    );
 
-    setImmediate(() => {
-      setTimeout(async () => {
-        try {
-          const hasBudget =
-            typeof estimated_budget === "number" && estimated_budget > 0;
-    
-          if (!hasBudget) {
-            for (const adminEmail of adminEmails) {
-              sendEmail({
-                username: "Admin",
-                email: adminEmail,
-                type: "task-posted-no-budget",
-                taskTitle: categoryname,
-              }).catch(console.error);
-            }
-          }
-    
-          sendEmail({
-            username: name,
-            email,
-            type: "task-posted",
-            taskTitle: categoryname,
-          }).catch(console.error);
-    
-          if (hasBudget) {
-            for (const p of providersRes.rows) {
-              sendEmail({
-                email: p.email,
-                username: p.display_name || "Provider",
-                type: "provider-new-task",
-                taskTitle: title,
-                taskLocation: categoryname,
-              }).catch(console.error);
-    
-              createNotification({
-                userId: String(p.user_id),
-                type: "task_posted",
-                user_name: String(session?.user.name),
-                title: `${session?.user.name} posted a task`,
-                body: `New ${categoryname} task available`,
-                action_url:`/provider/leads`
-              }).catch(console.error);
-            }
-          }
-        } catch (err) {
-          console.error("Background job failed:", err);
-        }
-      }, 1000); 
+    // Prepare email queue
+    const emailQueue: any[] = [];
+
+    if (typeof estimated_budget === "number" && estimated_budget > 0) {
+      providersRes.rows.forEach((p) => {
+        emailQueue.push({
+          email: p.email,
+          username: p.display_name || "Provider",
+          type: "provider-new-task",
+          taskTitle: title,
+          taskLocation: categoryname,
+        });
+
+        createNotification({
+          userId: String(p.user_id),
+          type: "task_posted",
+          user_name: String(session.user.name),
+          title: `${session.user.name} posted a task`,
+          body: `New ${categoryname} task available`,
+          action_url: "/provider/leads",
+        }).catch(console.error);
+      });
+    } else {
+      adminEmails.forEach((adminEmail) => {
+        emailQueue.push({
+          email: adminEmail,
+          username: "Admin",
+          type: "task-posted-no-budget",
+          taskTitle: categoryname,
+        });
+      });
+    }
+
+    // Customer confirmation email
+    emailQueue.push({
+      email,
+      username: name,
+      type: "task-posted",
+      taskTitle: categoryname,
     });
+
+    // Fire emails in background with proper rate limit
+    sendEmailsWithRateLimit(emailQueue, 1).catch(console.error);
 
     return response;
   } catch (err: any) {
@@ -192,13 +183,13 @@ export async function GET() {
 
     const { rows: categoryRows } = await client.query(
       `SELECT category_id FROM user_categories WHERE user_id = $1`,
-      [userId]
+      [userId],
     );
 
     if (!categoryRows.length) {
       return NextResponse.json(
         { message: "No categories found for this user." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -255,7 +246,7 @@ export async function GET() {
   ORDER BY 
     t.created_at DESC;
   `,
-      [categoryIds, userId]
+      [categoryIds, userId],
     );
 
     return NextResponse.json(result.rows);
@@ -263,7 +254,7 @@ export async function GET() {
     console.error("Leads fetch error:", err);
     return NextResponse.json(
       { message: "Failed to fetch leads" },
-      { status: 500 }
+      { status: 500 },
     );
   } finally {
     client.release();

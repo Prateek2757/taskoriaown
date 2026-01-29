@@ -250,10 +250,16 @@ const Footer = () => {
                   Careers
                 </a>
                 <a
-                  href="/"
+                  href="/contact"
                   className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer"
                 >
                   Contact
+                </a>
+                <a
+                  href="/blogs"
+                  className="block text-gray-600 dark:text-white hover:text-gray-900   mb-2 cursor-pointer"
+                >
+                  Blogs
                 </a>
               </div>
             </div>

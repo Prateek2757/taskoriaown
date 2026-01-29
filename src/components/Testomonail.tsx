@@ -7,10 +7,10 @@ import Image from "next/image";
 
 const reviews = [
   {
-    name: "Pranika",
+    name: "Chong",
     username: "Brisbane, QLD",
     body: "This was my first time using Taskoria and I was a bit unsure at first, but it turned out great. The process was straightforward, and I liked that everything was handled in one place. The service provider was professional and responsive. Overall, a very positive experience.",
-    img: "/pranika.png",
+    img: "/chongmin.png",
   },
   {
     name: "Aayuskha",
@@ -52,7 +52,7 @@ const ReviewCard = ({
       )}
     >
       <div className="flex flex-row items-center gap-2">
-        <Image  className="rounded-lg" width={42} height={32} alt="mianc" src={img} />
+        <Image  className="rounded-lg" width={52} height={32} alt="mianc" src={img} />
         <div className="flex flex-col">
           <figcaption className="text-sm font-medium dark:text-white">
             {name}
