@@ -15,7 +15,7 @@ export default function DashboardPage() {
     ">
       <div className="container mx-auto px-4 py-8">
 
-        <Link href="/" className="inline-flex mb-4">
+        {/* <Link href="/" className="inline-flex mb-4">
           <Button
             variant="ghost"
             className="
@@ -29,7 +29,7 @@ export default function DashboardPage() {
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Button>
-        </Link>
+        </Link> */}
 
         <ProviderDashboard />
       </div>

@@ -4,6 +4,7 @@ type CreateNotificationParams = {
   userId: string
   title: string
   body: string
+  role?:string
   channel?: 'inapp' | 'email' | 'push'
   type?: 'post' | 'comment' | 'request' | 'file' | 'system'|'message' | 'lead_purchased' | 'lead_response' | 'task_posted'
   user_name?: string
@@ -11,6 +12,7 @@ type CreateNotificationParams = {
   user_avatar?: string
   action_buttons?: { label: string, action: string }[]
   attachment?: string
+
 }
 
 export async function createNotification({
@@ -22,6 +24,7 @@ export async function createNotification({
   user_name,
   user_avatar,
   action_url,
+  role,
   action_buttons,
   attachment,
 }: CreateNotificationParams) {
@@ -39,6 +42,7 @@ export async function createNotification({
       action_url,
       action_buttons,
       attachment,
+      role,
       is_read: false,
       created_at: new Date().toISOString(), 
     })

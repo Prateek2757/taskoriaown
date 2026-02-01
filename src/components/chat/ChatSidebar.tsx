@@ -69,12 +69,12 @@ export default function ChatSidebar({
         <h1 className="text-xl font-extrabold tracking-tight bg-[#3C7DED] bg-clip-text text-transparent">
           ChatLink
         </h1>
-        <button
+        {/* <button
           onClick={() => setSidebarOpen(false)}
           className="sm:hidden text-gray-400 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white transition"
         >
           ✕
-        </button>
+        </button> */}
       </div>
 
       <div className="p-3 border-b bg-white/40 dark:bg-black/20 border-gray-100 dark:border-gray-800">
@@ -82,7 +82,7 @@ export default function ChatSidebar({
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 dark:text-gray-500" />
           <input
             type="text"
-            placeholder="Search chats or names..."
+            placeholder="Search chat with names..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-9 pr-3 py-2 text-sm bg-white/70 dark:bg-black/40 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-[#6C63FF]/50 outline-none"

@@ -174,12 +174,13 @@ export default async function ServicePage({ params }: Props) {
     { next: { revalidate: 3600 } }
   );
   const cities = citiesRes.ok ? await citiesRes.json() : [];
+console.log(cities);
 
   const selectedLocation = citySlug
     ? cities.find(
         (city: any) =>
-          city.name?.toLowerCase().replace(/\s+/g, "-") ===
-          citySlug.toLowerCase().replace(/\s+/g,"-")
+          city.slug ===
+          citySlug
       )
     : null;
 

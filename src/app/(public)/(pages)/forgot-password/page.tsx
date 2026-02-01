@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "motion/react";
 import { Loader2, ArrowLeft, Mail, Lock, EyeOff, Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ import Link from "next/link";
 export default function ForgotPasswordPage() {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState<string[]>(Array(6).fill(""));
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -19,7 +19,7 @@ export default function ForgotPasswordPage() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
-
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -27,9 +27,12 @@ export default function ForgotPasswordPage() {
     setError("");
 
     try {
-      const res = await axios.post("/api/auth/forget-password/send-reset-code", {
-        email: email.trim().toLowerCase(),
-      });
+      const res = await axios.post(
+        "/api/auth/forget-password/send-reset-code",
+        {
+          email: email.trim().toLowerCase(),
+        }
+      );
 
       if (res.data.success) {
         setStep(2);
@@ -63,11 +66,14 @@ export default function ForgotPasswordPage() {
     }
 
     try {
-      const res = await axios.post("/api/auth/forget-password/verify-reset-code", {
-        email: email.trim().toLowerCase(),
-        code: code.trim(),
-        newPassword,
-      });
+      const res = await axios.post(
+        "/api/auth/forget-password/verify-reset-code",
+        {
+          email: email.trim().toLowerCase(),
+          code: code.join(""),
+          newPassword,
+        }
+      );
 
       if (res.data.success) {
         setMessage("Password reset successful! Redirecting...");
@@ -79,6 +85,24 @@ export default function ForgotPasswordPage() {
       setError(err.response?.data?.message || "Failed to reset password");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCodeChange = (value: string, index: number) => {
+    if (!/^\d?$/.test(value)) return;
+
+    const newCode = [...code];
+    newCode[index] = value;
+    setCode(newCode);
+
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
+    if (e.key === "Backspace" && !code[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
     }
   };
 
@@ -139,10 +163,11 @@ export default function ForgotPasswordPage() {
                 whileTap={{ scale: 0.97 }}
                 disabled={loading}
                 type="submit"
-                className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${loading
+                className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
+                  loading
                     ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
                     : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
-                  }`}
+                }`}
               >
                 {loading ? (
                   <>
@@ -157,7 +182,10 @@ export default function ForgotPasswordPage() {
           )}
 
           {step === 2 && (
-            <form onSubmit={handleResetPassword} className="flex flex-col gap-5">
+            <form
+              onSubmit={handleResetPassword}
+              className="flex flex-col gap-5"
+            >
               <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
                 <p className="text-blue-700 dark:text-blue-300 text-sm text-center">
                   Code sent to <strong>{email}</strong>
@@ -168,15 +196,24 @@ export default function ForgotPasswordPage() {
                 <label className="text-gray-700 dark:text-gray-300 text-sm font-medium">
                   6-Digit Code
                 </label>
-                <input
-                  type="text"
-                  placeholder="123654"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                  className="w-full p-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-transparent shadow-sm transition text-center text-xl tracking-widest font-mono"
-                  required
-                  maxLength={6}
-                />
+
+                <div className="flex justify-center gap-3">
+                  {code.map((digit, index) => (
+                    <input
+                      key={index}
+                      ref={(el) => {
+                        inputRefs.current[index] = el;
+                      }}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handleCodeChange(e.target.value, index)}
+                      onKeyDown={(e) => handleKeyDown(e, index)}
+                      className="w-12 h-14 text-center text-xl font-mono rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500/60 transition shadow-sm"
+                    />
+                  ))}
+                </div>
               </div>
 
               <div className="space-y-1 relative">
@@ -230,7 +267,11 @@ export default function ForgotPasswordPage() {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-500 dark:hover:text-cyan-400 transition"
                     aria-label="Toggle confirm password visibility"
                   >
-                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    {showConfirmPassword ? (
+                      <EyeOff size={18} />
+                    ) : (
+                      <Eye size={18} />
+                    )}
                   </button>
                 </div>
               </div>
@@ -238,10 +279,11 @@ export default function ForgotPasswordPage() {
                 whileTap={{ scale: 0.97 }}
                 disabled={loading}
                 type="submit"
-                className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${loading
+                className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
+                  loading
                     ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
                     : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
-                  }`}
+                }`}
               >
                 {loading ? (
                   <>
@@ -257,7 +299,7 @@ export default function ForgotPasswordPage() {
                 type="button"
                 onClick={() => {
                   setStep(1);
-                  setCode("");
+                  setCode(Array(6).fill(""));
                   setNewPassword("");
                   setConfirmPassword("");
                   setMessage("");

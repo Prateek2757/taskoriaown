@@ -176,7 +176,7 @@ export default function ChatPageInline({
 
       channel.subscribe((status) => {
         if (status === "SUBSCRIBED") {
-          console.log(`✅ Sidebar subscribed to ${channelName}`);
+          //console.log(`✅ Sidebar subscribed to ${channelName}`);
         }
       });
 
@@ -310,7 +310,8 @@ export default function ChatPageInline({
           >
             <Button
               onClick={() => setSidebarOpen(true)}
-              className="text-[#6C63FF] dark:text-[#78aaff] flex items-center gap-1"
+              variant="outline"
+              className="text-black dark:text-[#78aaff] border-none flex items-center gap-1"
             >
               <ArrowLeft className="w-5 h-5" />
               <span className="text-sm font-medium">Back</span>

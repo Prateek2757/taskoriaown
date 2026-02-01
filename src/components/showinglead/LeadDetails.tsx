@@ -24,6 +24,7 @@ import { useConversation } from "@/hooks/useConversation";
 import LocationMap from "../map/map";
 import { createNotification } from "@/lib/notifications";
 import { useSubscription } from "@/hooks/useSubcription";
+import Image from "next/image";
 
 interface LeadAnswer {
   question_id?: string | number;
@@ -42,6 +43,7 @@ interface Lead {
   customer_email?: string;
   location_name: string;
   postcode?: number;
+  image?: string;
   phone: number;
   created_at: string;
   description: string;
@@ -188,17 +190,17 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     await createNotification({
       userId: session?.user?.id,
       title: "Lead Purchased Successfully🎉!",
-      type:"lead_purchased",
+      type: "lead_purchased",
       body: `Congratulations ${session?.user?.name}! You have Purchased Lead For ${lead.category_name}`,
-      action_url:`/provider-responses`
+      action_url: `/provider-responses`,
     });
 
     await createNotification({
       userId: String(userId),
       title: "Lead Response 🎉",
-      type:"lead_response",
+      type: "lead_response",
       body: `Congratulations! Your Posted ${lead.category_name} Lead Got Response By ${session?.user?.name}`,
-      action_url:`/customer/dashboard`
+      action_url: `/customer/dashboard`,
     });
 
     if (hasActiveSubscription) {
@@ -273,9 +275,21 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         <div className="bg-[#3C7DED] px-6 py-8 text-white">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-4 ">
-              <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-bold text-xl border-2  border-white/30 ">
-                {getInitials(lead.customer_name || "N/A")}
-              </div>
+              {lead.image ? (
+                <div className="w-14 h-14 rounded-full overflow-hidden">
+                  <Image
+                    src={lead.image}
+                    width={56}
+                    height={56}
+                    alt="lead image"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="w-14 h-14 flex items-center justify-center rounded-full bg-cyan-600 text-white text-2xl font-semibold">
+                  {getInitials(lead.customer_name || "N/A")}
+                </div>
+              )}
               <div>
                 <div className="text-2xl font-bold mb-1">
                   {lead.customer_name}

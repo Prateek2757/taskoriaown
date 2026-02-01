@@ -22,6 +22,7 @@ export async function POST(req: Request) {
   );
 
   const data = await res.data;
+console.log(data);
 
   if (data.suggestions) {
     data.suggestions = data.suggestions.map((suggestion: any) => {

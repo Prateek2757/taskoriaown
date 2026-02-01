@@ -5,7 +5,7 @@ import { sendEmail } from "@/components/email/helpers/sendVerificationEmail";
 export async function GET() {
   try {
     const result = await pool.query(`
-      SELECT city_id, name ,display_name FROM cities ORDER BY popularity DESC 
+      SELECT city_id, name ,slug ,display_name FROM cities ORDER BY popularity DESC 
     `);
     return NextResponse.json(result.rows);
   } catch (err: unknown) {

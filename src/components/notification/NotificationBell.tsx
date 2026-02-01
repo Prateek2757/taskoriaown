@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-type NotificationType = "post" | "comment" | "request" | "file" | "system" | "lead_purchased" | "lead_response";
+type NotificationType = "post" | "comment" | "request" | "file" | "system" | "lead_purchased" | "lead_response" | "task_posted" | "message";
 
 type Notification = {
   notification_id: number;
@@ -16,11 +16,15 @@ type Notification = {
   created_at: string;
   type?: NotificationType;
   action_url?: string;
+  role?:string;
   user_name?: string;
   user_avatar?: string;
   action_buttons?: { label: string; action: string }[];
   attachment?: string;
 };
+
+const Inbox_Types:NotificationType[] =["message"]
+const General_Types:NotificationType[] =["lead_purchased" ,"lead_response" , "task_posted" ]
 
 let globalChannelRef: any = null;
 let globalUserId: number | null = null;
@@ -29,12 +33,19 @@ export default function NotificationBell({ userId }: { userId: number }) {
   const router = useRouter();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"inbox" | "general">("inbox");
+  const [activeTab, setActiveTab] = useState<"inbox" | "general">("general");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const bellRef = useRef<HTMLButtonElement>(null);
   const initializedRef = useRef(false);
 
   const unreadCount = notifications.filter((n) => !n.is_read).length;
+
+  const inboxNotifications = notifications.filter((n)=> n.type && Inbox_Types.includes(n.type));
+  const generalNotifications  = notifications.filter((n)=> !n.type || General_Types.includes(n.type));
+   
+  const visibleNotifications = activeTab === "inbox" ? inboxNotifications : generalNotifications
+  const unreadInboxCount = inboxNotifications.filter((n)=> !n.is_read).length
+  const unreadGeneralCount = generalNotifications.filter((n)=>!n.is_read).length
 
   const handleNewNotification = useCallback((payload: any) => {
     if (!userId) return;
@@ -284,6 +295,21 @@ export default function NotificationBell({ userId }: { userId: number }) {
               </div>
 
               <div className="flex items-center gap-1">
+              <button
+                  onClick={() => setActiveTab("general")}
+                  className={`relative px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
+                    activeTab === "general"
+                      ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30"
+                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                  }`}
+                >
+                  General
+                  {unreadGeneralCount > 0 && (
+                    <span className="ml-1.5 inline-flex items-center justify-center min-w-[16px] h-[16px] px-1 text-[10px] font-bold text-white bg-red-500 rounded-full">
+                      {unreadGeneralCount}
+                    </span>
+                  )}
+                </button>
                 <button
                   onClick={() => setActiveTab("inbox")}
                   className={`relative px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
@@ -293,16 +319,16 @@ export default function NotificationBell({ userId }: { userId: number }) {
                   }`}
                 >
                   Inbox
-                  {unreadCount > 0 && (
+                  {unreadInboxCount > 0 && (
                     <span className="ml-1.5 inline-flex items-center justify-center min-w-[16px] h-[16px] px-1 text-[10px] font-bold text-white bg-red-500 rounded-full">
-                      {unreadCount}
+                      {unreadInboxCount}
                     </span>
                   )}
                 </button>
+           
               </div>
             </div>
           </div>
-
           <div className="max-h-[480px] overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 px-4">
@@ -315,15 +341,36 @@ export default function NotificationBell({ userId }: { userId: number }) {
               </div>
             ) : (
               <div className="divide-y divide-gray-100 dark:divide-gray-800">
-                {notifications.map((notification) => (
+                {visibleNotifications.map((notification) => (
                   <div
                     key={notification.notification_id}
                     onClick={() => {
                       if (!notification.is_read) {
                         markAsRead(notification.notification_id);
                       }
-                      if(notification.action_url){
-                        router.push(notification.action_url)
+                      if (notification.type === "message" && notification.role) {
+                        const senderRole = notification.role; 
+                      
+                        const newViewMode =
+                          senderRole === "provider" ? "customer" : "provider";
+                      
+                        localStorage.setItem("viewMode", newViewMode);
+                        window.dispatchEvent(new Event("viewModeChanged"));
+                      }
+                      
+                      if(notification.type ==="task_posted" || notification.type ==="lead_purchased"){
+                        localStorage.setItem("viewMode","provider")
+                        window.dispatchEvent(new Event("viewModeChanged"));
+
+                      }
+                      if(notification.type ==="lead_response"){
+                        localStorage.setItem("viewMode","customer")
+                        window.dispatchEvent(new Event("viewModeChanged"))
+                      }
+
+                      if (notification.action_url) {
+                        router.push(notification.action_url);
+                        setOpen(false)
                       }
                     }}
                     className={`px-4 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${

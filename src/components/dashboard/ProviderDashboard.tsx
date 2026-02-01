@@ -12,7 +12,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 
-import { BarChart3, Users, Star, Target, User, Zap, ArrowUpRight } from "lucide-react";
+import {
+  BarChart3,
+  Users,
+  Star,
+  Target,
+  User,
+  Zap,
+  ArrowUpRight,
+  ChevronRight,
+} from "lucide-react";
 import LeadSettingsCard from "../Lead-setting/leadsetting";
 import { useLeadProfile } from "@/hooks/useLeadProfile";
 
@@ -101,7 +110,7 @@ export default function ProviderDashboard() {
   return (
     <div
       className="
-        min-h-screen py-10 
+        min-h-screen py-6 
         bg-gray-50 dark:bg-[#0d1117]
         transition-colors duration-300
       "
@@ -112,8 +121,7 @@ export default function ProviderDashboard() {
             <h1
               className="
                 text-3xl font-bold 
-                bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#00E5FF]
-                bg-clip-text text-transparent
+              text-[#3C7DED] bg-clip-text 
               "
             >
               {greeting}, {user.name?.split(" ")[0] || "User"}!
@@ -439,7 +447,8 @@ export default function ProviderDashboard() {
                         </Badge>
                       </div>
                       <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                        Verified badge, priority support, weekly free leads & exclusive features
+                        Verified badge, priority support, weekly free leads &
+                        exclusive features
                       </p>
                       <Link href="/settings/billing/taskoria_pro">
                         <Button className="w-full bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-semibold shadow-lg shadow-amber-500/20">
@@ -459,7 +468,10 @@ export default function ProviderDashboard() {
                         Starter Pack
                       </h3>
                     </div>
-                    <Badge variant="secondary" className="bg-blue-600 text-white">
+                    <Badge
+                      variant="secondary"
+                      className="bg-blue-600 text-white"
+                    >
                       20% OFF
                     </Badge>
                   </div>
@@ -467,7 +479,10 @@ export default function ProviderDashboard() {
                     Respond to 10 customers & boost your credibility
                   </p>
                   <Link href="/settings/billing/my_credits">
-                    <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50 font-semibold">
+                    <Button
+                      variant="outline"
+                      className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50 font-semibold"
+                    >
                       Get Started
                       <ArrowUpRight className="w-4 h-4 ml-2" />
                     </Button>
@@ -480,43 +495,40 @@ export default function ProviderDashboard() {
           <LeadSettingsCard />
 
           <div className="space-y-6">
-            <Card
-              className="
-                border rounded-2xl shadow-lg backdrop-blur 
-                bg-white/80 dark:bg-white/5
-                border-gray-200 dark:border-white/10
-              "
-            >
-              <CardHeader className="flex justify-between items-center">
-                <CardTitle className="text-lg font-semibold dark:text-white">
-                  Leads Overview
-                </CardTitle>
-                <Button
-                  variant="link"
-                  className="text-cyan-700 dark:text-cyan-300"
-                  onClick={() => router.push("/provider/leads")}
-                >
-                  View
-                </Button>
-              </CardHeader>
-
-              <CardContent className="flex items-center gap-4">
-                <div
-                  className="
-                    flex h-20 w-20 items-center justify-center 
-                    rounded-full bg-cyan-100 dark:bg-cyan-900/40 
-                    text-cyan-700 dark:text-cyan-300 
-                    text-3xl font-bold
-                  "
-                >
-                  {totalLeads ?? "—"}
+            <div className="rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800">
+              <div className="relative h-36 bg-[#3C7DED] flex flex-col justify-between p-5">
+                <div className="absolute top-0 right-0 w-28 h-28 bg-white/10 rounded-full blur-2xl" />
+                <div className="absolute bottom-0 left-0 w-20 h-20 bg-white/10 rounded-full blur-xl" />
+                <div className="relative flex items-start justify-between">
+                  <div>
+                    <p className="text-xs font-semibold text-white/70">
+                      Leads Overview
+                    </p>
+                    <h3 className="text-sm font-bold text-white mt-0.5">
+                      Total Received
+                    </h3>
+                  </div>
+                  <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
+                    <BarChart3 className="w-4 h-4 text-white" />
+                  </div>
                 </div>
-
-                <p className="font-semibold text-sm dark:text-slate-300">
-                  Total Leads Received
-                </p>
-              </CardContent>
-            </Card>
+                <div className="relative flex items-end justify-between">
+                  <div>
+                    <p className="text-4xl font-bold text-white tracking-tight">
+                      {totalLeads ?? "—"}
+                    </p>
+                    <p className="text-xs text-white/60 mt-0.5">Total leads</p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    className="text-white/80 hover:text-white hover:bg-white/10 text-xs px-3 h-7 rounded-lg"
+                    onClick={() => router.push("/provider/leads")}
+                  >
+                    View All <ChevronRight className="w-3.5 h-3.5 ml-0.5" />
+                  </Button>
+                </div>
+              </div>
+            </div>
 
             <Card
               className="
@@ -542,7 +554,3 @@ export default function ProviderDashboard() {
     </div>
   );
 }
-
-
-
-

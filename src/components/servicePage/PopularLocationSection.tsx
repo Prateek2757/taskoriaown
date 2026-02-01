@@ -24,6 +24,7 @@ interface City {
   city_id?: number;
   display_name?: string;
   city?: string;
+  slug?:string
   name?: string;
   image?: string;
   providers?: CityProvider[];
@@ -269,7 +270,7 @@ export default function PopularLocationsSection({
                       <Button 
                         onClick={(e) => {
                           e.preventDefault();
-                          router.push(`/services/${serviceSlug}/${city.name}`);
+                          router.push(`/services/${serviceSlug}/${city.slug}`);
                         }}
                         className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white font-semibold rounded-2xl hover:shadow-lg transition-all"
                       >
