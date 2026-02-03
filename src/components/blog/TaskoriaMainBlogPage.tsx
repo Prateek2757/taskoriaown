@@ -1,9 +1,9 @@
 "use client";
 import  { useState, useMemo } from "react";
 import { TrendingUp, Sparkles } from "lucide-react";
-import { blogPosts } from "./BlogData";
 import { BlogCard } from "./BlogCard";
 import { PostDetail } from "./PostDetails";
+import { blogPosts } from "./BlogData";
 
 const categories = ["All Posts", "For Providers", "Future of Work"];
 
@@ -46,7 +46,6 @@ const TaskoriaBlog = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // --- POST DETAIL VIEW ---
   if (currentView === "post" && selectedPost) {
     const relatedPosts = blogPosts
       .filter(

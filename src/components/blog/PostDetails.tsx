@@ -183,12 +183,12 @@ export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
               <Clock size={16} className="text-blue-600 dark:text-blue-400" />
               <span className="font-medium">{post.readTime}</span>
             </div>
-            <div className="flex items-center gap-1.5">
+            {/* <div className="flex items-center gap-1.5">
               <Eye size={16} className="text-blue-600 dark:text-blue-400" />
               <span className="font-medium">
                 {post.views.toLocaleString()} views
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
 

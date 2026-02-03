@@ -120,7 +120,7 @@ export function useLeadProfile() {
     }
   };
 
-  const addLocation = async (city_id: number, city_name: string) => {
+  const addLocation = async (city_id: number, city_name: string,radius:number) => {
     if (userLocations.some((loc) => loc.city_id === city_id)) {
       throw new Error("Location already added");
     }
@@ -129,11 +129,12 @@ export function useLeadProfile() {
         id: Date.now(),
         city_id,
         city_name,
+        radius,
         created_at: new Date().toISOString(),
       };
       mutateLocations([...userLocations, newLocation], false);
 
-      await axios.post("/api/user_locations", { city_id });
+      await axios.post("/api/user_locations", { city_id , radius});
       mutateLocations(undefined, true);
       notifyAll();
     } catch (err: any) {

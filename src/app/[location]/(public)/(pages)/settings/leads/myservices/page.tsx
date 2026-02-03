@@ -160,7 +160,6 @@ export default function MyServicesPage() {
     setLocationSuccess(null); 
     
     try {
-      // Pass the radius along with the location data
       await addLocation(data.city_id as any, data.city as any, selectedRadius);
       setLocationSuccess(`${data.city} (${selectedRadius}mi radius) added successfully!`);
       

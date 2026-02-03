@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const userId = session.user.id;
-  const { city_id } = await req.json();
+  const { city_id , radius } = await req.json();
 
   if (!city_id) {
     return NextResponse.json(
@@ -46,12 +46,12 @@ export async function POST(req: Request) {
   try {
     const { rows } = await pool.query(
       `
-      INSERT INTO user_locations (user_id, city_id)
-      VALUES ($1, $2)
+      INSERT INTO user_locations (user_id, city_id ,distance_mile)
+      VALUES ($1, $2 , $3)
       ON CONFLICT (user_id, city_id) DO NOTHING
       RETURNING id, city_id
       `,
-      [userId, city_id]
+      [userId, city_id , radius]
     );
 
     if (rows.length === 0) {
