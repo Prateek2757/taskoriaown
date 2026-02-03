@@ -94,8 +94,8 @@ function OnboardingContent() {
     setIsSubmitting(true);
     try {
       const payload: any = {
-        public_id: String(userId),
-        categoryPublic_id: String(categoryId),
+        public_id: userId || null,  
+        categoryPublic_id: categoryId || null,
         ...data,
         phone: data.phone || null,
       };

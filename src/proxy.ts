@@ -1,4 +1,4 @@
-// middleware.ts - OPTIMIZED VERSION
+// middleware.ts - FIXED VERSION
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
@@ -23,7 +23,7 @@ function getLocale(request: NextRequest): string {
 }
 
 export async function proxy(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+  const { pathname, search } = req.nextUrl; // ← ADD search
 
   if (
     pathname.startsWith("/_next") ||
@@ -41,29 +41,25 @@ export async function proxy(req: NextRequest) {
   const maybeLocale = segments[0];
   const hasLocale = i18n.locales.includes(maybeLocale as any);
 
-  // Handle URLs without locale prefix
   if (!hasLocale) {
     const locale = getLocale(req);
     
-    // For default locale, optionally keep URLs clean (no /au prefix)
-    // This is SEO-friendly as it avoids duplicate content
     if (locale === i18n.defaultLocale) {
-      // Rewrite to localized path without redirect (better for SEO)
       const url = req.nextUrl.clone();
       url.pathname = `/${locale}${pathname}`;
+      // search is already preserved in clone()
       
       const response = NextResponse.rewrite(url);
       
-      // Set locale cookie for future visits
       response.cookies.set("NEXT_LOCALE", locale, {
-        maxAge: 31536000, // 1 year
+        maxAge: 31536000, 
         path: "/",
       });
       
       return response;
     } else {
-      // For non-default locales, redirect with 301 (permanent)
-      const url = new URL(`/${locale}${pathname}`, req.url);
+      // ✅ Preserve query params
+      const url = new URL(`/${locale}${pathname}${search}`, req.url);
       
       const response = NextResponse.redirect(url, 301);
       response.cookies.set("NEXT_LOCALE", locale, {
@@ -75,11 +71,9 @@ export async function proxy(req: NextRequest) {
     }
   }
 
-  // Extract actual path without locale
   const locale = segments[0];
   const pathnameWithoutLocale = "/" + segments.slice(1).join("/");
 
-  // Handle authentication
   const token = await getToken({ req, secret });
 
   const protectedPaths = [
@@ -90,13 +84,11 @@ export async function proxy(req: NextRequest) {
     "/provider/leads",
   ];
 
-  // Redirect authenticated users away from /create
   if (pathnameWithoutLocale.startsWith("/create")) {
     if (token) {
-      return NextResponse.redirect(
-        new URL(`/${locale}/provider/dashboard`, req.url),
-        307 // Temporary redirect
-      );
+      // ✅ Preserve query params in redirect
+      const url = new URL(`/${locale}/provider/dashboard${search}`, req.url);
+      return NextResponse.redirect(url, 307);
     }
   }
 
@@ -104,7 +96,7 @@ export async function proxy(req: NextRequest) {
   if (protectedPaths.some((path) => pathnameWithoutLocale.startsWith(path))) {
     if (!token) {
       const url = new URL(`/${locale}/signin`, req.url);
-      url.searchParams.set("callbackUrl", pathname);
+      url.searchParams.set("callbackUrl", pathname + search); // ✅ Preserve query params
       
       return NextResponse.redirect(url, 307);
     }
@@ -122,13 +114,6 @@ export async function proxy(req: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder files
-     */
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

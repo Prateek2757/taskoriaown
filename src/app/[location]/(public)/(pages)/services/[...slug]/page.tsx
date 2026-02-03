@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/categories/${serviceSlug}`,
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/signup/category-selection`,
       { next: { revalidate: 3600 } }
     );
 

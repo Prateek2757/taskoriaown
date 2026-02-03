@@ -39,6 +39,8 @@ export default function CategorySelectionPage() {
     fetchCategories();
 
     const savedDraft = localStorage.getItem("draftProviderPublicId");
+    console.log("Draft ID from localStorage:", savedDraft); // ADD THIS
+
     if (savedDraft) setDraftId(String(savedDraft));
   }, []);
 
@@ -55,6 +57,8 @@ export default function CategorySelectionPage() {
   }, [searchQuery, categories]);
 
   const handleSelectCategory = (id: string, name: string) => {
+    console.log("Selected category ID:", id); // ADD THIS
+
     setSelectedCategory(id);
     setSearchQuery(name);
   };
@@ -62,8 +66,13 @@ export default function CategorySelectionPage() {
   const goNext = () => {
     if (!selectedCategory) return alert("Please select a category to continue");
     if (!draftId) return alert("Draft ID missing! Restart onboarding.");
+    
+    console.log("Navigating with:", { draftId, selectedCategory }); 
+    const url = `/create-account?user_id=${draftId}&cn=${selectedCategory}`;
+    console.log("URL:", url); // ADD THIS
+    
     setIsNavigating(true);
-    router.push(`/create-account?user_id=${draftId}&cn=${selectedCategory}`);
+    router.push(url);
   };
 
   const popularCategories = useMemo(() => categories.slice(0, 8), [categories]);
