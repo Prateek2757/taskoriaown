@@ -116,7 +116,7 @@ export function ServiceDetailsSection({ serviceDetails }) {
       {sections.howItWorks.length > 0 && (
         <div className="mb-14">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 dark:from-indigo-500/20 dark:via-purple-500/20 dark:to-pink-500/20 border border-indigo-200/50 dark:border-indigo-700/50 text-indigo-700 dark:text-indigo-300 font-bold rounded-full text-sm mb-6 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-blue-500/10 dark:from-indigo-500/20 dark:via-blue-500/20 dark:to-blue-500/20 border border-indigo-200/50 dark:border-indigo-700/50 text-indigo-700 dark:text-indigo-300 font-bold rounded-full text-sm mb-6 backdrop-blur-sm">
               <Sparkles className="w-4 h-4" />
               HOW IT WORKS
             </div>

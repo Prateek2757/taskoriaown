@@ -238,10 +238,10 @@ export default function PopularLocationsSection({
                       )}
                       <div className="absolute bottom-4 left-4 right-4">
                         <h3 className="text-2xl font-bold text-white mb-1">{city.city_name}</h3>
-                        <div className="flex items-center gap-2 text-white/90 text-sm">
+                        {/* <div className="flex items-center gap-2 text-white/90 text-sm">
                           <TrendingUp className="w-4 h-4" />
                           <span>{popularCities[index % popularCities.length]?.activeProviders || 150}+ Active Providers</span>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   
@@ -249,7 +249,7 @@ export default function PopularLocationsSection({
                       <div className="space-y-3 mb-5"> 
                         {popularCities[index % popularCities.length]?.providers?.slice(0, 3).map((provider, i) => (
                           <div key={i} className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700/50 transition">
-                            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0 shadow-md">
+                            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0 shadow-md">
                               {provider.logo}
                             </div>
                             <div className="flex-1 min-w-0">
@@ -272,7 +272,7 @@ export default function PopularLocationsSection({
                           e.preventDefault();
                           router.push(`/services/${serviceSlug}/${city.state_slug}/${city.slug}`);
                         }}
-                        className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white font-semibold rounded-2xl hover:shadow-lg transition-all"
+                        className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-indigo-500 dark:to-blue-500 text-white font-semibold rounded-2xl hover:shadow-lg transition-all"
                       >
                         Search {city.city_name}
                       </Button>
