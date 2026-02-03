@@ -324,10 +324,10 @@ export const blogPosts = [
   When you define the job clearly, compare properly, and choose local providers, you drastically reduce the risk of problems.
     
   Hiring should feel calm—not stressful.`,
-      author: "Daniel McAllister",
-      authorRole: "Home Services Analyst",
-      authorImage: "/daniel.png",
-      publishedDate: "2026-01-30",
+  author: "Martin",
+  authorRole: "Labor Market Analyst",
+  authorImage: "/prashant.png",
+  publishedDate: "2026-01-30",
       readTime: "9 min read",
       category: "Home Services",
       tags: ["Brisbane", "Tradies", "Home Improvement", "Hiring Guide"],
@@ -385,10 +385,10 @@ export const blogPosts = [
   Airtasker isn't broken—it's just not always the right tool anymore.
   
   If you value reliability, clear communication, and local accountability, Brisbane-focused service platforms are the smarter choice in 2026.`,
-      author: "Liam O'Connell",
-      authorRole: "Local Services Editor",
-      authorImage: "/liam.png",
-      publishedDate: "2026-02-01",
+  author: "Pranika",
+  authorRole: "Trust & Safety Director",
+  authorImage: "/pranika.png",
+  publishedDate: "2026-02-01",
       readTime: "6 min read",
       category: "Guides",
       tags: ["Brisbane", "Airtasker Alternatives", "Local Services", "Hiring"],

@@ -28,7 +28,7 @@ export const BlogCard = ({ post, onClick, featured = false }) => {
           </span>
         </div>
 
-        {featured && (
+        {/* {featured && (
           <div className="absolute bottom-4 left-4 flex items-center gap-4 text-sm text-white">
             <div className="flex items-center gap-1.5 bg-black/50 dark:bg-black/60 px-3 py-1 rounded-full backdrop-blur-sm">
               <Eye size={14} />
@@ -39,7 +39,7 @@ export const BlogCard = ({ post, onClick, featured = false }) => {
               <span>{post.likes}</span>
             </div>
           </div>
-        )}
+        )} */}
       </div>
 
       <div className={`p-6 ${featured ? "md:p-8" : ""}`}>
