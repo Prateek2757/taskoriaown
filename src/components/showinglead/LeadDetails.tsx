@@ -452,11 +452,11 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                     </span>
                   </div>
                   <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">
-                    🏆 Protected by Get Hired Guarantee
+                    🏆 Protected by Premium Credit Pack
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Full credit refund if you're not hired during your starter
-                    pack period
+                    Full credit refund if you're not hired during your premium
+                    credit pack period
                   </p>
                 </div>
               </div>

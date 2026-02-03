@@ -13,6 +13,7 @@ import {
   XCircle,
   Search,
   Check,
+  Radar,
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
@@ -26,6 +27,34 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import LocationSearch from "@/components/Location/locationsearch";
+
+const RADIUS_OPTIONS = [1, 2, 5, 10, 20, 30, 50, 75, 100, 125, 150] as const;
+
+const scrollbarStyles = `
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgb(243 244 246);
+    border-radius: 10px;
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgb(31 41 55);
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgb(209 213 219);
+    border-radius: 10px;
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgb(75 85 99);
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgb(156 163 175);
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgb(107 114 128);
+  }
+`;
 
 export default function MyServicesPage() {
   const {
@@ -50,6 +79,7 @@ export default function MyServicesPage() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [locationSuccess, setLocationSuccess] = useState<string | null>(null);
+  const [selectedRadius, setSelectedRadius] = useState<number>(10);
   const [pendingRemove, setPendingRemove] = useState<{
     type: "service" | "location";
     id: number | null;
@@ -130,12 +160,14 @@ export default function MyServicesPage() {
     setLocationSuccess(null); 
     
     try {
-      await addLocation(data.city_id as any, data.city as any);
-      setLocationSuccess(`${data.city} added successfully!`);
+      // Pass the radius along with the location data
+      await addLocation(data.city_id as any, data.city as any, selectedRadius);
+      setLocationSuccess(`${data.city} (${selectedRadius}mi radius) added successfully!`);
       
       setTimeout(() => {
         setLocationDialogOpen(false);
         setLocationSuccess(null);
+        setSelectedRadius(10); // Reset to default
       }, 1500);
     } catch (err: any) {
       const errorMessage = err.message || "Failed to add location";
@@ -162,6 +194,8 @@ export default function MyServicesPage() {
 
   return (
     <div className="max-w-6xl mx-auto py-4 px-6 space-y-6">
+      <style>{scrollbarStyles}</style>
+      
       <Link href="/provider/dashboard">
         <Button
           variant="ghost"
@@ -349,7 +383,8 @@ export default function MyServicesPage() {
                   setLocationDialogOpen(open);
                   if (!open) {
                     setLocationError(null); 
-                    setLocationSuccess(null); 
+                    setLocationSuccess(null);
+                    setSelectedRadius(10); // Reset radius when closing
                   }
                 }}
               >
@@ -368,7 +403,7 @@ export default function MyServicesPage() {
                       Add Location
                     </DialogTitle>
                     <DialogDescription className="text-base text-gray-600 dark:text-gray-400">
-                      Select cities where you provide services. You can add multiple locations.
+                      Select a city and service radius where you provide services.
                     </DialogDescription>
                   </DialogHeader>
 
@@ -403,8 +438,61 @@ export default function MyServicesPage() {
                     </div>
                   )}
 
-                  <div className="space-y-4 flex-1 flex flex-col">
-                    <LocationSearch onSelect={handleAddLocation} />
+                  <div className="space-y-5 flex-1 flex flex-col">
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-5 rounded-xl border border-blue-200 dark:border-gray-700">
+                      <div className="flex items-center gap-2 mb-4">
+                        <Radar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        <label className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                          Service Radius
+                        </label>
+                      </div>
+                      <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2.5 max-h-[200px] overflow-y-auto p-2 custom-scrollbar">
+                        {RADIUS_OPTIONS.map((radius) => (
+                          <button
+                            key={radius}
+                            type="button"
+                            onClick={() => setSelectedRadius(radius)}
+                            className={`
+                              relative py-3 px-3 rounded-lg font-semibold text-sm transition-all duration-200
+                              ${
+                                selectedRadius === radius
+                                  ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30 scale-105 ring-2 ring-blue-400"
+                                  : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500"
+                              }
+                            `}
+                          >
+                            {selectedRadius === radius && (
+                              <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                                <Check className="w-2.5 h-2.5 text-white" />
+                              </div>
+                            )}
+                            <div className="flex flex-col items-center gap-0.5">
+                              <span className="text-lg font-bold">{radius}</span>
+                              <span className="text-[10px] opacity-90 leading-none">mi</span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-3 text-center">
+                        Select how far you're willing to travel from the selected city
+                      </p>
+                    </div>
+
+                    <div className="flex-1">
+                      <LocationSearch onSelect={handleAddLocation} />
+                    </div>
+
+                    <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                          <Radar className="w-4 h-4" />
+                          <span>Coverage area:</span>
+                        </div>
+                        <span className="font-semibold text-blue-600 dark:text-blue-400">
+                          {selectedRadius} mile radius
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -437,6 +525,11 @@ export default function MyServicesPage() {
                     >
                       <MapPin className="w-3.5 h-3.5" />
                       {loc.city_name}
+                      {loc.radius && (
+                        <span className="text-xs opacity-75">
+                          ({loc.radius}mi)
+                        </span>
+                      )}
                       <XCircle className="w-3.5 h-3.5" />
                     </Badge>
                   ))}
@@ -469,7 +562,7 @@ export default function MyServicesPage() {
               </div>
 
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                💡 <strong>Tip:</strong> Click on a location badge to remove it. Add multiple cities to expand your reach.
+                💡 <strong>Tip:</strong> Click on a location badge to remove it. Each location includes your selected service radius.
               </p>
             </div>
           </CardContent>

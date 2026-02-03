@@ -9,7 +9,11 @@ const withSerwist = withSerwistInit({
   disable: false, // Enable PWA in all environments
 });
 const nextConfig: NextConfig = {
-	reactStrictMode: true,
+	reactStrictMode: true, 
+	// i18n: {
+	// 	locales: ['au'],  // all your supported locales
+	// 	defaultLocale: 'au',          // current default (your /au)
+	//   },
 	images: {
 	  formats: ['image/webp', 'image/avif'],
 	  domains: ["eoicjmcyigolwgjantsl.supabase.co"],

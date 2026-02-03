@@ -1,0 +1,59 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+<url>
+<loc>https://www.taskoria.com/</loc>
+<changefreq>daily</changefreq>
+<priority>1.0</priority>
+</url>
+<url>
+<loc>https://www.taskoria.com/services</loc>
+<changefreq>daily</changefreq>
+<priority>0.9</priority>
+</url>
+<url>
+<loc>https://www.taskoria.com/providers</loc>
+<changefreq>daily</changefreq>
+<priority>0.8</priority>
+</url>
+
+<url>
+<loc>https://www.taskoria.com/trust-safety</loc>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
+</url>
+<url>
+<loc>https://www.taskoria.com/about-us</loc>
+<changefreq>monthly</changefreq>
+<priority>0.6</priority>
+</url>
+<url>
+<loc>https://www.taskoria.com/careers</loc>
+<changefreq>monthly</changefreq>
+<priority>0.4</priority>
+</url>
+<!--  Legal  -->
+<url>
+<loc>https://www.taskoria.com/privacy-policy</loc>
+<changefreq>yearly</changefreq>
+<priority>0.2</priority>
+</url>
+<url>
+<loc>https://www.taskoria.com/terms-and-conditions</loc>
+<changefreq>yearly</changefreq>
+<priority>0.2</priority>
+</url>
+<url>
+<loc>https://www.taskoria.com/cookie-policy</loc>
+<changefreq>yearly</changefreq>
+<priority>0.2</priority>
+</url>
+
+
+
+ <!-- IMPORTANT:
+       Excluded on purpose:
+       - /book/* (booking flow pages; should usually be noindex)
+       - /providerprofile/* (profile pages; include only if you have stable canonical URLs + index rules)
+       - /post-job currently returns 404 (fix route then add)
+   -->
+</urlset>

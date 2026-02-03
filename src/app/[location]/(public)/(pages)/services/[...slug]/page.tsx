@@ -18,7 +18,8 @@ interface ServiceData {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
   const serviceSlug = slug[0];
-  const citySlug = slug[1] || null;
+  const stateSlug = slug[1] || null;
+  const citySlug = slug[2]|| null;
 
   try {
     const res = await fetch(
@@ -137,7 +138,8 @@ export default async function ServicePage({ params }: Props) {
   const { slug = [] } = await params;
 
   const serviceSlug = slug[0];
-  const citySlug = slug[1] || null;
+  const stateSlug = slug[1] || null;
+  const citySlug = slug[2] || null;
 
   let service: ServiceData | null = null;
   let error = false;
@@ -170,11 +172,10 @@ export default async function ServicePage({ params }: Props) {
   // console.log(service.description);
 
   const citiesRes = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/signup/location`,
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`,
     { next: { revalidate: 3600 } }
   );
   const cities = citiesRes.ok ? await citiesRes.json() : [];
-console.log(cities);
 
   const selectedLocation = citySlug
     ? cities.find(

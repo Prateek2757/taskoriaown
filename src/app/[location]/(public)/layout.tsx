@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "../globals.css";
+import "../../globals.css";
 import { UserProvider } from "@/context/userContext";
 import AuthProvider from "@/context/AuthProvider";
 import { Toaster } from "sonner";
@@ -11,6 +11,7 @@ import type { Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { useNotificationTitle } from "@/hooks/useNotificationTitle";
 import NotificationHandler from "@/components/NotificationHandler";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -129,6 +130,7 @@ export default function RootLayout({
             <UserProvider>
               <ModernNavbar />
               <main className=" ">{children}</main>
+              <SpeedInsights />
 
               <Toaster position="top-right" richColors expand closeButton />
               <Footer />

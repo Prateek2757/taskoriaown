@@ -117,7 +117,8 @@ export async function POST(req: Request) {
       ).rows[0].city_id;
 
     await client.query("COMMIT");
-
+    console.log(cityId);
+    
     return NextResponse.json({
       message: "Location saved successfully",
       country_id: countryId,

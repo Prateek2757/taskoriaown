@@ -206,7 +206,7 @@ export default function PopularLocationsSection({
         >
           <div className="flex gap-6 px-1 pb-2" style={{ width: 'max-content' }}>
             {displayCities.map((city, index) => {
-              const citySlug = city.name.toLowerCase().replace(/\s+/g, '-');
+              const citySlug = city.city_name.toLowerCase().replace(/\s+/g, '-');
               const isCurrentCity = currentCity === citySlug;
               
               return (
@@ -227,7 +227,7 @@ export default function PopularLocationsSection({
                       <Image
                         fill
                         src={popularCities[index % popularCities.length]?.image}
-                        alt={city.name}
+                        alt={city.city_name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
@@ -237,7 +237,7 @@ export default function PopularLocationsSection({
                         </div>
                       )}
                       <div className="absolute bottom-4 left-4 right-4">
-                        <h3 className="text-2xl font-bold text-white mb-1">{city.name}</h3>
+                        <h3 className="text-2xl font-bold text-white mb-1">{city.city_name}</h3>
                         <div className="flex items-center gap-2 text-white/90 text-sm">
                           <TrendingUp className="w-4 h-4" />
                           <span>{popularCities[index % popularCities.length]?.activeProviders || 150}+ Active Providers</span>
@@ -270,11 +270,11 @@ export default function PopularLocationsSection({
                       <Button 
                         onClick={(e) => {
                           e.preventDefault();
-                          router.push(`/services/${serviceSlug}/${city.slug}`);
+                          router.push(`/services/${serviceSlug}/${city.state_slug}/${city.slug}`);
                         }}
                         className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500 text-white font-semibold rounded-2xl hover:shadow-lg transition-all"
                       >
-                        Search {city.name}
+                        Search {city.city_name}
                       </Button>
                     </div>
                   </Link>
