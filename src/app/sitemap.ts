@@ -1,4 +1,3 @@
-// sitemap.ts - OPTIMIZED VERSION
 import type { MetadataRoute } from "next";
 import { i18n } from "../../i18n-config";
 
@@ -6,7 +5,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.taskoria.com";
   const currentDate = new Date();
 
-  // Define core routes (without locale prefix)
   const coreRoutes = [
     { path: "", priority: 1.0, changeFreq: "daily" as const },
     { path: "/services", priority: 0.9, changeFreq: "daily" as const },
@@ -25,7 +23,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/cookie-policy", priority: 0.2, changeFreq: "yearly" as const },
   ];
 
-  // Fetch dynamic services
   let services: any[] = [];
   try {
     const res = await fetch(`${baseUrl}/api/signup/category-selection`, {
@@ -53,7 +50,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ];
 
-  // Generate sitemap entries for ALL locales
   const sitemapEntries: MetadataRoute.Sitemap = [];
 
   allRoutes.forEach((route) => {

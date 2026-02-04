@@ -42,24 +42,28 @@ export default function LeadSettingsCard() {
       </div>
     );
   }
+  const isNationwide = profile.is_nationwide;
 
-  const location = profile.is_nationwide
-    ? "Nationwide"
-    : userLocations || "Not set";
+  const locationDisplay = profile.is_nationwide
+  ? "Nationwide"
+  : Array.isArray(userLocations) && userLocations.length
+  ? userLocations
+      .map(
+        (loc: { city_name: string; radius: number }) =>
+          `within ${loc.radius} mile${loc.radius !== 1 ? "s" : ""} of ${loc.city_name}`
+      )
+      .join(", ")
+  : "Location not set";
 
-  const locationDisplay = Array.isArray(location)
-    ? location.map((loc: { city_name: string }) => loc.city_name).join(", ")
-    : location;
 
   return (
     <div className="bg-white dark:bg-[#161b22] rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden self-start">
-      {/* Header */}
       <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 bg-[#3C7DED]/10 rounded-lg flex items-center justify-center">
             <Wrench className="w-4.5 h-4.5 text-[#3C7DED]" />
           </div>
-          <h2 className="text-sm font-bold text-gray-800 dark:text-white">Lead Settings</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">Lead Settings</h2>
         </div>
         <Link href="/settings/leads/myservices">
           <Button
@@ -72,9 +76,7 @@ export default function LeadSettingsCard() {
         </Link>
       </div>
 
-      {/* Body */}
       <div className="p-5 space-y-6">
-        {/* Services section */}
         <div>
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -88,7 +90,7 @@ export default function LeadSettingsCard() {
           {profile.categories.length ? (
             <div className="flex flex-wrap gap-2">
               {profile.categories.map((c: { category_id: string; category_name: string }) => (
-                <Badge
+                <div
                   key={c.category_id}
                   className="
                     bg-[#3C7DED]/8 text-[#3C7DED] border border-[#3C7DED]/20 
@@ -98,7 +100,7 @@ export default function LeadSettingsCard() {
                   "
                 >
                   {c.category_name}
-                </Badge>
+                </div>
               ))}
             </div>
           ) : (
@@ -113,33 +115,60 @@ export default function LeadSettingsCard() {
           )}
         </div>
 
-        {/* Divider */}
         <div className="border-t border-gray-100 dark:border-gray-800" />
 
-        {/* Location section */}
         <div>
-          <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-            Location
-          </h3>
-          <div className="flex items-center gap-2.5 bg-gray-50 dark:bg-gray-900/50 rounded-xl px-3.5 py-2.5 border border-gray-100 dark:border-gray-800">
-            <div className="w-7 h-7 bg-[#3C7DED]/10 rounded-lg flex items-center justify-center">
-              <MapPin className="w-3.5 h-3.5 text-[#3C7DED]" />
-            </div>
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{locationDisplay}</span>
-          </div>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 leading-relaxed">
-            This is where you'll receive leads from. Update your location on the{" "}
-            <Link href="/settings/leads/myservices" className="text-[#3C7DED] hover:underline">
-              Manage Services
-            </Link>{" "}
-            page.
-          </p>
-        </div>
+  <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+    Location
+  </h3>
 
-        {/* Divider */}
+  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-3 border border-gray-100 dark:border-gray-800 space-y-2">
+    {isNationwide ? (
+      <div className="flex items-center gap-2">
+        <div className="w-7 h-7 bg-[#3C7DED]/10 rounded-lg flex items-center justify-center">
+          <MapPin className="w-3.5 h-3.5 text-[#3C7DED]" />
+        </div>
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          Nationwide
+        </span>
+      </div>
+    ) : userLocations?.length ? (
+      userLocations.map((loc) => (
+        <div
+          key={loc.id}
+          className="flex items-center justify-between gap-3 bg-white dark:bg-[#161b22] rounded-lg px-3 py-2 border border-gray-100 dark:border-gray-700"
+        >
+          <div className="flex items-center gap-2 min-w-0">
+            <MapPin className="w-3.5 h-3.5 text-[#3C7DED] shrink-0" />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">
+              {loc.city_name}
+            </span>
+          </div>
+             {loc.radius>0?
+             <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#3C7DED]/10 text-[#3C7DED] whitespace-nowrap">
+            Within  {loc.radius} mi
+           </span>
+             :""}
+         
+        </div>
+      ))
+    ) : (
+      <span className="text-xs text-gray-400">Location not set</span>
+    )}
+  </div>
+
+  <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 leading-relaxed">
+    You’ll receive leads from these areas. Update locations in{" "}
+    <Link href="/settings/leads/myservices" className="text-[#3C7DED] hover:underline">
+      Manage Services
+    </Link>
+    .
+  </p>
+</div>
+
+
         <div className="border-t border-gray-100 dark:border-gray-800" />
 
-        {/* Profile footer */}
         <div className="flex items-center justify-between">
           <span className="text-xs text-gray-400 dark:text-gray-500">Profile</span>
           <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">

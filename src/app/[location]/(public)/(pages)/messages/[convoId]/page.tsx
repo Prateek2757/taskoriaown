@@ -13,6 +13,7 @@ import axios from "axios";
 interface Participant {
   user_id: string;
   name: string;
+  profile_image?:string;
 }
 
 interface Conversation {
@@ -201,25 +202,34 @@ export default function ChatPageInline({
     if (found) setActiveConversation(found);
   }, [routeConvoId, conversations]);
 
-  const getOtherParticipantName = useCallback(
-    (conversation: Conversation) => {
-      const other = conversation.participants.find(
-        (p) => Number(p.user_id) !== Number(session?.user?.id)
-      );
-      return other?.name || "Unknown";
-    },
-    [session?.user?.id]
-  );
+  // const getOtherParticipantName = useCallback(
+  //   (conversation: Conversation) => {
+  //     const other = conversation.participants.find(
+  //       (p) => Number(p.user_id) !== Number(session?.user?.id)
+  //     );
+  //     return other?.name || "Unknown";
+  //   },
+  //   [session?.user?.id]
+  // );
 
-  const getOtherParticipantId = useCallback(
-    (conversation: Conversation) => {
-      const other = conversation.participants.find(
-        (p) => Number(p.user_id) !== Number(session?.user.id)
-      );
-      return other?.user_id || "unknown Id";
-    },
-    [session?.user.id]
-  );
+  const getOtherParticipant = (c:Conversation)=>{
+    return c.participants?.[0] ?? null
+  }
+
+  const other =  activeConversation && getOtherParticipant(activeConversation)
+const otherName = other?.name;
+const otherId = other?.user_id
+const otherProfileImage = other?.profile_image
+
+  // const getOtherParticipantId = useCallback(
+  //   (conversation: Conversation) => {
+  //     const other = conversation.participants.find(
+  //       (p) => Number(p.user_id) !== Number(session?.user.id)
+  //     );
+  //     return other?.user_id || "unknown Id";
+  //   },
+  //   [session?.user.id]
+  // );
 
   const handleSelectConversation = useCallback((conversation: Conversation) => {
     setActiveConversation(conversation);
@@ -249,15 +259,14 @@ export default function ChatPageInline({
     );
   }
 
-  const otherParticipant =
-    activeConversation && session?.user?.id
-      ? {
-          name: getOtherParticipantName(activeConversation),
-          otherId: getOtherParticipantId(activeConversation),
-        }
-      : { name: "Unknown", otherId: null };
-  const otherName = otherParticipant.name;
-  const otherId = otherParticipant.otherId;
+  // const otherParticipant =
+  //   activeConversation && session?.user?.id
+  //     ? {
+  //         name: getOtherParticipantName(activeConversation),
+  //         otherId: getOtherParticipantId(activeConversation),
+  //       }
+  //     : { name: "Unknown", otherId: null };
+ 
 
   const conversationTitle = activeConversation?.task_title || "Conversation";
 
@@ -364,6 +373,7 @@ export default function ChatPageInline({
             >
               <ChatWindow
                 otherName={otherName}
+                otherProfileImage={otherProfileImage}
                 OtherUserId={String(otherId)}
                 conversationTitle={conversationTitle}
                 conversationId={activeConversation.id}

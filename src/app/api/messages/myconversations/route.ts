@@ -28,7 +28,8 @@ export async function GET() {
   json_agg(
     json_build_object(
       'user_id', up.user_id,
-      'name', up.display_name
+      'name', up.display_name,
+      'profile_image',up.profile_image_url
     )
   ) AS participants
 
@@ -36,6 +37,7 @@ FROM conversations c
 
 JOIN conversation_participants cp 
   ON cp.conversation_id = c.id
+  AND cp.user_id <> $1
 
 JOIN user_profiles up 
   ON up.user_id::text = cp.user_id   

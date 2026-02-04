@@ -1,4 +1,3 @@
-// middleware.ts - FIXED VERSION
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
@@ -23,7 +22,7 @@ function getLocale(request: NextRequest): string {
 }
 
 export async function proxy(req: NextRequest) {
-  const { pathname, search } = req.nextUrl; // ← ADD search
+  const { pathname, search } = req.nextUrl; 
 
   if (
     pathname.startsWith("/_next") ||
@@ -47,7 +46,6 @@ export async function proxy(req: NextRequest) {
     if (locale === i18n.defaultLocale) {
       const url = req.nextUrl.clone();
       url.pathname = `/${locale}${pathname}`;
-      // search is already preserved in clone()
       
       const response = NextResponse.rewrite(url);
       
@@ -86,26 +84,22 @@ export async function proxy(req: NextRequest) {
 
   if (pathnameWithoutLocale.startsWith("/create")) {
     if (token) {
-      // ✅ Preserve query params in redirect
       const url = new URL(`/${locale}/provider/dashboard${search}`, req.url);
       return NextResponse.redirect(url, 307);
     }
   }
 
-  // Protect routes that require authentication
   if (protectedPaths.some((path) => pathnameWithoutLocale.startsWith(path))) {
     if (!token) {
       const url = new URL(`/${locale}/signin`, req.url);
-      url.searchParams.set("callbackUrl", pathname + search); // ✅ Preserve query params
+      url.searchParams.set("callbackUrl", pathname + search); 
       
       return NextResponse.redirect(url, 307);
     }
   }
 
-  // Add security and SEO headers
   const response = NextResponse.next();
   
-  // Prevent clickjacking
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("X-Content-Type-Options", "nosniff");
   

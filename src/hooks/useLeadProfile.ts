@@ -13,6 +13,7 @@ export type UserLocation = {
   id: number;
   city_id: number;
   city_name: string;
+  radius: number;
   created_at: string;
 };
 export type Subscription = {
@@ -60,7 +61,6 @@ export function useLeadProfile() {
   const { data: userLocations = [], mutate: mutateLocations } = useSWR<
     UserLocation[]
   >("/api/user_locations", fetcher);
-  const saving = useSWR(() => null);
 
   const updateProfile = async (data: Partial<Profile>) => {
     if (!profile) return;
@@ -120,7 +120,7 @@ export function useLeadProfile() {
     }
   };
 
-  const addLocation = async (city_id: number, city_name: string,radius:number) => {
+  const addLocation = async (city_id: number, city_name: string, radius: number) => {
     if (userLocations.some((loc) => loc.city_id === city_id)) {
       throw new Error("Location already added");
     }
@@ -134,12 +134,44 @@ export function useLeadProfile() {
       };
       mutateLocations([...userLocations, newLocation], false);
 
-      await axios.post("/api/user_locations", { city_id , radius});
+      await axios.post("/api/user_locations", { city_id, radius });
       mutateLocations(undefined, true);
       notifyAll();
     } catch (err: any) {
-      mutateLocations(userLocations, false); 
+      mutateLocations(userLocations, false);
       throw new Error(err.response?.data?.message || "Failed to add location");
+    }
+  };
+
+  const updateLocation = async (
+    oldCityId: number,
+    newCityId: number,
+    newCityName: string,
+    radius: number
+  ) => {
+    if (oldCityId !== newCityId && userLocations.some((loc) => loc.city_id === newCityId)) {
+      throw new Error("This location is already in your list");
+    }
+
+    try {
+      const updatedLocations = userLocations.map((loc) =>
+        loc.city_id === oldCityId
+          ? { ...loc, city_id: newCityId, city_name: newCityName, radius }
+          : loc
+      );
+      mutateLocations(updatedLocations, false);
+
+      await axios.put("/api/user_locations", {
+        old_city_id: oldCityId,
+        new_city_id: newCityId,
+        radius,
+      });
+      
+      mutateLocations(undefined, true);
+      notifyAll();
+    } catch (err: any) {
+      mutateLocations(userLocations, false);
+      throw new Error(err.response?.data?.message || "Failed to update location");
     }
   };
 
@@ -154,7 +186,7 @@ export function useLeadProfile() {
       mutateLocations(undefined, true);
       notifyAll();
     } catch (err: any) {
-      mutateLocations(userLocations, false); 
+      mutateLocations(userLocations, false);
       throw new Error("Failed to remove location");
     }
   };
@@ -209,11 +241,13 @@ export function useLeadProfile() {
     userLocations,
     loading: isLoading,
     error,
+    saving: false,
 
     updateProfile,
     addCategory,
     removeCategory,
     addLocation,
+    updateLocation, // New method for full location editing
     removeLocation,
     setLocation,
     toggleNationwide,

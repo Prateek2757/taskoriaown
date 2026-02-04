@@ -4,10 +4,12 @@ import { useState, useMemo } from "react";
 import { motion } from "motion/react";
 import { Search } from "lucide-react";
 import formatMessageTime from "./messageTimeUtility";
+import Image from "next/image";
 
 interface Participant {
   user_id: string;
   name: string;
+  profile_image?:string;
 }
 
 interface Conversation {
@@ -49,14 +51,29 @@ export default function ChatSidebar({
     return other?.name || "Unknown";
   };
 
+  const getOtherParticipant = (c: Conversation) => {
+    return c.participants?.[0] ?? null;
+  };
+  
+
+  const getOtherProfileImage=(c:string)=>{
+
+  }
+
   const filteredConversations = useMemo(() => {
     const term = searchTerm.toLowerCase();
-    return conversations.filter(
-      (c) =>
+  
+    return conversations.filter((c) => {
+      const other = getOtherParticipant(c);
+      const otherName = other?.name?.toLowerCase() ?? "";
+  
+      return (
         c.task_title?.toLowerCase().includes(term) ||
-        getOtherParticipantName(c).toLowerCase().includes(term)
-    );
-  }, [conversations, searchTerm, sessionUserId]);
+        otherName.includes(term)
+      );
+    });
+  }, [conversations, searchTerm]);
+  
 
   return (
     <motion.aside
@@ -100,12 +117,13 @@ export default function ChatSidebar({
           </div>
         ) : (
           filteredConversations.map((c) => {
-            const otherName = getOtherParticipantName(c);
+            const other= getOtherParticipant(c);
+            const otherName = other.name;
             const firstLetter = otherName.charAt(0).toUpperCase();
+            const profile_image = other.profile_image
             const unread = Number(c.unread_count || 0);
             const hasUnread = unread > 0;
 
-            // WhatsApp-style message preview with sender
             const messagePreview = c.last_message
               ? c.last_message_sender
                 ? `${c.last_message_sender}: ${c.last_message}`
@@ -125,9 +143,21 @@ export default function ChatSidebar({
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] flex items-center justify-center text-white font-semibold shadow-md group-hover:scale-105 transition-transform flex-shrink-0">
-                    {firstLetter}
-                  </div>
+                <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 shadow-md">
+    {profile_image ? (
+      <Image
+        src={profile_image}
+        alt={firstLetter ?? "Profile image"}
+        width={44}
+        height={44}
+        className="object-cover w-full h-full transition-transform group-hover:scale-105"
+      />
+    ) : (
+      <div className="w-full h-full bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
+        {firstLetter}
+      </div>
+    )}
+  </div>
 
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-center w-full gap-2">

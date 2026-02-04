@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
 import { useTheme } from "next-themes";
+import Image from "next/image";
 
 interface Message {
   id: string;
@@ -26,6 +27,7 @@ export default function MessageList({
   messages,
   me,
   otherName,
+  otherProfileImage,
   typingUsers,
   onSend,
   onTyping,
@@ -38,11 +40,12 @@ export default function MessageList({
   onSend: (text: string) => void;
   onTyping: () => void;
   conversationTitle?: string;
+  otherProfileImage?: string;
   otherName?: string;
   isLoading?: boolean;
 }) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
- const {resolvedTheme}=useTheme()
+  const { resolvedTheme } = useTheme();
   const listRef = useRef<HTMLDivElement>(null);
   const typingRef = useRef<HTMLDivElement>(null);
 
@@ -148,10 +151,22 @@ export default function MessageList({
 
   return (
     <div className="flex flex-col w-full h-full bg-white dark:bg-[#0E0F11]">
-      <div className="flex-shrink-0 px-4 py-[10px] border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0E0F11]">
+      <div className="flex-shrink-0 px-4 py-[8px] border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0E0F11]">
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white flex items-center justify-center font-semibold shadow-md">
-            {getInitials(otherName)}
+          <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 shadow-md">
+            {otherProfileImage ? (
+              <Image
+                src={otherProfileImage}
+                alt="Profile image"
+                width={44}
+                height={44}
+                className="object-cover w-full h-full transition-transform group-hover:scale-105"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
+                {getInitials(otherName)}
+              </div>
+            )}
           </div>
           <div>
             <p className="font-semibold text-gray-900 dark:text-white">
@@ -160,7 +175,6 @@ export default function MessageList({
             <p className="text-xs text-gray-500">
               {conversationTitle || "Chat"}
             </p>
-            
           </div>
         </div>
       </div>
@@ -206,9 +220,21 @@ export default function MessageList({
                             <div
                               className={`w-8 h-8 ${showAvatar ? "opacity-100" : "opacity-0"}`}
                             >
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white flex items-center justify-center text-xs font-semibold shadow">
-                                {getInitials(otherName)}
-                              </div>
+                                  <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 shadow-md">
+            {otherProfileImage ? (
+              <Image
+                src={otherProfileImage}
+                alt="Profile image"
+                width={44}
+                height={44}
+                className="object-cover w-full h-full transition-transform group-hover:scale-105"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
+                {getInitials(otherName)}
+              </div>
+            )}
+          </div>
                             </div>
                           )}
 
@@ -314,7 +340,7 @@ export default function MessageList({
               <EmojiPicker
                 onEmojiClick={handleEmojiClick}
                 autoFocusSearch={false}
-                theme={resolvedTheme ==='dark' ? Theme.DARK :Theme.LIGHT }
+                theme={resolvedTheme === "dark" ? Theme.DARK : Theme.LIGHT}
                 height={350}
                 width={300}
               />

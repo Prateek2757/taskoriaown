@@ -22,6 +22,7 @@ export default function ChatWindow({
   conversationId,
   OtherUserId,
   otherName,
+  otherProfileImage,
   conversationTitle,
   me,
   taskId,
@@ -30,6 +31,7 @@ export default function ChatWindow({
   me: { id: string; name?: string };
   taskId: number;
   OtherUserId?: string;
+  otherProfileImage?:string;
   conversationTitle?: string;
   otherName?: string;
 }) {
@@ -37,7 +39,7 @@ export default function ChatWindow({
   const [typingUsers, setTypingUsers] = useState<Record<string, number>>({});
   const [activeUsers, setActiveUsers] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showTaskDetails, setShowTaskDetails] = useState(false);
+  const [showTaskDetails, setShowTaskDetails] = useState<boolean>(false);
 
   const channelRef = useRef<any>(null);
   const { data: session } = useSession();
@@ -50,6 +52,15 @@ export default function ChatWindow({
 
   const uniqueMessages = (arr: Message[]) =>
     Array.from(new Map(arr.map((m) => [m.id, m])).values());
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+  
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+    setShowTaskDetails(isDesktop);
+  }, []);
+  
+
 
   useEffect(() => {
     if (!conversationId) return;
@@ -271,6 +282,7 @@ export default function ChatWindow({
         <MessageList
           messages={messages}
           otherName={otherName}
+          otherProfileImage={otherProfileImage}
           conversationTitle={conversationTitle}
           me={me}
           typingUsers={typingUsers}
