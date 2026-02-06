@@ -28,6 +28,7 @@ export type Profile = {
   location_id: number | null;
   location_name?: string;
   is_nationwide: boolean;
+  is_email_verified?:boolean;
   categories: Category[];
   display_name?: string;
   profile_image_url?: string;
@@ -242,12 +243,12 @@ export function useLeadProfile() {
     loading: isLoading,
     error,
     saving: false,
-
+    mutate,
     updateProfile,
     addCategory,
     removeCategory,
     addLocation,
-    updateLocation, // New method for full location editing
+    updateLocation, 
     removeLocation,
     setLocation,
     toggleNationwide,

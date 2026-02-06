@@ -19,6 +19,7 @@ export async function GET() {
         up.location_id,
         ci.name AS location_name,
         up.is_nationwide,
+        u.is_email_verified,
         up.profile_image_url,
         json_agg(
           json_build_object(
@@ -28,10 +29,11 @@ export async function GET() {
         ) FILTER (WHERE uc.category_id IS NOT NULL) AS categories
       FROM user_profiles up
       LEFT JOIN user_categories uc ON uc.user_id = up.user_id
+      LEFT JOIN users u ON u.user_id = up.user_id
       LEFT JOIN service_categories sc ON sc.category_id = uc.category_id
       LEFT JOIN cities ci ON ci.city_id = up.location_id
       WHERE up.user_id = $1
-      GROUP BY up.user_id, up.display_name, up.location_id, ci.name, up.is_nationwide, up.profile_image_url
+      GROUP BY up.user_id, up.display_name, up.location_id,u.is_email_verified, ci.name, up.is_nationwide, up.profile_image_url
     ),
 
     user_locations AS (

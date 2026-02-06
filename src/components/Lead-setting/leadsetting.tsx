@@ -82,10 +82,13 @@ export default function LeadSettingsCard() {
             <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               Your Services
             </h3>
-            <span className="text-xs text-gray-400 dark:text-gray-500">
+            {/* <span className="text-xs text-gray-400 dark:text-gray-500">
               {profile.categories.length} {profile.categories.length === 1 ? "service" : "services"}
-            </span>
+            </span> */}
           </div>
+
+
+
 
           {profile.categories.length ? (
             <div className="flex flex-wrap gap-2">

@@ -4,24 +4,13 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import {
-  Menu as MenuIcon,
-  X,
-  User,
-  ChevronDown,
-  Search,
-  Users,
-  LayoutDashboard,
-  MessageSquare,
-  LogOut,
-  Home,
-  HandPlatter,
-  Binoculars,
-  Star,
+  Menu as MenuIcon, X, User, ChevronDown, Search, Users,
+  LayoutDashboard, MessageSquare, LogOut, Home, HandPlatter, Binoculars, Star,
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { ThemeToggle } from "../theme-toggle";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import SlidingUnderlineNav from "./slidingUnderline";
@@ -35,16 +24,20 @@ export default function ModernNavbar() {
   const [viewMode, setViewMode] = useState<ViewMode>(null);
   const { joinAsProvider, loading } = useJoinAsProvider();
   const { data: session, status } = useSession();
+  
   const pathname = usePathname();
+  
+  const params = useParams();
   const router = useRouter();
   const profileRef = useRef<HTMLDivElement>(null);
+  
+  const locale = (params.locale as string) || "en-au"; 
 
   const minimalPages = ["/create", "/create-account"];
 
   const navLinks = {
     public: [
-      { name: "Home", href: "/", icon: Home },
-      // { name: "Providers", href: "/providers", icon: Users },
+      { name: "Home", href: "/", icon: Home }, 
       { name: "Services", href: "/services", icon: HandPlatter },
     ],
     customer: [
@@ -57,21 +50,15 @@ export default function ModernNavbar() {
       { name: "Home", href: "/", icon: Home },
       { name: "Leads", href: "/provider/leads", icon: Search },
       { name: "Inbox", href: "/messages/null", icon: MessageSquare },
-      {
-        name: "My Responses",
-        href: "/provider-responses",
-        icon: MessageSquare,
-      },
+      { name: "My Responses", href: "/provider-responses", icon: MessageSquare },
       { name: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
     ],
   };
 
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        profileRef.current &&
-        !profileRef.current.contains(e.target as Node)
-      ) {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
         setIsProfileOpen(false);
       }
     };
@@ -81,16 +68,12 @@ export default function ModernNavbar() {
 
   useEffect(() => {
     if (!session) return;
-
     const stored = localStorage.getItem("viewMode") as ViewMode;
-
     if (stored) {
       setViewMode(stored);
       return;
     }
-
-    const defaultView =
-      session.user.role === "provider" ? "provider" : "customer";
+    const defaultView = session.user.role === "provider" ? "provider" : "customer";
     setViewMode(defaultView);
     localStorage.setItem("viewMode", defaultView);
   }, [session]);
@@ -100,7 +83,6 @@ export default function ModernNavbar() {
       const stored = localStorage.getItem("viewMode") as ViewMode;
       setViewMode(stored);
     };
-
     window.addEventListener("viewModeChanged", update);
     return () => window.removeEventListener("viewModeChanged", update);
   }, []);
@@ -123,11 +105,8 @@ export default function ModernNavbar() {
     localStorage.setItem("viewMode", newView);
     setIsProfileOpen(false);
     setIsMenuOpen(false);
-    router.push(
-      newView === "provider" ? "/provider/dashboard" : "/customer/dashboard"
-    );
+    router.push(newView === "provider" ? "/provider/dashboard" : "/customer/dashboard");
   };
-  // console.log(session?.user.adminrole, "adinsdnoinas");
 
   const getCurrentLinks = () => {
     if (!session) return navLinks.public;
@@ -138,20 +117,24 @@ export default function ModernNavbar() {
 
   const currentLinks = getCurrentLinks();
 
-  const renderProfileDropdown = () => {
-    const profilePath =
-      viewMode === "provider" ? "/provider/profile" : "/customer/profile";
-    const canSwitchView = session?.user?.role === "provider";
+  
 
-    return (
-      <motion.div
+  const getLocalizedHref = (href: string) => {
+    if(href === "/") return `/${locale}`;
+    return `/${locale}${href}` ;
+  };
+
+  const renderProfileDropdown = () => {
+     const canSwitchView = session?.user?.role === "provider";
+     return (
+        <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.15 }}
         className="absolute right-0 mt- w-72 bg-white dark:bg-gray-900 rounded-xl shadow-xl overflow-hidden z-[999]"
       >
-        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 p-4 border-b border-gray-200 dark:border-gray-700">
+         <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <div className="relative">
               <div
@@ -257,11 +240,11 @@ export default function ModernNavbar() {
           </button>
         </div>
       </motion.div>
-    );
+     )
   };
 
   if (status === "loading") {
-    return (
+     return (
       <header className="bg-white dark:bg-gray-900/95 backdrop-blur-md border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -275,31 +258,11 @@ export default function ModernNavbar() {
 
   return (
     <>
-      <header
-        className="
-  sticky top-0 z-50 
-  backdrop-blur-xl
-  bg-white/30 dark:bg-gray-900/20 
-  border-b border-white/40 dark:border-white/10
-  shadow-lg shadow-black/5 dark:shadow-white/5
-  transition-colors w-full
-"
-      >
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/30 dark:bg-gray-900/20 border-b border-white/40 dark:border-white/10 shadow-lg shadow-black/5 dark:shadow-white/5 transition-colors w-full">
         <div className="container mx-auto px-4 py-2 flex items-center justify-between relative">
-          <Link
-            href="/"
-            className="flex items-center hover:opacity-90 transition-opacity"
-          >
-            <Image
-              src="/taskorialogonew.png"
-              alt="taskorialogo"
-              height={41}
-              width={28}
-            />
-
-            <span className="text-2xl font-bold bg-[#3C7DED]  bg-clip-text text-transparent ">
-              Taskoria
-            </span>
+          <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
+            <Image src="/taskorialogonew.png" alt="taskorialogo" height={41} width={28} />
+            <span className="text-2xl font-bold bg-[#3C7DED] bg-clip-text text-transparent">Taskoria</span>
           </Link>
 
           {!minimalPages.includes(pathname) && (
@@ -309,24 +272,11 @@ export default function ModernNavbar() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              {/* {currentLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="relative  mx-4  py-3.5 rounded-full font-medium text-sm transition-all text-gray-700 dark:text-gray-300 group inline-block"
-                >
-                  {link.name}
-                  <span
-                    className={`
-          absolute left-0 right-0 bottom-[-3] h-[2px] bg-[#3C7DED] rounded-full
-          scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left
-          ${pathname === link.href ? "scale-x-100" : ""}
-         `}
-                  />
-                </Link>
-              ))} */}
               <SlidingUnderlineNav
-                currentLinks={currentLinks}
+                currentLinks={currentLinks.map(link => ({
+                  ...link,
+                  href: getLocalizedHref(link.href) 
+                }))}
                 pathname={pathname}
               />
             </motion.nav>
@@ -339,13 +289,12 @@ export default function ModernNavbar() {
                   <div className="">
                     <NotificationBell userId={Number(session?.user?.id)} />
                   </div>
-
                   <Button
                     onClick={() => setIsProfileOpen((p) => !p)}
                     variant="ghost"
-                    className=" flex items-center gap-2 px py-2 rounded-full transition-all "
+                    className="flex items-center gap-2 px py-2 rounded-full transition-all"
                   >
-                    <div className="relative">
+                     <div className="relative">
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center
       bg-gradient-to-br from-blue-100 to-cyan-100
@@ -379,16 +328,11 @@ export default function ModernNavbar() {
                         </div>
                       )}
                     </div>
-
                     <span className="font-medium text-gray-700 dark:text-gray-300">
                       {session.user?.name?.split(" ")[0] || "User"}
                     </span>
-
                     <ChevronDown
-                      className={`
-                      w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform 
-                    ${isProfileOpen ? "rotate-180" : ""}
-                     `}
+                      className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform ${isProfileOpen ? "rotate-180" : ""}`}
                     />
                   </Button>
                   <AnimatePresence>
@@ -417,7 +361,7 @@ export default function ModernNavbar() {
               </div>
             </div>
           )}
-          <div className=" md:hidden ml-50 ">
+           <div className=" md:hidden ml-50 ">
             <NotificationBell userId={Number(session?.user?.id)} />
           </div>
           <Button
@@ -449,7 +393,7 @@ export default function ModernNavbar() {
               transition={{ type: "spring", damping: 40, stiffness: 300 }}
               className="fixed left-0 top-0 bottom-0 w-80 bg-white dark:bg-gray-900 shadow-2xl z-[9999] overflow-y-auto"
             >
-              <div className="p-6 border-b border-gray-100 dark:border-gray-800">
+               <div className="p-6 border-b border-gray-100 dark:border-gray-800">
                 <div className="flex items-center justify-between mb-6">
                   <Link
                     href="/"
@@ -536,11 +480,15 @@ export default function ModernNavbar() {
               <nav className="p-4 space-y-2">
                 {currentLinks.map((link) => {
                   const Icon = link.icon;
-                  const isActive = pathname === link.href;
+        
+                  const isActive = link.href === "/" 
+                    ? pathname === "/"
+                    : pathname.startsWith(link.href);
+
                   return (
                     <Link
                       key={link.name}
-                      href={link.href}
+                      href={getLocalizedHref(link.href)} 
                       onClick={() => setIsMenuOpen(false)}
                       className={`flex items-center gap-3 px-4 py-3 rounded-full font-medium transition-colors ${
                         isActive
@@ -559,7 +507,7 @@ export default function ModernNavbar() {
                     </Link>
                   );
                 })}
-                {session?.user.adminrole === "admin" ? (
+                 {session?.user.adminrole === "admin" ? (
                   <Link
                     href="/adminbudgetmanager"
                     onClick={() => setIsMenuOpen(false)}
@@ -590,20 +538,7 @@ export default function ModernNavbar() {
                     </div>
                   </button>
                 )}
-
-                {/* <Link
-                  href="/notifications"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
-                >
-                  <Bell className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                  Notifications
-                  <span className="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                    23
-                  </span>
-                </Link> */}
-
-                {session ? (
+                 {session ? (
                   <>
                     <button
                       onClick={() => {

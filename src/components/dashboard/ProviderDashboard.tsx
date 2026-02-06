@@ -305,9 +305,21 @@ export default function ProviderDashboard() {
                     )}
                   </h2>
 
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    {user.email}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm text-slate-700 dark:text-slate-300">
+                      {user.email}
+                    </p>
+
+                    {profile?.is_email_verified ? (
+                      <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                        Verified
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                        Unverified
+                      </span>
+                    )}
+                  </div>
 
                   <p
                     className={`text-xs mt-1 ${

@@ -80,19 +80,3 @@ export async function sendEmail({
     return { success: false, error: err };
   }
 }
-// ```
-
-// ## Step 3: Verify DNS Setup in Resend
-
-// 1. Go to Resend Dashboard → Domains
-// 2. Click on `taskoria.com`
-// 3. Verify all DNS records show green checkmarks
-// 4. Wait 24-48 hours for full DNS propagation
-
-// ## Step 4: Additional Best Practices
-
-// ### Enable BIMI (Optional - for verified logos in inbox)
-// ```
-// Type: TXT
-// Name: default._bimi
-// Value: v=BIMI1; l=https://taskoria.com/logo.svg; a=

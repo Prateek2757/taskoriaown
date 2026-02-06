@@ -1,11 +1,12 @@
 "use client";
 
-import { useState,  } from "react";
+import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Trash2,  } from "lucide-react";
+import { PlusCircle, Trash2 } from "lucide-react";
 import { Category } from "@/hooks/useLeadProfile";
 import AddServicesDialog from "./Addservicesdialog";
+import { toast } from "sonner";
 
 interface ServicesSectionProps {
   profile: any;
@@ -48,8 +49,20 @@ export default function ServicesSection({
               {profile.categories.map((c: any) => (
                 <div
                   key={c.category_id}
-                  className="bg-cyan-100 dark:bg-cyan-800 text-cyan-800 dark:text-cyan-200 px-4 py-2 text-sm rounded-full flex items-center gap-2 cursor-pointer hover:bg-red-100 dark:hover:bg-red-700 hover:text-red-700 dark:hover:text-red-200 transition-all"
-                  onClick={() => !saving && onRemove(c.category_id)}
+                  className={` px-4 py-2 text-sm rounded-full
+                   flex items-center gap-2 cursor-pointer
+                    ${profile.categories.length <= 1 ? "bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed" : "  bg-cyan-100 dark:bg-cyan-800 text-cyan-800 dark:text-cyan-200 hover:bg-red-100 dark:hover:bg-red-700 hover:text-red-700 dark:hover:text-red-200 transition-all"}
+                 `}
+                  onClick={() => {
+                    if (saving) return;
+
+                    if (profile.categories.length <= 1) {
+                      toast.error("You must have at least one service");
+                      return;
+                    }
+
+                    !saving && onRemove(c.category_id);
+                  }}
                 >
                   {c.category_name} <Trash2 className="w-4.5 h-4.5" />
                 </div>
@@ -58,15 +71,17 @@ export default function ServicesSection({
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-500 py-8">
               <p className="text-base font-medium">No services selected yet</p>
-              <p className="text-sm mt-1">Click "Add Services" to get started</p>
+              <p className="text-sm mt-1">
+                Click "Add Services" to get started
+              </p>
             </div>
           )}
         </div>
 
         <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            💡 <strong>Tip:</strong> Click on a service badge to remove it
-            from your profile
+            💡 <strong>Tip:</strong> Click on a service badge to remove it from
+            your profile
           </p>
         </div>
       </CardContent>

@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Check, XCircle, Radar } from "lucide-react";
+import { Check, XCircle, Radar, MapPin } from "lucide-react";
 import LocationSearch from "@/components/Location/locationsearch";
 
 const RADIUS_OPTIONS = [1, 2, 5, 10, 20, 30, 50, 75, 100, 125, 150] as const;
@@ -53,17 +53,22 @@ export default function AddLocationDialog({
   const [locationError, setLocationError] = useState<string | null>(null);
   const [locationSuccess, setLocationSuccess] = useState<string | null>(null);
   const [selectedRadius, setSelectedRadius] = useState<number>(10);
+  const [selectedLocation, setSelectedLocation] = useState<{ city_id: number; city: string } | null>(null);
   const [isAdding, setIsAdding] = useState(false);
 
-  const handleAddLocation = async (data: { city_id?: number; city?: string } | null) => {
-    if (!data) {
-      setLocationError(null);
-      setLocationSuccess(null);
+  const handleLocationSelect = (data: { city_id?: number; city?: string } | null) => {
+    if (!data || !data.city_id || !data.city) {
+      setSelectedLocation(null);
       return;
     }
+    
+    setSelectedLocation({ city_id: data.city_id, city: data.city });
+    setLocationError(null);
+  };
 
-    if (!data.city_id || !data.city) {
-      setLocationError("Invalid location data. Please select a valid location.");
+  const handleAddLocation = async () => {
+    if (!selectedLocation) {
+      setLocationError("Please select a location first.");
       setTimeout(() => setLocationError(null), 5000);
       return;
     }
@@ -73,13 +78,14 @@ export default function AddLocationDialog({
     setIsAdding(true);
 
     try {
-      await addLocation(data.city_id as any, data.city as any, selectedRadius);
-      setLocationSuccess(`${data.city} (${selectedRadius} mile radius) added successfully!`);
+      await addLocation(selectedLocation.city_id, selectedLocation.city, selectedRadius);
+      setLocationSuccess(`${selectedLocation.city} (${selectedRadius} mile radius) added successfully!`);
 
       setTimeout(() => {
         onOpenChange(false);
         setLocationSuccess(null);
         setSelectedRadius(10);
+        setSelectedLocation(null);
         setIsAdding(false);
       }, 1500);
     } catch (err: any) {
@@ -99,6 +105,7 @@ export default function AddLocationDialog({
       setLocationError(null);
       setLocationSuccess(null);
       setSelectedRadius(10);
+      setSelectedLocation(null);
       setIsAdding(false);
     }
   };
@@ -165,6 +172,20 @@ export default function AddLocationDialog({
           )}
 
           <div className="space-y-5 flex-1 flex flex-col">
+            <div className="flex-1">
+              <LocationSearch onSelect={handleLocationSelect} />
+            </div>
+
+            {selectedLocation && (
+              <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800 animate-in fade-in slide-in-from-top-2 duration-300">
+                <div className="flex items-center gap-2 text-sm">
+                  <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <span className="text-gray-700 dark:text-gray-300">Selected:</span>
+                  <span className="font-semibold text-blue-700 dark:text-blue-300">{selectedLocation.city}</span>
+                </div>
+              </div>
+            )}
+
             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-3 rounded-xl border border-blue-200 dark:border-gray-700">
               <div className="flex items-center gap-2 mb-2">
                 <Radar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -206,10 +227,6 @@ export default function AddLocationDialog({
               </p>
             </div>
 
-            <div className="flex-1">
-              <LocationSearch onSelect={handleAddLocation}  />
-            </div>
-
             <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
@@ -221,6 +238,23 @@ export default function AddLocationDialog({
                 </span>
               </div>
             </div>
+
+            <button
+              onClick={handleAddLocation}
+              disabled={!selectedLocation || isAdding}
+              className={`
+                w-full py-3 px-4 rounded-lg font-semibold text-base transition-all duration-200
+                flex items-center justify-center gap-2
+                ${
+                  selectedLocation && !isAdding
+                    ? "bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40"
+                    : "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                }
+              `}
+            >
+              <MapPin className="w-5 h-5" />
+              {isAdding ? "Adding..." : "Add Location"}
+            </button>
           </div>
         </DialogContent>
       </Dialog>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import ProviderDashboard from "@/components/dashboard/ProviderDashboard";
+import ProviderDashboard from "@/components/dashboard/ProviderDashboard/Providerdashboard";
 
 export default function DashboardPage() {
   return (
