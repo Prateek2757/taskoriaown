@@ -82,7 +82,7 @@ const Footer = () => {
   return (
     <>
       <Script
-        src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
+        src="//widget.trustpilot.com/bootstrap/v5/tp.wzdget.bootstrap.min.js"
         strategy="lazyOnload"
         onLoad={() => setTrustpilotLoaded(true)}
       />

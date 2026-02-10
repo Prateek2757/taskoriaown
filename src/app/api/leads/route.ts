@@ -197,55 +197,92 @@ export async function GET() {
 
     const result = await client.query(
       `
-     SELECT 
-    t.task_id,
-    t.title,
-    t.description,
-    t.is_remote_allowed,
-    t.budget_min,
-    t.budget_max,
-    t.estimated_budget,
-    t.status,
-    t.created_at,
-    t.queries,
-    c.name AS category_name,
-    ci.name AS location_name,
-    ci.postcode,
-    ci.latitude,
-    ci.longitude,
-    u.email AS customer_email,
-    u.phone,
-    up.user_id,
-    up.display_name AS customer_name,
-    up.profile_image_url AS image,
-    COALESCE(uts.seen, false) AS is_seen,  
-    json_agg(
-      json_build_object(
-        'question_id', ta.category_question_id,
-        'question', q.question,
-        'answer', ta.answer
-      )
-    ) FILTER (WHERE ta.task_answer_id IS NOT NULL) AS answers
-  FROM tasks t
-  JOIN service_categories c ON c.category_id = t.category_id
-  LEFT JOIN cities ci ON ci.city_id = t.location_id
-  LEFT JOIN task_answers ta ON ta.task_id = t.task_id
-  LEFT JOIN category_questions q ON q.category_question_id = ta.category_question_id
-  LEFT JOIN users u ON u.user_id = t.customer_id
-  LEFT JOIN user_profiles up ON up.user_id = t.customer_id
-  LEFT JOIN user_task_seen uts 
-    ON uts.task_id = t.task_id AND uts.user_id = $2 
-  WHERE 
-    t.status IN ('Open', 'Urgent','In Progress')
-    AND t.category_id = ANY($1::int[])
-    AND t.customer_id <> $2
-    AND t.estimated_budget IS NOT NULL
-    AND t.estimated_budget > 0
-  GROUP BY 
-    t.task_id, c.name, ci.name,ci.latitude,ci.longitude,ci.postcode, up.user_id, u.email, u.phone, up.display_name, up.profile_image_url, uts.seen
-  ORDER BY 
-    t.created_at DESC;
-  `,
+    WITH new_leads AS (
+      SELECT COUNT(DISTINCT t.task_id) AS new_leads_count
+      FROM tasks t
+      LEFT JOIN user_task_seen uts
+        ON uts.task_id = t.task_id
+        AND uts.user_id = $2
+      WHERE
+        t.status IN ('Open', 'Urgent', 'In Progress')
+        AND t.category_id = ANY($1::int[])
+        AND t.customer_id <> $2
+        AND t.estimated_budget IS NOT NULL
+        AND t.estimated_budget > 0
+        AND COALESCE(uts.seen, false) = false
+    )
+    
+    SELECT 
+      t.task_id,
+      t.title,
+      t.description,
+      t.is_remote_allowed,
+      t.budget_min,
+      t.budget_max,
+      t.estimated_budget,
+      t.status,
+      t.created_at,
+      t.queries,
+    
+      c.name AS category_name,
+    
+      ci.name AS location_name,
+      ci.postcode,
+      ci.latitude,
+      ci.longitude,
+    
+      u.email AS customer_email,
+      u.phone,
+    
+      up.user_id,
+      up.display_name AS customer_name,
+      up.profile_image_url AS image,
+    
+      COALESCE(uts.seen, false) AS is_seen,
+    
+      (SELECT new_leads_count FROM new_leads) AS new_leads_count,
+    
+      json_agg(
+        json_build_object(
+          'question_id', ta.category_question_id,
+          'question', q.question,
+          'answer', ta.answer
+        )
+      ) FILTER (WHERE ta.task_answer_id IS NOT NULL) AS answers
+    
+    FROM tasks t
+    JOIN service_categories c ON c.category_id = t.category_id
+    LEFT JOIN cities ci ON ci.city_id = t.location_id
+    LEFT JOIN task_answers ta ON ta.task_id = t.task_id
+    LEFT JOIN category_questions q ON q.category_question_id = ta.category_question_id
+    LEFT JOIN users u ON u.user_id = t.customer_id
+    LEFT JOIN user_profiles up ON up.user_id = t.customer_id
+    LEFT JOIN user_task_seen uts
+      ON uts.task_id = t.task_id AND uts.user_id = $2
+    
+    WHERE
+      t.status IN ('Open', 'Urgent', 'In Progress')
+      AND t.category_id = ANY($1::int[])
+      AND t.customer_id <> $2
+      AND t.estimated_budget IS NOT NULL
+      AND t.estimated_budget > 0
+    
+    GROUP BY
+      t.task_id,
+      c.name,
+      ci.name,
+      ci.latitude,
+      ci.longitude,
+      ci.postcode,
+      up.user_id,
+      u.email,
+      u.phone,
+      up.display_name,
+      up.profile_image_url,
+      uts.seen
+    
+    ORDER BY t.created_at DESC;
+    `,
       [categoryIds, userId],
     );
 

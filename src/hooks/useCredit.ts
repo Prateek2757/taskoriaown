@@ -9,6 +9,7 @@ export interface CreditPackage {
   name: string;
   credits: number;
   price: number;
+  stripe_price_id:string;
   original_price?: number;
   price_per_credit: number;
   leads_estimate: number;

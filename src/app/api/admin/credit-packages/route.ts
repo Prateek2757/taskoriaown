@@ -4,7 +4,7 @@ import pool from "@/lib/dbConnect";
 export async function GET() {
   try {
     const { rows } = await pool.query(`
-      SELECT package_id, name, credits, price, description
+      SELECT package_id, name, credits, price, description,stripe_price_id
       FROM credit_packages
       WHERE is_active = true
       ORDER BY price ASC

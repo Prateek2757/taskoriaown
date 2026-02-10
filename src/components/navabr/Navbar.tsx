@@ -142,7 +142,7 @@ export default function ModernNavbar() {
       bg-gradient-to-br from-blue-100 to-cyan-100
       dark:from-blue-900 dark:to-cyan-900
       transition-all group-hover:scale-[1.05] overflow-hidden
-      ${session?.user.status === "active" ? "ring-2 ring-yellow-400" : ""}`}
+      ${session?.user.status === "active" ||  session?.user.status ==="trialing" ? "ring-2 ring-yellow-400" : ""}`}
               >
                 {session?.user?.image ? (
                   <Image
@@ -158,7 +158,7 @@ export default function ModernNavbar() {
                 )}
               </div>
 
-              {session?.user.status === "active" && (
+              {session?.user.status === "active" || session?.user.status ==="trialing" && (
                 <div
                   className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full
                  bg-gradient-to-br from-yellow-400 to-orange-500
@@ -300,7 +300,7 @@ export default function ModernNavbar() {
       bg-gradient-to-br from-blue-100 to-cyan-100
       dark:from-blue-900 dark:to-cyan-900
       transition-all group-hover:scale-[1.05] overflow-hidden
-      ${session?.user.status === "active" ? "ring-2 ring-yellow-400" : ""}
+      ${session?.user.status === "active" || session?.user.status ==="trialing" ? "ring-2 ring-yellow-400" : ""}
       `}
                       >
                         {session?.user?.image ? (
@@ -317,7 +317,7 @@ export default function ModernNavbar() {
                         )}
                       </div>
 
-                      {session?.user.status === "active" && (
+                      {session?.user.status === "active" || session?.user.status ==="trialing"&& (
                         <div
                           className="absolute -bottom-1 -right-1 w-5 h-5 py-1 rounded-full
                  bg-gradient-to-br from-yellow-400 to-orange-500
@@ -432,7 +432,7 @@ export default function ModernNavbar() {
       bg-gradient-to-br from-blue-100 to-cyan-100
       dark:from-blue-900 dark:to-cyan-900
       transition-all group-hover:scale-[1.05] overflow-hidden
-      ${session?.user.status === "active" ? "ring-2 ring-yellow-400" : ""}`}
+      ${session?.user.status === "active" || session?.user.status ==="trialing"? "ring-2 ring-yellow-400" : ""}`}
                         >
                           {session?.user?.image ? (
                             <Image
@@ -448,7 +448,7 @@ export default function ModernNavbar() {
                           )}
                         </div>
 
-                        {session?.user.status === "active" && (
+                        {session?.user.status === "active" || session?.user.status ==="trialing"&& (
                           <div
                             className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full
                  bg-gradient-to-br from-yellow-400 to-orange-500

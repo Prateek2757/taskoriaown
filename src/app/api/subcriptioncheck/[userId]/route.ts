@@ -18,7 +18,7 @@ const {userId} = await params;
       .from("professional_subscriptions")
       .select("*")
       .eq("user_id", userId)
-      .eq("status", "active")
+      .in("status", ["active","trialing"])
       .gte("end_date", new Date().toISOString())
       .order("end_date", { ascending: false })
       .limit(1)

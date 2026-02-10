@@ -16,9 +16,13 @@ const nextConfig: NextConfig = {
 	//   },
 	images: {
 	  formats: ['image/webp', 'image/avif'],
-	  domains: ["eoicjmcyigolwgjantsl.supabase.co"],
 
 	  remotePatterns: [
+		{
+			protocol: "https",
+			hostname: "eoicjmcyigolwgjantsl.supabase.co",
+			pathname: "/**",
+		  },
 		{
 		  protocol: 'https',
 		  hostname: 'source.unsplash.com',

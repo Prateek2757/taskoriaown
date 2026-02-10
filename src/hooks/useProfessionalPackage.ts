@@ -15,6 +15,8 @@ export interface ProfessionalPackage {
   free_enquiries: number;
   enquiry_price: number;
   discount_percentage: number;
+  stripe_price_id?:string;
+  free_trail_days?:string;
   has_performance_insights: boolean;
   has_verified_badge: boolean;
   has_unlocked_inbox: boolean;

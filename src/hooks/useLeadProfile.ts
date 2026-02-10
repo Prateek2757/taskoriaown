@@ -29,6 +29,9 @@ export type Profile = {
   location_name?: string;
   is_nationwide: boolean;
   is_email_verified?:boolean;
+  response_stats?: {
+    total_responses: number;
+  };
   categories: Category[];
   display_name?: string;
   profile_image_url?: string;

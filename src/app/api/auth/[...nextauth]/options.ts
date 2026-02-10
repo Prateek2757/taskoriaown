@@ -115,13 +115,14 @@ export const authOptions: NextAuthOptions = {
           u.role AS adminrole,
           ps.status,
           COALESCE(r.role_name, 'customer') AS role,
-          up.profile_image_url AS image
+          up.profile_image_url AS image,
+          up.display_name
 
           FROM users u
           LEFT JOIN roles r ON r.role_id = u.default_role_id
           LEFT JOIN user_profiles up ON u.user_id = up.user_id
           LEFT JOIN professional_subscriptions ps ON u.user_id = ps.user_id
-          where  u.email = $1 AND u.is_deleted = FALSE`,
+          where  u.email = $1 AND u.is_deleted = FALSE  `,
           [email]
         );
 
@@ -131,6 +132,7 @@ export const authOptions: NextAuthOptions = {
         const existingUser = result.rows[0];
 
         user.id = existingUser.user_id.toString();
+        user.name=existingUser.display_name;
         user.adminrole = existingUser.adminrole;
         user.role = existingUser.role;
         user.status = existingUser.status;

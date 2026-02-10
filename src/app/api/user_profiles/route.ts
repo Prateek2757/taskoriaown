@@ -35,7 +35,12 @@ export async function GET() {
       WHERE up.user_id = $1
       GROUP BY up.user_id, up.display_name, up.location_id,u.is_email_verified, ci.name, up.is_nationwide, up.profile_image_url
     ),
-
+response_stats AS (
+  SELECT
+    COUNT(*) AS total_responses
+  FROM task_responses
+  WHERE professional_id = $1
+),
     user_locations AS (
       SELECT 
         ul.user_id,
@@ -75,7 +80,7 @@ export async function GET() {
         ps.payment_transaction_id
       FROM professional_subscriptions ps
       WHERE ps.user_id = $1
-      AND ps.status = 'active'
+      AND ps.status IN ('active', 'trialing')
       AND ps.end_date > NOW()
       ORDER BY ps.end_date DESC
       LIMIT 1
@@ -91,7 +96,9 @@ export async function GET() {
       cp.years_in_business,
       (cp.user_id IS NOT NULL) AS has_company,
       EXISTS (SELECT 1 FROM active_sub) AS is_pro,
-      (SELECT row_to_json(s) FROM active_sub s) AS active_subscription
+      (SELECT row_to_json(s) FROM active_sub s) AS active_subscription,
+        (SELECT row_to_json(rs) FROM response_stats rs) AS response_stats
+
     FROM profile p
     LEFT JOIN user_locations ul ON ul.user_id = p.user_id
     LEFT JOIN company_profile cp ON cp.user_id = p.user_id;

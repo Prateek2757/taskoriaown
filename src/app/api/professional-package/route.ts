@@ -19,6 +19,8 @@ export async function GET() {
         has_performance_insights,
         has_verified_badge,
         has_unlocked_inbox,
+        stripe_price_id,
+        free_trail_days,
         display_order
       FROM professional_packages 
       WHERE is_active = true 

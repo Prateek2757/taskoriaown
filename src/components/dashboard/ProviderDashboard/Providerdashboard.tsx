@@ -11,6 +11,7 @@ import { UpgradeOffersCard } from "./Upgradeofferscard";
 import LeadSettingsCard from "@/components/Lead-setting/leadsetting";
 import { LeadsOverviewCard } from "./Leadsoverviewcard";
 import { ResponsesCard } from "./Responsescard";
+import axios from "axios";
 
 
 export default function ProviderDashboard() {
@@ -20,7 +21,8 @@ export default function ProviderDashboard() {
 
   const [showStats, setShowStats] = useState(false);
   const [totalLeads, setTotalLeads] = useState<number | null>(null);
-
+  const [totalNewCount, setTotalNewCount] = useState<number | null>(null);
+const totalResponses = profile?.response_stats?.total_responses
   const isPro = profile?.is_pro;
   const imageToShow =
     profile?.has_company && profile?.company_size !== "Sole-Trader"
@@ -38,9 +40,10 @@ export default function ProviderDashboard() {
 
   const fetchLeads = async () => {
     try {
-      const res = await fetch("/api/leads", { cache: "no-store" });
-      const data = await res.json();
+      const res = await axios.get("/api/leads");
+      const data = await res.data;
       setTotalLeads(data.length ?? 0);
+      setTotalNewCount(data.new_leads_count);
     } catch (err) {
       console.error("Failed to fetch leads", err);
     }
@@ -119,8 +122,8 @@ export default function ProviderDashboard() {
           <LeadSettingsCard />
 
           <div className="space-y-6">
-            <LeadsOverviewCard totalLeads={totalLeads} />
-            <ResponsesCard />
+            <LeadsOverviewCard totalLeads={totalLeads} totalNewCount={totalNewCount} />
+            <ResponsesCard totalResponse={totalResponses} />
           </div>
         </div>
       </main>

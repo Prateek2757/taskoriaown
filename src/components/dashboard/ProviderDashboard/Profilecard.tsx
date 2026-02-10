@@ -41,7 +41,6 @@ export function ProfileCard({
     <>
       <Card className="border rounded-2xl shadow-lg backdrop-blur bg-white/80 dark:bg-white/5 py-0 border-gray-200 dark:border-white/10">
         <CardContent className="pt-6 text-center relative overflow-hidden">
-          {/* Pro Background Effects */}
           {isPro && (
             <>
               <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-amber-500/5 to-yellow-600/5 pointer-events-none"></div>
@@ -50,8 +49,7 @@ export function ProfileCard({
             </>
           )}
 
-          <div className="relative z-10">
-            {/* Avatar Section */}
+          <div className=" p-2  z-10">
             <div className="relative h-28 w-28 mx-auto mb-4 group">
               {isPro && (
                 <>
@@ -117,7 +115,6 @@ export function ProfileCard({
               )}
             </div>
 
-            {/* Name Section */}
             <h2
               className={`text-xl font-semibold mb-3 ${
                 isPro
@@ -137,7 +134,6 @@ export function ProfileCard({
               )}
             </h2>
 
-            {/* Email and Verification Section */}
             <div className="space-y-3 mb-4">
               <p className="text-sm text-slate-700 dark:text-slate-300 font-medium">
                 {user.email}
@@ -180,7 +176,6 @@ export function ProfileCard({
               )}
             </div>
 
-            {/* Role Section */}
             <p
               className={`text-xs ${
                 isPro
@@ -259,7 +254,7 @@ export function ProfileCard({
             </div>
 
             {isPro && (
-              <div className="mt-6 p-3 rounded-xl bg-gradient-to-r from-yellow-500/10 via-amber-500/10 to-yellow-500/10 border border-yellow-500/20 backdrop-blur-sm">
+              <div className="mt-6 p-2 rounded-xl bg-gradient-to-r from-yellow-500/10 via-amber-500/10 to-yellow-500/10 border border-yellow-500/20 backdrop-blur-sm">
                 <div className="flex items-center justify-center gap-2 text-xs text-yellow-500/90 font-medium">
                   <svg
                     className="w-4 h-4"

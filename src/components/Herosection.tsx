@@ -99,7 +99,7 @@ export default function HeroSection() {
               />{" "}
               Australia's Trusted AI Powered Marketplace
             </div>
-            <div className="text-4xl md:text-7xl font-extrabold  font- text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
+            <div className="text-4xl md:text-7xl   font-extrabold text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
               The Future of{" "}
               <span className="relative inline-block bg-[#3C7DED] bg-clip-text text-transparent">
                 Service

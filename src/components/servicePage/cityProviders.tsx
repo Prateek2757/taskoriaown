@@ -47,20 +47,19 @@ export default function CityProviders({ serviceSlug, citySlug }: Props) {
   if (!providers.length) {
     return (
       <div className="text-center m-6 ">
-        <h2 className="text-2xl font-bold mb-3">
-          No providers found in {citySlug}
-        </h2>
-        <p className="text-gray-500 max-w-xl mx-auto">
-          Don’t worry — we still have trusted professionals who can help you.
-        </p>
-
+      <h2 className="text-2xl font-bold mb-3">
+  Professionals are coming soon to {citySlug}
+</h2>
+<p className="text-gray-500 max-w-xl mx-auto">
+  We’re expanding quickly and trusted experts will be available in your area very soon.
+</p>
         <div className="mt-8 flex justify-center gap-4">
-          <Link
+          {/* <Link
             href={`/post-task`}
             className="px-6 py-3 rounded-full bg-indigo-600 text-white font-semibold hover:bg-indigo-700"
           >
             Post a Task
-          </Link>
+          </Link> */}
 
           <Link
             href={`/services`}
@@ -73,7 +72,6 @@ export default function CityProviders({ serviceSlug, citySlug }: Props) {
     );
   }
 
-  // 🔹 PROVIDERS FOUND (PEAK DESIGN)
   return (
     <section className="mb-24">
       <h2 className="text-2xl font-bold mb-6">
