@@ -187,7 +187,7 @@ export default function ProviderResponsesPage() {
           <p className="text-gray-600 dark:text-gray-400 mb-6">{error}</p>
           <button
             onClick={fetchResponses}
-            className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white px-6 py-3 rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-200 font-medium"
+            className="bg-linear-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white px-6 py-3 rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-200 font-medium"
           >
             Try Again
           </button>
@@ -197,15 +197,15 @@ export default function ProviderResponsesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 dark:from-black dark:via-gray-900 dark:to-black py-6 md:py-10 px-4 sm:px-6 lg:px-8 transition-colors">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 via-gray-100 to-gray-50 dark:from-black dark:via-gray-900 dark:to-black py-6 md:py-10 px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8 ">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-xl shadow-lg">
+            <div className="p-3 bg-linear-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-xl shadow-lg">
               <MessageSquare className="w-6 h-6 md:w-7 md:h-7 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl  font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent">
+              <h1 className="text-3xl  font-bold bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent">
                 My Responses
               </h1>
               <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 mt-1">
@@ -262,7 +262,7 @@ export default function ProviderResponsesPage() {
                   className={`
                     px-4 md:px-5 py-2 rounded-xl font-medium transition-all duration-200 text-sm md:text-base
                     ${filterStatus === filter.key
-                      ? `bg-gradient-to-r from-${filter.color}-500 to-${filter.color}-600 text-white shadow-lg shadow-${filter.color}-500/30 scale-105`
+                      ? `bg-linear-to-r from-${filter.color}-500 to-${filter.color}-600 text-white shadow-lg shadow-${filter.color}-500/30 scale-105`
                       : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
                     }
                   `}
@@ -300,7 +300,7 @@ export default function ProviderResponsesPage() {
                   setSearchQuery("");
                   setFilterStatus("all");
                 }}
-                className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white px-6 py-3 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-200 font-medium"
+                className="bg-linear-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white px-6 py-3 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-200 font-medium"
               >
                 Clear all filters
               </button>
@@ -350,7 +350,7 @@ export default function ProviderResponsesPage() {
                         flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-200
                         ${currentPage === 1
                           ? "bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
-                          : "bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white hover:shadow-lg hover:scale-105"
+                          : "bg-linear-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white hover:shadow-lg hover:scale-105"
                         }
                       `}
                     >
@@ -378,7 +378,7 @@ export default function ProviderResponsesPage() {
                             className={`
                               w-10 h-10 rounded-lg font-medium transition-all duration-200
                               ${currentPage === pageNumber
-                                ? "bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white shadow-lg scale-110"
+                                ? "bg-linear-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white shadow-lg scale-110"
                                 : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
                               }
                             `}
@@ -396,7 +396,7 @@ export default function ProviderResponsesPage() {
                         flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-200
                         ${currentPage === totalPages
                           ? "bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed"
-                          : "bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white hover:shadow-lg hover:scale-105"
+                          : "bg-linear-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white hover:shadow-lg hover:scale-105"
                         }
                       `}
                     >

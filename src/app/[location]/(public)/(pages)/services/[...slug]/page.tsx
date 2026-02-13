@@ -140,6 +140,7 @@ export default async function ServicePage({ params }: Props) {
   const serviceSlug = slug[0];
   const stateSlug = slug[1] || null;
   const citySlug = slug[2] || null;
+  const subCitySlug = slug[3]||null;
 
   let service: ServiceData | null = null;
   let error = false;
@@ -177,6 +178,7 @@ export default async function ServicePage({ params }: Props) {
   );
   const cities = citiesRes.ok ? await citiesRes.json() : [];
 
+
   const selectedLocation = citySlug
     ? cities.find(
         (city: any) =>
@@ -184,6 +186,14 @@ export default async function ServicePage({ params }: Props) {
           citySlug
       )
     : null;
+  // console.log(selectedLocation,"loc");
+  
+    const selectedSubCity = subCitySlug
+  ? selectedLocation?.subcities.find(
+      (s: any) => s.slug === subCitySlug
+    )
+  : null;
+// console.log(selectedSubCity,"sub");
 
   return (
     <>
@@ -199,8 +209,11 @@ export default async function ServicePage({ params }: Props) {
       <ServicePageClient
         service={service}
         cities={cities}
-        initialLocation={selectedLocation}
+        initialLocation={selectedSubCity ?? selectedLocation}
         citySlug={citySlug}
+        stateSlug={stateSlug}
+        subCitySlug={subCitySlug}
+
       />
     </>
   );

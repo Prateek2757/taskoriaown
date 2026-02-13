@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Check, XCircle, Radar, MapPin } from "lucide-react";
 import LocationSearch from "@/components/Location/locationsearch";
+import { Button } from "../ui/button";
 
 const RADIUS_OPTIONS = [1, 2, 5, 10, 20, 30, 50, 75, 100, 125, 150] as const;
 
@@ -146,12 +147,12 @@ export default function AddLocationDialog({
                 <p className="font-semibold text-sm">Cannot add location</p>
                 <p className="text-sm mt-0.5">{locationError}</p>
               </div>
-              <button
+              <Button
                 onClick={() => setLocationError(null)}
                 className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200"
               >
                 <XCircle className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           )}
 
@@ -195,7 +196,7 @@ export default function AddLocationDialog({
               </div>
               <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2.5 max-h-[200px] overflow-y-auto p-2 custom-scrollbar">
                 {RADIUS_OPTIONS.map((radius) => (
-                  <button
+                  <Button
                     key={radius}
                     type="button"
                     onClick={() => setSelectedRadius(radius)}
@@ -219,7 +220,7 @@ export default function AddLocationDialog({
                       <span className="text-lg font-bold">{radius}</span>
                       <span className="text-[10px] opacity-90 leading-none">mi</span>
                     </div>
-                  </button>
+                  </Button>
                 ))}
               </div>
               <p className="text-xs text-gray-600 dark:text-gray-400 mt-3 text-center">
@@ -239,8 +240,9 @@ export default function AddLocationDialog({
               </div>
             </div>
 
-            <button
+            <Button
               onClick={handleAddLocation}
+              type="button"
               disabled={!selectedLocation || isAdding}
               className={`
                 w-full py-3 px-4 rounded-lg font-semibold text-base transition-all duration-200
@@ -254,7 +256,7 @@ export default function AddLocationDialog({
             >
               <MapPin className="w-5 h-5" />
               {isAdding ? "Adding..." : "Add Location"}
-            </button>
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

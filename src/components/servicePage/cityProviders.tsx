@@ -33,7 +33,6 @@ export default function CityProviders({ serviceSlug, citySlug }: Props) {
       .finally(() => setLoading(false));
   }, [serviceSlug, citySlug]);
 
-  // 🔹 Skeleton
   if (loading) {
     return (
       <div className="grid md:grid-cols-3 gap-6">

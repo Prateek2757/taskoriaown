@@ -40,7 +40,7 @@ export default function MessageInput({
   };
 
   return (
-    <div className="flex-shrink-0 bg-white border-t border-gray-200 px-4 py-3">
+    <div className="shrink-0 bg-white border-t border-gray-200 px-4 py-3">
       <div
         className={`flex items-center gap-2 bg-gray-50 rounded-2xl border-2 transition-all duration-300 px-3 py-2 ${
           isFocused
@@ -48,10 +48,9 @@ export default function MessageInput({
             : "border-gray-200"
         }`}
       >
-        {/* Action Buttons - Left */}
         <button
           type="button"
-          className="p-1.5 rounded-full text-gray-400 hover:text-[#6C63FF] hover:bg-[#6C63FF]/5 transition-all duration-200 flex-shrink-0"
+          className="p-1.5 rounded-full text-gray-400 hover:text-[#6C63FF] hover:bg-[#6C63FF]/5 transition-all duration-200 shrink-0"
           title="Add emoji"
         >
           <Smile className="w-5 h-5" />

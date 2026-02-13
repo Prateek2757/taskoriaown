@@ -9,11 +9,12 @@ import ChatWindow from "@/components/chat/chatWindow";
 import { Button } from "@/components/ui/button";
 import { supabaseBrowser } from "@/lib/supabase-server";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface Participant {
   user_id: string;
   name: string;
-  profile_image?:string;
+  profile_image?: string;
 }
 
 interface Conversation {
@@ -35,7 +36,7 @@ export default function ChatPageInline({
   const paramsWrapped = use(params);
   const routeConvoId = paramsWrapped?.convoId || null;
   const { data: session } = useSession();
-
+  const router = useRouter();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConversation, setActiveConversation] =
     useState<Conversation | null>(null);
@@ -212,14 +213,14 @@ export default function ChatPageInline({
   //   [session?.user?.id]
   // );
 
-  const getOtherParticipant = (c:Conversation)=>{
-    return c.participants?.[0] ?? null
-  }
+  const getOtherParticipant = (c: Conversation) => {
+    return c.participants?.[0] ?? null;
+  };
 
-  const other =  activeConversation && getOtherParticipant(activeConversation)
-const otherName = other?.name;
-const otherId = other?.user_id
-const otherProfileImage = other?.profile_image
+  const other = activeConversation && getOtherParticipant(activeConversation);
+  const otherName = other?.name;
+  const otherId = other?.user_id;
+  const otherProfileImage = other?.profile_image;
 
   // const getOtherParticipantId = useCallback(
   //   (conversation: Conversation) => {
@@ -239,6 +240,7 @@ const otherProfileImage = other?.profile_image
         c.id === conversation.id ? { ...c, unread_count: 0 } : c
       )
     );
+    router.push(`/messages/${conversation.id}`);
 
     axios
       .get(`/api/messages/conversation-read/${conversation.id}`, {})
@@ -253,7 +255,7 @@ const otherProfileImage = other?.profile_image
     return (
       <div
         className="flex items-center justify-center h-screen
-        bg-gradient-to-br from-gray-100 via-white to-gray-50
+        bg-linear-to-br from-gray-100 via-white to-gray-50
         dark:from-[#0a0a0f] dark:via-[#0f1117] dark:to-[#11131a]"
       ></div>
     );
@@ -266,7 +268,6 @@ const otherProfileImage = other?.profile_image
   //         otherId: getOtherParticipantId(activeConversation),
   //       }
   //     : { name: "Unknown", otherId: null };
- 
 
   const conversationTitle = activeConversation?.task_title || "Conversation";
 
@@ -274,7 +275,7 @@ const otherProfileImage = other?.profile_image
     <div
       className="
       relative flex h-screen overflow-hidden
-      bg-gradient-to-br from-gray-50 via-white to-gray-100
+      bg-linear-to-br from-gray-50 via-white to-gray-100
       dark:from-[#050507] dark:via-[#0b0c10] dark:to-[#11131a]
       text-gray-800 dark:text-gray-200"
     >

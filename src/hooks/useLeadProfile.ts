@@ -70,7 +70,7 @@ export function useLeadProfile() {
     if (!profile) return;
     try {
       const res = await axios.put("/api/user_profiles", data);
-      mutate({ ...profile, ...res.data.profile }, { revalidate: true });
+      mutate({ ...profile, ...res.data.profile }, { revalidate: false });
       return res.data.profile;
     } catch (err: any) {
       throw new Error(err.message || "Failed to update profile");
@@ -96,10 +96,11 @@ export function useLeadProfile() {
         },
         false
       );
+      
       await axios.post("/api/user_categories", { category_id });
-      mutate(undefined, true);
       notifyAll();
-    } catch {
+    } catch (err) {
+      mutate(profile, false);
       throw new Error("Failed to add category");
     }
   };
@@ -116,10 +117,11 @@ export function useLeadProfile() {
         },
         false
       );
+      
       await axios.delete("/api/user_categories", { data: { category_id } });
-      mutate(undefined, true);
       notifyAll();
-    } catch {
+    } catch (err) {
+      mutate(profile, false);
       throw new Error("Failed to remove category");
     }
   };
@@ -128,6 +130,7 @@ export function useLeadProfile() {
     if (userLocations.some((loc) => loc.city_id === city_id)) {
       throw new Error("Location already added");
     }
+    
     try {
       const newLocation = {
         id: Date.now(),
@@ -136,10 +139,15 @@ export function useLeadProfile() {
         radius,
         created_at: new Date().toISOString(),
       };
+      
       mutateLocations([...userLocations, newLocation], false);
 
-      await axios.post("/api/user_locations", { city_id, radius });
-      mutateLocations(undefined, true);
+      const response = await axios.post("/api/user_locations", { city_id, radius });
+      
+      if (response.data && response.data.location) {
+        mutateLocations([...userLocations, response.data.location], false);
+      }
+      
       notifyAll();
     } catch (err: any) {
       mutateLocations(userLocations, false);
@@ -163,6 +171,7 @@ export function useLeadProfile() {
           ? { ...loc, city_id: newCityId, city_name: newCityName, radius }
           : loc
       );
+      
       mutateLocations(updatedLocations, false);
 
       await axios.put("/api/user_locations", {
@@ -171,7 +180,6 @@ export function useLeadProfile() {
         radius,
       });
       
-      mutateLocations(undefined, true);
       notifyAll();
     } catch (err: any) {
       mutateLocations(userLocations, false);
@@ -187,7 +195,6 @@ export function useLeadProfile() {
       );
 
       await axios.delete("/api/user_locations", { data: { city_id } });
-      mutateLocations(undefined, true);
       notifyAll();
     } catch (err: any) {
       mutateLocations(userLocations, false);
@@ -207,13 +214,15 @@ export function useLeadProfile() {
         },
         false
       );
+      
       await axios.put("/api/user_profiles", {
         location_id: city_id,
         is_nationwide: false,
       });
-      mutate(undefined, true);
+      
       notifyAll();
-    } catch {
+    } catch (err) {
+      mutate(profile, false);
       throw new Error("Failed to update location");
     }
   };
@@ -230,10 +239,11 @@ export function useLeadProfile() {
         },
         false
       );
+      
       await axios.put("/api/user_profiles", { is_nationwide: value });
-      mutate(undefined, true);
       notifyAll();
-    } catch {
+    } catch (err) {
+      mutate(profile, false);
       throw new Error("Failed to toggle nationwide");
     }
   };

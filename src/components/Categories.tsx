@@ -100,7 +100,7 @@ export default function Services() {
 
         {loading ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {Array.from({ length: 5 }).map((_, index) => (
+            {Array.from({ length: 4 }).map((_, index) => (
               <div
                 key={index}
                 className={`relative overflow-hidden rounded-3xl bg-gray-200 animate-pulse ${

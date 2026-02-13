@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import LocationSearch from "@/components/Location/locationsearch";
+import { toast } from "sonner";
 
 const onboardingSchema = z.object({
   is_nationwide: z.boolean(),
@@ -108,7 +109,7 @@ function OnboardingContent() {
       router.push("/signin");
     } catch (err: any) {
       console.error("Onboarding error:", err.response?.data || err.message);
-      alert(
+      toast.error(
         err.response?.data?.message ||
           "Failed to complete onboarding. Try again."
       );
@@ -257,7 +258,7 @@ function OnboardingContent() {
                                         onSelect={(data) =>
                                           setValue(
                                             "city_id",
-                                            String(data.city_id)
+                                            String(data?.city_id || "")
                                           )
                                         }
                                       />

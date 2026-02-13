@@ -1,6 +1,6 @@
 "use client";
-
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useState ,useEffect} from "react";
 import { signIn } from "next-auth/react";
 import { motion } from "motion/react";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
@@ -19,6 +19,24 @@ export default function SignInPage() {
   const router = useRouter();
 
   const { joinAsProvider, loading: joinLoading } = useJoinAsProvider();
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const error = searchParams.get("error");
+  
+    if (error) {
+      if (error === "not_registered") {
+        setMessage("This Google account is not registered. Please sign up first.");
+      }
+  
+      if (error === "OAuthAccountNotLinked") {
+        setMessage("This email is already registered with another method.");
+      }
+  
+      router.replace("/signin", { scroll: false });
+    }
+  }, [searchParams, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,8 +77,9 @@ export default function SignInPage() {
     }
   };
 
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-black transition-colors duration-300">
+    <div className="min-h-screen flex items-center justify-center p-6 bg-linear-to-br from-white via-gray-50 to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-black transition-colors duration-300">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}

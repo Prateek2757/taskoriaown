@@ -1,33 +1,39 @@
-
 "use client";
 
-import { useState, useEffect } from "react";
+import useSWR from "swr";
 import { toast } from "sonner";
 import { fetchCategories } from "@/utils/api";
+import axios from "axios";
 
 interface Category {
-    category_id: number;
-    name: string;
-    slug: string;
+  category_id: number;
+  name: string;
+  slug: string;
+}
+
+const fetcher = async (url: string) => {
+  const response = await axios.get(url);
+  return response.data;
+};
+export const useCategories = (limit?: number) => {
+  const { data, error, isLoading } = useSWR<Category[]>(
+    "/api/signup/category-selection",
+    fetcher,
+    {
+      revalidateOnFocus: false,    
+      revalidateOnReconnect: false,
+      dedupingInterval: 1000 * 60 * 60, 
+    }
+  );
+
+  if (error) {
+    toast.error(error.message || "Failed to load categories.");
   }
 
-export const useCategories = (limit?: number) => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+  const categories = limit && data ? data.slice(0, limit) : data || [];
 
-  useEffect(() => {
-    const getProviders = async () => {
-      try {
-        const data = await fetchCategories(limit);
-        setCategories(data);
-      } catch (error: any) {
-        toast.error(error.message || "Failed to load providers.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    getProviders();
-  }, [limit]);
-
-  return { categories, loading };
+  return {
+    categories,
+    loading: isLoading,
+  };
 };

@@ -137,14 +137,21 @@ export async function POST(req: NextRequest) {
       message: "✅ Signup successful!",
       user: rows[0],
     });
-  } catch (err: unknown) {
-    await client.query("ROLLBACK");
-    console.error("Signup error:", err);
+  } catch (err: any) {
+    if (
+      err.code === "23505" || 
+      err.message?.includes("users_email_key")
+    ) {
+      return NextResponse.json(
+        { message: "Email is already used." },
+        { status: 400 }
+      );
+    }
+  
     return NextResponse.json(
-      { message: err instanceof Error ? err.message : "Unknown server error" },
+      { message: "Something went wrong." },
       { status: 500 }
-    );
-  } finally {
+    );} finally {
     client.release();
   }
 }

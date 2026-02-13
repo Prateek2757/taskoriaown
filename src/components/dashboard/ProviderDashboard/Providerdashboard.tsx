@@ -123,7 +123,7 @@ const totalResponses = profile?.response_stats?.total_responses
 
           <div className="space-y-6">
             <LeadsOverviewCard totalLeads={totalLeads} totalNewCount={totalNewCount} />
-            <ResponsesCard totalResponse={totalResponses} />
+            <ResponsesCard totalResponse={totalResponses ?? 0} />
           </div>
         </div>
       </main>

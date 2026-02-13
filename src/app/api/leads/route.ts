@@ -71,7 +71,6 @@ export async function POST(req: Request) {
 
     const taskId = taskResult.rows[0].task_id;
 
-    // Save category answers
     if (category_answers && typeof category_answers === "object") {
       const insertAnswerQuery = `
         INSERT INTO task_answers (task_id, category_question_id, answer)
@@ -95,7 +94,6 @@ export async function POST(req: Request) {
     const adminRes = await client.query(`SELECT email FROM users WHERE role='admin'`);
     const adminEmails = adminRes.rows.map((r) => r.email);
 
-    // Get providers for this category
     const providersRes = await client.query(
       `
       SELECT u.email, u.user_id, up.display_name
@@ -115,7 +113,6 @@ export async function POST(req: Request) {
       task: taskResult.rows[0],
     });
 
-    // Prepare email queue
     const emailQueue: any[] = [];
 
     if (typeof estimated_budget === "number" && estimated_budget > 0) {
@@ -148,7 +145,6 @@ export async function POST(req: Request) {
       });
     }
 
-    // Customer confirmation email
     emailQueue.push({
       email,
       username: name,
@@ -156,7 +152,6 @@ export async function POST(req: Request) {
       taskTitle: categoryname,
     });
 
-    // Fire emails in background with proper rate limit
     sendEmailsWithRateLimit(emailQueue, 1).catch(console.error);
 
     return response;

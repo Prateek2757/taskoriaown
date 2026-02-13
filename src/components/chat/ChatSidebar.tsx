@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { Search } from "lucide-react";
 import formatMessageTime from "./messageTimeUtility";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 interface Participant {
   user_id: string;
@@ -44,6 +45,8 @@ export default function ChatSidebar({
 }: ChatSidebarProps) {
   const [searchTerm, setSearchTerm] = useState("");
 
+  const {data:session}=useSession()
+
   const getOtherParticipantName = (c: Conversation) => {
     const other = c.participants.find(
       (p) => Number(p.user_id) !== Number(sessionUserId)
@@ -52,8 +55,11 @@ export default function ChatSidebar({
   };
 
   const getOtherParticipant = (c: Conversation) => {
-    return c.participants?.[0] ?? null;
-  };
+    const other = c.participants.find(
+      (p) => Number(p.user_id) !== Number(session?.user?.id)
+    );
+    return other ?? null;
+  }
   
 
   const getOtherProfileImage=(c:string)=>{
@@ -143,7 +149,7 @@ export default function ChatSidebar({
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 shadow-md">
+                <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 shadow-md">
     {profile_image ? (
       <Image
         src={profile_image}
@@ -153,7 +159,7 @@ export default function ChatSidebar({
         className="object-cover w-full h-full transition-transform group-hover:scale-105"
       />
     ) : (
-      <div className="w-full h-full bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
+      <div className="w-full h-full bg-linear-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
         {firstLetter}
       </div>
     )}
@@ -166,7 +172,7 @@ export default function ChatSidebar({
                       </div>
 
                       {c.last_message_at && (
-                        <div className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 shrink-0">
                           {formatMessageTime(c.last_message_at)}
                         </div>
                       )}
@@ -184,7 +190,7 @@ export default function ChatSidebar({
                       </p>
 
                       {hasUnread && (
-                        <span className="flex-shrink-0 inline-flex items-center justify-center min-w-[20px] h-5 bg-[#6C63FF] dark:bg-[#7da2ff] text-white text-xs font-bold px-1.5 rounded-full">
+                        <span className="shrink-0 inline-flex items-center justify-center min-w-5 h-5 bg-[#6C63FF] dark:bg-[#7da2ff] text-white text-xs font-bold px-1.5 rounded-full">
                           {unread > 99 ? "99+" : unread}
                         </span>
                       )}

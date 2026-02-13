@@ -45,7 +45,6 @@ export default function LocationsSection({
     setEditDialogOpen(true);
   };
 
-  // Get existing city IDs to prevent duplicates
   const existingCityIds = userLocations.map(loc => loc.city_id);
 
   return (

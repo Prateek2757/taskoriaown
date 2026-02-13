@@ -1,4 +1,3 @@
-// components/sections/ReviewsSection.tsx
 "use client";
 
 import React from "react";

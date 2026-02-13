@@ -118,7 +118,7 @@ export function useCredit(professionalId?: string) {
           credits: creditsUsed,
         });
 
-        toast.success(`Credits deducted successfully ${creditsUsed}`);
+        // toast.success(`Credits deducted successfully ${creditsUsed}`);
         await fetchBalance();
         return true;
       } catch (error: any) {

@@ -12,6 +12,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { useNotificationTitle } from "@/hooks/useNotificationTitle";
 import NotificationHandler from "@/components/NotificationHandler";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Script from "next/script";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -104,6 +105,24 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable}`} suppressHydrationWarning>
       <head>
+        {/* <Script
+          src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz"
+          strategy="afterInteractive"
+        />
+
+        <Script
+          src="https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.25.0-min.js.gz"
+          strategy="afterInteractive"
+        />
+
+        <Script id="amplitude-init" strategy="afterInteractive">
+          {`
+    window.amplitude.add(window.sessionReplay.plugin({ sampleRate: 1 }));
+    window.amplitude.init('f593ae0ebb19f7ac0189a56210abc7a9', {
+      autocapture: { elementInteractions: true }
+    });
+  `}
+        </Script> */}
         <link
           rel="icon"
           href="/favicon.ico"

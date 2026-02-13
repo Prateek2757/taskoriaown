@@ -42,42 +42,37 @@ const popularCities: City[] = [
   {
     name: "Sydney",
     image: "https://images.unsplash.com/photo-1523059623039-a9ed027e7fad?w=800&h=600&fit=crop",
-    activeProviders: 248,
-    providers: [
-      { name: "Elite Home Services", rating: 4.9, logo: "🏆", completedJobs: 156 },
-      { name: "Pro Solutions Co", rating: 4.8, logo: "⚡", completedJobs: 203 },
-      { name: "Premium Care", rating: 5.0, logo: "✨", completedJobs: 189 }
-    ]
+    // activeProviders: 248,
+    // providers: [
+    //   { name: "Elite Home Services", rating: 4.9, logo: "🏆", completedJobs: 156 },
+    //   { name: "Pro Solutions Co", rating: 4.8, logo: "⚡", completedJobs: 203 },
+    //   { name: "Premium Care", rating: 5.0, logo: "✨", completedJobs: 189 }
+    // ]
   },
   {
     name: "Melbourne",
     image: "https://images.unsplash.com/photo-1609036394821-b63e8168dc64?q=80&w=1548&auto=format&fit=crop",
-    activeProviders: 192,
-    providers: [
-      { name: "Expert Hands", rating: 4.9, logo: "🎯", completedJobs: 178 },
-      { name: "Quality First", rating: 4.7, logo: "💼", completedJobs: 145 },
-      { name: "Master Services", rating: 5.0, logo: "🌟", completedJobs: 201 }
-    ]
+    // activeProviders: 192,
+    // providers: [
+    //   { name: "Expert Hands", rating: 4.9, logo: "🎯", completedJobs: 178 },
+    //   { name: "Quality First", rating: 4.7, logo: "💼", completedJobs: 145 },
+    //   { name: "Master Services", rating: 5.0, logo: "🌟", completedJobs: 201 }
+    // ]
   },
   {
     name: "Adelaide",
     image: "https://images.unsplash.com/photo-1702252212983-db7e428cc3cf?q=80&w=1880&auto=format&fit=crop",
-    activeProviders: 156,
-    providers: [
-      { name: "Top Tier Pros", rating: 4.8, logo: "🔥", completedJobs: 134 },
-      { name: "Swift Solutions", rating: 4.9, logo: "⚙️", completedJobs: 167 },
-      { name: "Premier Group", rating: 4.7, logo: "💎", completedJobs: 142 }
-    ]
+    // activeProviders: 156,
+    // providers: [
+    //   { name: "Top Tier Pros", rating: 4.8, logo: "🔥", completedJobs: 134 },
+    //   { name: "Swift Solutions", rating: 4.9, logo: "⚙️", completedJobs: 167 },
+    //   { name: "Premier Group", rating: 4.7, logo: "💎", completedJobs: 142 }
+    // ]
   },
   {
     name: "Perth",
     image: "https://images.unsplash.com/photo-1574471101497-d958f6e3ebd4?q=80&w=1548&auto=format&fit=crop",
-    activeProviders: 134,
-    providers: [
-      { name: "Ocean City Services", rating: 4.9, logo: "🌊", completedJobs: 112 },
-      { name: "Sunrise Experts", rating: 4.8, logo: "☀️", completedJobs: 98 },
-      { name: "West Coast Pros", rating: 5.0, logo: "🏖️", completedJobs: 156 }
-    ]
+   
   }
 ];
 
@@ -177,7 +172,7 @@ export default function PopularLocationsSection({
       <div className="relative group">
         <button
           onClick={handlePrevious}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-xl flex items-center justify-center opacity-100 hover:bg-gray-50 dark:hover:bg-slate-700 -translate-x-1/2 border border-gray-200 dark:border-slate-600"
+          className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-xl flex items-center justify-center opacity-100 hover:bg-gray-50 dark:hover:bg-slate-700 -translate-x-1/2 border border-gray-200 dark:border-slate-600"
           aria-label="Previous"
         >
           <ChevronLeft className="w-6 h-6 text-gray-700 dark:text-gray-300" />
@@ -206,7 +201,7 @@ export default function PopularLocationsSection({
         >
           <div className="flex gap-6 px-1 pb-2" style={{ width: 'max-content' }}>
             {displayCities.map((city, index) => {
-              const citySlug = city.city_name.toLowerCase().replace(/\s+/g, '-');
+              const citySlug = city.name.toLowerCase().replace(/\s+/g, '-');
               const isCurrentCity = currentCity === citySlug;
               
               return (
@@ -227,7 +222,7 @@ export default function PopularLocationsSection({
                       <Image
                         fill
                         src={popularCities[index % popularCities.length]?.image}
-                        alt={city.city_name}
+                        alt={city.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
@@ -237,7 +232,7 @@ export default function PopularLocationsSection({
                         </div>
                       )}
                       <div className="absolute bottom-4 left-4 right-4">
-                        <h3 className="text-2xl font-bold text-white mb-1">{city.city_name}</h3>
+                        <h3 className="text-2xl font-bold text-white mb-1">{city.name}</h3>
                         {/* <div className="flex items-center gap-2 text-white/90 text-sm">
                           <TrendingUp className="w-4 h-4" />
                           <span>{popularCities[index % popularCities.length]?.activeProviders || 150}+ Active Providers</span>
@@ -246,7 +241,7 @@ export default function PopularLocationsSection({
                     </div>
                   
                     <div className="p-6">
-                      <div className="space-y-3 mb-5"> 
+                      {/* <div className="space-y-3 mb-5"> 
                         {popularCities[index % popularCities.length]?.providers?.slice(0, 3).map((provider, i) => (
                           <div key={i} className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700/50 transition">
                             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0 shadow-md">
@@ -265,7 +260,7 @@ export default function PopularLocationsSection({
                             </div>
                           </div>
                         ))}
-                      </div>
+                      </div> */}
                         
                       <Button 
                         onClick={(e) => {
@@ -274,7 +269,7 @@ export default function PopularLocationsSection({
                         }}
                         className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-indigo-500 dark:to-blue-500 text-white font-semibold rounded-2xl hover:shadow-lg transition-all"
                       >
-                        Search {city.city_name}
+                        Search {city.name}
                       </Button>
                     </div>
                   </Link>
