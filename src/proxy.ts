@@ -21,16 +21,29 @@ function getLocale(request: NextRequest): string {
   return matchLocale(languages, i18n.locales, i18n.defaultLocale);
 }
 
-export async function proxy(req: NextRequest) {
+export async function  proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl; 
+
+  if (pathname.endsWith("/sitemap.xml") || pathname.endsWith("/sitemap")) {
+    if (pathname !== "/sitemap.xml" && pathname !== "/sitemap") {
+      console.log(`Redirecting ${pathname} to /sitemap.xml`);
+      return NextResponse.redirect(new URL("/sitemap.xml", req.url), 301);
+    }
+    return NextResponse.next();
+  }
+
+  if (pathname.endsWith("/robots.txt") || pathname === "/robots") {
+    if (pathname !== "/robots.txt") {
+      return NextResponse.redirect(new URL("/robots.txt", req.url), 301);
+    }
+    return NextResponse.next();
+  }
 
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/static") ||
     pathname.includes("/favicon") ||
-    pathname.includes("/robots") ||
-    pathname.includes("/sitemap") ||
     /\.(.*)$/.test(pathname)
   ) {
     return NextResponse.next();
@@ -52,17 +65,20 @@ export async function proxy(req: NextRequest) {
       response.cookies.set("NEXT_LOCALE", locale, {
         maxAge: 31536000, 
         path: "/",
+        sameSite: "lax",
       });
+      
+      response.headers.set("Content-Language", locale);
       
       return response;
     } else {
-      // ✅ Preserve query params
       const url = new URL(`/${locale}${pathname}${search}`, req.url);
       
-      const response = NextResponse.redirect(url, 301);
+      const response = NextResponse.redirect(url, 302);
       response.cookies.set("NEXT_LOCALE", locale, {
         maxAge: 31536000,
         path: "/",
+        sameSite: "lax",
       });
       
       return response;
@@ -102,6 +118,10 @@ export async function proxy(req: NextRequest) {
   
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("X-XSS-Protection", "1; mode=block");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  
+  response.headers.set("Content-Language", locale);
   
   return response;
 }

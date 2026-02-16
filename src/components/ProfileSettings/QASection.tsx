@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { useFAQs } from "@/hooks/useFAQS";
