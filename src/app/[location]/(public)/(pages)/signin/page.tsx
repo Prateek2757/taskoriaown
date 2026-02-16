@@ -1,3 +1,4 @@
+
 "use client";
 import { useSearchParams } from "next/navigation";
 import { useState ,useEffect} from "react";
@@ -8,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import axios from "axios";
 import Link from "next/link";
+export const dynamic = "force-dynamic";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
