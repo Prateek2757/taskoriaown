@@ -18,8 +18,8 @@ export default function robots(): MetadataRoute.Robots {
           '/messages/',
           '/signin',
           '/signup',
-          '/*?callbackUrl=*', // Prevent indexing of redirect URLs
-          '/*?*utm_*', // Prevent indexing of tracking parameters
+          '/*?callbackUrl=*', 
+          '/*?*utm_*',
         ],
       },
       {

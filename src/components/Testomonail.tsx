@@ -114,33 +114,13 @@ export default function Testomonail() {
           <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-linear-to-l from-white dark:from-background"></div>
         </div>
       </div>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            name: "Taskoria",
-            url: "https://www.taskoria.com",
-            review: reviews.map((r) => ({
-              "@type": "Review",
-              author: {
-                "@type": "Person",
-                name: r.name,
-              },
-              reviewBody: r.body,
-            })),
-          }),
-        }}
-      />
       <script
   type="application/ld+json"
   dangerouslySetInnerHTML={{
     __html: JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Organization",
-      "name": "Taskoria",
+      "name": "Taskoria", 
       "url": "https://www.taskoria.com",
       "aggregateRating": {
         "@type": "AggregateRating",
