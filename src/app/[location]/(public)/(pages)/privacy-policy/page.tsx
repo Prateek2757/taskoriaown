@@ -408,12 +408,12 @@ export default function PrivacyPolicyPage() {
             <br />
             🌐 Website:{" "}
             <a
-              href="https://taskoria.com"
+              href="https://www.taskoria.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 dark:text-blue-400 underline hover:text-blue-700 dark:hover:text-blue-300"
             >
-              https://taskoria.com
+              https://wwww.taskoria.com
             </a>
           </p>
         </section>

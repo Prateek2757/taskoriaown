@@ -43,7 +43,7 @@ const getEmailContent = ({
         message:
           "We're excited to have you onboard. Find trusted professionals and get tasks done faster.",
         buttonText: "Get Started",
-        buttonLink: "https://taskoria.com",
+        buttonLink: "https://www.taskoria.com",
       };
     case "task-posted":
       return {
@@ -54,7 +54,7 @@ const getEmailContent = ({
           taskLocation ? `in ${taskLocation}` : ""
         } has been successfully posted.`,
         buttonText: "View Task",
-        buttonLink: "https://taskoria.com/customer/dashboard",
+        buttonLink: "https://www.taskoria.com/customer/dashboard",
       };
     case "provider-new-task":
       return {
@@ -65,7 +65,7 @@ const getEmailContent = ({
           taskLocation ? `in ${taskLocation}` : ""
         } matches your service category. Submit your quotation early to increase your chances.`,
         buttonText: "View Task",
-        buttonLink: "https://taskoria.com/provider/leads",
+        buttonLink: "https://www.taskoria.com/provider/leads",
       };
     case "task-posted-no-budget":
       return {
@@ -109,7 +109,7 @@ const AppEmail = (props: AppEmailProps) => {
         <Container style={{ maxWidth: "600px", margin: "32px auto", backgroundColor: "#ffffff", borderRadius: "8px", padding: "32px", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" }}>
           <Section style={{ textAlign: "center" }}>
             <Img
-              src="https://taskoria.com/taskorialogonew.png"
+              src="https://www.taskoria.com/taskorialogonew.png"
               alt={`${company} Logo`}
               width="48"
               height="48"
@@ -165,7 +165,7 @@ const AppEmail = (props: AppEmailProps) => {
             </Text>
             <Text style={{ textAlign: "center", fontSize: "12px", color: "#6b7280", margin: "8px 0" }}>
               <Link
-                href="https://taskoria.com/privacy-policy"
+                href="https://www.taskoria.com/privacy-policy"
                 style={{ color: "#2563eb", textDecoration: "underline" }}
               >
                 Privacy Policy

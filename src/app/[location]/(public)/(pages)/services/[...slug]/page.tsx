@@ -64,12 +64,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           `${service.name.toLowerCase()} quotes`,
         ].join(", ");
 
-    const canonicalUrl = `https://taskoria.com/services/${serviceSlug}${
+    const canonicalUrl = `https://www.taskoria.com/services/${serviceSlug}${
       citySlug ? `/${citySlug}` : ""
     }`;
 
     const imageUrl =
-      service.hero_image || `https://taskoria.com/og-images/${serviceSlug}.jpg`;
+      service.hero_image || `https://www.taskoria.com/og-images/${serviceSlug}.jpg`;
 
     return {
       title,

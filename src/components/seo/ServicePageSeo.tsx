@@ -26,7 +26,6 @@ export default function ServicePageSEO({
   const cityName = city?.display_name || city?.name || citySlug;
   const isLocalService = !!cityName;
 
-  // Dynamic title generation
   const generateTitle = () => {
     if (isLocalService) {
       return `${service.name} in ${cityName} | Get Free Quotes | Taskoria`;
@@ -34,7 +33,6 @@ export default function ServicePageSEO({
     return `${service.name} Services | Compare Quotes & Book Online | Taskoria`;
   };
 
-  // Dynamic description generation
   const generateDescription = () => {
     const baseDesc = service.description || 
       `Professional ${service.name.toLowerCase()} services`;
@@ -45,7 +43,6 @@ export default function ServicePageSEO({
     return `${baseDesc}. Get instant quotes from verified professionals. Compare prices, read reviews, and book with confidence. Fast, easy, and secure.`;
   };
 
-  // Dynamic keywords generation
   const generateKeywords = () => {
     const baseKeywords = [
       service.name.toLowerCase(),
@@ -73,25 +70,22 @@ export default function ServicePageSEO({
     return baseKeywords.join(", ");
   };
 
-  const canonicalUrl = `https://taskoria.com/services/${service.slug}${
+  const canonicalUrl = `https://www.taskoria.com/services/${service.slug}${
     citySlug ? `/${citySlug}` : ''
   }`;
 
   const imageUrl = service.hero_image || 
-    `https://taskoria.com/og-images/${service.slug}.jpg`;
+    `https://www.taskoria.com/og-images/${service.slug}.jpg`;
 
   return (
     <Head>
-      {/* Primary Meta Tags */}
       <title>{generateTitle()}</title>
       <meta name="title" content={generateTitle()} />
       <meta name="description" content={generateDescription()} />
       <meta name="keywords" content={generateKeywords()} />
       
-      {/* Canonical URL */}
       <link rel="canonical" href={canonicalUrl} />
       
-      {/* Open Graph / Facebook */}
       <meta property="og:type" content="website" />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:title" content={generateTitle()} />
@@ -100,14 +94,12 @@ export default function ServicePageSEO({
       <meta property="og:site_name" content="Taskoria" />
       <meta property="og:locale" content="en_AU" />
       
-      {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:url" content={canonicalUrl} />
       <meta name="twitter:title" content={generateTitle()} />
       <meta name="twitter:description" content={generateDescription()} />
       <meta name="twitter:image" content={imageUrl} />
       
-      {/* Additional SEO Meta Tags */}
       <meta name="robots" content="index, follow, max-image-preview:large" />
       <meta name="googlebot" content="index, follow" />
       <meta name="bingbot" content="index, follow" />
@@ -127,13 +119,11 @@ export default function ServicePageSEO({
         </>
       )}
       
-      {/* Mobile Meta Tags */}
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       <meta name="apple-mobile-web-app-title" content="Taskoria" />
       
-      {/* Alternate language versions */}
       <link rel="alternate" hrefLang="en-au" href={canonicalUrl} />
       <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
     </Head>

@@ -24,10 +24,9 @@ const reviews = [
     body: "I hired a graphic designer through Taskoria for a small business project. What stood out was how relevant the matches were — I didn’t get random quotes. The designer understood the brief well and delivered exactly what I needed. The platform feels well thought out and easy to use.",
     img: "/zaya.png",
   },
-
 ];
 
-const firstRow = reviews.slice(0, reviews.length );
+const firstRow = reviews.slice(0, reviews.length);
 const secondRow = reviews.slice(reviews.length / 2);
 
 const ReviewCard = ({
@@ -52,7 +51,13 @@ const ReviewCard = ({
       )}
     >
       <div className="flex flex-row items-center gap-2">
-        <Image  className="rounded-lg" width={52} height={32} alt="mianc" src={img} />
+        <Image
+          className="rounded-lg"
+          width={52}
+          height={32}
+          alt="Taskoria customer review"
+          src={img}
+        />
         <div className="flex flex-col">
           <figcaption className="text-sm font-medium dark:text-white">
             {name}
@@ -72,7 +77,7 @@ export default function Testomonail() {
   return (
     <section
       className="bg-card dark:bg-[radial-gradient(circle_at_top,_rgba(76,112,255,0.18)_0%,_rgba(0,0,0,1)_70%)] py-16 px-4"
-      id="community"
+      id="customer-reviews"
     >
       <div className="text-center">
         <motion.div
@@ -86,14 +91,14 @@ export default function Testomonail() {
           Testimonials
         </motion.div>
         <h2 className="text-3xl font-semibold text-center text-foreground">
-          What Our Users Say
+          Customer Reviews for Trusted Local Professionals on Taskoria
         </h2>
       </div>
       <div className="mt-8  max-w-6xl mx-auto">
         <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden">
           <Marquee pauseOnHover className="[--duration:20s]">
-            {firstRow.map((review , i) => (
-              <ReviewCard key={review.username + i } {...review} />
+            {firstRow.map((review, i) => (
+              <ReviewCard key={review.username + i} {...review} />
             ))}
           </Marquee>
           {/* <Marquee reverse pauseOnHover className="[--duration:20s]">
@@ -105,6 +110,26 @@ export default function Testomonail() {
           <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-linear-to-l from-white dark:from-background"></div>
         </div>
       </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Taskoria",
+            url: "https://www.taskoria.com",
+            review: reviews.map((r) => ({
+              "@type": "Review",
+              author: {
+                "@type": "Person",
+                name: r.name,
+              },
+              reviewBody: r.body,
+            })),
+          }),
+        }}
+      />
     </section>
   );
 }

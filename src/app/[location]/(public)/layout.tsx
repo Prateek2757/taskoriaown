@@ -93,7 +93,7 @@ export async function generateMetadata({
       "hire experts",
       "find professionals",
     ],
-    authors: [{ name: "Taskoria", url: "https://taskoria.com" }],
+    authors: [{ name: "Taskoria", url: "https://wwww.taskoria.com" }],
     creator: "Taskoria",
     publisher: "Taskoria",
     

@@ -15,11 +15,11 @@ export const metadata: Metadata = {
     title: "Careers at Taskoria | Build the Future of Local Services",
     description:
       "Explore career opportunities at Taskoria. Join our team and help shape the future of AI-powered service marketplaces",
-    url: "https://taskoria.com/careers",
+    url: "https://www.taskoria.com/careers",
     siteName: "Taskoria",
     images: [
       {
-        url: "https://taskoria.com/og-careers.png",
+        url: "https://www.taskoria.com/og-careers.png",
         width: 1200,
         height: 630,
         alt: "Careers at Taskoria",
@@ -252,8 +252,8 @@ export default function CareersComingSoonPage() {
             "@context": "https://schema.org",
             "@type": "Organization",
             name: "Taskoria",
-            url: "https://taskoria.com",
-            logo: "https://taskoria.com/logo.png",
+            url: "https://www.taskoria.com",
+            logo: "https://www.taskoria.com/logo.png",
             description:
               "A modern service marketplace connecting people with trusted local professionals",
             sameAs: ["https://www.linkedin.com/company/taskoria-au"],
