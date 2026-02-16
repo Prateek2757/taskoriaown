@@ -10,8 +10,8 @@ import SupportChatbot from "@/components/supportChatbox";
 import Testomonail from "@/components/Testomonail";
 
 export const metadata: Metadata = {
-  title: "Taskoria - Australia's #1 AI-Powered Service Marketplace | Find Verified Professionals",
-  description: "Connect with 1000+ verified service providers across 50+ Australian cities. AI-powered matching for cleaning, web development, plumbing & more. 4.5★ rated with 24/7 support. Post jobs free & get instant quotes.",
+  title: "Taskoria | Hire Verified Professionals in Australia",
+  description:"Hire verified local professionals across Australia. Post a job for free and get matched instantly with trusted trades, tech experts, cleaners and more. Transparent quotes, secure hiring.",
   
   keywords: [
     "service marketplace Australia",
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Taskoria | Australia's #1 Service Marketplace",
+    title: "Taskoria | Hire Verified Professionals in Australia",
     description: "Find verified professionals for any job. AI-powered matching, instant quotes, 4.5★ rated. Serving 50+ Australian cities.",
     images: ["https://www.taskoria.com/twitter-image.jpg"],
     creator: "@taskoria",

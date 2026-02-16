@@ -122,7 +122,7 @@ export default function HowTaskoriaWorks() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <motion.header
+          <motion.div
             variants={fadeInUp}
             transition={{ duration: 0.7 }}
             className="sm:text-center mb-10 sm:mb-15"
@@ -133,7 +133,7 @@ export default function HowTaskoriaWorks() {
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Connect with verified professionals in three simple steps. Post your job, get matched with experts, and start collaborating instantly.
             </p>
-          </motion.header>
+          </motion.div>
 
           <div
             className="relative flex max-w-6xl h-16 mx-auto items-center justify-center overflow-hidden"
@@ -147,7 +147,7 @@ export default function HowTaskoriaWorks() {
                   ref={div1Ref}
                   aria-label="Step 1"
                 >
-                  <span className="dark:text-gray-900 text-[#41A6EE] font-bold text-lg">
+                  <span className="dark:text-gray-900 text-[#41AEEE] font-bold text-lg">
                     1
                   </span>
                 </Circle>
@@ -218,7 +218,7 @@ export default function HowTaskoriaWorks() {
                         <div className="bg-blue-100 dark:bg-blue-900/30 w-12 h-12 rounded-lg flex items-center justify-center">
                           <Icon className="w-6 h-6 text-blue-600 dark:text-blue-400" aria-hidden="true" />
                         </div>
-                        <span className="text-3xl font-bold text-gray-300 dark:text-gray-700">
+                        <span className="text-3xl font-bold text-gray-400 ">
                           {step.id}
                         </span>
                       </div>

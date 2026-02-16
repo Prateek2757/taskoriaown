@@ -275,7 +275,8 @@ export default function ModernNavbar() {
               <SlidingUnderlineNav
                 currentLinks={currentLinks.map(link => ({
                   ...link,
-                  href: getLocalizedHref(link.href) 
+                  // href: getLocalizedHref(link.href) 
+                  href:link.href
                 }))}
                 pathname={pathname}
               />
