@@ -8,36 +8,31 @@ import { i18n } from "../i18n-config";
 const secret = process.env.NEXTAUTH_SECRET;
 
 function getLocale(request: NextRequest): string {
-  const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value;
-  if (cookieLocale && i18n.locales.includes(cookieLocale as any)) {
-    return cookieLocale;
-  }
-
+  // Defensive check: ensure headers exist
   const negotiatorHeaders: Record<string, string> = {};
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
 
+  // @ts-ignore: Negotiator expects strict types but works with Record<string, string>
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages();
   
-  return matchLocale(languages, i18n.locales, i18n.defaultLocale);
+  // Default to 'en' if detection fails
+  try {
+    return matchLocale(languages, i18n.locales, i18n.defaultLocale);
+  } catch (e) {
+    return i18n.defaultLocale;
+  }
 }
 
+// RENAME 'proxy' TO 'middleware'
 export async function proxy(req: NextRequest) {
-  const { pathname, search } = req.nextUrl; 
+  const { pathname, search } = req.nextUrl;
 
-  if (pathname.endsWith("/sitemap.xml") || pathname.endsWith("/sitemap")) {
-    if (pathname !== "/sitemap.xml" && pathname !== "/sitemap") {
-      return NextResponse.redirect(new URL("/sitemap.xml", req.url), 301);
-    }
+  // 1. Handle Robots and Sitemap specially to avoid loops
+  if (pathname === "/sitemap.xml" || pathname === "/robots.txt") {
     return NextResponse.next();
   }
 
-  if (pathname.endsWith("/robots.txt") || pathname === "/robots") {
-    if (pathname !== "/robots.txt") {
-      return NextResponse.redirect(new URL("/robots.txt", req.url), 301);
-    }
-    return NextResponse.next();
-  }
-
+  // 2. Ignore internal paths and static assets
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
@@ -52,12 +47,14 @@ export async function proxy(req: NextRequest) {
   const maybeLocale = segments[0];
   const hasLocale = i18n.locales.includes(maybeLocale as any);
 
+  // 3. NO LOCALE PRESENT IN URL (e.g. taskoria.com/dashboard)
   if (!hasLocale) {
     const locale = getLocale(req);
-    
+
+    // If default locale, we rewrite (mask) the URL
     if (locale === i18n.defaultLocale) {
       const pathnameWithoutLocale = pathname;
-      const token = await getToken({ req, secret });
+      const token = await getToken({ req, secret }); // Ensure NEXTAUTH_SECRET is set in Vercel
 
       const protectedPaths = [
         "/provider/dashboard",
@@ -67,6 +64,7 @@ export async function proxy(req: NextRequest) {
         "/provider/leads",
       ];
 
+      // Handle /create redirect
       if (pathnameWithoutLocale.startsWith("/create")) {
         if (token) {
           const url = new URL(`/provider/dashboard${search}`, req.url);
@@ -74,6 +72,7 @@ export async function proxy(req: NextRequest) {
         }
       }
 
+      // Handle protected routes
       if (protectedPaths.some((path) => pathnameWithoutLocale.startsWith(path))) {
         if (!token) {
           const url = new URL(`/signin`, req.url);
@@ -82,40 +81,23 @@ export async function proxy(req: NextRequest) {
         }
       }
 
+      // Rewrite to the internal locale folder
       const url = req.nextUrl.clone();
       url.pathname = `/${locale}${pathname}`;
-      
       const response = NextResponse.rewrite(url);
-      
-      response.cookies.set("NEXT_LOCALE", locale, {
-        maxAge: 31536000,
-        path: "/",
-        sameSite: "lax",
-      });
-      
+
+      // Security & SEO Headers
       response.headers.set("Content-Language", locale);
       response.headers.set("X-Robots-Tag", "index, follow");
-      
-      response.headers.set("X-Frame-Options", "DENY");
-      response.headers.set("X-Content-Type-Options", "nosniff");
-      response.headers.set("X-XSS-Protection", "1; mode=block");
-      response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-      
       return response;
     }
-    
+
+    // If not default locale, Redirect to the locale prefix (e.g. /fr/dashboard)
     const url = new URL(`/${locale}${pathname}${search}`, req.url);
-    const response = NextResponse.redirect(url, 301);
-    
-    response.cookies.set("NEXT_LOCALE", locale, {
-      maxAge: 31536000,
-      path: "/",
-      sameSite: "lax",
-    });
-    
-    return response;
+    return NextResponse.redirect(url, 301);
   }
 
+  // 4. LOCALE IS PRESENT (e.g. taskoria.com/en/dashboard)
   const locale = segments[0];
   const pathnameWithoutLocale = "/" + segments.slice(1).join("/");
   const token = await getToken({ req, secret });
@@ -144,15 +126,8 @@ export async function proxy(req: NextRequest) {
   }
 
   const response = NextResponse.next();
-  
   response.headers.set("Content-Language", locale);
   response.headers.set("X-Robots-Tag", "index, follow");
-  
-  response.headers.set("X-Frame-Options", "DENY");
-  response.headers.set("X-Content-Type-Options", "nosniff");
-  response.headers.set("X-XSS-Protection", "1; mode=block");
-  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-  
   return response;
 }
 

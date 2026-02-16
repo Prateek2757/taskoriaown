@@ -120,7 +120,6 @@ export default function Onboarding() {
             )}
           </div>
 
-          {/* Details */}
           <div>
             <label className="block font-semibold">Name</label>
             <input
