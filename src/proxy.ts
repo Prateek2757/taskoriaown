@@ -21,12 +21,11 @@ function getLocale(request: NextRequest): string {
   return matchLocale(languages, i18n.locales, i18n.defaultLocale);
 }
 
-export async function  proxy(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl; 
 
   if (pathname.endsWith("/sitemap.xml") || pathname.endsWith("/sitemap")) {
     if (pathname !== "/sitemap.xml" && pathname !== "/sitemap") {
-      console.log(`Redirecting ${pathname} to /sitemap.xml`);
       return NextResponse.redirect(new URL("/sitemap.xml", req.url), 301);
     }
     return NextResponse.next();
@@ -55,38 +54,70 @@ export async function  proxy(req: NextRequest) {
 
   if (!hasLocale) {
     const locale = getLocale(req);
-  
-    // If default locale → DO NOTHING
+    
     if (locale === i18n.defaultLocale) {
-      const response = NextResponse.next();
-  
+      const pathnameWithoutLocale = pathname;
+      const token = await getToken({ req, secret });
+
+      const protectedPaths = [
+        "/provider/dashboard",
+        "/messages",
+        "/customer/dashboard",
+        "/provider/message",
+        "/provider/leads",
+      ];
+
+      if (pathnameWithoutLocale.startsWith("/create")) {
+        if (token) {
+          const url = new URL(`/provider/dashboard${search}`, req.url);
+          return NextResponse.redirect(url, 307);
+        }
+      }
+
+      if (protectedPaths.some((path) => pathnameWithoutLocale.startsWith(path))) {
+        if (!token) {
+          const url = new URL(`/signin`, req.url);
+          url.searchParams.set("callbackUrl", pathname + search);
+          return NextResponse.redirect(url, 307);
+        }
+      }
+
+      const url = req.nextUrl.clone();
+      url.pathname = `/${locale}${pathname}`;
+      
+      const response = NextResponse.rewrite(url);
+      
       response.cookies.set("NEXT_LOCALE", locale, {
         maxAge: 31536000,
         path: "/",
         sameSite: "lax",
       });
-  
+      
       response.headers.set("Content-Language", locale);
+      response.headers.set("X-Robots-Tag", "index, follow");
+      
+      response.headers.set("X-Frame-Options", "DENY");
+      response.headers.set("X-Content-Type-Options", "nosniff");
+      response.headers.set("X-XSS-Protection", "1; mode=block");
+      response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+      
       return response;
     }
-  
-    // Redirect only for NON-default locales
+    
     const url = new URL(`/${locale}${pathname}${search}`, req.url);
-  
-    const response = NextResponse.redirect(url, 302);
-  
+    const response = NextResponse.redirect(url, 301);
+    
     response.cookies.set("NEXT_LOCALE", locale, {
       maxAge: 31536000,
       path: "/",
       sameSite: "lax",
     });
-  
+    
     return response;
   }
 
   const locale = segments[0];
   const pathnameWithoutLocale = "/" + segments.slice(1).join("/");
-
   const token = await getToken({ req, secret });
 
   const protectedPaths = [
@@ -107,20 +138,20 @@ export async function  proxy(req: NextRequest) {
   if (protectedPaths.some((path) => pathnameWithoutLocale.startsWith(path))) {
     if (!token) {
       const url = new URL(`/${locale}/signin`, req.url);
-      url.searchParams.set("callbackUrl", pathname + search); 
-      
+      url.searchParams.set("callbackUrl", pathname + search);
       return NextResponse.redirect(url, 307);
     }
   }
 
   const response = NextResponse.next();
   
+  response.headers.set("Content-Language", locale);
+  response.headers.set("X-Robots-Tag", "index, follow");
+  
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("X-XSS-Protection", "1; mode=block");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-  
-  response.headers.set("Content-Language", locale);
   
   return response;
 }
