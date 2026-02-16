@@ -35,9 +35,10 @@ function getOGLocale(locale: string): string {
 export async function generateMetadata({
   params,
 }: {
-  params: { location?: string };
-}): Promise<Metadata> {
-  const locale = params?.location || i18n.defaultLocale;
+  params: Promise<{ location?: string }>;
+}){
+
+  const locale = (await params).location || i18n.defaultLocale;
   const baseUrl = "https://www.taskoria.com";
 
   const titles: Record<string, string> = {
@@ -157,14 +158,14 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function RootLayout({
+export  default async function RootLayout({
   children,
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { location?: string };
+  params: Promise<{ location?: string }>;
 }>) {
-  const locale = params?.location || i18n.defaultLocale;
+  const locale = (await params).location || i18n.defaultLocale;
 
   return (
     <html 
