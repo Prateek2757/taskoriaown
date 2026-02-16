@@ -57,26 +57,37 @@ export default function HeroSection() {
     setOpenModal(true);
   };
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Australia's Trusted AI Powered Marketplace",
-    "description": "Connect with verified professionals through our AI-powered platform. Find trusted service providers across 50+ Australian cities for cleaning, web development, and more.",
-    "url": typeof window !== 'undefined' ? window.location.origin : '',
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": `${typeof window !== 'undefined' ? window.location.origin : ''}/services/{search_term_string}`
-      },
-      "query-input": "required name=search_term_string"
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Taskoria",
+      "url":"www.taskoria.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": `www.taskoria.com/services/{search_term_string}`
+        },
+        "query-input": "required name=search_term_string"
+      }
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.5",
-      "reviewCount": "5000"
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Taskoria",
+      "url": "www.taskoria.com",
+      "logo": `www.taskoria.com/taskorialogonew.png`, 
+      "description": "Australia's Trusted AI Powered Marketplace for verified professionals.",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.5",
+        "reviewCount": "5000",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
     }
-  };
+  ];
 
   return (
     <>

@@ -7,18 +7,21 @@ import Image from "next/image";
 
 const reviews = [
   {
+    id:"1",
     name: "Chong",
     username: "Brisbane, QLD",
     body: "This was my first time using Taskoria and I was a bit unsure at first, but it turned out great. The process was straightforward, and I liked that everything was handled in one place. The service provider was professional and responsive. Overall, a very positive experience.",
     img: "/chongmin.png",
   },
   {
+    id:"2",
     name: "Aayuskha",
     username: "Gold Coast, QLD",
     body: "Taskoria saved me a lot of time. I needed an electrician urgently and didn’t want to call around. Within a short time, I had a couple of good options and could compare them easily. The job was completed on time and communication was solid throughout. Very convenient platform.",
     img: "/aayushka.png",
   },
   {
+    id:"3",
     name: "Zaya",
     username: "Sydney, NSW",
     body: "I hired a graphic designer through Taskoria for a small business project. What stood out was how relevant the matches were — I didn’t get random quotes. The designer understood the brief well and delivered exactly what I needed. The platform feels well thought out and easy to use.",
@@ -49,6 +52,7 @@ const ReviewCard = ({
         // dark styles
         "dark:border-gray-50/10 dark:bg-gray-50/10 dark:hover:bg-gray-50/15"
       )}
+      
     >
       <div className="flex flex-row items-center gap-2">
         <Image
