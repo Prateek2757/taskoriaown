@@ -55,34 +55,33 @@ export async function  proxy(req: NextRequest) {
 
   if (!hasLocale) {
     const locale = getLocale(req);
-    
+  
+    // If default locale → DO NOTHING
     if (locale === i18n.defaultLocale) {
-      const url = req.nextUrl.clone();
-      url.pathname = `/${locale}${pathname}`;
-      
-      const response = NextResponse.rewrite(url);
-      
-      response.cookies.set("NEXT_LOCALE", locale, {
-        maxAge: 31536000, 
-        path: "/",
-        sameSite: "lax",
-      });
-      
-      response.headers.set("Content-Language", locale);
-      
-      return response;
-    } else {
-      const url = new URL(`/${locale}${pathname}${search}`, req.url);
-      
-      const response = NextResponse.redirect(url, 302);
+      const response = NextResponse.next();
+  
       response.cookies.set("NEXT_LOCALE", locale, {
         maxAge: 31536000,
         path: "/",
         sameSite: "lax",
       });
-      
+  
+      response.headers.set("Content-Language", locale);
       return response;
     }
+  
+    // Redirect only for NON-default locales
+    const url = new URL(`/${locale}${pathname}${search}`, req.url);
+  
+    const response = NextResponse.redirect(url, 302);
+  
+    response.cookies.set("NEXT_LOCALE", locale, {
+      maxAge: 31536000,
+      path: "/",
+      sameSite: "lax",
+    });
+  
+    return response;
   }
 
   const locale = segments[0];
