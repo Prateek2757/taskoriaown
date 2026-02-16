@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
 import { i18n } from "../../i18n-config";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 3600; 
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.taskoria.com";
   const currentDate = new Date();
@@ -19,7 +22,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const legalRoutes = [
     { path: "/privacy-policy", priority: 0.3, changeFreq: "yearly" as const },
-    { path: "/terms-and-conditions", priority: 0.3, changeFreq: "yearly" as const },
+    {
+      path: "/terms-and-conditions",
+      priority: 0.3,
+      changeFreq: "yearly" as const,
+    },
     { path: "/cookie-policy", priority: 0.3, changeFreq: "yearly" as const },
   ];
 
@@ -27,7 +34,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const res = await fetch(`${baseUrl}/api/signup/category-selection`, {
       cache: "no-store",
-      next: { revalidate: 3600 }, 
     });
 
     if (res.ok) {
@@ -60,31 +66,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       languages: {} as Record<string, string>,
     };
 
+    i18n.locales.forEach((loc) => {
+      const localePath = loc === i18n.defaultLocale ? "" : `/${loc}`;
+      alternates.languages[loc] = `${baseUrl}${localePath}${route.path}`;
+    });
+
+    alternates.languages["x-default"] = `${baseUrl}${route.path}`;
+
     i18n.locales.forEach((locale) => {
       const localePath = locale === i18n.defaultLocale ? "" : `/${locale}`;
-      alternates.languages[locale] = `${baseUrl}${localePath}${route.path}`;
-    });
 
-    alternates.languages['x-default'] = `${baseUrl}${route.path}`;
-
-    sitemapEntries.push({
-      url: `${baseUrl}${route.path}`,
-      lastModified: lastMod,
-      changeFrequency: route.changeFreq,
-      priority: route.priority,
-      alternates,
-    });
-
-    i18n.locales.forEach((locale) => {
-      if (locale !== i18n.defaultLocale) {
-        sitemapEntries.push({
-          url: `${baseUrl}/${locale}${route.path}`,
-          lastModified: lastMod,
-          changeFrequency: route.changeFreq,
-          priority: route.priority,
-          alternates,
-        });
-      }
+      sitemapEntries.push({
+        url: `${baseUrl}${localePath}${route.path}`,
+        lastModified: lastMod,
+        changeFrequency: route.changeFreq,
+        priority: route.priority,
+        alternates,
+      });
     });
   });
 
