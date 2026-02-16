@@ -81,11 +81,7 @@ const Footer = () => {
 
   return (
     <>
-      <Script
-        src="//widget.trustpilot.com/bootstrap/v5/tp.wzdget.bootstrap.min.js"
-        strategy="lazyOnload"
-        onLoad={() => setTrustpilotLoaded(true)}
-      />
+     
 
       <div
         className="relative h-full overflow-hidden sm:pt-14 pt-8 
@@ -102,7 +98,7 @@ const Footer = () => {
               >
                 <Image
                   src="/taskorialogonew.png"
-                  alt="Taskoria Logo"
+                  alt="Taskoria - Trusted Local Services Marketplace in Australia"
                   width={35}
                   height={35}
                   className="rounded-md"
@@ -495,6 +491,45 @@ const Footer = () => {
             </div>
           </div>
         </div>
+        <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": "https://www.taskoria.com",
+      name: "Taskoria Pty Ltd",
+      url: "https://www.taskoria.com",
+      logo: "https://www.taskoria.com/taskorialogonew.png",
+      image: "https://www.taskoria.com/taskorialogonew.png",
+      description:
+        "Taskoria is a trusted platform connecting customers with verified local professionals across Australia.",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Queensland",
+        postalCode: "4350",
+        addressCountry: "AU"
+      },
+      areaServed: {
+        "@type": "Country",
+        name: "Australia"
+      },
+      sameAs: [
+        "https://www.instagram.com/taskoria.au/",
+        "https://www.linkedin.com/company/taskoriaa/about/",
+        "http://facebook.com/profile.php?id=61582506497352",
+        "https://www.trustpilot.com/review/taskoria.com"
+      ],
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.8",
+        reviewCount: "100",
+        bestRating: "5",
+        worstRating: "1"
+      }
+    })
+  }}
+/>
       </div>
     </>
   );

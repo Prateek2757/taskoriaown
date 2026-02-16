@@ -130,6 +130,38 @@ export default function Testomonail() {
           }),
         }}
       />
+      <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Taskoria",
+      "url": "https://www.taskoria.com",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "reviewCount": reviews.length.toString(),
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "review": reviews.map((r) => ({
+        "@type": "Review",
+        "author": {
+          "@type": "Person",
+          "name": r.name,
+        },
+        "reviewBody": r.body,
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "5",
+          "bestRating": "5",
+          "worstRating": "1"
+        }
+      })),
+    }),
+  }}
+/>
     </section>
   );
 }
