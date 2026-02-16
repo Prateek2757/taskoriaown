@@ -1,7 +1,7 @@
-
 "use client";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { motion } from "motion/react";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
@@ -9,9 +9,10 @@ import { useRouter } from "next/navigation";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import axios from "axios";
 import Link from "next/link";
+
 export const dynamic = "force-dynamic";
 
-export default function SignInPage() {
+function SignInForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -19,23 +20,21 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
-
   const { joinAsProvider, loading: joinLoading } = useJoinAsProvider();
-
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const error = searchParams.get("error");
-  
+
     if (error) {
       if (error === "not_registered") {
         setMessage("This Google account is not registered. Please sign up first.");
       }
-  
+
       if (error === "OAuthAccountNotLinked") {
         setMessage("This email is already registered with another method.");
       }
-  
+
       router.replace("/signin", { scroll: false });
     }
   }, [searchParams, router]);
@@ -78,7 +77,6 @@ export default function SignInPage() {
       setTimeout(() => router.push("/provider/dashboard"));
     }
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-linear-to-br from-white via-gray-50 to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-black transition-colors duration-300">
@@ -141,7 +139,7 @@ export default function SignInPage() {
                   placeholder="••••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full  p-3.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/60 focus:border-transparent shadow-sm transition"
+                  className="w-full p-3.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/60 focus:border-transparent shadow-sm transition"
                   required
                 />
                 <button
@@ -153,17 +151,17 @@ export default function SignInPage() {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-
             </div>
 
             <motion.button
               whileTap={{ scale: 0.97 }}
               disabled={loading}
               type="submit"
-              className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${loading
-                ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
-                : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
-                }`}
+              className={`mt-1 w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
+                loading
+                  ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
+                  : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
+              }`}
             >
               {loading ? (
                 <>
@@ -180,10 +178,11 @@ export default function SignInPage() {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className={`text-center text-sm font-medium ${message.includes("Successful")
-                ? "text-cyan-500"
-                : "text-red-500"
-                }`}
+              className={`text-center text-sm font-medium ${
+                message.includes("Successful")
+                  ? "text-cyan-500"
+                  : "text-red-500"
+              }`}
             >
               {message}
             </motion.p>
@@ -196,28 +195,30 @@ export default function SignInPage() {
             </span>
             <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
           </div>
+
           <button
             onClick={() =>
               signIn("google", { callbackUrl: "/provider/dashboard" })
             }
-            className="mt-2 w-full flex items-center justify-center p-3 dark:text-gray-300 dark:bg-black rounded-xl
-  bg-white border border-gray-500 shadow-sm hover:bg-gray-100"
+            className="mt-2 w-full flex items-center justify-center p-3 dark:text-gray-300 dark:bg-black rounded-xl bg-white border border-gray-500 shadow-sm hover:bg-gray-100"
           >
             <img
               src="/images/googleicon.svg"
-              alt="siginwith google"
+              alt="Sign in with Google"
               className="w-5 h-5 mr-2"
             />
             Sign in with Google
           </button>
+
           <motion.button
             whileTap={{ scale: 0.97 }}
             disabled={joinLoading}
             onClick={joinAsProvider}
-            className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${joinLoading
-              ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
-              : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
-              }`}
+            className={`w-full flex items-center justify-center gap-2 p-3 rounded-xl font-semibold text-white shadow-lg transition-all ${
+              joinLoading
+                ? "bg-gradient-to-r from-blue-400 to-cyan-400 opacity-80"
+                : "bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 hover:shadow-xl hover:scale-[1.02]"
+            }`}
           >
             {joinLoading ? (
               <>
@@ -231,5 +232,26 @@ export default function SignInPage() {
         </div>
       </motion.div>
     </div>
+  );
+}
+
+function SignInLoading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center p-6 bg-linear-to-br from-white via-gray-50 to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-black">
+      <div className="relative w-full max-w-md">
+        <div className="relative bg-white/70 dark:bg-black/40 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 dark:border-white/10 p-10 flex flex-col items-center gap-6">
+          <Loader2 className="animate-spin h-8 w-8 text-blue-500" />
+          <p className="text-gray-600 dark:text-gray-300">Loading...</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<SignInLoading />}>
+      <SignInForm />
+    </Suspense>
   );
 }
