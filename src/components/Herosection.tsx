@@ -61,26 +61,41 @@ export default function HeroSection() {
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
+      "@id": "https://www.taskoria.com/#website",
       "name": "Taskoria",
-      "url":"www.taskoria.com",
+      "url": "https://www.taskoria.com",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": `www.taskoria.com/services/{search_term_string}`
-        },
+        "target": "https://www.taskoria.com/services/{search_term_string}",
         "query-input": "required name=search_term_string"
       }
     },
     {
       "@context": "https://schema.org",
       "@type": "Organization",
+      "@id": "https://www.taskoria.com/#organization",
       "name": "Taskoria",
-      "url": "www.taskoria.com",
-      "logo": `www.taskoria.com/taskorialogonew.png`, 
-      "description": "Australia's Trusted AI Powered Marketplace for verified professionals.",
+      "url": "https://www.taskoria.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.taskoria.com/taskorialogonew.png",
+        "width": 250,
+        "height": 60
+      },
+      "description": "Australia's trusted AI-powered marketplace connecting customers with verified professionals.",
+      "sameAs": [
+        "https://www.facebook.com/taskoria",
+        "https://twitter.com/taskoria",
+        "https://www.linkedin.com/company/taskoria",
+        "https://www.instagram.com/taskoria"
+      ],
+      "areaServed": {
+        "@type": "Country",
+        "name": "Australia"
+      }
     }
   ];
+  
 
   return (
     <>
