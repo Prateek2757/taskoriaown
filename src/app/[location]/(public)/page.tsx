@@ -93,146 +93,69 @@ const structuredData = {
     {
       "@type": "Organization",
       "@id": "https://www.taskoria.com/#organization",
-      name: "Taskoria",
-      url: "https://www.taskoria.com",
-      logo: {
+      "name": "Taskoria",
+      "url": "https://www.taskoria.com",
+      "logo": {
         "@type": "ImageObject",
-        url: "https://www.taskoria.com/taskorialogonew.png",
-        width: 250,
-        height: 60,
+        "url": "https://www.taskoria.com/taskorialogonew.png",
+        "width": 250,
+        "height": 60,
       },
-      description: "Australia's trusted AI-powered service marketplace connecting customers with verified professionals.",
-      address: {
+      "description": "Australia's trusted AI-powered service marketplace.",
+      "address": {
         "@type": "PostalAddress",
-        addressCountry: "AU",
+        "addressCountry": "AU",
       },
-      contactPoint: {
-        "@type": "ContactPoint",
-        contactType: "Customer Service",
-        availableLanguage: ["English"],
-        telephone: "+61-XXX-XXX-XXX",
-      },
-      sameAs: [
-        "https://www.facebook.com/taskoria",
-        "https://twitter.com/taskoria",
-        "https://www.linkedin.com/company/taskoria",
-        "https://www.instagram.com/taskoria",
-      ],
-      aggregateRating: {
+      "aggregateRating": {
         "@type": "AggregateRating",
-        ratingValue: "4.5",
-        reviewCount: "5000",
-        bestRating: "5",
-        worstRating: "1",
+        "ratingValue": "4.5",
+        "reviewCount": "5000",
+        "bestRating": "5",
+        "worstRating": "1",
       },
     },
-    // WebSite Schema
     {
       "@type": "WebSite",
       "@id": "https://www.taskoria.com/#website",
-      url: "https://www.taskoria.com",
-      name: "Taskoria",
-      description: "Australia's #1 AI-Powered Service Marketplace",
-      publisher: {
-        "@id": "https://www.taskoria.com/#organization",
-      },
-      potentialAction: {
+      "url": "https://www.taskoria.com",
+      "name": "Taskoria",
+      "publisher": { "@id": "https://www.taskoria.com/#organization" },
+      "potentialAction": {
         "@type": "SearchAction",
-        target: {
+        "target": {
           "@type": "EntryPoint",
-          urlTemplate: "https://www.taskoria.com/services/{search_term_string}",
+          "urlTemplate": "https://www.taskoria.com/services/{search_term_string}",
         },
         "query-input": "required name=search_term_string",
       },
     },
     {
-      "@type": "WebPage",
-      "@id": "https://www.taskoria.com/#webpage",
-      url: "https://www.taskoria.com",
-      name: "Taskoria - Australia's #1 AI-Powered Service Marketplace",
-      description: "Connect with verified service providers across Australia. AI-powered matching for all your service needs.",
-      isPartOf: {
-        "@id": "https://www.taskoria.com/#website",
-      },
-      about: {
-        "@id": "https://www.taskoria.com/#organization",
-      },
-      breadcrumb: {
-        "@id": "https://www.taskoria.com/#breadcrumb",
-      },
-    },
-    {
       "@type": "Service",
-      serviceType: "Service Marketplace",
-      provider: {
-        "@id": "https://www.taskoria.com/#organization",
-      },
-      areaServed: {
-        "@type": "Country",
-        name: "Australia",
-      },
-      hasOfferCatalog: {
+      "name": "Taskoria AI-Powered Marketplace",
+      "serviceType": "Service Marketplace",
+      "provider": { "@id": "https://www.taskoria.com/#organization" },
+      "areaServed": { "@type": "Country", "name": "Australia" },
+      "hasOfferCatalog": {
         "@type": "OfferCatalog",
-        name: "Service Categories",
-        itemListElement: [
+        "name": "Service Categories",
+        "itemListElement": [
           {
             "@type": "OfferCatalog",
-            name: "Cleaning Services",
-            itemListElement: [
-              {
-                "@type": "Offer",
-                itemOffered: {
-                  "@type": "Service",
-                  name: "Home Cleaning",
-                },
-              },
-            ],
+            "name": "Cleaning Services",
+            "itemListElement": [{ "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Home Cleaning" } }]
           },
           {
             "@type": "OfferCatalog",
-            name: "Web Development",
-            itemListElement: [
-              {
-                "@type": "Offer",
-                itemOffered: {
-                  "@type": "Service",
-                  name: "Website Development",
-                },
-              },
-            ],
-          },
-          {
-            "@type": "OfferCatalog",
-            name: "Plumbing Services",
-            itemListElement: [
-              {
-                "@type": "Offer",
-                itemOffered: {
-                  "@type": "Service",
-                  name: "Plumbing & Repairs",
-                },
-              },
-            ],
-          },
+            "name": "Web Development",
+            "itemListElement": [{ "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Development" } }]
+          }
         ],
-      },
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.5",
-        reviewCount: "5000",
       },
     },
     {
       "@type": "BreadcrumbList",
       "@id": "https://www.taskoria.com/#breadcrumb",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: "https://www.taskoria.com",
-        },
-      ],
+      "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.taskoria.com" }],
     },
   ],
 };

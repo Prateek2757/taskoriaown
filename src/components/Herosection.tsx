@@ -52,9 +52,11 @@ export default function HeroSection() {
     setOpenModal(true);
   };
 
-  const handleSelectCategory = (cat: Category) => {
-    setSelectedCategory(cat);
-    setOpenModal(true);
+  const handleSelectCategory = (cat: Category | null) => {
+    if (cat) {
+      setSelectedCategory(cat);
+      setOpenModal(true);
+    }
   };
 
   const structuredData = [
