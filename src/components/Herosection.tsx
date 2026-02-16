@@ -79,13 +79,6 @@ export default function HeroSection() {
       "url": "www.taskoria.com",
       "logo": `www.taskoria.com/taskorialogonew.png`, 
       "description": "Australia's Trusted AI Powered Marketplace for verified professionals.",
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.5",
-        "reviewCount": "5000",
-        "bestRating": "5",
-        "worstRating": "1"
-      }
     }
   ];
 
