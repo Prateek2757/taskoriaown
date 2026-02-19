@@ -20,6 +20,7 @@ export async function GET() {
         ci.name AS location_name,
         up.is_nationwide,
         u.is_email_verified,
+        u.referral_code,
         up.profile_image_url,
         json_agg(
           json_build_object(
@@ -33,7 +34,7 @@ export async function GET() {
       LEFT JOIN service_categories sc ON sc.category_id = uc.category_id
       LEFT JOIN cities ci ON ci.city_id = up.location_id
       WHERE up.user_id = $1
-      GROUP BY up.user_id, up.display_name, up.location_id,u.is_email_verified, ci.name, up.is_nationwide, up.profile_image_url
+      GROUP BY up.user_id, up.display_name,u.referral_code, up.location_id,u.is_email_verified, ci.name, up.is_nationwide, up.profile_image_url
     ),
 response_stats AS (
   SELECT

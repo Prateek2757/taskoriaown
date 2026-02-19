@@ -4,8 +4,19 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import {
-  Menu as MenuIcon, X, User, ChevronDown, Search, Users,
-  LayoutDashboard, MessageSquare, LogOut, Home, HandPlatter, Binoculars, Star,
+  Menu as MenuIcon,
+  X,
+  User,
+  ChevronDown,
+  Search,
+  Users,
+  LayoutDashboard,
+  MessageSquare,
+  LogOut,
+  Home,
+  HandPlatter,
+  Binoculars,
+  Star,
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
@@ -24,20 +35,20 @@ export default function ModernNavbar() {
   const [viewMode, setViewMode] = useState<ViewMode>(null);
   const { joinAsProvider, loading } = useJoinAsProvider();
   const { data: session, status } = useSession();
-  
+
   const pathname = usePathname();
-  
+
   const params = useParams();
   const router = useRouter();
   const profileRef = useRef<HTMLDivElement>(null);
-  
-  const locale = (params.locale as string) || "en-au"; 
+
+  const locale = (params.locale as string) || "en-au";
 
   const minimalPages = ["/create", "/create-account"];
 
   const navLinks = {
     public: [
-      { name: "Home", href: "/", icon: Home }, 
+      { name: "Home", href: "/", icon: Home },
       { name: "Services", href: "/services", icon: HandPlatter },
     ],
     customer: [
@@ -50,15 +61,21 @@ export default function ModernNavbar() {
       { name: "Home", href: "/", icon: Home },
       { name: "Leads", href: "/provider/leads", icon: Search },
       { name: "Inbox", href: "/messages/null", icon: MessageSquare },
-      { name: "My Responses", href: "/provider-responses", icon: MessageSquare },
+      {
+        name: "My Responses",
+        href: "/provider-responses",
+        icon: MessageSquare,
+      },
       { name: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
     ],
   };
 
-
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(e.target as Node)
+      ) {
         setIsProfileOpen(false);
       }
     };
@@ -73,7 +90,8 @@ export default function ModernNavbar() {
       setViewMode(stored);
       return;
     }
-    const defaultView = session.user.role === "provider" ? "provider" : "customer";
+    const defaultView =
+      session.user.role === "provider" ? "provider" : "customer";
     setViewMode(defaultView);
     localStorage.setItem("viewMode", defaultView);
   }, [session]);
@@ -105,7 +123,9 @@ export default function ModernNavbar() {
     localStorage.setItem("viewMode", newView);
     setIsProfileOpen(false);
     setIsMenuOpen(false);
-    router.push(newView === "provider" ? "/provider/dashboard" : "/customer/dashboard");
+    router.push(
+      newView === "provider" ? "/provider/dashboard" : "/customer/dashboard"
+    );
   };
 
   const getCurrentLinks = () => {
@@ -117,24 +137,22 @@ export default function ModernNavbar() {
 
   const currentLinks = getCurrentLinks();
 
-  
-
   const getLocalizedHref = (href: string) => {
-    if(href === "/") return `/${locale}`;
-    return `/${locale}${href}` ;
+    if (href === "/") return `/${locale}`;
+    return `/${locale}${href}`;
   };
 
   const renderProfileDropdown = () => {
-     const canSwitchView = session?.user?.role === "provider";
-     return (
-        <motion.div
+    const canSwitchView = session?.user?.role === "provider";
+    return (
+      <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.15 }}
         className="absolute right-0 mt- w-72 bg-white dark:bg-gray-900 rounded-xl shadow-xl overflow-hidden z-[999]"
       >
-         <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <div className="relative">
               <div
@@ -142,7 +160,7 @@ export default function ModernNavbar() {
       bg-gradient-to-br from-blue-100 to-cyan-100
       dark:from-blue-900 dark:to-cyan-900
       transition-all group-hover:scale-[1.05] overflow-hidden
-      ${session?.user.status === "active" ||  session?.user.status ==="trialing" ? "ring-2 ring-yellow-400" : ""}`}
+      ${session?.user.status === "active" || session?.user.status === "trialing" ? "ring-2 ring-yellow-400" : ""}`}
               >
                 {session?.user?.image ? (
                   <Image
@@ -158,16 +176,17 @@ export default function ModernNavbar() {
                 )}
               </div>
 
-              {session?.user.status === "active" || session?.user.status ==="trialing" && (
-                <div
-                  className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full
+              {session?.user.status === "active" ||
+                (session?.user.status === "trialing" && (
+                  <div
+                    className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full
                  bg-gradient-to-br from-yellow-400 to-orange-500
                  flex items-center justify-center
                  ring-2 ring-white dark:ring-slate-900 shadow-md"
-                >
-                  <Star className="w-3 h-3 text-white fill-white" />
-                </div>
-              )}
+                  >
+                    <Star className="w-3 h-3 text-white fill-white" />
+                  </div>
+                ))}
             </div>
 
             <div className="flex-1 min-w-0">
@@ -221,6 +240,20 @@ export default function ModernNavbar() {
           ) : (
             ""
           )}
+          {session?.user.public_id ? (
+            <Link
+              href={`/providerprofile/${session.user.public_id}`}
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsProfileOpen(false);
+              }}
+              className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+            >
+              View Public Profile
+            </Link>
+          ) : (
+            ""
+          )}
 
           <Link
             href="/settings/profile/my-profile"
@@ -240,11 +273,11 @@ export default function ModernNavbar() {
           </button>
         </div>
       </motion.div>
-     )
+    );
   };
 
   if (status === "loading") {
-     return (
+    return (
       <header className="bg-white dark:bg-gray-900/95 backdrop-blur-md border-b sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -260,9 +293,19 @@ export default function ModernNavbar() {
     <>
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/30 dark:bg-gray-900/20 border-b border-white/40 dark:border-white/10 shadow-lg shadow-black/5 dark:shadow-white/5 transition-colors w-full">
         <div className="container mx-auto px-4 py-2 flex items-center justify-between relative">
-          <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
-            <Image src="/taskorialogonew.png" alt="taskorialogo" height={41} width={28} />
-            <span className="text-2xl font-bold bg-[#3C7DED] bg-clip-text text-transparent">Taskoria</span>
+          <Link
+            href="/"
+            className="flex items-center hover:opacity-90 transition-opacity"
+          >
+            <Image
+              src="/taskorialogonew.png"
+              alt="taskorialogo"
+              height={41}
+              width={28}
+            />
+            <span className="text-2xl font-bold bg-[#3C7DED] bg-clip-text text-transparent">
+              Taskoria
+            </span>
           </Link>
 
           {!minimalPages.includes(pathname) && (
@@ -273,10 +316,10 @@ export default function ModernNavbar() {
               transition={{ duration: 0.3 }}
             >
               <SlidingUnderlineNav
-                currentLinks={currentLinks.map(link => ({
+                currentLinks={currentLinks.map((link) => ({
                   ...link,
-                  // href: getLocalizedHref(link.href) 
-                  href:link.href
+                  // href: getLocalizedHref(link.href)
+                  href: link.href,
                 }))}
                 pathname={pathname}
               />
@@ -295,13 +338,13 @@ export default function ModernNavbar() {
                     variant="ghost"
                     className="flex items-center gap-2 px py-2 rounded-full transition-all"
                   >
-                     <div className="relative">
+                    <div className="relative">
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center
       bg-gradient-to-br from-blue-100 to-cyan-100
       dark:from-blue-900 dark:to-cyan-900
       transition-all group-hover:scale-[1.05] overflow-hidden
-      ${session?.user.status === "active" || session?.user.status ==="trialing" ? "ring-2 ring-yellow-400" : ""}
+      ${session?.user.status === "active" || session?.user.status === "trialing" ? "ring-2 ring-yellow-400" : ""}
       `}
                       >
                         {session?.user?.image ? (
@@ -318,16 +361,17 @@ export default function ModernNavbar() {
                         )}
                       </div>
 
-                      {session?.user.status === "active" || session?.user.status ==="trialing"&& (
-                        <div
-                          className="absolute -bottom-1 -right-1 w-5 h-5 py-1 rounded-full
+                      {session?.user.status === "active" ||
+                        (session?.user.status === "trialing" && (
+                          <div
+                            className="absolute -bottom-1 -right-1 w-5 h-5 py-1 rounded-full
                  bg-gradient-to-br from-yellow-400 to-orange-500
                  flex items-center justify-center
                  ring-2 ring-white dark:ring-slate-900 shadow-md"
-                        >
-                          <Star className=" text-white fill-white" />
-                        </div>
-                      )}
+                          >
+                            <Star className=" text-white fill-white" />
+                          </div>
+                        ))}
                     </div>
                     <span className="font-medium text-gray-700 dark:text-gray-300">
                       {session.user?.name?.split(" ")[0] || "User"}
@@ -362,7 +406,7 @@ export default function ModernNavbar() {
               </div>
             </div>
           )}
-           <div className=" md:hidden ml-50 ">
+          <div className=" md:hidden ml-50 ">
             <NotificationBell userId={Number(session?.user?.id)} />
           </div>
           <Button
@@ -394,7 +438,7 @@ export default function ModernNavbar() {
               transition={{ type: "spring", damping: 40, stiffness: 300 }}
               className="fixed left-0 top-0 bottom-0 w-80 bg-white dark:bg-gray-900 shadow-2xl z-[9999] overflow-y-auto"
             >
-               <div className="p-6 border-b border-gray-100 dark:border-gray-800">
+              <div className="p-6 border-b border-gray-100 dark:border-gray-800">
                 <div className="flex items-center justify-between mb-6">
                   <Link
                     href="/"
@@ -433,7 +477,7 @@ export default function ModernNavbar() {
       bg-gradient-to-br from-blue-100 to-cyan-100
       dark:from-blue-900 dark:to-cyan-900
       transition-all group-hover:scale-[1.05] overflow-hidden
-      ${session?.user.status === "active" || session?.user.status ==="trialing"? "ring-2 ring-yellow-400" : ""}`}
+      ${session?.user.status === "active" || session?.user.status === "trialing" ? "ring-2 ring-yellow-400" : ""}`}
                         >
                           {session?.user?.image ? (
                             <Image
@@ -449,16 +493,17 @@ export default function ModernNavbar() {
                           )}
                         </div>
 
-                        {session?.user.status === "active" || session?.user.status ==="trialing"&& (
-                          <div
-                            className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full
+                        {session?.user.status === "active" ||
+                          (session?.user.status === "trialing" && (
+                            <div
+                              className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full
                  bg-gradient-to-br from-yellow-400 to-orange-500
                  flex items-center justify-center
                  ring-2 ring-white dark:ring-slate-900 shadow-md"
-                          >
-                            <Star className="w-3 h-3 text-white fill-white" />
-                          </div>
-                        )}
+                            >
+                              <Star className="w-3 h-3 text-white fill-white" />
+                            </div>
+                          ))}
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-gray-900 dark:text-gray-100 truncate text-lg">
@@ -481,15 +526,16 @@ export default function ModernNavbar() {
               <nav className="p-4 space-y-2">
                 {currentLinks.map((link) => {
                   const Icon = link.icon;
-        
-                  const isActive = link.href === "/" 
-                    ? pathname === "/"
-                    : pathname.startsWith(link.href);
+
+                  const isActive =
+                    link.href === "/"
+                      ? pathname === "/"
+                      : pathname.startsWith(link.href);
 
                   return (
                     <Link
                       key={link.name}
-                      href={getLocalizedHref(link.href)} 
+                      href={getLocalizedHref(link.href)}
                       onClick={() => setIsMenuOpen(false)}
                       className={`flex items-center gap-3 px-4 py-3 rounded-full font-medium transition-colors ${
                         isActive
@@ -508,7 +554,7 @@ export default function ModernNavbar() {
                     </Link>
                   );
                 })}
-                 {session?.user.adminrole === "admin" ? (
+                {session?.user.adminrole === "admin" ? (
                   <Link
                     href="/adminbudgetmanager"
                     onClick={() => setIsMenuOpen(false)}
@@ -539,7 +585,7 @@ export default function ModernNavbar() {
                     </div>
                   </button>
                 )}
-                 {session ? (
+                {session ? (
                   <>
                     <button
                       onClick={() => {

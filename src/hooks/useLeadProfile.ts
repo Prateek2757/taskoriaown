@@ -42,6 +42,7 @@ export type Profile = {
   logo_url?: string;
   is_pro?: boolean;
   active_subscription?: Subscription | null;
+  referral_code?:string;
 };
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
@@ -53,6 +54,7 @@ export function useLeadProfile() {
     isLoading,
     mutate,
   } = useSWR<Profile>("/api/user_profiles", fetcher);
+console.log(profile,"data ");
 
   const { data: categories = [], mutate: mutateCategories } = useSWR<
     Category[]

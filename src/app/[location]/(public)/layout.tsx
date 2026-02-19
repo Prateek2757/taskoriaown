@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import "../../globals.css";
 import { UserProvider } from "@/context/userContext";
 import AuthProvider from "@/context/AuthProvider";
@@ -11,7 +10,6 @@ import type { Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import NotificationHandler from "@/components/NotificationHandler";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Script from "next/script";
 import { i18n } from "../../../../i18n-config";
 
 const poppins = Poppins({

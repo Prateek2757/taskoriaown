@@ -173,8 +173,8 @@
 //   );
 // } 
 "use client";
-import { MessageCircle } from "lucide-react";
 import { motion } from "motion/react";
+import { FaWhatsapp } from "react-icons/fa";
 
 const WHATSAPP_NUMBER = "‪+61 474 655 902‬";
 
@@ -193,10 +193,10 @@ export default function WhatsAppSupportButton() {
       whileHover={{ scale: 1.08 }}
       whileTap={{ scale: 0.95 }}
       onClick={handleWhatsApp}
-      className="fixed bottom-3 right-2 h-14 w-14 rounded-full bg-green-600 text-white shadow-glow-lg z-50 grid place-content-center"
+      className="fixed bottom-3 right-2 h-14 w-14 rounded-full bg-[#2AB319] text-white shadow-glow-lg z-50 grid place-content-center"
       aria-label="Chat on WhatsApp"
     >
-      <MessageCircle className="h-6 w-6" />
+      <FaWhatsapp className="h-11 w-12" />
     </motion.button>
   );
 }

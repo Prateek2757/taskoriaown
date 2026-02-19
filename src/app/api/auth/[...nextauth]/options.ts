@@ -7,6 +7,7 @@ import pool from "@/lib/dbConnect";
 declare module "next-auth" {
   interface User {
     id: string;
+    public_id?:string;
     name: string;
     email?: string;
     image?: string;
@@ -15,6 +16,7 @@ declare module "next-auth" {
     status?: string;
     serviceCategory: string;
     isVerified?: boolean;
+
   }
 
   interface Session {
@@ -25,6 +27,7 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     id: string;
+    public_id?:string;
     name: string;
     email?: string;
     role: string;
@@ -57,6 +60,7 @@ export const authOptions: NextAuthOptions = {
           `
           SELECT 
             u.user_id,
+            u.public_id,
             u.email,
             u.role AS adminrole,
             u.password_hash,
@@ -87,6 +91,7 @@ export const authOptions: NextAuthOptions = {
 
         return {
           id: user.user_id.toString(),
+          public_id:user.public_id,
           adminrole:user.adminrole,
           email: user.email,
           name: user.display_name || "",
@@ -112,6 +117,7 @@ export const authOptions: NextAuthOptions = {
 
         const result = await pool.query(
           `SELECT u.user_id,
+          u.public_id,
           u.role AS adminrole,
           ps.status,
           COALESCE(r.role_name, 'customer') AS role,
@@ -133,6 +139,7 @@ export const authOptions: NextAuthOptions = {
         const existingUser = result.rows[0];
 
         user.id = existingUser.user_id.toString();
+        user.public_id = existingUser.public_id;
         user.name=existingUser.display_name;
         user.adminrole = existingUser.adminrole;
         user.role = existingUser.role;
@@ -146,6 +153,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
+        token.public_id = user.public_id;
         token.name = user.name || "";
         token.email = user.email || "";
         token.role = user.role;
@@ -166,6 +174,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id;
+        session.user.public_id = token.public_id;
         session.user.status = token.status;
         session.user.name = token.name;
         session.user.email = token.email;

@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "../components/ui/button";
 import { MapPin, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -14,7 +13,6 @@ import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import { SparklesCoreLight } from "./ui/sparklesLight";
 import ScrollPopularSection from "./ScrollPopularSection";
 import Image from "next/image";
-import { sendEmail } from "./email/helpers/sendVerificationEmail";
 
 interface Category {
   category_id: number;
@@ -72,7 +70,7 @@ export default function HeroSection() {
         "query-input": "required name=search_term_string"
       }
     },
-    {
+    { 
       "@context": "https://schema.org",
       "@type": "Organization",
       "@id": "https://www.taskoria.com/#organization",
@@ -118,7 +116,7 @@ export default function HeroSection() {
       mx-auto  pb-4  px-4 relative z-10"
         >
           <div className="max-w-4xl mx-auto  space-y-6">
-            <div className="inline-flex gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-2" role="banner">
+            <div className="inline-flex items-center gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-2" role="banner">
               <Image
                 src="/flag-aus.png"
                 alt="Australian flag"

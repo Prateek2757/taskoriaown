@@ -1,13 +1,13 @@
-
 "use client"
-import { Facebook, Github, Globe, Instagram, Linkedin, LucideIcon, PinIcon, Twitter, YoutubeIcon } from "lucide-react";
+
+import { Facebook, Github, Globe, Instagram, Linkedin, LucideIcon, Twitter, YoutubeIcon } from "lucide-react";
 import { FaDiscord, FaPinterest, FaTelegram, FaWhatsapp } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
 
 export interface SocialPlatform {
     id: string;
     name: string;
-    icon: LucideIcon |IconType; // Emoji or we can use react-icons
+    icon: LucideIcon |IconType; 
     baseUrl: string;
     placeholder: string;
     validation: RegExp;

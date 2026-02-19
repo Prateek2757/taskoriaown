@@ -146,7 +146,7 @@ export default function HowTaskoriaWorks() {
                   ref={div1Ref}
                   aria-label="Step 1"
                 >
-                  <span className="dark:text-gray-900 text-[#41AEEE] font-bold text-lg">
+                  <span className="dark:text-gray-900 text-[#41A6EE] font-bold text-lg">
                     1
                   </span>
                 </Circle>

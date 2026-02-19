@@ -15,20 +15,16 @@ export default function ServicesSection() {
     bulkUpdateServices,
   } = useProfileServices();
 
-  // Local state for form inputs
   const [newTitle, setNewTitle] = useState("");
   const [newDesc, setNewDesc] = useState("");
   
-  // Local state for editing
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editDesc, setEditDesc] = useState("");
   
-  // Loading states
   const [adding, setAdding] = useState(false);
   const [updating, setUpdating] = useState<string | null>(null);
   
-  // Delete confirmation state
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [serviceToDelete, setServiceToDelete] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
