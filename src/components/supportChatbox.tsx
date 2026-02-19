@@ -176,9 +176,9 @@
 import { motion } from "motion/react";
 import { FaWhatsapp } from "react-icons/fa";
 
-const WHATSAPP_NUMBER = "‪+61 474 655 902‬";
+const WHATSAPP_NUMBER = "61474655902";    
 
-export default function WhatsAppSupportButton() {
+export default function WhatsAppSupportButton() { 
   const message = "Hi, I need support regarding your service.";
 
   const handleWhatsApp = () => {
