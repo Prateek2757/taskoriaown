@@ -217,9 +217,9 @@ export default function HowTaskoriaWorks() {
                         <div className="bg-blue-100 dark:bg-blue-900/30 w-12 h-12 rounded-lg flex items-center justify-center">
                           <Icon className="w-6 h-6 text-blue-600 dark:text-blue-400" aria-hidden="true" />
                         </div>
-                        <span className="text-3xl font-bold text-gray-400 ">
+                        {/* <span className="text-3xl font-bold text-gray-400 ">
                           {step.id}
-                        </span>
+                        </span> */}
                       </div>
 
                       <h2 className="text-xl max-sm:mb-0 sm:text-xl font-semibold mb-3 dark:text-white">
