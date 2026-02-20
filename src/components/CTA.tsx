@@ -41,33 +41,33 @@ function CTA() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
               </span>
               <span className="text-xs font-medium dark:text-white text-slate-700">
-                Trusted by 5,000+ users worldwide
+                Brisbane-first marketplace with Australia-wide coverage
               </span>
             </div>
 
             <h2 className="text-slate-900 text-2xl sm:text-3xl lg:text-4xl dark:text-white font-bold leading-tight max-w-2xl">
-              Ready to Experience the{" "}
+              Ready to hire without the{" "}
               <span className="bg-clip-text text-transparent bg-[#3C7DED]   animate-gradient">
-                Future?
+                runaround?
               </span>
             </h2>
             <p className="text-slate-400 text-sm sm:text-base mt-1 max-w-xl leading-relaxed">
-              Join thousands of satisfied customers and providers in our
-              AI‑powered, secure marketplace. Start your journey today!
+              Post your job for free, compare responses, and choose the right provider
+              for your timeline and budget.
             </p>
 
             <div className="flex flex-wrap justify-center gap-3 mt-4">
-              <Link href="/services">
+              <Link href="/trust-safety">
                 <Button
                   variant="outline"
                   className="bg-white/80 border-2 border-gray-300 text-slate-900 dark:text-white hover:bg-white hover:border-gray-400 hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg px-6 py-3 text-xs sm:text-base font-semibold"
                 >
-                  Find Services
+                  See Safety & Support
                 </Button>
               </Link>
-              <Link href="/providers">
+              <Link href="/create">
                 <Button className="relative overflow-hidden bg-[#3C7DED]   text-white hover:scale-105 border-0 flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 px-6 py-3 text-xs sm:text-base font-semibold group">
-                  <span className="relative z-10">Become a Provider</span>
+                  <span className="relative z-10">Post a Job Free</span>
                   <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
                   <div className="absolute inset-0 bg-[#3C7DED] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Button>

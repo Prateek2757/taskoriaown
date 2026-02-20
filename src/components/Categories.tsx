@@ -54,7 +54,7 @@ export default function Services() {
   return (
     <section
       className="min-h-screen 
- py-10 px-4 sm:px-6 lg:px-8 dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] "
+ py-5 px-4 sm:px-6 lg:px-8 dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] "
     >
       <div className="max-w-7xl relative mx-auto">
         {/* <motion.div

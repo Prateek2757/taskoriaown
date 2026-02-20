@@ -169,6 +169,20 @@ export default function HomePage() {
       <main className="min-h-screen" role="main">
         <section aria-label="Hero section with service search">
           <HeroSection />
+          <section
+          aria-label="Trust and protection highlights"
+          className="bg-slate-50 dark:bg-slate-950 border-y border-slate-200 dark:border-slate-800"
+        >
+          <div className="container mx-auto px-4 py-4">
+            <p className="text-sm text-slate-700 dark:text-slate-300 text-center">
+              Provider checks, transparent messaging, and support for unresolved issues.{" "}
+              <a href="/trust-safety" className="font-semibold text-blue-600 hover:underline">
+                Learn how Taskoria keeps you safer
+              </a>
+              .
+            </p>
+          </div>
+        </section>
         </section>
 
         <section aria-label="How Taskoria works">

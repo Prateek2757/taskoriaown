@@ -83,20 +83,17 @@ export default function Testomonail() {
       className="bg-card dark:bg-[radial-gradient(circle_at_top,_rgba(76,112,255,0.18)_0%,_rgba(0,0,0,1)_70%)] py-16 px-4"
       id="customer-reviews"
     >
-      <div className="text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800"
-        >
+     <div className="text-center">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800">
           <QuoteIcon className="w-3.5 h-3.5" />
           Testimonials
-        </motion.div>
+        </div>
         <h2 className="text-3xl font-semibold text-center text-foreground">
-          Customer Reviews for Trusted Local Professionals on Taskoria
+          What customers say after hiring on Taskoria
         </h2>
+        <p className="text-center text-sm text-gray-600 dark:text-gray-300 mt-2">
+          Scannable proof from real locations, so you can evaluate fit quickly.
+        </p>
       </div>
       <div className="mt-8  max-w-6xl mx-auto">
         <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden">

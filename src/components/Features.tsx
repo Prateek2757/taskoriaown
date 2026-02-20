@@ -9,36 +9,36 @@ import { BrainCircuit, ShieldCheck, Star, Users } from "lucide-react";
 
 const projects = [
   {
-    title: "AI-Powered Matching",
+    title: "Relevant Matching",
     description:
-      "Experience the future of service discovery with our intelligent matching algorithm. Our AI analyzes thousands of data points to connect you with providers who perfectly match your specific requirements, budget.",
+      "Share your job details and get responses from providers that fit your location, service type, and timeline.",
     link: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop&q=80",
     color: "#5196fd",
     icon: "🤖",
     feature: "Smart AI matching system",
   },
   {
-    title: "Professional Verification",
+    title: "Provider Checks",
     description:
-      "Trust verified. Every provider undergoes rigorous background checks, credential verification, and quality assessments. Our blockchain-based verification system ensures complete transparency and authenticity.",
+      "Providers can add licences, accreditations, and business details so customers can make more informed hiring decisions.",
     link: "https://plus.unsplash.com/premium_photo-1674669009418-2643aa58b11b?auto=format&fit=crop&q=80",
     color: "#8f89ff",
     icon: "✓",
     feature: "Verified service providers",
   },
   {
-    title: "Smart Quoting System",
+    title: "Clear Quoting Flow",
     description:
-      "Get instant, accurate quotes powered by machine learning. Our system analyzes your project requirements and provides detailed cost breakdowns, helping you make informed decisions with confidence.",
+      "Collect responses in one place, compare pricing and scope, and choose the provider that best matches your needs.",
     link: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&auto=format&fit=crop&q=80",
     color: "#13006c",
     icon: "💰",
     feature: "Instant quote generation",
   },
   {
-    title: "Community Hub",
+    title: "Direct Communication",
     description:
-      "Join thousands of satisfied customers and expert providers in our thriving community. Share experiences, get advice, and discover insights that help you make the best choices for your projects.",
+      "Message providers directly to confirm availability, clarify scope, and keep your hiring decision transparent.",
     link: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80",
     color: "#ed649e",
     icon: "👥",
@@ -137,7 +137,7 @@ export default function FeaturesStacking() {
           }
         `}</style>
 
-        <div className="pt-4 pb-5 md:pt-3 px-4">
+        <div className=" pb-5  px-4">
           <header className="sm:text-center mx-auto">
             <h1
               className="text-4xl md:text-xl lg:text-5xl font-extrabold tracking-tight mb-6
@@ -145,21 +145,20 @@ export default function FeaturesStacking() {
                   dark:from-white dark:via-gray-200 dark:to-gray-500
                   bg-clip-text text-transparent"
             >
-              Discover Amazing{" "}
+              Built for real-world{" "}
               <span className="bg-[#3C7DED] bg-clip-text text-transparent">
-                Features
+                service hiring
               </span>{" "}
-              for Service Marketplace
+              in Australia
             </h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-              Explore the powerful AI tools and intelligent systems that make
-              Taskoria the ultimate platform for hiring verified professionals and managing service projects.
+              Practical tools to post jobs faster, compare providers clearly, and hire with less risk.
             </p>
           </header>
         </div>
 
         <section 
-          className="max-w-7xl m-auto relative bg-linear-to-b from-transparent via-gray-50/50 to-white dark:via-neutral-950/50 dark:to-black flex flex-col md:flex-row gap-0 py-20 px-4 md:px-0 items-center"
+          className="max-w-7xl m-auto relative bg-linear-to-b from-transparent via-gray-50/50 to-white dark:via-neutral-950/50 dark:to-black flex flex-col md:flex-row gap-0 py-10 px-4 md:px-0 items-center"
           aria-label="Platform features and capabilities"
         >
           <div className="order-2 md:order-1 flex flex-col gap-8 mb-8 md:mb-0 md:gap-40 flex-1">
@@ -303,7 +302,7 @@ interface CardProps {
 
 export const Card = ({ i, title, description, url, feature, isEven }: CardProps) => {
   return (
-    <article className="flex items-center justify-center">
+    <article className="flex items-center  justify-center">
       <div
         className="
         w-full rounded-2xl
@@ -319,7 +318,7 @@ export const Card = ({ i, title, description, url, feature, isEven }: CardProps)
         dark:hover:shadow-[0_20px_60px_rgb(0,0,0,0.6)]
         "
       >
-        <div className="flex flex-col gap-0 md:gap-6 h-full p-6 md:p-8">
+        <div className="flex flex-col gap-0 md:gap-6 h-full p-6 md:p-9">
           <div
             className={`flex flex-col space-y-4 ${
               isEven ? "md:text-end" : "text-start"

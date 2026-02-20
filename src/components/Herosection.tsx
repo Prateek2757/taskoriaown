@@ -124,13 +124,13 @@ export default function HeroSection() {
                 height={5}
                 fetchPriority="high"
               />{" "}
-              <span>Australia's Trusted AI Powered Marketplace</span>
-            </div>
+              <span>Australia-first marketplace • Post for free • Local providers</span>
+              </div>
 
-            <h1 className="text-4xl md:text-7xl font-extrabold text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
-              The Future of{" "}
-              <span className="relative inline-block bg-[#2563EB] bg-clip-text text-transparent">
-                Service
+            <h1 className="text-4xl md:text-5xl font-extrabold text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
+            Post your job once.{" "}
+            <span className="relative inline-block bg-[#2563EB] bg-clip-text text-transparent">
+                Get quotes
                 <span className="absolute right-0 bottom-0 translate-y-3 w-full h-5 overflow-hidden" aria-hidden="true">
                   <SparklesCore
                     background="transparent"
@@ -140,21 +140,20 @@ export default function HeroSection() {
                     className="w-full h-full"
                     particleColor={theme === "dark" ? "#fff" : "#000"}
                   />{" "}
-                  <div className="absolute inset-x-20  top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-                  <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
-                  <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-                  <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
+                  <div className="absolute inset-x-20  top-0 bg-linear-to-r from-transparent via-indigo-500 to-transparent h-0.5 w-3/4 blur-sm" />
+                  <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
+                  <div className="absolute inset-x-60 top-0 bg-linear-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
+                  <div className="absolute inset-x-60 top-0 bg-linear-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
                 </span>
               </span>{" "}
               <span className="bg-[#2563EB] bg-clip-text text-transparent">
-                Marketplaces
+                 from verified local professionals.
               </span>
             </h1>
 
-            <p className="max-w-xl mx-auto mt-4 text-[15px] text-gray-400 dark:text-gray-300 hidden sm:block">
-              Connect with verified professionals through our AI-powered
-              platform. Experience trust, transparency, and innovation in every
-              service interaction across Australia.
+            <p className="max-w-2xl mx-auto mt-4 text-[15px] text-gray-600 dark:text-gray-300">
+              Tell us what you need, compare responses, and hire confidently with clear
+              profiles, reviews, and support when issues come up.
             </p>
 
             <div className="max-w-2xl mx-auto mt-6 sm:px-4">
@@ -190,7 +189,7 @@ export default function HeroSection() {
                 className="flex-1 py-5 bg-[#2563EB] text-white"
                 aria-label="Post a job to find service providers"
               >
-                Post a Job <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
+                Post a Job Free<ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
               </Button>
 
               <NewRequestModal
@@ -219,17 +218,17 @@ export default function HeroSection() {
         <ScrollPopularSection />
 
         <div className="mt-10 hidden lg:block relative overflow-hidden bg-gradient-to-t from-zinc-100 to-transparent dark:from-black">
-          <div className="mx-auto max-w-4xl relative">
+        <div className="mx-auto max-w-4xl relative">
             <header className="text-center text-3xl text-white">
               <h2 className="text-slate-900 text-2xl sm:text-3xl lg:text-4xl dark:text-white font-bold leading-tight">
-                Trusted by{" "}
+                Marketplace{" "}
                 <span className="bg-clip-text text-transparent bg-[#2563EB] animate-gradient">
-                  Experts
+                  Activity
                 </span>
               </h2>
 
               <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-                Used by the leaders in Australian service marketplace.
+                Snapshot of customer and provider activity on Taskoria.
               </p>
             </header>
 
@@ -237,34 +236,34 @@ export default function HeroSection() {
               {[
                 {
                   value: "1K+",
-                  label: "Verified Providers",
+                  label: "Provider Profiles",
                   gradient: "from-blue-500 to-blue-700",
-                  description: "Over 1000 verified service providers"
+                  description: "More than 1,000 provider profiles"
                 },
                 {
                   value: "5K+",
-                  label: "Jobs Completed",
+                  label: "Jobs Posted",
                   gradient: "from-cyan-500 to-cyan-700",
-                  description: "More than 5000 successful jobs completed"
+                  description: "More than 5,000 jobs posted"
                 },
                 {
                   value: "4.5★",
-                  label: "Average Rating",
+                  label: "Customer Rating",
                   gradient: "from-purple-500 to-purple-700",
                   description: "4.5 star average customer rating"
                 },
                 {
-                  value: "24/7",
-                  label: "AI Support",
+                  value: "50+",
+                  label: "Cities Served",
                   gradient: "from-orange-500 to-orange-700",
-                  description: "24/7 AI-powered customer support"
+                  description: "Services requested across more than 50 cities"
                 },
               ].map((item, index) => (
                 <div
                   key={index}
                   role="listitem"
                   className={`
-                          relative text-center hover:scale-[1.04] transition-all
+                          relative text-center transition-colors
                           after:content-[''] after:absolute after:top-[10%] after:h-[80%] after:w-px after:bg-gray-200 dark:after:bg-gray-700
                           after:-right-3 md:after:-right-4
                           ${index % 2 !== 0 ? "after:hidden" : "after:block"}
@@ -315,21 +314,21 @@ export default function HeroSection() {
 
           <div className="w-full px-8 absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center text-3xl text-white">
             <h3 className="text-gray-600 text-lg sm:text-xl lg:text-2xl dark:text-white font-semibold leading-tight mb-2">
-              Ready to Experience the Future?
+              Need a provider now?
             </h3>
             <p className="text-gray-500 text-sm dark:text-gray-400 mb-4">
-              Join us today and transform the way you connect with services.
+              Post your job and start getting responses from local professionals.
             </p>
             <Button
               onClick={handlePostJob}
-              disabled={loading}
               className="py-5 bg-[#2563EB] text-white"
               aria-label="Find and book services"
             >
-              Find Services <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
+              Post a Job Free <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
             </Button>
           </div>
         </div>
+        
       </section>
     </>
   );

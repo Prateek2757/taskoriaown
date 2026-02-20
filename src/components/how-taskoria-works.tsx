@@ -12,21 +12,21 @@ const steps = [
     id: 1,
     title: "Post Your Job",
     description:
-      "Use our AI assistant to describe your project effortlessly and publish instantly.",
+      "Tell us what you need, your location, and your timeline in a few quick steps.",
     icon: Sparkles,
   },
   {
     id: 2,
-    title: "Get Matched Instantly",
+    title: "Receive Provider Responses",
     description:
-      "Our AI connects you with verified professionals who match your specific needs.",
+      "Relevant local providers review your request and respond with availability and quotes.",
     icon: Users,
   },
   {
     id: 3,
-    title: "Start Collaborating",
+    title: "Compare and Hire",
     description:
-      "Work seamlessly with real-time chat, milestone tracking, and secure payments.",
+      "Check profiles, ratings, and messages, then choose the provider that best fits your job.",
     icon: Shield,
   },
 ];
@@ -127,10 +127,10 @@ export default function HowTaskoriaWorks() {
             className="sm:text-center mb-10 sm:mb-15"
           >
             <h1 id="how-it-works-heading" className="text-4xl md:text-6xl font-black mb-4">
-              How Our Service Marketplace Works
+              How hiring works on Taskoria
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Connect with verified professionals in three simple steps. Post your job, get matched with experts, and start collaborating instantly.
+              Post for free, receive responses, and hire with confidence.
             </p>
           </motion.div>
 
@@ -250,7 +250,7 @@ export default function HowTaskoriaWorks() {
                 className="group bg-white dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300 font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30"
               >
                 <span className="flex items-center gap-2">
-                  Start My 1-Minute Setup
+                  Post a Job Free
                   <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 duration-300 group-hover:rotate-45" aria-hidden="true" />
                 </span>
               </Button>
