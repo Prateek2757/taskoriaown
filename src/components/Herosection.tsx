@@ -127,8 +127,8 @@ export default function HeroSection() {
               <span>Australia-first marketplace • Post for free • Local providers</span>
               </div>
 
-            <h1 className="text-4xl md:text-5xl font-extrabold text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
-            Post your job once.{" "}
+            <h1 className="text-4xl md:text-6xl font-extrabold text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
+            Post your job.{" "}
             <span className="relative inline-block bg-[#2563EB] bg-clip-text text-transparent">
                 Get quotes
                 <span className="absolute right-0 bottom-0 translate-y-3 w-full h-5 overflow-hidden" aria-hidden="true">
@@ -147,7 +147,7 @@ export default function HeroSection() {
                 </span>
               </span>{" "}
               <span className="bg-[#2563EB] bg-clip-text text-transparent">
-                 from verified local professionals.
+                 from  professionals.
               </span>
             </h1>
 
