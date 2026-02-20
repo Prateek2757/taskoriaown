@@ -57,7 +57,6 @@ export default function CategorySelectionPage() {
   }, [searchQuery, categories]);
 
   const handleSelectCategory = (id: string, name: string) => {
-    console.log("Selected category ID:", id); // ADD THIS
 
     setSelectedCategory(id);
     setSearchQuery(name);
@@ -69,7 +68,6 @@ export default function CategorySelectionPage() {
     
     console.log("Navigating with:", { draftId, selectedCategory }); 
     const url = `/create-account?user_id=${draftId}&cn=${selectedCategory}`;
-    console.log("URL:", url); // ADD THIS
     
     setIsNavigating(true);
     router.push(url);
@@ -91,7 +89,7 @@ export default function CategorySelectionPage() {
       <Card className="max-w-2xl w-full shadow-2xl border border-gray-200/40 dark:border-gray-700/40 rounded-3xl backdrop-blur-xl bg-white/80 dark:bg-black/40 transition-colors">
         <CardContent className="p-8">
           <div className="text-center mb-6">
-            <h1 className="text-4xl font-extrabold bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-extrabold bg-blue-500 bg-clip-text text-transparent">
               What service do you provide?
             </h1>
             <p className="text-gray-600 dark:text-gray-300 mt-2">
@@ -104,7 +102,7 @@ export default function CategorySelectionPage() {
             <Input
               type="text"
               placeholder="Search for a service..."
-              className="pl-10 py-6 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500 rounded-xl text-base shadow-sm transition"
+              className="pl-10 py-5 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100   rounded-xl text-base shadow-sm transition"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -124,9 +122,9 @@ export default function CategorySelectionPage() {
                       <motion.div
                         key={c.public_id}
                         whileHover={{ scale: 1.03 }}
-                        className={`cursor-pointer border rounded-xl p-4 text-center font-medium transition-all duration-200 ${
+                        className={`cursor-pointer border rounded-xl py-2 text-center font-medium transition-all duration-200 ${
                           selectedCategory === String(c.public_id)
-                            ? "bg-cyan-600 text-white border-cyan-600 shadow-md"
+                            ? "bg-blue-500 text-white border-cyan-600 shadow-md"
                             : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-100 hover:bg-cyan-50 dark:hover:bg-cyan-900/20"
                         }`}
                         onClick={() =>
@@ -151,7 +149,7 @@ export default function CategorySelectionPage() {
               <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-3 text-center">
                 Popular Categories
               </h2>
-              <div className="flex flex-wrap justify-center gap-3">
+              <div className="flex flex-wrap justify-center gap-1">
                 {popularCategories.map((c) => (
                   <Button
                     key={c.category_id}
@@ -161,7 +159,7 @@ export default function CategorySelectionPage() {
                       setSelectedCategory(String(c.public_id));
                       setSearchQuery(c.name);
                     }}
-                    className={`rounded-full px-4 py-2 text-sm transition ${
+                    className={`rounded-full px-4 py-2 text-sm transition  ${
                       selectedCategory === String(c.public_id)
                         ? "bg-cyan-600 text-white border-cyan-600"
                         : "hover:bg-cyan-100 dark:hover:bg-cyan-900/20 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700"
@@ -178,7 +176,7 @@ export default function CategorySelectionPage() {
             <Button
               disabled={isNavigating}
               onClick={goNext}
-              className="bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-500 dark:to-blue-500 text-white px-10 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-cyan-700 hover:to-blue-700 dark:hover:from-cyan-600 dark:hover:to-blue-600 transition-all w-full"
+              className="bg-gradient-to-r bg-blue-600 text-white px-10 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-cyan-700 hover:to-blue-700 dark:hover:from-cyan-600 dark:hover:to-blue-600 transition-all w-full"
             >
               {isNavigating ? (
                 <>

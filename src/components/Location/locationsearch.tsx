@@ -216,10 +216,9 @@ console.log(data);
           results.length > 0 &&
           setShowDropdown(true)
         }
-        className="w-full border border-gray-300 rounded-xl pl-9 pr-9 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+        className=" border border-gray-300 py-5 pl-9 pr-9 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
       />
 
-      {/* Show loader OR clear button, not both */}
       <div className="absolute right-3 top-3">
         {loading ? (
           <Loader2 className="h-4 w-4 animate-spin text-gray-400" />

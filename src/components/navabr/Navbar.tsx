@@ -303,7 +303,7 @@ export default function ModernNavbar() {
               height={41}
               width={28}
             />
-            <span className="text-2xl font-bold bg-[#3C7DED] bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-[#2563EB] bg-clip-text text-transparent">
               Taskoria
             </span>
           </Link>

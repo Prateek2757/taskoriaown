@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/form";
 import LocationSearch from "@/components/Location/locationsearch";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
 
 const onboardingSchema = z.object({
   is_nationwide: z.boolean(),
@@ -541,7 +542,7 @@ function OnboardingContent() {
                     control={control}
                     name="hasWebsite"
                     render={({ field }) => (
-                      <FormItem className="pt-4">
+                      <FormItem className="">
                         <FormLabel className="text-base font-semibold text-gray-800 dark:text-gray-200">
                           Does your company have a website?
                         </FormLabel>
@@ -622,7 +623,7 @@ function OnboardingContent() {
                         <FormControl>
                           <select
                             {...field}
-                            className="border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500"
+                            className="border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 "
                           >
                             <option value="">Select size</option>
                             <option value="1-10">1-10 employees</option>
@@ -637,7 +638,6 @@ function OnboardingContent() {
                     )}
                   />
 
-                  {/* ── Referral Code Field ── */}
                   <FormField
                     control={control}
                     name="referralCode"
@@ -652,7 +652,7 @@ function OnboardingContent() {
                         </FormLabel>
                         <FormControl>
                           <div
-                            className={`flex items-center border rounded-xl px-3 py-2.5 shadow-sm transition-all duration-200 bg-white dark:bg-gray-800/50 ${referralWrapperBorder[referralStatus]}`}
+                            className={`flex items-center  border-1 shadow-sm rounded-xl px-3 py-2.5  transition-all duration-200 bg-white dark:bg-gray-800/50 ${referralWrapperBorder[referralStatus]}`}
                           >
                             <div className="mr-2 flex-shrink-0 transition-all duration-300">
                               {referralStatusIcon[referralStatus]}
@@ -690,7 +690,6 @@ function OnboardingContent() {
                           </div>
                         </FormControl>
 
-                        {/* Status message */}
                         <AnimatePresence>
                           {referralMessage && (
                             <motion.p
@@ -712,7 +711,6 @@ function OnboardingContent() {
                           )}
                         </AnimatePresence>
 
-                        {/* Idle helper text */}
                         {referralStatus === "idle" && (
                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
                             Got a referral code? Enter it above and click <strong>Apply</strong>.
@@ -727,7 +725,7 @@ function OnboardingContent() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-[#3C7DED] text-white hover:opacity-90 py-3 rounded-xl shadow-md mt-4"
+                    className="w-full bg-[#3C7DED] text-white hover:opacity-90 py-5 rounded-xl shadow-md mt-4"
                   >
                     {isSubmitting ? (
                       <span className="flex items-center justify-center gap-2">

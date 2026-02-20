@@ -74,13 +74,13 @@ export function ProfileCard({
     <>
       <Card className="border rounded-2xl shadow-lg backdrop-blur bg-white/80 dark:bg-white/5 py-0 border-gray-200 dark:border-white/10 overflow-hidden">
         <CardContent className="pt-6 pb-0 text-center relative">
-          {isPro && (
+          {/* {isPro && (
             <>
               <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-amber-500/5 to-yellow-600/5 pointer-events-none" />
               <div className="absolute top-0 right-0 w-full h-32 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
             </>
-          )}
+          )} */}
 
           <div className="p-2 z-10">
             <div className="relative h-28 w-28 mx-auto mb-4 group">
@@ -234,22 +234,20 @@ export function ProfileCard({
 
           {profile.referral_code && (
             <div className={`mx-0 px-5 py-4 border-t ${
-              isPro
-                ? "border-yellow-500/20 bg-gradient-to-br from-yellow-500/5 via-amber-400/5 to-transparent"
-                : "border-gray-100 dark:border-white/8 bg-gradient-to-br from-blue-50/60 via-cyan-50/40 to-transparent dark:from-blue-950/20 dark:via-cyan-950/10 dark:to-transparent"
+           
+                 "border-gray-100 dark:border-white/8 bg-gradient-to-br from-blue-50/60 via-cyan-50/40 to-transparent dark:from-blue-950/20 dark:via-cyan-950/10 dark:to-transparent"
             }`}>
 
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div className={`p-1.5 rounded-lg ${
-                    isPro
-                      ? "bg-yellow-500/15 text-yellow-500"
-                      : "bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400"
+                  
+                    "bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400"
                   }`}>
                     <Gift className="w-3.5 h-3.5" />
                   </div>
                   <span className={`text-xs font-semibold tracking-wide uppercase ${
-                    isPro ? "text-yellow-500/80" : "text-slate-500 dark:text-slate-400"
+                   "text-slate-500 dark:text-slate-400"
                   }`}>
                     Your Referral Code
                   </span>
@@ -257,9 +255,8 @@ export function ProfileCard({
                 <button
                   onClick={handleShare}
                   className={`flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-lg transition-all ${
-                    isPro
-                      ? "text-yellow-400 hover:bg-yellow-500/10"
-                      : "text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                  
+                    "text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
                   }`}
                 >
                   <Share2 className="w-3 h-3" />
@@ -268,14 +265,12 @@ export function ProfileCard({
               </div>
 
               <div className={`flex items-center gap-2 rounded-xl px-3 py-2.5 border ${
-                isPro
-                  ? "bg-yellow-500/8 border-yellow-500/25"
-                  : "bg-white dark:bg-white/5 border-gray-200 dark:border-white/10"
+             
+                   "bg-white dark:bg-white/5 border-gray-200 dark:border-white/10"
               }`}>
                 <span className={`flex-1 text-center font-mono text-lg font-bold tracking-[0.2em] select-all ${
-                  isPro
-                    ? "text-yellow-400"
-                    : "text-blue-700 dark:text-blue-300"
+                 
+                     "text-blue-700 dark:text-blue-300"
                 }`}>
                   {profile.referral_code}
                 </span>
@@ -286,9 +281,8 @@ export function ProfileCard({
                   className={`flex-shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200 ${
                     copied
                       ? "bg-emerald-500 text-white shadow-md shadow-emerald-200 dark:shadow-emerald-900"
-                      : isPro
-                      ? "bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30"
-                      : "bg-blue-600 text-white hover:bg-blue-700 shadow-sm"
+                      : 
+                       "bg-blue-600 text-white hover:bg-blue-700 shadow-sm"
                   }`}
                 >
                   {copied ? (
@@ -306,7 +300,7 @@ export function ProfileCard({
               </div>
 
               <p className={`mt-2.5 text-xs leading-relaxed ${
-                isPro ? "text-yellow-500/60" : "text-slate-400 dark:text-slate-500"
+                 "text-slate-400 dark:text-slate-500"
               }`}>
                 Share your code and earn rewards when friends join.
               </p>

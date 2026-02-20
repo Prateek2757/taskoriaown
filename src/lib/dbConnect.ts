@@ -1,24 +1,24 @@
-// lib/db.ts
 import pkg from "pg";
 const { Pool } = pkg;
 
-// const pool = new Pool({
-//   user: process.env.PG_USER,
-//   host: process.env.PG_HOST,
-//   database: process.env.PG_DATABASE,
-//   password: process.env.PG_PASSWORD,
-//   port: Number(process.env.PG_PORT),
-// });
+declare global {
+  var pgPool: InstanceType<typeof Pool> | undefined;
+}
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
+const pool =
+  global.pgPool ||
+  new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
+    max: 10,                    // limit connections
+    idleTimeoutMillis: 30000,   // close idle after 30s
+    connectionTimeoutMillis: 2000,
+  });
+
+if (process.env.NODE_ENV !== "production") {
+  global.pgPool = pool;
+}
 
 export default pool;
-
-
-
-

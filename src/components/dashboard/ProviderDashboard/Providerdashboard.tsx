@@ -12,12 +12,14 @@ import LeadSettingsCard from "@/components/Lead-setting/leadsetting";
 import { LeadsOverviewCard } from "./Leadsoverviewcard";
 import { ResponsesCard } from "./Responsescard";
 import axios from "axios";
+import LoadingSpinner from "@/components/showinglead/LoadingSpinner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 export default function ProviderDashboard() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const { profile, mutate: mutateProfile } = useLeadProfile();
+  const { profile, mutate: mutateProfile , loading} = useLeadProfile();
 
   const [showStats, setShowStats] = useState(false);
   const [totalLeads, setTotalLeads] = useState<number | null>(null);
@@ -70,7 +72,7 @@ const totalResponses = profile?.response_stats?.total_responses
     mutateProfile();
   };
 
-  if (status === "loading" || !session?.user) return null;
+  if (loading || !session?.user) return <Skeleton className="h-full w-full"/>;
 
   const user = session.user;
 

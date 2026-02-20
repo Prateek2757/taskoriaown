@@ -202,7 +202,6 @@ const LeadsPage: React.FC = () => {
     }
   };
 
-  if (loading) return <LoadingSpinner />;
   
   if (error)
     return (
@@ -310,12 +309,21 @@ const LeadsPage: React.FC = () => {
 
       <div className="hidden md:block flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-900">
         {selectedLead ? (
-          <LeadDetails
+          <>
+  <LeadDetails
             lead={selectedLead}
             userId={selectedLead.user_id}
             taskId={selectedLead.task_id}
             requiredCredits={taskCredits[Number(selectedLead.task_id)] || 0}
           />
+
+          <div>
+            asdasdas
+            
+          </div>
+          </>
+        
+         
         ) : (
           <div className="flex items-center justify-center h-full text-gray-400 dark:text-gray-500">
             <h2>Select a lead to view details</h2>

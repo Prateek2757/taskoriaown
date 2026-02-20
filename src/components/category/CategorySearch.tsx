@@ -139,7 +139,7 @@ export default function CategorySearch({
         onChange={(e) => handleChange(e.target.value)}
         placeholder={placeholder || "Search category..."}
         onFocus={(e) => handleFocus(e)}
-        className="pl-9 pr-9 rounded-lg py-5 max-sm:text-sm"
+        className="pl-9 pr-9  border- py-5 max-sm:text-sm"
       />
 
       {query && (

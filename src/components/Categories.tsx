@@ -26,23 +26,23 @@ const itemVariants: Variants = {
 
 const staticImages = [
   {
-    url: "/images/housecleaning.avif",
+    url: "/images/homecleaning.webp",
     gradient: "from-red-500/20 to-orange-500/20",
   },
   {
-    url: "/images/electrician.png",
+    url: "/images/electrician.webp",
     gradient: "from-orange-500/20 to-amber-500/20",
   },
   {
-    url: "/images/gardening.png",
+    url: "/images/gardening.webp",
     gradient: "from-slate-500/20 to-gray-500/20",
   },
   {
-    url: "/images/plumber.png",
+    url: "/images/plumbers.webp",
     gradient: "from-blue-500/20 to-cyan-500/20",
   },
   {
-    url: "/images/weddingphoto.png",
+    url: "/images/photography.webp",
     gradient: "from-purple-500/20 to-pink-500/20",
   },
 ];

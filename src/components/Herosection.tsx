@@ -129,7 +129,7 @@ export default function HeroSection() {
 
             <h1 className="text-4xl md:text-7xl font-extrabold text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
               The Future of{" "}
-              <span className="relative inline-block bg-[#3C7DED] bg-clip-text text-transparent">
+              <span className="relative inline-block bg-[#2563EB] bg-clip-text text-transparent">
                 Service
                 <span className="absolute right-0 bottom-0 translate-y-3 w-full h-5 overflow-hidden" aria-hidden="true">
                   <SparklesCore
@@ -146,7 +146,7 @@ export default function HeroSection() {
                   <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
                 </span>
               </span>{" "}
-              <span className="bg-[#3C7DED] bg-clip-text text-transparent">
+              <span className="bg-[#2563EB] bg-clip-text text-transparent">
                 Marketplaces
               </span>
             </h1>
@@ -187,7 +187,7 @@ export default function HeroSection() {
               <Button
                 onClick={handlePostJob}
                 disabled={loading}
-                className="flex-1 py-5 bg-[#3C7DED] text-white"
+                className="flex-1 py-5 bg-[#2563EB] text-white"
                 aria-label="Post a job to find service providers"
               >
                 Post a Job <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
@@ -223,7 +223,7 @@ export default function HeroSection() {
             <header className="text-center text-3xl text-white">
               <h2 className="text-slate-900 text-2xl sm:text-3xl lg:text-4xl dark:text-white font-bold leading-tight">
                 Trusted by{" "}
-                <span className="bg-clip-text text-transparent bg-[#3C7DED] animate-gradient">
+                <span className="bg-clip-text text-transparent bg-[#2563EB] animate-gradient">
                   Experts
                 </span>
               </h2>
@@ -323,7 +323,7 @@ export default function HeroSection() {
             <Button
               onClick={handlePostJob}
               disabled={loading}
-              className="py-5 bg-[#3C7DED] text-white"
+              className="py-5 bg-[#2563EB] text-white"
               aria-label="Find and book services"
             >
               Find Services <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
