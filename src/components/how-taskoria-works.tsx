@@ -12,21 +12,21 @@ const steps = [
     id: 1,
     title: "Post Your Job",
     description:
-      "Tell us what you need, your location, and your timeline in a few quick steps.",
+      "Describe your job, location, and timeline in just a few simple steps.",
     icon: Sparkles,
   },
   {
     id: 2,
     title: "Receive Provider Responses",
     description:
-      "Relevant local providers review your request and respond with availability and quotes.",
+      "Qualified local providers review your request and send tailored quotes.",
     icon: Users,
   },
   {
     id: 3,
     title: "Compare and Hire",
     description:
-      "Check profiles, ratings, and messages, then choose the provider that best fits your job.",
+      "Review profiles, compare offers, and hire the right provider with confidence.",
     icon: Shield,
   },
 ];
@@ -95,8 +95,8 @@ export default function HowTaskoriaWorks() {
           className="absolute inset-0 opacity-30 pointer-events-none"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)
+              linear-gradient(rgba(0,0,0,0.2) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0,0,0,0.2) 1px, transparent 1px)
             `,
             backgroundSize: "55px 55px",
           }}
@@ -107,8 +107,8 @@ export default function HowTaskoriaWorks() {
           className="absolute inset-0 opacity-50 pointer-events-none dark:opacity-20 hidden dark:block"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)
+              linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px)
             `,
             backgroundSize: "55px 55px",
           }}
@@ -206,7 +206,7 @@ export default function HowTaskoriaWorks() {
                     variants={cardVariant}
                     transition={{ duration: 0.6, delay: index * 0.25 }}
                     className="
-                      group relative w-full rounded-xl p-6 sm:p-8
+                      group relative w-full rounded-xl p-6 sm:p-
                       bg-white/70 dark:bg-white/5
                       border border-black/10 dark:border-white/20 
                       dark:before:from-white/10 dark:before:via-white/5 dark:before:to-transparent
@@ -214,15 +214,15 @@ export default function HowTaskoriaWorks() {
                   >
                     <div className="relative z-10">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="bg-blue-100 dark:bg-blue-900/30 w-12 h-12 rounded-lg flex items-center justify-center">
+                        {/* <div className="bg-blue-100 dark:bg-blue-900/30 w-12 h-12 rounded-lg flex items-center justify-center">
                           <Icon className="w-6 h-6 text-blue-600 dark:text-blue-400" aria-hidden="true" />
-                        </div>
+                        </div> */}
                         {/* <span className="text-3xl font-bold text-gray-400 ">
                           {step.id}
                         </span> */}
                       </div>
 
-                      <h2 className="text-xl max-sm:mb-0 sm:text-xl font-semibold mb-3 dark:text-white">
+                      <h2 className="text-xl max-sm:mb-0 text-[#2563EB] sm:text-xl font-semibold mb-3 dark:text-white">
                         {step.title}
                       </h2>
 

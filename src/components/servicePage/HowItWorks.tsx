@@ -111,43 +111,40 @@ export function ServiceDetailsSection({ serviceDetails }) {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* How It Works Section */}
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
       {sections.howItWorks.length > 0 && (
         <div className="mb-14">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-blue-500/10 dark:from-indigo-500/20 dark:via-blue-500/20 dark:to-blue-500/20 border border-indigo-200/50 dark:border-indigo-700/50 text-indigo-700 dark:text-indigo-300 font-bold rounded-full text-sm mb-6 backdrop-blur-sm">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-blue-500/10 dark:from-indigo-500/20 dark:via-blue-500/20 dark:to-blue-500/20 border border-indigo-200/50 dark:border-indigo-700/50 text-indigo-700 dark:text-indigo-300 font-bold rounded-full text-sm mb-6 backdrop-blur-sm">
               <Sparkles className="w-4 h-4" />
               HOW IT WORKS
             </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white mb-6">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white mb-6">
               Three Simple Steps
             </h2>
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
+            <p className="text-xl  text-gray-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
               Getting the help you need has never been easier
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 relative">
-            {/* Connection Lines */}
-            <div className="hidden md:block absolute top-10 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-indigo-200 to-transparent dark:via-indigo-800 z-0" />
+          <div className="grid md:grid-cols-3 gap-6 relative">
+            <div className="hidden md:block absolute top-17 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-indigo-200 to-transparent dark:via-indigo-800 z-0" />
 
             {sections.howItWorks.map((step, i) => (
               <div
                 key={i}
-                className={`relative bg-gradient-to-br ${gradients[i]?.bg} rounded-3xl p-8 border-2 ${gradients[i]?.border} hover:shadow-2xl ${gradients[i]?.shadow} transition-all hover:-translate-y-2 duration-500 backdrop-blur-sm group z-10`}
+                className={`relative bg-gradient-to-br ${gradients[i]?.bg} rounded-3xl p-3 border-2 ${gradients[i]?.border} hover:shadow-2xl ${gradients[i]?.shadow} transition-all hover:-translate-y-2 duration-500 backdrop-blur-sm group z-10`}
               >
                 <div
-                  className={`absolute -top-8 left-1/2 -translate-x-1/2 w-16 h-16 bg-gradient-to-br ${gradients[i]?.num} rounded-2xl flex items-center justify-center text-white font-black text-3xl shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}
+                  className={`absolute -top-6 left-1/2 -translate-x-1/2 w-10 h-10 bg-gradient-to-br ${gradients[i]?.num} rounded-2xl flex items-center justify-center text-white font-black text-3xl shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}
                 >
                   {i + 1}
                 </div>
-                <div className="pt-10">
+                <div className="pt-4">
                   <p className="text-gray-800 dark:text-gray-200 leading-relaxed text-lg font-medium">
                     {step}
                   </p>
                 </div>
-                {/* Decorative element */}
                 <div
                   className={`absolute -bottom-2 -right-2 w-24 h-24 bg-gradient-to-br ${gradients[i]?.num} rounded-full opacity-10 blur-2xl group-hover:opacity-20 transition-opacity duration-500`}
                 />
@@ -157,18 +154,17 @@ export function ServiceDetailsSection({ serviceDetails }) {
         </div>
       )}
 
-      {/* What's Included Section - Premium Card Design */}
       {sections.whatsIncluded.length > 0 && (
-        <div className="mb-14">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#3C7DED] border border-emerald-200/50 dark:border-emerald-700/50 text-white font-bold rounded-full text-sm mb-6 backdrop-blur-sm">
+        <div className="mb-10">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-1 px-5 py-1 bg-[#2563EB] border border-emerald-200/50 dark:border-emerald-700/50 text-white font-bold rounded-full text-sm mb-3 backdrop-blur-sm">
               <CheckCircle className="w-4 h-4" />
               WHAT'S INCLUDED
             </div>
-            <h2 className="text-5xl md:text-5xl pb-2 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#070707] via-[#41A6EE] to-[#052e39] mb-6">
+            <h2 className="text-4xl pb-1 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#070707] via-[#2563Eb] to-[#052e39] ">
               Everything You Need
             </h2>
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
+            <p className="text-xl  text-gray-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
               Comprehensive service features designed for your peace of mind
             </p>
           </div>
@@ -177,15 +173,15 @@ export function ServiceDetailsSection({ serviceDetails }) {
             {sections.whatsIncluded.map((item, i) => (
               <div
                 key={i}
-                className="group relative bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-3xl p-7 border-2 border-gray-200/50 dark:border-gray-700/50 hover:border-emerald-300 dark:hover:border-emerald-600 hover:shadow-2xl hover:shadow-emerald-500/20 dark:hover:shadow-emerald-500/10 transition-all hover:-translate-y-2 duration-500 overflow-hidden"
+                className="group relative bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-3xl p-2 border-2 border-gray-200/50 dark:border-gray-700/50 hover:border-emerald-300 dark:hover:border-emerald-600 hover:shadow-2xl hover:shadow-emerald-500/20 dark:hover:shadow-emerald-500/10 transition-all hover:-translate-y-2 duration-500 overflow-hidden"
               >
                 {/* Animated background gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/0 via-teal-500/0 to-cyan-500/0 group-hover:from-emerald-500/5 group-hover:via-teal-500/5 group-hover:to-cyan-500/5 transition-all duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-br from-[emerald-500/0] via-teal-500/0 to-cyan-500/0 group-hover:from-emerald-500/5 group-hover:via-teal-500/5 group-hover:to-cyan-500/5 transition-all duration-500" />
 
                 {/* Icon with animated ring */}
                 <div className="relative mb-5">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] rounded-2xl opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-500" />
-                  <div className="relative w-14 h-14 bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                  <div className="relative w-14 h-14 bg-gradient-to-br from-[#2563EB] via-[#41A6EE] to-[#46CBEE] rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
                     <CheckCircle
                       className="w-7 h-7 text-white"
                       strokeWidth={2.5}
@@ -205,19 +201,18 @@ export function ServiceDetailsSection({ serviceDetails }) {
         </div>
       )}
 
-      {/* Pricing Section - Real-world Scenario Design */}
       {sections.pricing.factors.length >= 0 && (
         <div className="mb-14">
           <div className="text-center ">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#3C7DED] [#46CBEE]  to-[#46CBEE]  border border-amber-200/50 dark:border-amber-700/50 text-white dark:tex-white font-bold rounded-full text-sm mb-6 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-5 py-1 bg-gradient-to-r from-[#2563EB] [#46CBEE]  to-[#46CBEE]  border border-amber-200/50 dark:border-amber-700/50 text-white dark:tex-white font-bold rounded-full text-sm mb-6 backdrop-blur-sm">
               <TrendingUp className="w-4 h-4" />
               TRANSPARENT PRICING
             </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold pb-2 text-transparent bg-clip-text bg-[#3C7DED]  mb-6">
+            <h2 className="text-4xl  font-extrabold pb-2 text-transparent bg-clip-text bg-[#2563EB]  ">
               Fair & Clear Pricing
             </h2>
             {sections.pricing.description && (
-              <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto font-medium mb-8">
+              <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto font-medium mb-4">
                 {sections.pricing.description}
               </p>
             )}
@@ -267,8 +262,8 @@ export function ServiceDetailsSection({ serviceDetails }) {
             </div>
 
             {/* Trust indicators */}
-            <div className="bg-gradient-to-br from-amber-50 via-blue-50/50 to-[#46CBEE]/30 dark:from-amber-950/30 dark:via-orange-950/20 dark:to-yellow-950/30 rounded-3xl p-8 border-2 border-amber-200/50 dark:border-amber-800/50 backdrop-blur-sm">
-              <div className="flex flex-col md:flex-row items-center justify-around gap-6 text-center">
+            <div className="bg-gradient-to-br w-auto from-blue-50 via-blue-50/50 to-[#46CBEE]/30 dark:from-amber-950/30 dark:via-orange-950/20 dark:to-yellow-950/30 rounded-3xl p-3 border-2 border-amber-200/50 dark:border-amber-800/50 backdrop-blur-sm">
+              <div className="flex flex-col md:flex-row items-center justify-around  text-center">
                 <div className="flex flex-col items-center gap-2">
                   <div className="w-14 h-14 bg-gradient-to-br from-[#256779] to-[#46CBEE] rounded-2xl flex items-center justify-center shadow-lg">
                     <CheckCircle
@@ -317,51 +312,49 @@ export function ServiceDetailsSection({ serviceDetails }) {
         </div>
       )}
 
-      {/* Tips Section */}
       {sections.tips.length > 0 && (
-        <div className="mb-24">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-teal-500/10 dark:from-blue-500/20 dark:via-cyan-500/20 dark:to-teal-500/20 border border-blue-200/50 dark:border-blue-700/50 text-blue-700 dark:text-blue-300 font-bold rounded-full text-sm mb-6 backdrop-blur-sm">
-              <Lightbulb className="w-4 h-4" />
-              PRO TIPS
-            </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 dark:from-blue-400 dark:via-cyan-400 dark:to-teal-400 mb-6">
-              Get Better Results
-            </h2>
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
-              Expert advice to maximize value and get accurate quotes faster
-            </p>
+        <div className="mb-14">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-5 py-1 bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-teal-500/10 dark:from-blue-500/20 dark:via-cyan-500/20 dark:to-teal-500/20 border border-blue-200/50 dark:border-blue-700/50 text-blue-700 dark:text-blue-300 font-bold rounded-full text-sm mb-3 backdrop-blur-sm">
+            <Lightbulb className="w-4 h-4" />
+            PRO TIPS
           </div>
-
-          <div className="max-w-4xl mx-auto space-y-5">
+          <h2 className="text-4xl  font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-[#2563EB] to-teal-600 dark:from-blue-400 dark:via-[#2536EB] dark:to-teal-400 mb-2">
+            Get Better Results
+          </h2>
+          <p className="text-xl  text-gray-600 dark:text-gray-400 max-w-3xl mx-auto font-medium">
+            Expert advice to maximize value and get accurate quotes faster
+          </p>
+        </div>
+      
+        <div className="max-w-full overflow-x-auto py-2">
+          <div className="flex gap-6 min-w-max">
             {sections.tips.map((tip, i) => (
               <div
                 key={i}
-                className="group relative bg-gradient-to-r from-blue-50/80 via-cyan-50/60 to-teal-50/80 dark:from-blue-950/40 dark:via-cyan-950/30 dark:to-teal-950/40 backdrop-blur-sm rounded-3xl p-8 border-l-4 border-blue-500 dark:border-blue-400 hover:shadow-2xl hover:shadow-blue-500/20 dark:hover:shadow-blue-500/10 transition-all duration-500 hover:-translate-x-2 overflow-hidden"
+                className="group relative flex-shrink-0 w-80 bg-gradient-to-r from-blue-50/80 via-[#2563EB]/15 to-teal-50/80 dark:from-blue-950/40 dark:via-cyan-950/30 dark:to-teal-950/40 backdrop-blur-sm rounded-3xl p-3 border-l-4 border-blue-500 dark:border-blue-400 hover:shadow-2xl hover:shadow-blue-500/20 dark:hover:shadow-blue-500/10 transition-all duration-500 hover:-translate-y-2 overflow-hidden"
               >
-                {/* Animated background gradient */}
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-cyan-500/0 to-teal-500/0 group-hover:from-blue-500/5 group-hover:via-cyan-500/5 group-hover:to-teal-500/5 transition-all duration-500" />
-
+      
                 <div className="relative flex items-start gap-6">
                   <div className="relative flex-shrink-0">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-500" />
-                    <div className="relative w-12 h-12 bg-gradient-to-br from-blue-500 via-cyan-500 to-teal-500 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-500">
-                      <span className="text-white font-black text-lg">
-                        {i + 1}
-                      </span>
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-[#2536Eb] rounded-full opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-500" />
+                    <div className="relative w-12  h-12 bg-gradient-to-br from-blue-500 via-[#2563EB] to-teal-500 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-500">
+                      <span className="text-white font-black text-lg">{i + 1}</span>
                     </div>
                   </div>
-                  <p className="text-gray-800 dark:text-gray-200 leading-relaxed text-lg font-medium pt-2">
+                  <p className="text-gray-800 dark:text-gray-200 leading-relaxed text-lg font-medium ">
                     {tip}
                   </p>
                 </div>
-
+      
                 {/* Decorative corner element */}
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/10 to-transparent rounded-bl-full transform translate-x-12 -translate-y-12 group-hover:translate-x-8 group-hover:-translate-y-8 transition-transform duration-500" />
               </div>
             ))}
           </div>
         </div>
+      </div>
       )}
     </div>
   );

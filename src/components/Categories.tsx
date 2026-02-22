@@ -53,8 +53,8 @@ export default function Services() {
 
   return (
     <section
-      className="min-h-screen 
- py-5 px-4 sm:px-6 lg:px-8 dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] "
+      className=" lg:min-h-screen 
+ py-6 lg:pt-6  lg:pb-0 px-4 sm:px-6 lg:px-8 dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] "
     >
       <div className="max-w-7xl relative mx-auto">
         {/* <motion.div
@@ -76,14 +76,14 @@ export default function Services() {
         </motion.div> */}
 
         <motion.div
-          className="flex gap-8 items-start mb-5 flex-col lg:flex-row
+          className="flex gap-4 items-start mb-5 flex-col lg:flex-row
         "
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           <div className="w-full lg:w-2/3  flex-col  ">
-            <div className="text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight drop-shadow-sm">
+            <div className="text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white  md:leading-tight drop-shadow-sm">
               All Your Skills,
               <br />
               <span className="text-[#3C7DED]">Empowered and Rewarded</span>
@@ -91,7 +91,7 @@ export default function Services() {
           </div>
 
           <div className="lg:pt-4 flex-col flex-1">
-            <p className="text-gray-700  dark:text-gray-300 pb-3 text-lg leading-relaxed max-w-xl">
+            <p className="text-gray-700  dark:text-gray-300 pb-3 text-lg  leading-relaxed  max-w-xl">
               Connect with trusted experts for every task — from home repairs to
               creative work — all in one place on Taskoria.
             </p>
@@ -107,7 +107,7 @@ export default function Services() {
                   index === 0 ? "lg:col-span-2 lg:row-span-2" : ""
                 } ${index === 3 ? "lg:col-span-2" : ""}`}
               >
-                <div className="h-full min-h-[320px] lg:min-h-[400px]" />
+                <div className="h-full min-h-[320px] lg:min-h-[300px]" />
               </div>
             ))}
           </div>
@@ -196,7 +196,7 @@ export default function Services() {
                   }`}
                   className="block"
                 >
-                  <div className="relative h-full min-h-[320px] lg:min-h-[300px]">
+                  <div className="relative  h-full min-h-[320px] lg:min-h-[265px]">
                     <div className="absolute inset-0">
                       <Image
                       fill 
@@ -239,7 +239,7 @@ export default function Services() {
             ))}
           </motion.div>
         ) : (
-          <div className="text-center py-20">
+          <div className="text-center py-10">
             <p className="text-gray-600 text-lg">
               No categories available at the moment.
             </p>

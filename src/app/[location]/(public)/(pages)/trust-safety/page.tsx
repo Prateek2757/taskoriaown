@@ -199,8 +199,8 @@ const TrustSafety = () => {
                   <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Award className="w-8 h-8 text-amber-600" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">Bronze Verified</h3>
-                  <p className="text-sm text-muted-foreground">ID + ABN verified</p>
+                  <h3 className="font-semibold text-foreground mb-2">Taskoria Plus Verified</h3>
+                  {/* <p className="text-sm text-muted-foreground">ID + ABN verified</p> */}
                 </CardContent>
               </Card>
               
@@ -209,8 +209,8 @@ const TrustSafety = () => {
                   <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Award className="w-8 h-8 text-gray-400" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">Silver Verified</h3>
-                  <p className="text-sm text-muted-foreground">Bronze + Licence verified</p>
+                  <h3 className="font-semibold text-foreground mb-2">Taskoria Pro Verified</h3>
+                  {/* <p className="text-sm text-muted-foreground">Bronze + Licence verified</p> */}
                 </CardContent>
               </Card>
               
@@ -219,8 +219,8 @@ const TrustSafety = () => {
                   <div className="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Award className="w-8 h-8 text-yellow-600" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">Gold Verified</h3>
-                  <p className="text-sm text-muted-foreground">Silver + Insurance verified</p>
+                  <h3 className="font-semibold text-foreground mb-2">Taskoria Pro Max Verified</h3>
+                  {/* <p className="text-sm text-muted-foreground">Silver + Insurance verified</p> */}
                 </CardContent>
               </Card>
             </div>

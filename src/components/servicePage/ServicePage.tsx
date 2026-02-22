@@ -154,7 +154,7 @@ export default function ServicePageClient({
             <FAQSection faqs={service.faqs} />
           )}
 
-          <aside className="rounded-3xl bg-gradient-to-br from-slate-900 to-indigo-900 text-white p-8 md:p-12">
+          <aside className="rounded-3xl bg-gradient-to-br from-slate-900 to-indigo-900 text-white p-8 md:p-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div>
                 <h2 className="text-3xl font-bold mb-2">

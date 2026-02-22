@@ -109,14 +109,13 @@ export default function HeroSection() {
   dark:bg-[radial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)] "
         aria-label="Hero section with service marketplace search"
       >
-        <div className="dark:hidden bg-radial-[at_0%_100%] from-red-100 via-white/0 to-white/0 to-90% h-[100%] w-[100%] absolute left-0 top-0 right-0 bottom-0" aria-hidden="true"></div>
-        <div className="dark:hidden bg-radial-[at_100%_0%] from-sky-100 via-white/0 to-white/0 to-90% h-[100%] w-[100%] absolute left-0 top-0 right-0 bottom-0" aria-hidden="true"></div>
+        <div className="dark:hidden bg-radial-[at_0%_100%] from-red-100 via-white/0 to-white/0 to-90% h-full w-full absolute left-0 top-0 right-0 bottom-0" aria-hidden="true"></div>
+        <div className="dark:hidden bg-radial-[at_100%_0%] from-sky-100 via-white/0 to-white/0 to-90% h-full w-full absolute left-0 top-0 right-0 bottom-0" aria-hidden="true"></div>
         <div
-          className="container pt-10  max-md:bg-gradient-to-r from-[#3C7DED]/25 via-[#41A6EE]/20 to-[#46CBEE]/25 
-      mx-auto  pb-4  px-4 relative z-10"
+          className="container md:pt-10 pt-6   max-md:bg-linear-to-r from-[#3C7DED]/25 via-[#41A6EE]/20 to-[#46CBEE]/25 
+      mx-auto  pb-4  md:px-4  relative z-10"
         >
-          <div className="max-w-4xl mx-auto  space-y-6">
-            <div className="inline-flex items-center gap-2 border bg-card dark:bg-gray-800 rounded-full px-4 py-1 text-xs text-muted-foreground mb-2" role="banner">
+          <div className="inline-flex items-center gap-1 border bg-card dark:bg-gray-800 rounded-full px-1 py-1 text-xs text-muted-foreground mb-2" role="banner">
               <Image
                 src="/flag-aus.png"
                 alt="Australian flag"
@@ -126,6 +125,8 @@ export default function HeroSection() {
               />{" "}
               <span>Australia-first marketplace • Post for free • Local providers</span>
               </div>
+          <div className="max-w-4xl mx-auto  px-4 space-y-6">
+            
 
             <h1 className="text-4xl md:text-6xl font-extrabold text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
             Post your job.{" "}
@@ -151,10 +152,10 @@ export default function HeroSection() {
               </span>
             </h1>
 
-            <p className="max-w-2xl mx-auto mt-4 text-[15px] text-gray-600 dark:text-gray-300">
+            {/* <p className="max-w-2xl mx-auto mt-4 text-[15px] text-gray-600 dark:text-gray-300">
               Tell us what you need, compare responses, and hire confidently with clear
               profiles, reviews, and support when issues come up.
-            </p>
+            </p> */}
 
             <div className="max-w-2xl mx-auto mt-6 sm:px-4">
               <div className="relative w-full max-w-3xl group flex sm:items-center max-sm:gap-2">
@@ -217,7 +218,7 @@ export default function HeroSection() {
 
         <ScrollPopularSection />
 
-        <div className="mt-10 hidden lg:block relative overflow-hidden bg-gradient-to-t from-zinc-100 to-transparent dark:from-black">
+        <div className="mt-10 hidden lg:block relative overflow-hidden bg-linear-to-t from-zinc-100 to-transparent dark:from-black">
         <div className="mx-auto max-w-4xl relative">
             <header className="text-center text-3xl text-white">
               <h2 className="text-slate-900 text-2xl sm:text-3xl lg:text-4xl dark:text-white font-bold leading-tight">
@@ -227,9 +228,9 @@ export default function HeroSection() {
                 </span>
               </h2>
 
-              <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+              {/* <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
                 Snapshot of customer and provider activity on Taskoria.
-              </p>
+              </p> */}
             </header>
 
             <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto" role="list">
@@ -273,7 +274,7 @@ export default function HeroSection() {
                   aria-label={item.description}
                 >
                   <div
-                    className={`text-xl sm:text-4xl font-extrabold bg-gradient-to-r ${item.gradient} bg-clip-text text-transparent`}
+                    className={`text-xl sm:text-4xl font-extrabold bg-linear-to-r ${item.gradient} bg-clip-text text-transparent`}
                   >
                     {item.value}
                   </div>

@@ -12,11 +12,11 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
 
   return (
     <div className="mb-20">
-      <div className="text-center mb-12">
-        <span className="inline-block px-4 py-2 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 font-semibold rounded-full text-sm mb-4">
+      <div className="text-center mb-5">
+        <span className="inline-block p-2 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 font-semibold rounded-full text-sm mb-4">
           FREQUENTLY ASKED
         </span>
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
           Got Questions?
         </h2>
         <p className="text-xl text-gray-600 dark:text-gray-400">
@@ -32,7 +32,7 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
           >
             <button
               onClick={() => setActiveFaq(activeFaq === i ? null : i)}
-              className="w-full text-left p-6 flex items-center justify-between gap-4"
+              className="w-full text-left p-2 flex items-center justify-between gap-4"
             >
               <span className="font-bold text-gray-900 dark:text-white text-lg">
                 {faq.question}
@@ -46,7 +46,7 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
               </div>
             </button>
             {activeFaq === i && (
-              <div className="px-6 pb-6 text-gray-700 dark:text-gray-300 leading-relaxed border-t border-gray-100 dark:border-slate-700 pt-4">
+              <div className="p-2  text-gray-700 dark:text-gray-300 leading-relaxed border-t border-gray-100 dark:border-slate-700 pt-4">
                 {faq.answer}
               </div>
             )}

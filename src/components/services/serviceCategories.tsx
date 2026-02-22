@@ -28,6 +28,44 @@ interface ServiceCategory {
 interface ServiceCategoriesProps {
   categories: ServiceCategory[];
 }
+const staticServiceImages: Record<string, { url: string; gradient: string }> = {
+  "House Cleaning": {
+    url: "/images/homecleaning.webp",
+    gradient: "from-blue-500/20 to-cyan-500/20",
+  },
+  Electricians: {
+    url: "/images/electrician.webp",
+    gradient: "from-yellow-500/20 to-orange-500/20",
+  },
+  "Gardening & Lawn Mowing": {
+    url: "/images/gardening.webp",
+    gradient: "from-green-500/20 to-emerald-500/20",
+  },
+  Plumbers: {
+    url: "/images/plumbers.webp",
+    gradient: "from-sky-500/20 to-blue-500/20",
+  },
+  "Wedding Photography": {
+    url: "/images/photography.webp",
+    gradient: "from-purple-500/20 to-pink-500/20",
+  },
+  Painters: {
+    url: "/images/painting.png",
+    gradient: "from-indigo-500/20 to-blue-500/20",
+  },
+  "Rubbish Removal": {
+    url: "/images/rubbishremoval.png",
+    gradient: "from-gray-500/20 to-slate-500/20",
+  },
+  "Air Conditioning & Heating": {
+    url: "/images/airconditioning.png",
+    gradient: "from-cyan-500/20 to-blue-500/20",
+  },
+  Roofing: {
+    url: "/images/roofing.png",
+    gradient: "from-orange-500/20 to-red-500/20",
+  },
+};
 
 export default function ServiceCategoriesClient({
   categories,
@@ -45,20 +83,6 @@ export default function ServiceCategoriesClient({
     return categories.map((cat, index) => ({
       ...cat,
       demandScore: categories.length - index,
-      responseTime:
-        index % 4 === 0
-          ? "~18 min"
-          : index % 4 === 1
-            ? "~26 min"
-            : index % 4 === 2
-              ? "~34 min"
-              : "~48 min",
-      typicalQuote:
-        index % 3 === 0
-          ? "A$120-A$280"
-          : index % 3 === 1
-            ? "A$180-A$420"
-            : "A$90-A$240",
     }));
   }, [categories]);
 
@@ -68,14 +92,14 @@ export default function ServiceCategoriesClient({
     return categoriesWithSignals.filter(
       (category) =>
         category.name.toLowerCase().includes(query) ||
-        category.slug.toLowerCase().includes(query),
+        category.slug.toLowerCase().includes(query)
     );
   }, [categoriesWithSignals, searchQuery]);
 
   const topCategories = useMemo(() => {
     return [...filteredCategories]
       .sort((a, b) => b.demandScore - a.demandScore)
-      .slice(0, 12);
+      .slice(0, 9);
   }, [filteredCategories]);
 
   const secondaryCategories = useMemo(() => {
@@ -101,7 +125,6 @@ export default function ServiceCategoriesClient({
         name: category.name,
         slug: category.slug,
       });
-    
     } else {
       setSelectedCategory(null);
     }
@@ -206,7 +229,6 @@ export default function ServiceCategoriesClient({
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
-               
               }}
               className="h-12 border-slate-300 bg-white pl-11 pr-11 text-base focus-visible:ring-blue-500 dark:border-slate-600 dark:bg-slate-950"
             />
@@ -256,13 +278,18 @@ export default function ServiceCategoriesClient({
               No exact match found
             </h3>
             <p className="mx-auto mt-2 max-w-xl text-sm text-slate-600 dark:text-slate-300">
-              Try broader terms like plumbing, cleaning, electrical, removals, or digital services. You can still post your job and providers will match it.
+              Try broader terms like plumbing, cleaning, electrical, removals,
+              or digital services. You can still post your job and providers
+              will match it.
             </p>
             <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
               <Button variant="outline" onClick={clearSearch}>
                 Clear search
               </Button>
-              <Button onClick={() => handlePostJob()} className="bg-blue-600 text-white hover:bg-blue-700">
+              <Button
+                onClick={() => handlePostJob()}
+                className="bg-blue-600 text-white hover:bg-blue-700"
+              >
                 Post My Job Instead
               </Button>
             </div>
@@ -273,7 +300,9 @@ export default function ServiceCategoriesClient({
           <section className="space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                {hasSearchQuery ? "Best matching services" : "Most requested services"}
+                {hasSearchQuery
+                  ? "Best matching services"
+                  : "Most requested services"}
               </h3>
               <Button
                 variant="outline"
@@ -288,23 +317,40 @@ export default function ServiceCategoriesClient({
               {topCategories.map((category) => (
                 <article
                   key={category.category_id}
-                  className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900"
+                  className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900"
                 >
                   <Link href={`/services/${category.slug}`} className="block">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <h4 className="text-lg font-semibold text-slate-900 group-hover:text-blue-700 dark:text-slate-100 dark:group-hover:text-blue-400">
-                          {highlightMatch(category.name, searchQuery)}
-                        </h4>
-                        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                          Typical quote range {category.typicalQuote}
-                        </p>
-                      </div>
-                      <ChevronRight className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-blue-600" />
+                    <div className="relative h-40 w-full overflow-hidden">
+                      {(() => {
+                        const staticImage = staticServiceImages[category.name];
+
+                        return (
+                          <>
+                            <img
+                              src={staticImage?.url || "/images/default.webp"}
+                              alt={category.name}
+                              className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                            />
+
+                            <div
+                              className={`absolute inset-0 bg-linear-to-t ${
+                                "from-black/60 to-transparent"
+                              }`}
+                            />
+                          </>
+                        );
+                      })()}
+
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
+
+                      <h4 className="absolute bottom-3 left-4 right-4 text-lg font-semibold text-white">
+                        {highlightMatch(category.name, searchQuery)}
+                      </h4>
                     </div>
                   </Link>
 
-                  <div className="mt-3 flex items-center justify-between text-xs text-slate-600 dark:text-slate-300">
+                  {/* <div className="p-5">
+                  <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-300">
                     <span className="inline-flex items-center gap-1">
                       <Clock3 className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
                       Avg first response {category.responseTime}
@@ -314,13 +360,14 @@ export default function ServiceCategoriesClient({
                       In demand
                     </span>
                   </div>
-
+              
                   <Button
-                    className="mt-4 w-full bg-[#2563EB] text-white  hover:bg-slate-800  dark:hover:text-slate-800 dark:hover:bg-slate-200"
+                    className="mt-4 w-full bg-[#2563EB] text-white hover:bg-blue-700"
                     onClick={() => handlePostJob(category)}
                   >
                     Post this job
                   </Button>
+                </div> */}
                 </article>
               ))}
             </div>
@@ -338,7 +385,9 @@ export default function ServiceCategoriesClient({
                   onClick={() => setShowAll((prev) => !prev)}
                   className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"
                 >
-                  {showAll ? "Show less" : `Show all (${secondaryCategories.length})`}
+                  {showAll
+                    ? "Show less"
+                    : `Show all (${secondaryCategories.length})`}
                 </button>
               ) : null}
             </div>
@@ -415,7 +464,9 @@ function TrustRow({
       <div className="flex items-start gap-3">
         <Icon className="mt-0.5 h-4 w-4 text-blue-600 dark:text-blue-400" />
         <div>
-          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{title}</p>
+          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+            {title}
+          </p>
           <p className="text-xs text-slate-600 dark:text-slate-300">{body}</p>
         </div>
       </div>
@@ -435,7 +486,9 @@ function InfoCard({
   return (
     <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
       <Icon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-      <h4 className="mt-3 text-base font-semibold text-slate-900 dark:text-slate-100">{title}</h4>
+      <h4 className="mt-3 text-base font-semibold text-slate-900 dark:text-slate-100">
+        {title}
+      </h4>
       <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{body}</p>
     </article>
   );

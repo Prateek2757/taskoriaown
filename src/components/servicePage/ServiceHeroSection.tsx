@@ -32,8 +32,8 @@ export default function ServiceHeroSection({
         style={{ backgroundImage: `url(${service.hero_image})` }}
       />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-15 md:py-14">
-        <div className="text-center mb-10">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-10 md:py-10">
+        <div className="text-center mb-6">
           <h1 className="text-4xl md:text-5xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-6">
             <span className="bg-[#3C7DED] bg-clip-text text-transparent drop-shadow-lg">
               {title}
@@ -67,7 +67,7 @@ export default function ServiceHeroSection({
         </div>
 
         <div className="max-w-2xl mx-auto">
-          <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-4 border border-white/20 dark:border-slate-700/50">
+          <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg rounded-3xl shadow-2xl p-4 md:p-3 border border-white/20 dark:border-slate-700/50">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-14 h-14 bg-gradient-to-br from-indigo-600 to-blue-500 dark:from-indigo-500 dark:to-blue-400 rounded-2xl flex items-center justify-center shadow-lg">
                 <MapPin className="w-7 h-7 text-white" />

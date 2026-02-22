@@ -7,28 +7,27 @@ import Image from "next/image";
 
 const reviews = [
   {
-    id:"1",
+    id: "1",
     name: "Chong",
     username: "Brisbane, QLD",
-    body: "This was my first time using Taskoria and I was a bit unsure at first, but it turned out great. The process was straightforward, and I liked that everything was handled in one place. The service provider was professional and responsive. Overall, a very positive experience.",
+    body: "My first time using Taskoria and it was smooth from start to finish. The provider was professional and communication was easy. A great overall experience.",
     img: "/chongmin.png",
   },
   {
-    id:"2",
+    id: "2",
     name: "Aayuskha",
     username: "Gold Coast, QLD",
-    body: "Taskoria saved me a lot of time. I needed an electrician urgently and didn’t want to call around. Within a short time, I had a couple of good options and could compare them easily. The job was completed on time and communication was solid throughout. Very convenient platform.",
+    body: "I needed an electrician urgently and found great options quickly. Comparing quotes was simple and the job was completed on time.",
     img: "/aayushka.png",
   },
   {
-    id:"3",
+    id: "3",
     name: "Zaya",
     username: "Sydney, NSW",
-    body: "I hired a graphic designer through Taskoria for a small business project. What stood out was how relevant the matches were — I didn’t get random quotes. The designer understood the brief well and delivered exactly what I needed. The platform feels well thought out and easy to use.",
+    body: "I hired a graphic designer and received highly relevant matches. The work matched my brief perfectly and the process was seamless.",
     img: "/zaya.png",
   },
 ];
-
 const firstRow = reviews.slice(0, reviews.length);
 const secondRow = reviews.slice(reviews.length / 2);
 
@@ -84,8 +83,8 @@ export default function Testomonail() {
       id="customer-reviews"
     >
      <div className="text-center">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800">
-          <QuoteIcon className="w-3.5 h-3.5" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-linear-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800">
+          {/* <QuoteIcon className="w-3.5 h-3.5" /> */}
           Testimonials
         </div>
         <h2 className="text-3xl font-semibold text-center text-foreground">

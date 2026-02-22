@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 
 function CTA() {
   return (
-    <section className="relative py-10 px-2 sm:px-4 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 dark:bg-[radial-gradient(circle_at_center_bottom,_rgba(76,112,255,0.18)_0%,_rgba(0,0,0,1)_70%)] overflow-hidden">
+    <section className="relative py-6 px-2 sm:px-4 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 dark:bg-[radial-gradient(circle_at_center_bottom,_rgba(76,112,255,0.18)_0%,_rgba(0,0,0,1)_70%)] overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-5 w-36 h-36 bg-blue-400/10 rounded-full blur-2xl animate-pulse"></div>
         <div
@@ -34,8 +34,8 @@ function CTA() {
             style={{ animationDelay: "1s" }}
           ></div>
 
-          <div className="relative z-10 flex flex-col items-center  text-center space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 backdrop-blur-sm">
+          <div className="relative z-10 flex flex-col items-center  text-center space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-blue-500/10 to-[#c2d4fb] border border-blue-500/20 backdrop-blur-sm">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
@@ -45,9 +45,9 @@ function CTA() {
               </span>
             </div>
 
-            <h2 className="text-slate-900 text-2xl sm:text-3xl lg:text-4xl dark:text-white font-bold leading-tight max-w-2xl">
+            <h2 className="text-slate-900  text-2xl sm:text-3xl lg:text-4xl dark:text-white font-bold leading-tight max-w-3xl">
               Ready to hire without the{" "}
-              <span className="bg-clip-text text-transparent bg-[#3C7DED]   animate-gradient">
+              <span className="bg-clip-text text-transparent bg-[#2563EB]   animate-gradient">
                 runaround?
               </span>
             </h2>

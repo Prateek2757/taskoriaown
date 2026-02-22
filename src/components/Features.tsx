@@ -57,24 +57,24 @@ export default function FeaturesStacking() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Taskoria Service Marketplace",
-    "applicationCategory": "BusinessApplication",
-    "offers": {
+    name: "Taskoria Service Marketplace",
+    applicationCategory: "BusinessApplication",
+    offers: {
       "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "AUD"
+      price: "0",
+      priceCurrency: "AUD",
     },
-    "featureList": [
+    featureList: [
       "AI-Powered Matching - Intelligent algorithm connects you with perfect service providers",
       "Professional Verification - Rigorous background checks and credential verification",
       "Smart Quoting System - Instant accurate quotes powered by machine learning",
-      "Community Hub - Join thousands of satisfied customers and expert providers"
+      "Community Hub - Join thousands of satisfied customers and expert providers",
     ],
-    "aggregateRating": {
+    aggregateRating: {
       "@type": "AggregateRating",
-      "ratingValue": "4.5",
-      "reviewCount": "5000"
-    }
+      ratingValue: "4.5",
+      reviewCount: "5000",
+    },
   };
 
   return (
@@ -84,7 +84,7 @@ export default function FeaturesStacking() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <main className="bg-white dark:bg-black transition-colors duration-300 sm:mt-30">
+      <main className="bg-white dark:bg-black transition-colors duration-300 sm:mt-20">
         <style>{`
           @keyframes borderRotate {
             0% {
@@ -146,18 +146,19 @@ export default function FeaturesStacking() {
                   bg-clip-text text-transparent"
             >
               Built for real-world{" "}
-              <span className="bg-[#3C7DED] bg-clip-text text-transparent">
+              <span className="bg-[#2563EB] bg-clip-text text-transparent">
                 service hiring
               </span>{" "}
               in Australia
             </h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-              Practical tools to post jobs faster, compare providers clearly, and hire with less risk.
+              Practical tools to post jobs faster, compare providers clearly,
+              and hire with less risk.
             </p>
           </header>
         </div>
 
-        <section 
+        <section
           className="max-w-7xl m-auto relative bg-linear-to-b from-transparent via-gray-50/50 to-white dark:via-neutral-950/50 dark:to-black flex flex-col md:flex-row gap-0 py-10 px-4 md:px-0 items-center"
           aria-label="Platform features and capabilities"
         >
@@ -193,12 +194,20 @@ export default function FeaturesStacking() {
                   <Circle ref={div1Ref} aria-label="AI Brain Icon">
                     <BrainCircuit className="text-blue-600" />
                   </Circle>
-                  <Circle ref={div5Ref} className="p-2" aria-label="Shield Check Icon">
+                  <Circle
+                    ref={div5Ref}
+                    className="p-2"
+                    aria-label="Shield Check Icon"
+                  >
                     <ShieldCheck className="text-blue-600" />
                   </Circle>
                 </div>
                 <div className="flex flex-row items-center justify-center">
-                  <Circle ref={div4Ref} className="h-16 w-16 p-3" aria-label="Taskoria Logo">
+                  <Circle
+                    ref={div4Ref}
+                    className="h-16 w-16 p-3"
+                    aria-label="Taskoria Logo"
+                  >
                     <Image
                       src="/taskorialogonew.png"
                       alt="Taskoria service marketplace logo"
@@ -209,10 +218,18 @@ export default function FeaturesStacking() {
                   </Circle>
                 </div>
                 <div className="flex flex-row items-center justify-between">
-                  <Circle ref={div3Ref} className="p-2" aria-label="Star Rating Icon">
+                  <Circle
+                    ref={div3Ref}
+                    className="p-2"
+                    aria-label="Star Rating Icon"
+                  >
                     <Star className="text-blue-600" />
                   </Circle>
-                  <Circle ref={div7Ref} className="p-2" aria-label="Users Community Icon">
+                  <Circle
+                    ref={div7Ref}
+                    className="p-2"
+                    aria-label="Users Community Icon"
+                  >
                     <Users className="text-blue-600" />
                   </Circle>
                 </div>
@@ -300,7 +317,14 @@ interface CardProps {
   isEven: boolean;
 }
 
-export const Card = ({ i, title, description, url, feature, isEven }: CardProps) => {
+export const Card = ({
+  i,
+  title,
+  description,
+  url,
+  feature,
+  isEven,
+}: CardProps) => {
   return (
     <article className="flex items-center  justify-center">
       <div
@@ -318,13 +342,24 @@ export const Card = ({ i, title, description, url, feature, isEven }: CardProps)
         dark:hover:shadow-[0_20px_60px_rgb(0,0,0,0.6)]
         "
       >
-        <div className="flex flex-col gap-0 md:gap-6 h-full p-6 md:p-9">
+        <div className="flex flex-col gap-0 md:gap-6 h-full p-6 md:py-4 md:px-10">
           <div
             className={`flex flex-col space-y-4 ${
               isEven ? "md:text-end" : "text-start"
             }`}
           >
-            <h2 className="text-2xl md:text-2xl font-extrabold text-gray-900 dark:text-blue-400">
+            <h2
+              className={`text-2xl  font-extrabold  inlin
+              ${
+                isEven
+                  ? " bg-linear-to-r  from-[#1D4ED8]  via-[#2563EB] to-[#60A5FA] "
+                  : "bg-linear-to-r from-[#1D4ED8]   via-[#60A5FA] to-[#60A5FA] "
+              } 
+
+               bg-clip-text 
+               text-transparent 
+               drop-shadow-sm`}
+            >
               {title}
             </h2>
 
@@ -332,13 +367,13 @@ export const Card = ({ i, title, description, url, feature, isEven }: CardProps)
               {description}
             </p>
 
-            <div className="pt-2 pb-3">
+            {/* <div className="pt-2 pb-3">
               <Button
                 aria-label={`Learn more about ${title}`}
               >
                 Learn More
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

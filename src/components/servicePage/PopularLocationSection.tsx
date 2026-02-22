@@ -156,12 +156,12 @@ export default function PopularLocationsSection({
   };
 
   return (
-    <div className="mb-20 relative">
+    <div className="mb-10 relative">
       <div className="text-center mb-12">
-        <span className="inline-block px-4 py-2 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-semibold rounded-full text-sm mb-4">
+        <span className="inline-block px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-semibold rounded-full text-sm mb-4">
           POPULAR LOCATIONS
         </span>
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        <h2 className="text-4xl  font-bold text-gray-900 dark:text-white mb-2">
           Find Providers Near You
         </h2>
         <p className="text-xl text-gray-600 dark:text-gray-400">
@@ -211,7 +211,7 @@ export default function PopularLocationsSection({
                   style={{ width: 'calc((100vw - 8rem) / 3)', minWidth: '300px', maxWidth: '350px' }}
                 >
                   <Link
-                    href={`/services/${serviceSlug}/${citySlug}`}
+                    href={`/services/${serviceSlug}/${city.state_slug}/${city.slug}`}
                     className={`block h-full bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border ${
                       isCurrentCity 
                         ? 'border-indigo-500 ring-2 ring-indigo-300 dark:ring-indigo-700' 
@@ -240,7 +240,7 @@ export default function PopularLocationsSection({
                       </div>
                     </div>
                   
-                    <div className="p-6">
+                    <div className="p-2">
                       {/* <div className="space-y-3 mb-5"> 
                         {popularCities[index % popularCities.length]?.providers?.slice(0, 3).map((provider, i) => (
                           <div key={i} className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700/50 transition">
