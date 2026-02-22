@@ -97,16 +97,16 @@ const totalResponses = profile?.response_stats?.total_responses
             </p>
           </div>
 
-          <Button
+          {/* <Button
             variant="outline"
             className="border-cyan-600 text-cyan-700 dark:border-cyan-400 dark:text-cyan-300 dark:hover:bg-cyan-400/10"
             onClick={() => setShowStats((prev) => !prev)}
           >
             {showStats ? "Hide Insights" : "View Insights"}
-          </Button>
+          </Button> */}
         </div>
 
-        {showStats && <DashboardStats totalLeads={totalLeads} />}
+        {/* {showStats && <DashboardStats totalLeads={totalLeads} />} */}
 
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="space-y-6">

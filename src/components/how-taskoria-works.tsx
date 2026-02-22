@@ -206,12 +206,12 @@ export default function HowTaskoriaWorks() {
                     variants={cardVariant}
                     transition={{ duration: 0.6, delay: index * 0.25 }}
                     className="
-                      group relative w-full rounded-xl p-6 sm:p-
+                      group relative w-full rounded-xl p-4 
                       bg-white/70 dark:bg-white/5
                       border border-black/10 dark:border-white/20 
                       dark:before:from-white/10 dark:before:via-white/5 dark:before:to-transparent
                     "
-                  >
+                  > 
                     <div className="relative z-10">
                       <div className="flex items-center gap-3 mb-4">
                         {/* <div className="bg-blue-100 dark:bg-blue-900/30 w-12 h-12 rounded-lg flex items-center justify-center">
@@ -222,7 +222,7 @@ export default function HowTaskoriaWorks() {
                         </span> */}
                       </div>
 
-                      <h2 className="text-xl max-sm:mb-0 text-[#2563EB] sm:text-xl font-semibold mb-3 dark:text-white">
+                      <h2 className="text-xl max-sm:mb-0 text-[#2563EB] sm:text-xl font-semibold mb-3 ">
                         {step.title}
                       </h2>
 

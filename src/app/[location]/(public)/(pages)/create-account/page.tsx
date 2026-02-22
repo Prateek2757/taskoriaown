@@ -51,7 +51,7 @@ const onboardingSchema = z.object({
     },
     { message: "Please enter a valid Australian phone number" }
   ),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
   hasWebsite: z.enum(["yes", "no"]).optional(),
   websiteUrl: z
     .string()
@@ -75,7 +75,6 @@ const conditionalSchema = onboardingSchema
 type OnboardingFormData = z.infer<typeof conditionalSchema>;
 type ReferralStatus = "idle" | "validating" | "valid" | "invalid";
 
-/** Red asterisk for required fields */
 const Req = () => <span className="text-red-500 ml-0.5">*</span>;
 
 function OnboardingContent() {
@@ -122,7 +121,9 @@ function OnboardingContent() {
     }
     setReferralStatus("validating");
     try {
-      const res = await axios.post("/api/signup/referral-validate", { code: code.trim() });
+      const res = await axios.post("/api/signup/referral-validate", {
+        code: code.trim(),
+      });
       if (res.data.valid) {
         setReferralStatus("valid");
         setReferralMessage(res.data.message || "Referral code applied! 🎉");
@@ -170,10 +171,10 @@ function OnboardingContent() {
     "w-full outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 bg-transparent";
 
   const inputWrapperClasses =
-    "flex items-center border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2.5 shadow-sm focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition bg-white dark:bg-gray-800/50";
+    "flex items-center border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 shadow-sm focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition bg-white dark:bg-gray-800/50";
 
   const buttonSelected =
-    "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg ring-2 ring-blue-300";
+    "bg-gradient-to-r from-[#2563EB] to-cyan-600 text-white shadow-lg ring-2 ring-blue-300";
 
   const buttonUnselected =
     "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600";
@@ -194,7 +195,6 @@ function OnboardingContent() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800 p-4">
-      {/* Decorative blobs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-200/40 dark:bg-blue-900/20 rounded-full blur-3xl" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-cyan-200/40 dark:bg-cyan-900/20 rounded-full blur-3xl" />
@@ -205,7 +205,6 @@ function OnboardingContent() {
         animate={{ opacity: 1, y: 0 }}
         className="relative bg-white dark:bg-gray-900 shadow-2xl rounded-3xl w-full max-w-3xl p-8 sm:p-12"
       >
-        {/* Step indicator */}
         <div className="flex items-center justify-center gap-2 mb-6">
           {["location", "details"].map((s, i) => (
             <div key={s} className="flex items-center gap-2">
@@ -214,8 +213,8 @@ function OnboardingContent() {
                   step === s
                     ? "bg-blue-600 text-white shadow-lg shadow-blue-200 dark:shadow-blue-900"
                     : i < (step === "details" ? 1 : 0)
-                    ? "bg-emerald-500 text-white"
-                    : "bg-gray-200 dark:bg-gray-700 text-gray-400"
+                      ? "bg-emerald-500 text-white"
+                      : "bg-gray-200 dark:bg-gray-700 text-gray-400"
                 }`}
               >
                 {i < (step === "details" ? 1 : 0) ? "✓" : i + 1}
@@ -223,7 +222,9 @@ function OnboardingContent() {
               {i < 1 && (
                 <div
                   className={`w-12 h-0.5 rounded-full transition-all duration-500 ${
-                    step === "details" ? "bg-emerald-400" : "bg-gray-200 dark:bg-gray-700"
+                    step === "details"
+                      ? "bg-emerald-400"
+                      : "bg-gray-200 dark:bg-gray-700"
                   }`}
                 />
               )}
@@ -242,10 +243,10 @@ function OnboardingContent() {
             : "We'll use this info to complete your provider profile."}
         </p>
 
-        {/* Required fields legend — only show on details step */}
         {step === "details" && (
           <p className="text-xs text-gray-400 dark:text-gray-500 text-right -mt-5 mb-4">
-            <span className="text-red-500 font-semibold">*</span> Required fields
+            <span className="text-red-500 font-semibold">*</span> Required
+            fields
           </p>
         )}
 
@@ -284,7 +285,8 @@ function OnboardingContent() {
                               I serve customers nationwide
                             </h3>
                             <p className="text-gray-500 dark:text-gray-400 text-sm">
-                              Your services are available anywhere in the country.
+                              Your services are available anywhere in the
+                              country.
                             </p>
                             <input
                               type="radio"
@@ -331,15 +333,30 @@ function OnboardingContent() {
                                 render={({ field }) => (
                                   <FormItem>
                                     <FormControl>
-                                      <select
-                                        {...field}
-                                        className="border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-2 w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-cyan-500"
-                                      >
-                                        <option value="10">10 miles</option>
-                                        <option value="20">20 miles</option>
-                                        <option value="30">30 miles</option>
-                                        <option value="50">50 miles</option>
-                                      </select>
+                                      <div className={inputWrapperClasses}>
+                                        <Building2 className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
+                                        <select
+                                          {...field}
+                                          className={`${inputClasses} `}
+                                        >
+                                          <option value="">Select size</option>
+                                          <option value="1-10">
+                                            1-10 employees
+                                          </option>
+                                          <option value="11-50">
+                                            11-50 employees
+                                          </option>
+                                          <option value="51-200">
+                                            51-200 employees
+                                          </option>
+                                          <option value="201-500">
+                                            201-500 employees
+                                          </option>
+                                          <option value="500+">
+                                            500+ employees
+                                          </option>
+                                        </select>
+                                      </div>
                                     </FormControl>
                                     <FormMessage />
                                   </FormItem>
@@ -351,12 +368,16 @@ function OnboardingContent() {
                                 render={() => (
                                   <FormItem>
                                     <FormLabel className="dark:text-gray-200">
-                                      Select your city<Req />
+                                      Select your city
+                                      <Req />
                                     </FormLabel>
                                     <FormControl>
                                       <LocationSearch
                                         onSelect={(data) =>
-                                          setValue("city_id", String(data?.city_id || ""))
+                                          setValue(
+                                            "city_id",
+                                            String(data?.city_id || "")
+                                          )
                                         }
                                       />
                                     </FormControl>
@@ -378,7 +399,7 @@ function OnboardingContent() {
 
                   <Button
                     type="button"
-                    className="w-full bg-[#3C7DED] text-white hover:opacity-90 py-3 rounded-xl shadow-md"
+                    className="w-full bg-[#3C7DED] text-white hover:opacity-90 py-5 rounded-xl shadow-md"
                     onClick={() => setStep("details")}
                   >
                     Continue
@@ -401,11 +422,18 @@ function OnboardingContent() {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="dark:text-gray-200">Full Name<Req /></FormLabel>
+                          <FormLabel className="dark:text-gray-200">
+                            Full Name
+                            <Req />
+                          </FormLabel>
                           <FormControl>
                             <div className={inputWrapperClasses}>
                               <User className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
-                              <input {...field} placeholder="Full Name" className={inputClasses} />
+                              <input
+                                {...field}
+                                placeholder="Full Name"
+                                className={inputClasses}
+                              />
                             </div>
                           </FormControl>
                           <FormMessage />
@@ -418,7 +446,10 @@ function OnboardingContent() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="dark:text-gray-200">Email Address<Req /></FormLabel>
+                          <FormLabel className="dark:text-gray-200">
+                            Email Address
+                            <Req />
+                          </FormLabel>
                           <FormControl>
                             <div className={inputWrapperClasses}>
                               <Mail className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
@@ -441,7 +472,9 @@ function OnboardingContent() {
                     name="companyName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="dark:text-gray-200">Company Name</FormLabel>
+                        <FormLabel className="dark:text-gray-200">
+                          Company Name
+                        </FormLabel>
                         <FormControl>
                           <div className={inputWrapperClasses}>
                             <Building2 className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
@@ -466,7 +499,9 @@ function OnboardingContent() {
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="dark:text-gray-200">Phone Number</FormLabel>
+                          <FormLabel className="dark:text-gray-200">
+                            Phone Number
+                          </FormLabel>
                           <FormControl>
                             <div className={inputWrapperClasses}>
                               <span className="text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0">
@@ -481,7 +516,8 @@ function OnboardingContent() {
                                   const target = e.target as HTMLInputElement;
                                   let value = target.value.replace(/\D/g, "");
                                   if (value.length > 4 && value.length <= 7) {
-                                    value = value.slice(0, 4) + " " + value.slice(4);
+                                    value =
+                                      value.slice(0, 4) + " " + value.slice(4);
                                   } else if (value.length > 7) {
                                     value =
                                       value.slice(0, 4) +
@@ -507,7 +543,10 @@ function OnboardingContent() {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="dark:text-gray-200">Password<Req /></FormLabel>
+                          <FormLabel className="dark:text-gray-200">
+                            Password
+                            <Req />
+                          </FormLabel>
                           <FormControl>
                             <div className={`${inputWrapperClasses} relative`}>
                               <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
@@ -547,14 +586,16 @@ function OnboardingContent() {
                           Does your company have a website?
                         </FormLabel>
                         <FormControl>
-                          <div className="flex gap-4 mt-3">
+                          <div className="flex gap-4 mt-1">
                             <motion.button
                               type="button"
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                               onClick={() => setValue("hasWebsite", "yes")}
                               className={`px-8 py-2 rounded-full font-semibold transition-all shadow-sm ${
-                                field.value === "yes" ? buttonSelected : buttonUnselected
+                                field.value === "yes"
+                                  ? buttonSelected
+                                  : buttonUnselected
                               }`}
                             >
                               Yes
@@ -595,7 +636,10 @@ function OnboardingContent() {
                           name="websiteUrl"
                           render={({ field }) => (
                             <FormItem className="mt-3">
-                              <FormLabel className="dark:text-gray-200">Website URL<Req /></FormLabel>
+                              <FormLabel className="dark:text-gray-200">
+                                Website URL
+                                <Req />
+                              </FormLabel>
                               <FormControl>
                                 <div className={inputWrapperClasses}>
                                   <Globe className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
@@ -619,11 +663,13 @@ function OnboardingContent() {
                     name="companySize"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="dark:text-gray-200">Company Size</FormLabel>
+                        <FormLabel className="dark:text-gray-200">
+                          Company Size
+                        </FormLabel>
                         <FormControl>
                           <select
                             {...field}
-                            className="border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 "
+                            className="  focus-within:ring-2 focus-within:ring-blue-500  transition shadow-sm  rounded-xl px-3 py-2 w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 "
                           >
                             <option value="">Select size</option>
                             <option value="1-10">1-10 employees</option>
@@ -652,7 +698,7 @@ function OnboardingContent() {
                         </FormLabel>
                         <FormControl>
                           <div
-                            className={`flex items-center  border-1 shadow-sm rounded-xl px-3 py-2.5  transition-all duration-200 bg-white dark:bg-gray-800/50 ${referralWrapperBorder[referralStatus]}`}
+                            className={`flex items-center  border-1 shadow-sm rounded-xl px-3 py-2  transition-all duration-200 bg-white dark:bg-gray-800/50 ${referralWrapperBorder[referralStatus]}`}
                           >
                             <div className="mr-2 flex-shrink-0 transition-all duration-300">
                               {referralStatusIcon[referralStatus]}
@@ -665,7 +711,6 @@ function OnboardingContent() {
                               onChange={(e) => {
                                 const val = e.target.value.toUpperCase();
                                 field.onChange(val);
-                                // Reset status when user types
                                 if (referralStatus !== "idle") {
                                   setReferralStatus("idle");
                                   setReferralMessage("");
@@ -679,11 +724,15 @@ function OnboardingContent() {
                                   initial={{ opacity: 0, scale: 0.8 }}
                                   animate={{ opacity: 1, scale: 1 }}
                                   exit={{ opacity: 0, scale: 0.8 }}
-                                  onClick={() => validateReferralCode(field.value || "")}
+                                  onClick={() =>
+                                    validateReferralCode(field.value || "")
+                                  }
                                   disabled={referralStatus === "validating"}
                                   className="ml-2 flex-shrink-0 text-xs font-semibold px-3 py-1 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
                                 >
-                                  {referralStatus === "validating" ? "Checking..." : "Apply"}
+                                  {referralStatus === "validating"
+                                    ? "Checking..."
+                                    : "Apply"}
                                 </motion.button>
                               )}
                             </AnimatePresence>
@@ -700,12 +749,16 @@ function OnboardingContent() {
                                 referralStatus === "valid"
                                   ? "text-emerald-600 dark:text-emerald-400"
                                   : referralStatus === "invalid"
-                                  ? "text-red-500 dark:text-red-400"
-                                  : "text-gray-500"
+                                    ? "text-red-500 dark:text-red-400"
+                                    : "text-gray-500"
                               }`}
                             >
-                              {referralStatus === "valid" && <CheckCircle2 className="w-3.5 h-3.5" />}
-                              {referralStatus === "invalid" && <XCircle className="w-3.5 h-3.5" />}
+                              {referralStatus === "valid" && (
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                              )}
+                              {referralStatus === "invalid" && (
+                                <XCircle className="w-3.5 h-3.5" />
+                              )}
                               {referralMessage}
                             </motion.p>
                           )}
@@ -713,7 +766,8 @@ function OnboardingContent() {
 
                         {referralStatus === "idle" && (
                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
-                            Got a referral code? Enter it above and click <strong>Apply</strong>.
+                            Got a referral code? Enter it above and click{" "}
+                            <strong>Apply</strong>.
                           </p>
                         )}
 
@@ -729,7 +783,8 @@ function OnboardingContent() {
                   >
                     {isSubmitting ? (
                       <span className="flex items-center justify-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin" /> Submitting...
+                        <Loader2 className="w-4 h-4 animate-spin" />{" "}
+                        Submitting...
                       </span>
                     ) : (
                       "Finish Onboarding"

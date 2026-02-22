@@ -98,7 +98,7 @@ export default function CategorySelectionPage() {
           </div>
 
           <div className="relative mb-8">
-            <Search className="absolute left-3 top-3.5 text-gray-400 dark:text-gray-500 w-5 h-5" />
+            <Search className="absolute left-3 top-3 text-gray-400 dark:text-gray-500 w-5 h-5" />
             <Input
               type="text"
               placeholder="Search for a service..."
@@ -176,7 +176,7 @@ export default function CategorySelectionPage() {
             <Button
               disabled={isNavigating}
               onClick={goNext}
-              className="bg-gradient-to-r bg-blue-600 text-white px-10 py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-cyan-700 hover:to-blue-700 dark:hover:from-cyan-600 dark:hover:to-blue-600 transition-all w-full"
+              className="bg-gradient-to-r bg-blue-600 text-white px-10 py-5 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-cyan-700 hover:to-blue-700 dark:hover:from-cyan-600 dark:hover:to-blue-600 transition-all w-full"
             >
               {isNavigating ? (
                 <>

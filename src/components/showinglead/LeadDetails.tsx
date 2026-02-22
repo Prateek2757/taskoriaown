@@ -180,7 +180,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     convoError,
     refetchConversation,
     isNavigating,
-    hasActiveSubscription,
+    // hasActiveSubscription,
   ]);
 
   const handlePurchaseSuccess = useCallback(async () => {
@@ -188,7 +188,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
     await fetchResponses();
     await createNotification({
-      userId: session?.user?.id,
+      userId: String(session?.user?.id),
       title: "Lead Purchased Successfully🎉!",
       type: "lead_purchased",
       body: `Congratulations ${session?.user?.name}! You have Purchased Lead For ${lead.category_name}`,
@@ -203,7 +203,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       action_url: `/customer/dashboard`,
     });
 
-    if (hasActiveSubscription) {
+    // if (hasActiveSubscription) {
+
+
       toast.info("Preparing your chat...");
       await new Promise((resolve) => setTimeout(resolve, 500));
       const newConvoId = await refetchConversation();
@@ -212,13 +214,16 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       } else {
         toast.info("Click 'Chat' button to start your conversation");
       }
-    } else {
-      toast.info("Contact details unlocked! Subscribe to use chat feature.");
-    }
+
+
+    // } 
+    // else {
+    //   toast.info("Contact details unlocked! Subscribe to use chat feature.");
+    // }
   }, [
     fetchResponses,
     refetchConversation,
-    hasActiveSubscription,
+    // hasActiveSubscription,
     session,
     userId,
     lead,
@@ -265,7 +270,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   const isChatButtonDisabled =
     !leadStatus.purchased ||
-    !hasActiveSubscription ||
+    // !hasActiveSubscription ||
     isNavigating ||
     subscriptionLoading;
 
@@ -397,7 +402,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
           </div>
 
           {leadStatus.purchased &&
-            !hasActiveSubscription &&
+            // !hasActiveSubscription &&
             !subscriptionLoading && (
               <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-4 mb-6">
                 <div className="flex items-start gap-3">
@@ -469,26 +474,31 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 onClick={handleGoToChat}
                 disabled={isChatButtonDisabled}
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed relative"
-                title={
-                  !hasActiveSubscription ? "Active subscription required" : ""
-                }
+                // title={
+                //   !hasActiveSubscription ? "Active subscription required" : ""
+                // }
               >
-                {subscriptionLoading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    Checking subscription...
-                  </>
-                ) : isNavigating || convoLoading ? (
+                {
+                // subscriptionLoading ? (
+                //   <>
+                //     <Loader2 className="w-5 h-5 animate-spin" />
+                //     Checking subscription...
+                //   </>
+                // ) : 
+
+                isNavigating || convoLoading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
                     {isNavigating ? "Opening Chat..." : "Preparing Chat..."}
                   </>
-                ) : !hasActiveSubscription ? (
-                  <>
-                    <Lock className="w-5 h-5" />
-                    Chat (Subscription Required)
-                  </>
-                ) : (
+                ) : 
+                // !hasActiveSubscription ? (
+                //   <>
+                //     <Lock className="w-5 h-5" />
+                //     Chat (Subscription Required)
+                //   </>
+                // ) :
+                 (
                   <>
                     <MessageSquare className="w-5 h-5" />
                     Chat with {customerFirstName}

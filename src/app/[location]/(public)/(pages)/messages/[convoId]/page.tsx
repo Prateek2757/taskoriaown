@@ -203,6 +203,27 @@ export default function ChatPageInline({
     if (found) setActiveConversation(found);
   }, [routeConvoId, conversations]);
 
+  useEffect(() => {
+    if (!conversations.length) return;
+    if (activeConversation) return;
+  
+    const convoFromRoute = conversations.find(
+      (c) => String(c.id) === String(routeConvoId)
+    );
+  
+    if (convoFromRoute) {
+      setActiveConversation(convoFromRoute);
+      return;
+    }
+  
+    const firstConversation = conversations[0];
+  
+    if (firstConversation) {
+      setActiveConversation(firstConversation);
+      router.replace(`/messages/${firstConversation.id}`);
+    }
+  }, [conversations, routeConvoId, activeConversation, router]);
+
   // const getOtherParticipantName = useCallback(
   //   (conversation: Conversation) => {
   //     const other = conversation.participants.find(

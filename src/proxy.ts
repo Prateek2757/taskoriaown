@@ -54,6 +54,7 @@ export async function proxy(req: NextRequest) {
         "/customer/dashboard",
         "/provider/message",
         "/provider/leads",
+        "/settings",
       ];
 
       if (pathnameWithoutLocale.startsWith("/create")) {
@@ -94,6 +95,10 @@ export async function proxy(req: NextRequest) {
     "/customer/dashboard",
     "/provider/message",
     "/provider/leads",
+    "/settings",
+    "/adminbudgetmanager",
+    "/provider-responses",
+
   ];
 
   if (pathnameWithoutLocale.startsWith("/create")) {

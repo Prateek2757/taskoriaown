@@ -57,8 +57,7 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const fetchAutocomplete = async (input: string) => {
@@ -108,7 +107,7 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
       });
 
       const data = res.data;
-console.log(data);
+      console.log(data);
 
       return {
         place_id: data.place_id,
@@ -140,10 +139,7 @@ console.log(data);
     if (!details) return;
 
     try {
-      const reslocation = await axios.post(
-        "/api/signup/location",
-        details
-      );
+      const reslocation = await axios.post("/api/signup/location", details);
 
       const city_id = reslocation.data.city_id;
 
@@ -170,18 +166,12 @@ console.log(data);
 
   const handleChange = (value: string) => {
     setQuery(value);
-    if (debounceTimeout.current)
-      clearTimeout(debounceTimeout.current);
+    if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
 
-    debounceTimeout.current = setTimeout(
-      () => fetchAutocomplete(value),
-      300
-    );
+    debounceTimeout.current = setTimeout(() => fetchAutocomplete(value), 300);
   };
 
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!results.length) return;
 
     if (e.key === "ArrowDown") {
@@ -189,9 +179,7 @@ console.log(data);
       setActiveIndex((prev) => (prev + 1) % results.length);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setActiveIndex(
-        (prev) => (prev - 1 + results.length) % results.length
-      );
+      setActiveIndex((prev) => (prev - 1 + results.length) % results.length);
     } else if (e.key === "Enter") {
       e.preventDefault();
       if (activeIndex >= 0) handleSelect(results[activeIndex]);
@@ -212,11 +200,9 @@ console.log(data);
         onChange={(e) => handleChange(e.target.value)}
         onKeyDown={handleKeyDown}
         onFocus={() =>
-          query.length >= 3 &&
-          results.length > 0 &&
-          setShowDropdown(true)
+          query.length >= 3 && results.length > 0 && setShowDropdown(true)
         }
-        className=" border border-gray-300 py-5 pl-9 pr-9 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+        className=" border  py-5 pl-9 pr-9 text-sm shadow-sm focus:outline-none focus:ring- focus:ring-primary"
       />
 
       <div className="absolute right-3 top-3">

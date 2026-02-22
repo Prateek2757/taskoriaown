@@ -372,9 +372,9 @@ const Footer = () => {
                   x2="100%"
                   y2="0%"
                 >
-                  <stop offset="0%" stopColor="#3C7DED" />
-                  <stop offset="50%" stopColor="#41A6EE" />
-                  <stop offset="100%" stopColor="#46CBEE" />
+                  <stop offset="20%" stopColor="#2563EB" />
+                  <stop offset="50%" stopColor="#46CBEE" />
+                  <stop offset="100%" stopColor="#2563EB" />
                 </linearGradient>
 
                 <filter

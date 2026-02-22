@@ -26,6 +26,7 @@ import { ThemeToggle } from "../theme-toggle";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import SlidingUnderlineNav from "./slidingUnderline";
 import NotificationBell from "../notification/NotificationBell";
+import TaskoriaSasthoreDirect from "../sastoticket/taskoriasasthoredirect";
 
 type ViewMode = "customer" | "provider" | null;
 
@@ -55,7 +56,7 @@ export default function ModernNavbar() {
       { name: "Home", href: "/", icon: Home },
       { name: "My Requests", href: "/customer/dashboard", icon: Search },
       { name: "Discover", href: "/services", icon: Binoculars },
-      { name: "Messages", href: "/messages/null", icon: MessageSquare },
+      { name: "Messages", href: "/messages/null", icon: MessageSquare }
     ],
     provider: [
       { name: "Home", href: "/", icon: Home },
@@ -308,6 +309,7 @@ export default function ModernNavbar() {
             </span>
           </Link>
 
+
           {!minimalPages.includes(pathname) && (
             <motion.nav
               className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 px-5 py-2 rounded-full space-x-2"
@@ -407,7 +409,11 @@ export default function ModernNavbar() {
             </div>
           )}
           <div className=" md:hidden ml-50 ">
-            <NotificationBell userId={Number(session?.user?.id)} />
+            {session ? (
+              <NotificationBell userId={Number(session?.user?.id)} />
+            ) : (
+              ""
+            )}
           </div>
           <Button
             variant="ghost"

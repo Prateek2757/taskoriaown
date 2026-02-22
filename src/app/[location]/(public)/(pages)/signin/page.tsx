@@ -93,8 +93,8 @@ function SignInForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50  via-white to-slate-100 px-4 py-10 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
-      <div className=" flex  mx-auto items-center justify-center  max-w-6xl gap-6 ">
+    <div className=" bg-gradient-to-b from-slate-50  via-white to-slate-100 px-4 py-10 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
+      <div className="  flex  mx-auto items-center justify-center  max-w-6xl gap-6 ">
         <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:p-10">
           <div className="mb-6">
             <p className="text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">

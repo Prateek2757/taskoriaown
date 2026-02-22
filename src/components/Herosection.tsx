@@ -13,6 +13,8 @@ import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import { SparklesCoreLight } from "./ui/sparklesLight";
 import ScrollPopularSection from "./ScrollPopularSection";
 import Image from "next/image";
+import TaskoriaSasthoreDirect from "./sastoticket/taskoriasasthoredirect";
+import TaskoriaSasthoRedirect from "./sastoticket/taskoriasasthoredirect";
 
 interface Category {
   category_id: number;
@@ -220,7 +222,9 @@ export default function HeroSection() {
 
         <div className="mt-10 hidden lg:block relative overflow-hidden bg-linear-to-t from-zinc-100 to-transparent dark:from-black">
         <div className="mx-auto max-w-4xl relative">
+<TaskoriaSasthoRedirect/>
             <header className="text-center text-3xl text-white">
+              
               <h2 className="text-slate-900 text-2xl sm:text-3xl lg:text-4xl dark:text-white font-bold leading-tight">
                 Marketplace{" "}
                 <span className="bg-clip-text text-transparent bg-[#2563EB] animate-gradient">
