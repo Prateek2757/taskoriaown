@@ -221,7 +221,7 @@ export default function PopularLocationsSection({
                     <div className="relative h-52 overflow-hidden">
                       <Image
                         fill
-                        src={popularCities[index % popularCities.length]?.image}
+                        src={popularCities[index % popularCities.length]?.image || "/default-image.jpg"}
                         alt={city.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />

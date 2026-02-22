@@ -5,7 +5,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useCategories } from "@/hooks/useCategories";
 import { Button } from "./ui/button";
-import Marquee from "./ui/marquee";
 import Image from "next/image";
 
 const containerVariants: Variants = {
@@ -199,7 +198,7 @@ export default function Services() {
                   <div className="relative  h-full min-h-[320px] lg:min-h-[265px]">
                     <div className="absolute inset-0">
                       <Image
-                      fill 
+                        fill
                         src={staticImages[index]?.url || staticImages[0].url}
                         alt={category.name}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -254,7 +253,7 @@ export default function Services() {
             transition={{ duration: 0.6, delay: 0.8 }}
           >
             <Link href="/services">
-              <Button className="group bg-white dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300 font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30">
+              <Button className="group bg-white   dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300 font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30">
                 <span className="flex items-center gap-2">
                   View All Services
                   <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 duration-300 group-hover:rotate-45" />
