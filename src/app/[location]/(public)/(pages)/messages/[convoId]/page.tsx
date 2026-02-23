@@ -32,8 +32,7 @@ export default function ChatPageInline({
   params,
 }: {
   params: Promise<{ convoId: string }>;
-})
- {
+}) {
   const paramsWrapped = use(params);
   const routeConvoId = paramsWrapped?.convoId || null;
   const { data: session } = useSession();
@@ -45,40 +44,34 @@ export default function ChatPageInline({
   const [endpoint, setEndpoint] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
-  // ✨ FIX 1: Hydration-safe mobile detection state
   const [isMobile, setIsMobile] = useState(false);
 
-  // ─── Refs ─────────────────────────────────────────────────────────────────
   const hasFetched = useRef(false);
   const didInitialSelect = useRef(false);
   const sidebarChannelsRef = useRef<any[]>([]);
-
   const activeConvoIdRef = useRef<string | null>(null);
-  useEffect(() => {
-    activeConvoIdRef.current = activeConversationId;
-  }, [activeConversationId]);
-
   const conversationsRef = useRef<Conversation[]>([]);
-  useEffect(() => {
-    conversationsRef.current = conversations;
-  }, [conversations]);
+
+  const routeConvoIdRef = useRef<string | null>(routeConvoId);
+  const routerRef = useRef(router);
+  useEffect(() => { routeConvoIdRef.current = routeConvoId; }, [routeConvoId]);
+  useEffect(() => { routerRef.current = router; }, [router]);
+
+  useEffect(() => { activeConvoIdRef.current = activeConversationId; }, [activeConversationId]);
+  useEffect(() => { conversationsRef.current = conversations; }, [conversations]);
 
   const activeConversation = useMemo(
     () => conversations.find((c) => c.id === activeConversationId) ?? null,
     [conversations, activeConversationId]
   );
 
-  // ─── Detect Mobile for Sidebar ─────────────────────────────────────────────
-  // ✨ FIX 1: Check screen size strictly on the client to avoid SSR mismatch
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.matchMedia("(max-width: 640px)").matches);
-    checkMobile(); // Run once on mount
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    const check = () => setIsMobile(window.matchMedia("(max-width: 640px)").matches);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
   }, []);
 
-  // ─── Read endpoint once ──────────────────────────────────────────────────
   useEffect(() => {
     const storedView = localStorage.getItem("viewMode");
     if (storedView === "customer" || storedView === "provider") {
@@ -90,9 +83,6 @@ export default function ChatPageInline({
     }
   }, []);
 
-  // ─── Fetch conversations & Initial Selection ───────────────────────────────
-  // ✨ FIX 2: Consolidated state updates. We set the active conversation HERE 
-  // to avoid a separate useEffect triggering another render cycle.
   const fetchConversations = useCallback(async (ep: string) => {
     setLoading(true);
     setError(null);
@@ -104,15 +94,13 @@ export default function ChatPageInline({
       hasFetched.current = true;
 
       if (convos.length > 0 && !didInitialSelect.current) {
-        const target = routeConvoId
-          ? convos.find((c) => String(c.id) === String(routeConvoId))
-          : null;
-
+        const rid = routeConvoIdRef.current;
+        const target = rid ? convos.find((c) => String(c.id) === String(rid)) : null;
         if (target) {
           setActiveConversationId(target.id);
         } else {
           setActiveConversationId(convos[0].id);
-          router.replace(`/messages/${convos[0].id}`);
+          routerRef.current.replace(`/messages/${convos[0].id}`);
         }
         didInitialSelect.current = true;
       }
@@ -123,16 +111,15 @@ export default function ChatPageInline({
     } finally {
       setLoading(false);
     }
-  }, [routeConvoId, router]);
+  }, []); 
 
   useEffect(() => {
     if (!endpoint) return;
     hasFetched.current = false;
     didInitialSelect.current = false;
     fetchConversations(endpoint);
-  }, [endpoint, fetchConversations]);
+  }, [endpoint]); 
 
-  // ─── Sidebar Supabase subscriptions ───────────────────────────────────────
   const conversationIdsKey = useMemo(
     () => conversations.map((c) => c.id).join(","),
     [conversations]
@@ -145,9 +132,7 @@ export default function ChatPageInline({
     sidebarChannelsRef.current = [];
 
     const sessionUserId = session.user.id;
-    // ✨ FIX 3: Add an isSubscribed flag. If the component unmounts while a 
-    // message is being processed, this prevents a memory leak error.
-    let isSubscribed = true; 
+    let active = true;
 
     conversationsRef.current.forEach((convo) => {
       const channel = supabaseBrowser.channel(`sidebar:${convo.id}`, {
@@ -155,31 +140,25 @@ export default function ChatPageInline({
       });
 
       channel.on("broadcast", { event: "message" }, (payload) => {
-        if (!isSubscribed) return; // Exit if component is unmounted
-        
+        if (!active) return;
         const msg = payload.payload?.message;
         if (!msg?.id) return;
 
         const isMyMessage = String(msg.user_id) === String(sessionUserId);
         const isActiveConvo = activeConvoIdRef.current === msg.conversation_id;
-
         const senderName = isMyMessage
           ? "You"
-          : convo.participants.find(
-              (p) => String(p.user_id) === String(msg.user_id)
-            )?.name ?? "Unknown";
+          : convo.participants.find((p) => String(p.user_id) === String(msg.user_id))?.name ?? "Unknown";
 
         setConversations((prev) => {
           const updated = prev.map((c) => {
             if (c.id !== msg.conversation_id) return c;
-            const newUnread =
-              isMyMessage || isActiveConvo ? 0 : (c.unread_count || 0) + 1;
             return {
               ...c,
               last_message: msg.content,
               last_message_sender: senderName,
               last_message_at: msg.created_at,
-              unread_count: newUnread,
+              unread_count: isMyMessage || isActiveConvo ? 0 : (c.unread_count || 0) + 1,
             };
           });
           return [...updated].sort((a, b) => {
@@ -195,35 +174,26 @@ export default function ChatPageInline({
     });
 
     return () => {
-      isSubscribed = false; // Flag component as unmounted
+      active = false;
       sidebarChannelsRef.current.forEach((ch) => supabaseBrowser.removeChannel(ch));
       sidebarChannelsRef.current = [];
     };
   }, [conversationIdsKey, session?.user?.id]);
 
-  // ─── Select conversation ───────────────────────────────────────────────────
-  const handleSelectConversation = useCallback(
-    (conversation: Conversation) => {
-      setActiveConversationId(conversation.id);
-      setConversations((prev) =>
-        prev.map((c) =>
-          c.id === conversation.id ? { ...c, unread_count: 0 } : c
-        )
-      );
-      router.push(`/messages/${conversation.id}`);
-      axios
-        .get(`/api/messages/conversation-read/${conversation.id}`)
-        .catch((err) => console.error("Failed to mark as read:", err));
-      
-      // Use the new isMobile state instead of checking the window directly
-      if (isMobile) {
-        setSidebarOpen(false);
-      }
-    },
-    [router, isMobile] // Added isMobile to dependencies
-  );
+  const handleSelectConversation = useCallback((conversation: Conversation) => {
+    setActiveConversationId(conversation.id);
+    setConversations((prev) =>
+      prev.map((c) => (c.id === conversation.id ? { ...c, unread_count: 0 } : c))
+    );
+    routerRef.current.push(`/messages/${conversation.id}`);
+    axios
+      .get(`/api/messages/conversation-read/${conversation.id}`)
+      .catch((err) => console.error("Failed to mark as read:", err));
+    if (window.matchMedia("(max-width: 640px)").matches) {
+      setSidebarOpen(false);
+    }
+  }, []); 
 
-  // ─── Derived display values ────────────────────────────────────────────────
   const other = activeConversation?.participants?.[0] ?? null;
   const otherName = other?.name;
   const otherId = other?.user_id;
@@ -235,10 +205,10 @@ export default function ChatPageInline({
       <div className="flex items-center justify-center h-screen bg-linear-to-br from-gray-100 via-white to-gray-50 dark:from-[#0a0a0f] dark:via-[#0f1117] dark:to-[#11131a]" />
     );
   }
+
   return (
     <div className="relative flex h-screen overflow-hidden bg-linear-to-br from-gray-50 via-white to-gray-100 dark:from-[#050507] dark:via-[#0b0c10] dark:to-[#11131a] text-gray-800 dark:text-gray-200">
-      <AnimatePresence mode="wait">
-        {/* ✨ FIX 1: Cleaned up conditional logic using isMobile state */}
+      <AnimatePresence>
         {(sidebarOpen || !isMobile) && (
           <motion.div
             key="sidebar"
@@ -262,7 +232,7 @@ export default function ChatPageInline({
       </AnimatePresence>
 
       <div className="flex-1 flex flex-col relative overflow-hidden">
-        {activeConversation && (
+        {activeConversation && isMobile && (
           <div className="sm:hidden p-3 flex items-center gap-3 bg-white/80 dark:bg-[#12131a]/80 border-b border-gray-200 dark:border-[#1d1f27] backdrop-blur-md shadow-sm">
             <Button
               onClick={() => setSidebarOpen(true)}

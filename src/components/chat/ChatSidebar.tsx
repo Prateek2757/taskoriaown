@@ -70,9 +70,9 @@ export default function ChatSidebar({
 
   return (
     <motion.aside
-      initial={{ x: -300, opacity: 0 }}
-      animate={{ x: sidebarOpen ? 0 : -300, opacity: sidebarOpen ? 1 : 0 }}
-      transition={{ duration: 0.25 }}
+      // initial={{ x: -300, opacity: 0 }}
+      // animate={{ x: sidebarOpen ? 0 : -300, opacity: sidebarOpen ? 1 : 0 }}
+      // transition={{ duration: 0.25 }}
       className="w-full sm:w-80 h-[calc(100vh-75px)] border-r shadow-lg flex flex-col bg-white/90 dark:bg-black/40 backdrop-blur-xl border-gray-100 dark:border-gray-800"
     >
       <div className="flex items-center justify-between px-5 py-4 border-b bg-white/60 dark:bg-black/30 border-gray-100 dark:border-gray-800">

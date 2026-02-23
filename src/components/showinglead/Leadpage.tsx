@@ -224,7 +224,7 @@ const LeadsPage: React.FC = () => {
   return (
     <div className="flex flex-col md:flex-row md:h-screen min-h-screen bg-gray-50 dark:bg-gray-900 font-sans relative">
       <div
-        className={`flex flex-col w-full md:w-[380px] border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-all duration-300 ${
+        className={`flex flex-col w-full md:w-[380px] border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 transition-all duration-300 ${
           isMobileDetailsOpen ? "hidden md:flex" : "flex"
         }`}
       >
@@ -310,17 +310,14 @@ const LeadsPage: React.FC = () => {
       <div className="hidden md:block flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-900">
         {selectedLead ? (
           <>
-  <LeadDetails
+           <LeadDetails
             lead={selectedLead}
             userId={selectedLead.user_id}
             taskId={selectedLead.task_id}
             requiredCredits={taskCredits[Number(selectedLead.task_id)] || 0}
           />
 
-          <div>
-            asdasdas
-            
-          </div>
+          
           </>
         
          

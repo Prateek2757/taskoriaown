@@ -15,6 +15,7 @@ import {
   Lock,
   AlertCircle,
   Forward,
+  Settings,
 } from "lucide-react";
 import { CreditPurchaseModal } from "../payments/CreditTopup";
 import { useSession } from "next-auth/react";
@@ -25,6 +26,7 @@ import LocationMap from "../map/map";
 import { createNotification } from "@/lib/notifications";
 import { useSubscription } from "@/hooks/useSubcription";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface LeadAnswer {
   question_id?: string | number;
@@ -69,6 +71,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   taskId,
   userId,
 }) => {
+
+  const router = useRouter();
   const { data: session } = useSession();
   const [isSaved, setIsSaved] = useState(false);
   const [showCreditModal, setShowCreditModal] = useState(false);
@@ -123,7 +127,10 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   }, [fetchResponses]);
 
   const shouldFetchConversation =
-    leadStatus.purchased && hasActiveSubscription && !!taskId && !!userId;
+    leadStatus.purchased &&
+    // && hasActiveSubscription
+    !!taskId &&
+    !!userId;
 
   const {
     conversationId,
@@ -205,18 +212,16 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
     // if (hasActiveSubscription) {
 
+    toast.info("Preparing your chat...");
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    const newConvoId = await refetchConversation();
+    if (newConvoId) {
+      toast.success("Chat is ready!");
+    } else {
+      toast.info("Click 'Chat' button to start your conversation");
+    }
 
-      toast.info("Preparing your chat...");
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      const newConvoId = await refetchConversation();
-      if (newConvoId) {
-        toast.success("Chat is ready!");
-      } else {
-        toast.info("Click 'Chat' button to start your conversation");
-      }
-
-
-    // } 
+    // }
     // else {
     //   toast.info("Contact details unlocked! Subscribe to use chat feature.");
     // }
@@ -277,66 +282,70 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   return (
     <div className="max-w-4xl mx-auto">
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
-        <div className="bg-[#3C7DED] px-6 py-8 text-white">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-4 ">
+        <div className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="relative flex-shrink-0">
               {lead.image ? (
-                <div className="w-14 h-14 rounded-full overflow-hidden">
+                <div className="w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-blue-100 dark:ring-blue-900">
                   <Image
                     src={lead.image}
                     width={56}
                     height={56}
-                    alt="lead image"
+                    alt="avatar"
                     className="w-full h-full object-cover"
                   />
                 </div>
               ) : (
-                <div className="w-14 h-14 flex items-center justify-center rounded-full bg-cyan-600 text-white text-2xl font-semibold">
-                  {getInitials(lead.customer_name || "N/A")}
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-lg font-bold">
+                  {getInitials(lead.customer_name || "N A")}
                 </div>
               )}
-              <div>
-                <div className="text-2xl font-bold mb-1">
+              {lead.status === "Open" && (
+                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-white dark:border-gray-900" />
+              )}
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-base font-semibold text-gray-900 dark:text-gray-100 truncate">
                   {lead.customer_name}
-                </div>
-                <div className="flex items-center gap-2 text-blue-100 line-clamp-1">
-                  <MapPin className="w-4 h-4" />
-                  <span className="text-sm">
-                    {lead.postcode ? lead.postcode : lead.location_name}
-                  </span>
-                </div>
+                </h1>
+                <span
+                  className={`text-[11px] font-medium px-2 py-0.5 rounded-full border `}
+                >
+                  {lead.status}
+                </span>
+              </div>
+              <div className="flex items-center gap-3 mt-1 text-xs text-gray-400 dark:text-gray-500 flex-wrap">
+                <span className="flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5" />
+                  {lead.postcode || lead.location_name}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5" />
+                  {formatTimeAgo(lead.created_at)}
+                </span>
+                <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-full border border-blue-100 dark:border-blue-800">
+                  {lead.category_name}
+                </span>
               </div>
             </div>
+
             <button
               onClick={() => setIsSaved(!isSaved)}
-              className="p-2 rounded-lg bg-white/20 hover:bg-white/30 backdrop-blur-sm transition"
-            >
-              <Bookmark className={`w-5 h-5 ${isSaved ? "fill-white" : ""}`} />
-            </button>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 dark:bg-gray-800 backdrop-blur-sm rounded-full text-sm font-medium border border-white/30 dark:border-gray-700">
-              {lead.category_name}
-            </span>
-            <span
-              className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-semibold shadow-sm border transition-all duration-300 ${
-                lead.status === "Open"
-                  ? "bg-cyan-50 text-cyan-600 border-cyan-200 dark:bg-cyan-900 dark:text-cyan-200 dark:border-cyan-700 hover:dark:bg-cyan-800"
-                  : lead.status === "Pending"
-                    ? "bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-900 dark:text-orange-200 dark:border-orange-700 hover:dark:bg-orange-800"
-                    : "bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 hover:dark:bg-gray-700"
+              className={`p-2 rounded-xl border transition-all ${
+                isSaved
+                  ? "bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:border-blue-700"
+                  : "bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-750"
               }`}
             >
-              {lead.status}
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 dark:bg-gray-800 backdrop-blur-sm rounded-full text-sm">
-              <Clock className="w-4 h-4" />
-              {formatTimeAgo(lead.created_at)}
-            </span>
-          </div>
-        </div>
-
+              <Bookmark
+                className={`w-4 h-4 transition-colors ${isSaved ? "fill-blue-500 text-blue-500" : "text-gray-400"}`}
+              />
+            </button>
+          </div>{" "}
+        </div>{" "}
+        <div className=" border-t border-gray-100 dark:border-gray-800" />
         <div className="p-6">
           <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-6">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wide mb-4 flex items-center gap-2">
@@ -355,10 +364,17 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                     <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
                       Phone Number
                     </div>
+
                     <div className="font-mono text-sm text-gray-900 dark:text-gray-100">
-                      {leadStatus.purchased
-                        ? lead.phone
-                        : maskPhone(lead.phone)}
+                      {!lead.phone ? (
+                        <span className="italic text-gray-400 dark:text-gray-500">
+                          Not provided
+                        </span>
+                      ) : leadStatus.purchased ? (
+                        lead.phone
+                      ) : (
+                        maskPhone(lead.phone)
+                      )}
                     </div>
                   </div>
                 </div>
@@ -401,7 +417,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
           </div>
 
-          {leadStatus.purchased &&
+          {/* {leadStatus.purchased &&
             // !hasActiveSubscription &&
             !subscriptionLoading && (
               <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-4 mb-6">
@@ -418,7 +434,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
 
           <div className="bg-blue-50 dark:bg-blue-900 rounded-xl p-5 mb-6">
             <div className="flex items-center justify-between mb-3">
@@ -473,37 +489,37 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               <button
                 onClick={handleGoToChat}
                 disabled={isChatButtonDisabled}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed relative"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-[#2563EB] text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed relative"
                 // title={
                 //   !hasActiveSubscription ? "Active subscription required" : ""
                 // }
               >
                 {
-                // subscriptionLoading ? (
-                //   <>
-                //     <Loader2 className="w-5 h-5 animate-spin" />
-                //     Checking subscription...
-                //   </>
-                // ) : 
+                  // subscriptionLoading ? (
+                  //   <>
+                  //     <Loader2 className="w-5 h-5 animate-spin" />
+                  //     Checking subscription...
+                  //   </>
+                  // ) :
 
-                isNavigating || convoLoading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    {isNavigating ? "Opening Chat..." : "Preparing Chat..."}
-                  </>
-                ) : 
-                // !hasActiveSubscription ? (
-                //   <>
-                //     <Lock className="w-5 h-5" />
-                //     Chat (Subscription Required)
-                //   </>
-                // ) :
-                 (
-                  <>
-                    <MessageSquare className="w-5 h-5" />
-                    Chat with {customerFirstName}
-                  </>
-                )}
+                  isNavigating || convoLoading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      {isNavigating ? "Opening Chat..." : "Preparing Chat..."}
+                    </>
+                  ) : (
+                    // !hasActiveSubscription ? (
+                    //   <>
+                    //     <Lock className="w-5 h-5" />
+                    //     Chat (Subscription Required)
+                    //   </>
+                    // ) :
+                    <>
+                      <MessageSquare className="w-5 h-5" />
+                      Chat with {customerFirstName}
+                    </>
+                  )
+                }
               </button>
             ) : (
               <button
@@ -596,6 +612,31 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
           longitude={lead.longitude as number}
         />
       </div>
+      <div className=" border-t border-gray-100 dark:border-gray-800" />
+      <div className="mt-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 p-5 flex items-start gap-4">
+
+<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30">
+  <Settings className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+</div>
+
+<div className="flex-1">
+  <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+    Not seeing the right leads?
+  </h3>
+
+  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+    Stop seeing leads with specific answers by customising your settings.
+  </p>
+
+  <button
+    onClick={() => router.push("/settings/leads/myservices")}
+    className="mt-3 inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition"
+  >
+    Update lead settings →
+  </button>
+</div>
+</div>
+
     </div>
   );
 };

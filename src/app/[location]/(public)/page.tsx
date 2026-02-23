@@ -205,7 +205,7 @@ export default function HomePage() {
           <CTA />
         </section>
 
-        <SupportChatbot />
+        {/* <SupportChatbot /> */}
       </main>
     </>
   );

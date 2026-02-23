@@ -11,6 +11,7 @@ import { Analytics } from "@vercel/analytics/next";
 import NotificationHandler from "@/components/NotificationHandler";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { i18n } from "../../../../i18n-config";
+import SupportChatbot from "@/components/supportChatbox";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -20,22 +21,21 @@ const poppins = Poppins({
 
 function getOGLocale(locale: string): string {
   const localeMap: Record<string, string> = {
-    'en': 'en_US',
-    'en-au': 'en_AU',
-    'en-gb': 'en_GB',
-    'es': 'es_ES',
-    'fr': 'fr_FR',
-    'de': 'de_DE',
+    en: "en_US",
+    "en-au": "en_AU",
+    "en-gb": "en_GB",
+    es: "es_ES",
+    fr: "fr_FR",
+    de: "de_DE",
   };
-  return localeMap[locale] || 'en_US';
+  return localeMap[locale] || "en_US";
 }
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ location?: string }>;
-}){
-
+}) {
   const locale = (await params).location || i18n.defaultLocale;
   const baseUrl = "https://www.taskoria.com";
 
@@ -47,7 +47,8 @@ export async function generateMetadata({
 
   const descriptions: Record<string, string> = {
     en: "Taskoria connects you with verified local professionals for home, business, and digital services. AI-powered matching, transparent pricing, and secure payments.",
-    "en-au": "Taskoria connects you with verified local professionals for home, business, and digital services. AI-powered matching, transparent pricing, and secure payments.",
+    "en-au":
+      "Taskoria connects you with verified local professionals for home, business, and digital services. AI-powered matching, transparent pricing, and secure payments.",
     es: "Taskoria te conecta con profesionales locales verificados para servicios domésticos, empresariales y digitales. Emparejamiento impulsado por IA, precios transparentes y pagos seguros.",
   };
 
@@ -62,7 +63,7 @@ export async function generateMetadata({
   languages["x-default"] = baseUrl;
 
   const ogLocale = getOGLocale(locale);
-  
+
   const alternateLocales = i18n.locales
     .filter((loc) => loc !== locale)
     .map(getOGLocale);
@@ -95,7 +96,7 @@ export async function generateMetadata({
     authors: [{ name: "Taskoria", url: "https://wwww.taskoria.com" }],
     creator: "Taskoria",
     publisher: "Taskoria",
-    
+
     alternates: {
       canonical: locale === i18n.defaultLocale ? "/" : `/${locale}`,
       languages,
@@ -156,7 +157,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export  default async function RootLayout({
+export default async function RootLayout({
   children,
   params,
 }: Readonly<{
@@ -166,9 +167,9 @@ export  default async function RootLayout({
   const locale = (await params).location || i18n.defaultLocale;
 
   return (
-    <html 
-      lang={locale} 
-      className={`${poppins.variable}`} 
+    <html
+      lang={locale}
+      className={`${poppins.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -200,8 +201,10 @@ export  default async function RootLayout({
               <ModernNavbar />
               <main>{children}</main>
               <SpeedInsights />
+
               <Toaster position="top-right" richColors expand closeButton />
               <Footer />
+              <SupportChatbot />
             </UserProvider>
           </ThemeProvider>
         </body>

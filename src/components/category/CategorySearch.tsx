@@ -79,7 +79,7 @@ export default function CategorySearch({
   }, []);
 
   useEffect(() => {
-    if (selected) return;
+    // if (selected) return;
 
     if (!query.trim()) {
       setFiltered(categories.slice(0, 10));
