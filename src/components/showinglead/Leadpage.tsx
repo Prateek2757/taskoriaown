@@ -73,7 +73,7 @@ const LeadsPage: React.FC = () => {
       }
     };
     fetchLeadsAndCredits();
-  }, [fetchCreditEstimates]);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

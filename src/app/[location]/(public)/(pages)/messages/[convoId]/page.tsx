@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef, use } from "react";
+import { useEffect, useState, useCallback, useRef, use, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "motion/react";
 import { MessageCircle, ArrowLeft } from "lucide-react";
@@ -32,27 +32,54 @@ export default function ChatPageInline({
   params,
 }: {
   params: Promise<{ convoId: string }>;
-}) {
+})
+ {
   const paramsWrapped = use(params);
   const routeConvoId = paramsWrapped?.convoId || null;
   const { data: session } = useSession();
   const router = useRouter();
+
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [activeConversation, setActiveConversation] =
-    useState<Conversation | null>(null);
+  const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [endpoint, setEndpoint] = useState<string | null>(null);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // ✨ FIX 1: Hydration-safe mobile detection state
+  const [isMobile, setIsMobile] = useState(false);
 
+  // ─── Refs ─────────────────────────────────────────────────────────────────
   const hasFetched = useRef(false);
+  const didInitialSelect = useRef(false);
   const sidebarChannelsRef = useRef<any[]>([]);
-  const cacheKey = `chat_conversations_${session?.user?.id}`;
 
+  const activeConvoIdRef = useRef<string | null>(null);
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    activeConvoIdRef.current = activeConversationId;
+  }, [activeConversationId]);
 
+  const conversationsRef = useRef<Conversation[]>([]);
+  useEffect(() => {
+    conversationsRef.current = conversations;
+  }, [conversations]);
+
+  const activeConversation = useMemo(
+    () => conversations.find((c) => c.id === activeConversationId) ?? null,
+    [conversations, activeConversationId]
+  );
+
+  // ─── Detect Mobile for Sidebar ─────────────────────────────────────────────
+  // ✨ FIX 1: Check screen size strictly on the client to avoid SSR mismatch
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.matchMedia("(max-width: 640px)").matches);
+    checkMobile(); // Run once on mount
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // ─── Read endpoint once ──────────────────────────────────────────────────
+  useEffect(() => {
     const storedView = localStorage.getItem("viewMode");
     if (storedView === "customer" || storedView === "provider") {
       setEndpoint(
@@ -63,263 +90,167 @@ export default function ChatPageInline({
     }
   }, []);
 
-  useEffect(() => {
-    if (!session?.user?.id) return;
-    const cached = sessionStorage.getItem(cacheKey);
-    if (cached) setConversations(JSON.parse(cached));
-  }, [cacheKey, session?.user?.id]);
-
-  const fetchConversations = useCallback(async () => {
-    if (!endpoint || hasFetched.current) return;
-
+  // ─── Fetch conversations & Initial Selection ───────────────────────────────
+  // ✨ FIX 2: Consolidated state updates. We set the active conversation HERE 
+  // to avoid a separate useEffect triggering another render cycle.
+  const fetchConversations = useCallback(async (ep: string) => {
     setLoading(true);
     setError(null);
-
     try {
-      const res = await fetch(endpoint, { cache: "no-store" });
+      const res = await fetch(ep, { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to fetch conversations");
-
       const data = await res.json();
-      const convos = data.conversations || [];
+      const convos: Conversation[] = data.conversations || [];
+      hasFetched.current = true;
+
+      if (convos.length > 0 && !didInitialSelect.current) {
+        const target = routeConvoId
+          ? convos.find((c) => String(c.id) === String(routeConvoId))
+          : null;
+
+        if (target) {
+          setActiveConversationId(target.id);
+        } else {
+          setActiveConversationId(convos[0].id);
+          router.replace(`/messages/${convos[0].id}`);
+        }
+        didInitialSelect.current = true;
+      }
 
       setConversations(convos);
-      hasFetched.current = true;
     } catch (err: any) {
       setError(err?.message || "Failed to load conversations");
     } finally {
       setLoading(false);
     }
-  }, [endpoint]);
+  }, [routeConvoId, router]);
 
   useEffect(() => {
-    if (endpoint) {
-      hasFetched.current = false;
-      fetchConversations();
-    }
+    if (!endpoint) return;
+    hasFetched.current = false;
+    didInitialSelect.current = false;
+    fetchConversations(endpoint);
   }, [endpoint, fetchConversations]);
 
-  useEffect(() => {
-    if (!conversations.length || !session?.user?.id) {
-      return;
-    }
+  // ─── Sidebar Supabase subscriptions ───────────────────────────────────────
+  const conversationIdsKey = useMemo(
+    () => conversations.map((c) => c.id).join(","),
+    [conversations]
+  );
 
-    sidebarChannelsRef.current.forEach((ch) => {
-      supabaseBrowser.removeChannel(ch);
-    });
+  useEffect(() => {
+    if (!conversationIdsKey || !session?.user?.id) return;
+
+    sidebarChannelsRef.current.forEach((ch) => supabaseBrowser.removeChannel(ch));
     sidebarChannelsRef.current = [];
 
-    conversations.forEach((convo) => {
-      const channelName = `sidebar:${convo.id}`;
+    const sessionUserId = session.user.id;
+    // ✨ FIX 3: Add an isSubscribed flag. If the component unmounts while a 
+    // message is being processed, this prevents a memory leak error.
+    let isSubscribed = true; 
 
-      const channel = supabaseBrowser.channel(channelName, {
-        config: {
-          broadcast: {
-            self: true,
-            ack: true,
-          },
-        },
+    conversationsRef.current.forEach((convo) => {
+      const channel = supabaseBrowser.channel(`sidebar:${convo.id}`, {
+        config: { broadcast: { self: true, ack: true } },
       });
 
       channel.on("broadcast", { event: "message" }, (payload) => {
+        if (!isSubscribed) return; // Exit if component is unmounted
+        
         const msg = payload.payload?.message;
-        if (!msg?.id) {
-          return;
-        }
+        if (!msg?.id) return;
 
-        const isMyMessage = String(msg.user_id) === String(session.user.id);
-        const isActiveConvo = activeConversation?.id === msg.conversation_id;
+        const isMyMessage = String(msg.user_id) === String(sessionUserId);
+        const isActiveConvo = activeConvoIdRef.current === msg.conversation_id;
 
-        let senderName;
-        if (isMyMessage) {
-          senderName = "You";
-        } else {
-          const sender = convo.participants.find(
-            (p) => String(p.user_id) === String(msg.user_id)
-          );
-          senderName = sender?.name || "Unknown";
-        }
+        const senderName = isMyMessage
+          ? "You"
+          : convo.participants.find(
+              (p) => String(p.user_id) === String(msg.user_id)
+            )?.name ?? "Unknown";
 
         setConversations((prev) => {
           const updated = prev.map((c) => {
-            if (c.id === msg.conversation_id) {
-              let newUnread = 0;
-              if (isMyMessage) {
-                newUnread = 0;
-              } else if (isActiveConvo) {
-                newUnread = 0;
-              } else {
-                newUnread = (c.unread_count || 0) + 1;
-              }
-
-              return {
-                ...c,
-                last_message: msg.content,
-                last_message_sender: senderName,
-                last_message_at: msg.created_at,
-                unread_count: newUnread,
-              };
-            }
-            return c;
+            if (c.id !== msg.conversation_id) return c;
+            const newUnread =
+              isMyMessage || isActiveConvo ? 0 : (c.unread_count || 0) + 1;
+            return {
+              ...c,
+              last_message: msg.content,
+              last_message_sender: senderName,
+              last_message_at: msg.created_at,
+              unread_count: newUnread,
+            };
           });
-
-          const sorted = updated.sort((a, b) => {
-            const timeA = a.last_message_at
-              ? new Date(a.last_message_at).getTime()
-              : 0;
-            const timeB = b.last_message_at
-              ? new Date(b.last_message_at).getTime()
-              : 0;
-            return timeB - timeA;
+          return [...updated].sort((a, b) => {
+            const tA = a.last_message_at ? new Date(a.last_message_at).getTime() : 0;
+            const tB = b.last_message_at ? new Date(b.last_message_at).getTime() : 0;
+            return tB - tA;
           });
-
-          return sorted;
         });
       });
 
-      channel.subscribe((status) => {
-        if (status === "SUBSCRIBED") {
-          //console.log(`✅ Sidebar subscribed to ${channelName}`);
-        }
-      });
-
+      channel.subscribe();
       sidebarChannelsRef.current.push(channel);
     });
 
     return () => {
-      sidebarChannelsRef.current.forEach((ch) => {
-        supabaseBrowser.removeChannel(ch);
-      });
+      isSubscribed = false; // Flag component as unmounted
+      sidebarChannelsRef.current.forEach((ch) => supabaseBrowser.removeChannel(ch));
       sidebarChannelsRef.current = [];
     };
-  }, [conversations.length, session?.user?.id, activeConversation?.id]);
+  }, [conversationIdsKey, session?.user?.id]);
 
-  useEffect(() => {
-    if (!routeConvoId) return;
-    if (!conversations.length) return;
+  // ─── Select conversation ───────────────────────────────────────────────────
+  const handleSelectConversation = useCallback(
+    (conversation: Conversation) => {
+      setActiveConversationId(conversation.id);
+      setConversations((prev) =>
+        prev.map((c) =>
+          c.id === conversation.id ? { ...c, unread_count: 0 } : c
+        )
+      );
+      router.push(`/messages/${conversation.id}`);
+      axios
+        .get(`/api/messages/conversation-read/${conversation.id}`)
+        .catch((err) => console.error("Failed to mark as read:", err));
+      
+      // Use the new isMobile state instead of checking the window directly
+      if (isMobile) {
+        setSidebarOpen(false);
+      }
+    },
+    [router, isMobile] // Added isMobile to dependencies
+  );
 
-    const found = conversations.find(
-      (c) => String(c.id) === String(routeConvoId)
-    );
-    if (found) setActiveConversation(found);
-  }, [routeConvoId, conversations]);
-
-  useEffect(() => {
-    if (!conversations.length) return;
-    if (activeConversation) return;
-  
-    const convoFromRoute = conversations.find(
-      (c) => String(c.id) === String(routeConvoId)
-    );
-  
-    if (convoFromRoute) {
-      setActiveConversation(convoFromRoute);
-      return;
-    }
-  
-    const firstConversation = conversations[0];
-  
-    if (firstConversation) {
-      setActiveConversation(firstConversation);
-      router.replace(`/messages/${firstConversation.id}`);
-    }
-  }, [conversations, routeConvoId, activeConversation, router]);
-
-  // const getOtherParticipantName = useCallback(
-  //   (conversation: Conversation) => {
-  //     const other = conversation.participants.find(
-  //       (p) => Number(p.user_id) !== Number(session?.user?.id)
-  //     );
-  //     return other?.name || "Unknown";
-  //   },
-  //   [session?.user?.id]
-  // );
-
-  const getOtherParticipant = (c: Conversation) => {
-    return c.participants?.[0] ?? null;
-  };
-
-  const other = activeConversation && getOtherParticipant(activeConversation);
+  // ─── Derived display values ────────────────────────────────────────────────
+  const other = activeConversation?.participants?.[0] ?? null;
   const otherName = other?.name;
   const otherId = other?.user_id;
   const otherProfileImage = other?.profile_image;
-
-  // const getOtherParticipantId = useCallback(
-  //   (conversation: Conversation) => {
-  //     const other = conversation.participants.find(
-  //       (p) => Number(p.user_id) !== Number(session?.user.id)
-  //     );
-  //     return other?.user_id || "unknown Id";
-  //   },
-  //   [session?.user.id]
-  // );
-
-  const handleSelectConversation = useCallback((conversation: Conversation) => {
-    setActiveConversation(conversation);
-
-    setConversations((prev) =>
-      prev.map((c) =>
-        c.id === conversation.id ? { ...c, unread_count: 0 } : c
-      )
-    );
-    router.push(`/messages/${conversation.id}`);
-
-    axios
-      .get(`/api/messages/conversation-read/${conversation.id}`, {})
-      .catch((err) => console.error("Failed to mark as read:", err));
-
-    if (window.matchMedia("(max-width: 640px)").matches) {
-      setSidebarOpen(false);
-    }
-  }, []);
+  const conversationTitle = activeConversation?.task_title || "Conversation";
 
   if (!session?.user) {
     return (
-      <div
-        className="flex items-center justify-center h-screen
-        bg-linear-to-br from-gray-100 via-white to-gray-50
-        dark:from-[#0a0a0f] dark:via-[#0f1117] dark:to-[#11131a]"
-      ></div>
+      <div className="flex items-center justify-center h-screen bg-linear-to-br from-gray-100 via-white to-gray-50 dark:from-[#0a0a0f] dark:via-[#0f1117] dark:to-[#11131a]" />
     );
   }
-
-  // const otherParticipant =
-  //   activeConversation && session?.user?.id
-  //     ? {
-  //         name: getOtherParticipantName(activeConversation),
-  //         otherId: getOtherParticipantId(activeConversation),
-  //       }
-  //     : { name: "Unknown", otherId: null };
-
-  const conversationTitle = activeConversation?.task_title || "Conversation";
-
   return (
-    <div
-      className="
-      relative flex h-screen overflow-hidden
-      bg-linear-to-br from-gray-50 via-white to-gray-100
-      dark:from-[#050507] dark:via-[#0b0c10] dark:to-[#11131a]
-      text-gray-800 dark:text-gray-200"
-    >
+    <div className="relative flex h-screen overflow-hidden bg-linear-to-br from-gray-50 via-white to-gray-100 dark:from-[#050507] dark:via-[#0b0c10] dark:to-[#11131a] text-gray-800 dark:text-gray-200">
       <AnimatePresence mode="wait">
-        {(sidebarOpen ||
-          typeof window === "undefined" ||
-          !window.matchMedia("(max-width: 640px)").matches) && (
+        {/* ✨ FIX 1: Cleaned up conditional logic using isMobile state */}
+        {(sidebarOpen || !isMobile) && (
           <motion.div
             key="sidebar"
             initial={{ x: -280, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -280, opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="
-              absolute sm:relative 
-              w-full sm:w-80 h-full z-10
-              bg-white dark:bg-[#0f1015]
-              border-r border-gray-200 dark:border-[#1d1f27]
-              shadow-md dark:shadow-lg"
+            className="absolute sm:relative w-full sm:w-80 h-full z-10 bg-white dark:bg-[#0f1015] border-r border-gray-200 dark:border-[#1d1f27] shadow-md dark:shadow-lg"
           >
             <ChatSidebar
               conversations={conversations}
-              activeConversationId={activeConversation?.id || null}
+              activeConversationId={activeConversationId}
               onSelectConversation={handleSelectConversation}
               sessionUserId={session.user.id}
               sessionUserName={session.user.name}
@@ -332,13 +263,7 @@ export default function ChatPageInline({
 
       <div className="flex-1 flex flex-col relative overflow-hidden">
         {activeConversation && (
-          <div
-            className="
-            sm:hidden p-3 flex items-center gap-3
-            bg-white/80 dark:bg-[#12131a]/80 
-            border-b border-gray-200 dark:border-[#1d1f27]
-            backdrop-blur-md shadow-sm"
-          >
+          <div className="sm:hidden p-3 flex items-center gap-3 bg-white/80 dark:bg-[#12131a]/80 border-b border-gray-200 dark:border-[#1d1f27] backdrop-blur-md shadow-sm">
             <Button
               onClick={() => setSidebarOpen(true)}
               variant="outline"
@@ -347,7 +272,6 @@ export default function ChatPageInline({
               <ArrowLeft className="w-5 h-5" />
               <span className="text-sm font-medium">Back</span>
             </Button>
-
             <div className="flex-1 text-center font-semibold truncate dark:text-gray-200">
               {conversationTitle}
             </div>
@@ -363,13 +287,7 @@ export default function ChatPageInline({
               exit={{ opacity: 0 }}
               className="flex flex-col items-center justify-center flex-1 text-gray-500 dark:text-gray-400"
             >
-              <div
-                className="
-                animate-spin border-4 
-                border-[#6C63FF]/20 border-t-[#6C63FF]
-                rounded-full w-10 h-10 mb-3
-              "
-              ></div>
+              <div className="animate-spin border-4 border-[#6C63FF]/20 border-t-[#6C63FF] rounded-full w-10 h-10 mb-3" />
               <p>Loading conversations...</p>
             </motion.div>
           ) : error ? (
@@ -389,9 +307,7 @@ export default function ChatPageInline({
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="
-                flex-1 overflow-hidden flex
-                bg-white dark:bg-[#0e0f14]"
+              className="flex-1 overflow-hidden flex bg-white dark:bg-[#0e0f14]"
             >
               <ChatWindow
                 otherName={otherName}
@@ -409,9 +325,7 @@ export default function ChatPageInline({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="
-                flex flex-col items-center justify-center flex-1
-                text-gray-500 dark:text-gray-400"
+              className="flex flex-col items-center justify-center flex-1 text-gray-500 dark:text-gray-400"
             >
               <MessageCircle className="w-12 h-12 mb-4 text-[#6C63FF] dark:text-[#7da2ff]" />
               <p className="text-lg font-medium">Select a conversation</p>

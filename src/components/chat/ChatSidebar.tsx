@@ -1,16 +1,15 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback,memo } from "react";
 import { motion } from "motion/react";
 import { Search } from "lucide-react";
 import formatMessageTime from "./messageTimeUtility";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
 
 interface Participant {
   user_id: string;
   name: string;
-  profile_image?:string;
+  profile_image?: string;
 }
 
 interface Conversation {
@@ -28,6 +27,7 @@ interface ChatSidebarProps {
   conversations: Conversation[];
   activeConversationId: string | null;
   onSelectConversation: (conversation: Conversation) => void;
+
   sessionUserId: number | string;
   sessionUserName?: string;
   sidebarOpen: boolean;
@@ -45,41 +45,28 @@ export default function ChatSidebar({
 }: ChatSidebarProps) {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const {data:session}=useSession()
-
-  const getOtherParticipantName = (c: Conversation) => {
-    const other = c.participants.find(
-      (p) => Number(p.user_id) !== Number(sessionUserId)
-    );
-    return other?.name || "Unknown";
-  };
-
-  const getOtherParticipant = (c: Conversation) => {
-    const other = c.participants.find(
-      (p) => Number(p.user_id) !== Number(session?.user?.id)
-    );
-    return other ?? null;
-  }
   
-
-  const getOtherProfileImage=(c:string)=>{
-
-  }
+  const getOtherParticipant = useCallback(
+    (c: Conversation): Participant | null => {
+      return (
+        c.participants.find(
+          (p) => Number(p.user_id) !== Number(sessionUserId)
+        ) ?? null
+      );
+    },
+    [sessionUserId] 
+  );
 
   const filteredConversations = useMemo(() => {
     const term = searchTerm.toLowerCase();
-  
     return conversations.filter((c) => {
       const other = getOtherParticipant(c);
       const otherName = other?.name?.toLowerCase() ?? "";
-  
       return (
-        c.task_title?.toLowerCase().includes(term) ||
-        otherName.includes(term)
+        c.task_title?.toLowerCase().includes(term) || otherName.includes(term)
       );
     });
-  }, [conversations, searchTerm]);
-  
+  }, [conversations, searchTerm, getOtherParticipant]);
 
   return (
     <motion.aside
@@ -92,12 +79,6 @@ export default function ChatSidebar({
         <h1 className="text-xl font-extrabold tracking-tight bg-[#3C7DED] bg-clip-text text-transparent">
           ChatLink
         </h1>
-        {/* <button
-          onClick={() => setSidebarOpen(false)}
-          className="sm:hidden text-gray-400 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white transition"
-        >
-          ✕
-        </button> */}
       </div>
 
       <div className="p-3 border-b bg-white/40 dark:bg-black/20 border-gray-100 dark:border-gray-800">
@@ -123,10 +104,13 @@ export default function ChatSidebar({
           </div>
         ) : (
           filteredConversations.map((c) => {
-            const other= getOtherParticipant(c);
-            const otherName = other.name;
+         
+            const other = getOtherParticipant(c);
+            if (!other) return null;
+
+            const otherName = other.name ?? "Unknown";
             const firstLetter = otherName.charAt(0).toUpperCase();
-            const profile_image = other.profile_image
+            const profile_image = other.profile_image;
             const unread = Number(c.unread_count || 0);
             const hasUnread = unread > 0;
 
@@ -144,33 +128,32 @@ export default function ChatSidebar({
                   activeConversationId === c.id
                     ? "bg-[#f4f1ff] dark:bg-[#1a1535] border-l-4 border-l-[#6C63FF]"
                     : hasUnread
-                      ? "bg-[#f0f5ff] dark:bg-[#1c163a] hover:bg-[#f9f8ff] dark:hover:bg-black/30"
-                      : "hover:bg-[#f9f8ff] dark:hover:bg-black/30"
+                    ? "bg-[#f0f5ff] dark:bg-[#1c163a] hover:bg-[#f9f8ff] dark:hover:bg-black/30"
+                    : "hover:bg-[#f9f8ff] dark:hover:bg-black/30"
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 shadow-md">
-    {profile_image ? (
-      <Image
-        src={profile_image}
-        alt={firstLetter ?? "Profile image"}
-        width={44}
-        height={44}
-        className="object-cover w-full h-full transition-transform group-hover:scale-105"
-      />
-    ) : (
-      <div className="w-full h-full bg-linear-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
-        {firstLetter}
-      </div>
-    )}
-  </div>
+                  <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 shadow-md">
+                    {profile_image ? (
+                      <Image
+                        src={profile_image}
+                        alt={otherName}
+                        width={44}
+                        height={44}
+                        className="object-cover w-full h-full transition-transform group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-linear-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
+                        {firstLetter}
+                      </div>
+                    )}
+                  </div>
 
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-center w-full gap-2">
                       <div className="font-bold text-gray-800 dark:text-gray-200 truncate text-base group-hover:text-[#6C63FF] transition-colors flex-1 min-w-0">
                         {otherName}
                       </div>
-
                       {c.last_message_at && (
                         <div className="text-xs text-gray-500 dark:text-gray-400 shrink-0">
                           {formatMessageTime(c.last_message_at)}
@@ -188,7 +171,6 @@ export default function ChatSidebar({
                       >
                         {messagePreview}
                       </p>
-
                       {hasUnread && (
                         <span className="shrink-0 inline-flex items-center justify-center min-w-5 h-5 bg-[#6C63FF] dark:bg-[#7da2ff] text-white text-xs font-bold px-1.5 rounded-full">
                           {unread > 99 ? "99+" : unread}

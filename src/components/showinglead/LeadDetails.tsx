@@ -139,10 +139,10 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   const handleGoToChat = useCallback(async () => {
     if (isNavigating) return;
 
-    if (!hasActiveSubscription) {
-      toast.error("Active subscription required to use chat functionality");
-      return;
-    }
+    // if (!hasActiveSubscription) {
+    //   toast.error("Active subscription required to use chat functionality");
+    //   return;
+    // }
 
     if (!conversationId && !convoLoading) {
       setIsNavigating(true);
