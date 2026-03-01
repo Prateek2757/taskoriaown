@@ -60,8 +60,7 @@ export default function ModernNavbar() {
       { name: "My Requests", href: "/customer/dashboard", icon: Search },
       { name: "Discover", href: "/services", icon: Binoculars },
       { name: "Messages", href: "/messages/null", icon: MessageSquare },
-      { name: "Taskoria Plans & Pricing", href: "/settings/billing/taskoria_pro", icon:FaMoneyCheck },
-      { name: "Affiliate Hub", href: "/affiliate-dashboard-portal", icon: LayoutDashboardIcon }
+     
       
     ],
     provider: [
@@ -74,8 +73,7 @@ export default function ModernNavbar() {
         icon: MessageSquare,
       },
       { name: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
-      { name: "Taskoria Plans & Pricing", href: "/settings/billing/taskoria_pro", icon:FaMoneyCheck },
-      { name: "Affiliate Hub", href: "/affiliate-dashboard-portal", icon: LayoutDashboardIcon }
+     
     ],
   };
 
@@ -585,6 +583,27 @@ export default function ModernNavbar() {
                 ) : (
                   ""
                 )}
+                {
+                  session ?    <Link
+                  href="/settings/billing/taskoria_pro"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
+                >
+                  <FaMoneyCheck className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  Taskoria Plans & Pricing
+                </Link> :"" 
+                }
+                  {
+                  session ?    <Link
+                  href="/affiliate-dashboard-portal"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
+                >
+                  <LayoutDashboard className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                 Affilate Hub
+                </Link> :"" 
+                }
+              
 
                
 

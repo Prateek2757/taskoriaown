@@ -315,7 +315,7 @@ export function DashboardLayout({
         </header>
 
         {/* Page Content */}
-        <div className="p-1 lg:p-8">{children}</div>
+        <div className="p-1 overflow-auto lg:p-8">{children}</div>
       </main>
 
       {/* Mobile Bottom Navigation */}
