@@ -32,7 +32,7 @@ type Task = {
 };
 
 type Response = {
-  id: number;
+  response_id: string;
   display_name: string;
   profile_title: string;
   title: string;
@@ -158,11 +158,15 @@ export default function TasksList({ tasks }: { tasks?: Task[] }) {
   );
 
   const handleMessageClick = useCallback(
-    (responseId: number) => {
+    (responseId: string) => {
       router.push(`/messages/${responseId}`);
     },
     [router]
   );
+
+  const handleProfileClick = useCallback((profile_id:string)=>{
+router.push(`/providerprofile/${profile_id}`)
+  },[router])
 
   const filteredTasks = tasks?.filter((task) => {
     const matchesSearch = task.title
@@ -290,6 +294,7 @@ export default function TasksList({ tasks }: { tasks?: Task[] }) {
                 onToggle={() => toggleTask(task.task_id)}
                 onStatusChange={(status) => handleStatusChange(task, status)}
                 onMessageClick={handleMessageClick}
+                onViewProfile={handleProfileClick}
               />
             </motion.div>
           ))}

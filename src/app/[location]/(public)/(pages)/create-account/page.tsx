@@ -17,6 +17,7 @@ import {
   CheckCircle2,
   XCircle,
   Loader2,
+  Milestone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/userContext";
@@ -334,27 +335,17 @@ function OnboardingContent() {
                                   <FormItem>
                                     <FormControl>
                                       <div className={inputWrapperClasses}>
-                                        <Building2 className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
+                                        <Milestone className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
                                         <select
                                           {...field}
                                           className={`${inputClasses} `}
                                         >
                                           <option value="">Select size</option>
-                                          <option value="1-10">
-                                            1-10 employees
-                                          </option>
-                                          <option value="11-50">
-                                            11-50 employees
-                                          </option>
-                                          <option value="51-200">
-                                            51-200 employees
-                                          </option>
-                                          <option value="201-500">
-                                            201-500 employees
-                                          </option>
-                                          <option value="500+">
-                                            500+ employees
-                                          </option>
+                                          <option value="10">10 km </option>
+                                          <option value="20">20 km </option>
+                                          <option value="30">30 km </option>
+                                          <option value="40">40 km </option>
+                                          <option value="50">50 km+ </option>
                                         </select>
                                       </div>
                                     </FormControl>

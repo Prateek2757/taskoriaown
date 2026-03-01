@@ -8,7 +8,7 @@ import { motion } from "motion/react";
 import NewRequestModal from "@/components/leads/RequestModal";
 import { useTasks } from "@/hooks/useTasks";
 import Image from "next/image";
-import TasksListCustomer from "@/components/tasklistcustomer/TasksList";
+import TasksList from "@/components/tasklistcustomer/TasksList";
 
 interface LeadAnswer {
   question_id?: string | number;
@@ -111,7 +111,7 @@ const tasks=TaskFromHook ?? []
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <TasksListCustomer tasks={tasks}   />
+            <TasksList tasks={tasks}   />
           </motion.div>
         )}
         <section>

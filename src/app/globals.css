@@ -156,7 +156,7 @@ body {
   --sidebar-ring: oklch(0.707 0.022 261.325);
   --gradient-primary: linear-gradient(
     135deg,
-    hsl(160 84% 39%),
+    hsl(221, 81%, 53%),
     hsl(220 70% 50%)
   );
   --gradient-secondary: linear-gradient(

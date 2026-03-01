@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { i18n } from "../../i18n-config";
 
-export const revalidate = 3600; 
+export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.taskoria.com";
@@ -31,9 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let services: any[] = [];
   try {
-    const res = await fetch(`${baseUrl}/api/signup/category-selection`, {
-      cache: "no-store",
-    });
+    const res = await fetch(`${baseUrl}/api/signup/category-selection`);
 
     if (res.ok) {
       services = await res.json();
