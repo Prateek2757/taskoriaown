@@ -119,9 +119,9 @@ export function DashboardOverview() {
   const payoutProgress = (earningsSummary.approved / earningsSummary.payoutThreshold) * 100;
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 overflow-hidden  animate-fade-in">
       {/* Welcome Banner */}
-      <div className="gradient-primary rounded-2xl p-6 text-white relative overflow-hidden">
+      <div className="gradient-primary rounded-2xl p-3 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-white rounded-full blur-3xl" />
           <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-cyan-300 rounded-full blur-3xl" />

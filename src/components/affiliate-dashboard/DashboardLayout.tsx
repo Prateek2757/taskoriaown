@@ -34,6 +34,7 @@ import {
 import { notifications } from "@/lib/mockData";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -61,20 +62,18 @@ export function DashboardLayout({
 }: DashboardLayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const unreadNotifications = notifications.filter((n) => !n.read).length;
-const {data:session 
-} = useSession()
-const user = session?.user
+  const { data: session } = useSession();
+  const user = session?.user;
   const handleLogout = () => {
     // logout();
     toast.success("Logged out successfully");
   };
 
-
-
   const NavContent = ({ isMobile = false }: { isMobile?: boolean }) => (
     <>
       <div className="h-screen">
-        <div
+        <Link
+          href="/"
           className={`flex items-center ${isMobile ? "px-4 py-4" : "px-4 py-6"}`}
         >
           <div className="w-10 h-10 rounded-xl shadow-glow flex items-center justify-center ">
@@ -89,8 +88,7 @@ const user = session?.user
             <h1 className="font-bold text-lg text-slate-900">Taskoria</h1>
             <p className="text-xs text-slate-500">Affiliate Portal</p>
           </div>
-        </div>
-
+        </Link>
         {/* Navigation */}
         <ScrollArea className="flex-1 px-3">
           <div className="space-y-1">
@@ -172,7 +170,7 @@ const user = session?.user
                 </Avatar>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-slate-900">
-                    {user?.name} 
+                    {user?.name}
                   </p>
                   {/* <p className="text-xs  text-slate-500 truncate">
                     {user?.email}
@@ -308,7 +306,7 @@ const user = session?.user
               <div className="lg:hidden">
                 <Avatar className="w-8 h-8">
                   <AvatarFallback className="gradient-primary text-white text-xs">
-                   {user?.name}
+                    {user?.name}
                   </AvatarFallback>
                 </Avatar>
               </div>
@@ -317,7 +315,7 @@ const user = session?.user
         </header>
 
         {/* Page Content */}
-        <div className="p-4 lg:p-8">{children}</div>
+        <div className="p-1 lg:p-8">{children}</div>
       </main>
 
       {/* Mobile Bottom Navigation */}

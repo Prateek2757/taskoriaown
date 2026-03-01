@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { FaMoneyCheck } from "react-icons/fa6";
+
 import Image from "next/image";
 import {
   Menu as MenuIcon,
@@ -17,6 +19,7 @@ import {
   HandPlatter,
   Binoculars,
   Star,
+  LayoutDashboardIcon,
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
@@ -56,7 +59,10 @@ export default function ModernNavbar() {
       { name: "Home", href: "/", icon: Home },
       { name: "My Requests", href: "/customer/dashboard", icon: Search },
       { name: "Discover", href: "/services", icon: Binoculars },
-      { name: "Messages", href: "/messages/null", icon: MessageSquare }
+      { name: "Messages", href: "/messages/null", icon: MessageSquare },
+      { name: "Taskoria Plans & Pricing", href: "/settings/billing/taskoria_pro", icon:FaMoneyCheck },
+      { name: "Affiliate Hub", href: "/affiliate-dashboard-portal", icon: LayoutDashboardIcon }
+      
     ],
     provider: [
       { name: "Home", href: "/", icon: Home },
@@ -68,6 +74,8 @@ export default function ModernNavbar() {
         icon: MessageSquare,
       },
       { name: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
+      { name: "Taskoria Plans & Pricing", href: "/settings/billing/taskoria_pro", icon:FaMoneyCheck },
+      { name: "Affiliate Hub", href: "/affiliate-dashboard-portal", icon: LayoutDashboardIcon }
     ],
   };
 
@@ -255,13 +263,12 @@ export default function ModernNavbar() {
           ) : (
             ""
           )}
-             <Link
-              href={`/affiliate-dashboard-portal`}
-           
-              className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-            >
-          Affiliate Hub
-            </Link>
+          <Link
+            href={`/affiliate-dashboard-portal`}
+            className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+          >
+            Affiliate Hub
+          </Link>
 
           <Link
             href="/settings/profile/my-profile"
@@ -315,7 +322,6 @@ export default function ModernNavbar() {
               Taskoria
             </span>
           </Link>
-
 
           {!minimalPages.includes(pathname) && (
             <motion.nav
@@ -579,6 +585,8 @@ export default function ModernNavbar() {
                 ) : (
                   ""
                 )}
+
+               
 
                 {session?.user?.role === "provider" && (
                   <button
