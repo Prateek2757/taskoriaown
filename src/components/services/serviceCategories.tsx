@@ -512,7 +512,7 @@ function highlightMatch(text: string, query: string) {
       <span className="rounded bg-blue-200 px-1 text-slate-900 dark:bg-blue-800 dark:text-slate-100">
         {text.slice(start, end)}
       </span>
-      {text.slice(end)}
+      {text.slice(end)}2
     </>
   );
 }

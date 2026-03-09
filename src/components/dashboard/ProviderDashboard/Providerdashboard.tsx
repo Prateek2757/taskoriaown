@@ -14,17 +14,17 @@ import { ResponsesCard } from "./Responsescard";
 import axios from "axios";
 import LoadingSpinner from "@/components/showinglead/LoadingSpinner";
 import { Skeleton } from "@/components/ui/skeleton";
-
+import PageSkeleton from "@/components/skeleton/PageSkeleton";
 
 export default function ProviderDashboard() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const { profile, mutate: mutateProfile , loading} = useLeadProfile();
+  const { profile, mutate: mutateProfile, loading } = useLeadProfile();
 
   const [showStats, setShowStats] = useState(false);
   const [totalLeads, setTotalLeads] = useState<number | null>(null);
   const [totalNewCount, setTotalNewCount] = useState<number | null>(null);
-const totalResponses = profile?.response_stats?.total_responses
+  const totalResponses = profile?.response_stats?.total_responses;
   const isPro = profile?.is_pro;
   const imageToShow =
     profile?.has_company && profile?.company_size !== "Sole-Trader"
@@ -72,7 +72,7 @@ const totalResponses = profile?.response_stats?.total_responses
     mutateProfile();
   };
 
-  if (loading || !session?.user) return <Skeleton className="h-full w-full"/>;
+  if (loading || !session?.user) return <PageSkeleton />;
 
   const user = session.user;
 
@@ -124,7 +124,10 @@ const totalResponses = profile?.response_stats?.total_responses
           <LeadSettingsCard />
 
           <div className="space-y-6">
-            <LeadsOverviewCard totalLeads={totalLeads} totalNewCount={totalNewCount} />
+            <LeadsOverviewCard
+              totalLeads={totalLeads}
+              totalNewCount={totalNewCount}
+            />
             <ResponsesCard totalResponse={totalResponses ?? 0} />
           </div>
         </div>

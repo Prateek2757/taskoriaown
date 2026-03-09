@@ -39,6 +39,7 @@ export type Profile = {
   company_name?: string;
   company_size?: string;
   has_company?: boolean;
+  profile_completion?:number;
   logo_url?: string;
   is_pro?: boolean;
   active_subscription?: Subscription | null;

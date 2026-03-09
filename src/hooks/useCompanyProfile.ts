@@ -42,6 +42,7 @@ export const useCompanyProfile = () => {
     setError(null);
     try {
       const res = await api.put("/api/company", data);
+      await fetchCompany(); 
       setCompany(res.data.company);
       return res.data;
     } catch (err: any) {

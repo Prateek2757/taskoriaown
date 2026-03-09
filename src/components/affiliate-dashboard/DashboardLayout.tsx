@@ -30,11 +30,13 @@ import {
   Shield,
   Moon,
   MessageSquare,
+  Home,
 } from "lucide-react";
 import { notifications } from "@/lib/mockData";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -43,11 +45,11 @@ interface DashboardLayoutProps {
 }
 
 const navItems = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "analytics", label: "Analytics", icon: BarChart3 },
+  // { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+  // { id: "analytics", label: "Analytics", icon: BarChart3 },
   { id: "referrals", label: "Referrals", icon: Link2 },
-  { id: "payouts", label: "Payouts", icon: Wallet },
-  { id: "resources", label: "Resources", icon: BookOpen },
+  // { id: "payouts", label: "Payouts", icon: Wallet },
+  // { id: "resources", label: "Resources", icon: BookOpen },
 ];
 
 const bottomNavItems = [
@@ -61,12 +63,12 @@ export function DashboardLayout({
   onViewChange,
 }: DashboardLayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
   const unreadNotifications = notifications.filter((n) => !n.read).length;
   const { data: session } = useSession();
   const user = session?.user;
-  const handleLogout = () => {
-    // logout();
-    toast.success("Logged out successfully");
+  const handleGoToHomePAge = () => {
+    router.push("/");
   };
 
   const NavContent = ({ isMobile = false }: { isMobile?: boolean }) => (
@@ -115,20 +117,20 @@ export function DashboardLayout({
                     className={`w-5 h-5 mr-3 ${isActive ? "text-blue-600" : "text-slate-400"}`}
                   />
                   {item.label}
-                  {item.id === "referrals" && (
+                  {/* {item.id === "referrals" && (
                     <Badge
                       variant="secondary"
                       className="ml-auto text-xs bg-green-100 text-green-700"
                     >
                       3 new
                     </Badge>
-                  )}
+                  )} */}
                 </button>
               );
             })}
           </div>
 
-          <div className="mt-8 space-y-1">
+          {/* <div className="mt-8 space-y-1">
             <p className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
               Support
             </p>
@@ -155,7 +157,7 @@ export function DashboardLayout({
                 </button>
               );
             })}
-          </div>
+          </div> */}
         </ScrollArea>
 
         {/* User Profile */}
@@ -164,9 +166,17 @@ export function DashboardLayout({
             <DropdownMenuTrigger asChild>
               <button className="w-full flex items-center p-2 rounded-xl hover:bg-slate-50 transition-colors">
                 <Avatar className="w-9 h-9 mr-3">
-                  <AvatarFallback className="gradient-primary text-white text-sm font-medium">
-                    {user?.name}
-                  </AvatarFallback>
+                  {user?.image ? (
+                    <img
+                      src={user.image}
+                      alt={user?.name || "User"}
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  ) : (
+                    <AvatarFallback className="gradient-primary text-white text-sm font-medium">
+                      {user?.name?.charAt(0)}
+                    </AvatarFallback>
+                  )}
                 </Avatar>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-slate-900">
@@ -180,24 +190,27 @@ export function DashboardLayout({
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => onViewChange("settings")}>
+              {/* <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator /> */}
+              {/* <DropdownMenuItem onClick={() => onViewChange("settings")}>
                 <User className="w-4 h-4 mr-2" />
                 Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem>
+              </DropdownMenuItem> */}
+              {/* <DropdownMenuItem>
                 <Shield className="w-4 h-4 mr-2" />
                 Security
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Moon className="w-4 h-4 mr-2" />
                 Dark Mode
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} className="text-red-600">
-                <LogOut className="w-4 h-4 mr-2" />
-                Log out
+              </DropdownMenuItem> */}
+              {/* <DropdownMenuSeparator /> */}
+              <DropdownMenuItem
+                onClick={handleGoToHomePAge}
+                className="text-blue-600"
+              >
+                <Home className="w-4 h-4 mr-2" />
+                GO TO Home Page
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -239,9 +252,7 @@ export function DashboardLayout({
               </h2>
             </div>
 
-            {/* Right Actions */}
-            <div className="flex items-center gap-2">
-              {/* Notifications */}
+            {/* <div className="flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="relative">
@@ -297,12 +308,10 @@ export function DashboardLayout({
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* Messages */}
               <Button variant="ghost" size="icon">
                 <MessageSquare className="w-5 h-5 text-slate-600" />
               </Button>
 
-              {/* Mobile Profile */}
               <div className="lg:hidden">
                 <Avatar className="w-8 h-8">
                   <AvatarFallback className="gradient-primary text-white text-xs">
@@ -310,15 +319,13 @@ export function DashboardLayout({
                   </AvatarFallback>
                 </Avatar>
               </div>
-            </div>
+            </div> */}
           </div>
         </header>
 
-        {/* Page Content */}
         <div className="p-1 overflow-auto lg:p-8">{children}</div>
       </main>
 
-      {/* Mobile Bottom Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-40">
         <div className="flex items-center justify-around h-16">
           {navItems.slice(0, 4).map((item) => {

@@ -65,8 +65,8 @@ const LeadCard: React.FC<LeadCardProps> = ({
       className={`group relative p-5  rounded-2xl shadow-sm border transition-all duration-300 cursor-pointer overflow-hidden
         ${
           isSelected
-            ? "border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-700 dark:to-gray-800 shadow-md"
-            : "border-gray-200 dark:border-gray-700 hover:border-blue-400 hover:shadow-lg hover:bg-gradient-to-br hover:from-white dark:hover:from-gray-800 hover:to-blue-50 dark:hover:to-blue-700"
+            ? "border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 shadow-md"
+            : "border-gray-200 dark:hover:bg-gray-800/50"
         }`}
     >
       <div className="absolute top-2 right-3">

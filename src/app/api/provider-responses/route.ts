@@ -29,6 +29,7 @@ export async function GET() {
         t.estimated_budget,
         c.category_id,
         c.name AS category_name,
+        ci.display_name AS location_name,
         u.user_id AS customer_id,
         u.email AS customer_email,
         u.phone AS customer_phone,
@@ -53,6 +54,7 @@ export async function GET() {
       LEFT JOIN user_profiles up ON up.user_id = t.customer_id
       LEFT JOIN task_answers ta ON ta.task_id = t.task_id
       LEFT JOIN category_questions q ON q.category_question_id = ta.category_question_id
+      LEFT JOIN cities ci ON ci.city_id = t.location_id
       WHERE tr.professional_id = $1
         AND t.is_deleted = false
       GROUP BY
@@ -68,6 +70,7 @@ export async function GET() {
         t.estimated_budget,
         c.category_id,
         c.name,
+        ci.display_name,
         u.user_id,
         u.email,
         u.phone,

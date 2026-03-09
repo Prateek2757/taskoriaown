@@ -82,12 +82,12 @@ export default function ProfileSettings() {
     }
   };
 
-  useEffect(() => {
-    if (profile) {
-      const completed = profile.categories?.length ? 15 : 0;
-      setCompletion(completed + 12);
-    }
-  }, [profile]);
+  // useEffect(() => {
+  //   if (profile) {
+  //     const completed = profile.categories?.length ? 15 : 0;
+  //     setCompletion(completed + 12);
+  //   }
+  // }, [profile]);
 
   if (loading && companyLoading) {
     return (
@@ -109,15 +109,15 @@ export default function ProfileSettings() {
 
         <h1 className="text-3xl font-semibold">
           Your profile is{" "}
-          <span className="text-amber-500">{completion}% complete</span>
+          <span className="text-amber-500">{profile?.profile_completion}% complete</span>
         </h1>
 
         <div className="mt-5 flex items-center gap-4">
           <div className="flex-1">
-            <Progress value={completion} />
+            <Progress value={profile?.profile_completion} />
           </div>
           <span className="text-sm text-slate-600 dark:text-slate-400 min-w-[48px]">
-            {completion}%
+            {profile?.profile_completion}%
           </span>
         </div>
 

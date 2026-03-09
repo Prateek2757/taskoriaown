@@ -8,6 +8,7 @@ import { Search, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import PageSkeleton from "@/components/skeleton/PageSkeleton";
 
 interface Category {
   category_id: number;
@@ -57,7 +58,6 @@ export default function CategorySelectionPage() {
   }, [searchQuery, categories]);
 
   const handleSelectCategory = (id: string, name: string) => {
-
     setSelectedCategory(id);
     setSearchQuery(name);
   };
@@ -65,10 +65,10 @@ export default function CategorySelectionPage() {
   const goNext = () => {
     if (!selectedCategory) return alert("Please select a category to continue");
     if (!draftId) return alert("Draft ID missing! Restart onboarding.");
-    
-    console.log("Navigating with:", { draftId, selectedCategory }); 
+
+    console.log("Navigating with:", { draftId, selectedCategory });
     const url = `/create-account?user_id=${draftId}&cn=${selectedCategory}`;
-    
+
     setIsNavigating(true);
     router.push(url);
   };
@@ -76,12 +76,7 @@ export default function CategorySelectionPage() {
   const popularCategories = useMemo(() => categories.slice(0, 8), [categories]);
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white via-gray-50 to-gray-100 dark:from-black dark:via-gray-900 dark:to-gray-800 transition-colors">
-        <Loader2 className="w-8 h-8 text-cyan-500 animate-spin mb-3" />
-        <p className="text-gray-600 dark:text-gray-300">Loading categories...</p>
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   return (
@@ -180,7 +175,8 @@ export default function CategorySelectionPage() {
             >
               {isNavigating ? (
                 <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" /> Redirecting...
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />{" "}
+                  Redirecting...
                 </>
               ) : (
                 "Continue"
@@ -192,8 +188,3 @@ export default function CategorySelectionPage() {
     </div>
   );
 }
-
-
-
-
-

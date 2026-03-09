@@ -18,6 +18,7 @@ export type Task = {
   budget_min?: number | null;
   budget_max?: number | null;
   answers?:Lead_answers[];
+  queries?:string;
   response_count?:number;
 };
 

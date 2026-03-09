@@ -24,6 +24,7 @@ export async function GET() {
   t.status,
   t.created_at,
   t.estimated_budget,
+  t.queries,
   COUNT(DISTINCT r.response_id) AS response_count,
   json_agg(
     json_build_object(
@@ -43,6 +44,7 @@ WHERE t.customer_id = $1
 GROUP BY
   t.task_id,
   t.title,
+  t.queries,
   t.description,
   t.status,
   t.created_at,

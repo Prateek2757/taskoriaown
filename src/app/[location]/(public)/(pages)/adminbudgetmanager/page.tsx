@@ -36,6 +36,7 @@ import {
   Forward,
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import PageSkeleton from "@/components/skeleton/PageSkeleton";
 
 interface Task {
   task_id: number;
@@ -189,10 +190,9 @@ export default function AdminBudgetManager() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center h-96 gap-3">
-        <Loader2 className="animate-spin w-8 h-8 text-blue-500" />
-        <p className="text-gray-600 dark:text-gray-400">Loading tasks...</p>
-      </div>
+      <>
+        <PageSkeleton />
+      </>
     );
   }
 

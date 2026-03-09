@@ -21,6 +21,7 @@ interface ProfileCardProps {
     display_name?: string;
     profile_image_url?: string;
     is_pro?: boolean;
+    profile_completion?:number;
     referral_code?: string;
 
   };
@@ -196,7 +197,7 @@ export function ProfileCard({
               <div className="flex items-center justify-between">
                 <span className={`text-sm ${isPro ? "text-slate-600 dark:text-slate-400 font-medium" : "text-slate-700 dark:text-slate-300"}`}>
                   Profile completion:{" "}
-                  <span className={`font-bold ${isPro ? "text-yellow-400" : "font-semibold"}`}>27%</span>
+                  <span className={`font-bold ${isPro ? "text-yellow-400" : "font-semibold"}`}>{profile.profile_completion}%</span>
                 </span>
                 <Link
                   href="/settings/profile/my-profile"
@@ -213,7 +214,7 @@ export function ProfileCard({
               <div className="relative">
                 {isPro && <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-full blur-md" />}
                 <Progress
-                  value={27}
+                  value={profile.profile_completion}
                   className={`h-2 rounded-full relative ${isPro ? "bg-slate-700/50" : ""}`}
                   style={isPro ? { background: "linear-gradient(to right, rgba(234, 179, 8, 0.2), rgba(245, 158, 11, 0.2))" } : {}}
                 />

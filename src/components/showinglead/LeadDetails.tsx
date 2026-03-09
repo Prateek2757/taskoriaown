@@ -281,7 +281,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
+      <div className="bg-white dark:bg-[#0d1117] rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
         <div className="p-6">
           <div className="flex items-start gap-4">
             <div className="relative flex-shrink-0">
@@ -545,7 +545,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 p-6 mb-6">
+      <div className="bg-white dark:bg-[#0d1117] rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 p-6 mb-6">
         <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
           Project Details
         </h2>
@@ -562,7 +562,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               {lead.answers.map((ans, idx) => (
                 <div
                   key={ans.question_id || idx}
-                  className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4"
+                  className="bg-gray-50 dark:bg-blue-900/10 border border-gray-200 dark:border-gray-700 rounded-xl p-4"
                 >
                   <div className="flex items-start gap-2 mb-2">
                     {/* <MessageSquare
@@ -590,7 +590,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                     Additional Queries
                   </h3>
 
-                  <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+                  <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
                     <div className="flex items-start gap-3">
                       <HelpCircle
                         size={18}
@@ -613,7 +613,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         />
       </div>
       <div className=" border-t border-gray-100 dark:border-gray-800" />
-      <div className="mt-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 p-5 flex items-start gap-4">
+      <div className="mt-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-gray-50 to-white dark:from-blue-900/20 dark:to-blue-900/10 p-5 flex items-start gap-4">
 
 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30">
   <Settings className="h-5 w-5 text-blue-600 dark:text-blue-400" />

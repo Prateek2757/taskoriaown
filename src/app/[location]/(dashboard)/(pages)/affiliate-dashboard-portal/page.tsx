@@ -24,7 +24,7 @@ function AppContent() {
 
   const [authView, setAuthView] = useState<AuthView>("login");
   const [dashboardView, setDashboardView] =
-    useState<DashboardView>("dashboard");
+    useState<DashboardView>("referrals");
 
   // Show OTP verification if user exists but not verified
   //   if (sess && user && !user.isVerified && authView !== 'otp-verification') {
@@ -65,12 +65,12 @@ function AppContent() {
 
   return (
     <DashboardLayout activeView={dashboardView} onViewChange={setDashboardView}>
-      {dashboardView === "dashboard" && <DashboardOverview />}
-      {dashboardView === "analytics" && <AnalyticsPage />}
+      {/* {dashboardView === "dashboard" && <DashboardOverview />}
+      {dashboardView === "analytics" && <AnalyticsPage />} */}
       {dashboardView === "referrals" && <ReferralsPage />}
-      {dashboardView === "payouts" && <PayoutsPage />}
+      {/* {dashboardView === "payouts" && <PayoutsPage />}
       {dashboardView === "resources" && <ResourcesPage />}
-      {dashboardView === "settings" && <SettingsPage />}
+      {dashboardView === "settings" && <SettingsPage />} */}
     </DashboardLayout>
   );
 }

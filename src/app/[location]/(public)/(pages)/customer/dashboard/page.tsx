@@ -9,6 +9,8 @@ import NewRequestModal from "@/components/leads/RequestModal";
 import { useTasks } from "@/hooks/useTasks";
 import Image from "next/image";
 import TasksList from "@/components/tasklistcustomer/TasksList";
+import { Skeleton } from "@/components/ui/skeleton";
+import PageSkeleton from "@/components/skeleton/PageSkeleton";
 
 interface LeadAnswer {
   question_id?: string | number;
@@ -22,27 +24,47 @@ interface Task {
   description: string;
   status: string;
   created_at: string;
-  estimated_budget:number;
-  answers?:LeadAnswer[];
+  estimated_budget: number;
+  answers?: LeadAnswer[];
   budget_min: number | null;
   budget_max: number | null;
 }
 
 export default function CustomerDashboard() {
   const [openModal, setOpenModal] = useState(false);
-  const {tasks : TaskFromHook} = useTasks();
+  const { tasks: TaskFromHook, loading } = useTasks();
 
-const tasks=TaskFromHook ?? []
+  const tasks = TaskFromHook ?? [];
 
   const serviceCategories = [
-    { title: "Accounting & Tax", image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop" },
-    { title: "Business Services", image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop" },
-    { title: "Marketing & Design", image: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=400&h=300&fit=crop" },
-    { title: "Administrative", image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=400&h=300&fit=crop" },
+    {
+      title: "Accounting & Tax",
+      image:
+        "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop",
+    },
+    {
+      title: "Business Services",
+      image:
+        "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop",
+    },
+    {
+      title: "Marketing & Design",
+      image:
+        "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=400&h=300&fit=crop",
+    },
+    {
+      title: "Administrative",
+      image:
+        "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=400&h=300&fit=crop",
+    },
   ];
 
-  if (tasks === null) {
-    return <p className="text-center text-gray-500 mt-10">Loading your dashboard...</p>;
+  if (loading) {
+    return (
+      <>
+        <PageSkeleton />
+      </>
+    );
   }
 
   return (
@@ -111,7 +133,7 @@ const tasks=TaskFromHook ?? []
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <TasksList tasks={tasks}   />
+            <TasksList tasks={tasks} />
           </motion.div>
         )}
         <section>
@@ -120,10 +142,18 @@ const tasks=TaskFromHook ?? []
               You may also need
             </h2>
             <div className="flex gap-2">
-              <Button variant="outline" size="icon" className="h-10 w-10 rounded-full border-2 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-600 hover:text-white transition-all">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-10 w-10 rounded-full border-2 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-600 hover:text-white transition-all"
+              >
                 <ChevronLeft className="h-5 w-5" />
               </Button>
-              <Button variant="outline" size="icon" className="h-10 w-10 rounded-full border-2 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-600 hover:text-white transition-all">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-10 w-10 rounded-full border-2 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-600 hover:text-white transition-all"
+              >
                 <ChevronRight className="h-5 w-5" />
               </Button>
             </div>
@@ -140,7 +170,7 @@ const tasks=TaskFromHook ?? []
                 <Card className="group cursor-pointer overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/70 shadow-sm hover:shadow-lg transition-all">
                   <div className="relative h-48 overflow-hidden">
                     <Image
-                    fill
+                      fill
                       src={category.image}
                       alt={category.title}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"

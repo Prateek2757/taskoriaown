@@ -8,7 +8,7 @@ import { useState } from "react";
 import ConfirmDialog from "./Confirmdialog";
 import LocationsSection from "./Locationssection";
 import ServicesSection from "./ServiceSection";
-
+import PageSkeleton from "../skeleton/PageSkeleton";
 
 export default function MyServicesPage() {
   const {
@@ -50,16 +50,7 @@ export default function MyServicesPage() {
   };
 
   if (loading || !profile) {
-    return (
-      <div className="max-w-6xl mx-auto py-20 flex justify-center items-center">
-        <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600 mx-auto"></div>
-          <p className="text-gray-500 dark:text-gray-300 text-lg">
-            Loading your services and locations...
-          </p>
-        </div>
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   return (

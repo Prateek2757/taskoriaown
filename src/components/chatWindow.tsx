@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Send, Paperclip, Smile, Loader2 } from "lucide-react";
 import { supabaseBrowser } from "@/lib/supabase-server";
+import PageSkeleton from "./skeleton/PageSkeleton";
 
 export type Message = {
   id: string;
@@ -194,7 +195,7 @@ export default function ChatWindow({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full text-gray-500">
-        <Loader2 className="animate-spin mr-2" /> Loading messages...
+        <PageSkeleton />{" "}
       </div>
     );
   }

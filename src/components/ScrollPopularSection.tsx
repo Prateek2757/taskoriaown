@@ -38,7 +38,7 @@ function ScrollPopularSection() {
       <section className=" md:hidden pt-10">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto space-y-6">
-            <Skeleton className="h-44 w-full" />
+            <Skeleton className="h-44  w-full" />
           </div>
         </div>
       </section>

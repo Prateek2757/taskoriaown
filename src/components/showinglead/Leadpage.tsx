@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import axios from "axios";
 import LeadCard from "./LeadCard";
 import LeadDetails from "./LeadDetails";
-import LoadingSpinner from "./LoadingSpinner";
 import FilterSidebar from "./FilterSidebar";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { useCredit } from "@/hooks/useCredit";
+import { useLeads } from "@/hooks/useLead";
+import LeadSkeleton from "../skeleton/leadsskeleton";
 
 export interface Lead {
   user_id?: string | number;
@@ -41,8 +41,7 @@ export interface Filters {
 }
 
 const LeadsPage: React.FC = () => {
-  const [rawLeads, setRawLeads] = useState<Lead[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const { leads: rawLeads, error, isLoading, markAsSeen } = useLeads(); // 👈
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [filters, setFilters] = useState<Filters>({
     search: "",
@@ -54,26 +53,16 @@ const LeadsPage: React.FC = () => {
   });
   const [showFilters, setShowFilters] = useState(false);
   const [isMobileDetailsOpen, setIsMobileDetailsOpen] = useState(false);
-  const { taskCredits, fetchCreditEstimates, loading } = useCredit();
+  const { taskCredits, fetchCreditEstimates } = useCredit();
   const filtersRef = useRef<HTMLDivElement>(null);
 
+  // Set first lead as selected + fetch credits once leads load
   useEffect(() => {
-    const fetchLeadsAndCredits = async () => {
-      try {
-        const { data } = await axios.get<Lead[]>("/api/leads");
-        const leadsData = Array.isArray(data) ? data : [];
-        setRawLeads(leadsData);
-        // console.log(leadsData, "leadsData");
-
-        if (leadsData.length > 0) setSelectedLead(leadsData[0]);
-        await fetchCreditEstimates();
-      } catch (err) {
-        console.error(err);
-        setError("Failed to fetch leads or credits.");
-      }
-    };
-    fetchLeadsAndCredits();
-  }, []);
+    if (rawLeads.length > 0 && !selectedLead) {
+      setSelectedLead(rawLeads[0]);
+      fetchCreditEstimates();
+    }
+  }, [rawLeads]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -97,44 +86,33 @@ const LeadsPage: React.FC = () => {
       const sorted = [...rawLeads].sort((a, b) => {
         if (!a.is_seen && b.is_seen) return -1;
         if (a.is_seen && !b.is_seen) return 1;
-
-        if (!a.is_seen && !b.is_seen) {
+        if (!a.is_seen && !b.is_seen)
           return (
             new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
           );
-        }
-
         if (a.is_seen && b.is_seen) {
-          const aSeenTime = a.seen_at
+          const aT = a.seen_at
             ? new Date(a.seen_at).getTime()
             : new Date(a.created_at).getTime();
-          const bSeenTime = b.seen_at
+          const bT = b.seen_at
             ? new Date(b.seen_at).getTime()
             : new Date(b.created_at).getTime();
-          return bSeenTime - aSeenTime;
+          return bT - aT;
         }
-
         return 0;
       });
-
       setInitialOrder(sorted.map((l) => l.task_id!));
     }
   }, [rawLeads, initialOrder.length]);
 
   const sortedLeads = useMemo(() => {
     if (initialOrder.length === 0) return rawLeads;
-
     return [...rawLeads].sort((a, b) => {
-      const indexA = initialOrder.indexOf(a.task_id!);
-      const indexB = initialOrder.indexOf(b.task_id!);
-
-      if (indexA !== -1 && indexB !== -1) {
-        return indexA - indexB;
-      }
-
-      if (indexA === -1) return -1;
-      if (indexB === -1) return 1;
-
+      const iA = initialOrder.indexOf(a.task_id!);
+      const iB = initialOrder.indexOf(b.task_id!);
+      if (iA !== -1 && iB !== -1) return iA - iB;
+      if (iA === -1) return -1;
+      if (iB === -1) return 1;
       return 0;
     });
   }, [rawLeads, initialOrder]);
@@ -144,10 +122,9 @@ const LeadsPage: React.FC = () => {
       const matchesSearch =
         !filters.search ||
         lead.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-        (lead.customer_name &&
-          lead.customer_name
-            .toLowerCase()
-            .includes(filters.search.toLowerCase()));
+        lead.customer_name
+          ?.toLowerCase()
+          .includes(filters.search.toLowerCase());
       const matchesBudget =
         !filters.estimated_budget ||
         (lead.estimated_budget ?? 0) >= +filters.estimated_budget;
@@ -159,7 +136,6 @@ const LeadsPage: React.FC = () => {
       const matchesRemote =
         filters.isRemoteAllowed === null ||
         lead.is_remote_allowed === filters.isRemoteAllowed;
-
       return (
         matchesSearch &&
         matchesCategory &&
@@ -177,32 +153,22 @@ const LeadsPage: React.FC = () => {
   const handleLeadClick = async (lead: Lead) => {
     setSelectedLead(lead);
     if (window.innerWidth < 768) setIsMobileDetailsOpen(true);
-
     if (!lead.is_seen) {
-      axios.put(`/api/lead/${lead.task_id}`, { seen: true }).catch((err) => {
-        console.error("Failed to mark lead as seen:", err);
-      });
-
-      const seenTimestamp = new Date().toISOString();
-
-      setRawLeads((prev) =>
-        prev.map((l) =>
-          l.task_id === lead.task_id
-            ? { ...l, is_seen: true, seen_at: seenTimestamp }
-            : l
-        )
+      await markAsSeen(lead.task_id!);
+      setSelectedLead((prev) =>
+        prev?.task_id === lead.task_id
+          ? ({
+              ...prev,
+              is_seen: true,
+              seen_at: new Date().toISOString(),
+            } as Lead)
+          : prev
       );
-
-      setSelectedLead((prev) => {
-        if (prev && prev.task_id === lead.task_id) {
-          return { ...prev, is_seen: true, seen_at: seenTimestamp };
-        }
-        return prev;
-      });
     }
   };
 
-  
+  if (isLoading) return <LeadSkeleton />;
+
   if (error)
     return (
       <div className="flex h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
@@ -222,27 +188,25 @@ const LeadsPage: React.FC = () => {
     );
 
   return (
-    <div className="flex flex-col md:flex-row md:h-screen min-h-screen bg-gray-50 dark:bg-gray-900 font-sans relative">
+    <div className="flex flex-col md:flex-row md:h-screen min-h-screen bg-gray-50 dark:bg-[#0d1117] font-sans relative">
       <div
-        className={`flex flex-col w-full md:w-[380px] border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 transition-all duration-300 ${
+        className={`flex flex-col w-full md:w-[380px] border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0d1117] transition-all duration-300 ${
           isMobileDetailsOpen ? "hidden md:flex" : "flex"
         }`}
       >
-        <div className="sticky top-13 z-30 mb-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="sticky top-13 z-30 mb-4 bg-white dark:bg-[#0d1117] border-b border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 px-2 py-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:gap-3 w-full md:w-auto">
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 leading-none">
                   {filteredLeads.length} matching leads
                 </h2>
-
                 {unseenCount > 0 && (
                   <span className="px-2 py-1 text-xs font-semibold bg-blue-500 text-white rounded-full animate-pulse">
                     🔵 {unseenCount} New
                   </span>
                 )}
               </div>
-
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 sm:mt-0">
                 {filters.category || "All services"} •{" "}
                 {filters.location || "All locations"}
@@ -269,7 +233,6 @@ const LeadsPage: React.FC = () => {
               >
                 <SlidersHorizontal className="w-4 h-4" />
                 <span>Filters</span>
-
                 {Object.values(filters).some(
                   (val) =>
                     val &&
@@ -307,20 +270,14 @@ const LeadsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="hidden md:block flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-900">
+      <div className="hidden md:block flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-[#0d1117]">
         {selectedLead ? (
-          <>
-           <LeadDetails
+          <LeadDetails
             lead={selectedLead}
             userId={selectedLead.user_id}
             taskId={selectedLead.task_id}
             requiredCredits={taskCredits[Number(selectedLead.task_id)] || 0}
           />
-
-          
-          </>
-        
-         
         ) : (
           <div className="flex items-center justify-center h-full text-gray-400 dark:text-gray-500">
             <h2>Select a lead to view details</h2>
@@ -350,6 +307,7 @@ const LeadsPage: React.FC = () => {
         </div>
       )}
 
+      {/* Filter Sidebar */}
       {showFilters && (
         <>
           <div
@@ -365,7 +323,7 @@ const LeadsPage: React.FC = () => {
                 onClick={() => setShowFilters(false)}
                 className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition"
               >
-                ✕ 
+                ✕
               </button>
             </div>
             <FilterSidebar
