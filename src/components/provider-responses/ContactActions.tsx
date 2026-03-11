@@ -1,13 +1,21 @@
 "use client";
 
-import { Phone, MessageCircle, Mail, MessageSquare, DollarSign } from "lucide-react";
+import {
+  Phone,
+  MessageCircle,
+  Mail,
+  MessageSquare,
+  DollarSign,
+} from "lucide-react";
 import ContactAction from "./ContactAction";
 import { ProviderResponse } from "@/types";
+import { useState } from "react";
+import EstimateModal from "./EstimateModal";
+import EmailComposeModal from "./EmailComposeModal";
 
 export const getActions = (response: ProviderResponse) => {
   const phone = response.customer_phone;
   const email = response.customer_email;
-  const name = response.customer_name;
 
   return [
     {
@@ -28,7 +36,7 @@ export const getActions = (response: ProviderResponse) => {
       description: "Message them on WhatsApp",
       actionLabel: "Open WhatsApp",
       href: `https://wa.me/${phone?.replace(/\D/g, "")}?text=Hi ${encodeURIComponent(
-        name
+        response.customer_name
       )}, I saw your request on the platform.`,
       target: "_blank",
       iconBg: "bg-green-500",
@@ -41,7 +49,7 @@ export const getActions = (response: ProviderResponse) => {
       condition: !!email,
       description: "Send a professional email",
       actionLabel: `Email ${email}`,
-      href: `mailto:${email}`,
+      type: "email", // <-- triggers modal instead of href
       iconBg: "bg-violet-500",
       hover:
         "hover:bg-violet-50 dark:hover:bg-violet-900/30 hover:text-violet-600 dark:hover:text-violet-400 hover:border-violet-200 dark:hover:border-violet-800",
@@ -63,7 +71,7 @@ export const getActions = (response: ProviderResponse) => {
       condition: true,
       description: "Send a price quote for the job",
       actionLabel: "Send Estimate",
-      href: "#",
+      type: "estimate",
       iconBg: "bg-amber-500",
       hover:
         "hover:bg-amber-50 dark:hover:bg-amber-900/30 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-200 dark:hover:border-amber-800",
@@ -73,28 +81,72 @@ export const getActions = (response: ProviderResponse) => {
 
 interface ContactActionsProps {
   response: ProviderResponse;
-  variant?: "compact" | "full"; 
+  variant?: "compact" | "full";
 }
 
-export default function ContactActions({ response, variant = "full" }: ContactActionsProps) {
+export default function ContactActions({
+  response,
+  variant = "full",
+}: ContactActionsProps) {
   const actions = getActions(response);
+  const [openEstimate, setOpenEstimate] = useState(false);
+  const [openEmail, setOpenEmail] = useState(false);
 
   if (variant === "compact") {
     return (
       <>
-        {actions.map(({ icon: Icon, label, href, target, hover }) => (
-          <a
-            key={label}
-            href={href}
-            title={label}
-            target={target}
-            rel={target === "_blank" ? "noopener noreferrer" : undefined}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 dark:text-gray-400 transition-all ${hover}`}
-          >
-            <Icon className="w-3.5 h-3.5 flex-shrink-0" />
-            {label}
-          </a>
-        ))}
+        {actions.map(({ icon: Icon, label, href, target, hover, type }) => {
+          if (type === "estimate") {
+            return (
+              <button
+                key={label}
+                onClick={() => setOpenEstimate(true)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 dark:text-gray-400 transition-all cursor-pointer ${hover}`}
+              >
+                <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+                {label}
+              </button>
+            );
+          }
+
+          if (type === "email") {
+            return (
+              <button
+                key={label}
+                onClick={() => setOpenEmail(true)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 dark:text-gray-400 transition-all cursor-pointer ${hover}`}
+              >
+                <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+                {label}
+              </button>
+            );
+          }
+
+          return (
+            <a
+              key={label}
+              href={href}
+              title={label}
+              target={target}
+              rel={target === "_blank" ? "noopener noreferrer" : undefined}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 dark:text-gray-400 transition-all ${hover}`}
+            >
+              <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+              {label}
+            </a>
+          );
+        })}
+
+        <EstimateModal
+          open={openEstimate}
+          onClose={() => setOpenEstimate(false)}
+          response={response}
+        />
+        <EmailComposeModal
+          open={openEmail}
+          onClose={() => setOpenEmail(false)}
+          response={response}
+        />
       </>
     );
   }
@@ -104,11 +156,19 @@ export default function ContactActions({ response, variant = "full" }: ContactAc
       <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 flex items-start gap-3">
         <span className="mt-0.5 flex-shrink-0 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
           <svg className="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none">
-            <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              d="M2 6l3 3 5-5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </span>
         <div>
-          <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">Great!</p>
+          <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+            Great!
+          </p>
           <p className="text-xs text-gray-500 dark:text-gray-400">
             You're now able to contact {response.customer_name}.
           </p>
@@ -116,10 +176,41 @@ export default function ContactActions({ response, variant = "full" }: ContactAc
       </div>
 
       <div className="space-y-2">
-        {actions.map((action) => (
-          <ContactAction key={action.label} {...action} />
-        ))}
+        {actions.map((action) => {
+          if (action.type === "estimate") {
+            return (
+              <ContactAction
+                key={action.label}
+                {...action}
+                onClick={() => setOpenEstimate(true)}
+              />
+            );
+          }
+
+          if (action.type === "email") {
+            return (
+              <ContactAction
+                key={action.label}
+                {...action}
+                onClick={() => setOpenEmail(true)}
+              />
+            );
+          }
+
+          return <ContactAction key={action.label} {...action} />;
+        })}
       </div>
+
+      <EstimateModal
+        open={openEstimate}
+        onClose={() => setOpenEstimate(false)}
+        response={response}
+      />
+      <EmailComposeModal
+        open={openEmail}
+        onClose={() => setOpenEmail(false)}
+        response={response}
+      />
     </div>
   );
 }

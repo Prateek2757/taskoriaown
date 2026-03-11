@@ -35,6 +35,10 @@ export async function GET() {
         u.phone AS customer_phone,
         up.display_name AS customer_name,
         up.profile_image_url AS customer_profile_picture,
+        upp.display_name AS professional_name,
+        co.website AS professional_website,
+        co.company_name AS professional_company_name,
+        co.contact_phone AS professional_contact_number,
         (
           SELECT COUNT(DISTINCT tr2.response_id)
           FROM task_responses tr2
@@ -51,6 +55,8 @@ export async function GET() {
       JOIN tasks t ON t.task_id = tr.task_id
       JOIN service_categories c ON c.category_id = t.category_id
       JOIN users u ON u.user_id = t.customer_id
+      LEFT JOIN user_profiles upp ON upp.user_id = tr.professional_id
+      LEFT JOIN company co ON co.user_id = tr.professional_id
       LEFT JOIN user_profiles up ON up.user_id = t.customer_id
       LEFT JOIN task_answers ta ON ta.task_id = t.task_id
       LEFT JOIN category_questions q ON q.category_question_id = ta.category_question_id
@@ -75,7 +81,11 @@ export async function GET() {
         u.email,
         u.phone,
         up.display_name ,
-        up.profile_image_url 
+        up.profile_image_url ,
+        upp.display_name,
+        co.website,
+        co.company_name,
+        co.contact_phone
       ORDER BY tr.created_at DESC;
     `;
 
@@ -87,7 +97,7 @@ export async function GET() {
     console.error("Fetch provider responses error:", err);
     return NextResponse.json(
       { error: "Failed to load responses" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

@@ -17,7 +17,8 @@ export type EmailType =
   | "task-posted-no-budget"
   | "provider-new-task"
   | "verification"
-  | "password-reset-code";
+  | "password-reset-code"
+  | "provider-estimate";
 
 interface AppEmailProps {
   type: EmailType;
@@ -26,6 +27,9 @@ interface AppEmailProps {
   verifyCode?: string;
   taskTitle?: string;
   taskLocation?: string;
+  price?: string;
+  unit?: string;
+  messageFromProvider?: string;
 }
 
 const getEmailContent = ({
@@ -54,6 +58,15 @@ const getEmailContent = ({
           taskLocation ? `in ${taskLocation}` : ""
         } has been successfully posted.`,
         buttonText: "View Task",
+        buttonLink: "https://www.taskoria.com/customer/dashboard",
+      };
+    case "provider-estimate":
+      return {
+        heading: "💰 You received a new estimate",
+        message: `A service provider sent you a quote for "${
+          taskTitle ?? "your task"
+        }".`,
+        buttonText: "View Estimate",
         buttonLink: "https://www.taskoria.com/customer/dashboard",
       };
     case "provider-new-task":
@@ -96,7 +109,7 @@ const getEmailContent = ({
   }
 };
 
-const AppEmail = (props: AppEmailProps) => {
+const AppEmaill = (props: AppEmailProps) => {
   const company = props.company ?? "Taskoria";
   const content = getEmailContent({ ...props, company });
 
@@ -105,8 +118,24 @@ const AppEmail = (props: AppEmailProps) => {
       <Head>
         <title>{content.heading}</title>
       </Head>
-      <Body style={{ backgroundColor: "#f3f4f6", fontFamily: "Arial, sans-serif", margin: 0, padding: "16px" }}>
-        <Container style={{ maxWidth: "600px", margin: "32px auto", backgroundColor: "#ffffff", borderRadius: "8px", padding: "32px", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" }}>
+      <Body
+        style={{
+          backgroundColor: "#f3f4f6",
+          fontFamily: "Arial, sans-serif",
+          margin: 0,
+          padding: "16px",
+        }}
+      >
+        <Container
+          style={{
+            maxWidth: "600px",
+            margin: "32px auto",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            padding: "32px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          }}
+        >
           <Section style={{ textAlign: "center" }}>
             <Img
               src="https://www.taskoria.com/taskorialogonew.png"
@@ -117,22 +146,58 @@ const AppEmail = (props: AppEmailProps) => {
             />
           </Section>
 
-          <Heading style={{ marginBottom: "16px", fontSize: "24px", fontWeight: "bold", color: "#1f2937" }}>
+          <Heading
+            style={{
+              marginBottom: "16px",
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#1f2937",
+            }}
+          >
             {content.heading}
           </Heading>
 
-          <Text style={{ marginBottom: "24px", fontSize: "16px", lineHeight: "1.6", color: "#374151" }}>
+          <Text
+            style={{
+              marginBottom: "24px",
+              fontSize: "16px",
+              lineHeight: "1.6",
+              color: "#374151",
+            }}
+          >
             {content.message}
           </Text>
 
           {(props.type === "verification" ||
             props.type === "password-reset-code") &&
             props.verifyCode && (
-              <Section style={{ margin: "32px 0", backgroundColor: "#f9fafb", borderRadius: "8px", padding: "24px", textAlign: "center" }}>
-                <Text style={{ marginBottom: "8px", fontSize: "14px", color: "#4b5563" }}>
+              <Section
+                style={{
+                  margin: "32px 0",
+                  backgroundColor: "#f9fafb",
+                  borderRadius: "8px",
+                  padding: "24px",
+                  textAlign: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    marginBottom: "8px",
+                    fontSize: "14px",
+                    color: "#4b5563",
+                  }}
+                >
                   Your verification code:
                 </Text>
-                <Text style={{ fontSize: "32px", fontWeight: "bold", letterSpacing: "0.1em", color: "#2563eb", margin: "8px 0" }}>
+                <Text
+                  style={{
+                    fontSize: "32px",
+                    fontWeight: "bold",
+                    letterSpacing: "0.1em",
+                    color: "#2563eb",
+                    margin: "8px 0",
+                  }}
+                >
                   {props.verifyCode}
                 </Text>
               </Section>
@@ -145,7 +210,16 @@ const AppEmail = (props: AppEmailProps) => {
               <Section style={{ margin: "32px 0", textAlign: "center" }}>
                 <Button
                   href={content.buttonLink}
-                  style={{ backgroundColor: "#2563eb", color: "#ffffff", padding: "12px 32px", fontSize: "16px", fontWeight: "600", textDecoration: "none", borderRadius: "8px", display: "inline-block" }}
+                  style={{
+                    backgroundColor: "#2563eb",
+                    color: "#ffffff",
+                    padding: "12px 32px",
+                    fontSize: "16px",
+                    fontWeight: "600",
+                    textDecoration: "none",
+                    borderRadius: "8px",
+                    display: "inline-block",
+                  }}
                 >
                   {content.buttonText}
                 </Button>
@@ -153,17 +227,71 @@ const AppEmail = (props: AppEmailProps) => {
             )}
 
           {props.type === "password-reset-code" && (
-            <Text style={{ marginTop: "24px", fontSize: "14px", color: "#4b5563" }}>
-              If you didn't request this code, you can safely ignore this
-              email. Your password will remain unchanged.
+            <Text
+              style={{ marginTop: "24px", fontSize: "14px", color: "#4b5563" }}
+            >
+              If you didn't request this code, you can safely ignore this email.
+              Your password will remain unchanged.
             </Text>
           )}
 
-          <Section style={{ marginTop: "32px", borderTop: "1px solid #e5e7eb", paddingTop: "24px" }}>
-            <Text style={{ textAlign: "center", fontSize: "12px", color: "#6b7280", margin: "8px 0" }}>
+          {props.type === "provider-estimate" && (
+            <Section
+              style={{
+                margin: "24px 0",
+                backgroundColor: "#f9fafb",
+                padding: "20px",
+                borderRadius: "8px",
+              }}
+            >
+              <Text style={{ fontSize: "14px", color: "#6b7280" }}>
+                Quoted price
+              </Text>
+
+              <Text
+                style={{
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                  color: "#2563eb",
+                  margin: "8px 0",
+                }}
+              >
+                {props.price} {props.unit}
+              </Text>
+
+              {props.messageFromProvider && (
+                <Text style={{ fontSize: "14px", color: "#374151" }}>
+                  {props.messageFromProvider}
+                </Text>
+              )}
+            </Section>
+          )}
+
+          <Section
+            style={{
+              marginTop: "32px",
+              borderTop: "1px solid #e5e7eb",
+              paddingTop: "24px",
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: "12px",
+                color: "#6b7280",
+                margin: "8px 0",
+              }}
+            >
               © {new Date().getFullYear()} {company}. All rights reserved.
             </Text>
-            <Text style={{ textAlign: "center", fontSize: "12px", color: "#6b7280", margin: "8px 0" }}>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: "12px",
+                color: "#6b7280",
+                margin: "8px 0",
+              }}
+            >
               <Link
                 href="https://www.taskoria.com/privacy-policy"
                 style={{ color: "#2563eb", textDecoration: "underline" }}
@@ -185,4 +313,4 @@ const AppEmail = (props: AppEmailProps) => {
   );
 };
 
-export default AppEmail;
+export default AppEmaill;

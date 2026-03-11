@@ -124,7 +124,7 @@ export default function ServicePageSEO({
       <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       <meta name="apple-mobile-web-app-title" content="Taskoria" />
       
-      <link rel="alternate" hrefLang="en-au" href={canonicalUrl} />
+      {/* <link rel="alternate" hrefLang="en-au" href={canonicalUrl} /> */}
       <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
     </Head>
   );

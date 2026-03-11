@@ -1,0 +1,65 @@
+# Taskoria
+
+> Taskoria is an Australia-first service marketplace connecting customers with verified local professionals. Customers post jobs for free and receive quotes, while providers are verified for ID, ABN, licences, and insurance. Payments are secured in escrow and released only after approval.
+
+Taskoria operates across 50+ cities and covers a wide range of service categories — from trades (electricians, plumbers, builders) to creative work (designers, photographers). It emphasizes transparent hiring, secure payments, and trust.
+
+Provider badges include Taskoria Plus Verified, Pro Verified, and Pro Max Verified. The platform hosts 1,000+ verified provider profiles, 5,000+ posted jobs, and maintains an average 4.5★ rating. Australian-based support resolves disputes within 48 hours.
+
+## Overview
+
+Key features:
+
+- Free job posting for customers  
+- Verified providers (ID, ABN, trade licences, insurance)  
+- Secure escrow payments with customer approval  
+- Australian-based dispute resolution within 48 hours  
+- Provider badge tiers: Taskoria Plus Verified, Pro Verified, Pro Max Verified  
+- 1,000+ provider profiles, 5,000+ jobs posted, 4.5★ average rating  
+
+## Key Pages
+
+- [Homepage](https://www.taskoria.com/): Overview of Taskoria — post a job, receive quotes, compare and hire  
+- [Trust & Safety](https://www.taskoria.com/trust-safety): Provider verification, escrow, dispute resolution, and Taskoria Guarantee  
+- [Find Services](https://www.taskoria.com/services): Browse service categories and find providers  
+- [About Us](https://www.taskoria.com/about-us): Company mission, background, and values  
+- [Blog](https://www.taskoria.com/blog): Guides, tips, and resources for customers and providers  
+- [Refund Policy](https://www.taskoria.com/refund-policy): Conditions and process for refunds  
+- [Privacy Policy](https://www.taskoria.com/privacy-policy): How user data is collected, used, and protected  
+- [Terms & Conditions](https://www.taskoria.com/terms-and-conditions): Platform rules and legal terms  
+- [Contact](https://www.taskoria.com/contact): Reach Taskoria support  
+
+## Optional Pages
+
+- [Careers](https://www.taskoria.com/careers): Open roles at Taskoria  
+- [Cookie Policy](https://www.taskoria.com/cookie-policy): Cookie usage details  
+- [Trustpilot Reviews](https://www.trustpilot.com/review/taskoria.com): External customer reviews  
+
+## Provider Verification
+
+All providers undergo thorough checks:
+
+- Australian photo ID verification  
+- ABN (Australian Business Number) validation  
+- Trade licences and professional qualifications  
+- Public liability insurance verification  
+- Badge tiers indicate verification level  
+
+## Payment & Escrow
+
+- Customer funds are held securely in escrow  
+- Payments released only after job completion and approval  
+- Dispute resolution handled by Taskoria support within 48 hours  
+
+## Customer Experience
+
+- Post jobs for free and receive multiple quotes  
+- Compare provider ratings, reviews, and badges  
+- Transparent pricing with guide estimates and optional negotiation  
+- Dedicated Australian-based support  
+
+## Coverage
+
+- 50+ cities across Australia, including major metro and regional areas  
+- Trades, creative work, and professional services categories  
+- Verified providers in each category to ensure trust and reliability

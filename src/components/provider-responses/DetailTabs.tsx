@@ -1,17 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import {
-  MapPin,
-  Tag,
-  Users,
-  DollarSign,
-  Calendar,
-  MessageSquare,
-} from "lucide-react";
-import StatusBadge from "./StatusBadge";
+import { Tag, Users, Calendar } from "lucide-react";
 import { ProviderResponse, TabKey } from "@/types";
-import { formatDate, timeAgo } from "./helpers";
+import { formatDate } from "./helpers";
+import EstimateActivity from "./ProviderActivity";
 
 interface DetailTabsProps {
   response: ProviderResponse;
@@ -25,86 +18,14 @@ const TABS: { key: TabKey; label: string }[] = [
 
 const formatAnswerValue = (value?: string) => {
   if (!value) return "Not answered yet";
-
   const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/;
-
-  if (isoDateRegex.test(value)) {
-    return value.split("T")[0]; // YYYY-MM-DD
-  }
-
+  if (isoDateRegex.test(value)) return value.split("T")[0];
   return value;
 };
-
-function ActivityTab({ response }: { response: ProviderResponse }) {
-  return (
-    <div className="space-y-5">
-      <div className="flex items-center gap-3">
-        <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
-        <span className="text-xs text-gray-400 font-medium px-2">
-          {formatDate(response.response_created_at)}
-        </span>
-        <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
-      </div>
-
-      <div className="relative pl-6 space-y-6">
-        <div className="absolute left-3 top-2 bottom-[-16px] w-px bg-gray-200 dark:bg-gray-700" />
-
-        <div className="relative flex gap-4">
-          <div className="flex-1 bg-gray-50 dark:bg-gray-800/50 rounded-xl p-3 border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-sm flex items-center gap-2 font-semibold text-gray-800 dark:text-gray-200">
-                <MessageSquare className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                You responded to this task
-              </span>
-
-              <span className="text-[11px] text-gray-400">
-                {timeAgo(response.response_created_at)}
-              </span>
-            </div>
-
-            <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-              {response.response_message}
-            </p>
-          </div>
-        </div>
-
-        <div className="relative flex gap-4">
-          <div className="flex-1 bg-gray-50 dark:bg-gray-800/50 rounded-xl p-3 border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-sm flex items-center gap-2 font-semibold text-gray-800 dark:text-gray-200">
-                <Calendar className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
-
-                {response.customer_name}
-              </span>
-
-              <span className="text-[11px] text-gray-400">
-                {timeAgo(response.task_created_at)}
-              </span>
-            </div>
-
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              Looking for a{" "}
-              <span className="font-medium">{response.category_name}</span>{" "}
-              professional
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function DetailsTab({ response }: { response: ProviderResponse }) {
   const fields = [
     { icon: Tag, label: "Category", value: response.category_name },
-    { icon: MapPin, label: "Task", value: response.title },
-    // {
-    //   icon: DollarSign,
-    //   label: "Budget",
-    //   value: response.estimated_budget
-    //     ? `$${response.estimated_budget.toLocaleString()}`
-    //     : "Not specified",
-    // },
     {
       icon: Users,
       label: "Total responses",
@@ -119,9 +40,6 @@ function DetailsTab({ response }: { response: ProviderResponse }) {
 
   return (
     <div className="space-y-3">
-      {/* <div className="flex items-center gap-2 mb-1">
-        <StatusBadge status={response.status} />
-      </div> */}
       <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
         {response.description}
       </p>
@@ -130,9 +48,7 @@ function DetailsTab({ response }: { response: ProviderResponse }) {
           <div key={label} className="flex items-center gap-3 px-4 py-3">
             <Icon className="w-4 h-4 text-gray-400 flex-shrink-0" />
             <div className="flex-1 min-w-0">
-              <p className="text-[11px] text-gray-400 leading-none mb-0.5">
-                {label}
-              </p>
+              <p className="text-[11px] text-gray-400 leading-none mb-0.5">{label}</p>
               <p className="text-sm text-gray-800 dark:text-gray-200 font-medium truncate">
                 {value}
               </p>
@@ -151,11 +67,9 @@ function DetailsTab({ response }: { response: ProviderResponse }) {
               key={qa.question_id}
               className="bg-gray-50 dark:bg-blue-900/20 rounded-xl px-4 py-3"
             >
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                {qa.question}
-              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{qa.question}</p>
               <p className="text-sm text-gray-800 dark:text-gray-200 font-medium">
-                {formatAnswerValue(qa.answer)}{" "}
+                {formatAnswerValue(qa.answer)}
               </p>
             </div>
           ))}
@@ -214,7 +128,7 @@ export default function DetailTabs({ response }: DetailTabsProps) {
       </div>
 
       <div className="flex-1 overflow-y-auto p-4">
-        {activeTab === "activity" && <ActivityTab response={response} />}
+        {activeTab === "activity" && <EstimateActivity response={response} />}
         {activeTab === "details" && <DetailsTab response={response} />}
         {activeTab === "notes" && <NotesTab />}
       </div>

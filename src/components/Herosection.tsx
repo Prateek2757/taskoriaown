@@ -14,7 +14,6 @@ import { SparklesCoreLight } from "./ui/sparklesLight";
 import ScrollPopularSection from "./ScrollPopularSection";
 import Image from "next/image";
 
-
 interface Category {
   category_id: number;
   name: string;
@@ -63,40 +62,40 @@ export default function HeroSection() {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "@id": "https://www.taskoria.com/#website",
-      "name": "Taskoria",
-      "url": "https://www.taskoria.com",
-      "potentialAction": {
+      name: "Taskoria",
+      url: "https://www.taskoria.com",
+      potentialAction: {
         "@type": "SearchAction",
-        "target": "https://www.taskoria.com/services/{search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
+        target: "https://www.taskoria.com/services/{search_term_string}",
+        "query-input": "required name=search_term_string",
+      },
     },
-    { 
+    {
       "@context": "https://schema.org",
       "@type": "Organization",
       "@id": "https://www.taskoria.com/#organization",
-      "name": "Taskoria",
-      "url": "https://www.taskoria.com",
-      "logo": {
+      name: "Taskoria",
+      url: "https://www.taskoria.com",
+      logo: {
         "@type": "ImageObject",
-        "url": "https://www.taskoria.com/taskorialogonew.png",
-        "width": 250,
-        "height": 60
+        url: "https://www.taskoria.com/taskorialogonew.png",
+        width: 250,
+        height: 60,
       },
-      "description": "Australia's trusted AI-powered marketplace connecting customers with verified professionals.",
-      "sameAs": [
+      description:
+        "Australia's trusted AI-powered marketplace connecting customers with verified professionals.",
+      sameAs: [
         "https://www.facebook.com/taskoria",
         "https://twitter.com/taskoria",
         "https://www.linkedin.com/company/taskoria",
-        "https://www.instagram.com/taskoria"
+        "https://www.instagram.com/taskoria",
       ],
-      "areaServed": {
+      areaServed: {
         "@type": "Country",
-        "name": "Australia"
-      }
-    }
+        name: "Australia",
+      },
+    },
   ];
-  
 
   return (
     <>
@@ -106,34 +105,46 @@ export default function HeroSection() {
       />
 
       <section
-        className="relative text-center overflow-hidden 
-  dark:bg-[radial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)] "
+        className="relative text-center overflow-hidden  
+  dark:bg-[radial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_30%,rgba(0,0,0,1)_100%)] "
         aria-label="Hero section with service marketplace search"
       >
-        <div className="dark:hidden bg-radial-[at_0%_100%] from-red-100 via-white/0 to-white/0 to-90% h-full w-full absolute left-0 top-0 right-0 bottom-0" aria-hidden="true"></div>
-        <div className="dark:hidden bg-radial-[at_100%_0%] from-sky-100 via-white/0 to-white/0 to-90% h-full w-full absolute left-0 top-0 right-0 bottom-0" aria-hidden="true"></div>
+        <div
+          className="dark:hidden bg-radial-[at_0%_100%] from-red-100 via-white/0 to-white/0 to-90% h-full w-full absolute left-0 top-0 right-0 bottom-0"
+          aria-hidden="true"
+        ></div>
+        <div
+          className="dark:hidden bg-radial-[at_100%_0%] from-sky-100 via-white/0 to-white/0 to-90% h-full w-full absolute left-0 top-0 right-0 bottom-0"
+          aria-hidden="true"
+        ></div>
         <div
           className="container md:pt-10 pt-6   max-md:bg-linear-to-r from-[#3C7DED]/25 via-[#41A6EE]/20 to-[#46CBEE]/25 
-      mx-auto  pb-4  md:px-4  relative z-10"
+      mx-auto    md:px-4  relative z-10"
         >
-          <div className="inline-flex items-center gap-1 border bg-card dark:bg-gray-800 rounded-full px-1 py-1 text-xs text-muted-foreground mb-2" role="banner">
-              <Image
-                src="/flag-aus.png"
-                alt="Australian flag"
-                width={18}
-                height={5}
-                fetchPriority="high"
-              />{" "}
-              <span>Australia-first marketplace • Post for free • Local providers</span>
-              </div>
+          <div
+            className="inline-flex items-center gap-1 border bg-card dark:bg-gray-800 rounded-full px-1 py-1 text-xs text-muted-foreground mb-2"
+            role="banner"
+          >
+            <Image
+              src="/flag-aus.png"
+              alt="Australian flag"
+              width={18}
+              height={5}
+              fetchPriority="high"
+            />{" "}
+            <span>
+              Australia-first marketplace • Post for free • Local providers
+            </span>
+          </div>
           <div className="max-w-4xl mx-auto  px-4 space-y-6">
-            
-
             <h1 className="text-4xl md:text-6xl font-extrabold text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
-            Post your job.{" "}
-            <span className="relative inline-block bg-[#2563EB] bg-clip-text text-transparent">
+              Post your job.{" "}
+              <span className="relative inline-block bg-[#2563EB] bg-clip-text text-transparent">
                 Get quotes
-                <span className="absolute right-0 bottom-0 translate-y-3 w-full h-5 overflow-hidden" aria-hidden="true">
+                <span
+                  className="absolute right-0 bottom-0 translate-y-3 w-full h-5 overflow-hidden"
+                  aria-hidden="true"
+                >
                   <SparklesCore
                     background="transparent"
                     minSize={0.4}
@@ -149,7 +160,7 @@ export default function HeroSection() {
                 </span>
               </span>{" "}
               <span className="bg-[#2563EB] bg-clip-text text-transparent">
-                 from  professionals.
+                from professionals.
               </span>
             </h1>
 
@@ -161,7 +172,10 @@ export default function HeroSection() {
             <div className="max-w-2xl mx-auto mt-6 sm:px-4">
               <div className="relative w-full max-w-3xl group flex sm:items-center max-sm:gap-2">
                 <div className="relative flex-1 sm:mr-4 w-full">
-                  <div className="absolute -inset-[2px] rounded-lg bg-[#3C7DED] blur-md opacity-0 group-hover:opacity-100 transition duration-500" aria-hidden="true" />
+                  <div
+                    className="absolute -inset-[2px] rounded-lg bg-[#3C7DED] blur-md opacity-0 group-hover:opacity-100 transition duration-500"
+                    aria-hidden="true"
+                  />
                   <div className="relative flex items-center bg-white dark:bg-gray-800 rounded-lg hover:shadow-lg transition-all duration-300">
                     <CategorySearch
                       onSelect={handleSelectCategory}
@@ -179,7 +193,7 @@ export default function HeroSection() {
               </div>
 
               <div className="flex items-center justify-center gap-2 mt-2 sm:mt-4 text-sm text-gray-500 dark:text-gray-400">
-                <MapPin className="w-4 h-4" aria-hidden="true" /> 
+                <MapPin className="w-4 h-4" aria-hidden="true" />
                 <span>Serving 50+ cities across Australia</span>
               </div>
             </div>
@@ -191,7 +205,8 @@ export default function HeroSection() {
                 className="flex-1 py-5 bg-[#2563EB] text-white"
                 aria-label="Post a job to find service providers"
               >
-                Post a Job Free<ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
+                Post a Job Free
+                <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
               </Button>
 
               <NewRequestModal
@@ -214,14 +229,13 @@ export default function HeroSection() {
           </div>
         </div>
 
-        <div className="z-0" aria-hidden="true">
-        </div>
+        <div className="z-0" aria-hidden="true"></div>
 
         <ScrollPopularSection />
 
-        <div className="mt-10 hidden lg:block relative overflow-hidden bg-linear-to-t from-zinc-100 to-transparent dark:from-black">
-        <div className="mx-auto max-w-4xl relative">
-            <header className="text-center text-3xl text-white">
+        <div className="mt-5 hidden lg:block relative overflow-hidden bg-linear-to-t from-zinc-100 to-transparent dark:from-black">
+          <div className="mx-auto max-w-4xl relative">
+            {/* <header className="text-center text-3xl text-white">
               
               <h2 className="text-slate-900 text-2xl sm:text-3xl lg:text-4xl dark:text-white font-bold leading-tight">
                 Marketplace{" "}
@@ -230,12 +244,12 @@ export default function HeroSection() {
                 </span>
               </h2>
 
-              {/* <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
                 Snapshot of customer and provider activity on Taskoria.
-              </p> */}
-            </header>
+              </p>
+            </header> */}
 
-            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto" role="list">
+            {/* <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto" role="list">
               {[
                 {
                   value: "1K+",
@@ -285,16 +299,16 @@ export default function HeroSection() {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
 
           <div
-            className="relative -mt-32 h-96 overflow-hidden 
+            className="relative -mt-32 h-86 overflow-hidden 
         mask-[radial-gradient(50%_50%,black,transparent)]  dark:mask-[radial-gradient(50%_50%,white,transparent)] 
 
-        before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,#fff,transparent_80%)] dark:before:bg-[radial-gradient(circle_at_bottom_center,#369eff,transparent_80%)] before:opacity-100 
+        before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,#fff,transparent_80%)] dark:before:bg-[radial-gradient(circle_at_left_center,#000,transparent_100%)] before:opacity-100 
 
-        after:absolute after:-left-1/2 after:top-1/2 after:aspect-[1/0.7] after:w-[200%] after:rounded-[100%] after:border-t after:border-gray-400 dark:after:border-[#7876c566] after:bg-zinc-100 dark:after:bg-zinc-900
+        after:absolute after:-left-1/2 after:top-3/5  after:aspect-[1/0.7] after:w-[200%] after:rounded-[100%] after:border-t after:border-gray-400 dark:after:border-[#7876c566] after:bg-zinc-100 dark:after:bg-zinc-900
         "
             aria-hidden="true"
           >
@@ -307,6 +321,7 @@ export default function HeroSection() {
               className="absolute inset-x-0 bottom-0 h-full w-full mask-[radial-gradient(50%_50%,black,transparent_85%)] dark:mask-[radial-gradient(50%_50%,white,transparent_85%)] dark:hidden"
             />
             <SparklesCore
+            background="transparent"
               particleDensity={800}
               speed={1}
               maxSize={1.7}
@@ -315,23 +330,23 @@ export default function HeroSection() {
             />
           </div>
 
-          <div className="w-full px-8 absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center text-3xl text-white">
+          <div className="w-full px-8 absolute bottom-2 left-1/2 transform -translate-x-1/2 text-center text-3xl text-white">
             <h3 className="text-gray-600 text-lg sm:text-xl lg:text-2xl dark:text-white font-semibold leading-tight mb-2">
               Need a provider now?
             </h3>
             <p className="text-gray-500 text-sm dark:text-gray-400 mb-4">
-              Post your job and start getting responses from local professionals.
+              Post your job and start getting responses from local
+              professionals.
             </p>
-            <Button
+            {/* <Button
               onClick={handlePostJob}
               className="py-5 bg-[#2563EB] text-white"
               aria-label="Find and book services"
             >
               Post a Job Free <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
-            </Button>
+            </Button> */}
           </div>
         </div>
-        
       </section>
     </>
   );

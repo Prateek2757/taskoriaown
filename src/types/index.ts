@@ -34,6 +34,10 @@ export interface ProviderResponse {
   location_name:string;
   customer_name: string;
   customer_profile_picture: string | null;
+  professional_name:string;
+  professional_website:string;
+  professional_company_name:string;
+  professional_contact_number:string;
   total_responses: number;
   task_answers: TaskAnswer[];
 }

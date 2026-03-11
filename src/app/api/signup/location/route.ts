@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
-import { sendEmail } from "@/components/email/helpers/sendVerificationEmail";
 
 export async function GET() {
   try {
