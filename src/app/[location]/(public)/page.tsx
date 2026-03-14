@@ -9,8 +9,8 @@ import Testomonail from "@/components/Testomonail";
 
 export const metadata: Metadata = {
   title: "Taskoria | Hire Verified Professionals in Australia",
-  description:"Hire verified local professionals across Australia. Post a job for free and get matched instantly with trusted trades, tech experts, cleaners and more. Transparent quotes, secure hiring.",
-  
+  description: "Hire verified local professionals across Australia. Post a job for free and get matched instantly with trusted trades, tech experts, cleaners and more. Transparent quotes, secure hiring.",
+
   keywords: [
     "service marketplace Australia",
     "verified service providers",
@@ -39,8 +39,8 @@ export const metadata: Metadata = {
     url: "https://www.taskoria.com",
     siteName: "Taskoria - Australia's Trusted Service Marketplace",
     title: "Taskoria | Find Verified Service Providers in Australia",
-    description: "AI-powered marketplace connecting you with 1000+ verified professionals. Get instant quotes for cleaning, trades, tech services & more. Serving 50+ cities.",
-    images: [
+    description: "Connect with 1000+ verified professionals and receive instant quotes for cleaning, trades, tech services, and more. Available across 50+ cities.",
+        images: [
       {
         url: "https://www.taskoria.com/og-image.jpg",
         width: 1200,
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
 
   verification: {
     google: "your-google-verification-code",
-    
+
   },
 
   alternates: {
@@ -170,19 +170,19 @@ export default function HomePage() {
         <section aria-label="Hero section with service search">
           <HeroSection />
           <section
-          aria-label="Trust and protection highlights"
-          className="bg-slate-50 dark:bg-slate-950 border-y border-slate-200 dark:border-slate-800"
-        >
-          <div className="container mx-auto px-4 py-4">
-            <p className="text-sm text-slate-700 dark:text-slate-300 text-center">
-              Provider checks, transparent messaging, and support for unresolved issues.{" "}
-              <a href="/trust-safety" className="font-semibold text-blue-600 hover:underline">
-                Learn how Taskoria keeps you safer
-              </a>
-              .
-            </p>
-          </div>
-        </section>
+            aria-label="Trust and protection highlights"
+            className="bg-slate-50 dark:bg-slate-950 border-y border-slate-200 dark:border-slate-800"
+          >
+            <div className="container mx-auto px-4 py-4">
+              <p className="text-sm text-slate-700 dark:text-slate-300 text-center">
+                Provider checks, transparent messaging, and support for unresolved issues.{" "}
+                <a href="/trust-safety" className="font-semibold text-blue-600 hover:underline">
+                  Learn how Taskoria keeps you safer
+                </a>
+                .
+              </p>
+            </div>
+          </section>
         </section>
 
         <section aria-label="How Taskoria works">
