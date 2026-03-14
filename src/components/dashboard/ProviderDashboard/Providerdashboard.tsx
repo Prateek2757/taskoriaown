@@ -77,8 +77,8 @@ export default function ProviderDashboard() {
   const user = session.user;
 
   return (
-    <div className="min-h-screen py-6 bg-gray-50 dark:bg-[#0d1117] transition-colors duration-300">
-      <main className="container mx-auto rounded-2xl px-6 space-y-10 pb-16">
+    <div className="min-h-screen  bg-gray-50 dark:bg-[#0d1117] transition-colors duration-300">
+      <main className="container mx-auto rounded-2xl px-6 space-y-6 pb-16">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-[#3C7DED] bg-clip-text">

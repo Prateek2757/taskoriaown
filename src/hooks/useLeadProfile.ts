@@ -55,7 +55,7 @@ export function useLeadProfile() {
     isLoading,
     mutate,
   } = useSWR<Profile>("/api/user_profiles", fetcher);
-console.log(profile,"data ");
+// console.log(profile,"data ");
 
   const { data: categories = [], mutate: mutateCategories } = useSWR<
     Category[]

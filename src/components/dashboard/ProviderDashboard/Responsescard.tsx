@@ -11,15 +11,15 @@ type ResponsesCardProps = {
 export function ResponsesCard({ totalResponse }: ResponsesCardProps) {
   return (
     <Link href="/provider-responses" className="block group">
-      <Card className="border-2 rounded-2xl shadow-md bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500/50">
+      <Card className="border-2 p-2 gap-0 rounded-2xl shadow-md bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-blue-500/50">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-semibold flex items-center gap-2 text-gray-900 dark:text-white">
+          <CardTitle className="text-lg font-semibold flex items-center gap-2  text-gray-900 dark:text-white">
             <MessageSquare className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             Responses
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="">
           <div className="flex items-center justify-between">
             <div>
               {totalResponse === 0 ? (
@@ -48,7 +48,7 @@ export function ResponsesCard({ totalResponse }: ResponsesCardProps) {
             </div>
           </div>
 
-          <div className="mt-6 flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400 group-hover:gap-3 transition-all">
+          <div className="mt-3 flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400 group-hover:gap-3 transition-all">
             View my responses
             <ArrowRight className="w-4 h-4" />
           </div>

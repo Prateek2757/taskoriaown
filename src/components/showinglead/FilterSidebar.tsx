@@ -47,7 +47,6 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
     new Set(leads.map((l) => l.location_name).filter(Boolean))
   );
 
-  // Filter categories and locations based on search
   const filteredCategories = allCategories.filter((cat) =>
     cat.toLowerCase().includes(categorySearch.toLowerCase())
   );

@@ -36,7 +36,7 @@ interface TaskDetails {
   category_name: string;
   category_icon?: string | null;
   customer_id: number;
-
+  additional_queries?:string; 
   customer_email?: string;
   customer_profile_picture?: string | null;
   customer_display_name: string | null;
@@ -393,7 +393,7 @@ export default function TaskDetailsPanel({
                             transition={{ duration: 0.2 }}
                             className="overflow-hidden"
                           >
-                            <div className="px-4 pb-4 space-y-3">
+                            <div className="px-4 pb- space-y-3">
                               {task.task_answers.map((answer, index) => (
                                 <div
                                   key={answer.question_id || index}
@@ -408,6 +408,21 @@ export default function TaskDetailsPanel({
                                 </div>
                               ))}
                             </div>
+                            {task.additional_queries && (
+  <div className="bg-white dark:bg-gray-800/50 rounded-lg  ">
+    <div className="p-4">
+      <h5 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+        Additional Queries
+      </h5>
+
+      <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+        <p className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap">
+          {task.additional_queries}
+        </p>
+      </div>
+    </div>
+  </div>
+)}
                           </motion.div>
                         )}
                       </AnimatePresence>

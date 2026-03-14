@@ -25,6 +25,18 @@ function SignInForm() {
   const resumeRequest = searchParams.get("resume_request") === "1";
 
   useEffect(() => {
+    const savedLead = localStorage.getItem("pendingpayload");
+  
+    if (savedLead) {
+      localStorage.setItem("viewMode", "customer");
+    } else {
+      localStorage.setItem("viewMode", "provider");
+    }
+  
+    window.dispatchEvent(new Event("viewModeChanged"));
+  }, []);
+
+  useEffect(() => {
     const error = searchParams.get("error");
 
     if (error === "not_registered") {

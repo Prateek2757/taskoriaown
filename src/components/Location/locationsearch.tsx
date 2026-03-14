@@ -107,7 +107,6 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
       });
 
       const data = res.data;
-      console.log(data);
 
       return {
         place_id: data.place_id,

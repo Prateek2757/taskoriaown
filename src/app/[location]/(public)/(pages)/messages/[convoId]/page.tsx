@@ -111,14 +111,14 @@ export default function ChatPageInline({
     } finally {
       setLoading(false);
     }
-  }, []); 
+  }, []);
 
   useEffect(() => {
     if (!endpoint) return;
     hasFetched.current = false;
     didInitialSelect.current = false;
     fetchConversations(endpoint);
-  }, [endpoint]); 
+  }, [endpoint]);
 
   const conversationIdsKey = useMemo(
     () => conversations.map((c) => c.id).join(","),
@@ -192,7 +192,7 @@ export default function ChatPageInline({
     if (window.matchMedia("(max-width: 640px)").matches) {
       setSidebarOpen(false);
     }
-  }, []); 
+  }, []);
 
   const other = activeConversation?.participants?.[0] ?? null;
   const otherName = other?.name;

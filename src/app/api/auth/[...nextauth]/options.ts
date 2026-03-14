@@ -1,3 +1,4 @@
+import { Phone } from 'lucide-react';
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
@@ -16,7 +17,9 @@ declare module "next-auth" {
     status?: string;
     serviceCategory: string;
     isVerified?: boolean;
-
+    company_name?:string;
+    phone?:string;
+    website?:string;
   }
 
   interface Session {
@@ -36,6 +39,9 @@ declare module "next-auth/jwt" {
     status?: string;
     serviceCategory: string;
     isVerified?: boolean;
+    phone?:string;
+    company_name?:string
+    website?:string;
   }
 }
 
@@ -62,16 +68,21 @@ export const authOptions: NextAuthOptions = {
             u.user_id,
             u.public_id,
             u.email,
+            u.phone,
             u.role AS adminrole,
             u.password_hash,
             ps.status,
             up.display_name,
             up.profile_image_url AS image,
             COALESCE(r.role_name, 'customer') AS role,
-            u.is_email_verified
+            u.is_email_verified,
+            c.company_name,
+            c.website
           FROM users u
           LEFT JOIN user_profiles up ON u.user_id = up.user_id
           LEFT JOIN professional_subscriptions ps ON u.user_id = ps.user_id
+          LEFT JOIN  company c ON u.user_id = c.user_id
+
           LEFT JOIN roles r ON r.role_id = u.default_role_id
           WHERE u.email = $1 AND u.is_deleted = FALSE
           `,
@@ -100,6 +111,10 @@ export const authOptions: NextAuthOptions = {
           role: user.role,
           serviceCategory: "",
           isVerified: user.is_email_verified || false,
+          phone:user.phone,
+          company_name:user.company_name,
+          website:user.website,
+
         };
       },
     }),
@@ -119,14 +134,19 @@ export const authOptions: NextAuthOptions = {
           `SELECT u.user_id,
           u.public_id,
           u.role AS adminrole,
+          u.phone,
           ps.status,
           COALESCE(r.role_name, 'customer') AS role,
           up.profile_image_url AS image,
-          up.display_name
-
+          up.display_name,
+          c.company_name,
+          c.website
+        
           FROM users u
           LEFT JOIN roles r ON r.role_id = u.default_role_id
           LEFT JOIN user_profiles up ON u.user_id = up.user_id
+          LEFT JOIN  company c ON u.user_id = c.user_id
+
           LEFT JOIN professional_subscriptions ps ON u.user_id = ps.user_id
           where  u.email = $1 AND u.is_deleted = FALSE  `,
           [email]
@@ -145,6 +165,9 @@ export const authOptions: NextAuthOptions = {
         user.role = existingUser.role;
         user.status = existingUser.status;
         user.image = existingUser.image;
+        user.phone=existingUser.phone;
+        user.company_name=existingUser.company_name;
+        user.website = existingUser.website;
       }
 
       return true;
@@ -153,15 +176,20 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
+        token.phone = user.phone;
         token.public_id = user.public_id;
         token.name = user.name || "";
         token.email = user.email || "";
         token.role = user.role;
         token.adminrole=user.adminrole;
+        token.website
         token.image = user.image;
         token.status = user.status;
         token.serviceCategory = user.serviceCategory;
         token.isVerified = user.isVerified;
+       token.phone= user.phone
+        token.company_name=user.company_name
+        token.website=user.website
       }
 
       if (trigger === "update" && session) {
@@ -183,6 +211,9 @@ export const authOptions: NextAuthOptions = {
         session.user.adminrole = token.adminrole;
         session.user.serviceCategory = token.serviceCategory;
         session.user.isVerified = token.isVerified;
+        session.user.phone = token.phone;
+        session.user.company_name = token.company_name;
+        session.user.website = token.website;
       }
       return session;
     },

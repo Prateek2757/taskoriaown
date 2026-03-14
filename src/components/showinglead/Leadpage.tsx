@@ -229,7 +229,7 @@ const LeadsPage: React.FC = () => {
 
               <button
                 onClick={() => setShowFilters(true)}
-                className="relative flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white text-sm font-medium rounded-lg shadow hover:opacity-90 active:scale-[0.98] transition"
+                className="relative flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-medium rounded-lg shadow hover:opacity-90 active:scale-[0.98] transition"
               >
                 <SlidersHorizontal className="w-4 h-4" />
                 <span>Filters</span>
@@ -270,7 +270,7 @@ const LeadsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="hidden md:block flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-[#0d1117]">
+      <div className="hidden md:block flex-1 overflow-y-auto p-3 bg-gray-50 dark:bg-[#0d1117]">
         {selectedLead ? (
           <LeadDetails
             lead={selectedLead}
@@ -307,7 +307,6 @@ const LeadsPage: React.FC = () => {
         </div>
       )}
 
-      {/* Filter Sidebar */}
       {showFilters && (
         <>
           <div

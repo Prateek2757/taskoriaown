@@ -82,9 +82,7 @@ response_stats AS (
         ps.payment_transaction_id
       FROM professional_subscriptions ps
       WHERE ps.user_id = $1
-      AND ps.status IN ('active', 'trialing')
-      AND ps.end_date > NOW()
-      ORDER BY ps.end_date DESC
+      AND ps.status IN ('active','trialing')   
       LIMIT 1
     )
 

@@ -5,19 +5,21 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { email, messageFromProvider } = body;
+    const { email, messageFromProvider, subject } = body;
 
     if (!email || !messageFromProvider) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Missing required fields: email and messageFromProvider" },
         { status: 400 }
       );
     }
 
+   
     const result = await sendEmail({
       email,
       type: "provider-email-compose",
       messageFromProvider,
+      ...(subject ? { subject } : {}),
     });
 
     if (!result.success) {
@@ -27,15 +29,9 @@ export async function POST(req: Request) {
       );
     }
 
-    return NextResponse.json({
-      success: true,
-    });
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error("EMAIL ERROR:", error);
-
-    return NextResponse.json(
-      { error: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

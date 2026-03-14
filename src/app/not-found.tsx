@@ -40,7 +40,7 @@ export default function NotFound() {
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-blue-50">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Floating Orbs */}
@@ -92,7 +92,7 @@ export default function NotFound() {
         {/* 404 Number with 3D Effect */}
         <div className="relative mb-8 group">
           <div 
-            className="text-[12rem] md:text-[20rem] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 select-none"
+            className="text-[12rem] md:text-[20rem] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-blue-600 via-blue-600 to-blue-500 select-none"
             style={{
               fontFamily: '"Space Grotesk", "DM Sans", sans-serif',
               textShadow: `

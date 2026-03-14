@@ -6,7 +6,6 @@ import { sendEmail } from "@/components/email/helpers/sendVerificationEmail";
 import { createNotification } from "@/lib/notifications";
 import { logActivity } from "@/lib/logactivity";
 
-// ─── POST: submit a new estimate ─────────────────────────────────────────────
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -17,6 +16,7 @@ export async function POST(req: Request) {
 
   const {
     task_id,
+    customer_email,
     customer_name,
     task_title,
     price,
@@ -53,7 +53,6 @@ export async function POST(req: Request) {
       [task_id, session.user.id, price, unit, message]
     );
 
-    // ── Log the activity ────────────────────────────────────────────────────
     await logActivity({
       task_id,
       professional_id: session.user.id,
@@ -67,7 +66,7 @@ export async function POST(req: Request) {
     });
 
     await sendEmail({
-      email: "pratikguragain4@gmail.com",
+      email: customer_email,
       username: customer_name,
       type: "provider-estimate",
       taskTitle: task_title,
@@ -117,7 +116,6 @@ export async function GET(req: Request) {
   try {
     const client = await pool.connect();
 
-    // Fetch all activities (emails + estimates) in one query
     const { rows: activities } = await client.query(
       `SELECT activity_id, activity_type, metadata, created_at
        FROM provider_activities

@@ -2,7 +2,6 @@
 
 import React, { FormEvent, useRef, useState, useEffect } from "react";
 import { motion, useInView } from "motion/react";
-import Script from "next/script";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -373,8 +372,8 @@ const Footer = () => {
                   y2="0%"
                 >
                   <stop offset="20%" stopColor="#2563EB" />
-                  <stop offset="50%" stopColor="#46CBEE" />
-                  <stop offset="100%" stopColor="#2563EB" />
+                  <stop offset="50%" stopColor="#2563EB" />
+                  <stop offset="100%" stopColor="#46CBEE" />
                 </linearGradient>
 
                 <filter

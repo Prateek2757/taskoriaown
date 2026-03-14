@@ -69,12 +69,12 @@ export default function DetailPanel({ response, onBack }: DetailPanelProps) {
 
   return (
     <div className="flex flex-col h-full bg-white dark:bg-[#0d1117] overflow-hidden">
-      <div className="px-5 py-2 flex border-b border-gray-200 items-center justify-between dark:border-gray-700 flex-shrink-0">
-        <div className="flex  items-center gap-2 mb-3">
+      <div className="px-4 py-2 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 gap-2 flex-shrink-0">
+        <div className="flex items-center gap-2 flex-1 min-w-0">
           {onBack && (
             <button
               onClick={onBack}
-              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors lg:hidden -ml-1"
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors lg:hidden flex-shrink-0"
               aria-label="Back to list"
             >
               <ArrowLeft className="w-4 h-4 text-gray-500" />
@@ -87,33 +87,38 @@ export default function DetailPanel({ response, onBack }: DetailPanelProps) {
             size="md"
           />
 
-          <div className=" min-w-0">
-            <h2 className="font-bold flex gap-2 text-base text-gray-900 dark:text-white leading-tight truncate">
-              {response.customer_name}
-              <StatusBadge status={response.status} />
-            </h2>
-            <p className="text-xs p-1 text-gray-500 dark:text-gray-400 truncate">
+          <div className="flex flex-col min-w-0 flex-1">
+            <div className="flex items-center gap-2 min-w-0">
+              <h2 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white truncate">
+                {response.customer_name}
+              </h2>
+
+              <div className="shrink-0">
+                <StatusBadge status={response.status} />
+              </div>
+            </div>
+
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncae">
               {response.category_name}
             </p>
           </div>
         </div>
-        <div className="hidden lg:flex items-center gap-2">
-        <ContactActions response={response} variant="compact" />
-        </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center gap-2 shrink-0">
           {response.credits_spent > 0 && (
-            <div className="flex items-center gap-1 text-xs font-semibold bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 px-2.5 py-1 rounded-full">
+            <div className="flex items-center gap-1 text-xs font-semibold bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 px-2 py-1 rounded-full">
               <Coins className="w-3 h-3" />
-              {response.credits_spent} credits
+              {response.credits_spent}
             </div>
           )}
-        </div>
 
-        <div className="flex  md:hidden items-center justify-between">
+          <div className="hidden gap-3  lg:flex">
+            <ContactActions response={response} variant="compact" />
+          </div>
+
           <button
             onClick={() => setShowContact((p) => !p)}
-            className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors ${
+            className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors md:hidden ${
               showContact
                 ? "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400"
                 : "bg-blue-600 hover:bg-blue-700 text-white"

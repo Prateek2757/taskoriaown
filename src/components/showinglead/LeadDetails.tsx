@@ -2,19 +2,13 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   MapPin,
-  Phone,
-  Mail,
-  CheckCircle,
   Clock,
   Award,
   MessageSquare,
   Bookmark,
-  Quote,
   Loader2,
   HelpCircle,
-  Lock,
-  AlertCircle,
-  Forward,
+  CheckCircle,
   Settings,
 } from "lucide-react";
 import { CreditPurchaseModal } from "../payments/CreditTopup";
@@ -27,6 +21,8 @@ import { createNotification } from "@/lib/notifications";
 import { useSubscription } from "@/hooks/useSubcription";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import ContactActions from "../provider-responses/ContactActions";
+import { ProviderResponse } from "@/types";
 
 interface LeadAnswer {
   question_id?: string | number;
@@ -65,26 +61,55 @@ interface LeadDetailsProps {
   userId?: string | number;
 }
 
+
+function toProviderResponse(lead: Lead, session: any): ProviderResponse {
+  return {
+    customer_name: lead.customer_name ?? "Customer",
+    customer_phone: lead.phone ? String(lead.phone) : "",
+    customer_email: lead.customer_email ?? "",
+    professional_name: session?.user?.name ?? "",
+    professional_contact_number: session?.user?.phone ?? "",
+    professional_company_name: session?.user?.company_name ?? "",
+    professional_website: session?.user?.website ?? ""
+  } as ProviderResponse;
+}
+
 const LeadDetails: React.FC<LeadDetailsProps> = ({
   lead,
   requiredCredits,
   taskId,
   userId,
 }) => {
-
   const router = useRouter();
   const { data: session } = useSession();
   const [isSaved, setIsSaved] = useState(false);
   const [showCreditModal, setShowCreditModal] = useState(false);
-  const [leadStatus, setLeadStatus] = useState({ count: 0, purchased: false });
-  const [loadingResponses, setLoadingResponses] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
 
-  const {
-    hasActiveSubscription,
-    subscriptionDetails,
-    loading: subscriptionLoading,
-  } = useSubscription();
+
+  const cacheKey = taskId ? `lead_status_${taskId}` : null;
+
+  const [leadStatus, setLeadStatus] = useState<{
+    count: number;
+    purchased: boolean;
+    hydrated: boolean;
+  }>(() => {
+    if (typeof window === "undefined" || !cacheKey) {
+      return { count: 0, purchased: false, hydrated: false };
+    }
+    try {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+
+        return { count: parsed.count ?? 0, purchased: parsed.purchased ?? false, hydrated: false };
+      }
+    } catch {
+    }
+    return { count: 0, purchased: false, hydrated: false };
+  });
+
+  const { loading: subscriptionLoading } = useSubscription();
 
   const maxResponses = 5;
 
@@ -95,42 +120,34 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   const formatAnswerValue = (value?: string) => {
     if (!value) return "Not answered yet";
-
     const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/;
-
-    if (isoDateRegex.test(value)) {
-      return value.split("T")[0]; // YYYY-MM-DD
-    }
-
+    if (isoDateRegex.test(value)) return value.split("T")[0];
     return value;
   };
+
   const fetchResponses = useCallback(async () => {
-    if (!taskId) return;
-    setLoadingResponses(true);
+    if (!taskId || !cacheKey) return;
     try {
       const { data } = await axios.get(`/api/admin/task-responses/${taskId}`);
-      setLeadStatus((prev) =>
-        prev.purchased === data.purchased && prev.count === data.count
-          ? prev
-          : data
-      );
+      setLeadStatus((prev) => {
+        if (prev.purchased === data.purchased && prev.count === data.count && prev.hydrated) {
+          return prev;
+        }
+        localStorage.setItem(cacheKey, JSON.stringify({ count: data.count, purchased: data.purchased }));
+        return { count: data.count, purchased: data.purchased, hydrated: true };
+      });
     } catch (err) {
       console.error("Error fetching responses:", err);
-      toast.error("Failed to fetch lead status");
-    } finally {
-      setLoadingResponses(false);
+      setLeadStatus((prev) => ({ ...prev, hydrated: true }));
     }
-  }, [taskId]);
+  }, [taskId, cacheKey]);
 
   useEffect(() => {
     fetchResponses();
   }, [fetchResponses]);
 
   const shouldFetchConversation =
-    leadStatus.purchased &&
-    // && hasActiveSubscription
-    !!taskId &&
-    !!userId;
+    leadStatus.purchased && !!taskId && !!userId;
 
   const {
     conversationId,
@@ -146,18 +163,11 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   const handleGoToChat = useCallback(async () => {
     if (isNavigating) return;
 
-    // if (!hasActiveSubscription) {
-    //   toast.error("Active subscription required to use chat functionality");
-    //   return;
-    // }
-
     if (!conversationId && !convoLoading) {
       setIsNavigating(true);
       toast.info("Preparing chat...");
-
       try {
         const newConvoId = await refetchConversation();
-
         if (newConvoId) {
           window.location.href = `/messages/${newConvoId}`;
         } else {
@@ -181,19 +191,17 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       setIsNavigating(true);
       window.location.href = `/messages/${conversationId}`;
     }
-  }, [
-    conversationId,
-    convoLoading,
-    convoError,
-    refetchConversation,
-    isNavigating,
-    // hasActiveSubscription,
-  ]);
+  }, [conversationId, convoLoading, convoError, refetchConversation, isNavigating]);
 
   const handlePurchaseSuccess = useCallback(async () => {
     toast.success("Purchase successful!");
-
+    if (cacheKey) {
+      const next = { count: leadStatus.count + 1, purchased: true };
+      localStorage.setItem(cacheKey, JSON.stringify(next));
+      setLeadStatus({ ...next, hydrated: true });
+    }
     await fetchResponses();
+
     await createNotification({
       userId: String(session?.user?.id),
       title: "Lead Purchased Successfully🎉!",
@@ -210,8 +218,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       action_url: `/customer/dashboard`,
     });
 
-    // if (hasActiveSubscription) {
-
     toast.info("Preparing your chat...");
     await new Promise((resolve) => setTimeout(resolve, 500));
     const newConvoId = await refetchConversation();
@@ -220,19 +226,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     } else {
       toast.info("Click 'Chat' button to start your conversation");
     }
-
-    // }
-    // else {
-    //   toast.info("Contact details unlocked! Subscribe to use chat feature.");
-    // }
-  }, [
-    fetchResponses,
-    refetchConversation,
-    // hasActiveSubscription,
-    session,
-    userId,
-    lead,
-  ]);
+  }, [fetchResponses, refetchConversation, session, userId, lead, cacheKey, leadStatus.count]);
 
   const formatTimeAgo = useCallback((timestamp: string): string => {
     const now = new Date();
@@ -274,16 +268,17 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   const customerFirstName = (lead.customer_name ?? "Customer").split(" ")[0];
 
   const isChatButtonDisabled =
-    !leadStatus.purchased ||
-    // !hasActiveSubscription ||
-    isNavigating ||
-    subscriptionLoading;
+    !leadStatus.purchased || isNavigating || subscriptionLoading;
 
+  const providerResponse = useMemo(
+    () => toProviderResponse(lead, session),
+    [lead, session]
+  );
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="bg-white dark:bg-[#0d1117] rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
-        <div className="p-6">
-          <div className="flex items-start gap-4">
+    <div className="max-w-auto mx-auto">
+      <div className="b dark:bg-[#0d1117] bg-gray-50 rounded-2xl shadow- dark:shadow-md borde border-gra-200 dark:border-gray-700 overflow-hidden">
+        <div className="p-2">
+          <div className="flex items-start gap-3">
             <div className="relative flex-shrink-0">
               {lead.image ? (
                 <div className="w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-blue-100 dark:ring-blue-900">
@@ -296,12 +291,12 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                   />
                 </div>
               ) : (
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-lg font-bold">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-lg font-bold">
                   {getInitials(lead.customer_name || "N A")}
                 </div>
               )}
               {lead.status === "Open" && (
-                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-white dark:border-gray-900" />
+                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-900" />
               )}
             </div>
 
@@ -310,9 +305,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 <h1 className="text-base font-semibold text-gray-900 dark:text-gray-100 truncate">
                   {lead.customer_name}
                 </h1>
-                <span
-                  className={`text-[11px] font-medium px-2 py-0.5 rounded-full border `}
-                >
+                <span className="text-[11px] font-medium px-2 py-0.5 rounded-full border">
                   {lead.status}
                 </span>
               </div>
@@ -333,110 +326,109 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
             <button
               onClick={() => setIsSaved(!isSaved)}
-              className={`p-2 rounded-xl border transition-all ${
-                isSaved
+              className={`p-2 rounded-xl border transition-all ${isSaved
                   ? "bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:border-blue-700"
-                  : "bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-750"
-              }`}
+                  : "bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100"
+                }`}
             >
               <Bookmark
-                className={`w-4 h-4 transition-colors ${isSaved ? "fill-blue-500 text-blue-500" : "text-gray-400"}`}
+                className={`w-4 h-4 transition-colors ${isSaved ? "fill-blue-500 text-blue-500" : "text-gray-400"
+                  }`}
               />
             </button>
-          </div>{" "}
-        </div>{" "}
-        <div className=" border-t border-gray-100 dark:border-gray-800" />
-        <div className="p-6">
-          <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-5 mb-6">
+          </div>
+        </div>
+
+        <div className="border-t border-gray-100 dark:border-gray-800" />
+
+        <div className="p-2">
+
+          <div className=" bg-blue-50 bg-gradient-to-br mx-auo dark:from-gray-800 dark:to-black rounded-xl border border-gray-200 dark:border-gray-700 p-3 mb-6">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wide mb-4 flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-cyan-600" />
-              {leadStatus.purchased
-                ? "Verified Contact Details"
-                : "Contact Details (Hidden)"}
+              {leadStatus.purchased ? "Contact Details" : "Contact Details (Locked)"}
             </h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
+
+
+
+            {!leadStatus.hydrated && !leadStatus.purchased ? (
+              <div className="space-y-3  animate-pulse">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900 flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-blue-600 dark:text-blue-300" />
+                  <div className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
+                  <div className="space-y-2 flex-1">
+                    <div className="h-2.5 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
+                    <div className="h-3 w-36 bg-gray-200 dark:bg-gray-700 rounded" />
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
+                  <div className="space-y-2 flex-1">
+                    <div className="h-2.5 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
+                    <div className="h-3 w-48 bg-gray-200 dark:bg-gray-700 rounded" />
+                  </div>
+                </div>
+                <div className="flex gap-2 pt-1">
+                  {[1, 2, 3, 4].map(i => (
+                    <div key={i} className="h-7 w-20 bg-gray-200 dark:bg-gray-700 rounded-lg" />
+                  ))}
+                </div>
+              </div>
+            ) : leadStatus.purchased ? (
+              <>
+                <div className="hidden lg:flex items-center gap-3">
+                  <ContactActions response={providerResponse} variant="compact" />
+                </div>
+                <div className="flex lg:hidden justify-center mx-0 p-0 items-center gap-3">
+                  <ContactActions response={providerResponse} variant="full" />
+                </div>
+              </>
+
+            ) : (
+              <div className="  space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498A1 1 0 0121 15.72V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
-                      Phone Number
-                    </div>
-
-                    <div className="font-mono text-sm text-gray-900 dark:text-gray-100">
-                      {!lead.phone ? (
-                        <span className="italic text-gray-400 dark:text-gray-500">
-                          Not provided
-                        </span>
-                      ) : leadStatus.purchased ? (
-                        lead.phone
-                      ) : (
-                        maskPhone(lead.phone)
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Phone Number</div>
+                    <div className="font-mono text-sm text-gray-900 dark:text-gray-100 select-none">
+                      {lead.phone ? maskPhone(lead.phone) : (
+                        <span className="italic text-gray-400">Not provided</span>
                       )}
                     </div>
                   </div>
                 </div>
-                {leadStatus.purchased && (
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-cyan-100 dark:bg-cyan-700 text-cyan-700 dark:text-cyan-100 text-xs font-semibold rounded-md">
-                    <CheckCircle className="w-3 h-3" />
-                    Unlocked
-                  </span>
-                )}
-              </div>
 
-              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900 flex items-center justify-center">
-                    <Mail className="w-5 h-5 text-purple-600 dark:text-purple-300" />
+                  <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
                   </div>
-                  <div className="flex flex-col">
-                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
-                      Email Address
-                    </div>
-                    <div className="flex items-center gap-2 font-mono text-sm text-gray-900 dark:text-gray-100">
-                      {leadStatus.purchased ? (
-                        <>
-                          <span>{lead.customer_email}</span>
-                          <a
-                            href={`mailto:${lead.customer_email}`}
-                            className="px-2 py-1 bg-blue-500 text-white rounded-md text-xs font-semibold hover:bg-blue-700 transition flex items-center gap-1"
-                          >
-                            <Mail className="w-3 h-3" />
-                            Send Email
-                          </a>
-                        </>
-                      ) : (
-                        maskEmail(lead.customer_email)
-                      )}
+                  <div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Email Address</div>
+                    <div className="font-mono text-sm text-gray-900 dark:text-gray-100 select-none">
+                      {maskEmail(lead.customer_email)}
                     </div>
                   </div>
                 </div>
+
+                <p className="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1.5 pt-1">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  Purchase this lead to unlock full contact details & actions
+                </p>
               </div>
-            </div>
+            )}
           </div>
 
-          {/* {leadStatus.purchased &&
-            // !hasActiveSubscription &&
-            !subscriptionLoading && (
-              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-4 mb-6">
-                <div className="flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h4 className="text-sm font-semibold text-amber-900 dark:text-amber-100 mb-1">
-                      Subscription Required for Chat
-                    </h4>
-                    <p className="text-xs text-amber-700 dark:text-amber-300">
-                      You've unlocked the contact details! To use the chat
-                      feature, please subscribe to a professional plan.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )} */}
-
-          <div className="bg-blue-50 dark:bg-blue-900 rounded-xl p-5 mb-6">
+          <div className=" bg-gradient-to-br bg-blue-50  dark:from-gray-800 dark:to-black rounded-xl p-3 mb-6">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 Response Progress
@@ -452,19 +444,19 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               />
             </div>
             <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
-              <strong>{maxResponses - responseRate} spots remaining</strong> •
-              Be one of the first to respond
+              <strong>{maxResponses - responseRate} spots remaining</strong> • Be
+              one of the first to respond
             </p>
           </div>
 
           {!leadStatus.purchased && (
-            <div className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900 dark:to-orange-900 rounded-xl border border-orange-200 dark:border-orange-700 p-5 mb-6">
-              <div className="flex items-start gap-4">
+            <div className=" bg-blue-50 bg-gradient-to-br  dark:from-gray-800 dark:to-black rounded-xl border border-orange-200 dark:border-orange-700 p-3 mb-6">
+              <div className="flex items-start gap-2">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
                   <Award className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 mb-1">
                     <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                       {requiredCredits}
                     </span>
@@ -489,107 +481,77 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               <button
                 onClick={handleGoToChat}
                 disabled={isChatButtonDisabled}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-[#2563EB] text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed relative"
-                // title={
-                //   !hasActiveSubscription ? "Active subscription required" : ""
-                // }
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-[#2563EB] text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {
-                  // subscriptionLoading ? (
-                  //   <>
-                  //     <Loader2 className="w-5 h-5 animate-spin" />
-                  //     Checking subscription...
-                  //   </>
-                  // ) :
-
-                  isNavigating || convoLoading ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      {isNavigating ? "Opening Chat..." : "Preparing Chat..."}
-                    </>
-                  ) : (
-                    // !hasActiveSubscription ? (
-                    //   <>
-                    //     <Lock className="w-5 h-5" />
-                    //     Chat (Subscription Required)
-                    //   </>
-                    // ) :
-                    <>
-                      <MessageSquare className="w-5 h-5" />
-                      Chat with {customerFirstName}
-                    </>
-                  )
-                }
+                {isNavigating || convoLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    {isNavigating ? "Opening Chat..." : "Preparing Chat..."}
+                  </>
+                ) : (
+                  <>
+                    <MessageSquare className="w-5 h-5" />
+                    Chat with {customerFirstName}
+                  </>
+                )}
               </button>
             ) : (
               <button
                 onClick={() => setShowCreditModal(true)}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all"
               >
                 <MessageSquare className="w-5 h-5" />
                 Contact {customerFirstName}
               </button>
             )}
-
-            <CreditPurchaseModal
-              open={showCreditModal}
-              onOpenChange={setShowCreditModal}
-              requiredCredits={requiredCredits}
-              contactName={lead.customer_name}
-              taskId={taskId}
-              userId={userId}
-              professionalId={session?.user?.id}
-              onPurchaseSuccess={handlePurchaseSuccess}
-            />
           </div>
+
+          <CreditPurchaseModal
+            open={showCreditModal}
+            onOpenChange={setShowCreditModal}
+            requiredCredits={requiredCredits}
+            contactName={lead.customer_name}
+            taskId={taskId}
+            userId={userId}
+            professionalId={session?.user?.id}
+            onPurchaseSuccess={handlePurchaseSuccess}
+          />
         </div>
       </div>
 
-      <div className="bg-white dark:bg-[#0d1117] rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 p-6 mb-6">
-        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+      <div className="bg-white dark:bg-[#0d1117] rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 m-1 p-5 mb-6">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 ">
           Project Details
         </h2>
-        <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+        <p className="text-gray-700 dark:text-gray-300 leading-relaxed ">
           {lead.description}
         </p>
 
         {lead.answers && lead.answers.length > 0 && (
-          <div className="mt-6">
+          <div className="mt-4">
             <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">
               Lead Questions & Answers
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {lead.answers.map((ans, idx) => (
                 <div
                   key={ans.question_id || idx}
-                  className="bg-gray-50 dark:bg-blue-900/10 border border-gray-200 dark:border-gray-700 rounded-xl p-4"
+                  className="bg-gray-50 dark:bg-blue-900/10 border border-gray-200 dark:border-gray-700 rounded-xl p-3"
                 >
-                  <div className="flex items-start gap-2 mb-2">
-                    {/* <MessageSquare
-                      size={16}
-                      className="text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
-                    /> */}
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {ans.question || "—"}
-                    </p>
-                  </div>
-                  <div className="flex items-start gap-2 ">
-                    {/* <Forward
-                      size={16}
-                      className="text-cyan-600 dark:text-cyan-400 mt-0.5 flex-shrink-0"
-                    /> */}
-                    <p className="text-sm text-gray-700 dark:text-gray-300 italic">
-                      {formatAnswerValue(ans.answer)}
-                    </p>
-                  </div>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
+                    {ans.question || "—"}
+                  </p>
+                  <p className="text-sm text-gray-700 dark:text-gray-300 italic">
+                    {formatAnswerValue(ans.answer)}
+                  </p>
                 </div>
               ))}
+
               {lead.queries?.trim() && (
                 <div className="mt-6">
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">
                     Additional Queries
                   </h3>
-
                   <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
                     <div className="flex items-start gap-3">
                       <HelpCircle
@@ -606,37 +568,35 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
           </div>
         )}
+
         <LocationMap
           name={lead.location_name || (lead.customer_name as string)}
           latitude={lead.latitude as number}
           longitude={lead.longitude as number}
         />
       </div>
-      <div className=" border-t border-gray-100 dark:border-gray-800" />
-      <div className="mt-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-gray-50 to-white dark:from-blue-900/20 dark:to-blue-900/10 p-5 flex items-start gap-4">
 
-<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30">
-  <Settings className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-</div>
+      <div className="border-t border-gray-100 dark:border-gray-800" />
 
-<div className="flex-1">
-  <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-    Not seeing the right leads?
-  </h3>
-
-  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-    Stop seeing leads with specific answers by customising your settings.
-  </p>
-
-  <button
-    onClick={() => router.push("/settings/leads/myservices")}
-    className="mt-3 inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition"
-  >
-    Update lead settings →
-  </button>
-</div>
-</div>
-
+      <div className="mt-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-black p-3 flex items-start gap-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30">
+          <Settings className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+        </div>
+        <div className="flex-1">
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+            Not seeing the right leads?
+          </h3>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            Stop seeing leads with specific answers by customising your settings.
+          </p>
+          <button
+            onClick={() => router.push("/settings/leads/myservices")}
+            className="mt-3 inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition"
+          >
+            Update lead settings →
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

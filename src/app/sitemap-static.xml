@@ -50,10 +50,5 @@
 
 
 
- <!-- IMPORTANT:
-       Excluded on purpose:
-       - /book/* (booking flow pages; should usually be noindex)
-       - /providerprofile/* (profile pages; include only if you have stable canonical URLs + index rules)
-       - /post-job currently returns 404 (fix route then add)
-   -->
+
 </urlset>

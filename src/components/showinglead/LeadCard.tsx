@@ -62,7 +62,7 @@ const LeadCard: React.FC<LeadCardProps> = ({
   return (
     <div
       onClick={() => onSelect(lead)}
-      className={`group relative p-5  rounded-2xl shadow-sm border transition-all duration-300 cursor-pointer overflow-hidden
+      className={`group relative p-3  rounded-2xl shadow-sm border transition-all duration-300 cursor-pointer overflow-hidden
         ${
           isSelected
             ? "border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 shadow-md"
@@ -87,8 +87,10 @@ const LeadCard: React.FC<LeadCardProps> = ({
 
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-start gap-3">
+        <div className="relative flex-shrink-0">
+
           {lead.image ? (
-            <div className="w-14 h-14 rounded-full overflow-hidden">
+            <div className="w-14 h-14 rounded-2xl overflow-hidden">
               <Image
                 src={lead.image}
                 width={56}
@@ -98,10 +100,14 @@ const LeadCard: React.FC<LeadCardProps> = ({
               />
             </div>
           ) : (
-            <div className="w-14 h-14 flex items-center justify-center rounded-full bg-cyan-600 text-white text-2xl font-semibold">
+            <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white text-2xl font-semibold">
               {getInitials(lead.customer_name || "N/A")}
-            </div>
+            </div> 
+          )}  {lead.status === "Open" && (
+            <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-900" />
           )}
+          </div>
+          
           <div className="min-w-0">
             <h3 className="text-gray-900 dark:text-gray-100 text-base font-semibold leading-tight ">
               {lead.customer_name}
@@ -120,7 +126,7 @@ const LeadCard: React.FC<LeadCardProps> = ({
         </span>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-3">
+      <div className="flex flex-wrap gap-2 mb-2">
         {lead.status === "Urgent" && (
           <span className="px-2 py-1 text-[11px] font-medium rounded-full bg-red-100 dark:bg-red-700 text-red-700 dark:text-red-100 border border-red-200 dark:border-red-600">
             ⚡ Urgent
@@ -140,7 +146,7 @@ const LeadCard: React.FC<LeadCardProps> = ({
         </h4>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
+      <div className="mt-2  border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
         {/* <div className="flex flex-col">
           <span className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
             {" "}
@@ -151,7 +157,7 @@ const LeadCard: React.FC<LeadCardProps> = ({
           </span>
         </div> */}
 
-        <div className="flex items-center mt-3 gap-2">
+        <div className="flex items-center mt-2 gap-2">
           <div className="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 font-medium">
             <span>🎯</span>
             <span>{requiredCredits} Credits</span>

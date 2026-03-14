@@ -144,7 +144,6 @@ export async function POST(req: Request) {
         });
       });
     }
-
     emailQueue.push({
       email,
       username: name,

@@ -13,6 +13,24 @@ import { useState } from "react";
 import EstimateModal from "./EstimateModal";
 import EmailComposeModal from "./EmailComposeModal";
 
+
+const compactColor = (bg: string) => {
+  const map: Record<string, string> = {
+    "bg-blue-500":
+      "bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800",
+    "bg-green-500":
+      "bg-green-50 text-green-600 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800",
+"bg-violet-500":
+  "bg-[#E24134]/10 text-[#E24134] border-[#E24134]/30 dark:bg-[#E24134]/20 dark:text-[#ff6a5c] dark:border-[#E24134]/40",
+    "bg-cyan-500":
+      "bg-cyan-50 text-cyan-600 border-cyan-200 dark:bg-cyan-900/20 dark:text-cyan-400 dark:border-cyan-800",
+    "bg-amber-500":
+      "bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800",
+  };
+
+  return map[bg] || "";
+};
+
 export const getActions = (response: ProviderResponse) => {
   const phone = response.customer_phone;
   const email = response.customer_email;
@@ -26,8 +44,8 @@ export const getActions = (response: ProviderResponse) => {
       actionLabel: `Call ${phone}`,
       href: `tel:${phone}`,
       iconBg: "bg-blue-500",
-      hover:
-        "hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-200 dark:hover:border-blue-800",
+hover:
+"hover:bg-blue-600 hover:text-white hover:border-blue-600 dark:hover:bg-blue-500 dark:hover:text-white"
     },
     {
       icon: MessageCircle,
@@ -40,8 +58,8 @@ export const getActions = (response: ProviderResponse) => {
       )}, I saw your request on the platform.`,
       target: "_blank",
       iconBg: "bg-green-500",
-      hover:
-        "hover:bg-green-50 dark:hover:bg-green-900/30 hover:text-green-600 dark:hover:text-green-400 hover:border-green-200 dark:hover:border-green-800",
+hover:
+"hover:bg-green-600 hover:text-white hover:border-green-600 dark:hover:bg-green-500 dark:hover:text-white"
     },
     {
       icon: Mail,
@@ -49,10 +67,10 @@ export const getActions = (response: ProviderResponse) => {
       condition: !!email,
       description: "Send a professional email",
       actionLabel: `Email ${email}`,
-      type: "email", // <-- triggers modal instead of href
+      type: "email", 
       iconBg: "bg-violet-500",
-      hover:
-        "hover:bg-violet-50 dark:hover:bg-violet-900/30 hover:text-violet-600 dark:hover:text-violet-400 hover:border-violet-200 dark:hover:border-violet-800",
+hover:
+  "hover:bg-[#E24134] hover:text-white hover:border-[#E24134] dark:hover:bg-[#E24134] dark:hover:text-white"
     },
     {
       icon: MessageSquare,
@@ -62,8 +80,8 @@ export const getActions = (response: ProviderResponse) => {
       actionLabel: `SMS ${phone}`,
       href: `sms:${phone}`,
       iconBg: "bg-cyan-500",
-      hover:
-        "hover:bg-cyan-50 dark:hover:bg-cyan-900/30 hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-200 dark:hover:border-cyan-800",
+hover:
+"hover:bg-cyan-600 hover:text-white hover:border-cyan-600 dark:hover:bg-cyan-500 dark:hover:text-white"
     },
     {
       icon: DollarSign,
@@ -73,8 +91,8 @@ export const getActions = (response: ProviderResponse) => {
       actionLabel: "Send Estimate",
       type: "estimate",
       iconBg: "bg-amber-500",
-      hover:
-        "hover:bg-amber-50 dark:hover:bg-amber-900/30 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-200 dark:hover:border-amber-800",
+hover:
+"hover:bg-amber-500 hover:text-white hover:border-amber-500 dark:hover:bg-amber-400 dark:hover:text-black"
     },
   ].filter((a) => a.condition);
 };
@@ -95,28 +113,32 @@ export default function ContactActions({
   if (variant === "compact") {
     return (
       <>
-        {actions.map(({ icon: Icon, label, href, target, hover, type }) => {
+        {actions.map(({ icon: Icon, label, href, target, hover, type ,iconBg}) => {
           if (type === "estimate") {
             return (
               <button
-                key={label}
-                onClick={() => setOpenEstimate(true)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 dark:text-gray-400 transition-all cursor-pointer ${hover}`}
-              >
-                <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+              key={label}
+              onClick={() => setOpenEstimate(true)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${compactColor(
+                iconBg
+              )} ${hover}`}
+            >
+                <Icon className="w-3.5 h-3.5 shrink-0" />
                 {label}
               </button>
             );
           }
-
+ 
           if (type === "email") {
             return (
               <button
-                key={label}
-                onClick={() => setOpenEmail(true)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 dark:text-gray-400 transition-all cursor-pointer ${hover}`}
-              >
-                <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+              key={label}
+              onClick={() => setOpenEmail(true)}
+              className={`flex items-center gap-1.5  px-3 py-1.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${compactColor(
+                iconBg
+              )} ${hover}`}
+            >
+                <Icon className="w-3.5 h-3.5 shrink-0" />
                 {label}
               </button>
             );
@@ -124,14 +146,16 @@ export default function ContactActions({
 
           return (
             <a
-              key={label}
-              href={href}
-              title={label}
-              target={target}
-              rel={target === "_blank" ? "noopener noreferrer" : undefined}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs font-medium text-gray-500 dark:text-gray-400 transition-all ${hover}`}
-            >
-              <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+            key={label}
+            href={href}
+            title={label}
+            target={target}
+            rel={target === "_blank" ? "noopener noreferrer" : undefined}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${compactColor(
+              iconBg
+            )} ${hover}`}
+          >
+              <Icon className="w-3.5 h-3.5 shrink-0" />
               {label}
             </a>
           );
@@ -152,9 +176,9 @@ export default function ContactActions({
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 w-full">
       <div className="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 flex items-start gap-3">
-        <span className="mt-0.5 flex-shrink-0 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
+        <span className="mt-0.5 shrink-0 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
           <svg className="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none">
             <path
               d="M2 6l3 3 5-5"

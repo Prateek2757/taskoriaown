@@ -25,7 +25,6 @@ interface EstimateActivityProps {
   response: ProviderResponse;
 }
 
-// ─── Fetcher ──────────────────────────────────────────────────────────────────
 
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
@@ -33,7 +32,6 @@ const fetcher = (url: string) =>
     return res.json();
   });
 
-// ─── Activity card map ────────────────────────────────────────────────────────
 
 const ACTIVITY_CONFIG = {
   email_sent: {
@@ -92,7 +90,6 @@ const ACTIVITY_CONFIG = {
   },
 } as const;
 
-// ─── Single activity card ─────────────────────────────────────────────────────
 
 function ActivityCard({ activity }: { activity: Activity }) {
   const config = ACTIVITY_CONFIG[activity.activity_type];
@@ -177,6 +174,7 @@ export default function EstimateActivity({ response }: EstimateActivityProps) {
 );
 
   const activities = data?.activities ?? [];
+  
   const estimateCount = activities.filter((a) => a.activity_type === "estimate_sent").length;
 
   return (
@@ -190,7 +188,7 @@ export default function EstimateActivity({ response }: EstimateActivityProps) {
       </div>
 
       <div className="relative pl-6 space-y-6">
-        <div className="absolute left-4 top-2 bottom-[-16px] w-px bg-gray-200 dark:bg-gray-700" />
+        <div className="absolute left-4 top-2 bottom-4 w-px bg-gray-200 dark:bg-gray-700" />
 
         {/* {isLoading ? (
           <ActivitySkeleton />
@@ -208,8 +206,8 @@ export default function EstimateActivity({ response }: EstimateActivityProps) {
         <ResponseCard response={response} />
         <TaskPostedCard response={response} />
       </div>
-
-      {/* {!isLoading && !error && (
+{/* 
+      {!isLoading && !error && (
         <div className="flex items-center justify-end">
           <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${
             estimateCount >= 2

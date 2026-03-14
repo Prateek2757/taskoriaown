@@ -24,8 +24,8 @@ interface EstimateModalProps {
   response: ProviderResponse;
 }
 type EstimateForm = {
-  price: string;
-  message: string;
+  price: string; 
+ message: string;
   unit: string;
 };
 export default function EstimateModal({

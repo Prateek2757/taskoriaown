@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { i18n } from "../../i18n-config";
 
 export const revalidate = 3600;
 
@@ -62,24 +63,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       languages: {} as Record<string, string>,
     };
 
-    // i18n.locales.forEach((loc) => {
-    //   const localePath = loc === i18n.defaultLocale ? "" : `/${loc}`;
-    //   alternates.languages[loc] = `${baseUrl}${localePath}${route.path}`;
-    // });
+    i18n.locales.forEach((loc) => {
+      const localePath = loc === i18n.defaultLocale ? "" : `/${loc}`;
+      alternates.languages[loc] = `${baseUrl}${localePath}${route.path}`;
+    });
 
     alternates.languages["x-default"] = `${baseUrl}${route.path}`;
 
-    // i18n.locales.forEach((locale) => {
-    //   const localePath = locale === i18n.defaultLocale ? "" : `/${locale}`;
+    i18n.locales.forEach((locale) => {
+      const localePath = locale === i18n.defaultLocale ? "" : `/${locale}`;
 
-    //   sitemapEntries.push({
-    //     url: `${baseUrl}${localePath}${route.path}`,
-    //     lastModified: lastMod,
-    //     changeFrequency: route.changeFreq,
-    //     priority: route.priority,
-    //     alternates,
-    //   });
-    // });
+      sitemapEntries.push({
+        url: `${baseUrl}${localePath}${route.path}`,
+        lastModified: lastMod,
+        changeFrequency: route.changeFreq,
+        priority: route.priority,
+        alternates,
+      });
+    });
   });
 
   return sitemapEntries;
