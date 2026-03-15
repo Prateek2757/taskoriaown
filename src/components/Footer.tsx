@@ -505,8 +505,8 @@ const Footer = () => {
         "Taskoria is a trusted platform connecting customers with verified local professionals across Australia.",
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Queensland",
-        postalCode: "4350",
+        addressLocality: "Level 34, 1 Eagle Street, Brisbane QLD",
+        postalCode: "4000",
         addressCountry: "AU"
       },
       areaServed: {
