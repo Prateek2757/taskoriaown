@@ -28,7 +28,9 @@ export async function fetchProviders(limit?: number) {
     const baseURL = isServer
       ? process.env.NEXT_PUBLIC_APP_URL || "https://www.taskoria.com"
       : "";
-      const res = await fetch(`${baseURL}/api/signup/category-selection`);
+      const res = await fetch(`${baseURL}/api/signup/category-selection`, {
+        next: { revalidate: 3600 } 
+      });
       if (!res.ok) throw new Error("Failed to fetch providers");
   
       const data = await res.json();

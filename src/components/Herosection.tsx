@@ -237,7 +237,7 @@ export default function HeroSection() {
               </div>
             </div>
 
-            <div className="flex gap-2 sm:gap-4 justify-center max-w-md mx-auto mt-6">
+            <div className="flex gap-2 pb-4 sm:gap-4 justify-center max-w-md mx-auto mt-6">
               <Button
                 onClick={handlePostJob}
                 disabled={loading}
@@ -369,7 +369,7 @@ export default function HeroSection() {
             />
           </div>
 
-          <div className="w-full px-8 absolute bottom-2 left-1/2 transform -translate-x-1/2 text-center text-3xl text-white">
+          <div className="w-full px-8 pb- absolute bottom-2 left-1/2 transform -translate-x-1/2 text-center text-3xl text-white">
             <h3 className="text-gray-600 text-lg sm:text-xl lg:text-2xl dark:text-white font-semibold leading-tight mb-2">
               Need a provider now?
             </h3>

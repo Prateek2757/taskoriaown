@@ -156,7 +156,7 @@ export default function PopularLocationsSection({
   };
 
   return (
-    <div className="mb-10 relative">
+    <div className="mb-10 mt-6   relative">
       <div className="text-center mb-12">
         <span className="inline-block px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-semibold rounded-full text-sm mb-4">
           POPULAR LOCATIONS

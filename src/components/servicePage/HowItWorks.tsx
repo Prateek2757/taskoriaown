@@ -515,7 +515,6 @@ function AccordionLayout({ s, idx }: { s: Section; idx: number }) {
   );
 }
 
-/* PROSE */
 function ProseLayout({ s, idx }: { s: Section; idx: number }) {
   return (
     <InView className="max-w-5xl mx-auto px-4 py-5">
@@ -532,9 +531,7 @@ function ProseLayout({ s, idx }: { s: Section; idx: number }) {
   );
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   ROUTER  — purely structural dispatch
-───────────────────────────────────────────────────────────────────────────── */
+
 function SectionRouter({ section, idx }: { section: Section; idx: number }) {
   const layout = classify(section);
   const p = { s: section, idx };
@@ -547,13 +544,11 @@ function SectionRouter({ section, idx }: { section: Section; idx: number }) {
     case "chips":     return <ChipsLayout {...p} />;
     case "split":     return <SplitLayout {...p} />;
     case "accordion": return <AccordionLayout {...p} />;
-    case "prose":     return <ProseLayout {...p} />;
+    // case "prose":     return <ProseLayout {...p} />;
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   MAIN EXPORT
-───────────────────────────────────────────────────────────────────────────── */
+
 export function ServiceDetailsSection({ serviceDetails }: { serviceDetails: string }) {
   const { title, intro, sections } = useMemo(() => parseHTML(serviceDetails), [serviceDetails]);
   if (!sections.length && !title) return null;
