@@ -77,7 +77,7 @@ export default function ServicePageClient({
               citySlug={subCitySlug ?? citySlug}
             />
           )}
-   
+
           {citySlug &&
             !subCitySlug &&
             selectedLocation?.subcities?.length > 0 && (

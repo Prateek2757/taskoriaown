@@ -2,92 +2,78 @@
 
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
-import Image from "next/image";
 
 type Props = {
   serviceName: string;
   cityName: string;
-
 };
 
-export default function ServiceIntro({ serviceName , cityName }: Props) {
-  return (
-    <section className="relative dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-800  overflow-hidden  py-10">
-      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+export default function ServiceIntro({ serviceName, cityName }: Props) {
+  const displayCity = cityName
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (l) => l.toUpperCase());
 
-        <div className="text-jus">
-          <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-6">
+  return (
+    <section className="py-14 bg-white dark:bg-slate-950">
+      <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-start">
+
+        {/* Left — Description */}
+        <div>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight mb-5">
             Find trusted{" "}
-            <span className="text-blue-500">{serviceName}</span>{" "}
-            professionals in {cityName}
-          </h1>
-          {/* <Image
-                src="/taskoria-logo.png"
-                width="80"
-                height="80"
-                alt={` Logo`}
-                className="mx-auto"
-              /> */}
-          <p className="dark:text-slate-300 text-gray-600 text-justify mb-6">
-            Searching for reliable {serviceName}s doesn’t have to be difficult.
-            We help you connect with experienced local professionals who match
-            your needs — quickly and at no cost.
+            <span className="text-[#3C7DED]">{serviceName.replace(/-/g, " ")}</span>{" "}
+            professionals in {displayCity}
+          </h2>
+
+          <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed mb-6">
+            Searching for reliable {serviceName.replace(/-/g, " ")} professionals doesn't have to
+            be difficult. We help you connect with experienced local professionals
+            who match your needs — quickly and at no cost.
           </p>
 
-          <ul className="space-y-3 mb-8 ">
-            <li className="flex items-start gap-2">
-              <CheckCircle className="text-primary w-5 h-5 mt-1" />
-              Receive multiple quotes from vetted providers
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle className="text-primary w-5 h-5 mt-1" />
-              View ratings, past work, and customer feedback
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle className="text-primary w-5 h-5 mt-1" />
-              Choose only when you’re confident — no commitment
-            </li>
+          <ul className="space-y-3 mb-8">
+            {[
+              "Receive multiple quotes from vetted providers",
+              "View ratings, past work, and customer feedback",
+              "Choose only when you're confident — no commitment",
+            ].map((item, i) => (
+              <li key={i} className="flex items-start gap-3 text-gray-700 dark:text-gray-300">
+                <CheckCircle className="w-5 h-5 text-[#3C7DED] flex-shrink-0 mt-0.5" />
+                <span className="text-[15px]">{item}</span>
+              </li>
+            ))}
           </ul>
 
-          <div className="flex  flexwrap  gap-2">
-            <Button size="lg" className="rounded-xl ">
-              Start Free Search
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="rounded-xl dark:text-white border-white text-gray-950 hover:bg-white hover:text-slate-900"
-            >
-              Browse {serviceName}
-            </Button>
-          </div>
+          <Button className="bg-[#3C7DED] hover:bg-[#2b6ad9] text-white font-semibold rounded-lg px-6 h-11">
+            Find {serviceName.replace(/-/g, " ")} in {displayCity} today!
+          </Button>
         </div>
 
-        <div className="bg-white/10 backdrop-blur rounded-2xl p-8 shadow-lg">
-          <h3 className="text-xl font-semibold mb-4">
+        {/* Right — How it works mini-card */}
+        <div className="bg-gray-50 dark:bg-slate-800/60 rounded-xl p-7 border border-gray-100 dark:border-slate-700">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-5">
             How it works
           </h3>
 
-          <ol className="space-y-4 ">
-            <li>
-              <span className="font-semibold ">1.</span> Tell us what
-              you’re looking for and your requirements.
-            </li>
-            <li>
-              <span className="font-semibold ">2.</span> We match you
-              with suitable {serviceName}s in West Yorkshire.
-            </li>
-            <li>
-              <span className="font-semibold ">3.</span> Compare
-              responses, ask questions, and decide in your own time.
-            </li>
+          <ol className="space-y-5">
+            {[
+              "Tell us what you're looking for and your requirements.",
+              `We match you with suitable ${serviceName.replace(/-/g, " ")} professionals in ${displayCity}.`,
+              "Compare responses, ask questions, and decide in your own time.",
+            ].map((step, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <span className="w-7 h-7 rounded-full border-2 border-[#3C7DED] text-[#3C7DED] flex items-center justify-center text-sm font-bold flex-shrink-0">
+                  {i + 1}
+                </span>
+                <span className="text-gray-600 dark:text-gray-300 text-[15px] pt-0.5">{step}</span>
+              </li>
+            ))}
           </ol>
 
-          <p className=" mt-6">
-            It’s fast, transparent, and completely free to use.
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-6 pt-4 border-t border-gray-200 dark:border-slate-600">
+            It's fast, transparent, and completely free to use.
           </p>
         </div>
-
       </div>
     </section>
   );

@@ -533,9 +533,8 @@ export default function StepTwoQuestionsForm({
           type="submit"
           disabled={loading}
           onClick={handleSubmit(onSubmit)}
-          className={`rounded-lg px-8 bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105 ${
-            loading ? "opacity-70 cursor-not-allowed" : ""
-          }`}
+          className={`rounded-lg px-8 bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105 ${loading ? "opacity-70 cursor-not-allowed" : ""
+            }`}
         >
           {loading ? (
             <span className="flex items-center gap-2">

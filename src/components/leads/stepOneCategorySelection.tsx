@@ -164,10 +164,10 @@ export default function StepOneCategoryForm({
                 presetCategory={
                   presetCategory
                     ? {
-                        category_id: presetCategory.category_id,
-                        name: presetCategory.name,
-                        slug: presetCategory.slug || "",
-                      }
+                      category_id: presetCategory.category_id,
+                      name: presetCategory.name,
+                      slug: presetCategory.slug || "",
+                    }
                     : undefined
                 }
                 onSelect={(data) => {
@@ -177,7 +177,7 @@ export default function StepOneCategoryForm({
                     setSelectedCategoryTitle("");
                     return;
                   }
-                
+
                   setValue("category_id", data.category_id, {
                     shouldDirty: true,
                     shouldTouch: true,
@@ -221,17 +221,15 @@ export default function StepOneCategoryForm({
             <div className="relative mt-2">
               <LocationSearch
                 presetLocation={presetLocation}
+                onLoadingChange={(isLoading) => setLocationLoading(isLoading)}
                 onSelect={(data) => {
                   if (!data) {
                     setValue("city_id", 0);
                     setValue("location", "");
                     setSelectedLocation(null);
                     setSelectedLocationId("0");
-                    setLocationLoading(false);
                     return;
                   }
-
-                  setLocationLoading(true);
 
                   setValue("city_id", data.city_id, {
                     shouldDirty: true,
@@ -249,8 +247,6 @@ export default function StepOneCategoryForm({
                   });
 
                   setSelectedLocationId(String(data.city_id || 0));
-
-                  setLocationLoading(false);
                 }}
               />
             </div>
@@ -272,13 +268,13 @@ export default function StepOneCategoryForm({
               className={cn(
                 "flex-1 rounded-lg bg-[#3C7DED] text-white font-medium shadow-lg hover:shadow-xl transition-all",
                 (!isContinueEnabled || locationLoading) &&
-                  "opacity-60 cursor-not-allowed"
+                "opacity-60 cursor-not-allowed"
               )}
             >
               {locationLoading ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                  Processing...
+                  Getting location…
                 </>
               ) : (
                 "Continue"

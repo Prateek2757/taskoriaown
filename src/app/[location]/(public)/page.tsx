@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     siteName: "Taskoria - Australia's Trusted Service Marketplace",
     title: "Taskoria | Find Verified Service Providers in Australia",
     description: "Connect with 1000+ verified professionals and receive instant quotes for cleaning, trades, tech services, and more. Available across 50+ cities.",
-        images: [
+    images: [
       {
         url: "https://www.taskoria.com/og-image.jpg",
         width: 1200,

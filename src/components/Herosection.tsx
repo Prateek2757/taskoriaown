@@ -106,15 +106,27 @@ export default function HeroSection() {
 
       <section
         className="relative text-center overflow-hidden  
-  dark:bg-[radial-gradient(circle_at_right,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_30%,rgba(0,0,0,1)_100%)] "
+  dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_30%,rgba(0,0,0,1)_100%)] "
         aria-label="Hero section with service marketplace search"
       >
+        <div className="absolute top-11  left-168 w-full h-full">
+          <div
+            className="absolute  inset-0 w-165 h-full bg-[url('/images/herobg.png')] bg-cover bg-center opacity-60  dark:opacity-40"
+            style={{
+              backgroundImage: "url('/images/taskoriaherobgwithlogo.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+            aria-hidden="true"
+          />
+        </div>
+
         <div
-          className="dark:hidden bg-radial-[at_0%_100%] from-red-100 via-white/0 to-white/0 to-90% h-full w-full absolute left-0 top-0 right-0 bottom-0"
+          className="dark:hidden bg-radial-[at_0%_100%] from-blue-100 via-white/0 to-white/0 to-90% h-full w-full absolute left-0 top-0 right-0 bottom-0"
           aria-hidden="true"
         ></div>
         <div
-          className="dark:hidden bg-radial-[at_100%_0%] from-sky-100 via-white/0 to-white/0 to-90% h-full w-full absolute left-0 top-0 right-0 bottom-0"
+          className="dark:hidden bg-radial-[at_0%_0%] from-blue-100 via-white/0 to-white/0 to-90% h-full w-full absolute left-0 top-0 right-0 bottom-0"
           aria-hidden="true"
         ></div>
         <div
@@ -136,11 +148,32 @@ export default function HeroSection() {
               Australia-first marketplace • Post for free • Local providers
             </span>
           </div>
-          <div className="max-w-4xl mx-auto  px-4 space-y-6">
-            <h1 className="text-4xl md:text-6xl font-extrabold text-foreground dark:text-white leading-tight mb-0 md:mb-8 mt-2 md:mt-0">
-              Post your job.{" "}
-              <span className="relative inline-block bg-[#2563EB] bg-clip-text text-transparent">
-                Get quotes
+          <div className="max-w-auto mx-auto  px-4 space-y-6">
+            <h1
+              className="text-4xl md:text-6xl leading-tight mb-0 md:mb-8 mt-2 md:mt-0"
+              style={{
+                fontFamily: "'Bricolage Groteque', sans-serif",
+                fontWeight: 800,
+              }}
+            >
+              <span
+                className="text-foreground dark:text-white"
+                style={{
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
+                  fontWeight: 800,
+                }}
+              >
+                Post your job.
+              </span>{" "}
+              <span className="relative inline-block">
+                <span
+                  className="bg-[#2563EB] bg-clip-text text-transparent"
+                  style={{
+                    fontFamily: "'Bricolage Grotesque', sans-serif",
+                    fontWeight: 800,
+                  }}
+                >
+                  Get quote </span>
                 <span
                   className="absolute right-0 bottom-0 translate-y-3 w-full h-5 overflow-hidden"
                   aria-hidden="true"
@@ -152,14 +185,20 @@ export default function HeroSection() {
                     particleDensity={1100}
                     className="w-full h-full"
                     particleColor={theme === "dark" ? "#fff" : "#000"}
-                  />{" "}
-                  <div className="absolute inset-x-20  top-0 bg-linear-to-r from-transparent via-indigo-500 to-transparent h-0.5 w-3/4 blur-sm" />
+                  />
+                  <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-indigo-500 to-transparent h-0.5 w-3/4 blur-sm" />
                   <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
                   <div className="absolute inset-x-60 top-0 bg-linear-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
                   <div className="absolute inset-x-60 top-0 bg-linear-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
                 </span>
               </span>{" "}
-              <span className="bg-[#2563EB] bg-clip-text text-transparent">
+              <span
+                className=" block bg-[#2563EB] bg-clip-text text-transparent"
+                style={{
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
+                  fontWeight: 800,
+                }}
+              >
                 from professionals.
               </span>
             </h1>
@@ -308,7 +347,7 @@ export default function HeroSection() {
 
         before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,#fff,transparent_80%)] dark:before:bg-[radial-gradient(circle_at_left_center,#000,transparent_100%)] before:opacity-100 
 
-        after:absolute after:-left-1/2 after:top-3/5  after:aspect-[1/0.7] after:w-[200%] after:rounded-[100%] after:border-t after:border-gray-400 dark:after:border-[#7876c566] after:bg-zinc-100 dark:after:bg-zinc-900
+        after:absolute after:-left-1/2 after:top-4/6  after:aspect-[1/0.7] after:w-[200%] after:rounded-[100%] after:border-t after:border-gray-400 dark:after:border-[#7876c566] after:bg-zinc-100 dark:after:bg-zinc-900
         "
             aria-hidden="true"
           >
@@ -321,7 +360,7 @@ export default function HeroSection() {
               className="absolute inset-x-0 bottom-0 h-full w-full mask-[radial-gradient(50%_50%,black,transparent_85%)] dark:mask-[radial-gradient(50%_50%,white,transparent_85%)] dark:hidden"
             />
             <SparklesCore
-            background="transparent"
+              background="transparent"
               particleDensity={800}
               speed={1}
               maxSize={1.7}

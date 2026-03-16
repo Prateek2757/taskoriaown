@@ -73,7 +73,7 @@ export default function NewRequestModal({
     }
   }, [presetLocation]);
 
-  
+
 
   const next = () => setStep(2);
   const back = () => setStep(1);
@@ -126,9 +126,9 @@ export default function NewRequestModal({
                   presetCategory={
                     selectedCategoryId && selectedCategoryTitle
                       ? {
-                          category_id: Number(selectedCategoryId),
-                          name: selectedCategoryTitle,
-                        }
+                        category_id: Number(selectedCategoryId),
+                        name: selectedCategoryTitle,
+                      }
                       : undefined
                   }
                   presetLocation={presetLocation || selectedLocation}

@@ -20,10 +20,11 @@ type Location = {
 
 type Props = {
   onSelect?: (data: Location | null) => void;
+  onLoadingChange?: (isLoading: boolean) => void;
   presetLocation?: Location | null;
 };
 
-export default function LocationSearch({ onSelect, presetLocation }: Props) {
+export default function LocationSearch({ onSelect, onLoadingChange, presetLocation }: Props) {
   const sessionToken = useRef(
     typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
   );
@@ -132,10 +133,14 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
     setActiveIndex(-1);
 
     setLoading(true);
+    onLoadingChange?.(true);
     const details = await fetchPlaceDetails(loc.place_id);
     setLoading(false);
 
-    if (!details) return;
+    if (!details) {
+      onLoadingChange?.(false);
+      return;
+    }
 
     try {
       const reslocation = await axios.post("/api/signup/location", details);
@@ -149,6 +154,8 @@ export default function LocationSearch({ onSelect, presetLocation }: Props) {
       });
     } catch (error) {
       console.error("Failed to save location:", error);
+    } finally {
+      onLoadingChange?.(false);
     }
   };
 

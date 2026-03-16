@@ -1,7 +1,7 @@
-  "use client";
+"use client";
 
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 interface FAQSectionProps {
   faqs: { question: string; answer: string }[];
@@ -11,48 +11,44 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
   return (
-    <div className="mb-20">
-      <div className="text-center mb-5">
-        <span className="inline-block p-2 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 font-semibold rounded-full text-sm mb-4">
-          FREQUENTLY ASKED
-        </span>
-        <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-          Got Questions?
+    <section className="mb-16">
+      <div className="text-center mb-10">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
+          Frequently Asked Questions
         </h2>
-        <p className="text-xl text-gray-600 dark:text-gray-400">
-          We've got answers to help you get started
+        <p className="text-lg text-gray-500 dark:text-gray-400">
+          Got questions? We've got answers.
         </p>
       </div>
 
-      <div className="max-w-3xl mx-auto space-y-4">
+      <div className="max-w-3xl mx-auto divide-y divide-gray-200 dark:divide-slate-700 border-t border-b border-gray-200 dark:border-slate-700">
         {faqs.map((faq, i) => (
-          <div
-            key={i}
-            className="bg-white dark:bg-slate-800 rounded-2xl border-2 border-gray-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-700 transition-all overflow-hidden"
-          >
+          <div key={i}>
             <button
               onClick={() => setActiveFaq(activeFaq === i ? null : i)}
-              className="w-full text-left p-2 flex items-center justify-between gap-4"
+              className="w-full text-left py-5 px-1 flex items-center justify-between gap-4 group"
             >
-              <span className="font-bold text-gray-900 dark:text-white text-lg">
+              <span className="font-semibold text-gray-900 dark:text-white text-base group-hover:text-[#3C7DED] transition-colors">
                 {faq.question}
               </span>
-              <div className={`flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center transition-transform ${
-                activeFaq === i ? 'rotate-90 bg-indigo-600 dark:bg-indigo-500' : ''
-              }`}>
-                <ArrowRight className={`w-5 h-5 ${
-                  activeFaq === i ? 'text-white' : 'text-indigo-600 dark:text-indigo-400'
-                }`} />
-              </div>
+              <ChevronDown
+                className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-200 ${
+                  activeFaq === i ? "rotate-180 text-[#3C7DED]" : ""
+                }`}
+              />
             </button>
-            {activeFaq === i && (
-              <div className="p-2  text-gray-700 dark:text-gray-300 leading-relaxed border-t border-gray-100 dark:border-slate-700 pt-4">
+            <div
+              className={`overflow-hidden transition-all duration-200 ${
+                activeFaq === i ? "max-h-96 pb-5" : "max-h-0"
+              }`}
+            >
+              <p className="text-gray-600 dark:text-gray-400 text-[15px] leading-relaxed px-1">
                 {faq.answer}
-              </div>
-            )}
+              </p>
+            </div>
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

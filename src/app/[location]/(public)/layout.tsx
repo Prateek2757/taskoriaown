@@ -12,6 +12,7 @@ import NotificationHandler from "@/components/NotificationHandler";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { i18n } from "../../../../i18n-config";
 import SupportChatbot from "@/components/supportChatbox";
+import Link from "next/link";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -30,6 +31,7 @@ function getOGLocale(locale: string): string {
   };
   return localeMap[locale] || "en_US";
 }
+{/* In your layout.tsx or _document.tsx */}
 
 export async function generateMetadata({
   params,
@@ -172,6 +174,7 @@ export default async function RootLayout({
       className={`${poppins.variable}`}
       suppressHydrationWarning
     >
+
       <head>
         <link
           rel="icon"
@@ -179,6 +182,10 @@ export default async function RootLayout({
           sizes="48x48"
           type="image/x-icon"
         />
+        <link
+  href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Cormorant+Garamond:ital,wght@1,700&display=swap"
+  rel="stylesheet"
+/>
         <link
           rel="apple-touch-icon"
           sizes="140x140"
