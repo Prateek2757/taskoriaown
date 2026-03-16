@@ -54,7 +54,7 @@ export function ProfileCard({
     ? `${typeof window !== "undefined" ? window.location.origin : ""}/join?ref=${profile.referral_code}`
     : null;
   const displayLink = referralLink
-    ? referralLink.replace(/^https?:\/\//, "")
+    ? referralLink.replace(/^https?:\/\/(www\.)?/, "")
     : "";
 
   const handleCopyCode = () => {
@@ -317,44 +317,40 @@ export function ProfileCard({
               </div>
 
               <div className="flex items-center justify-between rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 py-2.5 shadow-sm">
-  
-  <div className="flex items-center gap-1 overflow-hidden">
-    <span className="font-mono text-sm dark:text-white/40 whitespace-nowrap">
-      {typeof window !== "undefined"
-        ? window.location.hostname
-        : "taskoria.com"} /join?ref=
-    </span>
+                <div className="flex items-center gap-1 overflow-hidden">
+                  <div className="flex items-center gap-1 overflow-hidden font-mono text-sm">
+                    <span className="dark:text-white/40 text-slate-500 whitespace-nowrap">
+                      {displayLink?.split(profile.referral_code || "")[0]}
+                    </span>
 
-    <span className="font-mono text-sm font-black text-blue-600 tracking-widest whitespace-nowrap">
-      {profile.referral_code || "------"}
-    </span>
-  </div>
+                    <span className="px-2 py-0.5 rounded-md bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 font-bold tracking-widest">
+                      {profile.referral_code}
+                    </span>
+                  </div>
+                </div>
 
-  <button
-    onClick={handleCopyCode}
-    title="Copy link"
-    className={`shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 m-1 rounded-lg transition-all duration-200 ${
-      copied
-        ? "bg-emerald-500 text-white shadow-sm"
-        : "bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/20"
-    }`}
-  >
-    {copied ? (
-      <Check className="w-5 h-5" />
-    ) : (
-      <Copy className="w-5 h-5" />
-    )}
-  </button>
-
-</div>
+                <button
+                  onClick={handleCopyCode}
+                  title="Copy link"
+                  className={`shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5  rounded-lg transition-all duration-200 ${
+                    copied
+                      ? "bg-emerald-500 text-white shadow-sm"
+                      : "bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/20"
+                  }`}
+                >
+                  {copied ? (
+                    <Check className="w-5 h-5" />
+                  ) : (
+                    <Copy className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
 
               <p className="mt-2.5 text-xs text-slate-400 dark:text-slate-500 leading-relaxed">
                 Share this link — your code is embedded automatically.
               </p>
             </div>
           )}
-
-          
         </CardContent>
 
         <style jsx>{`
