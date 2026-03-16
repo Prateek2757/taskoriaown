@@ -111,7 +111,7 @@ export default function HeroSection() {
       >
         <div className="absolute top-11  left-168 w-full h-full">
           <div
-            className="absolute  inset-0 w-165 h-full bg-[url('/images/herobg.png')] bg-cover bg-center opacity-60  dark:opacity-40"
+            className="absolute  inset-0 w-165 h-full bg-[url('/images/herobg.png')] bg-cover bg-center opacity-90  dark:opacity-80"
             style={{
               backgroundImage: "url('/images/taskoriaherobgwithlogo.png')",
               backgroundSize: "cover",
@@ -257,7 +257,7 @@ export default function HeroSection() {
               {!session && (
                 <Button
                   variant="outline"
-                  onClick={joinAsProvider}
+                  onClick={() => joinAsProvider()}
                   className="flex-1 py-5"
                   aria-label="Register as a service provider"
                 >

@@ -12,8 +12,6 @@ import LeadSettingsCard from "@/components/Lead-setting/leadsetting";
 import { LeadsOverviewCard } from "./Leadsoverviewcard";
 import { ResponsesCard } from "./Responsescard";
 import axios from "axios";
-import LoadingSpinner from "@/components/showinglead/LoadingSpinner";
-import { Skeleton } from "@/components/ui/skeleton";
 import PageSkeleton from "@/components/skeleton/PageSkeleton";
 
 export default function ProviderDashboard() {

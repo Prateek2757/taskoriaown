@@ -407,8 +407,8 @@ export default function ModernNavbar() {
                     Sign In
                   </Button>
                   <Button
-                    onClick={joinAsProvider}
-                    className="bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
+onClick={() => joinAsProvider()}
+className="bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
                     Join as Provider
                   </Button>

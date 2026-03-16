@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { motion, AnimatePresence } from "motion/react";
 import { Search, Loader2 } from "lucide-react";
@@ -26,7 +26,8 @@ export default function CategorySelectionPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isNavigating, setIsNavigating] = useState(false);
-
+ const searchparams = useSearchParams()
+ const ref = searchparams.get("ref")
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -66,11 +67,15 @@ export default function CategorySelectionPage() {
     if (!selectedCategory) return alert("Please select a category to continue");
     if (!draftId) return alert("Draft ID missing! Restart onboarding.");
 
-    console.log("Navigating with:", { draftId, selectedCategory });
-    const url = `/create-account?user_id=${draftId}&cn=${selectedCategory}`;
+    // console.log("Navigating with:", { draftId, selectedCategory });
+    // const url = `/create-account?user_id=${draftId}&cn=${selectedCategory}`;
+    const url = new URL(`/create-account`, window.location.origin);
+    url.searchParams.set("user_id", draftId);
+    url.searchParams.set("cn", selectedCategory);
+    if (ref) url.searchParams.set("ref", ref);
 
     setIsNavigating(true);
-    router.push(url);
+    router.push(url.pathname + url.search);
   };
 
   const popularCategories = useMemo(() => categories.slice(0, 8), [categories]);

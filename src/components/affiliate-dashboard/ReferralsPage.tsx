@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface CurrentUser {
   user_id: number;
@@ -50,7 +49,6 @@ interface ReferralsResponse {
   };
 }
 
-// ─── Fetcher ──────────────────────────────────────────────────────────────────
 
 const fetcher = (url: string) =>
   fetch(url, { credentials: 'include' }).then(r => {
@@ -58,7 +56,6 @@ const fetcher = (url: string) =>
     return r.json();
   });
 
-// ─── Status config ────────────────────────────────────────────────────────────
 
 const statusConfig: Record<string, { color: string; label: string }> = {
   pending:   { color: 'bg-amber-50 text-amber-700 border-amber-200',      label: 'Pending'   },
@@ -124,25 +121,52 @@ export function ReferralsPage() {
     return matchSearch && matchStatus;
   });
 
-  const handleCopy = () => {
-    if (!code) return;
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    toast.success('Referral code copied!');
-    setTimeout(() => setCopied(false), 2000);
-  };
+  // Build the link (add near top of component alongside `code`)
+const referralLink = code
+? `${typeof window !== "undefined" ? window.location.origin : ""}/join?ref=${code}`
+: "";
 
-  const handleShare = (platform: string) => {
-    const msg = encodeURIComponent(`Use my referral code ${code} to sign up!`);
-    const urls: Record<string, string> = {
-      facebook: `https://www.facebook.com/sharer/sharer.php?quote=${msg}`,
-      twitter:  `https://twitter.com/intent/tweet?text=${msg}`,
-      linkedin: `https://www.linkedin.com/sharing/share-offsite/?summary=${msg}`,
-      whatsapp: `https://wa.me/?text=${msg}`,
-      email:    `mailto:?subject=Join me!&body=${decodeURIComponent(msg)}`,
-    };
-    if (urls[platform]) window.open(urls[platform], '_blank');
-  };
+const handleCopy = () => {
+if (!referralLink) return;
+navigator.clipboard.writeText(referralLink);
+setCopied(true);
+toast.success("Referral link copied!");
+setTimeout(() => setCopied(false), 2000);
+};
+
+const handleShare = (platform: string) => {
+const text = encodeURIComponent(`Join me! Use my referral link to sign up:`);
+const url  = encodeURIComponent(referralLink);
+
+const urls: Record<string, string> = {
+  facebook:  `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+  twitter:   `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+  linkedin:  `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+  whatsapp:  `https://wa.me/?text=${text}%20${url}`,
+  email:     `mailto:?subject=Join me!&body=${decodeURIComponent(text)}%20${decodeURIComponent(url)}`,
+};
+if (urls[platform]) window.open(urls[platform], "_blank");
+};
+
+  // const handleCopy = () => {
+  //   if (!code) return;
+  //   navigator.clipboard.writeText(code);
+  //   setCopied(true);
+  //   toast.success('Referral code copied!');
+  //   setTimeout(() => setCopied(false), 2000);
+  // };
+
+  // const handleShare = (platform: string) => {
+  //   const msg = encodeURIComponent(`Use my referral code ${code} to sign up!`);
+  //   const urls: Record<string, string> = {
+  //     facebook: `https://www.facebook.com/sharer/sharer.php?quote=${msg}`,
+  //     twitter:  `https://twitter.com/intent/tweet?text=${msg}`,
+  //     linkedin: `https://www.linkedin.com/sharing/share-offsite/?summary=${msg}`,
+  //     whatsapp: `https://wa.me/?text=${msg}`,
+  //     email:    `mailto:?subject=Join me!&body=${decodeURIComponent(msg)}`,
+  //   };
+  //   if (urls[platform]) window.open(urls[platform], '_blank');
+  // };
 
   if (userError) {
     return (
@@ -197,15 +221,40 @@ export function ReferralsPage() {
               <Skeleton className="h-16 w-56 rounded-2xl bg-white/10" />
             ) : (
               <div className="flex items-stretch gap-3">
-                <div className="relative group cursor-default">
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500 to-blue-500 blur opacity-50 group-hover:opacity-80 transition-opacity duration-300" />
-                  <div className="relative px-7 py-4 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center">
-                    <span className="font-mono text-3xl font-black tracking-[0.25em] text-white drop-shadow-lg">
-                      {code || '------'}
-                    </span>
-                  </div>
-                </div>
+           <div className="relative group cursor-default">
+  <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/40 to-cyan-500/40 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+  <div className="relative rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 overflow-hidden">
+    
+    {/* Top label */}
+    <div className="flex items-center gap-2 px-4 pt-3 pb-1">
+      <div className="relative flex items-center justify-center">
+        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+        <div className="absolute w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping opacity-75" />
+      </div>
+      <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/40">
+        Your Referral Link
+      </span>
+    </div>
 
+    {/* URL display */}
+    <div className="flex items-center gap-1.5 px-4 pb-3.5">
+      {/* <span className="font-mono text-sm font-bold text-white whitespace-nowrap">
+        {typeof window !== "undefined"
+          ? window.location.hostname
+          : "taskoria.com"}
+      </span> */}
+      <span className="font-mono text-sm text-white/40 whitespace-nowrap">
+      {typeof window !== "undefined"
+          ? window.location.hostname
+          : "taskoria.com"}/join?ref=
+      </span>
+      <span className="font-mono text-sm font-black text-amber-300 tracking-widest whitespace-nowrap">
+        {code || "------"}
+      </span>
+    </div>
+
+  </div>
+</div>
                 <div className="flex flex-col gap-2">
                   <button
                     onClick={handleCopy}
@@ -257,8 +306,8 @@ export function ReferralsPage() {
         {showQR && code && (
           <div className="relative mt-6 flex justify-center animate-in fade-in slide-in-from-top-2 duration-200">
             <div className="bg-white rounded-2xl p-5 shadow-2xl inline-flex flex-col items-center gap-2">
-              <QRCodeSVG value={code} size={156} />
-              <p className="text-slate-500 text-xs font-mono tracking-widest">{code}</p>
+<QRCodeSVG value={referralLink} size={156} />
+<p className="text-slate-500 text-xs font-mono tracking-widest">{code}</p>
             </div>
           </div>
         )}

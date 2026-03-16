@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -83,6 +83,7 @@ function OnboardingContent() {
   const params = useSearchParams();
   const userId = params.get("user_id");
   const categoryId = params.get("cn");
+  const refFromUrl = params.get("ref"); 
   const { setUser } = useUser();
   const [step, setStep] = useState<"location" | "details">("location");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -104,7 +105,7 @@ function OnboardingContent() {
       hasWebsite: undefined,
       websiteUrl: "",
       companySize: "",
-      referralCode: "",
+      referralCode: refFromUrl ?? undefined,
     },
   });
 
@@ -113,7 +114,7 @@ function OnboardingContent() {
   const isNationwide = watch("is_nationwide");
   const hasWebsite = watch("hasWebsite");
   const referralCode = watch("referralCode");
-
+ 
   const validateReferralCode = async (code: string) => {
     if (!code || code.trim() === "") {
       setReferralStatus("idle");
@@ -137,6 +138,11 @@ function OnboardingContent() {
       setReferralMessage("Could not verify code. You can still continue.");
     }
   };
+   useEffect(() => {
+    if (refFromUrl) {
+      validateReferralCode(refFromUrl);
+    }
+  }, []);
 
   const onSubmit = async (data: OnboardingFormData) => {
     if (!userId || !categoryId) return alert("Missing user info");

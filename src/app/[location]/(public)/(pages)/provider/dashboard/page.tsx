@@ -1,18 +1,18 @@
 "use client";
 
-
 import ProviderDashboard from "@/components/dashboard/ProviderDashboard/Providerdashboard";
 
 export default function DashboardPage() {
   return (
-    <div className="
+    <div
+      className="
       min-h-screen 
       bg-gray-50 
       dark:bg-[#0d1117] 
       transition-colors duration-300
-    ">
+    "
+    >
       <div className="container mx-auto px-4 py-8">
-
         {/* <Link href="/" className="inline-flex mb-4">
           <Button
             variant="ghost"

@@ -5,7 +5,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { User, Mail, ShieldAlert, ShieldCheck, Copy, Check, Share2, Gift } from "lucide-react";
+import {
+  User,
+  Mail,
+  ShieldAlert,
+  ShieldCheck,
+  Copy,
+  Check,
+  Share2,
+  Gift,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { EmailVerificationDialog } from "./Emailverificationdialog";
@@ -21,9 +30,8 @@ interface ProfileCardProps {
     display_name?: string;
     profile_image_url?: string;
     is_pro?: boolean;
-    profile_completion?:number;
+    profile_completion?: number;
     referral_code?: string;
-
   };
   nameToShow: string;
   imageToShow?: string;
@@ -43,16 +51,17 @@ export function ProfileCard({
   const [copied, setCopied] = useState(false);
 
   const referralLink = profile.referral_code
-    ? `${typeof window !== "undefined" ? window.location.origin : ""}/signup?ref=${profile.referral_code}`
+    ? `${typeof window !== "undefined" ? window.location.origin : ""}/join?ref=${profile.referral_code}`
     : null;
-
-
+  const displayLink = referralLink
+    ? referralLink.replace(/^https?:\/\//, "")
+    : "";
 
   const handleCopyCode = () => {
-    if (!profile.referral_code) return;
-    navigator.clipboard.writeText(profile.referral_code);
+    if (!referralLink) return;
+    navigator.clipboard.writeText(referralLink);
     setCopied(true);
-    toast.success("Referral code copied!");
+    toast.success("Referral link copied!");
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -63,6 +72,7 @@ export function ProfileCard({
         await navigator.share({
           title: "Join Taskoria to find trusted professionals easily!",
           text: `Use my referral code ${profile.referral_code} to sign up.`,
+          url: referralLink,
         });
       } catch {}
     } else {
@@ -90,7 +100,8 @@ export function ProfileCard({
                   <div
                     className="absolute -inset-4 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-500"
                     style={{
-                      background: "conic-gradient(from 0deg, #eab308, #f59e0b, #d97706, #ca8a04, #eab308)",
+                      background:
+                        "conic-gradient(from 0deg, #eab308, #f59e0b, #d97706, #ca8a04, #eab308)",
                       animation: "spin 5s linear infinite",
                       filter: "blur(16px)",
                     }}
@@ -127,12 +138,19 @@ export function ProfileCard({
                 <div
                   className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full shadow-2xl backdrop-blur-sm border border-yellow-500/30 hover:scale-110 transition-transform duration-300 z-20"
                   style={{
-                    background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #eab308 100%)",
+                    background:
+                      "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #eab308 100%)",
                     color: "#000",
-                    boxShadow: "0 8px 20px rgba(234, 179, 8, 0.4), inset 0 1px 2px rgba(255,255,255,0.3)",
+                    boxShadow:
+                      "0 8px 20px rgba(234, 179, 8, 0.4), inset 0 1px 2px rgba(255,255,255,0.3)",
                   }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-3.5 w-3.5"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
                     <path d="M12 2l3 7h7l-5.5 4.1L18 21l-6-4-6 4 1.5-7.9L2 9h7z" />
                   </svg>
                   <span>Plus</span>
@@ -150,19 +168,27 @@ export function ProfileCard({
             >
               {nameToShow}
               {isPro && (
-                <svg className="inline-block ml-2 w-5 h-5 text-yellow-500 drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="inline-block ml-2 w-5 h-5 text-yellow-500 drop-shadow-lg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
                 </svg>
               )}
             </h2>
 
             <div className="space-y-3 mb-4">
-              <p className="text-sm text-slate-700 dark:text-slate-300 font-medium">{user.email}</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300 font-medium">
+                {user.email}
+              </p>
 
               {profile?.is_email_verified ? (
                 <div className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 px-3 py-1.5 shadow-lg">
                   <ShieldCheck className="h-3.5 w-3.5 text-white" />
-                  <span className="text-xs font-semibold text-white">Email Verified</span>
+                  <span className="text-xs font-semibold text-white">
+                    Email Verified
+                  </span>
                 </div>
               ) : (
                 <div className="mx-auto max-w-sm">
@@ -172,7 +198,9 @@ export function ProfileCard({
                         <ShieldAlert className="h-4 w-4 text-red-600 dark:text-red-400 flex-shrink-0" />
                       </div>
                       <div className="flex-1 min-w-0 text-left">
-                        <p className="text-xs font-bold text-red-900 dark:text-red-100">Email Not Verified</p>
+                        <p className="text-xs font-bold text-red-900 dark:text-red-100">
+                          Email Not Verified
+                        </p>
                       </div>
                     </div>
                     <Button
@@ -188,35 +216,66 @@ export function ProfileCard({
               )}
             </div>
 
-            <p className={`text-xs ${isPro ? "text-yellow-500/70 font-medium" : "text-slate-500 dark:text-slate-400"}`}>
+            <p
+              className={`text-xs ${isPro ? "text-yellow-500/70 font-medium" : "text-slate-500 dark:text-slate-400"}`}
+            >
               Role:{" "}
-              <strong className={isPro ? "text-yellow-400" : ""}>{user.role}</strong>
+              <strong className={isPro ? "text-yellow-400" : ""}>
+                {user.role}
+              </strong>
             </p>
 
             <div className="mx-3 mt-4 mb-4 space-y-2">
               <div className="flex items-center justify-between">
-                <span className={`text-sm ${isPro ? "text-slate-600 dark:text-slate-400 font-medium" : "text-slate-700 dark:text-slate-300"}`}>
+                <span
+                  className={`text-sm ${isPro ? "text-slate-600 dark:text-slate-400 font-medium" : "text-slate-700 dark:text-slate-300"}`}
+                >
                   Profile completion:{" "}
-                  <span className={`font-bold ${isPro ? "text-yellow-400" : "font-semibold"}`}>{profile.profile_completion}%</span>
+                  <span
+                    className={`font-bold ${isPro ? "text-yellow-400" : "font-semibold"}`}
+                  >
+                    {profile.profile_completion}%
+                  </span>
                 </span>
                 <Link
                   href="/settings/profile/my-profile"
                   className={`text-sm font-medium flex items-center gap-1 group/link transition-all ${
-                    isPro ? "text-yellow-400 hover:text-yellow-300" : "text-blue-700 dark:text-blue-400"
+                    isPro
+                      ? "text-yellow-400 hover:text-yellow-300"
+                      : "text-blue-700 dark:text-blue-400"
                   }`}
                 >
                   Edit
-                  <svg className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <svg
+                    className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </Link>
               </div>
               <div className="relative">
-                {isPro && <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-full blur-md" />}
+                {isPro && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-full blur-md" />
+                )}
                 <Progress
                   value={profile.profile_completion}
                   className={`h-2 rounded-full relative ${isPro ? "bg-slate-700/50" : ""}`}
-                  style={isPro ? { background: "linear-gradient(to right, rgba(234, 179, 8, 0.2), rgba(245, 158, 11, 0.2))" } : {}}
+                  style={
+                    isPro
+                      ? {
+                          background:
+                            "linear-gradient(to right, rgba(234, 179, 8, 0.2), rgba(245, 158, 11, 0.2))",
+                        }
+                      : {}
+                  }
                 />
               </div>
             </div>
@@ -224,7 +283,11 @@ export function ProfileCard({
             {isPro && (
               <div className="mx-3 mb-4 p-2 rounded-xl bg-gradient-to-r from-yellow-500/10 via-amber-500/10 to-yellow-500/10 border border-yellow-500/20 backdrop-blur-sm">
                 <div className="flex items-center justify-center gap-2 text-xs text-yellow-500/90 font-medium">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <path d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                   <span>Exclusive PRO Features Unlocked</span>
@@ -234,56 +297,52 @@ export function ProfileCard({
           </div>
 
           {profile.referral_code && (
-            <div className={`mx-0 px-5 py-4 border-t ${
-           
-                 "border-gray-100 dark:border-white/8 bg-gradient-to-br from-blue-50/60 via-cyan-50/40 to-transparent dark:from-blue-950/20 dark:via-cyan-950/10 dark:to-transparent"
-            }`}>
-
+            <div className="mx-0 px-5 py-5 border-t border-gray-100 dark:border-white/8 bg-gradient-to-br from-slate-50/80 via-blue-50/30 to-transparent dark:from-blue-950/20 dark:via-slate-900/10 dark:to-transparent">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <div className={`p-1.5 rounded-lg ${
-                  
-                    "bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400"
-                  }`}>
-                    <Gift className="w-3.5 h-3.5" />
+                  <div className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/40">
+                    <Gift className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <span className={`text-xs font-semibold tracking-wide uppercase ${
-                   "text-slate-500 dark:text-slate-400"
-                  }`}>
-                    Your Referral Code
+                  <span className="text-xs font-semibold tracking-widest uppercase text-slate-400 dark:text-slate-500">
+                    Referral Link
                   </span>
                 </div>
                 <button
                   onClick={handleShare}
-                  className={`flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-lg transition-all ${
-                  
-                    "text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
-                  }`}
+                  className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-sm shadow-blue-200 dark:shadow-none"
                 >
                   <Share2 className="w-3 h-3" />
                   Share
                 </button>
               </div>
 
-              <div className={`flex items-center gap-2 rounded-xl px-3 py-2.5 border ${
-             
-                   "bg-white dark:bg-white/5 border-gray-200 dark:border-white/10"
-              }`}>
-                <span className={`flex-1 text-center font-mono text-lg font-bold tracking-[0.2em] select-all ${
-                 
-                     "text-blue-700 dark:text-blue-300"
-                }`}>
-                  {profile.referral_code}
+              <div className="flex items-center gap- rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 py-2.5 shadow-sm">
+                {/* <div className="flex-shrink-0 flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800/40 rounded-md px-2 py-1">
+        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+        <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 tracking-wide">
+          {typeof window !== "undefined"
+            ? window.location.hostname
+            : "taskoria.com"}
+        </span>
+      </div> */}
+
+              
+                <span className="font-mono text-sm dark:text-white/40  whitespace-nowrap">
+                {typeof window !== "undefined"
+                    ? window.location.hostname
+                    : "taskoria.com"} /join?ref=
+                </span>
+                <span className="font-mono text-sm font-black text-blue-600 tracking-widest whitespace-nowrap">
+                  {profile.referral_code || "------"}
                 </span>
 
                 <button
                   onClick={handleCopyCode}
-                  title="Copy code"
-                  className={`flex-shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200 ${
+                  title="Copy link"
+                  className={`shrink-0 flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 m-1 rounded-lg transition-all duration-200 ${
                     copied
-                      ? "bg-emerald-500 text-white shadow-md shadow-emerald-200 dark:shadow-emerald-900"
-                      : 
-                       "bg-blue-600 text-white hover:bg-blue-700 shadow-sm"
+                      ? "bg-emerald-500 text-white shadow-sm"
+                      : "bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/20"
                   }`}
                 >
                   {copied ? (
@@ -293,26 +352,29 @@ export function ProfileCard({
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5" />
-                      Copy
+                      <Copy className="w-5 h-5" />
                     </>
                   )}
                 </button>
               </div>
 
-              <p className={`mt-2.5 text-xs leading-relaxed ${
-                 "text-slate-400 dark:text-slate-500"
-              }`}>
-                Share your code and earn rewards when friends join.
+              <p className="mt-2.5 text-xs text-slate-400 dark:text-slate-500 leading-relaxed">
+                Share this link — your code is embedded automatically.
               </p>
             </div>
           )}
+
+          
         </CardContent>
 
         <style jsx>{`
           @keyframes spin {
-            from { transform: rotate(0deg); }
-            to   { transform: rotate(360deg); }
+            from {
+              transform: rotate(0deg);
+            }
+            to {
+              transform: rotate(360deg);
+            }
           }
         `}</style>
       </Card>
