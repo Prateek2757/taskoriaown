@@ -173,7 +173,7 @@ export default function HeroSection() {
                     fontWeight: 800,
                   }}
                 >
-                  Get quote </span>
+                  Get quotes </span>
                 <span
                   className="absolute right-0 bottom-0 translate-y-3 w-full h-5 overflow-hidden"
                   aria-hidden="true"
