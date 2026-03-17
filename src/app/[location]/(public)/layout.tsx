@@ -20,14 +20,12 @@ const poppins = Poppins({
 
 const BASE_URL = "https://www.taskoria.com";
 
-// ── Metadata ──────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
 
   title: {
     default: "Taskoria | Find Trusted Local Professionals Across Australia",
-    // Every child page sets its own title; this is the site-wide fallback
     template: "%s | Taskoria",
   },
 
@@ -52,7 +50,6 @@ export const metadata: Metadata = {
   creator: "Taskoria",
   publisher: "Taskoria",
 
-  // ── Canonical + hreflang (Australia only) ──────────────────────────────────
   alternates: {
     canonical: BASE_URL,
     languages: {
@@ -61,7 +58,6 @@ export const metadata: Metadata = {
     },
   },
 
-  // ── Robots ─────────────────────────────────────────────────────────────────
   robots: {
     index: true,
     follow: true,
@@ -74,7 +70,6 @@ export const metadata: Metadata = {
     },
   },
 
-  // ── Open Graph ─────────────────────────────────────────────────────────────
   openGraph: {
     title: "Taskoria | Find Trusted Local Professionals Across Australia",
     description:
@@ -93,7 +88,6 @@ export const metadata: Metadata = {
     ],
   },
 
-  // ── Twitter Card ───────────────────────────────────────────────────────────
   twitter: {
     card: "summary_large_image",
     title: "Taskoria | Trusted Local Professionals Across Australia",
@@ -104,7 +98,6 @@ export const metadata: Metadata = {
     site: "@taskoria",
   },
 
-  // ── PWA / App ──────────────────────────────────────────────────────────────
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -115,23 +108,18 @@ export const metadata: Metadata = {
     telephone: false,
   },
 
-  // ── Verification (add your codes once confirmed in Search Console) ─────────
-  // verification: {
-  //   google: "your-google-search-console-verification-code",
-  // },
+
 };
 
-// ── Viewport ──────────────────────────────────────────────────────────────────
 
 export const viewport: Viewport = {
   themeColor: "#8A2BE2",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5,    // ✅ was 1 — Google penalises pages that block zoom
-  userScalable: true, // ✅ was false — accessibility issue, hurts Core Web Vitals
+  maximumScale: 5,   
+  userScalable: true, 
 };
 
-// ── Layout ────────────────────────────────────────────────────────────────────
 
 export default function RootLayout({
   children,
@@ -139,11 +127,9 @@ export default function RootLayout({
   return (
     <html lang="en-AU" className={poppins.variable} suppressHydrationWarning>
       <head>
-        {/* Favicon */}
         <link rel="icon" href="/favicon.ico" sizes="48x48" type="image/x-icon" />
         <link rel="apple-touch-icon" sizes="140x140" href="/taskorialogonew.png" />
 
-        {/* Fonts — preconnect before stylesheet for faster LCP */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -151,11 +137,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
 
-        {/* GTM preconnect */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
-        {/* ── Organisation schema — sitewide brand signal for Google ──────── */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -184,7 +168,6 @@ export default function RootLayout({
           }}
         />
 
-        {/* ── WebSite schema — enables Google Sitelinks search box ────────── */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

@@ -20,7 +20,7 @@ import { Button } from "../ui/button";
 import NewRequestModal from "../leads/RequestModal";
 
 interface ServiceCategory {
-  category_id: string | number;
+  category_id?: string | number;
   name: string;
   slug: string;
 }
