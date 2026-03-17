@@ -6,13 +6,11 @@ import ModernNavbar from "@/components/navabr/Navbar";
 import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
 import { Poppins } from "next/font/google";
-import type { Viewport } from "next";
+import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import NotificationHandler from "@/components/NotificationHandler";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { i18n } from "../../../../i18n-config";
 import SupportChatbot from "@/components/supportChatbox";
-import Link from "next/link";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -20,180 +18,195 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-function getOGLocale(locale: string): string {
-  const localeMap: Record<string, string> = {
-    en: "en_US",
-    "en-au": "en_AU",
-    "en-gb": "en_GB",
-    es: "es_ES",
-    fr: "fr_FR",
-    de: "de_DE",
-  };
-  return localeMap[locale] || "en_US";
-}
-{/* In your layout.tsx or _document.tsx */}
+const BASE_URL = "https://www.taskoria.com";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ location?: string }>;
-}) {
-  const locale = (await params).location || i18n.defaultLocale;
-  const baseUrl = "https://www.taskoria.com";
+// ── Metadata ──────────────────────────────────────────────────────────────────
 
-  const titles: Record<string, string> = {
-    en: "Taskoria | Find Trusted Local Professionals for Any Job",
-    "en-au": "Taskoria | Find Trusted Local Professionals for Any Job",
-    es: "Taskoria | Encuentra Profesionales Locales de Confianza para Cualquier Trabajo",
-  };
+export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
 
-  const descriptions: Record<string, string> = {
-    en: "Taskoria connects you with verified local professionals for home, business, and digital services. AI-powered matching, transparent pricing, and secure payments.",
-    "en-au":
-      "Taskoria connects you with verified local professionals for home, business, and digital services. AI-powered matching, transparent pricing, and secure payments.",
-    es: "Taskoria te conecta con profesionales locales verificados para servicios domésticos, empresariales y digitales. Emparejamiento impulsado por IA, precios transparentes y pagos seguros.",
-  };
+  title: {
+    default: "Taskoria | Find Trusted Local Professionals Across Australia",
+    // Every child page sets its own title; this is the site-wide fallback
+    template: "%s | Taskoria",
+  },
 
-  const title = titles[locale] || titles.en;
-  const description = descriptions[locale] || descriptions.en;
+  description:
+    "Taskoria connects Australians with verified local professionals for home, business, and digital services. Compare quotes, read real reviews, and book with confidence.",
 
-  const languages: Record<string, string> = {};
-  i18n.locales.forEach((loc) => {
-    const localePath = loc === i18n.defaultLocale ? "" : `/${loc}`;
-    languages[loc] = `${baseUrl}${localePath}`;
-  });
-  languages["x-default"] = baseUrl;
+  keywords: [
+    "taskoria",
+    "find professionals australia",
+    "hire local experts australia",
+    "home services australia",
+    "professional services near me",
+    "verified tradespeople australia",
+    "get free quotes australia",
+    "book local professionals",
+    "house cleaning australia",
+    "plumber australia",
+    "electrician australia",
+  ],
 
-  const ogLocale = getOGLocale(locale);
+  authors: [{ name: "Taskoria", url: BASE_URL }],
+  creator: "Taskoria",
+  publisher: "Taskoria",
 
-  const alternateLocales = i18n.locales
-    .filter((loc) => loc !== locale)
-    .map(getOGLocale);
-
-  return {
-    metadataBase: new URL(baseUrl),
-    title,
-    manifest: "/manifest.json",
-    appleWebApp: {
-      capable: true,
-      statusBarStyle: "default",
-      title: "Taskoria",
+  // ── Canonical + hreflang (Australia only) ──────────────────────────────────
+  alternates: {
+    canonical: BASE_URL,
+    languages: {
+      "en-AU": BASE_URL,
+      "x-default": BASE_URL,
     },
-    formatDetection: {
-      telephone: false,
-    },
-    description,
-    keywords: [
-      "Taskoria",
-      "service providers",
-      "home services",
-      "professional services",
-      "creative services",
-      "technology services",
-      "health services",
-      "education services",
-      "hire experts",
-      "find professionals",
-    ],
-    authors: [{ name: "Taskoria", url: "https://www.taskoria.com" }],
-    creator: "Taskoria",
-    publisher: "Taskoria",
+  },
 
-    alternates: {
-      canonical: locale === i18n.defaultLocale ? "/" : `/${locale}`,
-      languages,
-    },
-
-    robots: {
+  // ── Robots ─────────────────────────────────────────────────────────────────
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
       index: true,
       follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
+  // ── Open Graph ─────────────────────────────────────────────────────────────
+  openGraph: {
+    title: "Taskoria | Find Trusted Local Professionals Across Australia",
+    description:
+      "Connect with verified Australian professionals for home, business, and digital services. AI-powered matching, transparent pricing, and secure payments.",
+    url: BASE_URL,
+    siteName: "Taskoria",
+    locale: "en_AU",
+    type: "website",
+    images: [
+      {
+        url: `${BASE_URL}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "Taskoria – Find Trusted Local Professionals Across Australia",
       },
-    },
+    ],
+  },
 
-    openGraph: {
-      title,
-      description,
-      url: locale === i18n.defaultLocale ? baseUrl : `${baseUrl}/${locale}`,
-      siteName: "Taskoria",
-      images: [
-        {
-          url: `${baseUrl}/og-image.png`,
-          width: 1200,
-          height: 630,
-          alt: "Taskoria - Service Providers",
-        },
-      ],
-      locale: ogLocale,
-      alternateLocale: alternateLocales,
-      type: "website",
-    },
+  // ── Twitter Card ───────────────────────────────────────────────────────────
+  twitter: {
+    card: "summary_large_image",
+    title: "Taskoria | Trusted Local Professionals Across Australia",
+    description:
+      "Discover and hire verified professionals near you. Compare quotes, read reviews, and book instantly with Taskoria.",
+    images: [`${BASE_URL}/og-image.png`],
+    creator: "@taskoria",
+    site: "@taskoria",
+  },
 
-    twitter: {
-      card: "summary_large_image",
-      title: "Taskoria — Find Trusted Service Providers",
-      description:
-        "Discover and hire top service providers in your area across multiple categories with Taskoria.",
-      images: [`${baseUrl}/og-image.png`],
-      creator: "@Taskoria",
-    },
-  };
-}
+  // ── PWA / App ──────────────────────────────────────────────────────────────
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Taskoria",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+
+  // ── Verification (add your codes once confirmed in Search Console) ─────────
+  // verification: {
+  //   google: "your-google-search-console-verification-code",
+  // },
+};
+
+// ── Viewport ──────────────────────────────────────────────────────────────────
 
 export const viewport: Viewport = {
   themeColor: "#8A2BE2",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5,    // ✅ was 1 — Google penalises pages that block zoom
+  userScalable: true, // ✅ was false — accessibility issue, hurts Core Web Vitals
 };
 
-export async function generateStaticParams() {
-  return i18n.locales.map((locale) => ({
-    location: locale,
-  }));
-}
+// ── Layout ────────────────────────────────────────────────────────────────────
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
-  params,
-}: Readonly<{
-  children: React.ReactNode;
-  params: Promise<{ location?: string }>;
-}>) {
-  const locale = (await params).location || i18n.defaultLocale;
-
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang={locale}
-      className={`${poppins.variable}`}
-      suppressHydrationWarning
-    >
-
+    <html lang="en-AU" className={poppins.variable} suppressHydrationWarning>
       <head>
+        {/* Favicon */}
+        <link rel="icon" href="/favicon.ico" sizes="48x48" type="image/x-icon" />
+        <link rel="apple-touch-icon" sizes="140x140" href="/taskorialogonew.png" />
+
+        {/* Fonts — preconnect before stylesheet for faster LCP */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          rel="icon"
-          href="/favicon.ico"
-          sizes="48x48"
-          type="image/x-icon"
+          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Cormorant+Garamond:ital,wght@1,700&display=swap"
+          rel="stylesheet"
         />
-        <link
-  href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Cormorant+Garamond:ital,wght@1,700&display=swap"
-  rel="stylesheet"
-/>
-        <link
-          rel="apple-touch-icon"
-          sizes="140x140"
-          href="/taskorialogonew.png"
-        />
+
+        {/* GTM preconnect */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
+        {/* ── Organisation schema — sitewide brand signal for Google ──────── */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Taskoria",
+              url: BASE_URL,
+              logo: `${BASE_URL}/taskorialogonew.png`,
+              description:
+                "Taskoria connects Australians with verified local professionals for home, business, and digital services.",
+              address: {
+                "@type": "PostalAddress",
+                addressCountry: "AU",
+              },
+              contactPoint: {
+                "@type": "ContactPoint",
+                contactType: "customer support",
+                availableLanguage: "English",
+              },
+              sameAs: [
+                "https://www.facebook.com/taskoria",
+                "https://twitter.com/taskoria",
+              ],
+            }),
+          }}
+        />
+
+        {/* ── WebSite schema — enables Google Sitelinks search box ────────── */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "Taskoria",
+              url: BASE_URL,
+              inLanguage: "en-AU",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate: `${BASE_URL}/services?q={search_term_string}`,
+                },
+                "query-input": "required name=search_term_string",
+              },
+            }),
+          }}
+        />
       </head>
+
       <AuthProvider>
         <body className="antialiased dark:bg-black">
           <NotificationHandler />
@@ -208,7 +221,6 @@ export default async function RootLayout({
               <ModernNavbar />
               <main>{children}</main>
               <SpeedInsights />
-
               <Toaster position="top-right" richColors expand closeButton />
               <Footer />
               <SupportChatbot />

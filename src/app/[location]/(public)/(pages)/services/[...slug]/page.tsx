@@ -1,10 +1,22 @@
 
-import ServicePageClient from "@/components/servicePage/ServicePage";
-import StructuredData from "@/components/servicePage/StructureData";
+import dynamic from "next/dynamic";
 import { Metadata } from "next";
+import StructuredData from "@/components/servicePage/StructureData";
+
+const ServicePageClient = dynamic(
+  () => import("@/components/servicePage/ServicePage"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-gray-400">Loading...</div>
+      </div>
+    ),
+  }
+);
 
 type Props = {
-  params: Promise<{ slug?: string[] }>;
+  params: Promise<{ slug?: string[]; location?: string }>;
 };
 
 interface ServiceData {
@@ -212,8 +224,7 @@ export default async function ServicePage({ params }: Props) {
 
   return (
     <>
- 
- 
+     
       <StructuredData
         service={service}
         city={selectedLocation}
@@ -229,26 +240,17 @@ export default async function ServicePage({ params }: Props) {
         itemType="https://schema.org/BreadcrumbList"
       >
         {[
-          { name: "Home",         href: "/" },
-          { name: "Services",     href: "/services" },
-          { name: service.name,   href: `/services/${service.slug}` },
+          { name: "Home",       href: "/" },
+          { name: "Services",   href: "/services" },
+          { name: service.name, href: `/services/${service.slug}` },
           ...(stateSlug
-            ? [{
-                name: toTitleCase(stateSlug),
-                href: `/services/${service.slug}/${stateSlug}`,
-              }]
+            ? [{ name: toTitleCase(stateSlug), href: `/services/${service.slug}/${stateSlug}` }]
             : []),
           ...(citySlug
-            ? [{
-                name: toTitleCase(citySlug),
-                href: `/services/${service.slug}/${stateSlug}/${citySlug}`,
-              }]
+            ? [{ name: toTitleCase(citySlug), href: `/services/${service.slug}/${stateSlug}/${citySlug}` }]
             : []),
           ...(subCitySlug
-            ? [{
-                name: toTitleCase(subCitySlug),
-                href: `/services/${service.slug}/${stateSlug}/${citySlug}/${subCitySlug}`,
-              }]
+            ? [{ name: toTitleCase(subCitySlug), href: `/services/${service.slug}/${stateSlug}/${citySlug}/${subCitySlug}` }]
             : []),
         ].map((crumb, i) => (
           <span
@@ -265,6 +267,7 @@ export default async function ServicePage({ params }: Props) {
         ))}
       </nav>
 
+   
       <ServicePageClient
         service={service}
         cities={cities}
