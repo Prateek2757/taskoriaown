@@ -1,18 +1,8 @@
 
-import dynamic from "next/dynamic";
-import { Metadata } from "next";
-import StructuredData from "@/components/servicePage/StructureData";
 
-const ServicePageClient = dynamic(
-  () => import("@/components/servicePage/ServicePage"),
-  {
-    loading: () => (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse text-gray-400">Loading...</div>
-      </div>
-    ),
-  }
-);
+import ServicePageWrapper from "@/components/servicePage/ServicePageWrapper";
+import StructuredData from "@/components/servicePage/StructureData";
+import { Metadata } from "next";
 
 type Props = {
   params: Promise<{ slug?: string[]; location?: string }>;
@@ -45,6 +35,7 @@ function buildCanonical(
   return base;
 }
 
+// ── Metadata ──────────────────────────────────────────────────────────────────
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
@@ -73,10 +64,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const service: ServiceData = await res.json();
-    const cityName     = citySlug  ? toTitleCase(citySlug)  : null;
-    const stateName    = stateSlug ? toTitleCase(stateSlug) : null;
+    const cityName  = citySlug  ? toTitleCase(citySlug)  : null;
+    const stateName = stateSlug ? toTitleCase(stateSlug) : null;
     const canonicalUrl = buildCanonical(serviceSlug, stateSlug, citySlug);
-    const imageUrl     =
+    const imageUrl =
       service.hero_image ||
       `https://www.taskoria.com/og-images/${serviceSlug}.jpg`;
 
@@ -176,7 +167,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ServicePage({ params }: Props) {
   const { slug = [] } = await params;
-  const [serviceSlug, stateSlug = null, citySlug = null, subCitySlug = null] = slug;
+  const [serviceSlug, stateSlug = null, citySlug = null, subCitySlug = null] =
+    slug;
 
   let service: ServiceData | null = null;
   let fetchError = false;
@@ -196,7 +188,9 @@ export default async function ServicePage({ params }: Props) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800">Service Not Found</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Service Not Found
+          </h1>
           <p className="mt-2 text-gray-500">
             We couldn&apos;t find the service you&apos;re looking for.
           </p>
@@ -216,14 +210,15 @@ export default async function ServicePage({ params }: Props) {
     : null;
 
   const selectedSubCity = subCitySlug
-    ? selectedLocation?.subcities?.find((s: any) => s.slug === subCitySlug) ?? null
+    ? selectedLocation?.subcities?.find(
+        (s: any) => s.slug === subCitySlug
+      ) ?? null
     : null;
 
   const activeLocation = selectedSubCity ?? selectedLocation;
 
   return (
     <>
-     
       <StructuredData
         service={service}
         city={selectedLocation}
@@ -266,8 +261,8 @@ export default async function ServicePage({ params }: Props) {
         ))}
       </nav>
 
-   
-      <ServicePageClient
+  
+      <ServicePageWrapper
         service={service}
         cities={cities}
         initialLocation={activeLocation}
