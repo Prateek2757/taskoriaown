@@ -1,33 +1,23 @@
+"use client";
+
 import { useSession } from "next-auth/react";
 
 const TaskoriaSasthoRedirect = () => {
   const { data: session } = useSession();
+const phone_number = session?.user.phone
+  const handleRedirect = async () => {
+    if (!session?.user) {
+      alert("Login first");
+      return;
+    }
 
-  const handleRedirect = () => {
-    if (!session?.user) return;
+    const res = await fetch("/api/SasthoTicket/redirect");
+    const data = await res.json();
 
-    const userData = {
-      name: session.user.name,
-      email: session.user.email,
-    };
-
-    const jsonString = JSON.stringify(userData);
-console.log(jsonString,"jaso");
-
-    const base64Data = btoa(jsonString);
-
-
-    window.location.href = `http://hotel.taskoria.com/?data=${base64Data}`;
+    window.open(data.url, "_blank");
   };
 
-  return (
-    <>
-
-      <button className="text-black" onClick={handleRedirect}>
-        Sastho ticket
-      </button>
-    </>
-  );
+  return <button onClick={handleRedirect}>Sasto Ticket</button>;
 };
 
 export default TaskoriaSasthoRedirect;

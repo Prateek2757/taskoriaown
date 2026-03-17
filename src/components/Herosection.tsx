@@ -13,6 +13,7 @@ import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import { SparklesCoreLight } from "./ui/sparklesLight";
 import ScrollPopularSection from "./ScrollPopularSection";
 import Image from "next/image";
+import TaskoriaSasthoRedirect from "./sastoticket/taskoriasasthoredirect";
 
 interface Category {
   category_id: number;
@@ -109,26 +110,27 @@ export default function HeroSection() {
   dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_30%,rgba(0,0,0,1)_100%)] "
         aria-label="Hero section with service marketplace search"
       >
-        <div className="absolute top-11  left-168 w-full h-full">
+        {/* <div className="absolute top- left-20  w-full h-full">
           <div
-            className="absolute  inset-0 w-165 h-full bg-[url('/images/herobg.png')] bg-cover bg-center opacity-90  dark:opacity-80"
+            className="absolute  inset-0 w-70 h-full bg-[url('/images/herobg.png')] bg-cover bg-center opacity-100  dark:opacity-80"
             style={{
-              backgroundImage: "url('/images/taskoriaherobgwithlogo.png')",
-              backgroundSize: "cover",
+              backgroundImage: "url('/images/herobg.png')",
+              backgroundSize: "contain",
               backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
             }}
             aria-hidden="true"
           />
-        </div>
+        </div> */}
 
         <div
-          className="dark:hidden bg-radial-[at_0%_100%] from-blue-100 via-white/0 to-white/0 to-90% h-full w-full absolute left-0 top-0 right-0 bottom-0"
+          className="dark:hidden z-[-9] bg-radial-[at_0%_100%] from-blue-100 via-white/0 to-white/0 to-90% h-full w-full absolute left-0 top-0 right-0 bottom-0"
           aria-hidden="true"
         ></div>
-        <div
+        {/* <div
           className="dark:hidden bg-radial-[at_0%_0%] from-blue-100 via-white/0 to-white/0 to-90% h-full w-full absolute left-0 top-0 right-0 bottom-0"
           aria-hidden="true"
-        ></div>
+        ></div> */}
         <div
           className="container md:pt-10 pt-6   max-md:bg-linear-to-r from-[#3C7DED]/25 via-[#41A6EE]/20 to-[#46CBEE]/25 
       mx-auto    md:px-4  relative z-10"
@@ -148,6 +150,7 @@ export default function HeroSection() {
               Australia-first marketplace • Post for free • Local providers
             </span>
           </div>
+          {/* <TaskoriaSasthoRedirect/> */}
           <div className="max-w-auto mx-auto  px-4 space-y-6">
             <h1
               className="text-4xl md:text-6xl leading-tight mb-0 md:mb-8 mt-2 md:mt-0"
@@ -173,7 +176,8 @@ export default function HeroSection() {
                     fontWeight: 800,
                   }}
                 >
-                  Get quotes </span>
+                  Get quotes{" "}
+                </span>
                 <span
                   className="absolute right-0 bottom-0 translate-y-3 w-full h-5 overflow-hidden"
                   aria-hidden="true"
@@ -208,7 +212,17 @@ export default function HeroSection() {
               profiles, reviews, and support when issues come up.
             </p> */}
 
-            <div className="max-w-2xl mx-auto mt-6 sm:px-4">
+            <div className="max-w-2xl relative mx-auto mt-6 sm:px-4">
+                <div
+                  className="absolute left-[-900px] top-[-15px]   h-[200px] inset-0   dark:opacity-80"
+                  style={{
+                    backgroundImage: "url('/images/herobgnew.png')",
+                    backgroundSize: "contain",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                  }}
+                  aria-hidden="true"
+                />
               <div className="relative w-full max-w-3xl group flex sm:items-center max-sm:gap-2">
                 <div className="relative flex-1 sm:mr-4 w-full">
                   <div

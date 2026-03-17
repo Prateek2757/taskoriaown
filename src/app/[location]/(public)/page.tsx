@@ -274,7 +274,6 @@ export default function HomePage() {
         <section aria-label="Hero — find and hire local professionals">
           <HeroSection />
 
-          {/* ── Trust bar — adds E-E-A-T signal (Experience, Expertise, Authority, Trust) */}
           <section
             aria-label="Trust and safety highlights"
             className="bg-slate-50 dark:bg-slate-950 border-y border-slate-200 dark:border-slate-800"

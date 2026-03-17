@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 
 function CTA() {
   return (
-    <section className="relative py-6 px-2 sm:px-4 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 dark:bg-[radial-gradient(circle_at_center_bottom,_rgba(76,112,255,0.18)_0%,_rgba(0,0,0,1)_70%)] overflow-hidden">
+    <section className="relative py-6 px-2 sm:px-4 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 dark:bg-[radial-gradient(circle_at_top,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-5 w-36 h-36 bg-blue-400/10 rounded-full blur-2xl animate-pulse"></div>
         <div

@@ -44,7 +44,7 @@ const onboardingSchema = z.object({
   companyName: z.string().optional(),
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  phone: z.string().refine(
+  phone: z.string().min(10,"Phonenumber must be required").refine(
     (val) => {
       if (!val || val === "") return true;
       const cleaned = val.replace(/\s/g, "");
@@ -80,7 +80,7 @@ const Req = () => <span className="text-red-500 ml-0.5">*</span>;
 
 function OnboardingContent() {
   const router = useRouter();
-  const params = useSearchParams();
+  const params = useSearchParams()
   const userId = params.get("user_id");
   const categoryId = params.get("cn");
   const refFromUrl = params.get("ref"); 
@@ -498,6 +498,7 @@ function OnboardingContent() {
                         <FormItem>
                           <FormLabel className="dark:text-gray-200">
                             Phone Number
+                            <Req/>
                           </FormLabel>
                           <FormControl>
                             <div className={inputWrapperClasses}>

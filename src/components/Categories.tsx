@@ -52,7 +52,7 @@ export default function Services() {
 
   return (
     <section
-      className=" lg:min-h-screen 
+      className="  
  py-6 lg:pt-6  lg:pb-0 px-4 sm:px-6 lg:px-8 dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] "
     >
       <div className="max-w-7xl relative mx-auto">
@@ -247,13 +247,13 @@ export default function Services() {
 
         {!loading && categories.length > 0 && (
           <motion.div
-            className="mt-12 flex justify-center"
+            className="mt-6 pb-5 flex justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
           >
             <Link href="/services">
-              <Button className="group bg-white   dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300 font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30">
+              <Button className="group bg-white    dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300 font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30">
                 <span className="flex items-center gap-2">
                   View All Services
                   <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 duration-300 group-hover:rotate-45" />

@@ -84,7 +84,7 @@ export default function FeaturesStacking() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <main className="bg-white dark:bg-black transition-colors duration-300 sm:mt-20">
+      <main className="bg-white   dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] transition-colors duration-300 sm:pt-20">
         <style>{`
           @keyframes borderRotate {
             0% {
@@ -318,7 +318,6 @@ interface CardProps {
 }
 
 export const Card = ({
-  i,
   title,
   description,
   url,

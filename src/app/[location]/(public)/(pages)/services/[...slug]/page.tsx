@@ -35,7 +35,6 @@ function buildCanonical(
   return base;
 }
 
-// ── Metadata ──────────────────────────────────────────────────────────────────
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
