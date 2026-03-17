@@ -14,6 +14,7 @@ import {
   ChevronDown,
   Star,
 } from "lucide-react";
+import TaskoriaSasthoRedirect from "./sastoticket/taskoriasasthoredirect";
 
 const letters = "TASKORIA".split("");
 const letterPositions = [35, 75, 125, 175, 225, 275, 325, 355];
@@ -237,6 +238,7 @@ const Footer = () => {
                   >
                     Trust & Safety
                   </Link>
+                  <TaskoriaSasthoRedirect/>
                 </div>
               </div>
 
