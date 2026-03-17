@@ -6,7 +6,6 @@ import StructuredData from "@/components/servicePage/StructureData";
 const ServicePageClient = dynamic(
   () => import("@/components/servicePage/ServicePage"),
   {
-    ssr: false,
     loading: () => (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-pulse text-gray-400">Loading...</div>
