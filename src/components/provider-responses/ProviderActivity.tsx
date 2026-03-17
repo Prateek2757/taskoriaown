@@ -190,7 +190,7 @@ export default function EstimateActivity({ response }: EstimateActivityProps) {
       <div className="relative pl-6 space-y-6">
         <div className="absolute left-4 top-2 bottom-4 w-px bg-gray-200 dark:bg-gray-700" />
 
-        {/* {isLoading ? (
+        {isLoading ? (
           <ActivitySkeleton />
         ) : error ? (
           <div className="flex items-center gap-2 text-xs text-red-500 bg-red-50 dark:bg-red-900/20 px-3 py-2.5 rounded-xl border border-red-100 dark:border-red-800/40">
@@ -201,7 +201,7 @@ export default function EstimateActivity({ response }: EstimateActivityProps) {
           activities.map((activity) => (
             <ActivityCard key={activity.activity_id} activity={activity} />
           ))
-        )} */}
+        )}
 
         <ResponseCard response={response} />
         <TaskPostedCard response={response} />

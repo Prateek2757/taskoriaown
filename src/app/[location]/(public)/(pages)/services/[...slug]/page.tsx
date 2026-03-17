@@ -1,9 +1,12 @@
+
 import ServicePageClient from "@/components/servicePage/ServicePage";
+import StructuredData from "@/components/servicePage/StructureData";
 import { Metadata } from "next";
 
 type Props = {
   params: Promise<{ slug?: string[] }>;
 };
+
 interface ServiceData {
   category_id: number;
   name: string;
@@ -15,11 +18,34 @@ interface ServiceData {
   faqs?: { question: string; answer: string }[];
 }
 
+
+function toTitleCase(slug: string) {
+  return slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+}
+
+function buildCanonical(
+  serviceSlug: string,
+  stateSlug: string | null,
+  citySlug: string | null
+) {
+  const base = `https://www.taskoria.com/services/${serviceSlug}`;
+  if (stateSlug && citySlug) return `${base}/${stateSlug}/${citySlug}`;
+  if (stateSlug) return `${base}/${stateSlug}`;
+  return base;
+}
+
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
-  const serviceSlug = slug[0];
-  const stateSlug = slug[1] || null;
-  const citySlug = slug[2]|| null;
+  const [serviceSlug, stateSlug = null, citySlug = null] = slug;
+
+  if (!serviceSlug) {
+    return {
+      title: "Professional Services Near You | Taskoria",
+      description:
+        "Find and book trusted local professionals with Taskoria. Get free quotes, compare prices, and read verified reviews.",
+    };
+  }
 
   try {
     const res = await fetch(
@@ -36,46 +62,50 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const service: ServiceData = await res.json();
-    const cityName = citySlug
-      ?.replace(/-/g, " ")
-      .replace(/\b\w/g, (l) => l.toUpperCase());
+    const cityName     = citySlug  ? toTitleCase(citySlug)  : null;
+    const stateName    = stateSlug ? toTitleCase(stateSlug) : null;
+    const canonicalUrl = buildCanonical(serviceSlug, stateSlug, citySlug);
+    const imageUrl     =
+      service.hero_image ||
+      `https://www.taskoria.com/og-images/${serviceSlug}.jpg`;
 
     const title = cityName
-      ? `${service.name} in ${cityName} Near You |Trusted ${service.name} | Get Free Quotes | Taskoria`
-      : `${service.name} Services Near You | Trusted ${service.name}  – Taskoria`;
+      ? `${service.name} in ${cityName}${stateName ? `, ${stateName}` : ""} | Get Free Quotes – Taskoria`
+      : `${service.name} Services in Australia | Trusted Professionals – Taskoria`;
 
     const description = cityName
-      ? `Hire trusted ${service.name.toLowerCase()} professionals near you in ${cityName}.Compare verified ${service.name.toLowerCase()}  check reviews, and get fast quotes with Taskoria`
-      : `${service.description || `Professional ${service.name.toLowerCase()} services`}. Get instant quotes from verified professionals. Compare prices, read reviews, and book with confidence.`;
+      ? `Looking for reliable ${service.name.toLowerCase()} in ${cityName}? Compare verified professionals, read real reviews and get free quotes fast on Taskoria.`
+      : service.description
+      ? `${service.description.slice(0, 130).trimEnd()}. Get free quotes from verified professionals across Australia – only on Taskoria.`
+      : `Hire trusted ${service.name.toLowerCase()} professionals across Australia. Compare verified providers, read reviews and get instant free quotes on Taskoria.`;
+
     const keywords = cityName
       ? [
           `${service.name.toLowerCase()} ${cityName}`,
-          `${cityName} ${service.name.toLowerCase()}`,
           `${service.name.toLowerCase()} in ${cityName}`,
+          `${cityName} ${service.name.toLowerCase()} services`,
           `hire ${service.name.toLowerCase()} ${cityName}`,
           `best ${service.name.toLowerCase()} ${cityName}`,
+          `cheap ${service.name.toLowerCase()} ${cityName}`,
           `${service.name.toLowerCase()} near me`,
           `${service.name.toLowerCase()} quotes ${cityName}`,
+          ...(stateName ? [`${service.name.toLowerCase()} ${stateName}`] : []),
         ].join(", ")
       : [
-          service.name.toLowerCase(),
-          `${service.name.toLowerCase()} service`,
-          `hire ${service.name.toLowerCase()}`,
+          `${service.name.toLowerCase()} australia`,
+          `${service.name.toLowerCase()} services australia`,
+          `hire ${service.name.toLowerCase()} australia`,
+          `best ${service.name.toLowerCase()} australia`,
+          `${service.name.toLowerCase()} near me`,
           `${service.name.toLowerCase()} quotes`,
+          `professional ${service.name.toLowerCase()}`,
         ].join(", ");
-
-    const canonicalUrl = `https://www.taskoria.com/services/${serviceSlug}${
-      citySlug ? `/${citySlug}` : ""
-    }`;
-
-    const imageUrl =
-      service.hero_image || `https://www.taskoria.com/og-images/${serviceSlug}.jpg`;
 
     return {
       title,
       description,
       keywords,
-      authors: [{ name: "Taskoria" }],
+      authors: [{ name: "Taskoria", url: "https://www.taskoria.com" }],
       creator: "Taskoria",
       publisher: "Taskoria",
       robots: {
@@ -101,7 +131,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             url: imageUrl,
             width: 1200,
             height: 630,
-            alt: `${service.name} service${cityName ? ` in ${cityName}` : ""}`,
+            alt: cityName
+              ? `${service.name} in ${cityName}`
+              : `${service.name} Services in Australia`,
           },
         ],
       },
@@ -111,66 +143,56 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         description,
         images: [imageUrl],
         creator: "@taskoria",
+        site: "@taskoria",
       },
       alternates: {
         canonical: canonicalUrl,
         languages: {
           "en-AU": canonicalUrl,
-          "x-default": canonicalUrl,
+          "x-default": `https://www.taskoria.com/services/${serviceSlug}`,
         },
-      },
-      viewport: {
-        width: "device-width",
-        initialScale: 1,
-        maximumScale: 5,
       },
     };
   } catch (error) {
     console.error("Error generating metadata:", error);
     return {
       title: "Taskoria | Professional Services",
-      description: "Find and book professional services with Taskoria",
+      description: "Find and book professional services with Taskoria.",
     };
   }
 }
 
+
 export default async function ServicePage({ params }: Props) {
   const { slug = [] } = await params;
-
-  const serviceSlug = slug[0];
-  const stateSlug = slug[1] || null;
-  const citySlug = slug[2] || null;
-  const subCitySlug = slug[3]||null;
+  const [serviceSlug, stateSlug = null, citySlug = null, subCitySlug = null] = slug;
 
   let service: ServiceData | null = null;
-  let error = false;
+  let fetchError = false;
 
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_APP_URL}/api/categories/${serviceSlug}`,
       { next: { revalidate: 3600 } }
     );
-
-    if (res.ok) {
-      service = await res.json();
-    } else {
-      error = true;
-    }
-  } catch (err) {
-    console.error("Failed to fetch service:", err);
-    error = true;
+    service = res.ok ? await res.json() : null;
+    if (!service) fetchError = true;
+  } catch {
+    fetchError = true;
   }
 
-  if (error || !service) {
+  if (fetchError || !service) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1>Service Not Found</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Service Not Found</h1>
+          <p className="mt-2 text-gray-500">
+            We couldn&apos;t find the service you&apos;re looking for.
+          </p>
         </div>
       </div>
     );
   }
-  // console.log(service.description);
 
   const citiesRes = await fetch(
     `${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`,
@@ -178,77 +200,121 @@ export default async function ServicePage({ params }: Props) {
   );
   const cities = citiesRes.ok ? await citiesRes.json() : [];
 
-
   const selectedLocation = citySlug
-    ? cities.find(
-        (city: any) =>
-          city.slug ===
-          citySlug
-      )
+    ? cities.find((city: any) => city.slug === citySlug) ?? null
     : null;
-  // console.log(selectedLocation,"loc");
-  
-    const selectedSubCity = subCitySlug
-  ? selectedLocation?.subcities.find(
-      (s: any) => s.slug === subCitySlug
-    )
-  : null;
-// console.log(selectedSubCity,"sub");
+
+  const selectedSubCity = subCitySlug
+    ? selectedLocation?.subcities?.find((s: any) => s.slug === subCitySlug) ?? null
+    : null;
+
+  const activeLocation = selectedSubCity ?? selectedLocation;
 
   return (
     <>
-      {/* Structured Data - Rendered on SERVER */}
-      {/* <StructuredData
+ 
+ 
+      <StructuredData
         service={service}
         city={selectedLocation}
         citySlug={citySlug}
+        stateSlug={stateSlug}
         providers={selectedLocation?.providers || []}
-      /> */}
+      />
 
-      {/* Client Component - Interactive parts only */}
+      <nav
+        aria-label="Breadcrumb"
+        className="sr-only"
+        itemScope
+        itemType="https://schema.org/BreadcrumbList"
+      >
+        {[
+          { name: "Home",         href: "/" },
+          { name: "Services",     href: "/services" },
+          { name: service.name,   href: `/services/${service.slug}` },
+          ...(stateSlug
+            ? [{
+                name: toTitleCase(stateSlug),
+                href: `/services/${service.slug}/${stateSlug}`,
+              }]
+            : []),
+          ...(citySlug
+            ? [{
+                name: toTitleCase(citySlug),
+                href: `/services/${service.slug}/${stateSlug}/${citySlug}`,
+              }]
+            : []),
+          ...(subCitySlug
+            ? [{
+                name: toTitleCase(subCitySlug),
+                href: `/services/${service.slug}/${stateSlug}/${citySlug}/${subCitySlug}`,
+              }]
+            : []),
+        ].map((crumb, i) => (
+          <span
+            key={crumb.href}
+            itemProp="itemListElement"
+            itemScope
+            itemType="https://schema.org/ListItem"
+          >
+            <a itemProp="item" href={crumb.href}>
+              <span itemProp="name">{crumb.name}</span>
+            </a>
+            <meta itemProp="position" content={String(i + 1)} />
+          </span>
+        ))}
+      </nav>
+
       <ServicePageClient
         service={service}
         cities={cities}
-        initialLocation={selectedSubCity ?? selectedLocation}
+        initialLocation={activeLocation}
         citySlug={citySlug}
         stateSlug={stateSlug}
         subCitySlug={subCitySlug}
-
       />
     </>
   );
 }
 
-// export async function generateStaticParams() {
-//   try {
-//     const servicesRes = await fetch(
-//       `${process.env.NEXT_PUBLIC_API_URL}/api/categories`
-//     );
-//     const services = servicesRes.ok ? await servicesRes.json() : [];
 
-//     const citiesRes = await fetch(
-//       `${process.env.NEXT_PUBLIC_API_URL}/api/cities`
-//     );
-//     const cities = citiesRes.ok ? await citiesRes.json() : [];
+export async function generateStaticParams() {
+  try {
+    const [servicesRes, citiesRes] = await Promise.all([
+      fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/categories`),
+      fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`),
+    ]);
 
-//     const params = [];
+    const services: { slug: string }[] = servicesRes.ok
+      ? await servicesRes.json()
+      : [];
+    const cities: {
+      slug: string;
+      state_slug?: string;
+      subcities?: { slug: string }[];
+    }[] = citiesRes.ok ? await citiesRes.json() : [];
 
-//     for (const service of services) {
-//       params.push({ slug: [service.slug] });
-//     }
+    const params: { slug: string[] }[] = [];
 
-//     for (const service of services) {
-//       for (const city of cities) {
-//         const citySlug = city.name?.toLowerCase().replace(/\s+/g, '-');
-//         if (citySlug) {
-//           params.push({ slug: [service.slug, citySlug] });
-//         }
-//       }
-//     }
+    for (const service of services) {
+      params.push({ slug: [service.slug] });
 
-//     return params;
-//   } catch (error) {
-//     console.error('Error generating static params:', error);
-//     return [];
-//   }
-// }
+      for (const city of cities) {
+        if (!city.state_slug) continue;
+
+        params.push({ slug: [service.slug, city.state_slug, city.slug] });
+
+        for (const sub of city.subcities ?? []) {
+          params.push({
+            slug: [service.slug, city.state_slug, city.slug, sub.slug],
+          });
+        }
+      }
+    }
+
+    return params;
+  } catch (err) {
+    console.error("generateStaticParams error:", err);
+    return [];
+  }
+}
