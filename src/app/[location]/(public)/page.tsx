@@ -58,10 +58,6 @@ export const metadata: Metadata = {
     },
   },
 
-  // ✅ Replace placeholder with your real code from Google Search Console
-  // verification: {
-  //   google: "your-real-google-verification-code",
-  // },
 
   openGraph: {
     type:     "website",
