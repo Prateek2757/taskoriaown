@@ -92,7 +92,9 @@ export async function GET() {
       LEFT JOIN user_profile_photos upp ON up.user_id = upp.user_id
       LEFT JOIN user_faqs uf ON up.user_id = uf.user_id AND uf.is_visible = true
       LEFT JOIN user_accreditations ua ON up.user_id = ua.user_id
-    
+
+      WHERE u.status = 'active'
+      
       GROUP BY 
         up.user_id,
         up.display_name,

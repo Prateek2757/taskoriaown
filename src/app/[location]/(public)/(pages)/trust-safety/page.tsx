@@ -1,17 +1,18 @@
+"use client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Shield, CheckCircle, FileText, Lock, Users, AlertCircle, Phone, Award } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 
 
-export const metadata: Metadata = {
-  title: "Trust & Safety | How Taskoria Protects Customers and Providers",
-  description:"Taskoria is on a mission to make hiring local professionals simple, transparent, and reliable through technology and community trust.",
-  openGraph: {
-    title: `Trust & Safety | How Taskoria Protects Customers and Providers`,
-    description: "Taskoria is on a mission to make hiring local professionals simple, transparent, and reliable through technology and community trust.",
-  },
- }
+// export const metadata: Metadata = {
+//   title: "Trust & Safety | How Taskoria Protects Customers and Providers",
+//   description:"Taskoria is on a mission to make hiring local professionals simple, transparent, and reliable through technology and community trust.",
+//   openGraph: {
+//     title: `Trust & Safety | How Taskoria Protects Customers and Providers`,
+//     description: "Taskoria is on a mission to make hiring local professionals simple, transparent, and reliable through technology and community trust.",
+//   },
+//  }
 
 const TrustSafety = () => {
   const verificationSteps = [
@@ -185,48 +186,87 @@ const TrustSafety = () => {
         </div>
       </section>
 
-      <section className="py-16 bg-muted/50">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Provider Badge System</h2>
-            <p className="text-muted-foreground mb-8">
-              Look for these badges when choosing a provider
+      <section className="py-2 ">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-3">Provider Badge System</h2>
+            <p className="text-muted-foreground mb-10">
+              Look for these badges when choosing a provider — each represents a different level of
+              verified trust.
             </p>
-            
-            <div className="grid sm:grid-cols-3 gap-6">
-              <Card>
+
+            <div className="grid sm:grid-cols-3 gap-6 mb-10">
+
+              <Card className="border-2 border-amber-200 dark:border-amber-800 hover:shadow-md transition-shadow duration-200">
                 <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/20 ring-2 ring-amber-400 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Award className="w-8 h-8 text-amber-600" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">Taskoria Plus Verified</h3>
-                  {/* <p className="text-sm text-muted-foreground">ID + ABN verified</p> */}
+                  <h3 className="font-semibold text-foreground mb-1">Taskoria Plus Verified</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+                    Identity (photo ID) and ABN validated — the trusted entry point for general service providers.
+                  </p>
+                  <span className="inline-block text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 px-2 py-0.5 rounded-full">
+                    Tier 1
+                  </span>
                 </CardContent>
               </Card>
-              
-              <Card>
+
+              <Card className="border-2 border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow duration-200">
                 <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 ring-2 ring-slate-400 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Award className="w-8 h-8 text-gray-400" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">Taskoria Pro Verified</h3>
-                  {/* <p className="text-sm text-muted-foreground">Bronze + Licence verified</p> */}
+                  <h3 className="font-semibold text-foreground mb-1">Taskoria Pro Verified</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+                    Everything in Plus, plus a confirmed trade licence verified with the relevant state authority.
+                  </p>
+                  <span className="inline-block text-xs font-medium bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 px-2 py-0.5 rounded-full">
+                    Tier 2
+                  </span>
                 </CardContent>
               </Card>
-              
-              <Card>
+
+              <Card className="border-2 border-yellow-200 dark:border-yellow-800 hover:shadow-md transition-shadow duration-200">
                 <CardContent className="p-6 text-center">
-                  <div className="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/20 ring-2 ring-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Award className="w-8 h-8 text-yellow-600" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">Taskoria Pro Max Verified</h3>
-                  {/* <p className="text-sm text-muted-foreground">Silver + Insurance verified</p> */}
+                  <h3 className="font-semibold text-foreground mb-1">Taskoria Pro Max Verified</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+                    The gold standard — Pro checks plus validated Public Liability Insurance (min $10M coverage).
+                  </p>
+                  <span className="inline-block text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 px-2 py-0.5 rounded-full">
+                    Tier 3
+                  </span>
                 </CardContent>
               </Card>
+
             </div>
+{/* 
+            <Link
+              href="/verification-badges"
+              className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
+            >
+              View all badge details & requirements
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </Link> */}
           </div>
         </div>
       </section>
+          </div>
+        </div>
 
    
     </div>

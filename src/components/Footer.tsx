@@ -81,8 +81,6 @@ const Footer = () => {
 
   return (
     <>
-     
-
       <div
         className="relative h-full overflow-hidden sm:pt-14 pt-8 
         dark:bg-[radial-gradient(circle_at_bottom,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
@@ -94,7 +92,7 @@ const Footer = () => {
             <div className="lg:w-1/3">
               <Link
                 href="/"
-                className="flex items-center mb-4 hover:opacity-90"
+                className="flex items-center mb-2 hover:opacity-90"
               >
                 <Image
                   src="/taskorialogonew.png"
@@ -103,17 +101,16 @@ const Footer = () => {
                   height={35}
                   className="rounded-md"
                 />
-                <span className="ml-2 text-3xl font-bold bg-[#2563EB] bg-clip-text text-transparent">
+                <span className="ml- text-3xl font-bold bg-[#2563EB] bg-clip-text text-transparent">
                   Taskoria
                 </span>
               </Link>
 
-              <p className="text-gray-600 dark:text-white text-sm max-w-xs mb-6">
-                Redefining How the World Hires Trusted Professionals.
-              </p>
+              <p className="text-gray-600 dark:text-white text-sm max-w-xs mb-2">
+              Taskoria connects customers with trusted local professionals across Australia for home, trade, business, and creative services.              </p>
 
               <div className="pt-2 w-full sm:w-96">
-                <p className="md:text-xl text-lg mb-3 font-semibold">
+                <p className="md:text-xl text-lg  font-semibold">
                   Become a Professional
                 </p>
                 <a
@@ -238,7 +235,7 @@ const Footer = () => {
                   >
                     Trust & Safety
                   </Link>
-                  <TaskoriaSasthoRedirect/>
+                  <TaskoriaSasthoRedirect />
                 </div>
               </div>
 
@@ -275,12 +272,17 @@ const Footer = () => {
                   >
                     Join as Provider
                   </Link>
-                  <Link
-                    href="/"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  <button
+                    onClick={() => {
+                      const el = document.getElementById("customer-reviews");
+                      if (el) {
+                        el.scrollIntoView({ behavior: "smooth" });
+                      }
+                    }}
+                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] transition-colors mb-2"
                   >
                     Success Stories
-                  </Link>
+                  </button>
                   <Link
                     href="/"
                     className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
@@ -454,8 +456,8 @@ const Footer = () => {
               </Link>
               <br />
               <span className="text-xs text-gray-400">
-                ABN: 658 760 831 | ACN Registered  | Level 34, 1 Eagle Street, Brisbane QLD 4000
-                Proudly Australian Owned & Operated
+                ABN: 658 760 831 | ACN Registered | Level 34, 1 Eagle Street,
+                Brisbane QLD 4000 Proudly Australian Owned & Operated
               </span>
             </span>
 
@@ -493,44 +495,44 @@ const Footer = () => {
           </div>
         </div>
         <script
-  type="application/ld+json"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "@id": "https://www.taskoria.com",
-      name: "Taskoria Pty Ltd",
-      url: "https://www.taskoria.com",
-      logo: "https://www.taskoria.com/taskorialogonew.png",
-      image: "https://www.taskoria.com/taskorialogonew.png",
-      description:
-        "Taskoria is a trusted platform connecting customers with verified local professionals across Australia.",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Level 34, 1 Eagle Street, Brisbane QLD",
-        postalCode: "4000",
-        addressCountry: "AU"
-      },
-      areaServed: {
-        "@type": "Country",
-        name: "Australia"
-      },
-      sameAs: [
-        "https://www.instagram.com/taskoria.au/",
-        "https://www.linkedin.com/company/taskoriaa/about/",
-        "http://facebook.com/profile.php?id=61582506497352",
-        "https://www.trustpilot.com/review/taskoria.com"
-      ],
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.8",
-        reviewCount: "100",
-        bestRating: "5",
-        worstRating: "1"
-      }
-    })
-  }}
-/>
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "@id": "https://www.taskoria.com",
+              name: "Taskoria Pty Ltd",
+              url: "https://www.taskoria.com",
+              logo: "https://www.taskoria.com/taskorialogonew.png",
+              image: "https://www.taskoria.com/taskorialogonew.png",
+              description:
+                "Taskoria is a trusted platform connecting customers with verified local professionals across Australia.",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Level 34, 1 Eagle Street, Brisbane QLD",
+                postalCode: "4000",
+                addressCountry: "AU",
+              },
+              areaServed: {
+                "@type": "Country",
+                name: "Australia",
+              },
+              sameAs: [
+                "https://www.instagram.com/taskoria.au/",
+                "https://www.linkedin.com/company/taskoriaa/about/",
+                "http://facebook.com/profile.php?id=61582506497352",
+                "https://www.trustpilot.com/review/taskoria.com",
+              ],
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: "4.8",
+                reviewCount: "100",
+                bestRating: "5",
+                worstRating: "1",
+              },
+            }),
+          }}
+        />
       </div>
     </>
   );

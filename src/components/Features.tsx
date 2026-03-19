@@ -84,7 +84,7 @@ export default function FeaturesStacking() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <main className="bg-white   dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] transition-colors duration-300 sm:pt-20">
+      <main className="bg-white   dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] transition-colors duration-300 sm:pt-10">
         <style>{`
           @keyframes borderRotate {
             0% {
@@ -137,23 +137,20 @@ export default function FeaturesStacking() {
           }
         `}</style>
 
-        <div className=" pb-5  px-4">
+        <div className=" pb-3  px-4">
           <header className="sm:text-center mx-auto">
             <h1
-              className="text-4xl md:text-xl lg:text-5xl font-extrabold tracking-tight mb-6
-                  bg-gradient-to-br from-gray-900 via-gray-700 to-gray-500
-                  dark:from-white dark:via-gray-200 dark:to-gray-500
-                  bg-clip-text text-transparent"
+              className="text-4xl md:text-xl lg:text-5xl text-gray-800 font-extrabold tracking-tight mb-2
+                
+                  "
             >
-              Built for real-world{" "}
+              Why hire through{" "}
               <span className="bg-[#2563EB] bg-clip-text text-transparent">
-                service hiring
+                Taskoria
               </span>{" "}
-              in Australia
             </h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-              Practical tools to post jobs faster, compare providers clearly,
-              and hire with less risk.
+            Designed to make service hiring simpler, clearer, and safer.
             </p>
           </header>
         </div>

@@ -53,6 +53,9 @@ export default function StepOneCategoryForm({
   const [showCategorySuggestions, setShowCategorySuggestions] = useState(false);
   const [searchCategoryTerm, setSearchCategoryTerm] = useState("");
 
+
+  const [userInteracted, setUserInteracted] = useState(false);
+
   const { handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       category_id: 0,
@@ -122,6 +125,16 @@ export default function StepOneCategoryForm({
     setShowCategorySuggestions(filtered.length > 0);
   }, [searchCategoryTerm, categories, categoryId]);
 
+
+  useEffect(() => {
+    if (!userInteracted) return;
+    if (categoryId > 0 && location?.trim() !== "" && !locationLoading) {
+      setSelectedCategoryId(String(categoryId));
+      setSelectedLocationId(String(watch("city_id")));
+      onNext();
+    }
+  }, [categoryId, location, locationLoading, userInteracted]);
+
   const handleSelectCategory = (cat: Category) => {
     setValue("category_id", cat.category_id, {
       shouldDirty: true,
@@ -164,10 +177,10 @@ export default function StepOneCategoryForm({
                 presetCategory={
                   presetCategory
                     ? {
-                      category_id: presetCategory.category_id,
-                      name: presetCategory.name,
-                      slug: presetCategory.slug || "",
-                    }
+                        category_id: presetCategory.category_id,
+                        name: presetCategory.name,
+                        slug: presetCategory.slug || "",
+                      }
                     : undefined
                 }
                 onSelect={(data) => {
@@ -184,6 +197,7 @@ export default function StepOneCategoryForm({
                   });
                   setValue("category_name", data.name);
                   setSelectedCategoryTitle(data.name);
+                  setUserInteracted(true);
                 }}
               />
             </div>
@@ -247,6 +261,7 @@ export default function StepOneCategoryForm({
                   });
 
                   setSelectedLocationId(String(data.city_id || 0));
+                  setUserInteracted(true);
                 }}
               />
             </div>
@@ -255,9 +270,7 @@ export default function StepOneCategoryForm({
           <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <Button
               variant="outline"
-              onClick={() => {
-                setShowConfirm(true);
-              }}
+              onClick={() => setShowConfirm(true)}
               className="flex-1 rounded-lg border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
             >
               Cancel
@@ -268,7 +281,7 @@ export default function StepOneCategoryForm({
               className={cn(
                 "flex-1 rounded-lg bg-[#3C7DED] text-white font-medium shadow-lg hover:shadow-xl transition-all",
                 (!isContinueEnabled || locationLoading) &&
-                "opacity-60 cursor-not-allowed"
+                  "opacity-60 cursor-not-allowed"
               )}
             >
               {locationLoading ? (

@@ -46,7 +46,7 @@ export default function ModernNavbar() {
   const router = useRouter();
   const profileRef = useRef<HTMLDivElement>(null);
 
-  const locale = (params.locale as string) || "en-au";
+  // const locale = (params.locale as string) || "en-au";
 
   const minimalPages = ["/create", "/create-account"];
 
@@ -144,10 +144,10 @@ export default function ModernNavbar() {
 
   const currentLinks = getCurrentLinks();
 
-  const getLocalizedHref = (href: string) => {
-    if (href === "/") return `/${locale}`;
-    return `/${locale}${href}`;
-  };
+  // const getLocalizedHref = (href: string) => {
+  //   if (href === "/") return `/`;
+  //   return `/${href}`;
+  // };
 
   const renderProfileDropdown = () => {
     const canSwitchView = session?.user?.role === "provider";
@@ -552,7 +552,7 @@ className="bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-me
                   return (
                     <Link
                       key={link.name}
-                      href={getLocalizedHref(link.href)}
+                      href={link.href}
                       onClick={() => setIsMenuOpen(false)}
                       className={`flex items-center gap-3 px-4 py-3 rounded-full font-medium transition-colors ${
                         isActive

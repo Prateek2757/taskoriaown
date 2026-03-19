@@ -75,9 +75,9 @@ export default function ProviderDashboard() {
   const user = session.user;
 
   return (
-    <div className="min-h-screen  bg-gray-50 dark:bg-[#0d1117] transition-colors duration-300">
-      <main className="container mx-auto rounded-2xl px-6 space-y-6 pb-16">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="min-h-screen   bg-gray-50 dark:bg-[#0d1117] transition-colors duration-300">
+      <main className="container mx-auto rounded-2xl  lg:px-6 space-y-6 pb-16">
+        <div className="flex px-2 flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-[#3C7DED] bg-clip-text">
               {greeting}, {user.name?.split(" ")[0] || "User"}!
@@ -107,7 +107,7 @@ export default function ProviderDashboard() {
         {/* {showStats && <DashboardStats totalLeads={totalLeads} />} */}
 
         <div className="grid gap-8 lg:grid-cols-3">
-          <div className="space-y-6">
+          <div className="space-y-6  ">
             <ProfileCard
               user={{ ...user, email: user.email || "" }}
               profile={profile || {}}

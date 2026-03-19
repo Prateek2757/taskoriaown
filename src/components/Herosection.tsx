@@ -13,7 +13,6 @@ import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import { SparklesCoreLight } from "./ui/sparklesLight";
 import ScrollPopularSection from "./ScrollPopularSection";
 import Image from "next/image";
-import TaskoriaSasthoRedirect from "./sastoticket/taskoriasasthoredirect";
 
 interface Category {
   category_id: number;
@@ -203,7 +202,7 @@ export default function HeroSection() {
                   fontWeight: 800,
                 }}
               >
-                from professionals.
+                from trusted professionals.
               </span>
             </h1>
 
@@ -213,16 +212,16 @@ export default function HeroSection() {
             </p> */}
 
             <div className="max-w-2xl relative mx-auto mt-6 sm:px-4">
-                <div
-                  className="absolute left-[-900px] top-[-15px]   h-[200px] inset-0   dark:opacity-80"
-                  style={{
-                    backgroundImage: "url('/images/herobgnew.png')",
-                    backgroundSize: "contain",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                  }}
-                  aria-hidden="true"
-                />
+              <div
+                className="absolute left-[-900px] top-[-15px]   h-[200px] inset-0 pointer-events-none   dark:opacity-80"
+                style={{
+                  backgroundImage: "url('/images/herobgnew.png')",
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+                aria-hidden="true"
+              />
               <div className="relative w-full max-w-3xl group flex sm:items-center max-sm:gap-2">
                 <div className="relative flex-1 sm:mr-4 w-full">
                   <div
@@ -385,11 +384,11 @@ export default function HeroSection() {
 
           <div className="w-full px-8 pb- absolute bottom-2 left-1/2 transform -translate-x-1/2 text-center text-3xl text-white">
             <h3 className="text-gray-600 text-lg sm:text-xl lg:text-2xl dark:text-white font-semibold leading-tight mb-2">
-              Need a provider now?
+              Need a provider fast?
             </h3>
             <p className="text-gray-500 text-sm dark:text-gray-400 mb-4">
-              Post your job and start getting responses from local
-              professionals.
+              Post your job for free and receive responses from trusted local
+              professionals, with clearer quotes and safer hiring support.
             </p>
             {/* <Button
               onClick={handlePostJob}
@@ -400,6 +399,25 @@ export default function HeroSection() {
             </Button> */}
           </div>
         </div>
+
+        <section
+          aria-label="Trust and safety highlights"
+          className="bg-slate-50 dark:bg-slate-950 border-y border-slate-200 dark:border-slate-800"
+        >
+          <div className="container mx-auto px-4 py-4">
+            <p className="text-sm text-slate-700  dark:text-slate-300 text-center">
+              Background-checked profiles, clear quotes, direct communication,
+              and safer hiring support.&nbsp;
+              <a
+              href="/trust-safety"
+              className="font-semibold text-blue-600 hover:underline"
+            >
+               Learn how Taskoria keeps you safe
+            </a>
+            </p>
+           
+          </div>
+        </section>
       </section>
     </>
   );

@@ -27,22 +27,32 @@ const staticImages = [
   {
     url: "/images/homecleaning.webp",
     gradient: "from-red-500/20 to-orange-500/20",
+    description:
+      "Routine cleans, end-of-lease support, deep cleaning, and flexible one-off or scheduled jobs.",
   },
   {
     url: "/images/electrician.webp",
     gradient: "from-orange-500/20 to-amber-500/20",
+    description:
+      "Qualified help for small jobs, repairs, installations, and urgent callouts.",
   },
   {
     url: "/images/gardening.webp",
     gradient: "from-slate-500/20 to-gray-500/20",
+    description:
+      "Regular garden care, mowing, tidy-ups, and seasonal maintenance.",
   },
   {
     url: "/images/plumbers.webp",
     gradient: "from-blue-500/20 to-cyan-500/20",
+    description:
+      "From blocked drains and leak repairs to fixture installs and ongoing maintenance work.",
   },
   {
     url: "/images/photography.webp",
     gradient: "from-purple-500/20 to-pink-500/20",
+    description:
+      "Creative professionals for ceremonies, events, portraits, and commercial shoots.",
   },
 ];
 
@@ -75,24 +85,27 @@ export default function Services() {
         </motion.div> */}
 
         <motion.div
-          className="flex gap-4 items-start mb-5 flex-col lg:flex-row
+          className="flex gap-2 items-start flex-col 
         "
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           <div className="w-full lg:w-2/3  flex-col  ">
+            <span className="rounded-full p-1 px-2 text-sm border text-[#2563EB] ">
+              Popular Services
+            </span>
             <div className="text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white  md:leading-tight drop-shadow-sm">
-              All Your Skills,
+              Popular services on Taskoria
               <br />
-              <span className="text-[#3C7DED]">Empowered and Rewarded</span>
+              {/* <span className="text-[#3C7DED]">Empowered and Rewarded</span> */}
             </div>
           </div>
 
-          <div className="lg:pt-4 flex-col flex-1">
+          <div className=" flex-col">
             <p className="text-gray-700  dark:text-gray-300 pb-3 text-lg  leading-relaxed  max-w-xl">
-              Connect with trusted experts for every task — from home repairs to
-              creative work — all in one place on Taskoria.
+              Find trusted professionals across home, trade, business, and
+              creative services.
             </p>
           </div>
         </motion.div>
@@ -224,9 +237,7 @@ export default function Services() {
                           {category.name}
                         </h3>
                         <p className="text-white/90 text-sm leading-relaxed max-w-md">
-                          {
-                            "Professional services tailored to your needs with quality and expertise."
-                          }
+                          { staticImages[index].description}
                         </p>
                       </div>
                     </div>

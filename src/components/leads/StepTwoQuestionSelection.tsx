@@ -9,10 +9,6 @@ import { Button } from "@/components/ui/button";
 import {
   Loader2,
   Calendar as CalendarIconLucide,
-  MessageCircleQuestion,
-  ShieldQuestion,
-  MessageCircleQuestionIcon,
-  FileQuestion,
   ShieldQuestionIcon,
 } from "lucide-react";
 import QuestionRenderer from "./QuestionRenderer";

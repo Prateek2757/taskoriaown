@@ -36,7 +36,7 @@ const TaskoriaSasthoRedirect = () => {
       window.open(url, "_blank");
 
     } catch (error: any) {
-      toast.dismiss(loadingToast); // ✅ dismiss loading on error too
+      toast.dismiss(loadingToast); 
       console.error(error);
       toast.error(
         error?.response?.data?.error || "Something went wrong. Please try again."
@@ -45,7 +45,7 @@ const TaskoriaSasthoRedirect = () => {
       setLoading(false);
     }
   };
-
+if(session){
   return (
     <button
       onClick={handleRedirect}
@@ -54,9 +54,11 @@ const TaskoriaSasthoRedirect = () => {
       hover:text-[#3C7DED] dark:hover:text-[#41A6EE] 
       transition-colors mb-2 disabled:opacity-50 disabled:cursor-not-allowed"
     >
-      {loading ? "Redirecting..." : "Sasto Ticket"}
+      {loading ? "Redirecting..." : "Find Cheap Flights"}
     </button>
   );
+}
+
 };
 
 export default TaskoriaSasthoRedirect;

@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next";
-import { i18n } from "../../i18n-config";
 
 export const revalidate = 3600;
 
@@ -21,18 +20,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const legalRoutes = [
     { path: "/privacy-policy", priority: 0.3, changeFreq: "yearly" as const },
-    {
-      path: "/terms-and-conditions",
-      priority: 0.3,
-      changeFreq: "yearly" as const,
-    },
+    { path: "/terms-and-conditions", priority: 0.3, changeFreq: "yearly" as const },
     { path: "/cookie-policy", priority: 0.3, changeFreq: "yearly" as const },
   ];
 
   let services: any[] = [];
   try {
     const res = await fetch(`${baseUrl}/api/signup/category-selection`);
-
     if (res.ok) {
       services = await res.json();
     } else {
@@ -47,41 +41,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...companyRoutes,
     ...legalRoutes,
     ...services.map((service: any) => ({
-      path: `/services/${service.slug}`,
+      path: `/services/house-cleaning`,
       priority: 0.8,
       changeFreq: "weekly" as const,
       lastMod: service.updated_at ? new Date(service.updated_at) : currentDate,
     })),
   ];
 
-  const sitemapEntries: MetadataRoute.Sitemap = [];
-
-  allRoutes.forEach((route) => {
-    const lastMod = "lastMod" in route ? route.lastMod : currentDate;
-
-    const alternates = {
-      languages: {} as Record<string, string>,
-    };
-
-    i18n.locales.forEach((loc) => {
-      const localePath = loc === i18n.defaultLocale ? "" : `/${loc}`;
-      alternates.languages[loc] = `${baseUrl}${localePath}${route.path}`;
-    });
-
-    alternates.languages["x-default"] = `${baseUrl}${route.path}`;
-
-    i18n.locales.forEach((locale) => {
-      const localePath = locale === i18n.defaultLocale ? "" : `/${locale}`;
-
-      sitemapEntries.push({
-        url: `${baseUrl}${localePath}${route.path}`,
-        lastModified: lastMod,
-        changeFrequency: route.changeFreq,
-        priority: route.priority,
-        alternates,
-      });
-    });
-  });
-
-  return sitemapEntries;
+  return allRoutes.map((route) => ({
+    url: `${baseUrl}${route.path}`,
+    lastModified: "lastMod" in route ? route.lastMod : currentDate,
+    changeFrequency: route.changeFreq,
+    priority: route.priority,
+  }));
 }

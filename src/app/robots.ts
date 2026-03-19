@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
- 
+
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = 'https://www.taskoria.com'
   
@@ -20,6 +20,7 @@ export default function robots(): MetadataRoute.Robots {
           '/signup',
           '/*?callbackUrl=*', 
           '/*?*utm_*',
+          '/providerprofile/*'  
         ],
       },
       {
@@ -30,6 +31,7 @@ export default function robots(): MetadataRoute.Robots {
           '/admin/',
           '/provider/dashboard',
           '/customer/dashboard',
+          '/providerprofile/*'
         ],
         crawlDelay: 0,
       },
@@ -41,13 +43,13 @@ export default function robots(): MetadataRoute.Robots {
           '/admin/',
           '/provider/dashboard',
           '/customer/dashboard',
+          '/providerprofile/*'
         ],
         crawlDelay: 0,
       }
     ],
     sitemap: [
       `${baseUrl}/sitemap.xml`,
-   
     ],
   }
 }

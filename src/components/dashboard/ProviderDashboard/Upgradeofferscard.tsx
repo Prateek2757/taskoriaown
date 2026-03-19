@@ -12,7 +12,7 @@ interface UpgradeOffersCardProps {
 
 export function UpgradeOffersCard({ isPro = false }: UpgradeOffersCardProps) {
   return (
-    <Card className="border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm">
+    <Card className="border-slate-200  dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm">
       <CardHeader>
         <CardTitle className="text-lg font-bold flex items-center gap-2">
           <Zap className="w-5 h-5 text-amber-500" />

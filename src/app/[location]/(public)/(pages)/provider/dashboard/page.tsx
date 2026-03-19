@@ -12,7 +12,7 @@ export default function DashboardPage() {
       transition-colors duration-300
     "
     >
-      <div className="container mx-auto px-4 py-8">
+      <div className="container overflow-hidden mx-auto py-6">
         {/* <Link href="/" className="inline-flex mb-4">
           <Button
             variant="ghost"

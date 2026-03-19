@@ -83,7 +83,7 @@ export function ProfileCard({
 
   return (
     <>
-      <Card className="border rounded-2xl shadow-lg backdrop-blur bg-white/80 dark:bg-white/5 py-0 border-gray-200 dark:border-white/10 overflow-hidden">
+      <Card className="border rounded-2xl shadow-lg backdrop-blur  bg-white/80 dark:bg-white/5 py-0 border-gray-200 dark:border-white/10 overflow-hidden">
         <CardContent className="pt-6 pb-0 text-center relative">
           {/* {isPro && (
             <>

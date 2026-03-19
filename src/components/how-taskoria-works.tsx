@@ -12,21 +12,21 @@ const steps = [
     id: 1,
     title: "Post Your Job",
     description:
-      "Describe your job, location, and timeline in just a few simple steps.",
+      "Describe your job, location, and preferred timing in a few simple steps so providers know exactly what you need.",
     icon: Sparkles,
   },
   {
     id: 2,
     title: "Receive Provider Responses",
     description:
-      "Qualified local providers review your request and send tailored quotes.",
+      "Get quotes from relevant local professionals based on your service type, location, and job details.",
     icon: Users,
   },
   {
     id: 3,
     title: "Compare and Hire",
     description:
-      "Review profiles, compare offers, and hire the right provider with confidence.",
+      "Review profiles, pricing, and scope, then choose the provider that best fits your timeline and budget.",
     icon: Shield,
   },
 ];
@@ -226,7 +226,7 @@ export default function HowTaskoriaWorks() {
                         {step.title}
                       </h2>
 
-                      <p className="max-sm:text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
+                      <p className="max-sm:text-sm text-gray-700 dark:text-gray-200 leading-relaxed text-">
                         {step.description}
                       </p>
                     </div>

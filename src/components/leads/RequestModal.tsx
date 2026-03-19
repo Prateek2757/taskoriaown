@@ -69,7 +69,6 @@ export default function NewRequestModal({
   useEffect(() => {
     if (presetLocation) {
       setSelectedLocationId(String(presetLocation?.city_id));
-
     }
   }, [presetLocation]);
 
@@ -84,8 +83,8 @@ export default function NewRequestModal({
     setSelectedLocationId("");
     setSelectedCategoryTitle("");
     setSelectedLocation(null);
-  };
-  ``;
+  };  
+
 
   return (
     <Dialog
@@ -126,9 +125,9 @@ export default function NewRequestModal({
                   presetCategory={
                     selectedCategoryId && selectedCategoryTitle
                       ? {
-                        category_id: Number(selectedCategoryId),
-                        name: selectedCategoryTitle,
-                      }
+                          category_id: Number(selectedCategoryId),
+                          name: selectedCategoryTitle,
+                        }
                       : undefined
                   }
                   presetLocation={presetLocation || selectedLocation}
