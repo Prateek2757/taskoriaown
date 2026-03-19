@@ -270,7 +270,7 @@ export default function HomePage() {
         Hire Verified Local Professionals Across Australia
       </h1>
 
-      <main className="min-h-screen" role="main">
+      <main className="" role="main">
         <section aria-label="Hero — find and hire local professionals">
           <HeroSection />
 

@@ -3,7 +3,12 @@ import type { MetadataRoute } from "next";
 export default function sitemapServices(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.taskoria.com";
   const currentDate = new Date();
-
+  // ...services.map((service: any) => ({
+  //   path: `/services/house-cleaning`,
+  //   priority: 0.8,
+  //   changeFreq: "weekly" as const,
+  //   lastMod: service.updated_at ? new Date(service.updated_at) : currentDate,
+  // })),
   const services = [
     "house-cleaning",
     "electricians",

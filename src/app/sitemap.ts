@@ -12,6 +12,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "/providers", priority: 0.8, changeFreq: "daily" as const },
   ];
 
+  const serviceroute = {
+    path: "/services/house-cleaning",
+    priority: 0.9,
+    changeFreq: "daily" as const,
+  };
+
   const companyRoutes = [
     { path: "/trust-safety", priority: 0.7, changeFreq: "monthly" as const },
     { path: "/about-us", priority: 0.6, changeFreq: "monthly" as const },
@@ -40,18 +46,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...coreRoutes,
     ...companyRoutes,
     ...legalRoutes,
-    ...services.map((service: any) => ({
-      path: `/services/house-cleaning`,
-      priority: 0.8,
-      changeFreq: "weekly" as const,
-      lastMod: service.updated_at ? new Date(service.updated_at) : currentDate,
-    })),
+    serviceroute,
   ];
 
   return allRoutes.map((route) => ({
     url: `${baseUrl}${route.path}`,
-    lastModified: "lastMod" in route ? route.lastMod : currentDate,
-    changeFrequency: route.changeFreq,
+    lastModified: currentDate, 
+    changeFrequency: route.changeFreq, 
     priority: route.priority,
   }));
 }

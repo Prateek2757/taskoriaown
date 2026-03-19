@@ -65,7 +65,7 @@ const TrustSafety = () => {
     <div className="min-h-screen bg-background">
     
 
-      <section className="py-16 bg-gradient-to-br from-primary/5 to-secondary/5">
+      <section className="py-10 bg-gradient-to-br from-primary/5 to-secondary/5">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center space-y-6">
             <div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 px-4 py-2 rounded-full text-sm font-medium">
@@ -82,7 +82,7 @@ const TrustSafety = () => {
         </div>
       </section>
 
-      <section className="py-16">
+      <section className="py-10">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-foreground mb-4">How We Verify Providers</h2>
@@ -94,7 +94,7 @@ const TrustSafety = () => {
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {verificationSteps.map((step, index) => (
               <Card key={index} className="border-2">
-                <CardContent className="p-8">
+                <CardContent className="p-3">
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">
                       {step.icon}
@@ -111,7 +111,7 @@ const TrustSafety = () => {
         </div>
       </section>
 
-      <section className="py-16 bg-muted/50">
+      <section className="py-10 bg-muted/50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-foreground mb-4">Your Protection Guarantee</h2>
@@ -123,7 +123,7 @@ const TrustSafety = () => {
           <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {safetyFeatures.map((feature, index) => (
               <Card key={index}>
-                <CardContent className="p-6">
+                <CardContent className="p-3">
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0 p-3 bg-muted rounded-lg">
                       {feature.icon}
@@ -144,7 +144,7 @@ const TrustSafety = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <Card className="border-2">
-              <CardContent className="p-8">
+              <CardContent className="p-4">
                 <div className="flex items-start gap-4 mb-6">
                   <AlertCircle className="w-8 h-8 text-blue-600 flex-shrink-0" />
                   <div>
@@ -236,7 +236,7 @@ const TrustSafety = () => {
                   </div>
                   <h3 className="font-semibold text-foreground mb-1">Taskoria Pro Max Verified</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-                    The gold standard — Pro checks plus validated Public Liability Insurance (min $10M coverage).
+                    The gold standard — Pro checks plus validated Public Liability Insurance.
                   </p>
                   <span className="inline-block text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300 px-2 py-0.5 rounded-full">
                     Tier 3
@@ -245,7 +245,7 @@ const TrustSafety = () => {
               </Card>
 
             </div>
-{/* 
+
             <Link
               href="/verification-badges"
               className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
@@ -261,7 +261,7 @@ const TrustSafety = () => {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
-            </Link> */}
+            </Link>
           </div>
         </div>
       </section>
