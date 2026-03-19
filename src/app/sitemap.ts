@@ -9,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const coreRoutes = [
     { path: "", priority: 1.0, changeFreq: "daily" as const },
     { path: "/services", priority: 0.9, changeFreq: "daily" as const },
-    { path: "/providers", priority: 0.8, changeFreq: "daily" as const },
+    // { path: "/providers", priority: 0.8, changeFreq: "daily" as const },
   ];
 
   const serviceroute = {
