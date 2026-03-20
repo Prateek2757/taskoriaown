@@ -41,7 +41,7 @@ export default function CategorySelectionContent() {
     fetchCategories();
 
     const savedDraft = localStorage.getItem("draftProviderPublicId");
-    console.log("Draft ID from localStorage:", savedDraft); // ADD THIS
+    // console.log("Draft ID from localStorage:", savedDraft); 
 
     if (savedDraft) setDraftId(String(savedDraft));
   }, []);

@@ -97,7 +97,7 @@ const GRID_COLS: Record<number, string> = {
   6: "grid-cols-6",
 };
 
-export default function ProviderProfileClient({ provider }: { provider: any }) {
+export default function ProviderProfileClientt({ provider }: { provider: any }) {
   if (!provider) {
     return <div className="p-10 text-center">Provider Not Found</div>;
   }

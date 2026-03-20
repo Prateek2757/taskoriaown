@@ -235,7 +235,7 @@ const Footer = () => {
                   >
                     Trust & Safety
                   </Link>
-                  <TaskoriaSasthoRedirect />
+                  {/* <TaskoriaSasthoRedirect /> */}
                 </div>
               </div>
 
