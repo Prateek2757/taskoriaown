@@ -11,6 +11,7 @@ import { Analytics } from "@vercel/analytics/next";
 import NotificationHandler from "@/components/NotificationHandler";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import SupportChatbot from "@/components/supportChatbox";
+import Script from "next/script";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -124,9 +125,22 @@ export const viewport: Viewport = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const GA_ID = process.env.NEXT_PUBLIC_GOOGLEANALYTICS_MEASUREMENT_ID;
   return (
-    <html lang="en-AU" className={poppins.variable} suppressHydrationWarning>
+    <html className={poppins.variable} suppressHydrationWarning>
       <head>
+      <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}');
+          `}
+        </Script>
         <link rel="icon" href="/favicon.ico" sizes="48x48" type="image/x-icon" />
         <link rel="apple-touch-icon" sizes="140x140" href="/taskorialogonew.png" />
 

@@ -15,7 +15,6 @@ export function BookingPanel({ provider, socialLinks }: BookingPanelProps) {
 
   return (
     <div className="bg-white dark:bg-[#0c1220] border border-gray-100 dark:border-white/10 rounded-2xl shadow-xl shadow-black/5 overflow-hidden">
-      {/* Pricing header */}
       {provider.hourlyRate != null && (
         <div className="px-5 py-4 bg-gradient-to-r from-blue-600 to-blue-600 text-white">
           <div className="flex items-baseline gap-1">
@@ -26,8 +25,7 @@ export function BookingPanel({ provider, socialLinks }: BookingPanelProps) {
         </div>
       )}
 
-      {/* Actions */}
-      <div className="p-5 space-y-3">
+      {/* <div className="p-5 space-y-3">
         <Button asChild className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md shadow-blue-500/20">
           <Link href="/">
             <Calendar className="w-4 h-4 mr-2" />
@@ -48,7 +46,7 @@ export function BookingPanel({ provider, socialLinks }: BookingPanelProps) {
           <Bot className="w-4 h-4 mr-2 text-blue-600" />
           Get AI Quote
         </Button>
-      </div>
+      </div> */}
 
       {/* Social links strip */}
       {hasSocial && (

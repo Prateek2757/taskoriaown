@@ -61,11 +61,11 @@ export function ProfileTabs({
   if (!hasTabs) return null;
 
   return (
-    <div className="bg-white dark:bg-[#0c1220]  rounded-2xl shadow-sm overflow-hidden">
-      <Tabs  defaultValue={defaultTab}>
-        <div className=" px-2 overflow-x-auto">
-          <TabsList className="h-auto  bg-transparent rounded-full  gap-0 p-0 flex w-max min-w-full">
-            {hasPhotos && <TabItem value="portfolio" label="Portfolio" />}
+    <div className="bg-white dark:bg-[#0c1220] border-0 rounded-2xl shadow-sm overflow-hidden">
+      <Tabs className="border-0"  defaultValue={defaultTab}>
+        <div className=" px-2 border-0 overflow-x-auto">
+          <TabsList className="h-auto  bg-transparent rounded-full  gap-0 p-0 border-0 flex w-max min-w-full">
+            {hasPhotos && <TabItem  value="portfolio" label="Portfolio" />}
             {hasServices && <TabItem value="services" label="Services" />}
             {hasReviews && <TabItem value="reviews" label="Reviews" />}
             {hasAbout && <TabItem value="about" label="About" />}
