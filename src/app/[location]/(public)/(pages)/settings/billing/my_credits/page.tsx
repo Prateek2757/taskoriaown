@@ -1,10 +1,8 @@
 "use client"
-import { useState } from "react";
 import  { CreditPurchasePage } from "@/components/payments/CreditTopup";
 import { useSession } from "next-auth/react";
 
-export default function CreditsPage({ professionalId }: { professionalId: number }) {
-  const [open, setOpen] = useState(false);
+export default function CreditsPage() {
 
 const {data:session} = useSession()
 
