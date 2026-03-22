@@ -54,7 +54,7 @@ const staticServiceImages: Record<string, { url: string; gradient: string }> = {
     gradient: "from-indigo-500/20 to-blue-500/20",
   },
   Handyman: {
-    url: "/images/handyman.png",
+    url: "/images/handymann.png",
     gradient: "from-indigo-500/20 to-blue-500/20",
   },
   "Carpet Steam Cleaning": {
