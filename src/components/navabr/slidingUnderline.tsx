@@ -10,19 +10,33 @@ function SlidingUnderlineNav({ currentLinks, pathname }: { currentLinks: any; pa
 
     useEffect(() => {
         if (!containerRef.current) return;
-
+      
         const items = containerRef.current.querySelectorAll<HTMLElement>("[data-nav-item]");
         const pos: Record<string, { width: number; left: number }> = {};
-
-        items.forEach((el) => {
+      
+        const calculate = () => {
+          items.forEach((el) => {
+            const rect = el.getBoundingClientRect();
+      
             pos[el.dataset.navItem!] = {
-                width: el.offsetWidth,
-                left: el.offsetLeft,
+              width: rect.width,
+              left: rect.left - containerRef.current!.getBoundingClientRect().left,
             };
+          });
+      
+          setPositions(pos);
+        };
+      
+        requestAnimationFrame(calculate);
+      
+        const observer = new ResizeObserver(() => {
+          requestAnimationFrame(calculate);
         });
-
-        setPositions(pos);
-    }, [currentLinks]);
+      
+        items.forEach((el) => observer.observe(el));
+      
+        return () => observer.disconnect();
+      }, [currentLinks]);
 
     const activeLink = currentLinks.find((link: any) => link.href === pathname);
     const activeKey = hovered || (activeLink?.href);

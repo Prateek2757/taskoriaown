@@ -57,6 +57,7 @@ const nextConfig: NextConfig = {
 			value: [
 			  "</_next/static/css/de6a02220cea8ecc.css>; rel=preload; as=style",
 			  "</_next/static/css/acf30a8ef1da2597.css>; rel=preload; as=style",
+			  "</_next/static/css/e2e43d1b5ffe6c5e.css>; rel=preload; as=style",
 			].join(", "),
 		  },
 		],

@@ -165,8 +165,8 @@ export default function RootLayout({
           rel="stylesheet"
         /> */}
 
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        {/* <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" /> */}
 
         <script
           type="application/ld+json"

@@ -220,7 +220,7 @@ export default function HeroSection() {
                   alt="background"
                   fill
                   priority
-                  quality={60}
+                
                   className="object-contain object-center"
                 />
               </div>

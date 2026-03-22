@@ -65,15 +65,16 @@ export default function HowTaskoriaWorks() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    "name": "How to Use Our Service Marketplace Platform",
-    "description": "Learn how to hire verified professionals in three simple steps using our AI-powered marketplace",
-    "step": steps.map((step, index) => ({
+    name: "How to Use Our Service Marketplace Platform",
+    description:
+      "Learn how to hire verified professionals in three simple steps using our AI-powered marketplace",
+    step: steps.map((step, index) => ({
       "@type": "HowToStep",
-      "position": index + 1,
-      "name": step.title,
-      "text": step.description,
-      "url": `https://yourwebsite.com#step-${step.id}`
-    }))
+      position: index + 1,
+      name: step.title,
+      text: step.description,
+      url: `https://yourwebsite.com#step-${step.id}`,
+    })),
   };
 
   return (
@@ -121,22 +122,18 @@ export default function HowTaskoriaWorks() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <motion.div
-            variants={fadeInUp}
-            transition={{ duration: 0.7 }}
-            className="sm:text-center mb-10 sm:mb-15"
+          <h1
+            id="how-it-works-heading"
+            className="text-4xl md:text-6xl flex justify-center font-black"
           >
-            <h1
-  id="how-it-works-heading"
-  className="text-4xl md:text-6xl flex justify-center font-black"
->
-  How hiring works on Taskoria
-  <span className="block opacity-0 md:opacity-100 animate-fade-in">...</span>
-</h1>
-            <p className="text-lg my-1 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Post for free, receive responses, and hire with confidence.
-            </p>
-          </motion.div>
+            How hiring works on Taskoria
+            <span className="block opacity-0 md:opacity-100 animate-fade-in">
+              ...
+            </span>
+          </h1>
+          <p className="text-lg my-1 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Post for free, receive responses, and hire with confidence.
+          </p>
 
           <div
             className="relative flex max-w-6xl h-16 mx-auto items-center justify-center overflow-hidden"
@@ -201,8 +198,8 @@ export default function HowTaskoriaWorks() {
             {steps.map((step, index) => {
               const Icon = step.icon;
               return (
-                <article 
-                  key={step.id} 
+                <article
+                  key={step.id}
                   className="flex flex-col items-center relative"
                   id={`step-${step.id}`}
                 >
@@ -215,7 +212,7 @@ export default function HowTaskoriaWorks() {
                       border border-black/10 dark:border-white/20 
                       dark:before:from-white/10 dark:before:via-white/5 dark:before:to-transparent
                     "
-                  > 
+                  >
                     <div className="relative z-10">
                       <div className="flex items-center gap-3 mb-4">
                         {/* <div className="bg-blue-100 dark:bg-blue-900/30 w-12 h-12 rounded-lg flex items-center justify-center">
@@ -255,7 +252,10 @@ export default function HowTaskoriaWorks() {
               >
                 <span className="flex items-center gap-2">
                   Post a Job Free
-                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 duration-300 group-hover:rotate-45" aria-hidden="true" />
+                  <ArrowUpRight
+                    className="w-4 h-4 transition-transform group-hover:translate-x-1 duration-300 group-hover:rotate-45"
+                    aria-hidden="true"
+                  />
                 </span>
               </Button>
             </Link>
