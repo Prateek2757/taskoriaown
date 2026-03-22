@@ -126,10 +126,14 @@ export default function HowTaskoriaWorks() {
             transition={{ duration: 0.7 }}
             className="sm:text-center mb-10 sm:mb-15"
           >
-            <h1 id="how-it-works-heading" className="text-4xl md:text-6xl font-black mb-4">
-              How hiring works on Taskoria
-            </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <h1
+  id="how-it-works-heading"
+  className="text-4xl md:text-6xl flex justify-center font-black"
+>
+  How hiring works on Taskoria
+  <span className="block opacity-0 md:opacity-100 animate-fade-in">...</span>
+</h1>
+            <p className="text-lg my-1 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Post for free, receive responses, and hire with confidence.
             </p>
           </motion.div>

@@ -140,7 +140,7 @@ export default function FeaturesStacking() {
         <div className=" pb-3  px-4">
           <header className="sm:text-center mx-auto">
             <h1
-              className="text-4xl md:text-xl lg:text-5xl text-gray-800 font-extrabold tracking-tight mb-2
+              className="text-4xl md:text-xl lg:text-5xl text-gray-800 dark:text-white font-extrabold tracking-tight mb-2
                 
                   "
             >

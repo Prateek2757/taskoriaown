@@ -357,7 +357,7 @@ export default function HeroSection() {
           </div>
 
           <div
-            className="relative -mt-32 h-86 overflow-hidden 
+            className="relative -mt-32 h-76 overflow-hidden 
         mask-[radial-gradient(50%_50%,black,transparent)]  dark:mask-[radial-gradient(50%_50%,white,transparent)] 
 
         before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,#fff,transparent_80%)] dark:before:bg-[radial-gradient(circle_at_left_center,#000,transparent_100%)] before:opacity-100 
