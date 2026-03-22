@@ -1,14 +1,12 @@
-
 import { Metadata } from "next";
 import Categories from "@/components/Categories";
 import CTA from "@/components/CTA";
 import FeaturesPage from "@/components/Features";
-import HeroSection from "@/components/Herosection";
-import HowItWorks from "@/components/how-taskoria-works";
 import Testomonail from "@/components/Testomonail";
+import HeroSection from "@/components/HeroSection/Herosection";
+import HowTaskoriaWorks from "@/components/how-taskoria-works";
 
 const BASE_URL = "https://www.taskoria.com";
-
 
 export const metadata: Metadata = {
   title: "Taskoria | Hire Verified Local Professionals Across Australia",
@@ -33,15 +31,15 @@ export const metadata: Metadata = {
     "trusted professionals australia",
   ],
 
-  authors:   [{ name: "Taskoria", url: BASE_URL }],
-  creator:   "Taskoria",
+  authors: [{ name: "Taskoria", url: BASE_URL }],
+  creator: "Taskoria",
   publisher: "Taskoria",
-  category:  "Business",
+  category: "Business",
 
   alternates: {
     canonical: BASE_URL,
     languages: {
-      "en-AU":   BASE_URL,
+      "en-AU": BASE_URL,
       "x-default": BASE_URL,
     },
   },
@@ -58,121 +56,119 @@ export const metadata: Metadata = {
     },
   },
 
-
   openGraph: {
-    type:     "website",
-    locale:   "en_AU",
-    url:      BASE_URL,
+    type: "website",
+    locale: "en_AU",
+    url: BASE_URL,
     siteName: "Taskoria",
-    title:       "Taskoria | Hire Verified Local Professionals Across Australia",
+    title: "Taskoria | Hire Verified Local Professionals Across Australia",
     description:
       "Connect with 1,000+ verified Australian professionals. Get instant quotes for cleaning, trades, tech and more. Serving 50+ cities nationwide.",
     images: [
       {
-        url:    `${BASE_URL}/og-image.png`,
-        width:  1200,
+        url: `${BASE_URL}/og-image.png`,
+        width: 1200,
         height: 630,
-        alt:    "Taskoria — Hire Verified Professionals Across Australia",
+        alt: "Taskoria — Hire Verified Professionals Across Australia",
       },
     ],
   },
 
   twitter: {
-    card:        "summary_large_image",
-    title:       "Taskoria | Hire Verified Professionals Across Australia",
+    card: "summary_large_image",
+    title: "Taskoria | Hire Verified Professionals Across Australia",
     description:
       "Post a job free and get matched with trusted local professionals. 4.8★ rated across 50+ Australian cities.",
-    images:  [`${BASE_URL}/og-image.png`],
+    images: [`${BASE_URL}/og-image.png`],
     creator: "@taskoria",
-    site:    "@taskoria",
+    site: "@taskoria",
   },
 };
-
 
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "Organization",
-      "@id":   `${BASE_URL}/#organization`,
-      name:    "Taskoria",
-      url:     BASE_URL,
+      "@id": `${BASE_URL}/#organization`,
+      name: "Taskoria",
+      url: BASE_URL,
       logo: {
-        "@type":  "ImageObject",
-        url:      `${BASE_URL}/taskorialogonew.png`,
-        width:    250,
-        height:   60,
+        "@type": "ImageObject",
+        url: `${BASE_URL}/taskorialogonew.png`,
+        width: 250,
+        height: 60,
       },
       description:
         "Taskoria is Australia's trusted service marketplace connecting customers with verified local professionals for home, business, and digital services.",
       address: {
-        "@type":         "PostalAddress",
-        addressCountry:  "AU",
+        "@type": "PostalAddress",
+        addressCountry: "AU",
       },
       contactPoint: {
-        "@type":            "ContactPoint",
-        contactType:        "customer support",
-        availableLanguage:  "English",
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        availableLanguage: "English",
       },
       sameAs: [
         "https://www.facebook.com/taskoria",
         "https://twitter.com/taskoria",
       ],
       aggregateRating: {
-        "@type":       "AggregateRating",
-        ratingValue:   "4.8",
-        reviewCount:   "1200",
-        bestRating:    "5",
-        worstRating:   "1",
+        "@type": "AggregateRating",
+        ratingValue: "4.8",
+        reviewCount: "1200",
+        bestRating: "5",
+        worstRating: "1",
       },
     },
 
     {
-      "@type":     "WebSite",
-      "@id":       `${BASE_URL}/#website`,
-      url:         BASE_URL,
-      name:        "Taskoria",
-      inLanguage:  "en-AU",
-      publisher:   { "@id": `${BASE_URL}/#organization` },
+      "@type": "WebSite",
+      "@id": `${BASE_URL}/#website`,
+      url: BASE_URL,
+      name: "Taskoria",
+      inLanguage: "en-AU",
+      publisher: { "@id": `${BASE_URL}/#organization` },
       potentialAction: {
         "@type": "SearchAction",
         target: {
-          "@type":       "EntryPoint",
-          urlTemplate:   `${BASE_URL}/services?q={search_term_string}`,
+          "@type": "EntryPoint",
+          urlTemplate: `${BASE_URL}/services?q={search_term_string}`,
         },
         "query-input": "required name=search_term_string",
       },
     },
 
     {
-      "@type":      "WebPage",
-      "@id":        `${BASE_URL}/#webpage`,
-      url:          BASE_URL,
-      name:         "Taskoria | Hire Verified Local Professionals Across Australia",
+      "@type": "WebPage",
+      "@id": `${BASE_URL}/#webpage`,
+      url: BASE_URL,
+      name: "Taskoria | Hire Verified Local Professionals Across Australia",
       description:
         "Find and hire trusted local professionals across Australia. Get instant quotes from verified tradespeople, cleaners, tech experts and more.",
-      inLanguage:   "en-AU",
-      isPartOf:     { "@id": `${BASE_URL}/#website` },
-      about:        { "@id": `${BASE_URL}/#organization` },
+      inLanguage: "en-AU",
+      isPartOf: { "@id": `${BASE_URL}/#website` },
+      about: { "@id": `${BASE_URL}/#organization` },
       primaryImageOfPage: {
         "@type": "ImageObject",
-        url:     `${BASE_URL}/og-image.png`,
+        url: `${BASE_URL}/og-image.png`,
       },
     },
 
     {
-      "@type":       "Service",
-      name:          "Taskoria — Australian Service Marketplace",
-      serviceType:   "Service Marketplace",
-      provider:      { "@id": `${BASE_URL}/#organization` },
-      areaServed:    { "@type": "Country", name: "Australia" },
+      "@type": "Service",
+      name: "Taskoria — Australian Service Marketplace",
+      serviceType: "Service Marketplace",
+      provider: { "@id": `${BASE_URL}/#organization` },
+      areaServed: { "@type": "Country", name: "Australia" },
       hasOfferCatalog: {
         "@type": "OfferCatalog",
-        name:    "Service Categories",
+        name: "Service Categories",
         itemListElement: [
           {
             "@type": "OfferCatalog",
-            name:    "Cleaning Services",
+            name: "Cleaning Services",
             itemListElement: [
               {
                 "@type": "Offer",
@@ -182,7 +178,7 @@ const structuredData = {
           },
           {
             "@type": "OfferCatalog",
-            name:    "Trade Services",
+            name: "Trade Services",
             itemListElement: [
               {
                 "@type": "Offer",
@@ -196,7 +192,7 @@ const structuredData = {
           },
           {
             "@type": "OfferCatalog",
-            name:    "Digital Services",
+            name: "Digital Services",
             itemListElement: [
               {
                 "@type": "Offer",
@@ -210,7 +206,7 @@ const structuredData = {
 
     {
       "@type": "BreadcrumbList",
-      "@id":   `${BASE_URL}/#breadcrumb`,
+      "@id": `${BASE_URL}/#breadcrumb`,
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
       ],
@@ -218,45 +214,44 @@ const structuredData = {
 
     {
       "@context": "https://schema.org",
-      "@type":    "FAQPage",
+      "@type": "FAQPage",
       mainEntity: [
         {
           "@type": "Question",
-          name:    "How does Taskoria work?",
+          name: "How does Taskoria work?",
           acceptedAnswer: {
             "@type": "Answer",
-            text:   "Post your job for free on Taskoria, receive quotes from verified local professionals within minutes, compare reviews and pricing, then book directly through the platform.",
+            text: "Post your job for free on Taskoria, receive quotes from verified local professionals within minutes, compare reviews and pricing, then book directly through the platform.",
           },
         },
         {
           "@type": "Question",
-          name:    "Is Taskoria available across all of Australia?",
+          name: "Is Taskoria available across all of Australia?",
           acceptedAnswer: {
             "@type": "Answer",
-            text:   "Yes. Taskoria operates across 50+ Australian cities including Sydney, Melbourne, Brisbane, Perth, Adelaide, and surrounding suburbs.",
+            text: "Yes. Taskoria operates across 50+ Australian cities including Sydney, Melbourne, Brisbane, Perth, Adelaide, and surrounding suburbs.",
           },
         },
         {
           "@type": "Question",
-          name:    "Are professionals on Taskoria verified?",
+          name: "Are professionals on Taskoria verified?",
           acceptedAnswer: {
             "@type": "Answer",
-            text:   "All professionals on Taskoria go through identity verification and background checks before they can accept jobs on the platform.",
+            text: "All professionals on Taskoria go through identity verification and background checks before they can accept jobs on the platform.",
           },
         },
         {
           "@type": "Question",
-          name:    "How much does it cost to post a job on Taskoria?",
+          name: "How much does it cost to post a job on Taskoria?",
           acceptedAnswer: {
             "@type": "Answer",
-            text:   "Posting a job on Taskoria is completely free. You only pay when you hire a professional.",
+            text: "Posting a job on Taskoria is completely free. You only pay when you hire a professional.",
           },
         },
       ],
     },
   ],
 };
-
 
 export default function HomePage() {
   return (
@@ -273,12 +268,10 @@ export default function HomePage() {
       <main className="" role="main">
         <section aria-label="Hero — find and hire local professionals">
           <HeroSection />
-
-   
         </section>
 
         <section aria-label="How Taskoria works — step by step">
-          <HowItWorks />
+          <HowTaskoriaWorks />{" "}
         </section>
 
         <section aria-label="Browse service categories">

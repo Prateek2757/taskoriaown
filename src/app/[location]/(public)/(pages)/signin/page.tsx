@@ -149,14 +149,14 @@ function SignInForm() {
                   className="h-11 w-full rounded-xl border border-slate-300 px-3 pr-10 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100 dark:focus:ring-blue-900"
                   required
                 />
-                <Button
+                <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-200"
                   aria-label="Toggle password visibility"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </Button>
+                </button>
               </div>
             </div>
 

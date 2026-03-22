@@ -30,7 +30,7 @@ interface ServiceCategoriesProps {
 }
 const staticServiceImages: Record<string, { url: string; gradient: string }> = {
   "House Cleaning": {
-    url: "/images/homecleaning.webp",
+    url: "/images/homecleaning.avif",
     gradient: "from-blue-500/20 to-cyan-500/20",
   },
   Electricians: {
@@ -38,7 +38,7 @@ const staticServiceImages: Record<string, { url: string; gradient: string }> = {
     gradient: "from-yellow-500/20 to-orange-500/20",
   },
   "Gardening & Lawn Mowing": {
-    url: "/images/gardening.webp",
+    url: "/images/gardening.avif",
     gradient: "from-green-500/20 to-emerald-500/20",
   },
   Plumbers: {
@@ -53,6 +53,15 @@ const staticServiceImages: Record<string, { url: string; gradient: string }> = {
     url: "/images/painting.png",
     gradient: "from-indigo-500/20 to-blue-500/20",
   },
+  Handyman: {
+    url: "/images/handyman.png",
+    gradient: "from-indigo-500/20 to-blue-500/20",
+  },
+  "Carpet Steam Cleaning": {
+    url: "/images/carpetsteam.png",
+    gradient: "from-indigo-500/20 to-blue-500/20",
+  },
+
   "Rubbish Removal": {
     url: "/images/rubbishremoval.png",
     gradient: "from-gray-500/20 to-slate-500/20",
