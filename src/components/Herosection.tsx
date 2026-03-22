@@ -210,18 +210,20 @@ export default function HeroSection() {
               Tell us what you need, compare responses, and hire confidently with clear
               profiles, reviews, and support when issues come up.
             </p> */}
-
             <div className="max-w-2xl relative mx-auto mt-6 sm:px-4">
               <div
-                className="absolute left-[-900px] top-[-15px]   h-[200px] inset-0 pointer-events-none   dark:opacity-80"
-                style={{
-                  backgroundImage: "url('/images/herobgnew.png')",
-                  backgroundSize: "contain",
-                  backgroundPosition: "center",
-                  backgroundRepeat: "no-repeat",
-                }}
-                aria-hidden="true"
-              />
+                className="absolute left-[-900px] top-[-15px]   h-[200px] inset-0 pointer-events-none   dark:opacity-80
+"
+              >
+                <Image
+                  src="/images/herobgnew.avif"
+                  alt="background"
+                  fill
+                  priority
+                  quality={60}
+                  className="object-contain object-center"
+                />
+              </div>
               <div className="relative w-full max-w-3xl group flex sm:items-center max-sm:gap-2">
                 <div className="relative flex-1 sm:mr-4 w-full">
                   <div
@@ -409,13 +411,12 @@ export default function HeroSection() {
               Background-checked profiles, clear quotes, direct communication,
               and safer hiring support.&nbsp;
               <a
-              href="/trust-safety"
-              className="font-semibold text-blue-600 hover:underline"
-            >
-               Learn how Taskoria keeps you safe
-            </a>
+                href="/trust-safety"
+                className="font-semibold text-blue-600 hover:underline"
+              >
+                Learn how Taskoria keeps you safe
+              </a>
             </p>
-           
           </div>
         </section>
       </section>

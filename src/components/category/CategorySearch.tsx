@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
 import axios from "axios";
 import { AnimatePresence, motion } from "motion/react";
+import { useCategories } from "@/hooks/useCategories";
 
 type Category = {
   category_id: number;
@@ -22,7 +23,7 @@ export default function CategorySearch({
   placeholder,
   presetCategory,
 }: Props) {
-  const [categories, setCategories] = useState<Category[]>([]);
+const {categories} = useCategories()
   const [query, setQuery] = useState("");
   const [filtered, setFiltered] = useState<Category[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -31,7 +32,24 @@ export default function CategorySearch({
   );
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-
+  useEffect(() => {
+    // ✅ STOP if already selected
+    if (selected) {
+      setFiltered([]);
+      setShowSuggestions(false);
+      return;
+    }
+  
+    if (!query.trim()) {
+      setFiltered(categories.slice(0, 10));
+      return;
+    }
+  
+    const f = categories.filter((c) =>
+      c.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFiltered(f);
+  }, [query, categories, selected]);
   useEffect(() => {
     if (presetCategory) {
       setQuery(presetCategory.name);
@@ -66,17 +84,17 @@ export default function CategorySearch({
     return () => document.removeEventListener("keydown", handleEsc);
   }, []);
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await axios.get("/api/signup/category-selection");
-        setCategories(res.data);
-      } catch (e) {
-        console.error("Failed to fetch categories");
-      }
-    };
-    load();
-  }, []);
+  // useEffect(() => {
+  //   const load = async () => {
+  //     try {
+  //       const res = await axios.get("/api/signup/category-selection");
+  //       setCategories(res.data);
+  //     } catch (e) {
+  //       console.error("Failed to fetch categories");
+  //     }
+  //   };
+  //   load();
+  // }, []);
 
   useEffect(() => {
     // if (selected) return;
@@ -126,7 +144,7 @@ export default function CategorySearch({
         behavior: "smooth",
       });
     }
-    if (!query) setFiltered(categories.slice(0, 10));
+    if (!query && !selected) setFiltered(categories.slice(0, 10));
   };
 
   return (

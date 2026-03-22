@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import LocationSearch from "../Location/locationsearch";
 import CategorySearch from "../category/CategorySearch";
+import { useCategories } from "@/hooks/useCategories";
 
 type Category = {
   category_id: number;
@@ -46,8 +47,7 @@ export default function StepOneCategoryForm({
   setSelectedLocationId,
   setSelectedLocation,
 }: Props) {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+ const {categories,loading}= useCategories()
   const [locationLoading, setLocationLoading] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const [showCategorySuggestions, setShowCategorySuggestions] = useState(false);
@@ -70,19 +70,19 @@ export default function StepOneCategoryForm({
 
   const isContinueEnabled = categoryId > 0 && location?.trim() !== "";
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("/api/signup/category-selection");
-        setCategories(res.data);
-      } catch {
-        toast.error("Failed to load categories");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const res = await axios.get("/api/signup/category-selection");
+  //       setCategories(res.data);
+  //     } catch {
+  //       toast.error("Failed to load categories");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     if (presetCategory) {

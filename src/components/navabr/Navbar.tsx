@@ -430,6 +430,8 @@ className="bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-me
             variant="ghost"
             onClick={() => setIsMenuOpen((p) => !p)}
             className="md:hidden p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl"
+            aria-label="Open Menu"
+            
           >
             {isMenuOpen ? <X /> : <MenuIcon />}
           </Button>

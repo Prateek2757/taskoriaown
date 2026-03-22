@@ -149,7 +149,8 @@ export default function ProviderProfileClientt({ provider }: { provider: any }) 
   const tabCount = activeFlags.filter(Boolean).length;
   const colClass = GRID_COLS[tabCount] ?? "grid-cols-3";
 
-  const defaultTab = hasPhotos
+  const 
+  defaultTab = hasPhotos
     ? "portfolio"
     : hasServices
       ? "services"

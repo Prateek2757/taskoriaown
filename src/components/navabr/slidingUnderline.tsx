@@ -41,7 +41,7 @@ function SlidingUnderlineNav({ currentLinks, pathname }: { currentLinks: any; pa
                     onMouseLeave={() => setHovered(null)}
                     className={`relative py-3.5 font-medium text-sm px-6 transition-colors ${
                         pathname === link.href 
-                            ? "text-[#3C7DED]" 
+                            ? "text-[#2563EB] dark:text-[#4d86e7] " 
                             : "text-gray-700 dark:text-gray-300"
                     }`}
                 >

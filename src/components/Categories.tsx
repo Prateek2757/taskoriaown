@@ -25,7 +25,7 @@ const itemVariants: Variants = {
 
 const staticImages = [
   {
-    url: "/images/homecleaning.webp",
+    url: "/images/homecleaning.avif",
     gradient: "from-red-500/20 to-orange-500/20",
     description:
       "Routine cleans, end-of-lease support, deep cleaning, and flexible one-off or scheduled jobs.",
@@ -37,7 +37,7 @@ const staticImages = [
       "Qualified help for small jobs, repairs, installations, and urgent callouts.",
   },
   {
-    url: "/images/gardening.webp",
+    url: "/images/gardening.avif",
     gradient: "from-slate-500/20 to-gray-500/20",
     description:
       "Regular garden care, mowing, tidy-ups, and seasonal maintenance.",
@@ -212,6 +212,7 @@ export default function Services() {
                     <div className="absolute inset-0">
                       <Image
                         fill
+                        priority
                         src={staticImages[index]?.url || staticImages[0].url}
                         alt={category.name}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -227,9 +228,12 @@ export default function Services() {
 
                     <div className="relative h-full flex flex-col justify-between p-6 lg:p-8">
                       <div className="flex justify-end">
-                        <button className=" button w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white  transition-all duration-300 group-hover:scale-110 group-hover:rotate-45">
+                        <Button
+                          className=" button w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white  transition-all duration-300 group-hover:scale-110 group-hover:rotate-45"
+                          aria-label="Open link"
+                        >
                           <ArrowUpRight className=" button w-5 h-5" />
-                        </button>
+                        </Button>
                       </div>
 
                       <div className="space-y-2">
@@ -237,7 +241,7 @@ export default function Services() {
                           {category.name}
                         </h3>
                         <p className="text-white/90 text-sm leading-relaxed max-w-md">
-                          { staticImages[index].description}
+                          {staticImages[index].description}
                         </p>
                       </div>
                     </div>

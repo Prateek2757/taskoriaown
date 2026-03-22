@@ -5,7 +5,7 @@ import { Toaster } from "sonner";
 import ModernNavbar from "@/components/navabr/Navbar";
 import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
-import { Poppins } from "next/font/google";
+import { Poppins,Bricolage_Grotesque, Cormorant_Garamond } from "next/font/google";
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import NotificationHandler from "@/components/NotificationHandler";
@@ -13,10 +13,24 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import SupportChatbot from "@/components/supportChatbox";
 import Script from "next/script";
 
+
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300","400","500","600","700"],
   variable: "--font-poppins",
+});
+
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  weight: ["800"],
+  variable: "--font-bricolage",
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["700"],
+  style: ["italic"],
+  variable: "--font-cormorant",
 });
 
 const BASE_URL = "https://www.taskoria.com";
@@ -125,9 +139,9 @@ export const viewport: Viewport = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const GA_ID = process.env.NEXT_PUBLIC_GOOGLEANALYTICS_MEASUREMENT_ID;
+  const GA_ID = process.env.NEXT_PUBLIC_GOOGLEANALYTICS_MESUREMENT_ID!;
   return (
-    <html className={poppins.variable} suppressHydrationWarning>
+    <html lang="en" className={`${poppins.variable} ${bricolage.variable} ${cormorant.variable}`} suppressHydrationWarning>
       <head>
       <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
@@ -144,12 +158,12 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="48x48" type="image/x-icon" />
         <link rel="apple-touch-icon" sizes="140x140" href="/taskorialogonew.png" />
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        {/* <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Cormorant+Garamond:ital,wght@1,700&display=swap"
           rel="stylesheet"
-        />
+        /> */}
 
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
