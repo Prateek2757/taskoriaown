@@ -361,9 +361,12 @@ async function handleRecurringPayment(
 
   await pool.query(
     `UPDATE professional_subscriptions
-     SET status='active'
-     WHERE subscription_id=$1 AND end_date < NOW()`,
-    [subscriptionId]
+     SET start_date = $1,
+         end_date = $2,
+         status = 'active',
+         payment_transaction_id = $3
+     WHERE subscription_id = $4`,
+    [newStartDate, newEndDate, txId, subscriptionId]
   );
 
   console.log(

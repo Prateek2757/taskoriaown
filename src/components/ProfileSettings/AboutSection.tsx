@@ -3,6 +3,7 @@
 import { uploadToSupabase } from "@/lib/uploadFileToSupabase";
 import Image from "next/image";
 import React, { useState, ChangeEvent, useEffect, useMemo } from "react";
+import { toast } from "sonner";
 
 type Props = {
   data?: {
@@ -93,6 +94,11 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
   const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       const file = e.target.files[0];
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Profile picture must be under 5MB.");
+        e.target.value = "";
+        return;
+      }
       setFormState((prev) => ({
         ...prev,
         avatarFile: file,
@@ -100,10 +106,15 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
       }));
     }
   };
-
+  
   const handleCompanyLogoChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       const file = e.target.files[0];
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Company logo must be under 5MB.");
+        e.target.value = ""; // reset input
+        return;
+      }
       setFormState((prev) => ({
         ...prev,
         companyLogoFile: file,
@@ -111,7 +122,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
       }));
     }
   };
-
   const handleCancel = () => {
     setFormState(initialState);
     setError(null);

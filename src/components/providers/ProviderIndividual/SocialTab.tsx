@@ -16,7 +16,7 @@ export function SocialTab({ socialLinks }: { socialLinks: any[] }) {
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="group flex items-center gap-4 p-4 rounded-xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/5 hover:border-blue-200 dark:hover:border-blue-800 hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-all duration-200"
+          className="group flex items-center gap-4 p-2 rounded-xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/5 hover:border-blue-200 dark:hover:border-blue-800 hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-all duration-200"
         >
           <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 flex items-center justify-center text-blue-600 shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-200">
             <SocialIcon platform={link.platform} className="w-4 h-4" />

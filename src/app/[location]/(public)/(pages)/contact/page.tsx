@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import { Mail, Phone, MessageCircle, Clock, HelpCircle, Send, CheckCircle } from 'lucide-react';
+import { Mail, Phone, MessageCircle, Clock, HelpCircle, Send, CheckCircle, Locate, MapPin } from 'lucide-react';
 
 export default function ContactSupport() {
   const [formData, setFormData] = useState({
@@ -66,7 +66,7 @@ export default function ContactSupport() {
 
           <div className="md:col-span-1 space-y-4">
 
-            <div className="group bg-white dark:bg-gray-900 rounded-2xl shadow-sm hover:shadow-md dark:shadow-gray-900/30 dark:hover:shadow-gray-900/50 p-5 border border-gray-100 dark:border-gray-800 transition-all duration-300">
+            <div className="group bg-white dark:bg-gray-900 rounded-2xl shadow-sm hover:shadow-md dark:shadow-gray-900/30 dark:hover:shadow-gray-900/50 p-3 border border-gray-100 dark:border-gray-800 transition-all duration-300">
               <div className="flex items-start gap-4">
                 <div className="bg-blue-50 dark:bg-blue-500/10 rounded-xl p-3 group-hover:scale-105 transition-transform duration-200">
                   <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -81,7 +81,7 @@ export default function ContactSupport() {
                     <span className="truncate">contactus@taskoria.com</span>
                     <Send className="w-3.5 h-3.5 shrink-0 group-hover/link:translate-x-0.5 transition-transform" />
                   </a>
-                  <div className="mt-2.5 flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-600">
+                  <div className="mt-2.5 flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
                     <Clock className="w-3.5 h-3.5 shrink-0" />
                     Response within 24 hours
                   </div>
@@ -89,7 +89,7 @@ export default function ContactSupport() {
               </div>
             </div>
 
-            <div className="group bg-white dark:bg-gray-900 rounded-2xl shadow-sm hover:shadow-md dark:shadow-gray-900/30 dark:hover:shadow-gray-900/50 p-5 border border-gray-100 dark:border-gray-800 transition-all duration-300">
+            <div className="group bg-white dark:bg-gray-900 rounded-2xl shadow-sm hover:shadow-md dark:shadow-gray-900/30 dark:hover:shadow-gray-900/50 p-3 border border-gray-100 dark:border-gray-800 transition-all duration-300">
               <div className="flex items-start gap-4">
                 <div className="bg-emerald-50 dark:bg-emerald-500/10 rounded-xl p-3 group-hover:scale-105 transition-transform duration-200">
                   <Phone className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -104,11 +104,11 @@ export default function ContactSupport() {
                     +61 474 655 902
                   </a>
                   <div className="mt-2.5 space-y-1">
-                    <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-600">
+                    <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-600">
                       <Clock className="w-3.5 h-3.5 shrink-0" />
                       Mon–Fri: 9:00 AM – 6:00 PM
                     </div>
-                    <div className="text-xs text-gray-400 dark:text-gray-600 ml-5">
+                    <div className="text-xs text-gray-500 dark:text-gray-600 ml-5">
                       Sat: 10:00 AM – 4:00 PM
                     </div>
                   </div>
@@ -116,7 +116,7 @@ export default function ContactSupport() {
               </div>
             </div>
 
-            <div className="group bg-white dark:bg-gray-900 rounded-2xl shadow-sm hover:shadow-md dark:shadow-gray-900/30 dark:hover:shadow-gray-900/50 p-5 border border-gray-100 dark:border-gray-800 transition-all duration-300">
+            {/* <div className="group bg-white dark:bg-gray-900 rounded-2xl shadow-sm hover:shadow-md dark:shadow-gray-900/30 dark:hover:shadow-gray-900/50 p-3 border border-gray-100 dark:border-gray-800 transition-all duration-300">
               <div className="flex items-start gap-4">
                 <div className="bg-purple-50 dark:bg-purple-500/10 rounded-xl p-3 group-hover:scale-105 transition-transform duration-200">
                   <MessageCircle className="w-5 h-5 text-purple-600 dark:text-purple-400" />
@@ -133,18 +133,16 @@ export default function ContactSupport() {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-800 rounded-2xl p-5 border border-blue-100 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-5 border border-blue-100 dark:border-gray-700">
               <div className="flex items-start gap-3">
-                <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
+                <MapPin className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">Quick Answers</h4>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2.5">Check our FAQ for instant solutions</p>
-                  <a href="#" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium inline-flex items-center gap-1 group/link">
-                    Visit Help Center
-                    <span className="group-hover/link:translate-x-0.5 transition-transform">→</span>
-                  </a>
+                  <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">Location</h4>
+                  <div className="mt-2.5 flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                   Level 34, 1 Eagle Street, Brisbane QLD 4000
+                  </div>                 
                 </div>
               </div>
             </div>
@@ -172,7 +170,6 @@ export default function ContactSupport() {
 
                   <form onSubmit={handleSubmit} className="space-y-5">
                     <div className="grid sm:grid-cols-2 gap-5">
-                      {/* Name */}
                       <div>
                         <label htmlFor="name" className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
                           Full Name <span className="text-red-400">*</span>
@@ -210,7 +207,6 @@ export default function ContactSupport() {
                       </div>
                     </div>
 
-                    {/* Subject */}
                     <div>
                       <label htmlFor="subject" className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
                         Subject <span className="text-red-400">*</span>
@@ -236,7 +232,6 @@ export default function ContactSupport() {
                       </select>
                     </div>
 
-                    {/* Message */}
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <label htmlFor="message" className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">

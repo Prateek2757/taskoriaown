@@ -37,6 +37,7 @@ export default function TaskoriaProPage() {
           packageName: pkg.name,
           freeTrailDays: pkg.free_trail_days,
       });
+console.log('price_1SzFaCF0IhXFWFdOp4NVpoIW');
 
       if (!response.status) {
         const errorData = await response.data.catch(() => ({}));
@@ -182,7 +183,6 @@ export default function TaskoriaProPage() {
               </p>
             </div>
 
-            {/* Visibility Section */}
             <div className={`mb-4 pb-4 border-b ${
               highlighted ? "border-blue-500/30" : "border-gray-200 dark:border-gray-700"
             }`}>
@@ -227,7 +227,6 @@ export default function TaskoriaProPage() {
               </p>
             </div>
 
-            {/* Features List */}
             <div className="space-y-2.5 mb-5">
               {features.map((feature, idx) => (
                 <div key={idx} className="flex items-start gap-2.5">

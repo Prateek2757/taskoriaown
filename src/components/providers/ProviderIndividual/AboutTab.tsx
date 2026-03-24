@@ -1,6 +1,6 @@
 "use client";
 
-import { Award, BadgeCheck, Languages, Calendar } from "lucide-react";
+import { Award, BadgeCheck,Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface AboutTabProps {
@@ -58,7 +58,7 @@ export function AboutTab({ certifications, languages, accreditations, provider }
       )}
 
       {accreditations.length > 0 && (
-        <div className="p-5 rounded-xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/5">
+        <div className="p-3 rounded-xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/5">
           <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
             <BadgeCheck className="w-4 h-4 text-blue-600" />
             Accreditations
@@ -89,7 +89,7 @@ export function AboutTab({ certifications, languages, accreditations, provider }
       )}
 
       {(provider.availability || provider.joineddate) && (
-        <div className="p-5 rounded-xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/5">
+        <div className="p-3 rounded-xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/5">
           <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
             <Calendar className="w-4 h-4 text-blue-600" />
             Availability

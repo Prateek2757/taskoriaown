@@ -59,12 +59,13 @@ const ConversationItem = memo(function ConversationItem({
   return (
     <div
       onClick={() => onSelect(c)}
-      className={`cursor-pointer px-5 py-4 border-b transition-all border-gray-100 dark:border-gray-800 group flex justify-between items-center ${isActive
+      className={`cursor-pointer px-5 py-4 border-b transition-all border-gray-100 dark:border-gray-800 group flex justify-between items-center ${
+        isActive
           ? "bg-[#f4f1ff] dark:bg-[#1a1535] border-l-4 border-l-[#6C63FF]"
           : hasUnread
             ? "bg-[#f0f5ff] dark:bg-[#1c163a] hover:bg-[#f9f8ff] dark:hover:bg-black/30"
             : "hover:bg-[#f9f8ff] dark:hover:bg-black/30"
-        }`}
+      }`}
     >
       <div className="flex items-center gap-3 min-w-0 flex-1">
         <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 shadow-md">
@@ -94,13 +95,21 @@ const ConversationItem = memo(function ConversationItem({
               </div>
             )}
           </div>
-
           <div className="flex justify-between items-center mt-0.5 gap-2">
             <p
-              className={`text-sm truncate flex-1 min-w-0 ${hasUnread
+              className="text-sm truncate flex-1 min-w-0 
+                   font-medium text-gray-600 dark:text-gray-100"
+            >
+              {c.task_title}
+            </p>
+          </div>
+          <div className="flex justify-between items-center mt-0.5 gap-2">
+            <p
+              className={`text-sm truncate flex-1 min-w-0 ${
+                hasUnread
                   ? "font-medium text-gray-900 dark:text-gray-100"
                   : "text-gray-600 dark:text-gray-400"
-                }`}
+              }`}
             >
               {messagePreview}
             </p>
@@ -132,8 +141,6 @@ export default function ChatSidebar({
     [myId]
   );
 
-  // Pre-compute (other participant, filtered) in one pass to avoid iterating
-  // participants twice per row during filter and again during render.
   const filteredWithOther = useMemo(() => {
     const term = searchTerm.toLowerCase();
     const result: { convo: Conversation; other: Participant }[] = [];

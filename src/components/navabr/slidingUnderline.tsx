@@ -9,22 +9,24 @@ function SlidingUnderlineNav({ currentLinks, pathname }: { currentLinks: any; pa
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!containerRef.current) return;
+        const container = containerRef.current;
+        if (!container) return;
       
-        const items = containerRef.current.querySelectorAll<HTMLElement>("[data-nav-item]");
-        const pos: Record<string, { width: number; left: number }> = {};
+        const items = container.querySelectorAll<HTMLElement>("[data-nav-item]");
       
         const calculate = () => {
+          const c = containerRef.current;
+          if (!c) return;
+          const containerRect = c.getBoundingClientRect();
+          const newPos: Record<string, { width: number; left: number }> = {};
           items.forEach((el) => {
             const rect = el.getBoundingClientRect();
-      
-            pos[el.dataset.navItem!] = {
+            newPos[el.dataset.navItem!] = {
               width: rect.width,
-              left: rect.left - containerRef.current!.getBoundingClientRect().left,
+              left: rect.left - containerRect.left,
             };
           });
-      
-          setPositions(pos);
+          setPositions(newPos);
         };
       
         requestAnimationFrame(calculate);

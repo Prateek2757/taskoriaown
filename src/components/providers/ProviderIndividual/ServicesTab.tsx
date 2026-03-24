@@ -8,7 +8,7 @@ export function ServicesTab({ profileServices }: { profileServices: any[] }) {
       {profileServices.map((svc: any, idx: number) => (
         <div
           key={svc.id}
-          className="group relative p-5 rounded-xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/5 hover:border-blue-200 dark:hover:border-blue-800 hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-all duration-200"
+          className="group relative p-3 rounded-xl border border-gray-100 dark:border-white/10 bg-white dark:bg-white/5 hover:border-blue-200 dark:hover:border-blue-800 hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-all duration-200"
         >
           <div className="flex items-start gap-4">
             <div className="shrink-0 w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 flex items-center justify-center group-hover:bg-blue-600 group-hover:border-blue-600 transition-colors duration-200">

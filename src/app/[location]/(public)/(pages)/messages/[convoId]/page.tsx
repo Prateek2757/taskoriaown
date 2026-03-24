@@ -28,6 +28,10 @@ interface Conversation {
   last_message_at?: string;
 }
 
+function softNavigate(path: string) {
+  window.history.replaceState(null, "", path);
+}
+
 export default function ChatPageInline({
   params,
 }: {
@@ -53,9 +57,7 @@ export default function ChatPageInline({
   const conversationsRef = useRef<Conversation[]>([]);
 
   const routeConvoIdRef = useRef<string | null>(routeConvoId);
-  const routerRef = useRef(router);
   useEffect(() => { routeConvoIdRef.current = routeConvoId; }, [routeConvoId]);
-  useEffect(() => { routerRef.current = router; }, [router]);
 
   useEffect(() => { activeConvoIdRef.current = activeConversationId; }, [activeConversationId]);
   useEffect(() => { conversationsRef.current = conversations; }, [conversations]);
@@ -66,10 +68,11 @@ export default function ChatPageInline({
   );
 
   useEffect(() => {
-    const check = () => setIsMobile(window.matchMedia("(max-width: 640px)").matches);
+    const mq = window.matchMedia("(max-width: 640px)");
+    const check = () => setIsMobile(mq.matches);
     check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
+    mq.addEventListener("change", check);
+    return () => mq.removeEventListener("change", check);
   }, []);
 
   useEffect(() => {
@@ -96,11 +99,12 @@ export default function ChatPageInline({
       if (convos.length > 0 && !didInitialSelect.current) {
         const rid = routeConvoIdRef.current;
         const target = rid ? convos.find((c) => String(c.id) === String(rid)) : null;
-        if (target) {
-          setActiveConversationId(target.id);
-        } else {
-          setActiveConversationId(convos[0].id);
-          routerRef.current.replace(`/messages/${convos[0].id}`);
+        const selected = target ?? convos[0];
+
+        setActiveConversationId(selected.id);
+
+        if (!target) {
+          softNavigate(`/messages/${selected.id}`);
         }
         didInitialSelect.current = true;
       }
@@ -113,20 +117,30 @@ export default function ChatPageInline({
     }
   }, []);
 
+  const prevEndpointRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (!endpoint) return;
+    if (prevEndpointRef.current === endpoint && hasFetched.current) return;
+    prevEndpointRef.current = endpoint;
     hasFetched.current = false;
     didInitialSelect.current = false;
     fetchConversations(endpoint);
-  }, [endpoint]);
+  }, [endpoint, fetchConversations]);
 
-  const conversationIdsKey = useMemo(
-    () => conversations.map((c) => c.id).join(","),
+
+  const stableConversationIdsKey = useMemo(
+    () =>
+      conversations
+        .map((c) => c.id)
+        .slice()
+        .sort()
+        .join(","),
     [conversations]
   );
 
   useEffect(() => {
-    if (!conversationIdsKey || !session?.user?.id) return;
+    if (!stableConversationIdsKey || !session?.user?.id) return;
 
     sidebarChannelsRef.current.forEach((ch) => supabaseBrowser.removeChannel(ch));
     sidebarChannelsRef.current = [];
@@ -148,19 +162,26 @@ export default function ChatPageInline({
         const isActiveConvo = activeConvoIdRef.current === msg.conversation_id;
         const senderName = isMyMessage
           ? "You"
-          : convo.participants.find((p) => String(p.user_id) === String(msg.user_id))?.name ?? "Unknown";
+          : convo.participants.find((p) => String(p.user_id) === String(msg.user_id))?.name ??
+            "Unknown";
 
         setConversations((prev) => {
+          let changed = false;
           const updated = prev.map((c) => {
             if (c.id !== msg.conversation_id) return c;
+            changed = true;
             return {
               ...c,
               last_message: msg.content,
               last_message_sender: senderName,
               last_message_at: msg.created_at,
-              unread_count: isMyMessage || isActiveConvo ? 0 : (c.unread_count || 0) + 1,
+              unread_count:
+                isMyMessage || isActiveConvo ? 0 : (c.unread_count || 0) + 1,
             };
           });
+
+          if (!changed) return prev; 
+
           return [...updated].sort((a, b) => {
             const tA = a.last_message_at ? new Date(a.last_message_at).getTime() : 0;
             const tB = b.last_message_at ? new Date(b.last_message_at).getTime() : 0;
@@ -178,17 +199,22 @@ export default function ChatPageInline({
       sidebarChannelsRef.current.forEach((ch) => supabaseBrowser.removeChannel(ch));
       sidebarChannelsRef.current = [];
     };
-  }, [conversationIdsKey, session?.user?.id]);
+  }, [stableConversationIdsKey, session?.user?.id]);
 
   const handleSelectConversation = useCallback((conversation: Conversation) => {
+    if (activeConvoIdRef.current === conversation.id) return; // already active
+
     setActiveConversationId(conversation.id);
     setConversations((prev) =>
       prev.map((c) => (c.id === conversation.id ? { ...c, unread_count: 0 } : c))
     );
-    routerRef.current.push(`/messages/${conversation.id}`);
+
+    softNavigate(`/messages/${conversation.id}`);
+
     axios
       .get(`/api/messages/conversation-read/${conversation.id}`)
       .catch((err) => console.error("Failed to mark as read:", err));
+
     if (window.matchMedia("(max-width: 640px)").matches) {
       setSidebarOpen(false);
     }

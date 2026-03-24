@@ -1,5 +1,3 @@
-
-
 import Image from "next/image";
 import ScrollPopularSection from "../ScrollPopularSection";
 import HeroInteractive from "./HeroInteractive";

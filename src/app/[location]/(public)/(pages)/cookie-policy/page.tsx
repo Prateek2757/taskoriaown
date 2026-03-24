@@ -1,5 +1,6 @@
 
 import type { Metadata } from "next";
+import Script from "next/script";
 
 
 
@@ -136,7 +137,7 @@ export default function CookiePolicyPage() {
   return (
     <>
       {/* Structured Data for SEO */}
-      <script
+      <Script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({

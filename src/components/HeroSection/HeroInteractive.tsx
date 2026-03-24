@@ -1,8 +1,4 @@
 "use client";
-// HeroInteractive.tsx — CLIENT COMPONENT
-// Owns: CategorySearch, PostJob button, Join as Provider button, NewRequestModal.
-// Kept intentionally narrow so only this island hydrates on the client.
-
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -33,7 +29,14 @@ export default function HeroInteractive() {
   const handlePostJob = () => {
     setOpenModal(true);
   };
-
+  const start = 1774250793;
+  const end = 1776929193;
+  
+  // const startDate = new Date(start * 1000); // multiply by 1000 for milliseconds
+  // const endDate = new Date(end * 1000);
+  
+  // console.log(startDate.toUTCString()); // e.g., Wed, 21 Jan 2026 09:46:33 GMT
+  // console.log(endDate.toUTCString());
   const handleSelectCategory = (cat: Category | null) => {
     if (cat) {
       setSelectedCategory(cat);
@@ -43,9 +46,7 @@ export default function HeroInteractive() {
 
   return (
     <>
-      {/* ── Search box ── */}
       <div className="max-w-2xl relative mx-auto mt-6 sm:px-4">
-        {/* Hero background image — rendered here so it stays with the interactive island */}
         <div className="absolute left-[-900px] top-[-15px] h-[200px] inset-0 pointer-events-none dark:opacity-80">
           <Image
             src="/images/herobgnew.avif"

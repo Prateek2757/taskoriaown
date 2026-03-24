@@ -9,7 +9,7 @@ export function PortfolioTab({ photos }: { photos: any[] }) {
   );
 
   return (
-    <div className="grid sm:grid-cols-2 gap-4">
+    <div className="grid p-2 sm:grid-cols-2 gap-4">
       {sorted.map((photo: any) => (
         <div
           key={photo.id}

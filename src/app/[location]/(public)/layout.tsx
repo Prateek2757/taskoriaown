@@ -5,7 +5,11 @@ import { Toaster } from "sonner";
 import ModernNavbar from "@/components/navabr/Navbar";
 import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
-import { Poppins,Bricolage_Grotesque, Cormorant_Garamond } from "next/font/google";
+import {
+  Poppins,
+  Bricolage_Grotesque,
+  Cormorant_Garamond,
+} from "next/font/google";
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import NotificationHandler from "@/components/NotificationHandler";
@@ -13,10 +17,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import SupportChatbot from "@/components/supportChatbox";
 import Script from "next/script";
 
-
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["300","400","500","600","700"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-poppins",
 });
 
@@ -34,7 +37,6 @@ const cormorant = Cormorant_Garamond({
 });
 
 const BASE_URL = "https://www.taskoria.com";
-
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -122,104 +124,102 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
-
-
 };
-
 
 export const viewport: Viewport = {
   themeColor: "#8A2BE2",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5,   
-  userScalable: true, 
+  maximumScale: 5,
+  userScalable: true,
 };
-
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const GA_ID = process.env.NEXT_PUBLIC_GOOGLEANALYTICS_MESUREMENT_ID!;
   return (
-    <html lang="en" className={`${poppins.variable} ${bricolage.variable} ${cormorant.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${poppins.variable} ${bricolage.variable} ${cormorant.variable}`}
+      suppressHydrationWarning
+    >
       <head>
-      <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_ID}');
-          `}
-        </Script>
+        {/* Only plain <link> and <meta> tags here — no <Script> */}
         <link rel="icon" href="/favicon.ico" sizes="48x48" type="image/x-icon" />
         <link rel="apple-touch-icon" sizes="140x140" href="/taskorialogonew.png" />
-
-        {/* <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Cormorant+Garamond:ital,wght@1,700&display=swap"
-          rel="stylesheet"
-        /> */}
-
-        {/* <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" /> */}
-
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: "Taskoria",
-              url: BASE_URL,
-              logo: `${BASE_URL}/taskorialogonew.png`,
-              description:
-                "Taskoria connects Australians with verified local professionals for home, business, and digital services.",
-              address: {
-                "@type": "PostalAddress",
-                addressCountry: "AU",
-              },
-              contactPoint: {
-                "@type": "ContactPoint",
-                contactType: "customer support",
-                availableLanguage: "English",
-              },
-              sameAs: [
-                "https://www.facebook.com/taskoria",
-                "https://twitter.com/taskoria",
-              ],
-            }),
-          }}
-        />
-
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              name: "Taskoria",
-              url: BASE_URL,
-              inLanguage: "en-AU",
-              potentialAction: {
-                "@type": "SearchAction",
-                target: {
-                  "@type": "EntryPoint",
-                  urlTemplate: `${BASE_URL}/services?q={search_term_string}`,
+        <Script
+            id="schema-org"
+            type="application/ld+json"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                name: "Taskoria",
+                url: BASE_URL,
+                logo: `${BASE_URL}/taskorialogonew.png`,
+                description:
+                  "Taskoria connects Australians with verified local professionals for home, business, and digital services.",
+                address: { "@type": "PostalAddress", addressCountry: "AU" },
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  contactType: "customer support",
+                  availableLanguage: "English",
                 },
-                "query-input": "required name=search_term_string",
-              },
-            }),
-          }}
-        />
+                sameAs: [
+                  "https://www.facebook.com/taskoria",
+                  "https://twitter.com/taskoria",
+                ],
+              }),
+            }}
+          />
+          <Script
+            id="schema-website"
+            type="application/ld+json"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "Taskoria",
+                url: BASE_URL,
+                inLanguage: "en-AU",
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: {
+                    "@type": "EntryPoint",
+                    urlTemplate: `${BASE_URL}/services?q={search_term_string}`,
+                  },
+                  "query-input": "required name=search_term_string",
+                },
+              }),
+            }}
+          />
       </head>
 
       <AuthProvider>
         <body className="antialiased dark:bg-black">
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA_ID}');
+            `}
+          </Script>
+          <Script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon='{"token": "b0381ce5a7494c56869a77d5b4d0623c"}'
+            strategy="afterInteractive"
+          />
+         
+
           <NotificationHandler />
           <ThemeProvider
             attribute="class"

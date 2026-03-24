@@ -12,6 +12,7 @@ export async function fetchProviders(limit?: number) {
     if (!res.ok) throw new Error("Failed to fetch providers");
 
     const data = await res.json();
+    
     return limit ? data.slice(0, limit) : data;
   } catch (error: any) {
     console.error(error);

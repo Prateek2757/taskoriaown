@@ -2,6 +2,7 @@ import ProviderProfileClient from "@/components/providers/ProviderIndividual/Pro
 import { fetchProviders } from "@/utils/api";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 
 function isProfileComplete(provider: any): boolean {
   return !!(
@@ -100,7 +101,7 @@ export default async function ProviderPage({ params }: any) {
 
   return (
     <>
-      <script
+      <Script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />

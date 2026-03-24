@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Careers at Taskoria | Build the Future of Local Services",
@@ -245,7 +246,7 @@ export default function CareersComingSoonPage() {
         </main>
       </div>
 
-      <script
+      <Script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({

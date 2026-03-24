@@ -86,7 +86,7 @@ export default function ChatWindow({
 
     const chan = supabaseBrowser.channel(`conversation:${conversationId}`, {
       config: {
-        broadcast: { self: true },
+        broadcast: { self: false },
         presence: { key: me.id },
       },
     });

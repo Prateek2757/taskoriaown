@@ -585,6 +585,22 @@ className="bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-me
                 ) : (
                   ""
                 )}
+                  {session?.user.public_id ? (
+            <Link
+              href={`/providerprofile/${session.user.public_id}`}
+              onClick={() => {
+                setIsMenuOpen(true);
+                setIsProfileOpen(true);
+              }}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
+              >
+                                    <User className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+
+              View Public Profile
+            </Link>
+          ) : (
+            ""
+          )}
                 {
                   session ?    <Link
                   href="/settings/billing/taskoria_pro"

@@ -208,7 +208,7 @@ export default function MessageList({
 
                     return (
                       <motion.div
-                        key={m.id + index}
+                        key={m.id}
                         initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
                         className={`flex mb-3 ${isMe ? "justify-end" : "justify-start"}`}

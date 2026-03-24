@@ -1,8 +1,7 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
-import axios from "axios";
 import { AnimatePresence, motion } from "motion/react";
 import { useCategories } from "@/hooks/useCategories";
 
@@ -23,40 +22,29 @@ export default function CategorySearch({
   placeholder,
   presetCategory,
 }: Props) {
-const {categories} = useCategories()
-  const [query, setQuery] = useState("");
-  const [filtered, setFiltered] = useState<Category[]>([]);
+  const { categories } = useCategories();
+  const [query, setQuery] = useState(presetCategory?.name ?? "");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selected, setSelected] = useState<Category | null>(
-    presetCategory || null
+    presetCategory ?? null
   );
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    // ✅ STOP if already selected
-    if (selected) {
-      setFiltered([]);
-      setShowSuggestions(false);
-      return;
-    }
-  
-    if (!query.trim()) {
-      setFiltered(categories.slice(0, 10));
-      return;
-    }
-  
-    const f = categories.filter((c) =>
-      c.name.toLowerCase().includes(query.toLowerCase())
-    );
-    setFiltered(f);
-  }, [query, categories, selected]);
-  useEffect(() => {
-    if (presetCategory) {
-      setQuery(presetCategory.name);
-      setSelected(presetCategory);
-    }
-  }, [presetCategory]);
 
+  // ✅ Depend on primitives, not the object reference
+  useEffect(() => {
+    if (!presetCategory) return;
+
+    setQuery((prev) =>
+      prev === presetCategory.name ? prev : presetCategory.name
+    );
+
+    setSelected((prev) =>
+      prev?.category_id === presetCategory.category_id ? prev : presetCategory
+    );
+  }, [presetCategory?.category_id, presetCategory?.name]);
+
+  // ✅ No deps that change — stable, no issue
   useEffect(() => {
     function handleOutside(e: MouseEvent | TouchEvent) {
       if (
@@ -76,6 +64,7 @@ const {categories} = useCategories()
     };
   }, []);
 
+  // ✅ No deps that change — stable, no issue
   useEffect(() => {
     function handleEsc(e: KeyboardEvent) {
       if (e.key === "Escape") setShowSuggestions(false);
@@ -84,48 +73,26 @@ const {categories} = useCategories()
     return () => document.removeEventListener("keydown", handleEsc);
   }, []);
 
-  // useEffect(() => {
-  //   const load = async () => {
-  //     try {
-  //       const res = await axios.get("/api/signup/category-selection");
-  //       setCategories(res.data);
-  //     } catch (e) {
-  //       console.error("Failed to fetch categories");
-  //     }
-  //   };
-  //   load();
-  // }, []);
-
-  useEffect(() => {
-    // if (selected) return;
-
-    if (!query.trim()) {
-      setFiltered(categories.slice(0, 10));
-      return;
-    }
-
-    const f = categories.filter((c) =>
+  // ✅ `selected` is state (stable ref when unchanged), `categories` from hook
+  const filtered = useMemo(() => {
+    if (selected) return [];
+    if (!query.trim()) return categories.slice(0, 10);
+    return categories.filter((c) =>
       c.name.toLowerCase().includes(query.toLowerCase())
     );
-    setFiltered(f);
   }, [query, categories, selected]);
 
   const handleSelect = (cat: Category) => {
     setQuery(cat.name);
     setSelected(cat);
     setShowSuggestions(false);
-    onSelect?.({
-      category_id: cat.category_id,
-      name: cat.name,
-      slug: cat.slug,
-    });
+    onSelect?.({ category_id: cat.category_id, name: cat.name, slug: cat.slug });
   };
 
   const handleClear = () => {
     setQuery("");
     setSelected(null);
     setShowSuggestions(false);
-    setFiltered(categories.slice(0, 10));
     onSelect?.(null);
   };
 
@@ -135,16 +102,14 @@ const {categories} = useCategories()
     setShowSuggestions(true);
   };
 
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleFocus = () => {
     setShowSuggestions(true);
-    const winwidth = window.innerWidth;
-    if (winwidth < 640) {
+    if (window.innerWidth < 640) {
       window.scrollTo({
-        top: (wrapperRef.current?.offsetTop || 0) + 170,
+        top: (wrapperRef.current?.offsetTop ?? 0) + 170,
         behavior: "smooth",
       });
     }
-    if (!query && !selected) setFiltered(categories.slice(0, 10));
   };
 
   return (
@@ -155,9 +120,9 @@ const {categories} = useCategories()
         type="text"
         value={query}
         onChange={(e) => handleChange(e.target.value)}
-        placeholder={placeholder || "Search category..."}
-        onFocus={(e) => handleFocus(e)}
-        className="pl-9 pr-9  border- py-5 max-sm:text-sm"
+        placeholder={placeholder ?? "Search category..."}
+        onFocus={handleFocus}
+        className="pl-9 pr-9 border- py-5 max-sm:text-sm"
       />
 
       {query && (

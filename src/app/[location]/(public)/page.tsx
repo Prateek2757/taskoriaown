@@ -5,6 +5,7 @@ import FeaturesPage from "@/components/Features";
 import Testomonail from "@/components/Testomonail";
 import HeroSection from "@/components/HeroSection/Herosection";
 import HowTaskoriaWorks from "@/components/how-taskoria-works";
+import Script from "next/script";
 
 const BASE_URL = "https://www.taskoria.com";
 
@@ -256,7 +257,7 @@ const structuredData = {
 export default function HomePage() {
   return (
     <>
-      <script
+      <Script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />

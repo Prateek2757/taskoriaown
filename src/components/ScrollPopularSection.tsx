@@ -2,13 +2,12 @@
 import { ChevronRight, TrendingUp } from "lucide-react";
 import { useCategories } from "@/hooks/useCategories";
 import { Skeleton } from "./ui/skeleton";
-import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 const staticImages = [
   {
-    url: "/images/homecleaning.webp",
+    url: "/images/homecleaning.avif",
     gradient: "from-red-500/20 to-orange-500/20",
   },
   {
@@ -16,7 +15,7 @@ const staticImages = [
     gradient: "from-orange-500/20 to-amber-500/20",
   },
   {
-    url: "/images/gardening.webp",
+    url: "/images/gardening.avif",
     gradient: "from-slate-500/20 to-gray-500/20",
   },
   {

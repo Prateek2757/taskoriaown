@@ -1,8 +1,4 @@
 "use client";
-
-import Link from "next/link";
-import { Calendar, MessageCircle, Bot, ExternalLink } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { SocialIcon, platformLabel } from "./SocialIcon";
 
 interface BookingPanelProps {
@@ -15,7 +11,7 @@ export function BookingPanel({ provider, socialLinks }: BookingPanelProps) {
 
   return (
     <div className="bg-white dark:bg-[#0c1220] border border-gray-100 dark:border-white/10 rounded-2xl shadow-xl shadow-black/5 overflow-hidden">
-      {provider.hourlyRate != null && (
+      {/* {provider.hourlyRate != null && (
         <div className="px-5 py-4 bg-gradient-to-r from-blue-600 to-blue-600 text-white">
           <div className="flex items-baseline gap-1">
             <span className="text-3xl font-bold">${provider.hourlyRate}</span>
@@ -23,7 +19,7 @@ export function BookingPanel({ provider, socialLinks }: BookingPanelProps) {
           </div>
           <p className="text-xs text-white/70 mt-0.5">Starting rate · may vary by job</p>
         </div>
-      )}
+      )} */}
 
       {/* <div className="p-5 space-y-3">
         <Button asChild className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md shadow-blue-500/20">

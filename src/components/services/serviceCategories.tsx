@@ -2,17 +2,9 @@
 
 import { type ComponentType, useMemo, useState } from "react";
 import {
-  ArrowRight,
-  BadgeCheck,
-  Briefcase,
-  CheckCircle2,
-  ChevronRight,
-  Clock3,
   FolderOpen,
   Search,
-  ShieldCheck,
-  UserCheck,
-  X,
+  X
 } from "lucide-react";
 import Link from "next/link";
 import { Input } from "../ui/input";
