@@ -22,7 +22,7 @@ export default function CategorySearch({
   placeholder,
   presetCategory,
 }: Props) {
-  const { categories } = useCategories();
+  const { categories, loading } = useCategories();
   const [query, setQuery] = useState(presetCategory?.name ?? "");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selected, setSelected] = useState<Category | null>(
@@ -71,16 +71,24 @@ export default function CategorySearch({
   }, []);
 
   const filtered = useMemo(() => {
-    if (!categories || categories.length === 0) return [];
-  
-    if (selected && query == selected.name) return [];
-  
+    // categories is undefined while loading — show nothing
+    if (!categories) return [];
+
+    if (selected && query === selected.name) return [];
+
     if (!query.trim()) return categories.slice(0, 10);
-  
+
     return categories.filter((c) =>
       c.name.toLowerCase().includes(query.toLowerCase())
     );
   }, [query, categories, selected]);
+
+  const showNoResults =
+    !loading &&
+    !!categories &&
+    query.trim().length > 0 &&
+    filtered.length === 0 &&
+    !(selected && query === selected.name);
 
   const handleSelect = (cat: Category) => {
     setQuery(cat.name);
@@ -158,7 +166,17 @@ export default function CategorySearch({
           </motion.div>
         )}
 
-        {showSuggestions && filtered.length === 0 && query.trim() && (
+        {showSuggestions && loading && query.trim() && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="absolute z-50 bg-white dark:bg-gray-800 border mt-1 w-full rounded-lg p-3 text-gray-500 dark:text-gray-400 text-sm shadow-lg"
+          >
+            Loading categories...
+          </motion.div>
+        )}
+
+        {showSuggestions && showNoResults && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
