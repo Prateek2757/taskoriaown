@@ -9,6 +9,7 @@ type Category = {
   category_id: number;
   name: string;
   slug?: string;
+  keywords?: string[] | null; 
 };
 
 type Props = {
@@ -71,16 +72,18 @@ export default function CategorySearch({
   }, []);
 
   const filtered = useMemo(() => {
-    // categories is undefined while loading — show nothing
     if (!categories) return [];
-
     if (selected && query === selected.name) return [];
-
     if (!query.trim()) return categories.slice(0, 10);
-
-    return categories.filter((c) =>
-      c.name.toLowerCase().includes(query.toLowerCase())
-    );
+  
+    const q = query.toLowerCase().trim();
+  
+    return categories.filter((c) => {
+      const nameMatch = c.name.toLowerCase().includes(q);
+      // const keywordMatch = c.keywords?.some((k) => k.toLowerCase().includes(q));
+      return nameMatch 
+      // || keywordMatch;
+    });
   }, [query, categories, selected]);
 
   const showNoResults =

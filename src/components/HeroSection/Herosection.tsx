@@ -62,7 +62,6 @@ export default function HeroSection() {
           aria-hidden="true"
         />
 
-      
         <div
           className="container md:pt-10 pt-6 max-md:bg-linear-to-r from-[#3C7DED]/25 via-[#41A6EE]/20
             to-[#46CBEE]/25 mx-auto md:px-4 relative z-10"
@@ -79,22 +78,31 @@ export default function HeroSection() {
               height={5}
               fetchPriority="high"
             />
-            <span>Australia-first marketplace • Post for free • Local providers</span>
+            <span>
+              Australia-first marketplace • Post for free • Local providers
+            </span>
           </div>
 
           <div className="max-w-auto mx-auto px-4 space-y-6">
             <h1
               className="text-4xl md:text-6xl leading-tight mb-0 md:mb-8 mt-2 md:mt-0"
-              style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800 }}
+              style={{
+                fontFamily: "'Bricolage Grotesque', sans-serif",
+                fontWeight: 800,
+              }}
             >
-              <span className="text-foreground dark:text-white">Find the quote.</span>{" "}
-
+              <span className="text-foreground dark:text-white">
+                Australia’s best
+              </span>{" "}
               <span className="relative inline-block">
                 <span
                   className="bg-[#2563EB] bg-clip-text text-transparent"
-                  style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800 }}
+                  style={{
+                    fontFamily: "'Bricolage Grotesque', sans-serif",
+                    fontWeight: 800,
+                  }}
                 >
-                  Connect {" "}
+                  professionals,{" "}
                 </span>
 
                 <span
@@ -113,12 +121,14 @@ export default function HeroSection() {
                   <div className="absolute inset-x-60 top-0 bg-linear-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
                 </span>
               </span>{" "}
-
               <span
                 className="block bg-[#2563EB] bg-clip-text text-transparent"
-                style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800 }}
+                style={{
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
+                  fontWeight: 800,
+                }}
               >
-                with trusted local tradies
+                all in one place.{" "}
               </span>
             </h1>
 
@@ -179,8 +189,8 @@ export default function HeroSection() {
               Need a provider fast?
             </h3>
             <p className="text-gray-500 text-sm dark:text-gray-400 mb-4">
-              Post your job for free and receive responses from trusted local professionals,
-              with clearer quotes and safer hiring support.
+              Post your job for free and receive responses from trusted local
+              professionals, with clearer quotes and safer hiring support.
             </p>
           </div>
         </div>
@@ -191,8 +201,8 @@ export default function HeroSection() {
         >
           <div className="container mx-auto px-4 py-4">
             <p className="text-sm text-slate-700 dark:text-slate-300 text-center">
-              Background-checked profiles, clear quotes, direct communication, and safer
-              hiring support.&nbsp;
+              Background-checked profiles, clear quotes, direct communication,
+              and safer hiring support.&nbsp;
               <a
                 href="/trust-safety"
                 className="font-semibold text-blue-600 hover:underline"

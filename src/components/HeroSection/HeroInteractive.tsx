@@ -82,15 +82,14 @@ export default function HeroInteractive() {
         </div>
       </div>
 
-      <div className="flex gap-2 pb-4 sm:gap-4 justify-center max-w-md mx-auto mt-6">
+      <div className="flex gap-2 pb-4 sm:gap-4 justify-center max-w-xs mx-auto mt-4">
         <Button
           onClick={handlePostJob}
           disabled={loading}
-          className="flex-1 py-5 bg-[#2563EB] text-white"
+          className="flex-1 py-5  bg-[#2563EB] text-white"
           aria-label="Post a job to find service providers"
         >
-          Post a Job Free
-          <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
+Get Free Quotes          <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
         </Button>
 
         <NewRequestModal
@@ -98,7 +97,7 @@ export default function HeroInteractive() {
           onClose={() => setOpenModal(false)}
           presetCategory={selectedCategory}
         />
-
+{/* 
         {!session && (
           <Button
             variant="outline"
@@ -108,7 +107,7 @@ export default function HeroInteractive() {
           >
             Join as Provider
           </Button>
-        )}
+        )} */}
       </div>
     </>
   );
