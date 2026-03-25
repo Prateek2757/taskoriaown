@@ -31,7 +31,6 @@ export default function CategorySearch({
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // ✅ Depend on primitives, not the object reference
   useEffect(() => {
     if (!presetCategory) return;
 
@@ -44,7 +43,6 @@ export default function CategorySearch({
     );
   }, [presetCategory?.category_id, presetCategory?.name]);
 
-  // ✅ No deps that change — stable, no issue
   useEffect(() => {
     function handleOutside(e: MouseEvent | TouchEvent) {
       if (
@@ -64,7 +62,6 @@ export default function CategorySearch({
     };
   }, []);
 
-  // ✅ No deps that change — stable, no issue
   useEffect(() => {
     function handleEsc(e: KeyboardEvent) {
       if (e.key === "Escape") setShowSuggestions(false);
@@ -73,10 +70,13 @@ export default function CategorySearch({
     return () => document.removeEventListener("keydown", handleEsc);
   }, []);
 
-  // ✅ `selected` is state (stable ref when unchanged), `categories` from hook
   const filtered = useMemo(() => {
-    if (selected) return [];
+    if (!categories || categories.length === 0) return [];
+  
+    if (selected && query == selected.name) return [];
+  
     if (!query.trim()) return categories.slice(0, 10);
+  
     return categories.filter((c) =>
       c.name.toLowerCase().includes(query.toLowerCase())
     );

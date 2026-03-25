@@ -87,14 +87,14 @@ export default function HeroSection() {
               className="text-4xl md:text-6xl leading-tight mb-0 md:mb-8 mt-2 md:mt-0"
               style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800 }}
             >
-              <span className="text-foreground dark:text-white">Post your job.</span>{" "}
+              <span className="text-foreground dark:text-white">Find the quote.</span>{" "}
 
               <span className="relative inline-block">
                 <span
                   className="bg-[#2563EB] bg-clip-text text-transparent"
                   style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800 }}
                 >
-                  Get quotes{" "}
+                  Connect {" "}
                 </span>
 
                 <span
@@ -118,7 +118,7 @@ export default function HeroSection() {
                 className="block bg-[#2563EB] bg-clip-text text-transparent"
                 style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 800 }}
               >
-                from trusted professionals.
+                with trusted local tradies
               </span>
             </h1>
 

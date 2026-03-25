@@ -60,7 +60,6 @@ export default function HeroInteractive() {
 
         <div className="relative w-full max-w-3xl group flex sm:items-center max-sm:gap-2">
           <div className="relative flex-1 sm:mr-4 w-full">
-            {/* Hover glow ring */}
             <div
               className="absolute -inset-[2px] rounded-lg bg-[#3C7DED] blur-md opacity-0
                 group-hover:opacity-100 transition duration-500"
@@ -75,7 +74,6 @@ export default function HeroInteractive() {
             </div>
           </div>
 
-          {/* Browse-all anchor — still useful even without JS */}
           <Link
             href={`/services/${slugvalue}`}
             className="sm:w-auto sm:mt-0"
@@ -84,7 +82,6 @@ export default function HeroInteractive() {
         </div>
       </div>
 
-      {/* ── CTA buttons ── */}
       <div className="flex gap-2 pb-4 sm:gap-4 justify-center max-w-md mx-auto mt-6">
         <Button
           onClick={handlePostJob}
@@ -96,14 +93,12 @@ export default function HeroInteractive() {
           <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
         </Button>
 
-        {/* Modal — only mounts when openModal is true, keeping initial JS lean */}
         <NewRequestModal
           open={openModal}
           onClose={() => setOpenModal(false)}
           presetCategory={selectedCategory}
         />
 
-        {/* Only shown to unauthenticated users */}
         {!session && (
           <Button
             variant="outline"
