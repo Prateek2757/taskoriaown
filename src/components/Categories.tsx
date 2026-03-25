@@ -215,8 +215,6 @@ export default function Services() {
                         priority
                         src={staticImages[index]?.url || staticImages[0].url}
                         alt={category.name}
-                        height={0}
-                        width={0}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       <div

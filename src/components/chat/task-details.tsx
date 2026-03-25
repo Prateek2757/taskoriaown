@@ -129,6 +129,13 @@ export default function TaskDetailsPanel({
     });
   };
 
+  const formatAnswerValue = (value?: string) => {
+    if (!value) return "Not answered yet";
+    const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/;
+    if (isoDateRegex.test(value)) return value.split("T")[0];
+    return value;
+  };
+  
   const formatRelativeTime = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -403,7 +410,7 @@ export default function TaskDetailsPanel({
                                     {answer.question}
                                   </p>
                                   <p className="text-sm text-gray-900 dark:text-gray-100">
-                                    {answer.answer}
+                                    { formatAnswerValue( answer.answer)}
                                   </p>
                                 </div>
                               ))}

@@ -112,6 +112,13 @@ export function TaskCard({
 
   const statusConfig = getStatusConfig(currentStatus);
 
+  const formatAnswerValue = (value?: string) => {
+    if (!value) return "Not answered yet";
+    const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/;
+    if (isoDateRegex.test(value)) return value.split("T")[0];
+    return value;
+  };
+
   return (
     <Card className="overflow-hidden border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-950">
       <CardContent className="p-0">
@@ -201,7 +208,7 @@ export function TaskCard({
                           Q: {qa.question}
                         </p>
                         <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed">
-                          {qa.answer}
+                          {formatAnswerValue(qa.answer) }
                         </p>
                       </div>
                     );

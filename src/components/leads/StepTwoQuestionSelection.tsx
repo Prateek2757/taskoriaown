@@ -147,19 +147,19 @@ export default function StepTwoQuestionsForm({
       }
     }
 
-    if (!data.preferred_date_start || !data.preferred_date_end) {
-      toast.error("Please select both start and end dates");
-      setLoading(false);
-      return;
-    }
+    // if (!data.preferred_date_start || !data.preferred_date_end) {
+    //   toast.error("Please select both start and end dates");
+    //   setLoading(false);
+    //   return;
+    // }
 
-    const startDate = new Date(data.preferred_date_start);
-    const endDate = new Date(data.preferred_date_end);
-    if (endDate < startDate) {
-      toast.error("End date cannot be before start date");
-      setLoading(false);
-      return;
-    }
+    // const startDate = new Date(data.preferred_date_start);
+    // const endDate = new Date(data.preferred_date_end);
+    // if (endDate < startDate) {
+    //   toast.error("End date cannot be before start date");
+    //   setLoading(false);
+    //   return;
+    // }
 
     try {
       const payload = {
@@ -190,8 +190,8 @@ export default function StepTwoQuestionsForm({
         }, {} as any),
         estimated_budget:
           data.has_budget === "yes" ? Number(data.estimated_budget) : 0,
-        preferred_date_start: data.preferred_date_start,
-        preferred_date_end: data.preferred_date_end,
+        preferred_date_start: data.preferred_date_start || null,
+        preferred_date_end: data.preferred_date_end || null,
         queries: data.queries || "",
       };
 
@@ -238,8 +238,8 @@ export default function StepTwoQuestionsForm({
         }, {} as any),
         estimated_budget:
           data.has_budget === "yes" ? Number(data.estimated_budget) : 0,
-        preferred_date_start: data.preferred_date_start,
-        preferred_date_end: data.preferred_date_end,
+        // preferred_date_start: data.preferred_date_start,
+        // preferred_date_end: data.preferred_date_end,
         queries: data.queries || "",
       };
 
@@ -454,7 +454,7 @@ export default function StepTwoQuestionsForm({
             )}
           </div>
 
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-slate-800 dark:to-slate-700 rounded-xl p-3 border border-purple-100 dark:border-gray-600 shadow-sm">
+          {/* <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-slate-800 dark:to-slate-700 rounded-xl p-3 border border-purple-100 dark:border-gray-600 shadow-sm">
             <h3 className="text-gray-900 dark:text-white text-base font-semibold mb-4">
               Preferred Timeline <span className="text-red-500">*</span>
             </h3>
@@ -497,7 +497,7 @@ export default function StepTwoQuestionsForm({
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
               Select your preferred start and end dates for this service
             </p>
-          </div>
+          </div> */}
 
           <div className="bg-gray-50 dark:bg-slate-800 rounded-xl p-3 border border-gray-200 dark:border-gray-600">
             <label className="text-gray-900 dark:text-white font-semibold mb-2 block">
