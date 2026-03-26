@@ -60,8 +60,6 @@ export default function ModernNavbar() {
       { name: "My Requests", href: "/customer/dashboard", icon: Search },
       { name: "Discover", href: "/services", icon: Binoculars },
       { name: "Messages", href: "/messages/null", icon: MessageSquare },
-     
-      
     ],
     provider: [
       { name: "Home", href: "/", icon: Home },
@@ -73,7 +71,6 @@ export default function ModernNavbar() {
         icon: MessageSquare,
       },
       { name: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
-     
     ],
   };
 
@@ -407,8 +404,8 @@ export default function ModernNavbar() {
                     Sign In
                   </Button>
                   <Button
-onClick={() => joinAsProvider()}
-className="bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
+                    onClick={() => joinAsProvider()}
+                    className="bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
                     Join as Provider
                   </Button>
@@ -431,7 +428,6 @@ className="bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-me
             onClick={() => setIsMenuOpen((p) => !p)}
             className="md:hidden p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl"
             aria-label="Open Menu"
-            
           >
             {isMenuOpen ? <X /> : <MenuIcon />}
           </Button>
@@ -585,45 +581,45 @@ className="bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-me
                 ) : (
                   ""
                 )}
-                  {session?.user.public_id ? (
-            <Link
-              href={`/providerprofile/${session.user.public_id}`}
-              onClick={() => {
-                setIsMenuOpen(true);
-                setIsProfileOpen(true);
-              }}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
-              >
-                                    <User className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-
-              View Public Profile
-            </Link>
-          ) : (
-            ""
-          )}
-                {
-                  session ?    <Link
-                  href="/settings/billing/taskoria_pro"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
-                >
-                  <FaMoneyCheck className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                  Taskoria Plans & Pricing
-                </Link> :"" 
-                }
-                  {
-                  session ?    <Link
-                  href="/affiliate-dashboard-portal"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
-                >
-                  <LayoutDashboard className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                 Affilate Hub
-                </Link> :"" 
-                }
-              
-
-               
+                {session?.user.public_id ? (
+                  <Link
+                    href={`/providerprofile/${session.user.public_id}`}
+                    onClick={() => {
+                      setIsMenuOpen(true);
+                      setIsProfileOpen(true);
+                    }}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
+                  >
+                    <User className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    View Public Profile
+                  </Link>
+                ) : (
+                  ""
+                )}
+                {session ? (
+                  <Link
+                    href="/settings/billing/taskoria_pro"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
+                  >
+                    <FaMoneyCheck className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    Taskoria Plans & Pricing
+                  </Link>
+                ) : (
+                  ""
+                )}
+                {session ? (
+                  <Link
+                    href="/affiliate-dashboard-portal"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
+                  >
+                    <LayoutDashboard className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                    Affilate Hub
+                  </Link>
+                ) : (
+                  ""
+                )}
 
                 {session?.user?.role === "provider" && (
                   <button

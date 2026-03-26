@@ -269,7 +269,7 @@ export default function HeroSection() {
                 presetCategory={selectedCategory}
               />
 
-              {!session && (
+              {/* {!session && (
                 <Button
                   variant="outline"
                   onClick={() => joinAsProvider()}
@@ -278,7 +278,7 @@ export default function HeroSection() {
                 >
                   Join as Provider
                 </Button>
-              )}
+              )} */}
             </div>
           </div>
         </div>

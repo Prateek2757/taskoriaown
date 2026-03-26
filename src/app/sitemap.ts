@@ -12,11 +12,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // { path: "/providers", priority: 0.8, changeFreq: "daily" as const },
   ];
 
-  const serviceroute = {
-    path: "/services/house-cleaning",
-    priority: 0.9,
-    changeFreq: "daily" as const,
-  };
+  const serviceroute = [
+    { path:"/services/house-cleaning",priority: 0.9,changeFreq: "daily" as const},
+    { path:"/services/electricians",priority: 0.9,changeFreq: "daily" as const},
+    { path:"/services/plumbers",priority: 0.9,changeFreq: "daily" as const},
+    { path:"/services/pest-control",priority: 0.9,changeFreq: "daily" as const},
+    { path:"/services/graphic-design",priority: 0.9,changeFreq: "daily" as const},
+    { path:"/services/web-design-development",priority: 0.9,changeFreq: "daily" as const},
+    { path:"/services/accounting-taxation",priority: 0.9,changeFreq: "daily" as const},
+    { path:"/services/legal-services",priority: 0.9,changeFreq: "daily" as const},
+    { path:"/services/gardening-lawn-mowing",priority: 0.9,changeFreq: "daily" as const},
+    { path:"/services/wedding-photography",priority: 0.9,changeFreq: "daily" as const},
+    { path:"/services/roofing",priority: 0.9,changeFreq: "daily" as const},
+    { path:"/services/tiling-flooring",priority: 0.9,changeFreq: "daily" as const},
+];
 
   const companyRoutes = [
     { path: "/trust-safety", priority: 0.7, changeFreq: "monthly" as const },
@@ -46,7 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...coreRoutes,
     ...companyRoutes,
     ...legalRoutes,
-    serviceroute,
+    ...serviceroute,
   ];
 
   return allRoutes.map((route) => ({

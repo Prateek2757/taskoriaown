@@ -174,19 +174,12 @@ export default async function ServicesPage() {
         </span>
       </nav>
 
-      {/*
-       * H1 is visually hidden but present in the DOM.
-       * Google requires a descriptive H1 on every page.
-       * Your ServiceCategoriesClient likely has its own visual heading —
-       * this ensures one always exists for crawlers even if the client
-       * component hasn't hydrated yet.
-       */}
+   
       <h1 className="sr-only">
         Browse {categories.length} Service Categories Across Australia
       </h1>
 
-      {/* ── Interactive client component ──────────────────────────────────── */}
-      <ServiceCategoriesClient categories={categories} />
+    <ServiceCategoriesClient categories={categories} />
     </>
   );
 }

@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
 
     robots: complete
       ? { index: true, follow: true }
-      : { index: false, follow: false },
+      : { index: true, follow: true },
 
     alternates: {
       canonical: `https://www.taskoria.com/providerprofile/${id}`,

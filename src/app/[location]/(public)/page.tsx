@@ -222,7 +222,7 @@ const structuredData = {
           name: "How does Taskoria work?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Post your job for free on Taskoria, receive quotes from verified local professionals within minutes, compare reviews and pricing, then book directly through the platform.",
+            text: "Get quotes for free on Taskoria, receive quotes from verified local professionals within minutes, compare reviews and pricing, then book directly through the platform.",
           },
         },
         {

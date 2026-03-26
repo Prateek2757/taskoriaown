@@ -1,7 +1,5 @@
 "use client";
-
 import Image from "next/image";
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Shield,
@@ -46,14 +44,12 @@ function ShareButton({
 
   const handleShare = useCallback(async () => {
     if (timerRef.current) clearTimeout(timerRef.current);
-
     const url = window.location.href;
     const shareData: ShareData = {
       title: name,
       text: description ?? `Check out ${name}'s profile`,
       url,
     };
-
     if (
       typeof navigator.share === "function" &&
       navigator.canShare?.(shareData)
@@ -67,7 +63,6 @@ function ShareButton({
         if (err instanceof Error && err.name === "AbortError") return;
       }
     }
-
     try {
       await navigator.clipboard.writeText(url);
       setState("copied");
@@ -93,13 +88,7 @@ function ShareButton({
         : "Share";
 
   const Icon =
-    state === "copied"
-      ? Check
-      : state === "shared"
-        ? Check
-        : state === "idle"
-          ? Share2
-          : Share2;
+    state === "copied" || state === "shared" ? Check : Share2;
 
   return (
     <div className="relative">
@@ -118,7 +107,6 @@ function ShareButton({
       >
         <Icon className="w-4 h-4" />
       </button>
-
       {state !== "idle" && (
         <div
           role="status"
@@ -129,13 +117,9 @@ function ShareButton({
             animate-in fade-in slide-in-from-bottom-1 duration-150 pointer-events-none"
         >
           {state === "copied" ? (
-            <>
-              <LinkIcon className="w-3 h-3" /> Link copied
-            </>
+            <><LinkIcon className="w-3 h-3" /> Link copied</>
           ) : (
-            <>
-              <Check className="w-3 h-3" /> Shared!
-            </>
+            <><Check className="w-3 h-3" /> Shared!</>
           )}
         </div>
       )}
@@ -143,13 +127,14 @@ function ShareButton({
   );
 }
 
-
 interface Provider {
   name?: string;
   image?: string;
   cover_image?: string;
   coverImage?: string;
+  company_name?: string;
   verified?: boolean;
+  ispro?: boolean;
   services?: string[];
   specialBadges?: string[];
   avg_rating?: number | string;
@@ -172,7 +157,6 @@ interface ProfileHeroProps {
   onBookClick?: () => void;
   onMessageClick?: () => void;
 }
-
 
 interface LightboxProps {
   src: string;
@@ -201,7 +185,6 @@ function Lightbox({ src, alt, onClose }: LightboxProps) {
       className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200"
       onClick={onClose}
     >
-      {/* Close button */}
       <button
         onClick={onClose}
         aria-label="Close image preview"
@@ -209,7 +192,6 @@ function Lightbox({ src, alt, onClose }: LightboxProps) {
       >
         <X className="w-5 h-5" />
       </button>
-
       <div
         className="relative max-w-4xl max-h-[90vh] w-full h-full flex items-center justify-center"
         onClick={(e) => e.stopPropagation()}
@@ -229,7 +211,83 @@ function Lightbox({ src, alt, onClose }: LightboxProps) {
   );
 }
 
-// ─── Profile Hero ──────────────────────────────────────────────────────────────
+function ProBadge({ size = 28 }: { size?: number }) {
+  const half = size / 2;
+  const R = half * 0.84; 
+  const r = half * 0.38;   
+  const pts = Array.from({ length: 5 }, (_, i) => {
+    const outerAngle = (i * 72 - 90) * (Math.PI / 180);
+    const innerAngle = (i * 72 - 90 + 36) * (Math.PI / 180);
+    return [
+      `${half + R * Math.cos(outerAngle)},${half + R * Math.sin(outerAngle)}`,
+      `${half + r * Math.cos(innerAngle)},${half + r * Math.sin(innerAngle)}`,
+    ];
+  }).flat().join(" ");
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ display: "block" }}
+    >
+      <defs>
+        {/* <linearGradient id="pb-ring" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%"   stopColor="#FFF5C0" />
+          <stop offset="45%"  stopColor="#C97B08" />
+          <stop offset="100%" stopColor="#FFE070" />
+        </linearGradient> */}
+        {/* Dark shell */}
+        <linearGradient id="pb-shell" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stopColor="#FF9800" />
+          <stop offset="100%" stopColor="#FF9800" />
+        </linearGradient>
+        {/* Gold disc */}
+        <linearGradient id="pb-gold" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stopColor="#FF9800" />
+          
+          <stop offset="100%" stopColor="#FF9800" />
+        </linearGradient>
+        {/* Gloss shine */}
+        {/* <linearGradient id="pb-shine" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stopColor="#ffffff" stopOpacity="0.65" />
+          <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+        </linearGradient> */}
+      </defs>
+
+      {/* 1. Outer glow ring (stroke only) */}
+      <circle
+        cx={half} cy={half} r={half - 0.5}
+        fill="url(#pb-shell)"
+        stroke="url(#pb-ring)"
+        strokeWidth="1.6"
+      />
+
+      <circle
+        cx={half} cy={half} r={half - 2.4}
+        fill="url(#pb-gold)"
+      />
+
+      {/* 3. Gloss shine — top-center ellipse */}
+      {/* <ellipse
+        cx={half - 0.5}
+        cy={half * 0.52}
+        rx={half * 0.55}
+        ry={half * 0.28}
+        fill="url(#pb-shine)"
+      /> */}
+
+      {/* 4. Star — mathematically centered */}
+      <polygon
+        points={pts}
+        fill="#ffffff"
+        opacity="0.92"
+      />
+    </svg>
+  );
+}
 
 export function ProfileHero({
   provider,
@@ -246,7 +304,6 @@ export function ProfileHero({
 
   const closeLightbox = useCallback(() => setLightboxSrc(null), []);
 
-  // Derived values
   const services = Array.isArray(provider.services) ? provider.services : [];
   const specialBadges = Array.isArray(provider.specialBadges)
     ? provider.specialBadges
@@ -254,8 +311,8 @@ export function ProfileHero({
   const rating = provider.avg_rating ?? provider.rating ?? "4.8";
   const reviewCount = provider.total_reviews ?? provider.reviewCount ?? 0;
   const completedJobs = provider.jobscompleted ?? provider.completedJobs;
-  const coverSrc = provider.cover_image ?? provider.coverImage;
-  const hasCover = Boolean(coverSrc);
+  const companySrc = provider.cover_image ?? provider.coverImage;
+  const hasCover = Boolean(companySrc);
 
   const initials = (provider.name ?? "")
     .split(" ")
@@ -266,38 +323,36 @@ export function ProfileHero({
 
   return (
     <>
-      {/* ── Lightbox Portal ─────────────────────────────────────────────── */}
       {lightboxSrc && (
         <Lightbox src={lightboxSrc} alt={lightboxAlt} onClose={closeLightbox} />
       )}
 
       <div className="bg-white dark:bg-[#1d2226] border border-[#e2e2e2] dark:border-white/10 rounded-xl shadow-sm overflow-visible">
+
         <div className="relative h-36 sm:h-52 w-full overflow-hidden rounded-t-xl">
           {hasCover ? (
-            <>
-              <button
-                type="button"
-                aria-label="View cover photo"
-                className="absolute inset-0 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-inset"
-                onClick={() =>
-                  openLightbox(
-                    coverSrc!,
-                    `${provider.name ?? "Provider"} cover photo`
-                  )
-                }
-              >
-                <Image
-                  src={coverSrc!}
-                  alt={`${provider.name ?? "Provider"} cover photo`}
-                  fill
-                  className="object-cover brightness-90 saturate-105 transition-transform duration-300 group-hover:scale-[1.02]"
-                  priority
-                  sizes="(max-width: 768px) 100vw, 800px"
-                />
-                <span className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200" />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" />
-              </button>
-            </>
+            <button
+              type="button"
+              aria-label="View cover photo"
+              className="absolute inset-0 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-inset"
+              onClick={() =>
+                openLightbox(
+                  companySrc!,
+                  `${provider.name ?? "Provider"} cover photo`
+                )
+              }
+            >
+              <Image
+                src={companySrc!}
+                alt={`${provider.name ?? "Provider"} cover photo`}
+                fill
+                className="object-cover brightness-90 saturate-105 transition-transform duration-300 group-hover:scale-[1.02]"
+                priority
+                sizes="(max-width: 768px) 100vw, 800px"
+              />
+              <span className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200" />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" />
+            </button>
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-indigo-100 to-violet-100 dark:from-blue-950 dark:via-indigo-950 dark:to-slate-900 flex items-center justify-center">
               <svg
@@ -308,10 +363,7 @@ export function ProfileHero({
                 <defs>
                   <pattern
                     id="hero-dots"
-                    x="0"
-                    y="0"
-                    width="24"
-                    height="24"
+                    x="0" y="0" width="24" height="24"
                     patternUnits="userSpaceOnUse"
                   >
                     <circle cx="1.5" cy="1.5" r="1.5" fill="#3b82f6" />
@@ -319,13 +371,7 @@ export function ProfileHero({
                 </defs>
                 <rect width="100%" height="100%" fill="url(#hero-dots)" />
               </svg>
-
-              <div
-                className="relative z-10 inline-flex items-center gap-2 px-4 py-2 rounded-full 
-                bg-white/70 dark:bg-black/30 text-sm font-medium text-blue-700 dark:text-blue-300 
-                border border-blue-200 dark:border-blue-700 backdrop-blur-sm transition-all 
-                shadow-sm select-none cursor-default"
-              >
+              <div className="relative z-10 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 dark:bg-black/30 text-sm font-medium text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700 backdrop-blur-sm transition-all shadow-sm select-none cursor-default">
                 <ImagePlus className="w-4 h-4" />
                 Oops! This pro forgot to upload their company photo 😅
               </div>
@@ -337,7 +383,8 @@ export function ProfileHero({
           className="relative px-5 sm:px-6 flex items-end justify-between"
           style={{ marginTop: "-52px" }}
         >
-          <div className="relative z-10 group">
+          <div className="w-24 h-24 sm:w-32 sm:h-32 relative z-10 group">
+
             <button
               type="button"
               aria-label="View profile photo"
@@ -347,20 +394,20 @@ export function ProfileHero({
                 ${provider.image ? "cursor-zoom-in" : "cursor-default pointer-events-none"}
               `}
               onClick={
-                provider.image
+                provider.cover_image
                   ? () =>
                       openLightbox(
-                        provider.image!,
+                        provider.cover_image!,
                         `${provider.name ?? "Provider"} profile photo`
                       )
                   : undefined
               }
-              disabled={!provider.image}
+              disabled={!provider.cover_image}
             >
-              {provider.image ? (
-                <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden shadow-xl border-4 border-white dark:border-[#1d2226] transition-transform duration-200 group-hover:scale-105">
+              {provider.cover_image ? (
+                <div className={`rounded-full overflow-hidden shadow-xl ${provider.ispro ? `ring-2 ring-yellow-400 `:""} transition-transform duration-200 group-hover:scale-105`}>
                   <Image
-                    src={provider.image}
+                    src={provider.cover_image}
                     alt={provider.name ?? "Provider"}
                     width={128}
                     height={128}
@@ -369,14 +416,31 @@ export function ProfileHero({
                   />
                 </div>
               ) : (
-                <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full shadow-xl border-4 border-white dark:border-[#1d2226] bg-gradient-to-br from-blue-500 to-blue-700 grid place-content-center text-white text-3xl font-bold font-serif">
+                <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full shadow-xl border-4 border-white dark:border-[#1d2226] bg-gradient-to-br from-blue-500 to-[#2536EB] grid place-content-center text-white text-3xl font-bold font-serif">
                   {initials}
                 </div>
               )}
             </button>
 
+           
+            {provider.ispro && (
+              <div
+                className="absolute bottom-0 right-2 z-20"
+                title="Pro member"
+                aria-label="Pro member"
+              >
+                <ProBadge size={30} />
+              </div>
+            )}
+
             {provider.verified && (
-              <div className="absolute bottom-1 right-1 rounded-full p-0.5 bg-white dark:bg-[#1d2226] shadow-md ring-2 ring-white dark:ring-[#1d2226]">
+              <div
+                className={`absolute z-20 rounded-full p-0.5 bg-white dark:bg-[#1d2226] shadow-md ring-2 ring-white dark:ring-[#1d2226] ${
+                  provider.ispro
+                    ? "bottom-2 left-0"
+                    : "bottom-1 right-1"  
+                }`}
+              >
                 <CheckCircle2
                   className="w-5 h-5 sm:w-6 sm:h-6 fill-blue-600 text-white"
                   strokeWidth={1.5}
@@ -387,7 +451,7 @@ export function ProfileHero({
 
           <div className="flex items-center gap-2 pb-2">
             <ShareButton
-              name={provider.name ?? "Provider"}
+              name={provider.company_name ?? "Provider"}
               description={provider.description}
             />
             {onMessageClick && (
@@ -411,12 +475,10 @@ export function ProfileHero({
           </div>
         </div>
 
-        {/* ── Info Section ─────────────────────────────────────────────────── */}
         <div className="px-5 sm:px-6 pt-3 pb-1">
-          {/* Name + Verified badge */}
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight leading-snug">
-              {provider.name}
+              {provider.company_name}
             </h1>
             {provider.verified && (
               <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-700">
@@ -425,7 +487,6 @@ export function ProfileHero({
             )}
           </div>
 
-          {/* Services */}
           {services.length > 0 && (
             <p className="mt-1 text-sm font-medium text-gray-700 dark:text-gray-300">
               {services.join(" · ")}

@@ -19,7 +19,9 @@ interface Category {
 export default function HeroInteractive() {
   const [openModal, setOpenModal] = useState(false);
   const [slugvalue, setSlugValue] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
 
   const { data: session } = useSession();
@@ -31,10 +33,10 @@ export default function HeroInteractive() {
   };
   const start = 1774250793;
   const end = 1776929193;
-  
+
   // const startDate = new Date(start * 1000); // multiply by 1000 for milliseconds
   // const endDate = new Date(end * 1000);
-  
+
   // console.log(startDate.toUTCString()); // e.g., Wed, 21 Jan 2026 09:46:33 GMT
   // console.log(endDate.toUTCString());
   const handleSelectCategory = (cat: Category | null) => {
@@ -82,14 +84,15 @@ export default function HeroInteractive() {
         </div>
       </div>
 
-      <div className="flex gap-2 pb-4 sm:gap-4 justify-center max-w-xs mx-auto mt-4">
+      <div className="flex gap-2  sm:gap-4 justify-center max-w-xs mx-auto ">
         <Button
           onClick={handlePostJob}
           disabled={loading}
           className="flex-1 py-5  bg-[#2563EB] text-white"
           aria-label="Post a job to find service providers"
         >
-Get Free Quotes          <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
+          Get Free Quotes{" "}
+          <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
         </Button>
 
         <NewRequestModal
@@ -97,7 +100,7 @@ Get Free Quotes          <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true"
           onClose={() => setOpenModal(false)}
           presetCategory={selectedCategory}
         />
-{/* 
+        {/* 
         {!session && (
           <Button
             variant="outline"

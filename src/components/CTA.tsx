@@ -52,7 +52,7 @@ function CTA() {
               </span>
             </h2>
             <p className="text-slate-400 text-sm sm:text-base mt-1 max-w-xl leading-relaxed">
-              Post your job for free, compare responses, and choose the right provider
+              Get quotesfor free, compare responses, and choose the right provider
               for your timeline and budget.
             </p>
 

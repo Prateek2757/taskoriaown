@@ -508,7 +508,7 @@ Home maintenance doesn't have to be overwhelming. Start small—pick one area to
 
 Regular small checks save significant money and stress in the long run. Your home protects your family. Taking care of it is one of the most valuable things you can do.
 
-**Need a trusted tradie for your next home maintenance job?** Post your job on Taskoria today and get quotes from verified Australian professionals near you.`,
+**Need a trusted tradie for your next home maintenance job?** Get free quotes on Taskoria today and get quotes from verified Australian professionals near you.`,
     author: "James Wilson",
     authorRole: "Home Services Expert",
     authorImage: "/nimesh.png",

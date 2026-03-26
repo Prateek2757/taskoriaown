@@ -16,13 +16,13 @@ import {
 import { useProviders } from "@/hooks/useProvider";
 
 export const metadata = {
-  title: "Post a Job — Hire Service Providers | Taskoria",
+  title: "Get free quotes — Hire Service Providers | Taskoria",
   description:
-    "Post your job on Taskoria and get connected with trusted service providers. Fast, reliable, and secure hiring platform.",
+    "Get free quotes on Taskoria and get connected with trusted service providers. Fast, reliable, and secure hiring platform.",
   openGraph: {
     title: "Post a Job — Hire Service Providers | Taskoria",
     description:
-      "Post your job for free and hire skilled service providers across Nepal.",
+      "Get free quotes  and hire skilled service providers across Nepal.",
     url: "https://www.taskoria.com/post-job",
     siteName: "Taskoria",
     type: "website",

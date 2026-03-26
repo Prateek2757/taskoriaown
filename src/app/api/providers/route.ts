@@ -8,6 +8,12 @@ export async function GET() {
     const userId = session?.user.id;
 
     const { rows } = await pool.query(`
+      WITH active_sub AS (
+        SELECT 
+          ps.user_id
+        FROM professional_subscriptions ps
+        WHERE ps.status IN ('active','trialing')
+      )
       SELECT 
         up.user_id,
         up.display_name AS name,
@@ -21,10 +27,8 @@ export async function GET() {
         cp.logo_url AS cover_image,
         json_agg(DISTINCT sc.name) 
           FILTER (WHERE sc.name IS NOT NULL) AS services,
-    
         json_agg(DISTINCT sc.slug) 
           FILTER (WHERE sc.slug IS NOT NULL) AS slug,
-    
         COALESCE(
           json_agg(DISTINCT jsonb_build_object(
             'platform', usl.platform,
@@ -34,7 +38,6 @@ export async function GET() {
           )) FILTER (WHERE usl.id IS NOT NULL),
           '[]'
         ) AS social_links,
-    
         COALESCE(
           json_agg(DISTINCT jsonb_build_object(
             'id', ups.id,
@@ -43,7 +46,6 @@ export async function GET() {
           )) FILTER (WHERE ups.id IS NOT NULL),
           '[]'
         ) AS profile_services,
-    
         COALESCE(
           json_agg(DISTINCT jsonb_build_object(
             'id', upp.id,
@@ -55,7 +57,6 @@ export async function GET() {
           )) FILTER (WHERE upp.id IS NOT NULL),
           '[]'
         ) AS photos,
-    
         COALESCE(
           json_agg(DISTINCT jsonb_build_object(
             'id', uf.id,
@@ -66,7 +67,6 @@ export async function GET() {
           )) FILTER (WHERE uf.id IS NOT NULL),
           '[]'
         ) AS faqs,
-    
         COALESCE(
           json_agg(DISTINCT jsonb_build_object(
             'id', ua.id,
@@ -75,21 +75,24 @@ export async function GET() {
             'display_order', ua.display_order
           )) FILTER (WHERE ua.id IS NOT NULL),
           '[]'
-        ) AS accreditations
-    
-      FROM user_profiles up
+        ) AS accreditations,
 
+        CASE WHEN asub.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS isPro
+
+      FROM user_profiles up
       JOIN users u ON up.user_id = u.user_id
       LEFT JOIN user_categories uc ON up.user_id = uc.user_id
       LEFT JOIN service_categories sc ON sc.category_id = uc.category_id
       LEFT JOIN company cp ON up.user_id = cp.user_id
       LEFT JOIN cities c ON c.city_id = up.location_id
-    
+
       LEFT JOIN user_social_links usl ON up.user_id = usl.user_id AND usl.is_visible = true
       LEFT JOIN user_profile_services ups ON up.user_id = ups.user_id
       LEFT JOIN user_profile_photos upp ON up.user_id = upp.user_id
       LEFT JOIN user_faqs uf ON up.user_id = uf.user_id AND uf.is_visible = true
       LEFT JOIN user_accreditations ua ON up.user_id = ua.user_id
+
+      LEFT JOIN active_sub asub ON asub.user_id = up.user_id
 
       WHERE u.status = 'active'
       
@@ -104,7 +107,8 @@ export async function GET() {
         u.public_id,
         cp.company_name,
         cp.logo_url,
-        c.name
+        c.name,
+        asub.user_id
     
       ORDER BY up.created_at DESC;
     `);

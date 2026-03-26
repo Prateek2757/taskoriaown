@@ -78,9 +78,7 @@ export default function HeroSection() {
               height={5}
               fetchPriority="high"
             />
-            <span>
-              Australia-first marketplace • Post for free • Local providers
-            </span>
+            <span>Australia-first marketplace • Get free quotes • Local pros</span>
           </div>
 
           <div className="max-w-auto mx-auto px-4 space-y-6">
@@ -134,7 +132,7 @@ export default function HeroSection() {
 
             <HeroInteractive />
 
-            <div className="flex items-center justify-center gap-2 mt-2 sm:mt-4 text-sm text-gray-500 dark:text-gray-400">
+            <div className="flex items-center justify-center gap-2 pb-2 sm:mt-4 text-sm text-gray-500 dark:text-gray-400">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -189,7 +187,7 @@ export default function HeroSection() {
               Need a provider fast?
             </h3>
             <p className="text-gray-500 text-sm dark:text-gray-400 mb-4">
-              Post your job for free and receive responses from trusted local
+              Get free quotes and receive responses from trusted local
               professionals, with clearer quotes and safer hiring support.
             </p>
           </div>
