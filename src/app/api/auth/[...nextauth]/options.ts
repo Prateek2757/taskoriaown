@@ -18,6 +18,7 @@ declare module "next-auth" {
     serviceCategory: string;
     isVerified?: boolean;
     company_name?:string;
+    company_slug?:string
     phone?:string;
     website?:string;
   }
@@ -40,7 +41,8 @@ declare module "next-auth/jwt" {
     serviceCategory: string;
     isVerified?: boolean;
     phone?:string;
-    company_name?:string
+    company_name?:string;
+    company_slug?:string;
     website?:string;
   }
 }
@@ -77,6 +79,7 @@ export const authOptions: NextAuthOptions = {
             COALESCE(r.role_name, 'customer') AS role,
             u.is_email_verified,
             c.company_name,
+            c.slug AS company_slug,
             c.website
           FROM users u
           LEFT JOIN user_profiles up ON u.user_id = up.user_id
@@ -112,6 +115,7 @@ export const authOptions: NextAuthOptions = {
           serviceCategory: "",
           isVerified: user.is_email_verified || false,
           phone:user.phone,
+          company_slug:user.company_slug,
           company_name:user.company_name,
           website:user.website,
 
@@ -140,6 +144,7 @@ export const authOptions: NextAuthOptions = {
           up.profile_image_url AS image,
           up.display_name,
           c.company_name,
+          c.slug AS company_slug,
           c.website
         
           FROM users u
@@ -167,6 +172,7 @@ export const authOptions: NextAuthOptions = {
         user.image = existingUser.image;
         user.phone=existingUser.phone;
         user.company_name=existingUser.company_name;
+        user.company_slug=existingUser.company_slug;
         user.website = existingUser.website;
       }
 
@@ -189,6 +195,7 @@ export const authOptions: NextAuthOptions = {
         token.isVerified = user.isVerified;
        token.phone= user.phone
         token.company_name=user.company_name
+        token.company_slug=user.company_slug
         token.website=user.website
       }
 
@@ -213,6 +220,7 @@ export const authOptions: NextAuthOptions = {
         session.user.isVerified = token.isVerified;
         session.user.phone = token.phone;
         session.user.company_name = token.company_name;
+        session.user.company_slug = String(token.company_slug);
         session.user.website = token.website;
       }
       return session;

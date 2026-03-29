@@ -24,6 +24,7 @@ export async function GET() {
         up.profile_image_url AS image,
         up.created_at AS joineddate,
         cp.company_name,
+        cp.slug AS company_slug,
         cp.logo_url AS cover_image,
         json_agg(DISTINCT sc.name) 
           FILTER (WHERE sc.name IS NOT NULL) AS services,
@@ -107,6 +108,7 @@ export async function GET() {
         u.public_id,
         cp.company_name,
         cp.logo_url,
+        cp.slug,
         c.name,
         asub.user_id
     

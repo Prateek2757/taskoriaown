@@ -29,6 +29,7 @@ type Response = {
   response_id:string;
   message_id:string;
   public_id:string;
+  company_slug?:string;
   display_name: string;
   profile_title: string;
   title: string;

@@ -164,8 +164,8 @@ export default function TasksList({ tasks }: { tasks?: Task[] }) {
     [router]
   );
 
-  const handleProfileClick = useCallback((profile_id:string)=>{
-router.push(`/providerprofile/${profile_id}`)
+  const handleProfileClick = useCallback((company_slug:string)=>{
+router.push(`/providerprofile/${company_slug}`)
   },[router])
 
   const filteredTasks = tasks?.filter((task) => {

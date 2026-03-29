@@ -14,6 +14,7 @@ interface Provider {
   nationwide: boolean;
   company_name: string | null;
   logo_url: string | null;
+  company_slug?:string | null;
   locationname: string | null;
 }
 
@@ -116,7 +117,7 @@ export default function CityProviders({ serviceSlug, citySlug }: Props) {
 
             {/* CTA */}
             <Link
-              href={`/providerprofile/${p.public_id}`}
+              href={`/providerprofile/${p.company_slug}`}
               className="flex items-center justify-center gap-2 w-full py-2.5 bg-[#3C7DED] hover:bg-[#2b6ad9] text-white font-semibold rounded-lg text-sm transition-colors"
             >
               View Profile

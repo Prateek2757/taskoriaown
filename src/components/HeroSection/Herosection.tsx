@@ -78,7 +78,10 @@ export default function HeroSection() {
               height={5}
               fetchPriority="high"
             />
-            <span>Australia-first marketplace • Get free quotes • Local pros</span>
+            <span>
+              {" "}
+              Get free quotes in minutes • Trusted local professionals{" "}
+            </span>
           </div>
 
           <div className="max-w-auto mx-auto px-4 space-y-6">

@@ -16,12 +16,12 @@ export async function GET(
          up.profile_image_url,
          u.is_email_verified AS is_verified,
          u.public_id,
-    
+         cp.slug AS company_slug,
          (featured IS NOT NULL) AS is_featured,
     
          c.id   AS message_id,
          c.title AS conversation_title
-    
+         
        FROM task_responses tr
     
        JOIN user_profiles up 
@@ -29,7 +29,7 @@ export async function GET(
     
        LEFT JOIN users u 
          ON u.user_id = tr.professional_id
-    
+    LEFT JOIN company cp ON cp.user_id = tr.professional_id
        LEFT JOIN LATERAL (
          SELECT 1
          FROM professional_subscriptions ps

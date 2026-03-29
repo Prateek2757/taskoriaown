@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 type Response = {
   id: number;
   public_id:string;
+  company_slug:string;
   display_name: string;
   profile_title: string;
   title: string;
@@ -198,7 +199,7 @@ export function TaskResponseCard({
 
           {onViewProfile && (
             <button
-              onClick={() => onViewProfile(response.public_id)}
+              onClick={() => onViewProfile(response.company_slug)}
               className="mt-2 text-[11px] font-medium text-slate-400 underline-offset-2 hover:text-blue-600 hover:underline transition-colors"
             >
               View Profile

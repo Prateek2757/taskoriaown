@@ -11,9 +11,9 @@ function isProfileComplete(provider: any): boolean {
 }
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
-  const { id } = await params;
+  const { slug } = await params;
   const providers = await fetchProviders();
-  const provider = providers.find((p: any) => String(p.public_id) === id);
+  const provider = providers.find((p: any) => String(p.company_slug) === slug);
 
   if (!provider) {
     return {
@@ -41,13 +41,13 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
       : { index: true, follow: true },
 
     alternates: {
-      canonical: `https://www.taskoria.com/providerprofile/${id}`,
+      canonical: `https://www.taskoria.com/providerprofile/${slug}`,
     },
 
     openGraph: {
       title,
       description,
-      url: `https://www.taskoria.com/providerprofile/${id}`,
+      url: `https://www.taskoria.com/providerprofile/${slug}`,
       siteName: "Taskoria",
       images: provider.image
         ? [{ url: provider.image, alt: `${provider.name} profile photo` }]
@@ -59,9 +59,9 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
 }
 
 export default async function ProviderPage({ params }: any) {
-  const { id } = await params;
+  const { slug } = await params;
   const providers = await fetchProviders();
-  const provider = providers.find((p: any) => String(p.public_id) === id);
+  const provider = providers.find((p: any) => String(p.company_slug) === slug);
 
   if (!provider) notFound();
 
@@ -80,7 +80,7 @@ export default async function ProviderPage({ params }: any) {
     name: provider.name,
     description: provider.description,
     image: provider.image ?? undefined,
-    url: `https://www.taskoria.com/providerprofile/${id}`,
+    url: `https://www.taskoria.com/providerprofile/${slug}`,
     ...(location && {
       areaServed: {
         "@type": "Place",

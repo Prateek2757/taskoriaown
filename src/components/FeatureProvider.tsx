@@ -202,7 +202,7 @@ export const FeatureProvider = () => {
 
                     <Link
                       href={`/providerprofile/${encodeURIComponent(
-                        String(p.public_id)
+                        String(p.company_name)
                       )}`}
                       className="flex gap-2"
                     >

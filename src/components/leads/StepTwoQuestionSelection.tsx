@@ -238,12 +238,17 @@ export default function StepTwoQuestionsForm({
         }, {} as any),
         estimated_budget:
           data.has_budget === "yes" ? Number(data.estimated_budget) : 0,
-        // preferred_date_start: data.preferred_date_start,
-        // preferred_date_end: data.preferred_date_end,
+        preferred_date_start: data.preferred_date_start || null,
+        preferred_date_end: data.preferred_date_end || null,
         queries: data.queries || "",
       };
 
-      localStorage.setItem("pendingpayload", JSON.stringify(payload));
+      const dataWithExpiry = {
+        value: payload,
+        expiry: Date.now() + 5 * 60 * 60 * 1000, 
+      };
+
+      localStorage.setItem("pendingpayload", JSON.stringify(dataWithExpiry));
 
       toast.warning("Please Sign In or Sign Up to continue.");
       router.push("/signin");
@@ -275,7 +280,7 @@ export default function StepTwoQuestionsForm({
             <div className="flex items-center gap-3 mb-2">
               <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                 <div
-                  className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] h-2 rounded-full transition-all duration-300"
+                  className="bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] h-2 rounded-full transition-all duration-300"
                   style={{
                     width: `${((currentIndex + 1) / questions.length) * 100}%`,
                   }}
@@ -317,7 +322,7 @@ export default function StepTwoQuestionsForm({
           <Button
             type="button"
             onClick={(e) => handleNextQuestion(e)}
-            className="rounded-lg px-6 bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105"
+            className="rounded-lg px-6 bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105"
           >
             {currentIndex === questions.length - 1
               ? "Next: Budget & Dates"
@@ -342,7 +347,7 @@ export default function StepTwoQuestionsForm({
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-700 rounded-xl p-3 border border-blue-100 dark:border-gray-600 shadow-sm">
+          <div className="bg-linear-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-700 rounded-xl p-3 border border-blue-100 dark:border-gray-600 shadow-sm">
             <label className="text-gray-900 flex dark:text-white text-base font-semibold mb-3 gap-1">
               <ShieldQuestionIcon className="w-5" /> Do you have a budget in
               mind? <span className="text-red-500">*</span>
@@ -454,7 +459,7 @@ export default function StepTwoQuestionsForm({
             )}
           </div>
 
-          {/* <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-slate-800 dark:to-slate-700 rounded-xl p-3 border border-purple-100 dark:border-gray-600 shadow-sm">
+          {/* <div className="bg-linear-to-br from-blue-50 to-blue-100 dark:from-slate-800 dark:to-slate-700 rounded-xl p-3 border border-purple-100 dark:border-gray-600 shadow-sm">
             <h3 className="text-gray-900 dark:text-white text-base font-semibold mb-4">
               Preferred Timeline <span className="text-red-500">*</span>
             </h3>
@@ -529,7 +534,7 @@ export default function StepTwoQuestionsForm({
           type="submit"
           disabled={loading}
           onClick={handleSubmit(onSubmit)}
-          className={`rounded-lg px-8 bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105 ${loading ? "opacity-70 cursor-not-allowed" : ""
+          className={`rounded-lg px-8 bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105 ${loading ? "opacity-70 cursor-not-allowed" : ""
             }`}
         >
           {loading ? (

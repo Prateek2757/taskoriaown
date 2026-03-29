@@ -37,7 +37,7 @@ export default async function ProvidersPage() {
       item: {
         "@type": "LocalBusiness",
         name: p.name,
-        url: `https://www.taskoria.com/providerprofile/${p.public_id}`,
+        url: `https://www.taskoria.com/providerprofile/${p.company_slug}`,
         image: p.image ?? undefined,
         description: p.description ?? `${p.name} offers ${p.services?.slice(0, 2).join(", ")} on Taskoria.`,
         ...(p.rating && {

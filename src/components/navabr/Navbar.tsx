@@ -246,7 +246,7 @@ export default function ModernNavbar() {
           )}
           {session?.user.public_id ? (
             <Link
-              href={`/providerprofile/${session.user.public_id}`}
+              href={`/providerprofile/${session.user.company_slug}`}
               onClick={() => {
                 setIsMenuOpen(false);
                 setIsProfileOpen(false);
@@ -583,7 +583,7 @@ export default function ModernNavbar() {
                 )}
                 {session?.user.public_id ? (
                   <Link
-                    href={`/providerprofile/${session.user.public_id}`}
+                    href={`/providerprofile/${session.user.company_slug}`}
                     onClick={() => {
                       setIsMenuOpen(true);
                       setIsProfileOpen(true);

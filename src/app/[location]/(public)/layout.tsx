@@ -9,6 +9,7 @@ import {
   Poppins,
   Bricolage_Grotesque,
   Cormorant_Garamond,
+  Sora, Fraunces,
 } from "next/font/google";
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
@@ -35,6 +36,8 @@ const cormorant = Cormorant_Garamond({
   style: ["italic"],
   variable: "--font-cormorant",
 });
+
+
 
 const BASE_URL = "https://www.taskoria.com";
 

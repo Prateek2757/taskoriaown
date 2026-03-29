@@ -11,6 +11,7 @@ interface Provider {
     services: string[];
     company_name?:string;
     logo_url?:string;
+    company_slug?:string;
     rating: number;
     reviews_count: number;
     image?: string;

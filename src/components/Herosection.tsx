@@ -146,7 +146,7 @@ export default function HeroSection() {
               fetchPriority="high"
             />{" "}
             <span>
-              Australia-first marketplace • Post for free • Local providers
+              Get free quotes in minutes • Trusted local professionals{" "}
             </span>
           </div>
           {/* <TaskoriaSasthoRedirect/> */}
@@ -220,7 +220,6 @@ export default function HeroSection() {
                   alt="background"
                   fill
                   priority
-                
                   className="object-contain object-center"
                 />
               </div>

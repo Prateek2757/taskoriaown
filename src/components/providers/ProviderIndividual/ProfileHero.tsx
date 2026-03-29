@@ -198,7 +198,7 @@ function Lightbox({ src, alt, onClose }: LightboxProps) {
       >
         <div className="relative w-full h-full">
           <Image
-            src={src}
+            src={src || "coverimage"}
             alt={alt}
             fill
             className="object-contain rounded-lg select-none"
@@ -314,7 +314,7 @@ export function ProfileHero({
   const companySrc = provider.cover_image ?? provider.coverImage;
   const hasCover = Boolean(companySrc);
 
-  const initials = (provider.name ?? "")
+  const initials = (provider.company_name ?? "")
     .split(" ")
     .map((w: string) => w[0] ?? "")
     .join("")
@@ -343,7 +343,7 @@ export function ProfileHero({
               }
             >
               <Image
-                src={companySrc!}
+                src={companySrc! || "coverphoto"}
                 alt={`${provider.name ?? "Provider"} cover photo`}
                 fill
                 className="object-cover brightness-90 saturate-105 transition-transform duration-300 group-hover:scale-[1.02]"
@@ -383,71 +383,75 @@ export function ProfileHero({
           className="relative px-5 sm:px-6 flex items-end justify-between"
           style={{ marginTop: "-52px" }}
         >
-          <div className="w-24 h-24 sm:w-32 sm:h-32 relative z-10 group">
+         <div className="w-24 h-24  relative z-10 group">
 
-            <button
-              type="button"
-              aria-label="View profile photo"
-              className={`
-                block rounded-full focus-visible:outline-none focus-visible:ring-2
-                focus-visible:ring-blue-500 focus-visible:ring-offset-2
-                ${provider.image ? "cursor-zoom-in" : "cursor-default pointer-events-none"}
-              `}
-              onClick={
-                provider.cover_image
-                  ? () =>
-                      openLightbox(
-                        provider.cover_image!,
-                        `${provider.name ?? "Provider"} profile photo`
-                      )
-                  : undefined
-              }
-              disabled={!provider.cover_image}
-            >
-              {provider.cover_image ? (
-                <div className={`rounded-full overflow-hidden shadow-xl ${provider.ispro ? `ring-2 ring-yellow-400 `:""} transition-transform duration-200 group-hover:scale-105`}>
-                  <Image
-                    src={provider.cover_image}
-                    alt={provider.name ?? "Provider"}
-                    width={128}
-                    height={128}
-                    className="object-cover w-full h-full"
-                    priority
-                  />
-                </div>
-              ) : (
-                <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full shadow-xl border-4 border-white dark:border-[#1d2226] bg-gradient-to-br from-blue-500 to-[#2536EB] grid place-content-center text-white text-3xl font-bold font-serif">
-                  {initials}
-                </div>
-              )}
-            </button>
+<button
+  type="button"
+  aria-label="View profile photo"
+  className={`
+    w-full h-full block rounded-full focus-visible:outline-none focus-visible:ring-2
+    focus-visible:ring-blue-500 focus-visible:ring-offset-2
+    ${provider.image ? "cursor-zoom-in" : "cursor-default pointer-events-none"}
+  `}
+  onClick={
+    provider.cover_image
+      ? () =>
+          openLightbox(
+            provider.cover_image!,
+            `${provider.name ?? "Provider"} profile photo`
+          )
+      : undefined
+  }
+  disabled={!provider.cover_image}
+>
+  {provider.cover_image ? (
+    <div
+      className={`
+        w-full h-full rounded-full overflow-hidden shadow-xl
+        ${provider.ispro ? "ring-2 ring-yellow-400" : ""}
+        transition-transform duration-200 group-hover:scale-105
+      `}
+    >
+      <div className="relative w-full h-full">
+        <Image
+          src={provider.cover_image}
+          alt={provider.name ?? "Provider"}
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 96px, 128px"
+          priority
+        />
+      </div>
+    </div>
+  ) : (
+    <div className="h-full w-full shrink-0 text-2xl rounded-full bg-linear-to-br from-blue-600 via-blue-400 to-[#2536EB] text-white grid place-content-center font-semibold uppercase">
+    {provider.company_name
+      ?.split(" ")
+      .map((w: string) => w[0])
+      .join("")}
+  </div>
+  )}
+</button>
 
-           
-            {provider.ispro && (
-              <div
-                className="absolute bottom-0 right-2 z-20"
-                title="Pro member"
-                aria-label="Pro member"
-              >
-                <ProBadge size={30} />
-              </div>
-            )}
+{provider.ispro && (
+  <div className="absolute bottom-0 right-2 z-20" title="Pro member" aria-label="Pro member">
+    <ProBadge size={30} />
+  </div>
+)}
 
-            {provider.verified && (
-              <div
-                className={`absolute z-20 rounded-full p-0.5 bg-white dark:bg-[#1d2226] shadow-md ring-2 ring-white dark:ring-[#1d2226] ${
-                  provider.ispro
-                    ? "bottom-2 left-0"
-                    : "bottom-1 right-1"  
-                }`}
-              >
-                <CheckCircle2
-                  className="w-5 h-5 sm:w-6 sm:h-6 fill-blue-600 text-white"
-                  strokeWidth={1.5}
-                />
-              </div>
-            )}
-          </div>
+{provider.verified && (
+  <div
+    className={`absolute z-20 rounded-full p-0.5  bg-white dark:bg-[#1d2226] shadow-md ring-2 ring-white dark:ring-[#1d2226] ${
+      provider.ispro ? "bottom-2 left-0" : "bottom-1 right-1"
+    }`}
+  >
+    <CheckCircle2
+      className="w-5 h-5 sm:w-6 sm:h-6 fill-blue-600 text-white"
+      strokeWidth={1.5}
+    />
+  </div>
+)}
+</div>
 
           <div className="flex items-center gap-2 pb-2">
             <ShareButton
