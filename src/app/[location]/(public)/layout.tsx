@@ -9,7 +9,8 @@ import {
   Poppins,
   Bricolage_Grotesque,
   Cormorant_Garamond,
-  Sora, Fraunces,
+  Sora,
+  Fraunces,
 } from "next/font/google";
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
@@ -17,6 +18,7 @@ import NotificationHandler from "@/components/NotificationHandler";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import SupportChatbot from "@/components/supportChatbox";
 import Script from "next/script";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -36,8 +38,6 @@ const cormorant = Cormorant_Garamond({
   style: ["italic"],
   variable: "--font-cormorant",
 });
-
-
 
 const BASE_URL = "https://www.taskoria.com";
 
@@ -127,6 +127,10 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
+  icons: {
+    icon: [{ url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" }],
+    apple: [{ url: "/taskorialogonew.png", sizes: "140x140" }],
+  },
 };
 
 export const viewport: Viewport = {
@@ -140,18 +144,17 @@ export const viewport: Viewport = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const GA_ID = process.env.NEXT_PUBLIC_GOOGLEANALYTICS_MESUREMENT_ID!;
+  const GA_ID = process.env.NEXT_PUBLIC_GOOGLEANALYTICS_MEASUREMENT_ID;
+
   return (
     <html
       lang="en"
       className={`${poppins.variable} ${bricolage.variable} ${cormorant.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        {/* Only plain <link> and <meta> tags here — no <Script> */}
-        <link rel="icon" href="/favicon.ico" sizes="48x48" type="image/x-icon" />
-        <link rel="apple-touch-icon" sizes="140x140" href="/taskorialogonew.png" />
-        <Script
+      <AuthProvider>
+        <body className="antialiased dark:bg-black">
+          <Script
             id="schema-org"
             type="application/ld+json"
             strategy="afterInteractive"
@@ -199,29 +202,30 @@ export default function RootLayout({
               }),
             }}
           />
-      </head>
 
-      <AuthProvider>
-        <body className="antialiased dark:bg-black">
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-            strategy="afterInteractive"
-          />
-          <Script id="google-analytics" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${GA_ID}');
-            `}
-          </Script>
+          {GA_ID && (
+            <>
+              <Script
+                src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+                strategy="afterInteractive"
+              />
+              <Script id="google-analytics" strategy="afterInteractive">
+                {`
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${GA_ID}');
+                `}
+              </Script>
+            </>
+          )}
+
           <Script
             defer
             src="https://static.cloudflareinsights.com/beacon.min.js"
             data-cf-beacon='{"token": "b0381ce5a7494c56869a77d5b4d0623c"}'
             strategy="afterInteractive"
           />
-         
 
           <NotificationHandler />
           <ThemeProvider

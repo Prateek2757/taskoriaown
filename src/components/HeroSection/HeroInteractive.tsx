@@ -48,70 +48,56 @@ export default function HeroInteractive() {
 
   return (
     <>
-      <div className="max-w-2xl relative mx-auto mt-6 sm:px-4">
-        <div className="absolute left-[-900px] top-[-15px] h-[200px] inset-0 pointer-events-none dark:opacity-80">
-          <Image
-            src="/images/herobgnew.avif"
-            alt=""
-            fill
-            priority
-            aria-hidden="true"
-            className="object-contain object-center"
-          />
-        </div>
-
-        <div className="relative w-full max-w-3xl group flex sm:items-center max-sm:gap-2">
-          <div className="relative flex-1 sm:mr-4 w-full">
-            <div
-              className="absolute -inset-[2px] rounded-lg bg-[#3C7DED] blur-md opacity-0
-                group-hover:opacity-100 transition duration-500"
+      <div className="max-w-2xl w-full mx-auto mt-6 px-4 flex flex-col gap-3">
+  
+        {/* Search row */}
+        <div className="relative w-full group flex items-center">
+          {/* Decorative background */}
+          <div className="absolute left-[-900px] top-[-15px] h-[200px] inset-0 pointer-events-none dark:opacity-80">
+            <Image
+              src="/images/herobgnew.avif"
+              alt=""
+              fill
+              priority
               aria-hidden="true"
+              className="object-contain object-center"
             />
-            <div className="relative flex items-center bg-white dark:bg-gray-800 rounded-lg hover:shadow-lg transition-all duration-300">
-              <CategorySearch
-                onSelect={handleSelectCategory}
-                placeholder="What service you need? (e.g. Cleaning, Web Development, Plumbing)"
-                aria-label="Search for services"
-              />
-            </div>
           </div>
-
-          <Link
-            href={`/services/${slugvalue}`}
-            className="sm:w-auto sm:mt-0"
-            aria-label="Browse all services"
+  
+          <div
+            className="absolute -inset-[2px] rounded-lg bg-[#3C7DED] blur-md opacity-0
+              group-hover:opacity-100 transition duration-500"
+            aria-hidden="true"
           />
+  
+          <div className="relative w-full flex items-center bg-white dark:bg-gray-800 rounded-lg hover:shadow-lg transition-all duration-300">
+            <CategorySearch
+              onSelect={handleSelectCategory}
+              placeholder="What service you need? (e.g. Cleaning, Web Development, Plumbing)"
+              aria-label="Search for services"
+            />
+          </div>
         </div>
-      </div>
-
-      <div className="flex gap-2  sm:gap-4 justify-center max-w-xs mx-auto ">
-        <Button
-          onClick={handlePostJob}
-          disabled={loading}
-          className="flex-1 py-5  bg-[#2563EB] text-white"
-          aria-label="Post a job to find service providers"
-        >
-          Get Free Quotes{" "}
-          <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
-        </Button>
-
-        <NewRequestModal
-          open={openModal}
-          onClose={() => setOpenModal(false)}
-          presetCategory={selectedCategory}
-        />
-        {/* 
-        {!session && (
+  
+        <div className="flex gap-2   sm:gap-4 justify-center">
           <Button
-            variant="outline"
-            onClick={() => joinAsProvider()}
-            className="flex-1 py-5"
-            aria-label="Register as a service provider"
+            onClick={handlePostJob}
+            disabled={loading}
+            className="py-5  bg-[#2563EB] text-white"
+            aria-label="Post a job to find service providers"
           >
-            Join as Provider
+            Get Free Quotes
+            <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
           </Button>
-        )} */}
+        </div>
+  
       </div>
+  
+      <NewRequestModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        presetCategory={selectedCategory}
+      />
     </>
   );
 }

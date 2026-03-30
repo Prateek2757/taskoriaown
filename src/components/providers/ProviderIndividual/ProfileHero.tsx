@@ -97,7 +97,7 @@ function ShareButton({
         onClick={handleShare}
         aria-label={label}
         className={`
-          w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-200
+          w-9 h-9 rounded-full border mt-2 flex items-center justify-center transition-all duration-200
           ${
             state !== "idle"
               ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400"
@@ -434,7 +434,7 @@ export function ProfileHero({
 </button>
 
 {provider.ispro && (
-  <div className="absolute bottom-0 right-2 z-20" title="Pro member" aria-label="Pro member">
+  <div className="absolute bottom-0 right-1 z-20" title="Pro member" aria-label="Pro member">
     <ProBadge size={30} />
   </div>
 )}
@@ -453,7 +453,7 @@ export function ProfileHero({
 )}
 </div>
 
-          <div className="flex items-center gap-2 pb-2">
+          <div className="flex items-center gap-2 pt-2">
             <ShareButton
               name={provider.company_name ?? "Provider"}
               description={provider.description}

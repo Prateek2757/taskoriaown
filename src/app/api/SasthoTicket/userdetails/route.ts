@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from "next/server";
 import { decode } from "next-auth/jwt";
 import pool from "@/lib/dbConnect";

@@ -1,0 +1,4 @@
+Contact: mailto:contact@taskoria.com
+Policy: https://www.taskoria.com/security-policy
+Preferred-Languages: en
+Expires: 2027-03-30T00:00:00.000Z

@@ -5,9 +5,9 @@ import pool from "@/lib/dbConnect";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, phone, password } = await req.json();
+    const { email, password } = await req.json();
 
-    if (!password || (!email && !phone)) {
+    if (!password || !email ) {
       return NextResponse.json(
         { error: "Provide (email or phone) and password" },
         { status: 400 }
