@@ -52,7 +52,7 @@ export default function HeroSection() {
       />
 
       <section
-        className="relative flex flex-col sm:min-h-screen text-center overflow-hidden
+        className="relative flex flex-col text-center overflow-hidden
           dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_30%,rgba(0,0,0,1)_100%)]"
         aria-label="Hero section with service marketplace search"
       >
@@ -66,7 +66,7 @@ export default function HeroSection() {
           className="container md:pt-10 pt-6 max-md:bg-linear-to-r from-[#3C7DED]/25 via-[#41A6EE]/20
             to-[#46CBEE]/25 mx-auto md:px-4 relative z-10"
         >
-          <div className="flex flex-col items-center gap-4 max-w-auto mx-auto px-4">
+          <div className="flex flex-col items-center gap-4 max-w-auto mx-auto ">
             <div
               className="inline-flex items-center gap-1 border bg-card dark:bg-gray-800
                 rounded-full px-1 py-1 text-xs text-muted-foreground"
@@ -157,12 +157,10 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* ── DIV 2 · Popular scroll — grows to fill remaining space ── */}
         <div className="flex-1 flex flex-col justify-center">
           <ScrollPopularSection />
         </div>
 
-        {/* ── DIV 3 · Sparkle arc + trust bar — always pinned to bottom ── */}
         <div className="flex flex-col">
           <div className="hidden lg:block relative overflow-hidden bg-linear-to-t from-zinc-100 to-transparent dark:from-black">
             <div className="mx-auto max-w-4xl relative" />
@@ -209,8 +207,8 @@ export default function HeroSection() {
               <p className="text-sm text-slate-700 dark:text-slate-300 text-center">
                 Background-checked profiles, clear quotes, direct communication,
                 and safer hiring support.&nbsp;
-                
-                 < a href="/trust-safety"
+                <a
+                  href="/trust-safety"
                   className="font-semibold text-blue-600 hover:underline"
                 >
                   Learn how Taskoria keeps you safe
