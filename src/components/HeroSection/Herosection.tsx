@@ -52,7 +52,7 @@ export default function HeroSection() {
       />
 
       <section
-        className="relative md:min-h-screen text-center overflow-hidden
+        className="relative flex flex-col sm:min-h-screen text-center overflow-hidden
           dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_30%,rgba(0,0,0,1)_100%)]"
         aria-label="Hero section with service marketplace search"
       >
@@ -85,7 +85,6 @@ export default function HeroSection() {
               </span>
             </div>
 
-            {/* Headline */}
             <h1
               className="text-4xl md:text-6xl leading-tight mt-2 md:mt-0 md:mb-8"
               style={{
@@ -106,7 +105,6 @@ export default function HeroSection() {
                 >
                   professionals,{" "}
                 </span>
-
                 <span
                   className="absolute right-0 bottom-0 translate-y-3 w-full h-5 overflow-hidden"
                   aria-hidden="true"
@@ -137,32 +135,36 @@ export default function HeroSection() {
 
           <div className="flex flex-col items-center gap-2 max-w-auto mx-auto px-4 pb-2">
             <HeroInteractive />
+          </div>
 
-            <div className="flex items-center justify-center gap-2 sm:mt-4 text-sm text-gray-500 dark:text-gray-400">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              <span>Serving 50+ cities across Australia</span>
-            </div>
+          <div className="flex items-center justify-center gap-2 pb-2 sm:mt-4 text-sm text-gray-500 dark:text-gray-400">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span>Serving 50+ cities across Australia</span>
           </div>
         </div>
 
-        <div className="flex flex-col">
+        {/* ── DIV 2 · Popular scroll — grows to fill remaining space ── */}
+        <div className="flex-1 flex flex-col justify-center">
           <ScrollPopularSection />
+        </div>
 
-          <div className="mt-5 hidden lg:block relative overflow-hidden bg-linear-to-t from-zinc-100 to-transparent dark:from-black">
+        {/* ── DIV 3 · Sparkle arc + trust bar — always pinned to bottom ── */}
+        <div className="flex flex-col">
+          <div className="hidden lg:block relative overflow-hidden bg-linear-to-t from-zinc-100 to-transparent dark:from-black">
             <div className="mx-auto max-w-4xl relative" />
 
             <div
@@ -207,8 +209,8 @@ export default function HeroSection() {
               <p className="text-sm text-slate-700 dark:text-slate-300 text-center">
                 Background-checked profiles, clear quotes, direct communication,
                 and safer hiring support.&nbsp;
-                <a
-                  href="/trust-safety"
+                
+                 < a href="/trust-safety"
                   className="font-semibold text-blue-600 hover:underline"
                 >
                   Learn how Taskoria keeps you safe
