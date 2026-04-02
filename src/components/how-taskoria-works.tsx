@@ -88,7 +88,7 @@ export default function HowTaskoriaWorks() {
         className="
           relative py-14 px-4 sm:px-6 lg:px-8
           text-black bg-white 
-          dark:text-white dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
+          dark:text-white dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_30%,rgba(0,0,0,1)_100%)]
         "
         aria-labelledby="how-it-works-heading"
       >
@@ -124,7 +124,7 @@ export default function HowTaskoriaWorks() {
         >
           <h1
             id="how-it-works-heading"
-            className="text-4xl md:text-6xl flex justify-center font-black"
+            className="text-4xl md:text-5xl flex justify-center font-black"
           >
             How hiring works on Taskoria
             <span className="block opacity-0 md:opacity-100 animate-fade-in">

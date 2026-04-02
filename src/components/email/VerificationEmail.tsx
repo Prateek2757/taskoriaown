@@ -87,7 +87,7 @@ const getEmailContent = ({
           taskTitle ?? "Untitled Task"
         } ${taskLocation ? `Location: ${taskLocation}` : ""} Please review it.`,
         buttonText: "Review Task",
-        buttonLink: "https://taskoria.com/adminbudgetmanager",
+        buttonLink: "https://taskoria.com/admin/adminbudgetmanager",
       };
     case "verification":
       return {

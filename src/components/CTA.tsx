@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 
 function CTA() {
   return (
-    <section className="relative py-6 px-2 sm:px-4 bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 dark:bg-[radial-gradient(circle_at_top,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_50%,rgba(0,0,0,1)_90%)] overflow-hidden">
+    <section className="relative py-6 px-2 sm:px-4  dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_50%,rgba(0,0,0,1)_90%)] overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-5 w-36 h-36 bg-blue-400/10 rounded-full blur-2xl animate-pulse"></div>
         <div
@@ -19,10 +19,10 @@ function CTA() {
         <div className="relative rounded-[1.5rem] border border-white/40 bg-gradient-to-br from-white/95 via-white/90 to-white/85 dark:bg-[radial-gradient(circle_at_top,_rgba(76,112,255,0.18)_0%,_rgba(0,0,0,1)_70%)] backdrop-blur-lg p-6 sm:p-8 shadow-xl shadow-gray-900/5 overflow-hidden group transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/20">
           <div className="absolute inset-0 rounded-[1.5rem] bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-500"></div>
 
-          <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-gradient-to-br from-blue-400 to-purple-400 rounded-tl-[1.5rem] opacity-60 transition-all duration-300 group-hover:w-16 group-hover:h-16"></div>
+          {/* <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-gradient-to-br from-blue-400 to-purple-400 rounded-tl-[1.5rem] opacity-60 transition-all duration-300 group-hover:w-16 group-hover:h-16"></div>
           <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-gradient-to-bl from-purple-400 to-pink-400 rounded-tr-[1.5rem] opacity-60 transition-all duration-300 group-hover:w-16 group-hover:h-16"></div>
           <div className="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-gradient-to-tr from-pink-400 to-blue-400 rounded-bl-[1.5rem] opacity-60 transition-all duration-300 group-hover:w-16 group-hover:h-16"></div>
-          <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-gradient-to-tl from-blue-400 to-purple-400 rounded-br-[1.5rem] opacity-60 transition-all duration-300 group-hover:w-16 group-hover:h-16"></div>
+          <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-gradient-to-tl from-blue-400 to-purple-400 rounded-br-[1.5rem] opacity-60 transition-all duration-300 group-hover:w-16 group-hover:h-16"></div> */}
 
           <div className="absolute top-5 right-10 w-1 h-1 bg-blue-400 rounded-full animate-ping opacity-75"></div>
           <div

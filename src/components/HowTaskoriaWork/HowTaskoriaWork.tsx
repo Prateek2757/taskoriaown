@@ -75,7 +75,7 @@ export default function HowTaskoriaWorks() {
         <div className="max-w-7xl mx-auto relative">
           <h1
             id="how-it-works-heading"
-            className="text-4xl md:text-6xl flex justify-center font-black"
+            className="text-4xl md:text-5xl flex justify-center font-black"
           >
             How hiring works on Taskoria
             <span className="block opacity-0 md:opacity-100 animate-fade-in">

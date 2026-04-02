@@ -26,23 +26,23 @@ const securityHeaders = [
     key: 'Permissions-Policy',
     value: 'camera=(), microphone=(), geolocation=()',
   },
-  {
-    key: 'Content-Security-Policy',
-    value: [
-      "default-src 'self'",
-      "base-uri 'self'",
-      "form-action 'self'",
-      "frame-ancestors 'none'",
-      "object-src 'none'",
-      "img-src 'self' data: blob: https:",
-      "font-src 'self' data: https:",
-      "style-src 'self' 'unsafe-inline' https:",
-      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
-      "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://vitals.vercel-insights.com https:",
-      "frame-src 'self'",
-      "upgrade-insecure-requests",
-    ].join('; '),
-  },
+  // {
+  //   key: 'Content-Security-Policy',
+  //   value: [
+  //     "default-src 'self'",
+  //     "base-uri 'self'",
+  //     "form-action 'self'",
+  //     "frame-ancestors 'none'",
+  //     "object-src 'none'",
+  //     "img-src 'self' data: blob: https:",
+  //     "font-src 'self' data: https:",
+  //     "style-src 'self' 'unsafe-inline' https:",
+  //     "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+  //     "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://vitals.vercel-insights.com https:",
+  //     "frame-src 'self'",
+  //     "upgrade-insecure-requests",
+  //   ].join('; '),
+  // },
 ]
 
 const nextConfig: NextConfig = {

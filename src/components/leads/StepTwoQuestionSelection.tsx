@@ -27,14 +27,18 @@ export default function StepTwoQuestionsForm({
   selectedCategoryId,
   selectedLocationId,
   selectedTitle,
+  questions,
+  questionsLoading,
 }: {
   onBack: () => void;
   onClose: () => void;
   selectedCategoryId: string;
   selectedLocationId: string;
   selectedTitle: string;
+  questions: any[];
+  questionsLoading: boolean;
 }) {
-  const [questions, setQuestions] = useState<any[]>([]);
+  // const [questions, setQuestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState<"questions" | "budget">(
     "questions"
@@ -62,15 +66,25 @@ export default function StepTwoQuestionsForm({
     },
   });
 
+  // useEffect(() => {
+  //   if (!selectedCategoryId) return;
+  //   setQuestions([]);
+  //   setCurrentIndex(0);
+  //   setCurrentStep("questions");
+  //   reset();
+  //   setLoading(true);
+  //   axios
+  //     .get(`/api/category-questions/${selectedCategoryId}`)
+  //     .then((res) => setQuestions(res.data))
+  //     .catch(() => toast.error("Failed to load questions"))
+  //     .finally(() => setLoading(false));
+  // }, [selectedCategoryId]);
   useEffect(() => {
-    if (!selectedCategoryId) return;
-    setLoading(true);
-    axios
-      .get(`/api/category-questions/${selectedCategoryId}`)
-      .then((res) => setQuestions(res.data))
-      .catch(() => toast.error("Failed to load questions"))
-      .finally(() => setLoading(false));
-  }, [selectedCategoryId]);
+    setCurrentIndex(0);
+    setCurrentStep("questions");
+    reset();
+  }, [questions]);
+
 
   const currentQuestion = questions[currentIndex];
 
@@ -245,7 +259,7 @@ export default function StepTwoQuestionsForm({
 
       const dataWithExpiry = {
         value: payload,
-        expiry: Date.now() + 5 * 60 * 60 * 1000, 
+        expiry: Date.now() + 5 * 60 * 60 * 1000,
       };
 
       localStorage.setItem("pendingpayload", JSON.stringify(dataWithExpiry));

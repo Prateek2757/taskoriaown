@@ -85,12 +85,12 @@ export default function StepOneCategoryForm({
   // }, []);
 
   useEffect(() => {
-    if (presetCategory) {
+    if (presetCategory && !userInteracted) {
       setValue("category_id", presetCategory.category_id);
       setValue("category_name", presetCategory.name);
       setSelectedCategoryTitle(presetCategory.name);
     }
-  }, [presetCategory, setValue, setSelectedCategoryTitle]);
+  }, [presetCategory?.category_id, userInteracted]);
 
   useEffect(() => {
     if (presetLocation) {

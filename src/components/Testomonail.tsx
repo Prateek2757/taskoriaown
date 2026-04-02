@@ -102,7 +102,7 @@ const ReviewCard = ({
 export default function Testomonail() {
   return (
     <section
-      className="bg-card dark:bg-[radial-gradient(circle_at_top,_rgba(19,50,102,1)_0%,_rgba(0,0,0,1)_50%)] py-10 px-4"
+      className="bg-card dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_50%,rgba(0,0,0,1)_90%)] py-10 px-4"
       id="customer-reviews"
     >
       <div className="text-center">

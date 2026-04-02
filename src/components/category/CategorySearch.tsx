@@ -80,9 +80,9 @@ export default function CategorySearch({
   
     return categories.filter((c) => {
       const nameMatch = c.name.toLowerCase().includes(q);
-      // const keywordMatch = c.keywords?.some((k) => k.toLowerCase().includes(q));
+      const keywordMatch = c.keywords?.some((k) => k.toLowerCase().includes(q));
       return nameMatch 
-      // || keywordMatch;
+      || keywordMatch;
     });
   }, [query, categories, selected]);
 
@@ -154,7 +154,7 @@ export default function CategorySearch({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="absolute z-10 border mt-1 w-full rounded-lg shadow-lg 
-             max-h-auto overflow-y-auto pointer-events-auto backdrop-blur-xl bg-[rgba(255,255,255,.2)] touch-pan-y overscroll-auto"
+             max-h-[440px] overflow-y-auto overflow-visible pointer-events-auto backdrop-blur-xl bg-[rgba(255,255,255,.2)] touch-pan-y overscroll-auto"
           >
             {filtered.map((cat) => (
               <li

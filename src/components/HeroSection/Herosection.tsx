@@ -52,7 +52,7 @@ export default function HeroSection() {
       />
 
       <section
-        className="relative flex flex-col text-center overflow-hidden
+        className="relative flex flex-col text-center 
           dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_30%,rgba(0,0,0,1)_100%)]"
         aria-label="Hero section with service marketplace search"
       >
@@ -122,7 +122,7 @@ export default function HeroSection() {
                 </span>
               </span>{" "}
               <span
-                className="block bg-[#2563EB] bg-clip-text text-transparent"
+                className="block bg-[#2553EB] bg-clip-text text-transparent"
                 style={{
                   fontFamily: "'Bricolage Grotesque', sans-serif",
                   fontWeight: 800,

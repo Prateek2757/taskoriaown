@@ -61,7 +61,6 @@ interface LeadDetailsProps {
   userId?: string | number;
 }
 
-
 function toProviderResponse(lead: Lead, session: any): ProviderResponse {
   return {
     customer_name: lead.customer_name ?? "Customer",
@@ -70,7 +69,7 @@ function toProviderResponse(lead: Lead, session: any): ProviderResponse {
     professional_name: session?.user?.name ?? "",
     professional_contact_number: session?.user?.phone ?? "",
     professional_company_name: session?.user?.company_name ?? "",
-    professional_website: session?.user?.website ?? ""
+    professional_website: session?.user?.website ?? "",
   } as ProviderResponse;
 }
 
@@ -85,7 +84,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   const [isSaved, setIsSaved] = useState(false);
   const [showCreditModal, setShowCreditModal] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
-
 
   const cacheKey = taskId ? `lead_status_${taskId}` : null;
 
@@ -102,10 +100,13 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       if (cached) {
         const parsed = JSON.parse(cached);
 
-        return { count: parsed.count ?? 0, purchased: parsed.purchased ?? false, hydrated: false };
+        return {
+          count: parsed.count ?? 0,
+          purchased: parsed.purchased ?? false,
+          hydrated: false,
+        };
       }
-    } catch {
-    }
+    } catch {}
     return { count: 0, purchased: false, hydrated: false };
   });
 
@@ -130,10 +131,17 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     try {
       const { data } = await axios.get(`/api/admin/task-responses/${taskId}`);
       setLeadStatus((prev) => {
-        if (prev.purchased === data.purchased && prev.count === data.count && prev.hydrated) {
+        if (
+          prev.purchased === data.purchased &&
+          prev.count === data.count &&
+          prev.hydrated
+        ) {
           return prev;
         }
-        localStorage.setItem(cacheKey, JSON.stringify({ count: data.count, purchased: data.purchased }));
+        localStorage.setItem(
+          cacheKey,
+          JSON.stringify({ count: data.count, purchased: data.purchased })
+        );
         return { count: data.count, purchased: data.purchased, hydrated: true };
       });
     } catch (err) {
@@ -146,8 +154,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     fetchResponses();
   }, [fetchResponses]);
 
-  const shouldFetchConversation =
-    leadStatus.purchased && !!taskId && !!userId;
+  const shouldFetchConversation = leadStatus.purchased && !!taskId && !!userId;
 
   const {
     conversationId,
@@ -191,7 +198,13 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       setIsNavigating(true);
       window.location.href = `/messages/${conversationId}`;
     }
-  }, [conversationId, convoLoading, convoError, refetchConversation, isNavigating]);
+  }, [
+    conversationId,
+    convoLoading,
+    convoError,
+    refetchConversation,
+    isNavigating,
+  ]);
 
   const handlePurchaseSuccess = useCallback(async () => {
     toast.success("Purchase successful!");
@@ -226,7 +239,15 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     } else {
       toast.info("Click 'Chat' button to start your conversation");
     }
-  }, [fetchResponses, refetchConversation, session, userId, lead, cacheKey, leadStatus.count]);
+  }, [
+    fetchResponses,
+    refetchConversation,
+    session,
+    userId,
+    lead,
+    cacheKey,
+    leadStatus.count,
+  ]);
 
   const formatTimeAgo = useCallback((timestamp: string): string => {
     const now = new Date();
@@ -326,14 +347,16 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
             <button
               onClick={() => setIsSaved(!isSaved)}
-              className={`p-2 rounded-xl border transition-all ${isSaved
+              className={`p-2 rounded-xl border transition-all ${
+                isSaved
                   ? "bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:border-blue-700"
                   : "bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100"
-                }`}
+              }`}
             >
               <Bookmark
-                className={`w-4 h-4 transition-colors ${isSaved ? "fill-blue-500 text-blue-500" : "text-gray-400"
-                  }`}
+                className={`w-4 h-4 transition-colors ${
+                  isSaved ? "fill-blue-500 text-blue-500" : "text-gray-400"
+                }`}
               />
             </button>
           </div>
@@ -342,14 +365,13 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         <div className="border-t border-gray-100 dark:border-gray-800" />
 
         <div className="p-2">
-
           <div className=" bg-blue-50 bg-gradient-to-br mx-auo dark:from-gray-800 dark:to-black rounded-xl border border-gray-200 dark:border-gray-700 p-3 mb-6">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wide mb-4 flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-cyan-600" />
-              {leadStatus.purchased ? "Contact Details" : "Contact Details (Locked)"}
+              {leadStatus.purchased
+                ? "Contact Details"
+                : "Contact Details (Locked)"}
             </h3>
-
-
 
             {!leadStatus.hydrated && !leadStatus.purchased ? (
               <div className="space-y-3  animate-pulse">
@@ -368,35 +390,55 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                   </div>
                 </div>
                 <div className="flex gap-2 pt-1">
-                  {[1, 2, 3, 4].map(i => (
-                    <div key={i} className="h-7 w-20 bg-gray-200 dark:bg-gray-700 rounded-lg" />
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className="h-7 w-20 bg-gray-200 dark:bg-gray-700 rounded-lg"
+                    />
                   ))}
                 </div>
               </div>
             ) : leadStatus.purchased ? (
               <>
                 <div className="hidden lg:flex items-center gap-3">
-                  <ContactActions response={providerResponse} variant="compact" />
+                  <ContactActions
+                    response={providerResponse}
+                    variant="compact"
+                  />
                 </div>
                 <div className="flex lg:hidden justify-center mx-0 p-0 items-center gap-3">
                   <ContactActions response={providerResponse} variant="full" />
                 </div>
               </>
-
             ) : (
               <div className="  space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498A1 1 0 0121 15.72V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    <svg
+                      className="w-5 h-5 text-blue-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498A1 1 0 0121 15.72V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                      />
                     </svg>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Phone Number</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
+                      Phone Number
+                    </div>
                     <div className="font-mono text-sm text-gray-900 dark:text-gray-100 select-none">
-                      {lead.phone ? maskPhone(lead.phone) : (
-                        <span className="italic text-gray-400">Not provided</span>
+                      {lead.phone ? (
+                        maskPhone(lead.phone)
+                      ) : (
+                        <span className="italic text-gray-400">
+                          Not provided
+                        </span>
                       )}
                     </div>
                   </div>
@@ -404,13 +446,24 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    <svg
+                      className="w-5 h-5 text-purple-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      />
                     </svg>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Email Address</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
+                      Email Address
+                    </div>
                     <div className="font-mono text-sm text-gray-900 dark:text-gray-100 select-none">
                       {maskEmail(lead.customer_email)}
                     </div>
@@ -418,9 +471,18 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 </div>
 
                 <p className="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1.5 pt-1">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  <svg
+                    className="w-3.5 h-3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
                   </svg>
                   Purchase this lead to unlock full contact details & actions
                 </p>
@@ -444,8 +506,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               />
             </div>
             <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
-              <strong>{maxResponses - responseRate} spots remaining</strong> • Be
-              one of the first to respond
+              <strong>{maxResponses - responseRate} spots remaining</strong> •
+              Be one of the first to respond
             </p>
           </div>
 
@@ -587,7 +649,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             Not seeing the right leads?
           </h3>
           <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            Stop seeing leads with specific answers by customising your settings.
+            Stop seeing leads with specific answers by customising your
+            settings.
           </p>
           <button
             onClick={() => router.push("/settings/leads/myservices")}

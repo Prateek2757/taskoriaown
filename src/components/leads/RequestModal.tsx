@@ -21,6 +21,8 @@ import {
 
 import StepOneCategoryForm from "./stepOneCategorySelection";
 import StepTwoQuestionsForm from "./StepTwoQuestionSelection";
+import axios from "axios";
+import { toast } from "sonner";
 
 type Props = {
   open: boolean;
@@ -58,24 +60,43 @@ export default function NewRequestModal({
     display_name?: string;
     city?: string;
   } | null>(presetLocation || null);
+  const [questions, setQuestions] = useState<any[]>([]);
+  const [questionsLoading, setQuestionsLoading] = useState(false);
+  const [stepTwoKey, setStepTwoKey] = useState(0);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    if (presetCategory) {
-      setSelectedCategoryId(String(presetCategory?.category_id));
-      setSelectedCategoryTitle(String(presetCategory?.name));
-    }
-  }, [presetCategory]);
+    if (!selectedCategoryId) return;
 
-  useEffect(() => {
-    if (presetLocation) {
-      setSelectedLocationId(String(presetLocation?.city_id));
-    }
-  }, [presetLocation]);
+    setQuestions([]);
+    setQuestionsLoading(true);
 
+    axios
+      .get(`/api/category-questions/${selectedCategoryId}`)
+      .then((res) => setQuestions(res.data))
+      .catch(() => toast.error("Failed to load questions"))
+      .finally(() => setQuestionsLoading(false));
+  }, [selectedCategoryId]);
+console.log(selectedCategoryId,"selected catrgiory");
 
+useEffect(() => {
+  if (presetCategory) {
+    setSelectedCategoryId(String(presetCategory.category_id));
+    setSelectedCategoryTitle(String(presetCategory.name));
+  }
+}, [presetCategory?.category_id]); // 👈 only re-run if the ID actually changes
+
+useEffect(() => {
+  if (presetLocation) {
+    setSelectedLocationId(String(presetLocation.city_id));
+  }
+}, [presetLocation?.city_id]); // 👈 same pattern
 
   const next = () => setStep(2);
-  const back = () => setStep(1);
+  const back = () => {
+    setStep(1);
+    setStepTwoKey((k) => k + 1); // forces StepTwo to remount every time
+  };
   const close = () => {
     onClose();
     setStep(1);
@@ -83,8 +104,8 @@ export default function NewRequestModal({
     setSelectedLocationId("");
     setSelectedCategoryTitle("");
     setSelectedLocation(null);
-  };  
-
+    setQuestions([]);
+  };
 
   return (
     <Dialog
@@ -140,8 +161,8 @@ export default function NewRequestModal({
               </motion.div>
             ) : (
               <motion.div
-                key="step2"
-                initial={{ opacity: 0 }}
+              key={`step2-${stepTwoKey}`}  
+              initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
@@ -152,6 +173,8 @@ export default function NewRequestModal({
                   selectedCategoryId={selectedCategoryId}
                   selectedTitle={selectedCategoryTitle}
                   selectedLocationId={selectedLocationId}
+                  questions={questions}
+                  questionsLoading={questionsLoading}
                 />
               </motion.div>
             )}

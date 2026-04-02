@@ -150,10 +150,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${poppins.variable} ${bricolage.variable} ${cormorant.variable}`}
-      suppressHydrationWarning
     >
       <AuthProvider>
-        <body className="antialiased dark:bg-black">
+        <body className="antialiased dark:bg-black" suppressHydrationWarning >
           <Script
             id="schema-org"
             type="application/ld+json"

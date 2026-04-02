@@ -24,7 +24,7 @@ import {
           </Text>
   
           <Section style={{ margin: "32px 0", textAlign: "center" }}>
-            <Button href="https://taskoria.com/adminbudgetmanager" style={{ backgroundColor: "#2563eb", color: "#ffffff", padding: "12px 32px", fontSize: "16px", fontWeight: "600", textDecoration: "none", borderRadius: "8px", display: "inline-block" }}>
+            <Button href="https://taskoria.com/admin/adminbudgetmanager" style={{ backgroundColor: "#2563eb", color: "#ffffff", padding: "12px 32px", fontSize: "16px", fontWeight: "600", textDecoration: "none", borderRadius: "8px", display: "inline-block" }}>
               Review Task
             </Button>
           </Section>
