@@ -69,31 +69,38 @@ function SignInForm() {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-  
+
     const res = await signIn("credentials", {
       redirect: false,
       email: email.trim().toLowerCase(),
       password,
     });
-  
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      setMessage("Please enter a valid email address.");
+      setLoading(false);
+      return;
+    }
+
     setLoading(false);
-  
+
     if (res?.error) {
       setMessage(res.error);
       return;
     }
-  
+
     const savedLead = localStorage.getItem("pendingpayload");
     if (savedLead) {
       try {
         const parsedData = JSON.parse(savedLead);
-  
+
         if (Date.now() > parsedData.expiry) {
           localStorage.removeItem("pendingpayload");
         } else {
           const payload = parsedData.value;
           const submitRes = await axios.post("/api/leads", payload);
-  
+
           if (!submitRes.data.error) {
             localStorage.removeItem("pendingpayload");
             localStorage.setItem("viewMode", "customer");
@@ -109,13 +116,13 @@ function SignInForm() {
         console.error("Auto Submit Failed", error);
       }
     }
-  
+
     if (resumeRequest && next) {
       setMessage("Signed in. Returning to your request...");
       setTimeout(() => router.push(next), 300);
       return;
     }
-  
+
     setMessage("Signed in. Redirecting...");
     setTimeout(() => router.push("/provider/dashboard"), 300);
   };
@@ -236,7 +243,7 @@ function SignInForm() {
           <Button
             type="button"
             disabled={joinLoading}
-            onClick={joinAsProvider}
+            onClick={() => joinAsProvider()}
             className="mt-3 h-11 w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900"
           >
             {joinLoading ? (

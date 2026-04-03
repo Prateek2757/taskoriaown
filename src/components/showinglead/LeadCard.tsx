@@ -87,9 +87,9 @@ const LeadCard: React.FC<LeadCardProps> = ({
 
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-start gap-3">
-        <div className="relative flex-shrink-0">
+        <div className="relative shrink-0">
 
-          {lead.image ? (
+          {/* {lead.image ? (
             <div className="w-14 h-14 rounded-2xl overflow-hidden">
               <Image
                 src={lead.image}
@@ -99,11 +99,13 @@ const LeadCard: React.FC<LeadCardProps> = ({
                 className="w-full h-full object-cover"
               />
             </div>
-          ) : (
-            <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white text-2xl font-semibold">
+          ) : 
+          ( */}
+            <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-linear-to-br from-blue-500 to-blue-600 text-white text-2xl font-semibold">
               {getInitials(lead.customer_name || "N/A")}
             </div> 
-          )}  {lead.status === "Open" && (
+         {/* )}  */}
+           {lead.status === "Open" && (
             <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-900" />
           )}
           </div>

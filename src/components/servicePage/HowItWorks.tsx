@@ -1,98 +1,57 @@
 "use client";
 
-import {
-  CheckCircle,
-  DollarSign,
-  AlertTriangle,
-  ChevronDown,
-  Sparkles,
-  BookOpen,
-  ArrowRight,
-} from "lucide-react";
+import { useMemo, useState, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useState, useMemo } from "react";
+import {
+  ChevronDown,
+  CheckCircle2,
+  ArrowRight,
+  Star,
+  Users,
+  ShieldCheck,
+  Clock,
+  Zap,
+} from "lucide-react";
 
-
-interface ContentList {
-  ordered: boolean;
-  items: string[];
-}
-interface Subsection {
-  heading: string;
-  paragraphs: string[];
-  lists: ContentList[];
-}
-interface Section {
-  id: string;
-  heading: string;
-  paragraphs: string[];
-  lists: ContentList[];
-  subsections: Subsection[];
-}
-interface ParsedContent {
-  title: string;
-  intro: string;
-  sections: Section[];
-}
-
-
-function parseHTML(html: string): ParsedContent {
+function parseHTML(html) {
   const body = new DOMParser().parseFromString(html, "text/html").body;
+  const title = body.querySelector("h1")?.textContent?.trim() ?? "";
 
-  const title =
-    body.querySelector("h1")?.textContent?.trim() ??
-    body.querySelector("h2")?.textContent?.trim() ??
-    "";
-
-  let intro = "";
+  const intros = [];
   const firstH2 = body.querySelector("h2");
   if (firstH2) {
     let sib = firstH2.previousElementSibling;
     while (sib) {
-      if (sib.tagName === "P") { intro = sib.textContent?.trim() ?? ""; break; }
+      if (sib.tagName === "P") intros.unshift(sib.textContent.trim());
       sib = sib.previousElementSibling;
     }
   }
-  if (!intro) intro = body.querySelector("p")?.textContent?.trim() ?? "";
 
-  const sections: Section[] = [];
-  const h2Els = Array.from(body.querySelectorAll("h2"));
-
-  h2Els.forEach((h2, idx) => {
-    const heading = h2.textContent?.trim() ?? "";
-    if (!body.querySelector("h1") && idx === 0 && heading === title) return;
-
-    const section: Section = {
+  const sections = [];
+  body.querySelectorAll("h2").forEach((h2, idx) => {
+    const section = {
       id: `s${idx}`,
-      heading,
+      heading: h2.textContent.trim(),
       paragraphs: [],
       lists: [],
       subsections: [],
     };
     let cur = h2.nextElementSibling;
-    let sub: Subsection | null = null;
+    let sub = null;
 
     while (cur && cur.tagName !== "H2") {
       if (cur.tagName === "H3") {
         if (sub) section.subsections.push(sub);
-        sub = { heading: cur.textContent?.trim() ?? "", paragraphs: [], lists: [] };
+        sub = { heading: cur.textContent.trim(), paragraphs: [], items: [] };
       } else if (cur.tagName === "P") {
-        const t = cur.textContent?.trim() ?? "";
+        const t = cur.textContent.trim();
         if (t) (sub ? sub.paragraphs : section.paragraphs).push(t);
       } else if (cur.tagName === "UL" || cur.tagName === "OL") {
-        const items = Array.from(cur.querySelectorAll("li")).map(
-          (li) => li.textContent?.trim() ?? ""
+        const items = Array.from(cur.querySelectorAll("li")).map((li) =>
+          li.textContent.trim()
         );
-        (sub ? sub.lists : section.lists).push({ ordered: cur.tagName === "OL", items });
-      } else if (cur.tagName === "LI") {
-        const items: string[] = [];
-        while (cur && cur.tagName === "LI") {
-          items.push(cur.textContent?.trim() ?? "");
-          cur = cur.nextElementSibling;
-        }
-        if (items.length)
-          (sub ? sub.lists : section.lists).push({ ordered: false, items });
-        continue;
+        if (sub) sub.items.push(...items);
+        else section.lists.push(...items);
       }
       cur = cur.nextElementSibling;
     }
@@ -100,647 +59,952 @@ function parseHTML(html: string): ParsedContent {
     sections.push(section);
   });
 
-  return { title, intro, sections };
+  return { title, intros, sections };
 }
 
+const STEPS_RE = /how.it.works|get.started|steps|process|works/i;
+const SERVICE_RE =
+  /included|services|what.you|options|types|packages|offering|provide/i;
+const FEATURE_RE =
+  /help.you|why|benefit|find|choose|advantage|platform|taskoria|bark|marketplace/i;
 
-type Layout =
-  | "tiers"
-  | "steps"
-  | "pricing"
-  | "warnings"
-  | "checklist"
-  | "chips"
-  | "prose-list"
-  | "accordion"
-  | "prose";
+function classify(s) {
+  const hasSubs = s.subsections.length >= 2;
+  const hasLists = s.lists.length > 0;
+  const isNumbered = s.subsections.some((sub) => /^\d/.test(sub.heading));
 
-const PRICE_RE = /\b(cost|price|pric|fee|rate|charg|quot|budget|\$|dollar|invest)\b/i;
-const WARN_RE  = /^(don'?t|avoid|never|not |ensure|always|make sure|check|confirm|beware|watch)/i;
-
-function classify(s: Section): Layout {
-  const items  = s.lists.flatMap((l) => l.items);
-  const hasOL  = s.lists.some((l) => l.ordered);
-  const hasSub = s.subsections.length >= 2;
-  const n      = items.length;
-  const p      = s.paragraphs.length;
-
-  if (hasSub) return "tiers";
-  if (hasOL && n > 0) return "steps";
-
-  if (n > 0) {
-    const avgWords = items.reduce((sum, i) => sum + i.split(" ").length, 0) / n;
-    const pricey =
-      PRICE_RE.test(s.heading) ||
-      s.paragraphs.some((x) => PRICE_RE.test(x)) ||
-      items.some((x) => PRICE_RE.test(x));
-    const warnish = items.filter((i) => WARN_RE.test(i)).length > n * 0.3;
-
-    if (pricey)        return "pricing";
-    if (warnish)       return "warnings";
-    if (avgWords <= 5) return "chips";
-    if (p >= 1)        return "prose-list";
-    return "checklist";
-  }
-
-  if (p >= 3) return "accordion";
+  if ((STEPS_RE.test(s.heading) || isNumbered) && hasSubs) return "steps";
+  if (SERVICE_RE.test(s.heading) && hasSubs) return "services";
+  if (FEATURE_RE.test(s.heading) && hasSubs) return "features";
+  if (hasSubs) return "features";
+  if (hasLists) return "checklist";
   return "prose";
 }
 
+function cleanNum(h) {
+  return h.replace(/^(\d+\.?\s+|step\s+\d+[.:]\s*)/i, "").trim();
+}
+
+const T = {
+  brand: "#2563EB",
+  brandLight: "#7494DE",
+  brandMid: "#7494DE",
+  brandBorder: "#2563EB",
+
+  text: "var(--color-text-primary)",
+  muted: "var(--color-text-secondary)",
+  hint: "var(--color-text-tertiary)",
+
+  surface: "var(--color-background-primary)",
+  raised: "var(--color-background-secondary)",
+  border: "var(--color-border-tertiary)",
+  borderHover: "var(--color-border-secondary)",
+
+  radius: "10px",
+  radiusLg: "14px",
+};
 
 const up = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 16 },
   visible: (i = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.46, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.52, delay: i * 0.065, ease: [0.22, 1, 0.36, 1] },
   }),
 };
 
-function InView({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
+function Fade({ children, i = 0, style = {}, tag = "div" }) {
+  const Tag = motion[tag] || motion.div;
   return (
-    <motion.div
+    <Tag
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.06 }}
-      className={className}
+      viewport={{ once: true, amount: 0.08 }}
+      custom={i}
+      variants={up}
+      style={style}
     >
       {children}
-    </motion.div>
+    </Tag>
   );
 }
 
-
-const PALETTE = [
-  {
-    pill:  "text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800/60 bg-blue-50 dark:bg-blue-950/40",
-    icon:  "text-blue-500",
-    card:  "hover:border-blue-300 dark:hover:border-blue-700/60",
-    badge: "bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400",
-    bar:   "bg-blue-500",
-  },
-  {
-    pill:  "text-violet-600 dark:text-violet-400 border-violet-200 dark:border-violet-800/60 bg-violet-50 dark:bg-violet-950/40",
-    icon:  "text-violet-500",
-    card:  "hover:border-violet-300 dark:hover:border-violet-700/60",
-    badge: "bg-violet-50 dark:bg-violet-950/50 text-violet-600 dark:text-violet-400",
-    bar:   "bg-violet-500",
-  },
-  {
-    pill:  "text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40",
-    icon:  "text-emerald-500",
-    card:  "hover:border-emerald-300 dark:hover:border-emerald-700/60",
-    badge: "bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400",
-    bar:   "bg-emerald-500",
-  },
-  {
-    pill:  "text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/40",
-    icon:  "text-amber-500",
-    card:  "hover:border-amber-300 dark:hover:border-amber-700/60",
-    badge: "bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400",
-    bar:   "bg-amber-500",
-  },
-  {
-    pill:  "text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-800/60 bg-rose-50 dark:bg-rose-950/40",
-    icon:  "text-rose-500",
-    card:  "hover:border-rose-300 dark:hover:border-rose-700/60",
-    badge: "bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400",
-    bar:   "bg-rose-500",
-  },
-];
-
-const PILL_LABELS: Record<Layout, string> = {
-  tiers:        "Overview",
-  steps:        "How It Works",
-  pricing:      "Pricing",
-  warnings:     "Important",
-  checklist:    "What's Included",
-  chips:        "Services",
-  "prose-list": "Details",
-  accordion:    "About",
-  prose:        "About",
-};
-
-
-function Pill({ idx = 0, label }: { idx?: number; label: string }) {
-  const p = PALETTE[idx % PALETTE.length];
+function EyebrowLabel({ text }) {
   return (
     <span
-      className={`inline-flex items-center text-[10px] font-bold tracking-[0.2em] uppercase border px-3.5 py-1.5 rounded-full ${p.pill}`}
+      style={{
+        display: "inline-block",
+        fontSize: 11,
+        fontWeight: 700,
+        letterSpacing: "0.13em",
+        textTransform: "uppercase",
+        color: T.brand,
+        marginBottom: 8,
+      }}
     >
-      {label}
+      {text}
     </span>
   );
 }
 
-function SectionHeader({
-  heading,
-  paragraphs = [],
-  pill,
-  idx = 0,
-}: {
-  heading: string;
-  paragraphs?: string[];
-  pill: string;
-  idx?: number;
-}) {
+function SectionTitle({ children }) {
   return (
-    <div className="text-center mb-8">
-      <motion.div variants={up} custom={0}>
-        <Pill idx={idx} label={pill} />
-      </motion.div>
-      <motion.h2
-        variants={up}
-        custom={0.6}
-        className="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white leading-snug"
-      >
-        {heading}
-      </motion.h2>
-      {paragraphs.length > 0 && (
-        <div className="mt-3 max-w-2xl mx-auto space-y-2">
-          {paragraphs.map((p, i) => (
-            <motion.p
-              key={i}
-              variants={up}
-              custom={i + 1}
-              className="text-[15px] text-gray-500 dark:text-gray-400 leading-relaxed"
-            >
-              {p}
-            </motion.p>
-          ))}
-        </div>
-      )}
-    </div>
+    <h2
+      style={{
+        fontSize: "clamp(20px, 3vw, 26px)",
+        fontWeight: 700,
+        lineHeight: 1.25,
+        color: T.text,
+        marginBottom: 8,
+      }}
+    >
+      {children}
+    </h2>
+  );
+}
+
+function Dot() {
+  return (
+    <span
+      style={{
+        display: "inline-block",
+        width: 7,
+        height: 7,
+        borderRadius: "50%",
+        background: T.brandMid,
+        flexShrink: 0,
+        marginTop: 5,
+      }}
+    />
   );
 }
 
 function Divider() {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-2">
-      <div className="h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700/60 to-transparent" />
+    <div style={{ padding: "0 24px" }}>
+      <div style={{ height: 1, background: T.border }} />
     </div>
   );
 }
 
+const TRUST_ITEMS = [
+  { icon: <Users size={15} />, stat: "50,000+", label: "Verified providers" },
+  { icon: <Star size={15} />, stat: "4.8/5", label: "Average rating" },
+  { icon: <Clock size={15} />, stat: "< 1 hr", label: "Avg response time" },
+  { icon: <ShieldCheck size={15} />, stat: "100%", label: "Free to post" },
+];
 
-function Hero({ title, intro }: { title: string; intro: string }) {
-  if (!title && !intro) return null;
+function TrustBar() {
   return (
-    <InView className="max-w-4xl mx-auto px-4 pt-8 pb-4 text-center">
-      {title && (
-        <motion.h1
-          variants={up}
-          custom={0}
-          className="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold tracking-tight text-gray-900 dark:text-white leading-[1.12] mb-4"
+    <div
+      style={{
+        borderTop: `1px solid ${T.border}`,
+        borderBottom: `1px solid ${T.border}`,
+        padding: "14px 24px",
+        display: "flex",
+        gap: 0,
+        overflowX: "auto",
+        background: T.raised,
+      }}
+    >
+      {TRUST_ITEMS.map((item, i) => (
+        <div
+          key={i}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            flex: "1 1 0",
+            minWidth: 120,
+            padding: "0 12px",
+            borderLeft: i > 0 ? `1px solid ${T.border}` : "none",
+          }}
         >
-          {title}
-        </motion.h1>
-      )}
-      {intro && (
-        <motion.p
-          variants={up}
-          custom={1}
-          className="text-base sm:text-[17px] text-gray-500 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed"
-        >
-          {intro}
-        </motion.p>
-      )}
-    </InView>
-  );
-}
-
-
-function TiersLayout({ s, idx }: { s: Section; idx: number }) {
-  const cols =
-    s.subsections.length === 2
-      ? "sm:grid-cols-2"
-      : s.subsections.length >= 4
-        ? "sm:grid-cols-2 lg:grid-cols-4"
-        : "sm:grid-cols-3";
-
-  return (
-    <InView className="max-w-5xl mx-auto px-4 py-8">
-      <SectionHeader
-        heading={s.heading}
-        paragraphs={s.paragraphs}
-        pill={PILL_LABELS.tiers}
-        idx={idx}
-      />
-      <div className={`grid grid-cols-1 ${cols} gap-5`}>
-        {s.subsections.map((sub, si) => {
-          const ac    = PALETTE[si % PALETTE.length];
-          const items = sub.lists.flatMap((l) => l.items);
-          return (
-            <motion.div
-              key={si}
-              variants={up}
-              custom={si + 1}
-              className={`relative flex flex-col rounded-2xl bg-white dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.06] p-6 hover:shadow-lg transition-all duration-300 overflow-hidden ${ac.card}`}
+          <span style={{ color: T.brand, display: "flex" }}>{item.icon}</span>
+          <div>
+            <div
+              style={{
+                fontSize: 14,
+                fontWeight: 700,
+                color: T.text,
+                lineHeight: 1.2,
+              }}
             >
-              <div className={`absolute top-0 left-0 right-0 h-1 ${ac.bar} opacity-60 rounded-t-2xl`} />
-              <span
-                className={`self-start text-[10px] font-bold tracking-[0.18em] uppercase px-3 py-1.5 rounded-full mb-4 ${ac.badge}`}
-              >
-                {sub.heading}
-              </span>
-              {sub.paragraphs.map((p, pi) => (
-                <p key={pi} className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed mb-3">{p}</p>
-              ))}
-              {items.length > 0 && (
-                <ul className="space-y-2.5 mt-auto pt-2">
-                  {items.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2.5">
-                      <CheckCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${ac.icon}`} />
-                      <span className="text-[13px] text-gray-600 dark:text-gray-300 leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </motion.div>
-          );
-        })}
-      </div>
-    </InView>
-  );
-}
-
-
-function StepsLayout({ s, idx }: { s: Section; idx: number }) {
-  const steps =
-    s.lists.find((l) => l.ordered)?.items ?? s.lists[0]?.items ?? [];
-  const cols =
-    steps.length <= 2
-      ? "sm:grid-cols-2"
-      : steps.length === 3
-        ? "sm:grid-cols-3"
-        : steps.length === 4
-          ? "sm:grid-cols-2 lg:grid-cols-4"
-          : "sm:grid-cols-2 lg:grid-cols-3";
-
-  return (
-    <InView className="max-w-5xl mx-auto px-4 py-8">
-      <SectionHeader
-        heading={s.heading}
-        paragraphs={s.paragraphs}
-        pill={PILL_LABELS.steps}
-        idx={idx}
-      />
-      <div className="hidden sm:flex items-center max-w-4xl mx-auto mb-6 px-2">
-        {steps.map((_, i) => {
-          const ac = PALETTE[i % PALETTE.length];
-          return (
-            <div key={i} className="flex items-center flex-1 min-w-0">
-              <div
-                className={`w-8 h-8 rounded-full border-2 flex-shrink-0 flex items-center justify-center bg-white dark:bg-gray-950 border-current ${ac.icon}`}
-              >
-                <span className={`text-[11px] font-bold ${ac.icon}`}>{i + 1}</span>
-              </div>
-              {i < steps.length - 1 && (
-                <div className="flex-1 h-px bg-gradient-to-r from-gray-300 to-gray-100 dark:from-gray-600 dark:to-gray-800 mx-1" />
-              )}
+              {item.stat}
             </div>
-          );
-        })}
-      </div>
-      <div className={`grid grid-cols-1 ${cols} gap-4`}>
-        {steps.map((step, i) => {
-          const ac = PALETTE[i % PALETTE.length];
-          return (
-            <motion.div
-              key={i}
-              variants={up}
-              custom={i}
-              className={`relative rounded-2xl bg-white dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.06] p-5 hover:shadow-md transition-all duration-300 overflow-hidden ${ac.card}`}
-            >
-              <div className={`absolute top-0 left-0 right-0 h-0.5 ${ac.bar} opacity-50`} />
-              {/* mobile step number */}
-              <div
-                className={`sm:hidden w-7 h-7 rounded-full border-2 flex items-center justify-center mb-3 border-current ${ac.icon}`}
-              >
-                <span className={`text-[11px] font-bold ${ac.icon}`}>{i + 1}</span>
-              </div>
-              <p className="text-[14px] text-gray-600 dark:text-gray-300 leading-relaxed">{step}</p>
-            </motion.div>
-          );
-        })}
-      </div>
-    </InView>
-  );
-}
-
-
-function ChecklistLayout({ s, idx }: { s: Section; idx: number }) {
-  const items = s.lists.flatMap((l) => l.items);
-  const ac    = PALETTE[idx % PALETTE.length];
-  const cols  = items.length > 6 ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2";
-
-  return (
-    <InView className="max-w-5xl mx-auto px-4 py-8">
-      <SectionHeader
-        heading={s.heading}
-        paragraphs={s.paragraphs}
-        pill={PILL_LABELS.checklist}
-        idx={idx}
-      />
-      <div className={`grid grid-cols-1 ${cols} gap-3`}>
-        {items.map((item, i) => (
-          <motion.div
-            key={i}
-            variants={up}
-            custom={i}
-            className={`flex items-start gap-3 px-4 py-3.5 rounded-xl bg-white dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.06] transition-all duration-200 ${ac.card}`}
-          >
-            <CheckCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${ac.icon}`} />
-            <span className="text-[14px] text-gray-600 dark:text-gray-300 leading-relaxed">{item}</span>
-          </motion.div>
-        ))}
-      </div>
-    </InView>
-  );
-}
-
-
-function WarningsLayout({ s, idx }: { s: Section; idx: number }) {
-  const items = s.lists.flatMap((l) => l.items);
-  const cols  = "sm:grid-cols-2";
-
-  return (
-    <InView className="max-w-5xl mx-auto px-4 py-8">
-      <SectionHeader
-        heading={s.heading}
-        paragraphs={s.paragraphs}
-        pill={PILL_LABELS.warnings}
-        idx={idx}
-      />
-      <div className={`grid grid-cols-1 ${cols} gap-3`}>
-        {items.map((item, i) => (
-          <motion.div
-            key={i}
-            variants={up}
-            custom={i}
-            className="flex items-start gap-3 px-4 py-3.5 rounded-xl bg-white dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.06] hover:border-amber-200 dark:hover:border-amber-800/40 hover:bg-amber-50/30 dark:hover:bg-amber-950/10 transition-all duration-200"
-          >
-            <div className="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/30 flex items-center justify-center flex-shrink-0 mt-0.5 shrink-0">
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />
+            <div style={{ fontSize: 11, color: T.muted, lineHeight: 1.3 }}>
+              {item.label}
             </div>
-            <span className="text-[14px] text-gray-600 dark:text-gray-300 leading-relaxed">{item}</span>
-          </motion.div>
-        ))}
-      </div>
-    </InView>
-  );
-}
-
-
-function PricingLayout({ s, idx }: { s: Section; idx: number }) {
-  const items         = s.lists.flatMap((l) => l.items);
-  const introParagraph = s.paragraphs.slice(0, 1);
-  const outroParagraphs = s.paragraphs.slice(1);
-  const cols = items.length > 4 ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2";
-
-  return (
-    <InView className="max-w-5xl mx-auto px-4 py-8">
-      <SectionHeader
-        heading={s.heading}
-        paragraphs={introParagraph}
-        pill={PILL_LABELS.pricing}
-        idx={idx}
-      />
-      <div className={`grid grid-cols-1 ${cols} gap-3 mb-6`}>
-        {items.map((item, i) => (
-          <motion.div
-            key={i}
-            variants={up}
-            custom={i}
-            className="flex items-start gap-3 px-4 py-3.5 rounded-xl bg-white dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.06] hover:border-blue-200 dark:hover:border-blue-800/40 transition-all duration-200"
-          >
-            <div className="w-6 h-6 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30 flex items-center justify-center flex-shrink-0 mt-0.5 shrink-0">
-              <DollarSign className="w-3.5 h-3.5 text-blue-500" />
-            </div>
-            <span className="text-[14px] text-gray-600 dark:text-gray-300 leading-relaxed">{item}</span>
-          </motion.div>
-        ))}
-      </div>
-      {outroParagraphs.length > 0 && (
-        <div className="max-w-2xl mx-auto text-center space-y-2">
-          {outroParagraphs.map((p, i) => (
-            <motion.p
-              key={i}
-              variants={up}
-              custom={items.length + i}
-              className="text-[14px] text-gray-500 dark:text-gray-400 leading-relaxed"
-            >
-              {p}
-            </motion.p>
-          ))}
-        </div>
-      )}
-    </InView>
-  );
-}
-
-
-function ChipsLayout({ s, idx }: { s: Section; idx: number }) {
-  const items = s.lists.flatMap((l) => l.items);
-  return (
-    <InView className="max-w-5xl mx-auto px-4 py-8">
-      <SectionHeader
-        heading={s.heading}
-        paragraphs={s.paragraphs}
-        pill={PILL_LABELS.chips}
-        idx={idx}
-      />
-      <div className="flex flex-wrap gap-2.5 justify-center">
-        {items.map((item, i) => (
-          <motion.span
-            key={i}
-            variants={up}
-            custom={i}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.08] hover:border-blue-300 dark:hover:border-blue-700/60 hover:bg-blue-50/40 dark:hover:bg-blue-950/30 cursor-default transition-all duration-200 text-[13px] font-medium text-gray-700 dark:text-gray-300"
-          >
-            <Sparkles className="w-3 h-3 text-blue-400 flex-shrink-0" />
-            {item}
-          </motion.span>
-        ))}
-      </div>
-    </InView>
-  );
-}
-
-
-function ProseListLayout({ s, idx }: { s: Section; idx: number }) {
-  const items = s.lists.flatMap((l) => l.items);
-  const ac    = PALETTE[idx % PALETTE.length];
-  const cols  = items.length > 6 ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2";
-
-  return (
-    <InView className="max-w-5xl mx-auto px-4 py-8">
-      <SectionHeader
-        heading={s.heading}
-        paragraphs={s.paragraphs}
-        pill={PILL_LABELS["prose-list"]}
-        idx={idx}
-      />
-      {items.length > 0 && (
-        <div className={`grid grid-cols-1 ${cols} gap-3`}>
-          {items.map((item, i) => (
-            <motion.div
-              key={i}
-              variants={up}
-              custom={i}
-              className={`flex items-start gap-3 px-4 py-3.5 rounded-xl bg-white dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.06] transition-all duration-200 ${ac.card}`}
-            >
-              <ArrowRight className={`w-4 h-4 mt-0.5 flex-shrink-0 ${ac.icon}`} />
-              <span className="text-[14px] text-gray-600 dark:text-gray-300 leading-relaxed">{item}</span>
-            </motion.div>
-          ))}
-        </div>
-      )}
-    </InView>
-  );
-}
-
-
-function AccordionLayout({ s, idx }: { s: Section; idx: number }) {
-  const [open, setOpen] = useState(false);
-  const ac   = PALETTE[idx % PALETTE.length];
-  const rest = s.paragraphs.slice(1);
-
-  return (
-    <InView className="max-w-5xl mx-auto px-4 py-8">
-      <motion.div
-        variants={up}
-        custom={0}
-        className="max-w-3xl mx-auto rounded-2xl bg-white dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.06] overflow-hidden"
-      >
-        <div className={`h-1 ${ac.bar} opacity-60`} />
-        <button
-          onClick={() => setOpen((o) => !o)}
-          className="w-full text-left px-6 py-6 flex items-start gap-4 hover:bg-gray-50/60 dark:hover:bg-white/[0.02] transition-colors"
-        >
-          <div className="flex-1 min-w-0">
-            <Pill idx={idx} label={PILL_LABELS.accordion} />
-            <h2 className="mt-2 text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight leading-snug">
-              {s.heading}
-            </h2>
-            {s.paragraphs[0] && (
-              <p className="mt-2 text-[15px] text-gray-500 dark:text-gray-400 leading-relaxed">
-                {s.paragraphs[0]}
-              </p>
-            )}
           </div>
-          {rest.length > 0 && (
-            <ChevronDown
-              className={`w-5 h-5 text-gray-400 flex-shrink-0 mt-1 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
-            />
-          )}
-        </button>
-        <AnimatePresence initial={false}>
-          {open && rest.length > 0 && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="overflow-hidden"
-            >
-              <div className="px-6 pb-6 pt-4 space-y-3 border-t border-gray-100 dark:border-white/[0.05]">
-                {rest.map((p, i) => (
-                  <p key={i} className="text-[15px] text-gray-600 dark:text-gray-400 leading-relaxed">{p}</p>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
-    </InView>
-  );
-}
-
-
-function ProseLayout({ s, idx }: { s: Section; idx: number }) {
-  const ac = PALETTE[idx % PALETTE.length];
-  return (
-    <InView className="max-w-5xl mx-auto px-4 py-8">
-      <motion.div
-        variants={up}
-        custom={0}
-        className="max-w-3xl mx-auto rounded-2xl bg-white dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.06] overflow-hidden"
-      >
-        <div className={`h-1 ${ac.bar} opacity-60`} />
-        <div className="px-6 py-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-gray-50 dark:bg-white/[0.04] border border-gray-100 dark:border-white/[0.06]">
-              <BookOpen className={`w-4 h-4 ${ac.icon}`} />
-            </div>
-            <Pill idx={idx} label={PILL_LABELS.prose} />
-          </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white tracking-tight leading-snug mb-4">
-            {s.heading}
-          </h2>
-          <div className="space-y-3">
-            {s.paragraphs.map((p, i) => (
-              <motion.p
-                key={i}
-                variants={up}
-                custom={i + 1}
-                className="text-[15px] text-gray-600 dark:text-gray-400 leading-relaxed"
-              >
-                {p}
-              </motion.p>
-            ))}
-          </div>
-        </div>
-      </motion.div>
-    </InView>
-  );
-}
-
-
-function SectionRouter({ section, idx }: { section: Section; idx: number }) {
-  const layout = classify(section);
-  const p = { s: section, idx };
-  switch (layout) {
-    case "tiers":      return <TiersLayout {...p} />;
-    case "steps":      return <StepsLayout {...p} />;
-    case "pricing":    return <PricingLayout {...p} />;
-    case "warnings":   return <WarningsLayout {...p} />;
-    case "checklist":  return <ChecklistLayout {...p} />;
-    case "chips":      return <ChipsLayout {...p} />;
-    case "prose-list": return <ProseListLayout {...p} />;
-    case "accordion":  return <AccordionLayout {...p} />;
-    case "prose":      return <ProseLayout {...p} />;
-  }
-}
-
-/* ─── ROOT ───────────────────────────────────────────────────────────────────── */
-
-export function ServiceDetailsSection({ serviceDetails }: { serviceDetails: string }) {
-  const { title, intro, sections } = useMemo(
-    () => parseHTML(serviceDetails),
-    [serviceDetails]
-  );
-  if (!sections.length && !title) return null;
-
-  return (
-    <div className="w-full">
-      <Hero title={title} intro={intro} />
-      {sections.map((section, i) => (
-        <div key={section.id}>
-          {i > 0 && <Divider />}
-          <SectionRouter section={section} idx={i} />
         </div>
       ))}
     </div>
   );
 }
 
-export default function Howitwork({ servicedetails }: { servicedetails: string }) {
-  return <ServiceDetailsSection serviceDetails={servicedetails} />;
+function Hero({ title, intros, onPostJob }) {
+  if (!title && !intros.length) return null;
+  return (
+    <div style={{ padding: "36px 24px 28px", maxWidth: 700 }}>
+      {title && (
+        <Fade i={0}>
+          <h1
+            style={{
+              fontSize: "clamp(26px, 4vw, 38px)",
+              fontWeight: 800,
+              lineHeight: 1.15,
+              color: T.text,
+              marginBottom: 12,
+              letterSpacing: "-0.01em",
+            }}
+          >
+            {title}
+          </h1>
+        </Fade>
+      )}
+
+      {intros.map((p, i) => (
+        <Fade key={i} i={i + 1}>
+          <p
+            style={{
+              fontSize: i === 0 ? 17 : 14,
+              fontWeight: i === 0 ? 500 : 400,
+              color: i === 0 ? T.text : T.muted,
+              lineHeight: 1.65,
+              marginBottom: 8,
+            }}
+          >
+            {p}
+          </p>
+        </Fade>
+      ))}
+      <Fade i={intros.length + 1}>
+        <div
+          style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 20 }}
+        >
+          <button
+            onClick={onPostJob}
+            style={{
+              padding: "11px 26px",
+              borderRadius: T.radius,
+              background: T.brand,
+              color: "#fff",
+              fontSize: 14,
+              fontWeight: 700,
+              border: "none",
+              cursor: "pointer",
+              letterSpacing: "0.01em",
+            }}
+          >
+            Get Free Quotes{" "}
+          </button>
+          <button
+            style={{
+              padding: "11px 22px",
+              borderRadius: T.radius,
+              background: "transparent",
+              color: T.text,
+              fontSize: 14,
+              fontWeight: 600,
+              border: `1.5px solid ${T.borderHover}`,
+              cursor: "pointer",
+            }}
+          >
+            Browse Providers
+          </button>
+        </div>
+      </Fade>
+    </div>
+  );
+}
+
+function StepsSection({ section }) {
+  const subs = section.subsections;
+  return (
+    <div style={{ padding: "36px 24px", maxWidth: 620 }}>
+      <Fade i={0}>
+        <EyebrowLabel text="How it works" />
+        <SectionTitle>{section.heading}</SectionTitle>
+        {section.paragraphs.map((p, i) => (
+          <p
+            key={i}
+            style={{
+              fontSize: 14,
+              color: T.muted,
+              lineHeight: 1.65,
+              marginBottom: 4,
+            }}
+          >
+            {p}
+          </p>
+        ))}
+      </Fade>
+
+      <div style={{ marginTop: 28 }}>
+        {subs.map((sub, i) => (
+          <Fade key={i} i={i + 1}>
+            <div style={{ display: "flex", gap: 18, position: "relative" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  width: 36,
+                  flexShrink: 0,
+                }}
+              >
+                <div
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: "50%",
+                    background: T.brand,
+                    color: "#fff",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 14,
+                    fontWeight: 700,
+                    flexShrink: 0,
+                    boxShadow: `0 0 0 4px ${T.brandLight}`,
+                  }}
+                >
+                  {i + 1}
+                </div>
+                {i < subs.length - 1 && (
+                  <div
+                    style={{
+                      flex: 1,
+                      width: 2,
+                      background: `linear-gradient(to bottom, ${T.brandBorder}, transparent)`,
+                      margin: "8px 0 0",
+                      minHeight: 32,
+                    }}
+                  />
+                )}
+              </div>
+
+              <div
+                style={{ paddingBottom: i < subs.length - 1 ? 28 : 0, flex: 1 }}
+              >
+                <h3
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: T.text,
+                    marginBottom: 6,
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {cleanNum(sub.heading)}
+                </h3>
+                {sub.paragraphs.map((p, pi) => (
+                  <p
+                    key={pi}
+                    style={{ fontSize: 13.5, color: T.muted, lineHeight: 1.65 }}
+                  >
+                    {p}
+                  </p>
+                ))}
+                {sub.items.length > 0 && (
+                  <ul
+                    style={{
+                      marginTop: 8,
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 5,
+                      listStyle: "none",
+                    }}
+                  >
+                    {sub.items.map((item, ii) => (
+                      <li
+                        key={ii}
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: 8,
+                          fontSize: 13,
+                          color: T.muted,
+                        }}
+                      >
+                        <Dot />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </Fade>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ServiceCard({ sub, i }) {
+  const [open, setOpen] = useState(false);
+  const hasMore = sub.paragraphs.length > 1 || sub.items.length > 0;
+  const preview = sub.paragraphs[0] ?? "";
+
+  return (
+    <Fade i={i}>
+      <div
+        style={{
+          border: `1px solid ${open ? T.brandBorder : T.border}`,
+          borderRadius: T.radiusLg,
+          background: T.surface,
+          overflow: "hidden",
+          transition: "border-color 0.2s, box-shadow 0.2s",
+          boxShadow: open ? `0 4px 16px rgba(15,110,86,.08)` : "none",
+        }}
+      >
+        <button
+          onClick={() => hasMore && setOpen((o) => !o)}
+          style={{
+            width: "100%",
+            textAlign: "left",
+            padding: "16px 18px",
+            background: "none",
+            border: "none",
+            cursor: hasMore ? "pointer" : "default",
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 12,
+          }}
+        >
+          <span
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              background: T.brandMid,
+              flexShrink: 0,
+              marginTop: 6,
+            }}
+          />
+
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              style={{
+                fontSize: 14,
+                fontWeight: 700,
+                color: T.text,
+                lineHeight: 1.35,
+                marginBottom: preview ? 5 : 0,
+              }}
+            >
+              {sub.heading}
+            </div>
+            {preview && (
+              <div style={{ fontSize: 13, color: T.muted, lineHeight: 1.6 }}>
+                {preview}
+              </div>
+            )}
+          </div>
+
+          {hasMore && (
+            <ChevronDown
+              size={16}
+              style={{
+                color: T.muted,
+                flexShrink: 0,
+                marginTop: 2,
+                transition: "transform 0.22s",
+                transform: open ? "rotate(180deg)" : "rotate(0deg)",
+              }}
+            />
+          )}
+        </button>
+
+        <AnimatePresence initial={false}>
+          {open && hasMore && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              style={{ overflow: "hidden" }}
+            >
+              <div
+                style={{
+                  padding: "12px 18px 16px 38px",
+                  borderTop: `1px solid ${T.border}`,
+                  background: T.raised,
+                }}
+              >
+                {sub.paragraphs.slice(1).map((p, pi) => (
+                  <p
+                    key={pi}
+                    style={{
+                      fontSize: 13,
+                      color: T.muted,
+                      lineHeight: 1.65,
+                      marginBottom: 8,
+                    }}
+                  >
+                    {p}
+                  </p>
+                ))}
+                {sub.items.length > 0 && (
+                  <ul
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 6,
+                      listStyle: "none",
+                    }}
+                  >
+                    {sub.items.map((item, ii) => (
+                      <li
+                        key={ii}
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: 8,
+                          fontSize: 13,
+                          color: T.muted,
+                        }}
+                      >
+                        <CheckCircle2
+                          size={13}
+                          style={{
+                            color: T.brandMid,
+                            flexShrink: 0,
+                            marginTop: 2,
+                          }}
+                        />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </Fade>
+  );
+}
+
+function ServicesSection({ section }) {
+  return (
+    <div style={{ padding: "36px 24px", background: T.raised }}>
+      <Fade i={0}>
+        <div style={{ maxWidth: 620, marginBottom: 24 }}>
+          <EyebrowLabel text="Services" />
+          <SectionTitle>{section.heading}</SectionTitle>
+          {section.paragraphs.map((p, i) => (
+            <p
+              key={i}
+              style={{
+                fontSize: 14,
+                color: T.muted,
+                lineHeight: 1.65,
+                marginTop: 4,
+              }}
+            >
+              {p}
+            </p>
+          ))}
+        </div>
+      </Fade>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+          gap: 12,
+        }}
+      >
+        {section.subsections.map((sub, i) => (
+          <ServiceCard key={i} sub={sub} i={i + 1} />
+        ))}
+      </div>
+
+      {section.lists.length > 0 && (
+        <Fade i={section.subsections.length + 1}>
+          <div
+            style={{
+              marginTop: 16,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 8,
+            }}
+          >
+            {section.lists.map((item, i) => (
+              <span
+                key={i}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "6px 14px",
+                  borderRadius: 100,
+                  border: `1px solid ${T.border}`,
+                  background: T.surface,
+                  fontSize: 13,
+                  color: T.muted,
+                }}
+              >
+                <span
+                  style={{
+                    width: 5,
+                    height: 5,
+                    borderRadius: "50%",
+                    background: T.brandMid,
+                    display: "inline-block",
+                  }}
+                />
+                {item}
+              </span>
+            ))}
+          </div>
+        </Fade>
+      )}
+    </div>
+  );
+}
+
+function FeatureCard({ sub, i }) {
+  return (
+    <Fade i={i}>
+      <div
+        style={{
+          border: `1px solid ${T.border}`,
+          borderRadius: T.radiusLg,
+          background: T.surface,
+          padding: "18px 20px",
+          transition: "border-color 0.2s, box-shadow 0.2s",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.borderColor = T.brandBorder;
+          e.currentTarget.style.boxShadow = "0 4px 14px rgba(15,110,86,.07)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.borderColor = T.border;
+          e.currentTarget.style.boxShadow = "none";
+        }}
+      >
+        {/* <div style={{
+          width: 32, height: 32,
+          borderRadius: 8,
+          background: T.brandLight,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          marginBottom: 12,
+        }}>
+          <Zap size={15} color={T.brand} />
+        </div> */}
+
+        <h3
+          style={{
+            fontSize: 14,
+            fontWeight: 700,
+            color: T.text,
+            marginBottom: 6,
+            lineHeight: 1.3,
+          }}
+        >
+          {sub.heading}
+        </h3>
+
+        {sub.paragraphs.map((p, pi) => (
+          <p
+            key={pi}
+            style={{
+              fontSize: 13,
+              color: T.muted,
+              lineHeight: 1.65,
+              marginBottom: 4,
+            }}
+          >
+            {p}
+          </p>
+        ))}
+
+        {sub.items.length > 0 && (
+          <ul
+            style={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              gap: 5,
+              listStyle: "none",
+            }}
+          >
+            {sub.items.map((item, ii) => (
+              <li
+                key={ii}
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 7,
+                  fontSize: 12.5,
+                  color: T.muted,
+                }}
+              >
+                <ArrowRight
+                  size={12}
+                  style={{ color: T.brandMid, flexShrink: 0, marginTop: 2 }}
+                />
+                {item}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </Fade>
+  );
+}
+
+function FeaturesSection({ section }) {
+  return (
+    <div style={{ padding: "36px 24px" }}>
+      <Fade i={0}>
+        <div style={{ maxWidth: 620, marginBottom: 24 }}>
+          <EyebrowLabel text="Why Taskoria" />
+          <SectionTitle>{section.heading}</SectionTitle>
+          {section.paragraphs.map((p, i) => (
+            <p
+              key={i}
+              style={{
+                fontSize: 14,
+                color: T.muted,
+                lineHeight: 1.65,
+                marginTop: 4,
+              }}
+            >
+              {p}
+            </p>
+          ))}
+        </div>
+      </Fade>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+          gap: 12,
+        }}
+      >
+        {section.subsections.map((sub, i) => (
+          <FeatureCard key={i} sub={sub} i={i + 1} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ChecklistSection({ section }) {
+  return (
+    <div style={{ padding: "36px 24px", background: T.raised }}>
+      <Fade i={0}>
+        <div style={{ maxWidth: 620, marginBottom: 20 }}>
+          <EyebrowLabel text="Included" />
+          <SectionTitle>{section.heading}</SectionTitle>
+          {section.paragraphs.map((p, i) => (
+            <p
+              key={i}
+              style={{
+                fontSize: 14,
+                color: T.muted,
+                lineHeight: 1.65,
+                marginTop: 4,
+              }}
+            >
+              {p}
+            </p>
+          ))}
+        </div>
+      </Fade>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+          gap: 8,
+        }}
+      >
+        {section.lists.map((item, i) => (
+          <Fade key={i} i={i + 1}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 10,
+                padding: "12px 14px",
+                border: `1px solid ${T.border}`,
+                borderRadius: T.radius,
+                background: T.surface,
+              }}
+            >
+              <CheckCircle2
+                size={14}
+                style={{ color: T.brandMid, flexShrink: 0, marginTop: 1 }}
+              />
+              <span style={{ fontSize: 13.5, color: T.text, lineHeight: 1.5 }}>
+                {item}
+              </span>
+            </div>
+          </Fade>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ProseSection({ section }) {
+  return (
+    <div style={{ padding: "36px 24px", maxWidth: 660 }}>
+      <Fade i={0}>
+        <SectionTitle>{section.heading}</SectionTitle>
+        <div
+          style={{
+            marginTop: 12,
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+          }}
+        >
+          {section.paragraphs.map((p, i) => (
+            <p
+              key={i}
+              style={{ fontSize: 14, color: T.muted, lineHeight: 1.7 }}
+            >
+              {p}
+            </p>
+          ))}
+        </div>
+        {section.lists.length > 0 && (
+          <ul
+            style={{
+              marginTop: 14,
+              display: "flex",
+              flexDirection: "column",
+              gap: 7,
+              listStyle: "none",
+            }}
+          >
+            {section.lists.map((item, i) => (
+              <li
+                key={i}
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 9,
+                  fontSize: 14,
+                  color: T.muted,
+                }}
+              >
+                <Dot />
+                {item}
+              </li>
+            ))}
+          </ul>
+        )}
+      </Fade>
+    </div>
+  );
+}
+
+// function CtaBanner({ title }) {
+//   const serviceLabel = title || "this service";
+//   return (
+//     <Fade i={0}>
+//       <div style={{
+//         margin: "0 24px 40px",
+//         borderRadius: 16,
+//         background: T.brand,
+//         padding: "32px 28px",
+//         display: "flex",
+//         alignItems: "center",
+//         justifyContent: "space-between",
+//         flexWrap: "wrap",
+//         gap: 16,
+//       }}>
+//         <div>
+//           <div style={{ fontSize: 18, fontWeight: 800, color: "#fff", marginBottom: 5 }}>
+//             Ready to book {serviceLabel.toLowerCase()}?
+//           </div>
+//           <div style={{ fontSize: 13.5, color: "rgba(255,255,255,0.75)", lineHeight: 1.5 }}>
+//             Post your job for free and get quotes from local providers within the hour.
+//           </div>
+//         </div>
+//         <button style={{
+//           padding: "12px 24px",
+//           borderRadius: T.radius,
+//           background: "#fff",
+//           color: T.brand,
+//           fontSize: 14,
+//           fontWeight: 700,
+//           border: "none",
+//           cursor: "pointer",
+//           whiteSpace: "nowrap",
+//           flexShrink: 0,
+//         }}>
+//           Post a Job
+//         </button>
+//       </div>
+//     </Fade>
+//   );
+// }
+
+function SectionRouter({ section }) {
+  const layout = classify(section);
+  switch (layout) {
+    case "steps":
+      return <StepsSection section={section} />;
+    case "services":
+      return <ServicesSection section={section} />;
+    case "features":
+      return <FeaturesSection section={section} />;
+    case "checklist":
+      return <ChecklistSection section={section} />;
+    default:
+      return <ProseSection section={section} />;
+  }
+}
+
+export function ServiceDetailsSection({ serviceDetails, onPostJob }) {
+  const { title, intros, sections } = useMemo(
+    () => parseHTML(serviceDetails),
+    [serviceDetails]
+  );
+
+  if (!sections.length && !title) return null;
+
+  const classified = sections.map((s) => ({ section: s, layout: classify(s) }));
+  const shaded = new Set(["services", "checklist"]);
+
+  return (
+    <div
+      style={{
+        width: "100%",
+        fontFamily: "var(--font-sans, system-ui, sans-serif)",
+      }}
+    >
+      <Hero title={title} intros={intros} onPostJob={onPostJob} />
+      <TrustBar />
+
+      {classified.map(({ section, layout }, i) => (
+        <div key={section.id}>
+          {i > 0 &&
+            !shaded.has(layout) &&
+            !shaded.has(classified[i - 1].layout) && <Divider />}
+          <SectionRouter section={section} />
+        </div>
+      ))}
+
+      {/* <CtaBanner title={title} /> */}
+    </div>
+  );
+}
+
+export default function HowItWorks({ servicedetails, onpostjob }) {
+  return (
+    <ServiceDetailsSection
+      serviceDetails={servicedetails}
+      onPostJob={onpostjob}
+    />
+  );
 }

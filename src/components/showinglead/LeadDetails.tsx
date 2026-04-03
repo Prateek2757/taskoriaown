@@ -300,8 +300,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       <div className="b dark:bg-[#0d1117] bg-gray-50 rounded-2xl shadow- dark:shadow-md borde border-gra-200 dark:border-gray-700 overflow-hidden">
         <div className="p-2">
           <div className="flex items-start gap-3">
-            <div className="relative flex-shrink-0">
-              {lead.image ? (
+            <div className="relative shrink-0">
+              {/* {lead.image ? (
                 <div className="w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-blue-100 dark:ring-blue-900">
                   <Image
                     src={lead.image}
@@ -311,11 +311,11 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                     className="w-full h-full object-cover"
                   />
                 </div>
-              ) : (
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-lg font-bold">
+              ) : ( */}
+                <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-lg font-bold">
                   {getInitials(lead.customer_name || "N A")}
                 </div>
-              )}
+              {/* )} */}
               {lead.status === "Open" && (
                 <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-900" />
               )}
@@ -365,7 +365,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         <div className="border-t border-gray-100 dark:border-gray-800" />
 
         <div className="p-2">
-          <div className=" bg-blue-50 bg-gradient-to-br mx-auo dark:from-gray-800 dark:to-black rounded-xl border border-gray-200 dark:border-gray-700 p-3 mb-6">
+          <div className=" bg-blue-50 bg-linear-to-br mx-auo dark:from-gray-800 dark:to-black rounded-xl border border-gray-200 dark:border-gray-700 p-3 mb-6">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wide mb-4 flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-cyan-600" />
               {leadStatus.purchased
@@ -376,14 +376,14 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             {!leadStatus.hydrated && !leadStatus.purchased ? (
               <div className="space-y-3  animate-pulse">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
+                  <div className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 shrink-0" />
                   <div className="space-y-2 flex-1">
                     <div className="h-2.5 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
                     <div className="h-3 w-36 bg-gray-200 dark:bg-gray-700 rounded" />
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
+                  <div className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 shrink-0" />
                   <div className="space-y-2 flex-1">
                     <div className="h-2.5 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
                     <div className="h-3 w-48 bg-gray-200 dark:bg-gray-700 rounded" />
@@ -413,7 +413,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             ) : (
               <div className="  space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900 flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900 flex items-center justify-center shrink-0">
                     <svg
                       className="w-5 h-5 text-blue-500"
                       fill="none"
@@ -445,7 +445,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900 flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900 flex items-center justify-center shrink-0">
                     <svg
                       className="w-5 h-5 text-purple-500"
                       fill="none"
@@ -490,7 +490,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             )}
           </div>
 
-          <div className=" bg-gradient-to-br bg-blue-50  dark:from-gray-800 dark:to-black rounded-xl p-3 mb-6">
+          <div className=" bg-linear-to-br bg-blue-50  dark:from-gray-800 dark:to-black rounded-xl p-3 mb-6">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 Response Progress
@@ -501,7 +501,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
             <div className="relative w-full h-2 bg-white dark:bg-gray-800 rounded-full overflow-hidden shadow-inner">
               <div
-                className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500"
+                className="absolute inset-y-0 left-0 bg-linear-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500"
                 style={{ width: `${(responseRate / maxResponses) * 100}%` }}
               />
             </div>
@@ -512,9 +512,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
           </div>
 
           {!leadStatus.purchased && (
-            <div className=" bg-blue-50 bg-gradient-to-br  dark:from-gray-800 dark:to-black rounded-xl border border-orange-200 dark:border-orange-700 p-3 mb-6">
+            <div className=" bg-blue-50 bg-linear-to-br  dark:from-gray-800 dark:to-black rounded-xl border border-orange-200 dark:border-orange-700 p-3 mb-6">
               <div className="flex items-start gap-2">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-yellow-400 to-orange-500 flex items-center justify-center shrink-0">
                   <Award className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
@@ -543,7 +543,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               <button
                 onClick={handleGoToChat}
                 disabled={isChatButtonDisabled}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-[#2563EB] text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl bg-linear-to-r from-blue-500 to-[#2563EB] text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isNavigating || convoLoading ? (
                   <>
@@ -560,7 +560,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             ) : (
               <button
                 onClick={() => setShowCreditModal(true)}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl bg-linear-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all"
               >
                 <MessageSquare className="w-5 h-5" />
                 Contact {customerFirstName}
@@ -618,7 +618,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                     <div className="flex items-start gap-3">
                       <HelpCircle
                         size={18}
-                        className="text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
+                        className="text-blue-600 dark:text-blue-400 mt-0.5 shrink-0"
                       />
                       <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
                         {lead.queries}
@@ -640,7 +640,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
       <div className="border-t border-gray-100 dark:border-gray-800" />
 
-      <div className="mt-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-black p-3 flex items-start gap-4">
+      <div className="mt-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-linear-to-br from-gray-50 to-white dark:from-gray-800 dark:to-black p-3 flex items-start gap-4">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/30">
           <Settings className="h-5 w-5 text-blue-600 dark:text-blue-400" />
         </div>

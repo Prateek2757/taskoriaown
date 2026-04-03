@@ -50,11 +50,11 @@ function Section({
         {count != null && (
           <span className="text-xs text-gray-400 font-normal tabular-nums">{count}</span>
         )}
-        {showEdit && (
+        {/* {showEdit && (
           <button className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/8 transition-colors ml-1">
             <Pencil className="w-3.5 h-3.5" />
           </button>
-        )}
+        )} */}
       </div>
       {children}
     </div>

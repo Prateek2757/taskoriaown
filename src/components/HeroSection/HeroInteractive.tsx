@@ -53,7 +53,7 @@ export default function HeroInteractive() {
         {/* Search row */}
         <div className="relative w-full group flex items-center">
           {/* Decorative background */}
-          <div className="absolute left-[-900px] top-[-15px] h-[200px] inset-0 pointer-events-none dark:opacity-80">
+          <div className="absolute left-225 top-3.75 h-50 inset-0 pointer-events-none dark:opacity-80">
             <Image
               src="/images/herobgnew.avif"
               alt=""
@@ -65,7 +65,7 @@ export default function HeroInteractive() {
           </div>
   
           <div
-            className="absolute -inset-[2px] rounded-lg bg-[#3C7DED] blur-md opacity-0
+            className="absolute -inset-0.5 rounded-lg bg-[#3C7DED] blur-md opacity-0
               group-hover:opacity-100 transition duration-500"
             aria-hidden="true"
           />

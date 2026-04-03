@@ -215,7 +215,7 @@ export default function RefundRequestPage() {
   const eligibleTasks = tasks;
 
   useEffect(() => {
-    if (status === "unauthenticated") router.push("/login");
+    if (status === "unauthenticated") router.push("/signin");
     if (status === "authenticated" && session?.user?.email) {
       setValue("email" as never, session.user.email as never);
     }
@@ -343,7 +343,7 @@ export default function RefundRequestPage() {
 
   return (
     <div className="min-h-screen bg-stone-50 dark:bg-zinc-950 transition-colors duration-300 font-body">
-      <header className="sticky top-0 z-20 bg-stone-50/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-200/70 dark:border-zinc-800/70">
+      {/* <header className="sticky top-0 z-20 bg-stone-50/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-200/70 dark:border-zinc-800/70">
         <div className="max-w-2xl mx-auto px-5 h-14 flex items-center gap-3">
           <button
             onClick={() => router.back()}
@@ -360,9 +360,9 @@ export default function RefundRequestPage() {
           </svg>
           <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Submit a request</span>
         </div>
-      </header>
+      </header> */}
 
-      <div className="max-w-2xl mx-auto px-5 py-10 pb-24">
+      <div className="max-w-2xl mx-auto px-5 py-10 pb-14">
         <div className="mb-10">
           <h1 className="font-display text-4xl text-zinc-900 dark:text-zinc-50 mb-2 leading-tight">
             Submit a request
@@ -480,7 +480,6 @@ export default function RefundRequestPage() {
                 )}
               </section>
 
-              {/* Reason — dropdown style */}
               <section>
                 <SectionLabel num={4} label="Reason for return" />
                 <Controller
@@ -545,14 +544,12 @@ export default function RefundRequestPage() {
 
           {issueType === "something_else" && (
             <div className="space-y-8 fade-up">
-              {/* Email */}
               <section>
                 <SectionLabel num={2} label="Your email address" />
                 <input type="email" {...register("email")} className={inputCls} placeholder="you@example.com" />
                 {errors.email?.message && <p className="text-xs text-red-500 mt-1">{errors.email.message as string}</p>}
               </section>
 
-              {/* Topic — dropdown style matching the screenshot */}
               <section>
                 <SectionLabel num={3} label="What is your issue or question regarding?" />
                 <Controller
@@ -583,7 +580,6 @@ export default function RefundRequestPage() {
                 )}
               </section>
 
-              {/* Subject */}
               <section>
                 <SectionLabel num={4} label="Subject" />
                 <input
@@ -597,7 +593,6 @@ export default function RefundRequestPage() {
                 )}
               </section>
 
-              {/* Description */}
               <section>
                 <SectionLabel num={5} label="Description" />
                 <Controller

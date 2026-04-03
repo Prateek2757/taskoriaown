@@ -30,12 +30,11 @@ export function useJoinAsProvider() {
             referralCode ? `&ref=${referralCode}` : ""
           }`
         );
-        // const url = new URL(`/create`, window.location.origin);
-        // url.searchParams.set("user_id", data.user.public_id);
-        // if (referralCode) ? `url.searchParams.set("ref", referralCode)
-   
-        // router.push(url.pathname + url.search)`:""
+        const url = new URL(`/create`, window.location.origin);
+        url.searchParams.set("user_id", data.user.public_id);
+        if (referralCode) url.searchParams.set("ref", referralCode);
 
+        router.push(url.pathname + url.search);
       }
     } catch (error) {
       console.error("Join as provider failed:", error);

@@ -35,7 +35,6 @@ import {
 } from "@/components/ui/form";
 import LocationSearch from "@/components/Location/locationsearch";
 import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
 
 const onboardingSchema = z.object({
   is_nationwide: z.boolean(),
@@ -347,11 +346,18 @@ function OnboardingContent() {
                                           className={`${inputClasses} `}
                                         >
                                           <option value="">Select size</option>
+                                          <option value="1">1 km </option>
+                                          <option value="2">2 km </option>
+                                          <option value="5">5 km </option>
                                           <option value="10">10 km </option>
                                           <option value="20">20 km </option>
                                           <option value="30">30 km </option>
                                           <option value="40">40 km </option>
-                                          <option value="50">50 km+ </option>
+                                          <option value="50">50 km </option>
+                                          <option value="75">75 km </option>
+                                          <option value="100">100 km </option>
+                                          <option value="125">125 km </option>
+                                          <option value="150">150 km </option>
                                         </select>
                                       </div>
                                     </FormControl>
@@ -394,13 +400,22 @@ function OnboardingContent() {
                     You can update your service area later.
                   </div>
 
-                  <Button
-                    type="button"
-                    className="w-full bg-[#3C7DED] text-white hover:opacity-90 py-5 rounded-xl shadow-md"
-                    onClick={() => setStep("details")}
-                  >
-                    Continue
-                  </Button>
+<Button
+  type="button"
+  className="w-full bg-[#3C7DED] text-white hover:opacity-90 py-5 rounded-xl shadow-md"
+  onClick={async () => {
+    const isNationwide = form.getValues("is_nationwide");
+
+    if (!isNationwide) {
+      const valid = await form.trigger(["distance", "city_id"]);
+      if (!valid) return;
+    }
+
+    setStep("details");
+  }}
+>
+  Continue
+</Button>
                 </motion.div>
               )}
 

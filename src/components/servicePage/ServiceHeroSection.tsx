@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPin, BadgeCheck, Users, Star } from "lucide-react";
+import { MapPin, Users } from "lucide-react";
 import LocationSearch from "@/components/Location/locationsearch";
 
 interface HeroSectionProps {
@@ -26,7 +26,7 @@ export default function ServiceHeroSection({
 
   return (
     <section className="relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#03070d] via-[#16364e] to-[#13404c] dark:from-slate-950 dark:via-indigo-950 dark:to-slate-900 opacity-95"></div>
+      <div className="absolute inset-0 bg-linear-to-br from-[#03070d] via-[#16364e] to-[#13404c] dark:from-slate-950 dark:via-indigo-950 dark:to-slate-900 opacity-95"></div>
       <div
         className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-40 dark:opacity-20"
         style={{ backgroundImage: `url(${service.hero_image})` }}
@@ -69,7 +69,7 @@ export default function ServiceHeroSection({
         <div className="max-w-2xl mx-auto">
           <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg rounded-3xl shadow-2xl p-4 md:p-3 border border-white/20 dark:border-slate-700/50">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-14 h-14 bg-gradient-to-br from-indigo-600 to-blue-500 dark:from-indigo-500 dark:to-blue-400 rounded-2xl flex items-center justify-center shadow-lg">
+              <div className="w-14 h-14 bg-linear-to-br from-indigo-600 to-blue-500 dark:from-indigo-500 dark:to-blue-400 rounded-2xl flex items-center justify-center shadow-lg">
                 <MapPin className="w-7 h-7 text-white" />
               </div>
               <div>
