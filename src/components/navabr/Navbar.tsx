@@ -305,13 +305,13 @@ export default function ModernNavbar() {
         <div className="container mx-auto px-4 py-2 flex items-center justify-between relative">
           <Link
             href="/"
-            className="flex items-center hover:opacity-90 transition-opacity"
+            className="flex gap-1 items-center hover:opacity-90 transition-opacity"
           >
             <Image
-              src="/taskorialogonew.png"
+              src="/images/taskoria_logo.svg"
               alt="taskorialogo"
               height={41}
-              width={28}
+              width={25}
             />
             <span className="text-2xl font-bold bg-[#2563EB] bg-clip-text text-transparent">
               Taskoria
@@ -411,7 +411,7 @@ export default function ModernNavbar() {
                   </Button>
                 </>
               )}
-              <div className="">
+              <div className="" suppressHydrationWarning>
                 <ThemeToggle />
               </div>
             </div>
@@ -461,7 +461,7 @@ export default function ModernNavbar() {
                   >
                     <div>
                       <Image
-                        src="/taskorialogonew.png"
+                        src="/images/taskoria_logo.svg"
                         alt="logo taskoria"
                         height={0}
                         width={23}

@@ -92,14 +92,13 @@ const Footer = () => {
             <div className="lg:w-1/3">
               <Link
                 href="/"
-                className="flex items-center mb-2 hover:opacity-90"
+                className="flex items-center gap-1 mb-2 hover:opacity-90"
               >
                 <Image
-                  src="/taskorialogonew.png"
+                  src="/images/taskoria_logo.svg"
                   alt="Taskoria - Trusted Local Services Marketplace in Australia"
-                  width={35}
+                  width={25}
                   height={35}
-                  className="rounded-md"
                 />
                 <span className="ml- text-3xl font-bold bg-[#2563EB] bg-clip-text text-transparent">
                   Taskoria
@@ -107,7 +106,10 @@ const Footer = () => {
               </Link>
 
               <p className="text-gray-600 dark:text-white text-sm max-w-xs mb-2">
-              Taskoria connects customers with trusted local professionals across Australia for home, trade, business, and creative services.              </p>
+                Taskoria connects customers with trusted local professionals
+                across Australia for home, trade, business, and creative
+                services.{" "}
+              </p>
 
               <div className="pt-2 w-full sm:w-96">
                 <p className="md:text-xl text-lg  font-semibold">
@@ -503,8 +505,8 @@ const Footer = () => {
               "@id": "https://www.taskoria.com",
               name: "Taskoria Pty Ltd",
               url: "https://www.taskoria.com",
-              logo: "https://www.taskoria.com/taskorialogonew.png",
-              image: "https://www.taskoria.com/taskorialogonew.png",
+              logo: "https://www.taskoria.com/images/taskoria_logo.svg",
+              image: "https://www.taskoria.com/images/taskoria_logo.svg",
               description:
                 "Taskoria is a trusted platform connecting customers with verified local professionals across Australia.",
               address: {

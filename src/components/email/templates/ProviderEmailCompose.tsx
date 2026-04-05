@@ -30,11 +30,7 @@ export const ProviderEmailCompose = ({
     ? null
     : messageFromProvider
         .split("\n")
-        .map((line, i) => (
-          <span key={i}>
-            {line}
-          </span>
-        ));
+        .map((line, i) => <span key={i}>{line}</span>);
 
   return (
     <Html>
@@ -61,7 +57,7 @@ export const ProviderEmailCompose = ({
         >
           <Section style={{ textAlign: "center", paddingBottom: "8px" }}>
             <Img
-              src="https://www.taskoria.com/taskorialogonew.png"
+              src="https://www.taskoria.com/images/taskoria_logo.svg"
               alt={`${company} Logo`}
               width="48"
               height="48"
@@ -123,8 +119,8 @@ export const ProviderEmailCompose = ({
                   fontSize: "15px",
                   lineHeight: "1.6",
                   color: "#111827",
-                  padding:"auto",
-                  margin:"auto"
+                  padding: "auto",
+                  margin: "auto",
                 }}
                 dangerouslySetInnerHTML={{ __html: messageFromProvider }}
               />
@@ -144,7 +140,6 @@ export const ProviderEmailCompose = ({
           {/* Footer */}
           <Section
             style={{
-              
               textAlign: "center",
             }}
           >

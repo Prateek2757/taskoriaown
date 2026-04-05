@@ -138,7 +138,7 @@ const AppEmaill = (props: AppEmailProps) => {
         >
           <Section style={{ textAlign: "center" }}>
             <Img
-              src="https://www.taskoria.com/taskorialogonew.png"
+              src="https://www.taskoria.com/images/taskoria_logo.svg"
               alt={`${company} Logo`}
               width="48"
               height="48"

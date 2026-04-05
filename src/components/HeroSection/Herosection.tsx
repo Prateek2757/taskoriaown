@@ -24,7 +24,7 @@ const structuredData = [
     url: "https://www.taskoria.com",
     logo: {
       "@type": "ImageObject",
-      url: "https://www.taskoria.com/taskorialogonew.png",
+      url: "https://www.taskoria.com/images/taskoria_logo.svg",
       width: 250,
       height: 60,
     },

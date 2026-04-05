@@ -80,7 +80,7 @@ export function DashboardLayout({
         >
           <div className="w-10 h-10 rounded-xl shadow-glow flex items-center justify-center ">
             <Image
-              src="/taskorialogonew.png"
+              src="/images/taskoria_logo.svg"
               alt="taskorialogo"
               height={41}
               width={28}

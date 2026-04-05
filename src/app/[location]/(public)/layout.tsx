@@ -18,7 +18,7 @@ import NotificationHandler from "@/components/NotificationHandler";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import SupportChatbot from "@/components/supportChatbox";
 import Script from "next/script";
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -129,7 +129,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [{ url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" }],
-    apple: [{ url: "/taskorialogonew.png", sizes: "140x140" }],
+    apple: [{ url: "/images/taskoria_logo.svg", sizes: "140x140" }],
   },
 };
 
@@ -150,9 +150,10 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${poppins.variable} ${bricolage.variable} ${cormorant.variable}`}
+      suppressHydrationWarning
     >
       <AuthProvider>
-        <body className="antialiased dark:bg-black" suppressHydrationWarning >
+        <body className="antialiased dark:bg-black" suppressHydrationWarning>
           <Script
             id="schema-org"
             type="application/ld+json"
@@ -163,7 +164,7 @@ export default function RootLayout({
                 "@type": "Organization",
                 name: "Taskoria",
                 url: BASE_URL,
-                logo: `${BASE_URL}/taskorialogonew.png`,
+                logo: `${BASE_URL}/images/taskoria_logo.svg`,
                 description:
                   "Taskoria connects Australians with verified local professionals for home, business, and digital services.",
                 address: { "@type": "PostalAddress", addressCountry: "AU" },

@@ -96,7 +96,7 @@ const structuredData = {
       url: BASE_URL,
       logo: {
         "@type": "ImageObject",
-        url: `${BASE_URL}/taskorialogonew.png`,
+        url: `${BASE_URL}/images/taskoria_logo.svg`,
         width: 250,
         height: 60,
       },

@@ -13,10 +13,11 @@ import CalendarInput from "../CalenderInput";
 export default function QuestionRenderer({ q, control, register }: any) {
   const name = `q_${q.category_question_id}`;
   const otherFieldName = `q_${q.category_question_id}_other`;
-  
+
   const [showOtherTextarea, setShowOtherTextarea] = useState(false);
 
-  const isMultiCheckbox = q.field_type === "checkbox" && Array.isArray(q.options);
+  const isMultiCheckbox =
+    q.field_type === "checkbox" && Array.isArray(q.options);
 
   return (
     <motion.div
@@ -77,14 +78,16 @@ export default function QuestionRenderer({ q, control, register }: any) {
             control={control}
             name={name}
             render={({ field }) => (
-              <Checkbox checked={!!field.value} onCheckedChange={field.onChange} />
+              <Checkbox
+                checked={!!field.value}
+                onCheckedChange={field.onChange}
+              />
             )}
           />
           <span className="text-gray-800 dark:text-gray-100">{q.question}</span>
         </div>
       )}
 
-      {/* Multiple Checkbox with Other option */}
       {isMultiCheckbox && (
         <Controller
           control={control}
@@ -93,26 +96,42 @@ export default function QuestionRenderer({ q, control, register }: any) {
             const valueArray: string[] = field.value || [];
             return (
               <div className="flex flex-col gap-3">
-                {(q.options ?? []).map((opt: string, i: number) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition"
-                  >
-                    <Checkbox
-                      checked={valueArray.includes(opt)}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          field.onChange([...valueArray, opt]);
-                        } else {
+                {(q.options ?? []).map((opt: string, i: number) => {
+                  const isChecked = valueArray.includes(opt);
+                  return (
+                    <div
+                      key={i}
+                      onClick={() => {
+                        if (isChecked) {
                           field.onChange(valueArray.filter((v) => v !== opt));
+                        } else {
+                          field.onChange([...valueArray, opt]);
                         }
                       }}
-                    />
-                    <span className="text-gray-800 dark:text-gray-100">{opt}</span>
-                  </div>
-                ))}
+                      className={cn(
+                        "flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 shadow-sm",
+                        "hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800",
+                        isChecked
+                          ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
+                          : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
+                      )}
+                    >
+                      <Checkbox
+                        checked={isChecked}
+                        onCheckedChange={(checked) => {
+                          if (checked) field.onChange([...valueArray, opt]);
+                          else
+                            field.onChange(valueArray.filter((v) => v !== opt));
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <span className="text-gray-800 dark:text-gray-100">
+                        {opt}
+                      </span>
+                    </div>
+                  );
+                })}
 
-                {/* Other checkbox option */}
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition">
                     <Checkbox
@@ -122,12 +141,16 @@ export default function QuestionRenderer({ q, control, register }: any) {
                           field.onChange([...valueArray, "other"]);
                           setShowOtherTextarea(true);
                         } else {
-                          field.onChange(valueArray.filter((v) => v !== "other"));
+                          field.onChange(
+                            valueArray.filter((v) => v !== "other")
+                          );
                           setShowOtherTextarea(false);
                         }
                       }}
                     />
-                    <span className="text-gray-800 dark:text-gray-100">Other</span>
+                    <span className="text-gray-800 dark:text-gray-100">
+                      Other
+                    </span>
                   </div>
 
                   {valueArray.includes("other") && (
@@ -152,93 +175,97 @@ export default function QuestionRenderer({ q, control, register }: any) {
         />
       )}
 
-      {(q.field_type === "select" || q.field_type === "radio") && !isMultiCheckbox && (
-        <Controller
-          control={control}
-          name={name}
-          render={({ field }) => (
-            <div className="space-y-3">
-              {(q.options ?? []).map((opt: string, i: number) => (
-                <div
-                  key={i}
-                  onClick={() => {
-                    field.onChange(opt);
-                    setShowOtherTextarea(false);
-                  }}
-                  className={cn(
-                    "flex items-center gap-3 p-4 border rounded-xl cursor-pointer transition-all duration-200 shadow-sm",
-                    "hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800",
-                    field.value === opt
-                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
-                      : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
-                  )}
-                >
+      {(q.field_type === "select" || q.field_type === "radio") &&
+        !isMultiCheckbox && (
+          <Controller
+            control={control}
+            name={name}
+            render={({ field }) => (
+              <div className="space-y-3">
+                {(q.options ?? []).map((opt: string, i: number) => (
                   <div
+                    key={i}
+                    onClick={() => {
+                      field.onChange(opt);
+                      setShowOtherTextarea(false);
+                    }}
                     className={cn(
-                      "w-5 h-5 rounded-full border flex items-center justify-center transition",
-                      field.value === opt ? "border-blue-600" : "border-gray-400"
+                      "flex items-center gap-3 p-4 border rounded-xl cursor-pointer transition-all duration-200 shadow-sm",
+                      "hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800",
+                      field.value === opt
+                        ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
+                        : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
                     )}
                   >
-                    {field.value === opt && (
-                      <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
-                    )}
+                    <div
+                      className={cn(
+                        "w-5 h-5 rounded-full border flex items-center justify-center transition",
+                        field.value === opt
+                          ? "border-blue-600"
+                          : "border-gray-400"
+                      )}
+                    >
+                      {field.value === opt && (
+                        <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
+                      )}
+                    </div>
+                    <span className="text-gray-800 dark:text-gray-100 font-medium">
+                      {opt}
+                    </span>
                   </div>
-                  <span className="text-gray-800 dark:text-gray-100 font-medium">
-                    {opt}
-                  </span>
-                </div>
-              ))}
+                ))}
 
-              <div className="space-y-2">
-                <div
-                  onClick={() => {
-                    field.onChange("other");
-                    setShowOtherTextarea(true);
-                  }}
-                  className={cn(
-                    "flex items-center gap-3 p-4 border rounded-xl cursor-pointer transition-all duration-200 shadow-sm",
-                    "hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800",
-                    field.value === "other"
-                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
-                      : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
-                  )}
-                >
+                <div className="space-y-2">
                   <div
+                    onClick={() => {
+                      field.onChange("other");
+                      setShowOtherTextarea(true);
+                    }}
                     className={cn(
-                      "w-5 h-5 rounded-full border flex items-center justify-center transition",
-                      field.value === "other" ? "border-blue-600" : "border-gray-400"
+                      "flex items-center gap-3 p-4 border rounded-xl cursor-pointer transition-all duration-200 shadow-sm",
+                      "hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800",
+                      field.value === "other"
+                        ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
+                        : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
                     )}
                   >
-                    {field.value === "other" && (
-                      <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
-                    )}
+                    <div
+                      className={cn(
+                        "w-5 h-5 rounded-full border flex items-center justify-center transition",
+                        field.value === "other"
+                          ? "border-blue-600"
+                          : "border-gray-400"
+                      )}
+                    >
+                      {field.value === "other" && (
+                        <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
+                      )}
+                    </div>
+                    <span className="text-gray-800 dark:text-gray-100 font-medium">
+                      Other
+                    </span>
                   </div>
-                  <span className="text-gray-800 dark:text-gray-100 font-medium">
-                    Other
-                  </span>
-                </div>
 
-                
-                {field.value === "other" && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="px-2"
-                  >
-                    <Textarea
-                      {...register(otherFieldName)}
-                      placeholder="Please specify..."
-                      className="border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 min-h-[80px]"
-                      autoFocus
-                    />
-                  </motion.div>
-                )}
+                  {field.value === "other" && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="px-2"
+                    >
+                      <Textarea
+                        {...register(otherFieldName)}
+                        placeholder="Please specify..."
+                        className="border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 min-h-[80px]"
+                        autoFocus
+                      />
+                    </motion.div>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
-        />
-      )}
+            )}
+          />
+        )}
     </motion.div>
   );
 }

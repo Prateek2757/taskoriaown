@@ -29,7 +29,7 @@ const staticServiceImages: Record<string, { url: string; gradient: string }> = {
     url: "/images/electrician.webp",
     gradient: "from-yellow-500/20 to-orange-500/20",
   },
-  "Gardening & Lawn Mowing": {
+  "Lawn Mowing": {
     url: "/images/gardening.avif",
     gradient: "from-green-500/20 to-emerald-500/20",
   },
@@ -45,7 +45,7 @@ const staticServiceImages: Record<string, { url: string; gradient: string }> = {
     url: "/images/painting.png",
     gradient: "from-indigo-500/20 to-blue-500/20",
   },
-  Handyman: {
+  "Handyman & General Repair": {
     url: "/images/handymann.png",
     gradient: "from-indigo-500/20 to-blue-500/20",
   },
@@ -513,7 +513,7 @@ function highlightMatch(text: string, query: string) {
       <span className="rounded bg-blue-200 px-1 text-slate-900 dark:bg-blue-800 dark:text-slate-100">
         {text.slice(start, end)}
       </span>
-      {text.slice(end)}2
+      {text.slice(end)}
     </>
   );
 }

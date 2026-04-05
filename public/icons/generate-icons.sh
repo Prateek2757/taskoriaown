@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LOGO_PATH="../taskorialogonew.png"
+LOGO_PATH="../images/taskoria_logo.svg"
 SIZES=(72 96 128 144 152 192 384 512)
 
 if [ ! -f "$LOGO_PATH" ]; then

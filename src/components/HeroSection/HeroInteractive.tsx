@@ -50,46 +50,55 @@ export default function HeroInteractive() {
     <>
       <div className="max-w-2xl w-full mx-auto mt-6 px-4 flex flex-col gap-3">
   
-        {/* Search row */}
-        <div className="relative w-full group flex items-center">
-          {/* Decorative background */}
-          <div className="absolute left-225 top-3.75 h-50 inset-0 pointer-events-none dark:opacity-80">
-            <Image
-              src="/images/herobgnew.avif"
-              alt=""
-              fill
-              priority
-              aria-hidden="true"
-              className="object-contain object-center"
-            />
-          </div>
-  
-          <div
-            className="absolute -inset-0.5 rounded-lg bg-[#3C7DED] blur-md opacity-0
-              group-hover:opacity-100 transition duration-500"
-            aria-hidden="true"
-          />
-  
-          <div className="relative w-full flex items-center bg-white dark:bg-gray-800 rounded-lg hover:shadow-lg transition-all duration-300">
-            <CategorySearch
-              onSelect={handleSelectCategory}
-              placeholder="What service you need? (e.g. Cleaning, Web Development, Plumbing)"
-              aria-label="Search for services"
-            />
-          </div>
-        </div>
-  
-        <div className="flex gap-2   sm:gap-4 justify-center">
-          <Button
-            onClick={handlePostJob}
-            disabled={loading}
-            className="py-5  bg-[#2563EB] text-white"
-            aria-label="Post a job to find service providers"
-          >
-            Get Free Quotes
-            <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
-          </Button>
-        </div>
+      <div className="relative w-full group flex items-center">
+
+<div className="absolute right-170 -top-10 w-48 h-48 pointer-events-none dark:opacity-80 overflow-hidden">
+  <Image
+    src="/images/herobgnew.avif"
+    alt=""
+    fill
+    priority
+    aria-hidden="true"
+    className="object-contain object-center"
+  />
+</div>
+
+<div
+  className="absolute -inset-0.5 rounded-lg bg-[#3C7DED] blur-md opacity-0
+    group-hover:opacity-100 transition duration-500"
+  aria-hidden="true"
+/>
+
+<div className="relative w-full flex items-center bg-white dark:bg-gray-800 rounded-lg hover:shadow-lg transition-all duration-300">
+  <CategorySearch
+    onSelect={handleSelectCategory}
+    placeholder="What service you need? (e.g. Cleaning, Web Development, Plumbing)"
+    aria-label="Search for services"
+  />
+</div>
+</div>
+<div className="flex gap-2 sm:gap-4 justify-center">
+  <Button
+    onClick={handlePostJob}
+    disabled={loading}
+    className={`py-5 bg-[#2563EB] text-white ${session ? "w-80" : ""}`}
+    aria-label="Post a job to find service providers"
+  >
+    Get Free Quotes
+    <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
+  </Button>
+
+  {!session && (
+    <Button
+      variant="outline"
+      onClick={() => joinAsProvider()}
+      className=" px-8 py-5"
+      aria-label="Register as a service provider"
+    >
+      Join as Provider
+    </Button>
+  )}
+</div>
   
       </div>
   

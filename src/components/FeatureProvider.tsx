@@ -115,7 +115,7 @@ export const FeatureProvider = () => {
                           <div className="flex flex-col items-center hover:opacity-90 transition-opacity">
                             <div>
                               <Image
-                                src="/taskorialogonew.png"
+                                src="/images/taskoria_logo.svg"
                                 alt="logo taskoria"
                                 height={0}
                                 width={35}

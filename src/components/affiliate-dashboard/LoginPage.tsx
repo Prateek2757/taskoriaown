@@ -61,7 +61,7 @@
 //         <div className="text-center mb-8">
 //           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl shadow-glow ">
 //           <Image
-//               src="/taskorialogonew.png"
+//               src="/images/taskoria_logo.svg"
 //               alt="taskorialogo"
 //               height={41}
 //               width={50}
