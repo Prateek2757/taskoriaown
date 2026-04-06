@@ -13,8 +13,13 @@ import {
   ChevronUp,
   ChevronDown,
   Star,
+  X,
 } from "lucide-react";
 import TaskoriaSasthoRedirect from "./sastoticket/taskoriasasthoredirect";
+import { FaTiktok } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import { Button } from "./ui/button";
+import NewRequestModal from "./leads/RequestModal";
 
 const letters = "TASKORIA".split("");
 const letterPositions = [35, 75, 125, 175, 225, 275, 325, 355];
@@ -58,6 +63,7 @@ const Footer = () => {
   const ref = useRef(null);
   const trustpilotRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleNewsLetterData = (e: FormEvent) => {
     e.preventDefault();
@@ -81,6 +87,8 @@ const Footer = () => {
 
   return (
     <>
+      <NewRequestModal open={openModal} onClose={() => setOpenModal(false)} />
+
       <div
         className="relative h-full overflow-hidden sm:pt-14 pt-8 
         dark:bg-[radial-gradient(circle_at_bottom,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
@@ -219,18 +227,18 @@ const Footer = () => {
                   >
                     Find Services
                   </Link>
-                  <Link
+                  {/* <Link
                     href="/"
                     className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Community
-                  </Link>
-                  <Link
-                    href="/"
+                  </Link> */}
+                  <button
+                    onClick={() => setOpenModal(true)}
                     className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Post a Job
-                  </Link>
+                  </button>
                   <Link
                     href="/trust-safety"
                     className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
@@ -268,12 +276,12 @@ const Footer = () => {
                   className={`sm:block overflow-hidden transition-all duration-300 
                   ${openSection === "providers" ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
                 >
-                  <Link
+                  {/* <Link
                     href="/"
                     className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Join as Provider
-                  </Link>
+                  </Link> */}
                   <button
                     onClick={() => {
                       const el = document.getElementById("customer-reviews");
@@ -472,6 +480,25 @@ const Footer = () => {
                 aria-label="Instagram"
               >
                 <Instagram className="w-5 h-5 text-white" />
+              </a>
+
+              <a
+                href="https://www.tiktok.com/@taskoria?_r=1&_t=ZS-95J6I3nljlw"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-gradient-to-br from-[#000000] to-[#000000] dark:bg-white hover:scale-110 rounded-full transition-transform shadow-lg"
+                aria-label="Tiktok"
+              >
+                <FaTiktok className="w-5 h-5  text-white" />
+              </a>
+              <a
+                href="https://www.tiktok.com/@taskoria?_r=1&_t=ZS-95J6I3nljlw"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 bg-gradient-to-br from-[#000000] to-[#000000] hover:scale-110 rounded-full transition-transform shadow-lg"
+                aria-label="Tiktok"
+              >
+                <FaXTwitter className="w-5 h-5 text-white" />
               </a>
 
               <a

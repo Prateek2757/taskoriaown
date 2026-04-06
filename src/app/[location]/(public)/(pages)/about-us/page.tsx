@@ -92,25 +92,25 @@ export default function AboutUs() {
 
   const timeline = [
     {
-      year: '2020',
+      year: '2022',
       title: 'The Beginning',
       description: 'Founded with a vision to make finding trusted service providers safe and simple for every Australian household.'
     },
     {
-      year: '2021',
+      year: '2025',
       title: 'Verification Launch',
       description: 'Introduced our industry-leading verification system, setting new standards for marketplace safety.'
     },
     {
-      year: '2023',
+      year: '2026',
       title: 'National Expansion',
       description: 'Reached every major city across Australia, connecting communities with verified local professionals.'
     },
-    {
-      year: '2024',
-      title: 'Leading Innovation',
-      description: 'Australia\'s most trusted service marketplace with advanced payment protection and AI-powered matching.'
-    }
+    // {
+    //   year: '2025',
+    //   title: 'Leading Innovation',
+    //   description: 'Australia\'s most trusted service marketplace with advanced payment protection and AI-powered matching.'
+    // }
   ];
 
   return (

@@ -1,4 +1,3 @@
-// src/app/api/refund/my/route.ts
 import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
@@ -69,7 +68,6 @@ export async function GET() {
   }
 }
 
-// GET all tasks where this professional has responded (for the form selector)
 export async function POST() {
   try {
     const session = await getServerSession(authOptions);
