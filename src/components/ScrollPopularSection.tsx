@@ -11,11 +11,11 @@ const staticImages = [
     gradient: "from-red-500/20 to-orange-500/20",
   },
   {
-    url: "/images/electrician.webp",
+    url: "/images/handymann.png",
     gradient: "from-orange-500/20 to-amber-500/20",
   },
   {
-    url: "/images/gardening.avif",
+    url: "/images/electrician.webp",
     gradient: "from-slate-500/20 to-gray-500/20",
   },
   {
@@ -23,7 +23,7 @@ const staticImages = [
     gradient: "from-blue-500/20 to-cyan-500/20",
   },
   {
-    url: "/images/photography.webp",
+    url: "/images/gardening.avif",
     gradient: "from-purple-500/20 to-pink-500/20",
   },
 ];

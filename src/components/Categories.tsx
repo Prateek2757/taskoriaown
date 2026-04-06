@@ -31,13 +31,13 @@ const staticImages = [
       "Routine cleans, end-of-lease support, deep cleaning, and flexible one-off or scheduled jobs.",
   },
   {
-    url: "/images/electrician.webp",
+    url: "/images/handymann.png",
     gradient: "from-orange-500/20 to-amber-500/20",
     description:
       "Qualified help for small jobs, repairs, installations, and urgent callouts.",
   },
   {
-    url: "/images/gardening.avif",
+    url: "/images/electrician.webp",
     gradient: "from-slate-500/20 to-gray-500/20",
     description:
       "Regular garden care, mowing, tidy-ups, and seasonal maintenance.",
@@ -49,7 +49,7 @@ const staticImages = [
       "From blocked drains and leak repairs to fixture installs and ongoing maintenance work.",
   },
   {
-    url: "/images/photography.webp",
+    url: "/images/gardening.avif",
     gradient: "from-purple-500/20 to-pink-500/20",
     description:
       "Creative professionals for ceremonies, events, portraits, and commercial shoots.",

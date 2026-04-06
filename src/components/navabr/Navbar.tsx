@@ -585,7 +585,7 @@ export default function ModernNavbar() {
                   <Link
                     href={`/providerprofile/${session.user.company_slug}`}
                     onClick={() => {
-                      setIsMenuOpen(true);
+                      setIsMenuOpen(false);
                       setIsProfileOpen(true);
                     }}
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
