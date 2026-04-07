@@ -5,13 +5,12 @@ const VALID_STATUSES = ["approved", "rejected"] as const;
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+ context: { params: Promise<{ id: string }> }
 ) {
   const client = await pool.connect();
 
   try {
-    // ── Validate ID ───────────────────────────────────────
-    const id = parseInt(params.id, 10);
+    const id = parseInt((await context.params).id, 10);
     if (isNaN(id) || id <= 0) {
       return NextResponse.json(
         { success: false, message: "Invalid request ID." },
@@ -22,7 +21,6 @@ export async function PATCH(
     const body = await req.json();
     const { status, admin_note } = body;
 
-    // ── Validate status ───────────────────────────────────
     if (!status || !VALID_STATUSES.includes(status)) {
       return NextResponse.json(
         { success: false, message: `status must be one of: ${VALID_STATUSES.join(", ")}.` },
@@ -30,7 +28,6 @@ export async function PATCH(
       );
     }
 
-    // ── Check request exists and is still pending ─────────
     const existing = await client.query<{ status: string }>(
       `SELECT status FROM refund_requests WHERE id = $1`,
       [id]
@@ -53,7 +50,6 @@ export async function PATCH(
       );
     }
 
-    // ── Update ────────────────────────────────────────────
     await client.query("BEGIN");
 
     const { rows } = await client.query(

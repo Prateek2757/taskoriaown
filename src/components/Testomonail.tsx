@@ -33,6 +33,15 @@ const reviews = [
     body: "I hired a graphic designer and received highly relevant matches. The work matched my brief perfectly and the process was seamless.",
     img: "/zaya.png",
   },
+  {
+    id: "4",
+    name: "Arjun",
+    username: "Melbourne, VIC",
+    service: "Web Development",
+    rating: 5,
+    body: "I posted a project for a website redesign and got quality responses within minutes. The developer I chose delivered exactly what I needed on time. Super smooth experience!",
+    img: "/nimesh.png",
+  }
 ];
 const firstRow = reviews.slice(0, reviews.length);
 const secondRow = reviews.slice(reviews.length / 2);
@@ -117,9 +126,9 @@ export default function Testomonail() {
           Real hiring experiences from local customers.
         </p>
       </div>
-      <div className="mt-8  max-w-6xl mx-auto">
-        <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden">
-          <Marquee pauseOnHover className="[--duration:20s]">
+      <div className="mt-8  max-w-7xl mx-auto">
+        <div className="relative flex h-full w-full flex-col items-center justify-center overflow-y-auto">
+          <Marquee pauseOnHover className="[--duration:35s]">
             {firstRow.map((review, i) => (
               <ReviewCard key={review.username + i} {...review} />
             ))}

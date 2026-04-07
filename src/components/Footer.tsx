@@ -14,6 +14,8 @@ import {
   ChevronDown,
   Star,
   X,
+  Mail,
+  Phone,
 } from "lucide-react";
 import TaskoriaSasthoRedirect from "./sastoticket/taskoriasasthoredirect";
 import { FaTiktok } from "react-icons/fa";
@@ -119,7 +121,7 @@ const Footer = () => {
                 services.{" "}
               </p>
 
-              <div className="pt-2 w-full sm:w-96">
+              <div className="pt-2 w-full  sm:w-96">
                 <p className="md:text-xl text-lg  font-semibold">
                   Become a Professional
                 </p>
@@ -127,7 +129,13 @@ const Footer = () => {
                   href="mailto:contact@taskoria.com"
                   className="inline-flex items-center gap-2 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
                 >
-                  <span className="underline">contact@taskoria.com</span>
+                 <Mail className="w-5"/> <span className="underline">contact@taskoria.com</span>
+                </a>
+                <a
+                  href="tel:61 474 655 902"
+                  className="inline-flex items-center ml-2 gap-1 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
+                >
+                 <Phone className="w-4"/> <span className="">+61 474 655 902</span>
                 </a>
 
                 <motion.div
@@ -293,12 +301,12 @@ const Footer = () => {
                   >
                     Success Stories
                   </button>
-                  <Link
+                  {/* <Link
                     href="/"
                     className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Resources
-                  </Link>
+                  </Link> */}
                   <Link
                     href="/refund-policy"
                     className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
@@ -492,7 +500,7 @@ const Footer = () => {
                 <FaTiktok className="w-5 h-5  text-white" />
               </a>
               <a
-                href="https://www.tiktok.com/@taskoria?_r=1&_t=ZS-95J6I3nljlw"
+                href="https://x.com/taskoria"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 bg-gradient-to-br from-[#000000] to-[#000000] hover:scale-110 rounded-full transition-transform shadow-lg"
@@ -502,7 +510,7 @@ const Footer = () => {
               </a>
 
               <a
-                href="https://www.linkedin.com/company/taskoriaa/about/"
+                href="https://www.linkedin.com/company/taskoria-au"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 bg-gradient-to-br from-[#0966C2] to-[#0A66C2] hover:scale-110 rounded-full transition-transform shadow-lg"

@@ -61,10 +61,10 @@ export const metadata: Metadata = {
 
 export default function AboutUs() {
   const stats = [
-    { value: '50K+', label: 'Verified Providers' },
-    { value: '500K+', label: 'Jobs Completed' },
+    { value: '500+', label: 'Verified Providers' },
+    { value: '5K+', label: 'Jobs Completed' },
     { value: '99.8%', label: 'Satisfaction Rate' },
-    { value: '$50M+', label: 'Protected Payments' }
+    { value: '$5M+', label: 'Protected Payments' }
   ];
 
   const values = [

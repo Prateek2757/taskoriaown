@@ -177,7 +177,7 @@ function Divider() {
 }
 
 const TRUST = [
-  { icon: <Users size={14} />, stat: "50,000+", label: "Verified providers" },
+  { icon: <Users size={14} />, stat: "500+", label: "Verified providers" },
   { icon: <Star size={14} />, stat: "4.8 / 5", label: "Average rating" },
   { icon: <Clock size={14} />, stat: "< 1 hr", label: "Response time" },
   { icon: <ShieldCheck size={14} />, stat: "Free", label: "To post a job" },
@@ -241,7 +241,7 @@ function TrustBar() {
 function Hero({ title, intros, onPostJob }) {
   if (!title && !intros.length) return null;
   return (
-    <div style={{ padding: "clamp(28px, 5vw, 48px) 0 clamp(20px, 4vw, 36px)" }}>
+    <div style={{ padding: "clamp(10px, 5vw, 20px) 0 clamp(10px, 4vw, 20px)" }}>
       <Inner>
         {title && (
           <Fade i={0}>
@@ -276,7 +276,7 @@ function Hero({ title, intros, onPostJob }) {
           </Fade>
         ))}
 
-        <Fade i={intros.length + 1}>
+        {/* <Fade i={intros.length + 1}>
           <div
             style={{
               display: "flex",
@@ -316,7 +316,7 @@ function Hero({ title, intros, onPostJob }) {
               Browse Providers
             </button>
           </div>
-        </Fade>
+        </Fade> */}
       </Inner>
     </div>
   );
@@ -325,10 +325,10 @@ function Hero({ title, intros, onPostJob }) {
 function StepsSection({ section }) {
   const subs = section.subsections;
   return (
-    <div style={{ padding: "clamp(28px, 5vw, 48px) 0" }}>
+    <div style={{ padding: "clamp(10px, 5vw, 20px) 0" }}>
       <Inner>
         <Fade i={0}>
-          <Eyebrow text="How it works" />
+          <Eyebrow text="The Process" />
           <SecTitle>{section.heading}</SecTitle>
           {section.paragraphs.map((p, i) => (
             <p
@@ -347,7 +347,7 @@ function StepsSection({ section }) {
 
         <style>{`
           .steps-row {
-            margin-top: 32px;
+            margin-top: 30px;
             display: flex;
             flex-direction: row;
             align-items: flex-start;
@@ -403,7 +403,7 @@ function StepsSection({ section }) {
                       fontSize: 16,
                       fontWeight: 700,
                       flexShrink: 0,
-                      marginBottom: 14,
+                      marginBottom: 1,
                     }}
                   >
                     {i + 1}
@@ -492,7 +492,7 @@ function StepsSection({ section }) {
 
         <Fade i={subs.length + 1}>
           <div style={{ marginTop: 28, textAlign: "center" }}>
-            <a
+            {/* <a
               href="#"
               style={{
                 display: "inline-flex",
@@ -522,7 +522,7 @@ function StepsSection({ section }) {
                   strokeLinejoin="round"
                 />
               </svg>
-            </a>
+            </a> */}
           </div>
         </Fade>
       </Inner>
@@ -679,7 +679,7 @@ function ServiceCard({ sub, i }) {
 
 function ServicesSection({ section }) {
   return (
-    <div style={{ padding: "clamp(28px, 5vw, 44px) 0", background: T.raised }}>
+    <div style={{ padding: "clamp(10px, 5vw, 20px) 0", background: T.raised }}>
       <Inner>
         <Fade i={0}>
           <div style={{ marginBottom: 22 }}>
@@ -843,7 +843,7 @@ function FeatureCard({ sub, i }) {
 
 function FeaturesSection({ section }) {
   return (
-    <div style={{ padding: "clamp(28px, 5vw, 44px) 0" }}>
+    <div style={{ padding: "clamp(10px, 5vw, 20px) 0" }}>
       <Inner>
         <Fade i={0}>
           <div style={{ marginBottom: 22 }}>
@@ -884,7 +884,7 @@ function FeaturesSection({ section }) {
 /* ─── Checklist section ───────────────────────────────────── */
 function ChecklistSection({ section }) {
   return (
-    <div style={{ padding: "clamp(28px, 5vw, 44px) 0", background: T.raised }}>
+    <div style={{ padding: "clamp(10px, 5vw, 20px) 0", background: T.raised }}>
       <Inner>
         <Fade i={0}>
           <div style={{ marginBottom: 18 }}>

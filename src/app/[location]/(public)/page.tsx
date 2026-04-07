@@ -10,7 +10,7 @@ import Script from "next/script";
 const BASE_URL = "https://www.taskoria.com";
 
 export const metadata: Metadata = {
-  title: "Taskoria | Hire Verified Local Professionals Across Australia",
+  title: " Free Quotes, Hire Verified Local Professionals Across Australia | Taskoria ",
   description:
     "Find and hire trusted local professionals across Australia. Post a job free, get instant quotes from verified tradespeople, cleaners, tech experts and more. Compare reviews and book with confidence.",
 
@@ -145,7 +145,7 @@ const structuredData = {
       "@type": "WebPage",
       "@id": `${BASE_URL}/#webpage`,
       url: BASE_URL,
-      name: "Taskoria | Hire Verified Local Professionals Across Australia",
+      name: " Hire Verified Local Professionals Across Australia | Taskoria ",
       description:
         "Find and hire trusted local professionals across Australia. Get instant quotes from verified tradespeople, cleaners, tech experts and more.",
       inLanguage: "en-AU",

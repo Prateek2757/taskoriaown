@@ -235,8 +235,8 @@ export default function AdminBudgetManager() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Card>
-          <CardContent className="pt-6">
+        <Card className="py-2">
+          <CardContent className="">
             <div className="text-center">
               <p className="text-3xl font-bold text-blue-600">{tasks.length}</p>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -245,8 +245,8 @@ export default function AdminBudgetManager() {
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="pt-6">
+        <Card className="py-2">
+          <CardContent className="">
             <div className="text-center">
               <p className="text-3xl font-bold text-green-600">
                 {filteredTasks.length}
@@ -257,8 +257,8 @@ export default function AdminBudgetManager() {
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="pt-6">
+        <Card className="py-2">
+          <CardContent className="">
             <div className="text-center">
               <p className="text-3xl font-bold text-purple-600">
                 {categories.length - 1}
@@ -273,7 +273,7 @@ export default function AdminBudgetManager() {
 
       {filteredTasks.length === 0 ? (
         <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
+          <CardContent className="flex flex-col items-center justify-center py-6">
             <DollarSign className="w-16 h-16 text-gray-300 mb-4" />
             <p className="text-gray-600 dark:text-gray-400 text-center">
               {searchTerm || filterCategory !== "all"
@@ -289,7 +289,7 @@ export default function AdminBudgetManager() {
               key={task.task_id}
               className="hover:shadow-lg transition-shadow"
             >
-              <CardContent className="p-6">
+              <CardContent className="px-6 " >
                 <div className="flex flex-col lg:flex-row gap-6">
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-4">
