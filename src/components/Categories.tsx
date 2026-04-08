@@ -119,7 +119,7 @@ export default function Services() {
                   index === 0 ? "lg:col-span-2 lg:row-span-2" : ""
                 } ${index === 3 ? "lg:col-span-2" : ""}`}
               >
-                <div className="h-full min-h-[320px] lg:min-h-[300px]" />
+                <div className="h-full min-h-80 lg:min-h-75" />
               </div>
             ))}
           </div>
@@ -208,7 +208,7 @@ export default function Services() {
                   }`}
                   className="block"
                 >
-                  <div className="relative  h-full min-h-[320px] lg:min-h-[265px]">
+                  <div className="relative  h-full min-h-80 lg:min-h-66.25">
                     <div className="absolute inset-0">
                       <Image
                         fill
@@ -218,15 +218,32 @@ export default function Services() {
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       <div
-                        className={`absolute inset-0 bg-gradient-to-t ${
+                        className={`absolute inset-0 bg-linear-to-t ${
                           staticImages[index]?.gradient ||
                           staticImages[0].gradient
                         } to-transparent opacity-60`}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
+                      <div className=" absolute p-3 right-0  flex justify-end">
+                        <Button
+                          className=" button w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white  transition-all duration-300 group-hover:scale-110 group-hover:rotate-45"
+                          aria-label="Open link"
+                        >
+                          <ArrowUpRight className=" button w-5 h-5" />
+                        </Button>
+                      </div>
+
+                      <div className=" absolute p-3 bottom-0 space-y-2">
+                        <h3 className="text-white text-2xl lg:text-3xl font-bold leading-tight">
+                          {category.name}
+                        </h3>
+                        <p className="text-white/90 text-sm leading-relaxed max-w-md">
+                          {staticImages[index].description}
+                        </p>
+                      </div>
                     </div>
 
-                    <div className="relative h-full flex flex-col justify-between p-6 lg:p-8">
+                    {/* <div className="relative h-full flex flex-col justify-between p-6 lg:p-8">
                       <div className="flex justify-end">
                         <Button
                           className=" button w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white  transition-all duration-300 group-hover:scale-110 group-hover:rotate-45"
@@ -236,7 +253,7 @@ export default function Services() {
                         </Button>
                       </div>
 
-                      <div className="space-y-2">
+                      <div className=" absolute bottom-0 space-y-2">
                         <h3 className="text-white text-2xl lg:text-3xl font-bold leading-tight">
                           {category.name}
                         </h3>
@@ -244,7 +261,7 @@ export default function Services() {
                           {staticImages[index].description}
                         </p>
                       </div>
-                    </div>
+                    </div> */}
 
                     <div className="absolute inset-0 bg-orange-500/0 group-hover:bg-blue-500/10 transition-colors duration-300" />
                   </div>

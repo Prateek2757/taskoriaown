@@ -8,23 +8,23 @@ import Image from "next/image";
 const staticImages = [
   {
     url: "/images/homecleaning.avif",
-    gradient: "from-red-500/20 to-orange-500/20",
+    accent: "#ef4444",
   },
   {
     url: "/images/handymann.png",
-    gradient: "from-orange-500/20 to-amber-500/20",
+    accent: "#f97316",
   },
   {
     url: "/images/electrician.webp",
-    gradient: "from-slate-500/20 to-gray-500/20",
+    accent: "#64748b",
   },
   {
     url: "/images/plumbers.webp",
-    gradient: "from-blue-500/20 to-cyan-500/20",
+    accent: "#3b82f6",
   },
   {
     url: "/images/gardening.avif",
-    gradient: "from-purple-500/20 to-pink-500/20",
+    accent: "#a855f7",
   },
 ];
 
@@ -34,90 +34,76 @@ function ScrollPopularSection() {
 
   if (loading) {
     return (
-      <section className=" md:hidden pt-10">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto space-y-6">
-            <Skeleton className="h-44  w-full" />
-          </div>
+      <section className="md:hidden pt-6 pb-2">
+        <div className="px-4 space-y-3">
+          <Skeleton className="h-5 w-36 rounded-full" />
+          <Skeleton className="h-37 w-full rounded-3xl" />
         </div>
       </section>
     );
   }
 
-  if (categories.length === 0) {
-    return null;
-  }
-
-  const totalWidth = (320 + 16) * categories.length;
+  if (categories.length === 0) return null;
 
   return (
-    <div className="bg-gradient-to-br block  md:hidden from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-4 px-4">
+    <div className="block md:hidden bg-white dark:bg-gray-950 py-5">
       <section className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-3 animate-fadeIn">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <TrendingUp
-                className="w-5 h-5 text-blue-600 dark:text-blue-400 animate-bounce"
-                style={{ animationDuration: "2s" }}
-              />
-              <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-                Trending Now
-              </span>
-            </div>
-            <h2 className="text-xl text-left font-bold lg:text-3xl bg-[#3C7DED] bg-clip-text text-transparent">
-              Popular Services
-              <span className="absolute left-0 -bottom-2 h-1 w-full rounded-full bg-[#3C7DED]" />
-            </h2>
+        <div className="flex items-center gap-2 px-4 mb-4">
+          <div className="flex items-center justify-center w-7 h-7 rounded-full bg-blue-50 dark:bg-blue-900/30">
+            <TrendingUp
+              className="w-5 h-5 text-blue-600 dark:text-blue-400 animate-bounce"
+              style={{ animationDuration: "2s" }}
+            />{" "}
           </div>
+          <h2 className="text-xl text-left font-bold lg:text-3xl bg-[#3C7DED] bg-clip-text text-transparent">
+            Popular Services
+            <span className="absolute left-0 -bottom-2 h-1 w-full rounded-full bg-[#3C7DED]" />
+          </h2>
         </div>
 
-        <div className="relative overflow-x-auto">
-          <div className="flex gap-4 w-max cursor-grab">
-            {categories.map((category, index) => (
-              <div
-                key={`${category.category_id}`}
-                onClick={() =>
-                  router.push(
-                    `/services/${category.slug ?? category.category_id}`
-                  )
-                }
-                className="relative w-[320px] flex-shrink-0 bg-white dark:bg-gray-800 rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-[140px] cursor-pointer group"
-              >
-                <div className="absolute left-0 top-0 bottom-0 w-[50%] p-4 flex flex-col ">
-                  <h3 className="text-lg text-left font-semibold text-gray-900 leading-tight dark:text-white mb-2">
-                    {category.name}
-                  </h3>
-
-                  <p className="text-sm text-left text-gray-500 dark:text-gray-400">
-                    Explore top-rated services
-                  </p>
-                </div>
-
+        <div className="overflow-x-auto scrollbar-none pl-4">
+          <div className="flex gap-3 w-max pr-4">
+            {categories.map((category, index) => {
+              const img = staticImages[index % staticImages.length];
+              return (
                 <div
-                  className="absolute right-0 top-0 bottom-0 w-[65%] overflow-hidden"
-                  style={{
-                    clipPath: "ellipse(80% 100% at 100% 50%)",
-                  }}
+                  key={category.category_id}
+                  onClick={() =>
+                    router.push(
+                      `/services/${category.slug ?? category.category_id}`
+                    )
+                  }
+                  className="relative w-65 shrink-0 rounded-2xl overflow-hidden h-35 cursor-pointer group shadow-sm hover:shadow-lg transition-shadow duration-300 bg-gray-100 dark:bg-gray-800"
                 >
-                  <div className="relative w-full h-full">
-                    <Image
-                      fill
-                      src={staticImages[index % staticImages.length]?.url}
-                      alt={category.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      sizes="(max-width: 640px) 100vw,
-                       (max-width: 1024px) 50vw,   33vw"
-                      quality={75}
-                      fetchPriority="high"
-                    />
+                  <Image
+                    fill
+                    src={img.url}
+                    alt={category.name}
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="280px"
+                    quality={75}
+                    fetchPriority="high"
+                  />
 
-                    <div className="absolute inset-0 bg-gradient-to-l from-black/30 via-black/10 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/40 to-transparent" />
+
+                  <div className="absolute bottom-0 left-0 p-4 pr-10">
+                    <h3 className="text-[15px] font-bold text-white leading-snug drop-shadow-sm line-clamp-2">
+                      {category.name}
+                    </h3>
                   </div>
-                </div>
 
-                <ChevronRight className="absolute right-4 bottom-4 w-4 h-4 text-gray-400 group-hover:text-blue-600 transition z-20" />
-              </div>
-            ))}
+                  <div className="absolute bottom-3.5 right-3.5 w-6 h-6 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/40 transition-colors duration-200">
+                    <ChevronRight className="w-3.5 h-3.5 text-white" />
+                  </div>
+
+                  {/* <div
+                    className="absolute top-0 left-0 right-0 h-[3px] opacity-80"
+                    style={{ background: img.accent }}
+                  /> */}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

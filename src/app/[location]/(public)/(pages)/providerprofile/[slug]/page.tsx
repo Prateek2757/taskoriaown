@@ -27,7 +27,9 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
   const primaryCategory = provider.categories?.[0] ?? "Services";
   const location = provider.service_areas?.[0] ?? "";
 
-  const title = `${provider.name} — ${primaryService} ${primaryCategory} Provider${location ? ` in ${location}` : ""} | Taskoria`;
+  const title = `${provider.company_name} | Taskoria profiles and review `;
+  // | ${primaryService} ${primaryCategory} Provider${location ? ` in ${location}` : ""} | Taskoria
+
   const description =
   provider.description ||
   `Hire ${provider.name} on Taskoria for ${primaryService} services. View ratings, reviews, availability, and service areas.`;

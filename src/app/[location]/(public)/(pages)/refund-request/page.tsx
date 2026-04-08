@@ -193,6 +193,8 @@ function QuillField({
   );
 }
 
+
+
 export default function RefundRequestPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -249,6 +251,12 @@ export default function RefundRequestPage() {
     });
     clearErrors();
   }, [issueType, reset, clearErrors, session]);
+
+  useEffect(() => {
+    if (success) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [success]);
 
   const onSubmit = async (data: FormValues) => {
     setSubmitting(true);
@@ -618,8 +626,8 @@ export default function RefundRequestPage() {
           )}
 
           {issueType && (
-            <div className="pt-2">
-              <div className="h-px bg-zinc-200 dark:bg-zinc-800 mb-6" />
+            <div >
+              <div className="h-px bg-zinc-200 dark:bg-zinc-800 mb-2" />
               <div className="flex items-center justify-between gap-4 flex-wrap">
                 <p className="text-xs text-zinc-400 dark:text-zinc-500 max-w-xs leading-relaxed">
                   By submitting you confirm this information is accurate. False

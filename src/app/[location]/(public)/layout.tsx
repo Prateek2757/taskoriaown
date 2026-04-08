@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 
   title: {
     default: "Taskoria | Find Trusted Local Professionals Across Australia",
-    template: "%s | Taskoria",
+    template: "",
   },
 
   description:
@@ -221,7 +221,6 @@ export default function RootLayout({
           )}
 
           <Script
-            defer
             src="https://static.cloudflareinsights.com/beacon.min.js"
             data-cf-beacon='{"token": "b0381ce5a7494c56869a77d5b4d0623c"}'
             strategy="afterInteractive"
