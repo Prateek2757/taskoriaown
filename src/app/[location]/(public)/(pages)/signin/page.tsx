@@ -89,6 +89,10 @@ function SignInForm() {
       setMessage(res.error);
       return;
     }
+    const resSession = await fetch("/api/auth/register-session", { method: "POST" });
+    const { token } = await resSession.json();
+  
+    localStorage.setItem("redirect_token", token);
 
     const savedLead = localStorage.getItem("pendingpayload");
     if (savedLead) {

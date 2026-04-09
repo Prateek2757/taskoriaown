@@ -302,22 +302,25 @@ export default function ModernNavbar() {
   return (
     <>
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/30 dark:bg-gray-900/20 border-b border-white/40 dark:border-white/10 shadow-lg shadow-black/5 dark:shadow-white/5 transition-colors w-full">
-        <div className="container mx-auto px-4 py-2 flex items-center justify-between relative">
+        <div className="container mx-auto px-4 py-2 flex items-center gap-2 relative">
+          {/* Logo — grows on mobile to push action icons right */}
           <Link
             href="/"
-            className="flex gap-1 items-center hover:opacity-90 transition-opacity"
+            className="flex gap-1 items-center hover:opacity-90 transition-opacity flex-1 md:flex-none min-w-0"
           >
             <Image
               src="/images/taskoria_logo.svg"
               alt="taskorialogo"
               height={41}
               width={25}
+              className="shrink-0"
             />
-            <span className="text-2xl font-bold bg-[#2563EB] bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-[#2563EB] bg-clip-text text-transparent truncate">
               Taskoria
             </span>
           </Link>
 
+          {/* Desktop centered nav */}
           {!minimalPages.includes(pathname) && (
             <motion.nav
               className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 px-5 py-2 rounded-full space-x-2"
@@ -328,7 +331,6 @@ export default function ModernNavbar() {
               <SlidingUnderlineNav
                 currentLinks={currentLinks.map((link) => ({
                   ...link,
-                  // href: getLocalizedHref(link.href)
                   href: link.href,
                 }))}
                 pathname={pathname}
@@ -336,8 +338,9 @@ export default function ModernNavbar() {
             </motion.nav>
           )}
 
+          {/* Desktop right actions */}
           {!minimalPages.includes(pathname) && (
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-3 ml-auto">
               {session ? (
                 <div className="relative flex" ref={profileRef}>
                   <div className="">
@@ -416,21 +419,21 @@ export default function ModernNavbar() {
               </div>
             </div>
           )}
-          <div className=" md:hidden ml-50 ">
-            {session ? (
+
+          {/* Mobile: notification bell + hamburger grouped together on the right */}
+          <div className="flex items-center gap-1 md:hidden">
+            {session && (
               <NotificationBell userId={Number(session?.user?.id)} />
-            ) : (
-              ""
             )}
+            <Button
+              variant="ghost"
+              onClick={() => setIsMenuOpen((p) => !p)}
+              className="p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl"
+              aria-label="Open Menu"
+            >
+              {isMenuOpen ? <X /> : <MenuIcon />}
+            </Button>
           </div>
-          <Button
-            variant="ghost"
-            onClick={() => setIsMenuOpen((p) => !p)}
-            className="md:hidden p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl"
-            aria-label="Open Menu"
-          >
-            {isMenuOpen ? <X /> : <MenuIcon />}
-          </Button>
         </div>
       </header>
 
@@ -451,36 +454,38 @@ export default function ModernNavbar() {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 40, stiffness: 300 }}
-              className="fixed left-0 top-0 bottom-0 w-80 bg-white dark:bg-gray-900 shadow-2xl z-[9999] overflow-y-auto"
+              className="fixed left-0 top-0 bottom-0 w-[min(320px,85vw)] bg-white dark:bg-gray-900 shadow-2xl z-[9999] overflow-y-auto"
             >
-              <div className="p-6 border-b border-gray-100 dark:border-gray-800">
-                <div className="flex items-center justify-between mb-6">
+              <div className="p-4 border-b border-gray-100 dark:border-gray-800">
+                <div className="flex items-center justify-between mb-4 gap-2">
                   <Link
                     href="/"
-                    className="flex items-center hover:opacity-90 transition-opacity"
+                    className="flex items-center gap-1 hover:opacity-90 transition-opacity min-w-0"
+                    onClick={() => setIsMenuOpen(false)}
                   >
-                    <div>
-                      <Image
-                        src="/images/taskoria_logo.svg"
-                        alt="logo taskoria"
-                        height={0}
-                        width={23}
-                      />
-                    </div>
-                    <span className="text-2xl font-bold bg-[#3C7DED] bg-clip-text text-transparent">
+                    <Image
+                      src="/images/taskoria_logo.svg"
+                      alt="logo taskoria"
+                      height={32}
+                      width={22}
+                      className="shrink-0"
+                    />
+                    <span className="text-xl font-bold bg-[#3C7DED] bg-clip-text text-transparent truncate">
                       Taskoria
                     </span>
                   </Link>
-                  <div className="pl-16  ">
-                    <ThemeToggle />
-                  </div>
 
-                  <button
-                    onClick={() => setIsMenuOpen(false)}
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                  >
-                    <X className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-                  </button>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <div suppressHydrationWarning>
+                      <ThemeToggle />
+                    </div>
+                    <button
+                      onClick={() => setIsMenuOpen(false)}
+                      className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                    >
+                      <X className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                    </button>
+                  </div>
                 </div>
 
                 {session && (

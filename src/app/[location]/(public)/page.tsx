@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     locale: "en_AU",
     url: BASE_URL,
     siteName: "Taskoria",
-    title: "Taskoria | Hire Verified Local Professionals Across Australia",
+    title: "Hire Verified Local Professionals Across Australia | Taskoria",
     description:
       "Connect with 1,000+ verified Australian professionals. Get instant quotes for cleaning, trades, tech and more. Serving 50+ cities nationwide.",
     images: [

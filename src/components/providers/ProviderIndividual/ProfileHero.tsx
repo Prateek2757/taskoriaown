@@ -327,7 +327,7 @@ export function ProfileHero({
         <Lightbox src={lightboxSrc} alt={lightboxAlt} onClose={closeLightbox} />
       )}
 
-      <div className="bg-white dark:bg-[#1d2226] border border-[#e2e2e2] dark:border-white/10 rounded-xl shadow-sm overflow-visible">
+      <div className="bg-white dark:bg-[#1d2226]  border border-[#e2e2e2] dark:border-white/10 rounded-xl shadow-sm overflow-hidden">
 
         <div className="relative h-36 sm:h-52 w-full overflow-hidden rounded-t-xl">
           {hasCover ? (

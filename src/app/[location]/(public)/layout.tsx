@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
 
   title: {
-    default: "Taskoria | Find Trusted Local Professionals Across Australia",
+    default: " Find Trusted Local Professionals Across Australia | Taskoria" ,
     template: "",
   },
 
@@ -91,7 +91,7 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Taskoria | Find Trusted Local Professionals Across Australia",
+    title: "Find Trusted Local Professionals Across Australia | Taskoria  ",
     description:
       "Connect with verified Australian professionals for home, business, and digital services. AI-powered matching, transparent pricing, and secure payments.",
     url: BASE_URL,

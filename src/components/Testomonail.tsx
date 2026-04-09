@@ -111,7 +111,7 @@ const ReviewCard = ({
 export default function Testomonail() {
   return (
     <section
-      className="bg-card dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_50%,rgba(0,0,0,1)_90%)] py-10 px-4"
+      className="bg-card dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_50%,rgba(0,0,0,1)_90%)] py-10 px-4 over "
       id="customer-reviews"
     >
       <div className="text-center">
@@ -127,7 +127,7 @@ export default function Testomonail() {
         </p>
       </div>
       <div className="mt-8  max-w-7xl mx-auto">
-        <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden">
+        <div className="relative flex h-full w-full max-width-auto flex-col items-center justify-center overflow-hidden">
           <Marquee pauseOnHover className="[--duration:35s]">
             {firstRow.map((review, i) => (
               <ReviewCard key={review.username + i} {...review} />
