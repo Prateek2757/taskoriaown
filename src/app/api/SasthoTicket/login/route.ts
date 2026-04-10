@@ -119,11 +119,12 @@ export async function GET(req: NextRequest) {
     }
 
     const tokenHash = createHash("sha256").update(token).digest("hex");
-    const sessionRegitsult = await pool.query(
+    const sessionResult = await pool.query(
       `SELECT user_id FROM user_sessions
        WHERE token_hash = $1 AND expires_at > NOW()`,
       [tokenHash]
-    );
+    ); 
+    
 
     if (sessionResult.rows.length === 0) {
       return NextResponse.json(
@@ -178,11 +179,7 @@ export async function GET(req: NextRequest) {
         name:         user.name ?? null,
         email:        user.email ?? null,
         phone:        user.phone ?? null,
-        image:        user.image ?? null,
-        role:         user.role,
-        company_name: user.company_name ?? null,
-        company_slug: user.company_slug ?? null,
-        website:      user.website ?? null,
+          
       },
     });
 

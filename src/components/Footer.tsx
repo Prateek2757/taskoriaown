@@ -22,6 +22,10 @@ import { FaTiktok } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { Button } from "./ui/button";
 import NewRequestModal from "./leads/RequestModal";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
+import { join } from "path";
 
 const letters = "TASKORIA".split("");
 const letterPositions = [35, 75, 125, 175, 225, 275, 325, 355];
@@ -66,7 +70,9 @@ const Footer = () => {
   const trustpilotRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref);
   const [openModal, setOpenModal] = useState(false);
-
+  const { data: session } = useSession();
+  const router = useRouter();
+  const { joinAsProvider } = useJoinAsProvider();
   const handleNewsLetterData = (e: FormEvent) => {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
@@ -129,13 +135,15 @@ const Footer = () => {
                   href="mailto:contact@taskoria.com"
                   className="inline-flex items-center gap-2 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
                 >
-                 <Mail className="w-5"/> <span className="underline">contact@taskoria.com</span>
+                  <Mail className="w-5" />{" "}
+                  <span className="underline">contact@taskoria.com</span>
                 </a>
                 <a
                   href="tel:61 474 655 902"
                   className="inline-flex items-center ml-2 gap-1 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
                 >
-                 <Phone className="w-4"/> <span className="">+61 474 655 902</span>
+                  <Phone className="w-4" />{" "}
+                  <span className="">+61 474 655 902</span>
                 </a>
 
                 <motion.div
@@ -230,6 +238,13 @@ const Footer = () => {
           ${openSection === "customers" ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
                 >
                   <Link
+                    href="/how-it-works/customers"
+                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    How it Works
+                  </Link>
+
+                  <Link
                     href="/services"
                     className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
@@ -253,6 +268,13 @@ const Footer = () => {
                   >
                     Trust & Safety
                   </Link>
+                  <Link
+                    href={session ? "/provider/dashboard" : "/signin"}
+                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    Login
+                  </Link>
+
                   {/* <TaskoriaSasthoRedirect /> */}
                 </div>
               </div>
@@ -290,6 +312,13 @@ const Footer = () => {
                   >
                     Join as Provider
                   </Link> */}
+                  <Link
+                    href="/how-it-works/providers"
+                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    How it Works
+                  </Link>
+
                   <button
                     onClick={() => {
                       const el = document.getElementById("customer-reviews");
@@ -313,6 +342,19 @@ const Footer = () => {
                   >
                     Refund Policy
                   </Link>
+
+                  <button
+                    onClick={() => {
+                      if (session) {
+                        router.push("/provider/dashboard");
+                      } else {
+                        joinAsProvider();
+                      }
+                    }}
+                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    Join as a professional
+                  </button>
                 </div>
               </div>
 

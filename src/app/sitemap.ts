@@ -21,7 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path:"/services/web-design-development",priority: 0.9,changeFreq: "daily" as const},
     { path:"/services/accounting-taxation",priority: 0.9,changeFreq: "daily" as const},
     { path:"/services/legal-services",priority: 0.9,changeFreq: "daily" as const},
-    { path:"/services/gardening-lawn-mowing",priority: 0.9,changeFreq: "daily" as const},
+    { path:"/services/lawn-mowing",priority: 0.9,changeFreq: "daily" as const},
     { path:"/services/wedding-photography",priority: 0.9,changeFreq: "daily" as const},
     { path:"/services/roofing",priority: 0.9,changeFreq: "daily" as const},
     { path:"/services/tiling-flooring",priority: 0.9,changeFreq: "daily" as const},
