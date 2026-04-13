@@ -303,7 +303,6 @@ export default function ModernNavbar() {
     <>
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/30 dark:bg-gray-900/20 border-b border-white/40 dark:border-white/10 shadow-lg shadow-black/5 dark:shadow-white/5 transition-colors w-full">
         <div className="container mx-auto px-4 py-2 flex items-center gap-2 relative">
-          {/* Logo — grows on mobile to push action icons right */}
           <Link
             href="/"
             className="flex gap-1 items-center hover:opacity-90 transition-opacity flex-1 md:flex-none min-w-0"
@@ -338,7 +337,6 @@ export default function ModernNavbar() {
             </motion.nav>
           )}
 
-          {/* Desktop right actions */}
           {!minimalPages.includes(pathname) && (
             <div className="hidden md:flex items-center gap-3 ml-auto">
               {session ? (

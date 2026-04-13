@@ -1,6 +1,6 @@
 import {  StatusKey } from "@/types";
 
-export const STATUS_CONFIG: Record<
+ const STATUS_CONFIG: Record<
   StatusKey,
   {
     label: string;

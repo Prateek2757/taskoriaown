@@ -1,11 +1,12 @@
 import { Metadata } from "next";
-import Categories from "@/components/Categories";
-import CTA from "@/components/CTA";
-import FeaturesPage from "@/components/Features";
-import Testomonail from "@/components/Testomonail";
+import { lazy, Suspense } from "react";
 import HeroSection from "@/components/HeroSection/Herosection";
-import HowTaskoriaWorks from "@/components/how-taskoria-works";
 import Script from "next/script";
+const HowTaskoriaWorks = lazy(() => import("@/components/how-taskoria-works"));
+const Categories = lazy(() => import("@/components/Categories"));
+const FeaturesPage = lazy(() => import("@/components/Features"));
+const Testomonail = lazy(() => import("@/components/Testomonail"));
+const CTA = lazy(() => import("@/components/CTA"));
 
 const BASE_URL = "https://www.taskoria.com";
 
@@ -271,25 +272,35 @@ export default function HomePage() {
           <HeroSection />
         </section>
 
-        <section aria-label="How Taskoria works — step by step">
-          <HowTaskoriaWorks />{" "}
-        </section>
+        <Suspense fallback={<div className="min-h-[200px]" />}>
+          <section aria-label="How Taskoria works — step by step">
+            <HowTaskoriaWorks />{" "}
+          </section>
+        </Suspense>
 
-        <section aria-label="Browse service categories">
-          <Categories />
-        </section>
+        <Suspense fallback={<div className="min-h-[200px]" />}>
+          <section aria-label="Browse service categories">
+            <Categories />
+          </section>
+        </Suspense>
 
-        <section aria-label="Platform features and benefits">
-          <FeaturesPage />
-        </section>
+        <Suspense fallback={<div className="min-h-[300px]" />}>
+          <section aria-label="Platform features and benefits">
+            <FeaturesPage />
+          </section>
+        </Suspense>
 
-        <section aria-label="Customer reviews and testimonials">
-          <Testomonail />
-        </section>
+        <Suspense fallback={<div className="min-h-[200px]" />}>
+          <section aria-label="Customer reviews and testimonials">
+            <Testomonail />
+          </section>
+        </Suspense>
 
-        <section aria-label="Get started — post your first job free">
-          <CTA />
-        </section>
+        <Suspense fallback={<div className="min-h-[100px]" />}>
+          <section aria-label="Get started — post your first job free">
+            <CTA />
+          </section>
+        </Suspense>
       </main>
     </>
   );

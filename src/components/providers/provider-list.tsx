@@ -5,12 +5,12 @@ import Image from "next/image";
 import { useState } from "react";
 import { Star, Search, ArrowUpRight, Zap, Users } from "lucide-react";
 import { Fraunces, Sora } from "next/font/google";
-export const sora = Sora({
+ const sora = Sora({
   subsets: ["latin"],
   variable: "--font-sora",
 });
 
-export const fraunces = Fraunces({
+ const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-fraunces",
 });

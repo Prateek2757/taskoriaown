@@ -5,13 +5,7 @@ import { Toaster } from "sonner";
 import ModernNavbar from "@/components/navabr/Navbar";
 import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
-import {
-  Poppins,
-  Bricolage_Grotesque,
-  Cormorant_Garamond,
-  Sora,
-  Fraunces,
-} from "next/font/google";
+import { Poppins, Bricolage_Grotesque } from "next/font/google";
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import NotificationHandler from "@/components/NotificationHandler";
@@ -22,21 +16,18 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "600", "700"],
   variable: "--font-poppins",
+  display: "swap",
+  preload: true,
 });
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   weight: ["800"],
   variable: "--font-bricolage",
-});
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["700"],
-  style: ["italic"],
-  variable: "--font-cormorant",
+  display: "swap",
+  preload: true,
 });
 
 const BASE_URL = "https://www.taskoria.com";
@@ -149,7 +140,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${bricolage.variable} ${cormorant.variable}`}
+      className={`${poppins.variable} ${bricolage.variable}`}
       suppressHydrationWarning
     >
       <AuthProvider>

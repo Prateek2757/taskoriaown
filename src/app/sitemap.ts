@@ -28,6 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 ];
 
   const companyRoutes = [
+    { path: "/blog", priority: 0.9, changeFreq: "daily" as const },
     { path: "/trust-safety", priority: 0.7, changeFreq: "monthly" as const },
     { path: "/about-us", priority: 0.6, changeFreq: "monthly" as const },
     { path: "/careers", priority: 0.5, changeFreq: "monthly" as const },

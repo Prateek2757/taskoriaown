@@ -31,7 +31,7 @@ const compactColor = (bg: string) => {
   return map[bg] || "";
 };
 
-export const getActions = (response: ProviderResponse) => {
+const getActions = (response: ProviderResponse) => {
   const phone = response.customer_phone;
   const email = response.customer_email;
 

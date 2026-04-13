@@ -8,9 +8,12 @@ import ServiceHeroSection from "@/components/servicePage/ServiceHeroSection";
 import PopularLocationsSection from "@/components/servicePage/PopularLocationSection";
 import FAQSection from "@/components/servicePage/Faqs";
 import CityProviders from "@/components/servicePage/cityProviders";
-import ServiceIntro from "@/components/servicePage/IntroSection";
 import Howitwork from "@/components/servicePage/HowItWorks";
 import Link from "next/link";
+import SubHeroService from "./Subheroservice";
+import WhyTaskoria from "./WhyTaskoria";
+import StepWiseHowItWorks from "./3stepServiceSection";
+import ServiceBreadcrumb from "./Servicebreadcrumb";
 
 interface ServicePageClientProps {
   service: any;
@@ -44,6 +47,26 @@ export default function ServicePageClient({
     setOpenModal(true);
   };
 
+  console.log(selectedLocation,"slecterd");
+  console.log(initialLocation);
+  
+  
+
+  const cityName: string | undefined =
+    citySlug ?? undefined;
+
+  const subCityName: string | undefined = subCitySlug
+    ? (selectedLocation?.subcities?.find((s: any) => s.slug === subCitySlug)?.name ??
+        subCitySlug)
+    : undefined;
+
+  const stateName: string | undefined =
+    selectedLocation?.state_name ?? undefined;
+
+  const activeCityName = subCityName ?? cityName;
+  console.log(service,stateSlug,citySlug,subCitySlug,stateName,cityName,subCityName,"citynames ");
+  
+
   return (
     <main className="min-h-screen bg-linear-to-b from-white via-indigo-50/30 to-purple-50/20 dark:from-slate-950 dark:via-slate-900/95 dark:to-indigo-950/30">
       <NewRequestModal
@@ -61,26 +84,52 @@ export default function ServicePageClient({
           presetLocation={selectedLocation}
         />
 
-        {citySlug && (
-          <ServiceIntro
-            serviceName={service.slug}
-            cityName={subCitySlug ?? citySlug}
-          />
-        )}
-
         <section className="max-w-6xl mx-auto px-6 py-3">
-          {!citySlug && (
-            <Howitwork
-              servicedetails={service?.service_detail}
-              onpostjob={handleSelectCategory}
-            />
-          )}
+
           {citySlug && (
-            <CityProviders
-              serviceSlug={service.slug}
-              citySlug={subCitySlug ?? citySlug}
+            <ServiceBreadcrumb
+              service={service}
+              stateSlug={stateSlug}
+              citySlug={citySlug}
+              subCitySlug={subCitySlug}
+              stateName={stateName}
+              cityName={cityName}
+              subCityName={subCityName}
             />
           )}
+          {!citySlug && (
+            <SubHeroService service={service} onPostJob={handleSelectCategory} />
+          )}
+          {!citySlug && (
+            <StepWiseHowItWorks
+              serviceName={service.name}
+              onPostJob={handleSelectCategory}
+            />
+          )}
+
+          {citySlug && (
+            <>
+              <SubHeroService
+                service={service}
+                onPostJob={handleSelectCategory}
+                presetLocation={selectedLocation}
+                cityName={activeCityName}
+              />
+
+              <StepWiseHowItWorks
+                serviceName={service.name}
+                onPostJob={handleSelectCategory}
+                cityName={activeCityName}
+              />
+
+              <CityProviders
+                serviceSlug={service.slug}
+                citySlug={subCitySlug ?? citySlug}
+              />
+            </>
+          )}
+
+          {/* ── SUB-CITY AREA LINKS (city page, no subcity selected) ── */}
           {citySlug &&
             !subCitySlug &&
             selectedLocation?.subcities?.length > 0 && (
@@ -104,16 +153,13 @@ export default function ServicePageClient({
                       className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-indigo-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
                     >
                       <div className="absolute inset-0 bg-linear-to-br from-indigo-50 to-purple-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
                       <div className="relative z-10">
                         <h3 className="text-lg font-semibold text-slate-900 group-hover:text-indigo-700">
                           {sub.name}
                         </h3>
-
                         <p className="mt-1 text-sm text-slate-500">
                           View local professionals
                         </p>
-
                         <div className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-indigo-600 group-hover:text-indigo-700">
                           Explore
                           <svg
@@ -136,12 +182,12 @@ export default function ServicePageClient({
                 </div>
               </section>
             )}
+
           {!citySlug && (
-            <PopularLocationsSection
-              serviceSlug={service.slug}
-              cities={cities}
-            />
+            <PopularLocationsSection serviceSlug={service.slug} cities={cities} />
           )}
+          {!citySlug && <WhyTaskoria serviceName={service.slug} />}
+
           {service.about && (
             <section className="bg-white rounded-3xl p-10 shadow-lg mb-20">
               <div
@@ -150,14 +196,24 @@ export default function ServicePageClient({
               />
             </section>
           )}
+
+          {!citySlug && (
+            <Howitwork
+              servicedetails={service?.service_detail}
+              onpostjob={handleSelectCategory}
+            />
+          )}
           {!citySlug && service.faqs && service.faqs.length > 0 && (
             <FAQSection faqs={service.faqs} />
           )}
+
+          {/* ── BOTTOM CTA BANNER ── */}
           <aside className="rounded-3xl bg-linear-to-br from-slate-900 to-indigo-900 text-white p-8 md:p-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div>
                 <h2 className="text-3xl font-bold mb-2">
-                  Ready to get {service.name} done?
+                  Ready to get {service.name} done
+                  {activeCityName ? ` in ${activeCityName}` : ""}?
                 </h2>
                 <p className="text-lg text-white/80">
                   Post your job once—receive quotes fast, compare providers, and

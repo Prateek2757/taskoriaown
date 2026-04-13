@@ -1,5 +1,3 @@
-
-
 import ServicePageWrapper from "@/components/servicePage/ServicePageWrapper";
 import StructuredData from "@/components/servicePage/StructureData";
 import { Metadata } from "next";

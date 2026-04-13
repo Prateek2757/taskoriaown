@@ -82,7 +82,7 @@ function ScrollPopularSection() {
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="280px"
                     quality={75}
-                    fetchPriority="high"
+                    priority
                   />
 
                   <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/40 to-transparent" />

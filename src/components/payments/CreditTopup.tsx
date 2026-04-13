@@ -47,7 +47,7 @@ interface CreditPurchaseProps {
   onPurchaseSuccess?: () => void;
 }
 
-export function CreditPurchase({
+ function CreditPurchase({
   mode = "page",
   requiredCredits,
   contactName,

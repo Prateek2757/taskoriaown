@@ -3,53 +3,9 @@ import ScrollPopularSection from "../ScrollPopularSection";
 import HeroInteractive from "./HeroInteractive";
 import SparklesThemed from "./SparklesThemed";
 
-const structuredData = [
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "@id": "https://www.taskoria.com/#website",
-    name: "Taskoria",
-    url: "https://www.taskoria.com",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://www.taskoria.com/services/{search_term_string}",
-      "query-input": "required name=search_term_string",
-    },
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "@id": "https://www.taskoria.com/#organization",
-    name: "Taskoria",
-    url: "https://www.taskoria.com",
-    logo: {
-      "@type": "ImageObject",
-      url: "https://www.taskoria.com/images/taskoria_logo.svg",
-      width: 250,
-      height: 60,
-    },
-    description:
-      "Australia's trusted AI-powered marketplace connecting customers with verified professionals.",
-    sameAs: [
-      "https://www.facebook.com/taskoria",
-      "https://twitter.com/taskoria",
-      "https://www.linkedin.com/company/taskoria",
-      "https://www.instagram.com/taskoria",
-    ],
-    areaServed: {
-      "@type": "Country",
-      name: "Australia",
-    },
-  },
-];
-
 export default function HeroSection() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
 
       <section
         className="relative flex flex-col text-center 

@@ -77,7 +77,7 @@ export default function NewRequestModal({
       .catch(() => toast.error("Failed to load questions"))
       .finally(() => setQuestionsLoading(false));
   }, [selectedCategoryId]);
-console.log(selectedCategoryId,"selected catrgiory");
+// console.log(selectedCategoryId,"selected catrgiory");
 
 useEffect(() => {
   if (presetCategory) {
