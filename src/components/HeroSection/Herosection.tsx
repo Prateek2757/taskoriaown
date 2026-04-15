@@ -34,6 +34,9 @@ export default function HeroSection() {
                 width={18}
                 height={5}
                 fetchPriority="high"
+                sizes="(max-width: 640px) 100vw,
+                (max-width: 1024px) 50vw,
+                33vw"
               />
               <span>
                 {" "}

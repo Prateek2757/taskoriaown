@@ -37,7 +37,7 @@ function ScrollPopularSection() {
       <section className="md:hidden pt-6 pb-2">
         <div className="px-4 space-y-3">
           <Skeleton className="h-5 w-36 rounded-full" />
-          <Skeleton className="h-37 w-full rounded-3xl" />
+          <Skeleton className="h-36 w-full rounded-3xl" />
         </div>
       </section>
     );
@@ -55,9 +55,8 @@ function ScrollPopularSection() {
               style={{ animationDuration: "2s" }}
             />{" "}
           </div>
-          <h2 className="text-xl text-left font-bold lg:text-3xl bg-[#3C7DED] bg-clip-text text-transparent">
+          <h2 className=" relative text-xl text-left font-bold lg:text-3xl bg-[#3C7DED] bg-clip-text text-transparent">
             Popular Services
-            <span className="absolute left-0 -bottom-2 h-1 w-full rounded-full bg-[#3C7DED]" />
           </h2>
         </div>
 
@@ -80,11 +79,9 @@ function ScrollPopularSection() {
                     src={img.url}
                     alt={category.name}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="280px"
-                    quality={75}
-                    priority
+                    sizes="260px"
+                    priority={index === 0}
                   />
-
                   <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/40 to-transparent" />
 
                   <div className="absolute bottom-0 left-0 p-4 pr-10">

@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import NewRequestModal from "../leads/RequestModal";
+import Image from "next/image";
 
 interface ServiceCategory {
   category_id?: string | number;
@@ -55,11 +56,11 @@ const staticServiceImages: Record<string, { url: string; gradient: string }> = {
   },
 
   "Rubbish Removal": {
-    url: "/images/rubbishremoval.png",
+    url: "/images/rubbishremoval.avif",
     gradient: "from-gray-500/20 to-slate-500/20",
   },
   "Air Conditioning & Heating": {
-    url: "/images/airconditioning.png",
+    url: "/images/airconditioning.avif",
     gradient: "from-cyan-500/20 to-blue-500/20",
   },
   Roofing: {
@@ -315,7 +316,7 @@ export default function ServiceCategoriesClient({
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {topCategories.map((category) => (
+              {topCategories.map((category , index) => (
                 <article
                   key={category.category_id}
                   className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900"
@@ -327,11 +328,14 @@ export default function ServiceCategoriesClient({
 
                         return (
                           <>
-                            <img
-                              src={staticImage?.url || "/images/default.webp"}
-                              alt={category.name}
-                              className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                            />
+                         <Image
+  src={staticImage?.url || "/images/default.webp"}
+  alt={category.name}
+  fill
+  className="object-cover transition duration-300 group-hover:scale-105"
+  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+  priority={index === 0}
+/>
 
                             <div
                               className={`absolute inset-0 bg-linear-to-t ${

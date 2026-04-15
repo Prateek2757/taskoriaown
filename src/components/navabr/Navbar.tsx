@@ -140,7 +140,7 @@ export default function ModernNavbar() {
   };
 
   const currentLinks = getCurrentLinks();
-
+  const isLoggedIn = status === "authenticated";
   // const getLocalizedHref = (href: string) => {
   //   if (href === "/") return `/`;
   //   return `/${href}`;
@@ -286,18 +286,18 @@ export default function ModernNavbar() {
     );
   };
 
-  if (status === "loading") {
-    return (
-      <header className="bg-white dark:bg-gray-900/95 backdrop-blur-md border-b sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-[#3C7DED] rounded-xl animate-pulse" />
-            <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-          </div>
-        </div>
-      </header>
-    );
-  }
+  // if (status === "loading") {
+  //   return (
+  //     <header className="bg-white dark:bg-gray-900/95 backdrop-blur-md border-b sticky top-0 z-50 shadow-sm">
+  //       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+  //         <div className="flex items-center gap-2">
+  //           <div className="w-10 h-10 bg-[#3C7DED] rounded-xl animate-pulse" />
+  //           <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+  //         </div>
+  //       </div>
+  //     </header>
+  //   );
+  // }
 
   return (
     <>
@@ -312,7 +312,8 @@ export default function ModernNavbar() {
               alt="taskorialogo"
               height={41}
               width={25}
-              className="shrink-0"
+              className="shrink-0 "
+           
             />
             <span className="text-2xl font-bold bg-[#2563EB] bg-clip-text text-transparent truncate">
               Taskoria
@@ -339,7 +340,7 @@ export default function ModernNavbar() {
 
           {!minimalPages.includes(pathname) && (
             <div className="hidden md:flex items-center gap-3 ml-auto">
-              {session ? (
+              {isLoggedIn ? (
                 <div className="relative flex" ref={profileRef}>
                   <div className="">
                     <NotificationBell userId={Number(session?.user?.id)} />
@@ -467,6 +468,7 @@ export default function ModernNavbar() {
                       height={32}
                       width={22}
                       className="shrink-0"
+                  
                     />
                     <span className="text-xl font-bold bg-[#3C7DED] bg-clip-text text-transparent truncate">
                       Taskoria

@@ -211,6 +211,9 @@ export default function FeaturesStacking() {
                       height={28}
                       width={28}
                       loading="lazy"
+                      sizes="(max-width: 640px) 100vw,
+                      (max-width: 1024px) 50vw,
+                      33vw"
                     />
                   </Circle>
                 </div>

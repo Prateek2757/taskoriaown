@@ -119,6 +119,10 @@ export const FeatureProvider = () => {
                                 alt="logo taskoria"
                                 height={0}
                                 width={35}
+                                sizes="(max-width: 640px) 100vw,
+                                (max-width: 1024px) 50vw,
+                                33vw"
+
                               />
                             </div>
                             <span className="text-sm font-bold bg-[#3C7DED] bg-clip-text text-transparent">

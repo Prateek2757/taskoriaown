@@ -79,7 +79,7 @@ export function TaskResponseCard({
 
 //   const [from, to] = AVATAR_GRADIENTS[response.id % AVATAR_GRADIENTS.length];
   const isFeatured = response.is_featured;
-  console.log(response,"responsesssss");
+  // console.log(response,"responsesssss");
   
 
   return (

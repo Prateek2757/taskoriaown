@@ -57,6 +57,10 @@ export default function HeroInteractive() {
               priority
               aria-hidden="true"
               className="object-contain object-center"
+              sizes="(max-width: 640px) 100vw,
+              (max-width: 1024px) 50vw,
+              33vw"
+
             />
           </div>
 

@@ -16,6 +16,7 @@ type Location = {
   country?: string;
   lat?: number;
   lng?: number;
+  _resolving?: boolean;
 };
 
 type Props = {
@@ -24,7 +25,11 @@ type Props = {
   presetLocation?: Location | null;
 };
 
-export default function LocationSearch({ onSelect, onLoadingChange, presetLocation }: Props) {
+export default function LocationSearch({
+  onSelect,
+  onLoadingChange,
+  presetLocation,
+}: Props) {
   const sessionToken = useRef(
     typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
   );
@@ -132,30 +137,29 @@ export default function LocationSearch({ onSelect, onLoadingChange, presetLocati
     setShowDropdown(false);
     setActiveIndex(-1);
 
+    // ✅ Immediately unblock the parent with display info
+    onSelect?.({ ...loc, _resolving: true });
+
+    // 🔄 Run enrichment in background, notify parent when done
     setLoading(true);
-    onLoadingChange?.(true);
-    const details = await fetchPlaceDetails(loc.place_id);
-    setLoading(false);
-
-    if (!details) {
-      onLoadingChange?.(false);
-      return;
-    }
-
     try {
-      const reslocation = await axios.post("/api/signup/location", details);
+      const details = await fetchPlaceDetails(loc.place_id);
+      if (!details) return;
 
+      const reslocation = await axios.post("/api/signup/location", details);
       const city_id = reslocation.data.city_id;
 
+      // ✅ Push enriched data to parent silently
       onSelect?.({
         ...details,
         city_id,
         display_name: loc.display_name,
+        _resolving: false,
       });
-    } catch (error) {
-      console.error("Failed to save location:", error);
+    } catch (err) {
+      console.error("Location enrichment failed:", err);
     } finally {
-      onLoadingChange?.(false);
+      setLoading(false);
     }
   };
 

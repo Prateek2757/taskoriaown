@@ -1,6 +1,7 @@
 import ServicePageWrapper from "@/components/servicePage/ServicePageWrapper";
 import StructuredData from "@/components/servicePage/StructureData";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: Promise<{ slug?: string[]; location?: string }>;
@@ -166,10 +167,13 @@ export default async function ServicePage({ params }: Props) {
   const { slug = [] } = await params;
   const [serviceSlug, stateSlug = null, citySlug = null, subCitySlug = null] =
     slug;
+console.log(slug,"slugwefwe");
 
   let service: ServiceData | null = null;
   let fetchError = false;
-
+  if (!serviceSlug || serviceSlug === "undefined") {
+    notFound();
+  }
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_APP_URL}/api/categories/${serviceSlug}`,
@@ -224,7 +228,7 @@ export default async function ServicePage({ params }: Props) {
         providers={selectedLocation?.providers || []}
       />
 
-      <nav
+      {/* <nav
         aria-label="Breadcrumb"
         className="sr-only"
         itemScope
@@ -256,7 +260,7 @@ export default async function ServicePage({ params }: Props) {
             <meta itemProp="position" content={String(i + 1)} />
           </span>
         ))}
-      </nav>
+      </nav> */}
 
   
       <ServicePageWrapper

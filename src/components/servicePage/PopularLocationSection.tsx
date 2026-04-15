@@ -224,6 +224,9 @@ export default function PopularLocationsSection({
                         src={popularCities[index % popularCities.length]?.image || "/default-image.jpg"}
                         alt={city.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        sizes="(max-width: 640px) 100vw,
+                        (max-width: 1024px) 50vw,
+                        33vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                       {isCurrentCity && (

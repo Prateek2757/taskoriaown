@@ -124,6 +124,9 @@ export default function AboutUs() {
             fill
             className="object-cover object-center"
             priority
+            sizes="(max-width: 640px) 100vw,
+            (max-width: 1024px) 50vw,
+            33vw"
           />
           <div className="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
         </div>

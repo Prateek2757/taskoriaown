@@ -47,8 +47,8 @@ export default function ServicePageClient({
     setOpenModal(true);
   };
 
-  console.log(selectedLocation,"slecterd");
-  console.log(initialLocation);
+  // console.log(selectedLocation,"slecterd");
+  // console.log(initialLocation);
   
   
 
@@ -64,7 +64,7 @@ export default function ServicePageClient({
     selectedLocation?.state_name ?? undefined;
 
   const activeCityName = subCityName ?? cityName;
-  console.log(service,stateSlug,citySlug,subCitySlug,stateName,cityName,subCityName,"citynames ");
+  // console.log(service,stateSlug,citySlug,subCitySlug,stateName,cityName,subCityName,"citynames ");
   
 
   return (

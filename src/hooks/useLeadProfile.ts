@@ -133,24 +133,32 @@ export function useLeadProfile() {
     if (userLocations.some((loc) => loc.city_id === city_id)) {
       throw new Error("Location already added");
     }
-    
+  
     try {
-      const newLocation = {
+      const optimistic: UserLocation = {
         id: Date.now(),
         city_id,
-        city_name,
+        city_name,          
         radius,
         created_at: new Date().toISOString(),
       };
-      
-      mutateLocations([...userLocations, newLocation], false);
-
+  
+      mutateLocations([...userLocations, optimistic], false);
+  
       const response = await axios.post("/api/user_locations", { city_id, radius });
-      
-      if (response.data && response.data.location) {
-        mutateLocations([...userLocations, response.data.location], false);
+  
+      if (response.data?.location) {
+        mutateLocations(
+          (current = []) =>
+            current.map((loc) =>
+              loc.id === optimistic.id          
+                ? { city_name, radius,...response.data.location }
+                : loc
+            ),
+          false
+        );
       }
-      
+  
       notifyAll();
     } catch (err: any) {
       mutateLocations(userLocations, false);

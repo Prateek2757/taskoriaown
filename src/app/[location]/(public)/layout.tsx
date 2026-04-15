@@ -142,6 +142,7 @@ export default function RootLayout({
       lang="en"
       className={`${poppins.variable} ${bricolage.variable}`}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
     >
       <AuthProvider>
         <body className="antialiased dark:bg-black" suppressHydrationWarning>

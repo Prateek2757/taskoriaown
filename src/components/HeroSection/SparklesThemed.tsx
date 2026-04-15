@@ -1,6 +1,4 @@
 "use client";
-
-
 import { useTheme } from "next-themes";
 import { SparklesCore } from "../ui/sparkles";
 import { SparklesCoreLight } from "../ui/sparklesLight";

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -47,12 +47,11 @@ export default function StepOneCategoryForm({
   setSelectedLocationId,
   setSelectedLocation,
 }: Props) {
- const {categories,loading}= useCategories()
+  const { categories, loading } = useCategories();
   const [locationLoading, setLocationLoading] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const [showCategorySuggestions, setShowCategorySuggestions] = useState(false);
   const [searchCategoryTerm, setSearchCategoryTerm] = useState("");
-
 
   const [userInteracted, setUserInteracted] = useState(false);
 
@@ -67,7 +66,10 @@ export default function StepOneCategoryForm({
 
   const categoryId = watch("category_id");
   const location = watch("location");
-
+  const locationRef = useRef<{
+    city_id?: number;
+    resolved: boolean;
+  }>({ resolved: false });
   const isContinueEnabled = categoryId > 0 && location?.trim() !== "";
 
   // useEffect(() => {
@@ -124,7 +126,6 @@ export default function StepOneCategoryForm({
     setFilteredCategories(filtered);
     setShowCategorySuggestions(filtered.length > 0);
   }, [searchCategoryTerm, categories, categoryId]);
-
 
   useEffect(() => {
     if (!userInteracted) return;
@@ -238,29 +239,28 @@ export default function StepOneCategoryForm({
                 onLoadingChange={(isLoading) => setLocationLoading(isLoading)}
                 onSelect={(data) => {
                   if (!data) {
+                    locationRef.current = { resolved: false };
                     setValue("city_id", 0);
                     setValue("location", "");
                     setSelectedLocation(null);
-                    setSelectedLocationId("0");
                     return;
                   }
 
-                  setValue("city_id", data.city_id, {
-                    shouldDirty: true,
-                    shouldTouch: true,
-                  });
-                  setValue("location", data.city || data.display_name, {
-                    shouldDirty: true,
-                    shouldTouch: true,
-                  });
+                  setValue("location", data.city || data.display_name);
 
-                  setSelectedLocation({
-                    city_id: data.city_id,
-                    display_name: data.display_name,
-                    city: data.city,
-                  });
+                  if (data._resolving) {
+                    locationRef.current = { resolved: false };
+                  } else {
+                    // Enriched — update city_id and mark resolved
+                    locationRef.current = {
+                      city_id: data.city_id,
+                      resolved: true,
+                    };
+                    setValue("city_id", data.city_id ?? 0);
+                    setSelectedLocationId(String(data.city_id ?? 0));
+                    setSelectedLocation({ ...data });
+                  }
 
-                  setSelectedLocationId(String(data.city_id || 0));
                   setUserInteracted(true);
                 }}
               />

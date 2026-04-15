@@ -221,6 +221,9 @@ export default function HeroSection() {
                   fill
                   priority
                   className="object-contain object-center"
+                  sizes="(max-width: 640px) 100vw,
+                  (max-width: 1024px) 50vw,
+                  33vw"
                 />
               </div>
               <div className="relative w-full max-w-3xl group flex sm:items-center max-sm:gap-2">
