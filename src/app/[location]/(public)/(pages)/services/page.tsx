@@ -1,4 +1,3 @@
-
 import ServiceCategoriesClient from "@/components/services/serviceCategories";
 import { fetchCategories } from "@/utils/api";
 import { Metadata } from "next";
@@ -10,6 +9,7 @@ interface Category {
   category_id?:string | number;
   slug: string;
   name: string;
+  main_category?:string;
   hero_image?: string;
 }
 
@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const categories: Category[] = await fetchCategories();
   const count = categories.length;
 
-  const title = `${count}+ Service Categories | Hire Trusted Professionals Across Australia – Taskoria`;
+  const title = `Hire Trusted Pros Across ${count} Services in Australia`;
   const description = `Browse ${count} service categories on Taskoria — from home cleaning and trades to digital and creative work. Compare verified Australian professionals, read real reviews and get free quotes instantly.`;
 
   return {

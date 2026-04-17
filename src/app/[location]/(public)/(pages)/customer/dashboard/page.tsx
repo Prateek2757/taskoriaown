@@ -171,6 +171,7 @@ export default function CustomerDashboard() {
                   <div className="relative h-48 overflow-hidden">
                     <Image
                       fill
+                      title="category images"
                       src={category.image}
                       alt={category.title}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"

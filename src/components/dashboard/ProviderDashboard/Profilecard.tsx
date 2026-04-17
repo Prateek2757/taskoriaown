@@ -115,6 +115,7 @@ export function ProfileCard({
               <Avatar className="relative h-28 w-28 mx-auto">
                 {imageToShow ? (
                   <Image
+                  title="Profile Card Image"
                     src={imageToShow}
                     width={112}
                     height={112}

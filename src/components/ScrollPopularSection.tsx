@@ -75,6 +75,7 @@ function ScrollPopularSection() {
                   className="relative w-65 shrink-0 rounded-2xl overflow-hidden h-35 cursor-pointer group shadow-sm hover:shadow-lg transition-shadow duration-300 bg-gray-100 dark:bg-gray-800"
                 >
                   <Image
+                  title="popular catgories"
                     fill
                     src={img.url}
                     alt={category.name}

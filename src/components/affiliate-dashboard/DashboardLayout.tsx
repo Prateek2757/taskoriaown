@@ -48,7 +48,7 @@ const navItems = [
   // { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   // { id: "analytics", label: "Analytics", icon: BarChart3 },
   { id: "referrals", label: "Referrals", icon: Link2 },
-  // { id: "payouts", label: "Payouts", icon: Wallet },
+  { id: "payouts", label: "Payouts", icon: Wallet },
   // { id: "resources", label: "Resources", icon: BookOpen },
 ];
 
@@ -80,6 +80,7 @@ export function DashboardLayout({
         >
           <div className="w-10 h-10 rounded-xl shadow-glow flex items-center justify-center ">
             <Image
+            title="taskoria logo in affiliate dashbaord"
               src="/images/taskoria_logo.svg"
               alt="taskorialogo"
               height={41}

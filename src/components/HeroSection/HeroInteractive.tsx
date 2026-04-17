@@ -51,6 +51,7 @@ export default function HeroInteractive() {
         <div className="relative w-full px-2 group flex items-center">
           <div className="absolute right-170 -top-10 w-48 h-48 pointer-events-none dark:opacity-80 overflow-hidden">
             <Image
+            title="Hero Background Image"
               src="/images/herobgnew.avif"
               alt=""
               fill

@@ -84,18 +84,18 @@ useEffect(() => {
     setSelectedCategoryId(String(presetCategory.category_id));
     setSelectedCategoryTitle(String(presetCategory.name));
   }
-}, [presetCategory?.category_id]); // 👈 only re-run if the ID actually changes
+}, [presetCategory?.category_id]); 
 
 useEffect(() => {
   if (presetLocation) {
     setSelectedLocationId(String(presetLocation.city_id));
   }
-}, [presetLocation?.city_id]); // 👈 same pattern
+}, [presetLocation?.city_id]); 
 
   const next = () => setStep(2);
   const back = () => {
     setStep(1);
-    setStepTwoKey((k) => k + 1); // forces StepTwo to remount every time
+    setStepTwoKey((k) => k + 1);
   };
   const close = () => {
     onClose();

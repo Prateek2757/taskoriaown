@@ -77,6 +77,7 @@ export default function ResponsesRow({
                 <div className="flex items-start gap-4 mb-4">
                   <div className="relative">
                     <Image
+                    title={r.display_name}
                       height={14}
                       width={14}
                       src={r.avatar_url || "/images/default-avatar.png"}

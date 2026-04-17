@@ -172,7 +172,8 @@ export default function ProviderProfileClientt({ provider }: { provider: any }) 
       <div className="relative h-64 w-full">
         {provider.image ? (
           <div className="absolute inset-0">
-            <Image
+            <Image 
+            title="provider cover image"
               src={provider.image}
               alt={`${provider.name} cover`}
               fill
@@ -198,6 +199,7 @@ export default function ProviderProfileClientt({ provider }: { provider: any }) 
                   {provider.image ? (
                     <div className="w-20 h-20 rounded-full overflow-hidden ring-2 ring-white/60 dark:ring-black/40">
                       <Image
+                      title="Provider Profile Pic "
                         src={provider.image}
                         alt={provider.name ?? "Provider"}
                         width={96}
@@ -342,7 +344,8 @@ export default function ProviderProfileClientt({ provider }: { provider: any }) 
                               <div
                                 className={`relative ${photo.is_featured ? "h-64" : "h-44"}`}
                               >
-                                <Image
+                                <Image  
+                                title="Portfolio photo Featured"
                                   src={photo.photo_url}
                                   alt={photo.title ?? "Portfolio photo"}
                                   fill

@@ -251,7 +251,6 @@ export default function StepOneCategoryForm({
                   if (data._resolving) {
                     locationRef.current = { resolved: false };
                   } else {
-                    // Enriched — update city_id and mark resolved
                     locationRef.current = {
                       city_id: data.city_id,
                       resolved: true,

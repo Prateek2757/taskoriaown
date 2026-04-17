@@ -242,6 +242,7 @@ export default function ProviderDashboard() {
                     <Avatar className="relative h-28 w-28 mx-auto">
                       {imageToShow ? (
                         <Image
+                        title="Provider Dashboard Profile"
                           src={imageToShow as string}
                           width={112}
                           height={112}

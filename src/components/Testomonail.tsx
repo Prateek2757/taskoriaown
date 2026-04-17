@@ -71,6 +71,7 @@ const ReviewCard = ({
     >
       <div className="flex items-center gap-2">
         <Image
+        title="customers review profile picture"
           className="rounded-lg"
           width={52}
           height={32}

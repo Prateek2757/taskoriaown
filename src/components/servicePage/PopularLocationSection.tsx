@@ -220,6 +220,7 @@ export default function PopularLocationsSection({
                   >
                     <div className="relative h-52 overflow-hidden">
                       <Image
+                      title="Location Image"
                         fill
                         src={popularCities[index % popularCities.length]?.image || "/default-image.jpg"}
                         alt={city.name}

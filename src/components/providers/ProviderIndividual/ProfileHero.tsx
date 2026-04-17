@@ -198,6 +198,7 @@ function Lightbox({ src, alt, onClose }: LightboxProps) {
       >
         <div className="relative w-full h-full">
           <Image
+          title="Profile Hero Cover Image"
             src={src || "coverimage"}
             alt={alt}
             fill
@@ -343,6 +344,7 @@ export function ProfileHero({
               }
             >
               <Image
+              title="Company Cover Photo"
                 src={companySrc! || "coverphoto"}
                 alt={`${provider.name ?? "Provider"} cover photo`}
                 fill
@@ -414,6 +416,7 @@ export function ProfileHero({
     >
       <div className="relative w-full h-full">
         <Image
+        title="Provider Cover Image"
           src={provider.cover_image}
           alt={provider.name ?? "Provider"}
           fill

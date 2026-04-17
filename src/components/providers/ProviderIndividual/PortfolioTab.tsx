@@ -20,6 +20,7 @@ export function PortfolioTab({ photos }: { photos: any[] }) {
           {photo.photo_url ? (
             <div className={`relative ${photo.is_featured ? "h-64 sm:h-80" : "h-52"}`}>
               <Image
+              title="Portfolio photo Featured "
                 src={photo.photo_url}
                 alt={photo.title ?? "Portfolio photo"}
                 fill

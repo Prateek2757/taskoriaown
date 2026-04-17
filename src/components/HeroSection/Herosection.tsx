@@ -29,6 +29,7 @@ export default function HeroSection() {
               role="banner"
             >
               <Image
+              title="Aus Flag Home Page"
                 src="/flag-aus.png"
                 alt="Australian flag"
                 width={18}
@@ -44,7 +45,7 @@ export default function HeroSection() {
               </span>
             </div>
 
-            <h1
+            <div
               className="text-4xl md:text-6xl leading-tight mt-2 md:mt-0 md:mb-8"
               style={{
                 fontFamily: "'Bricolage Grotesque', sans-serif",
@@ -89,7 +90,7 @@ export default function HeroSection() {
               >
                 all in one place.
               </span>
-            </h1>
+            </div>
           </div>
 
           <div className="flex flex-col items-center gap-2 max-w-auto mx-auto px-4 pb-2">

@@ -322,6 +322,7 @@ export default function TasksListOld({ tasks }: { tasks?: Task[] }) {
                                 >
                                   <div className="flex items-center gap-3 mb-4">
                                     <Image
+                                    title="Customer Response Pic "
                                       width={12}
                                       height={12}
                                       src={

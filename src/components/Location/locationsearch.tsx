@@ -137,10 +137,8 @@ export default function LocationSearch({
     setShowDropdown(false);
     setActiveIndex(-1);
 
-    // ✅ Immediately unblock the parent with display info
     onSelect?.({ ...loc, _resolving: true });
 
-    // 🔄 Run enrichment in background, notify parent when done
     setLoading(true);
     try {
       const details = await fetchPlaceDetails(loc.place_id);
@@ -149,7 +147,6 @@ export default function LocationSearch({
       const reslocation = await axios.post("/api/signup/location", details);
       const city_id = reslocation.data.city_id;
 
-      // ✅ Push enriched data to parent silently
       onSelect?.({
         ...details,
         city_id,
@@ -168,7 +165,6 @@ export default function LocationSearch({
     setResults([]);
     setShowDropdown(false);
     setActiveIndex(-1);
-    // Pass null to indicate clearing
     if (onSelect) {
       onSelect(null);
     }

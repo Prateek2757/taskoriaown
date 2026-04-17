@@ -139,7 +139,7 @@ export default function FeaturesStacking() {
 
         <div className=" pb-3  px-4">
           <header className="sm:text-center mx-auto">
-            <h1
+            <div
               className="text-4xl md:text-xl lg:text-5xl text-gray-800 dark:text-white font-extrabold tracking-tight mb-2
                 
                   "
@@ -148,7 +148,7 @@ export default function FeaturesStacking() {
               <span className="bg-[#2563EB] bg-clip-text text-transparent">
                 Taskoria
               </span>{" "}
-            </h1>
+            </div>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
               Designed to make service hiring simpler, clearer, and safer.
             </p>
@@ -206,6 +206,7 @@ export default function FeaturesStacking() {
                     aria-label="Taskoria Logo"
                   >
                     <Image
+                    title="taskoria logo features"
                       src="/images/taskoria_logo.svg"
                       alt="Taskoria service marketplace logo"
                       height={28}

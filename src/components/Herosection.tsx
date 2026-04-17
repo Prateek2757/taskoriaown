@@ -139,6 +139,7 @@ export default function HeroSection() {
             role="banner"
           >
             <Image
+            title="Australia Flag"
               src="/flag-aus.png"
               alt="Australian flag"
               width={18}
@@ -216,6 +217,7 @@ export default function HeroSection() {
 "
               >
                 <Image
+                title="Hero Background "
                   src="/images/herobgnew.avif"
                   alt="background"
                   fill

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Taskoria | Building a Trusted Local Services Marketplace",
+  title: "About us | Taskoria",
   description:
     "Taskoria is on a mission to make hiring local professionals simple, transparent, and reliable through technology and community trust.",
   keywords: [
@@ -119,6 +119,7 @@ export default function AboutUs() {
       <section className="relative h-screen flex items-center justify-center text-center md:text-left overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
+          title='providers'
             src="/images/providers.jpeg"
             alt="Providers Background"
             fill
@@ -139,10 +140,10 @@ export default function AboutUs() {
             </div>
           </div>
           
-          <div className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
             Building Trust in<br />
             <span className="text-blue-200 dark:text-blue-300">Every Connection</span>
-          </div>
+          </h1>
           
           <p className="text-xl md:text-2xl text-blue-100 dark:text-blue-200 max-w-3xl leading-relaxed">
             We're on a mission to make finding trusted service providers safe, simple, and secure for every Australian. Because when it comes to your home and family, trust isn't optional.

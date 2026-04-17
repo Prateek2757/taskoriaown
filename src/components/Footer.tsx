@@ -104,18 +104,18 @@ const Footer = () => {
         ref={container}
       >
         <div className="sm:container px-4 mx-auto">
-          <div className="flex flex-col lg:flex-row justify-between w-full gap-10 lg:gap-10">
+          <div className="flex flex-col lg:flex-row justify-between w-full gap-10 lg:gap-6">
             <div className="lg:w-1/3">
               <Link
                 href="/"
                 className="flex items-center gap-1 mb-2 hover:opacity-90"
               >
                 <Image
+                  title="footer logo"
                   src="/images/taskoria_logo.svg"
                   alt="Taskoria - Trusted Local Services Marketplace in Australia"
                   width={25}
                   height={35}
-                  
                 />
                 <span className="ml- text-3xl font-bold bg-[#2563EB] bg-clip-text text-transparent">
                   Taskoria
@@ -210,9 +210,92 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="sm:grid sm:grid-cols-3 gap-8 lg:gap-16 w-full lg:w-auto mt-0 lg:mt-0">
+            <div className="sm:grid sm:grid-cols-4 gap-8 lg:gap-6 w-full lg:w-auto mt-0 lg:mt-0">
               <div className="sm:border-none">
-                <h2 className="hidden sm:block text-xl pb-3 font-semibold">
+                <h2 className="hidden sm:block text-[18px] pb-3 font-semibold">
+                  Categories
+                </h2>
+
+                <button
+                  className="sm:hidden w-full flex justify-between items-center text-[18px] pb-1 font-semibold border-gray-700"
+                  onClick={() =>
+                    setOpenSection(
+                      openSection === "categories" ? "" : "categories"
+                    )
+                  }
+                >
+                  Categories
+                  <span>
+                    {openSection === "categories" ? (
+                      <ChevronUp />
+                    ) : (
+                      <ChevronDown />
+                    )}
+                  </span>
+                </button>
+
+                <div
+                  className={`sm:block overflow-hidden transition-all duration-300 
+          ${openSection === "categories" ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
+                >
+                  <Link
+                    href="/services/house-cleaning"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    Cleaner
+                  </Link>
+                  <Link
+                    href="/services/removalists"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    Removalist{" "}
+                  </Link>
+                  <Link
+                    href="/services/accounting-taxation"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    Tax Accountant
+                  </Link>
+                  <Link
+                    href="/services/plumbers"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    Plumber{" "}
+                  </Link>
+                  <Link
+                    href="/services/building-and-construction"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    Builder{" "}
+                  </Link>
+                  <Link
+                    href="/services/photographers"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    Photographer
+                  </Link>
+                  <Link
+                    href="/services/carpet-steam-cleaning"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    Carpet Cleaning{" "}
+                  </Link>
+                  <Link
+                    href="/services/garden-maintenance-weeding"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    Gardening{" "}
+                  </Link>
+                  <Link
+                    href="/services/painters"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    Painter{" "}
+                  </Link>
+                </div>
+              </div>
+              <div className="sm:border-none">
+                <h2 className="hidden sm:block text-[18px] pb-3 font-semibold">
                   For Customers
                 </h2>
 
@@ -240,38 +323,38 @@ const Footer = () => {
                 >
                   <Link
                     href="/how-it-works/customers"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     How it Works
                   </Link>
 
                   <Link
                     href="/services"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Find Services
                   </Link>
                   {/* <Link
                     href="/"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Community
                   </Link> */}
                   <button
                     onClick={() => setOpenModal(true)}
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Post a Job
                   </button>
                   <Link
                     href="/trust-safety"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Trust & Safety
                   </Link>
                   <Link
                     href={session ? "/provider/dashboard" : "/signin"}
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Login
                   </Link>
@@ -281,7 +364,7 @@ const Footer = () => {
               </div>
 
               <div className="sm:border-none">
-                <h2 className="hidden sm:block text-xl pb-3 font-semibold">
+                <h2 className="hidden sm:block text-[18px] pb-3 font-semibold">
                   For Providers
                 </h2>
 
@@ -309,13 +392,13 @@ const Footer = () => {
                 >
                   {/* <Link
                     href="/"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Join as Provider
                   </Link> */}
                   <Link
                     href="/how-it-works/providers"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 text-sm dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     How it Works
                   </Link>
@@ -327,19 +410,19 @@ const Footer = () => {
                         el.scrollIntoView({ behavior: "smooth" });
                       }
                     }}
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] transition-colors mb-2"
                   >
                     Success Stories
                   </button>
                   {/* <Link
                     href="/"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Resources
                   </Link> */}
                   <Link
                     href="/refund-policy"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Refund Policy
                   </Link>
@@ -352,7 +435,7 @@ const Footer = () => {
                         joinAsProvider();
                       }
                     }}
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 text-start dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Join as a professional
                   </button>
@@ -360,12 +443,12 @@ const Footer = () => {
               </div>
 
               <div className="sm:border-none">
-                <h2 className="hidden sm:block text-xl pb-3 font-semibold">
+                <h2 className="hidden sm:block text-[18px] pb-3 font-semibold">
                   Company
                 </h2>
 
                 <button
-                  className="sm:hidden w-full flex justify-between items-center text-xl pb-1 font-semibold border-gray-700"
+                  className="sm:hidden w-full flex justify-between items-center text-[18px] pb-1 font-semibold border-gray-700"
                   onClick={() =>
                     setOpenSection(openSection === "company" ? "" : "company")
                   }
@@ -386,31 +469,31 @@ const Footer = () => {
                 >
                   <Link
                     href="/about-us"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     About Us
                   </Link>
                   <Link
                     href="/privacy-policy"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Privacy Policy
                   </Link>
                   <Link
                     href="/careers"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Careers
                   </Link>
                   <Link
                     href="/contact"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Contact
                   </Link>
                   <Link
                     href="/blog"
-                    className="block text-gray-600 dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Blog
                   </Link>
@@ -531,16 +614,18 @@ const Footer = () => {
                 aria-label="Instagram"
               >
                 <Instagram className="w-5 h-5 text-white" />
+                <span className="sr-only">Taskoria Instagram</span>
               </a>
 
               <a
-                href="https://www.tiktok.com/@taskoria?_r=1&_t=ZS-95J6I3nljlw"
+                href="https://www.tiktok.com/@taskoria"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 bg-gradient-to-br from-[#000000] to-[#000000] dark:bg-white hover:scale-110 rounded-full transition-transform shadow-lg"
                 aria-label="Tiktok"
               >
                 <FaTiktok className="w-5 h-5  text-white" />
+                <span className="sr-only">Taskoria Tiktok</span>
               </a>
               <a
                 href="https://x.com/taskoria"
@@ -550,6 +635,7 @@ const Footer = () => {
                 aria-label="Tiktok"
               >
                 <FaXTwitter className="w-5 h-5 text-white" />
+                <span className="sr-only">Taskoria XTwitter</span>
               </a>
 
               <a
@@ -560,6 +646,7 @@ const Footer = () => {
                 aria-label="LinkedIn"
               >
                 <Linkedin className="w-5 h-5 text-white" />
+                <span className="sr-only">Taskoria Linkedin</span>
               </a>
 
               <a
@@ -570,6 +657,7 @@ const Footer = () => {
                 aria-label="Facebook"
               >
                 <Facebook className="w-5 h-5 text-white" />
+                <span className="sr-only">Taskoria Facebook</span>
               </a>
             </div>
           </div>

@@ -212,6 +212,7 @@ export default function Services() {
                     <div className="absolute inset-0">
                       <Image
                         fill
+                        title="category title"
                         priority
                         src={staticImages[index]?.url || staticImages[0].url}
                         alt={category.name}

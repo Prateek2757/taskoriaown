@@ -73,7 +73,7 @@ export default function HowTaskoriaWorks() {
         />
 
         <div className="max-w-7xl mx-auto relative">
-          <h1
+          <div
             id="how-it-works-heading"
             className="text-4xl md:text-5xl flex justify-center font-black"
           >
@@ -81,7 +81,7 @@ export default function HowTaskoriaWorks() {
             <span className="block opacity-0 md:opacity-100 animate-fade-in">
               ...
             </span>
-          </h1>
+          </div>
           <p className="text-lg my-1 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Post for free, receive responses, and hire with confidence.
           </p>

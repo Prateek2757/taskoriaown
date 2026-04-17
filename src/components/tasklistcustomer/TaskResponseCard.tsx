@@ -125,6 +125,8 @@ export function TaskResponseCard({
             >
               {response.profile_image_url ? (
                 <Image
+                title={response.display_name}
+
                   src={response.profile_image_url}
                   alt={response.display_name}
                   fill

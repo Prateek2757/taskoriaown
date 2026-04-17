@@ -331,7 +331,7 @@ export default function SecurityPolicyPage() {
                 Contact
               </p>
               <a
-                href="mailto:security@taskoria.com"
+                href="mailto:contact@taskoria.com"
                 className="text-sm font-medium text-blue-600 hover:underline"
               >
                 contact@taskoria.com

@@ -212,6 +212,7 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
               <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 overflow-hidden flex items-center justify-center transition-all duration-200 group-hover:border-blue-500 dark:group-hover:border-blue-400">
                 {formState.avatarPreview ? (
                   <Image
+                  title="profile pic profile setting"
                     height={96}
                     width={96}
                     src={formState.avatarPreview}
@@ -277,6 +278,7 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
               <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 overflow-hidden flex items-center justify-center transition-all duration-200 group-hover:border-blue-500 dark:group-hover:border-blue-400">
                 {formState.companyLogoPreview ? (
                   <Image
+                  title="Company Logo Preview"
                     height={96}
                     width={96}
                     src={formState.companyLogoPreview}

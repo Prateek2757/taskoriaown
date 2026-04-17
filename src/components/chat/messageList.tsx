@@ -156,6 +156,7 @@ export default function MessageList({
           <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 shadow-md">
             {otherProfileImage ? (
               <Image
+              title="Profile Image of Messages Inbox"
                 src={otherProfileImage}
                 alt="Profile image"
                 width={44}
@@ -223,6 +224,7 @@ export default function MessageList({
                                   <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 shadow-md">
             {otherProfileImage ? (
               <Image
+              title="Other Profile image"
                 src={otherProfileImage}
                 alt="Profile image"
                 width={44}

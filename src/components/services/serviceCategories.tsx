@@ -1,11 +1,7 @@
 "use client";
 
 import { type ComponentType, useMemo, useState } from "react";
-import {
-  FolderOpen,
-  Search,
-  X
-} from "lucide-react";
+import { FolderOpen, Search, X } from "lucide-react";
 import Link from "next/link";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -15,6 +11,7 @@ import Image from "next/image";
 interface ServiceCategory {
   category_id?: string | number;
   name: string;
+  main_category?: string;
   slug: string;
 }
 
@@ -140,79 +137,6 @@ export default function ServiceCategoriesClient({
       <div className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-sky-200/50 blur-3xl dark:bg-sky-700/20" />
 
       <div className="relative mx-auto max-w-7xl space-y-10">
-        {/* <header className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/80 md:p-10">
-          <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-            <div>
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                <BadgeCheck className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-                Brisbane-first service marketplace
-              </div>
-
-              <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 md:text-5xl">
-                Tell us the job once.
-                <span className="mt-1 block text-blue-600 dark:text-blue-400">
-                  Get quotes from local providers.
-                </span>
-              </h1>
-
-              <p className="mt-4 max-w-2xl text-base text-slate-600 dark:text-slate-300 md:text-lg">
-                Post for free, compare verified providers, and hire only when you are ready. No spam calls. No obligation.
-              </p>
-
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <Button
-                  onClick={() => handlePostJob()}
-                  className="h-11 bg-blue-600 px-6 text-white hover:bg-blue-700"
-                >
-                  Post a Job Free
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-                <Button asChild variant="outline" className="h-11 px-6">
-                  <Link href="/providers/register">Get Leads as a Provider</Link>
-                </Button>
-              </div>
-
-              <div className="mt-5 flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-300">
-                <span className="inline-flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-                  Free to post
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <UserCheck className="h-3.5 w-3.5 text-emerald-600" />
-                  Verified providers
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-                  Trust & Safety support
-                </span>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-800/80">
-              <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
-                Why customers choose Taskoria
-              </h2>
-              <div className="mt-4 space-y-3">
-                <TrustRow
-                  icon={Clock3}
-                  title="Fast replies"
-                  body="Most active categories see first responses in under 35 minutes."
-                />
-                <TrustRow
-                  icon={ShieldCheck}
-                  title="Safer hiring"
-                  body="Profile checks, review signals, and support escalation before and after hire."
-                />
-                <TrustRow
-                  icon={Briefcase}
-                  title="Compare before committing"
-                  body="Receive multiple quotes and choose based on fit, timeline, and price."
-                />
-              </div>
-            </div>
-          </div>
-        </header> */}
-
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:p-8">
           <div className="mb-4 flex items-center justify-between gap-4">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
@@ -316,7 +240,7 @@ export default function ServiceCategoriesClient({
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {topCategories.map((category , index) => (
+              {topCategories.map((category, index) => (
                 <article
                   key={category.category_id}
                   className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900"
@@ -328,19 +252,18 @@ export default function ServiceCategoriesClient({
 
                         return (
                           <>
-                         <Image
-  src={staticImage?.url || "/images/default.webp"}
-  alt={category.name}
-  fill
-  className="object-cover transition duration-300 group-hover:scale-105"
-  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-  priority={index === 0}
-/>
+                            <Image
+                            title="Categories Image"
+                              src={staticImage?.url || "/images/default.webp"}
+                              alt={category.name}
+                              fill
+                              className="object-cover transition duration-300 group-hover:scale-105"
+                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                              priority={index === 0}
+                            />
 
                             <div
-                              className={`absolute inset-0 bg-linear-to-t ${
-                                "from-black/60 to-transparent"
-                              }`}
+                              className={`absolute inset-0 bg-linear-to-t ${"from-black/60 to-transparent"}`}
                             />
                           </>
                         );

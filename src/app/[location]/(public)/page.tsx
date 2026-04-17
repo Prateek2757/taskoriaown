@@ -11,9 +11,9 @@ const CTA = lazy(() => import("@/components/CTA"));
 const BASE_URL = "https://www.taskoria.com";
 
 export const metadata: Metadata = {
-  title: " Free Quotes, Hire Verified Local Professionals Across Australia | Taskoria ",
+  title: "Free Quotes & Verified Local Pros in Australia | Taskoria",
   description:
-    "Find and hire trusted local professionals across Australia. Post a job free, get instant quotes from verified tradespeople, cleaners, tech experts and more. Compare reviews and book with confidence.",
+    "Find trusted, verified local professionals across Australia. Get free quotes, compare services, and hire with confidence on Taskoria — fast, easy, and reliable.",
 
   keywords: [
     "hire professionals australia",

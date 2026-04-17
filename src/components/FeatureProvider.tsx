@@ -103,6 +103,7 @@ export const FeatureProvider = () => {
                     <div className="relative h-20 w-20 overflow-hidden rounded-2xl">
                       {p.image ? (
                         <Image
+                        title="provider profile image"
                           src={p.image}
                           alt={p.name}
                           fill
@@ -115,6 +116,7 @@ export const FeatureProvider = () => {
                           <div className="flex flex-col items-center hover:opacity-90 transition-opacity">
                             <div>
                               <Image
+                              title="taskoria logo "
                                 src="/images/taskoria_logo.svg"
                                 alt="logo taskoria"
                                 height={0}

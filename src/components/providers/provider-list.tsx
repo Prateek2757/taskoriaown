@@ -166,6 +166,7 @@ export default function ProvidersGrid({ providers }: { providers: any[] }) {
                         <div className="relative flex gap-3">
                           {p.cover_image ? (
                             <Image
+                            title="Provider List Photo"
                               src={p.cover_image}
                               alt={p.company_name}
                               width={56}

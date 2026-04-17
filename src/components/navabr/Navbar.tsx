@@ -168,6 +168,7 @@ export default function ModernNavbar() {
               >
                 {session?.user?.image ? (
                   <Image
+                  title="Profile Pic "
                     src={session.user.image}
                     alt="profile pic"
                     fill
@@ -308,6 +309,7 @@ export default function ModernNavbar() {
             className="flex gap-1 items-center hover:opacity-90 transition-opacity flex-1 md:flex-none min-w-0"
           >
             <Image
+            title="Taskoria Logo Navbar"
               src="/images/taskoria_logo.svg"
               alt="taskorialogo"
               height={41}
@@ -361,6 +363,7 @@ export default function ModernNavbar() {
                       >
                         {session?.user?.image ? (
                           <Image
+                          title="Session User Image"
                             src={session.user.image}
                             alt="profile pic"
                             fill
@@ -463,6 +466,7 @@ export default function ModernNavbar() {
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <Image
+                    title="taskoria logo mobile"
                       src="/images/taskoria_logo.svg"
                       alt="logo taskoria"
                       height={32}
@@ -501,6 +505,7 @@ export default function ModernNavbar() {
                         >
                           {session?.user?.image ? (
                             <Image
+                            title="session profile picture"
                               src={session.user.image}
                               alt="profile pic"
                               fill

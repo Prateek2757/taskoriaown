@@ -557,7 +557,7 @@ className="bg-[#2563EB] text-white font-semibold px-8 py-3.5 rounded-full hover:
         </section> */}
 
         {/* Categories */}
-        <section className="py-10 px-6">
+        {/* <section className="py-10 px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-3">
               Popular Brisbane services
@@ -593,7 +593,7 @@ className="bg-[#2563EB] text-white font-semibold px-8 py-3.5 rounded-full hover:
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Benefits */}
         <section className="bg-gray-50 dark:bg-gray-800/50 py-10 px-6">

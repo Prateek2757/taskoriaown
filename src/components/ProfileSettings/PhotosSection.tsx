@@ -199,6 +199,7 @@ export default function PhotosSection() {
               className="group relative aspect-square overflow-hidden rounded-lg border bg-slate-100 "
             >
               <Image
+              title="Portfolio photo"
                 src={photo.photo_url}
                 alt={photo.title || "Portfolio photo"}
                 fill
@@ -273,6 +274,7 @@ export default function PhotosSection() {
               </svg>
             </button>
             <Image
+            title="Full Size Portfolio photo"
               src={photos.find((p) => p.id === selectedPhoto)?.photo_url || ""}
               alt="Full size"
               width={1200}

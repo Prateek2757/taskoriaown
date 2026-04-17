@@ -71,6 +71,7 @@ const ConversationItem = memo(function ConversationItem({
         <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 shadow-md">
           {other.profile_image ? (
             <Image
+              title="Messages Profile Image "
               src={other.profile_image}
               alt={otherName}
               width={44}

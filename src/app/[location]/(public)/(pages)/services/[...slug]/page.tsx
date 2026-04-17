@@ -18,7 +18,6 @@ interface ServiceData {
   faqs?: { question: string; answer: string }[];
 }
 
-
 function toTitleCase(slug: string) {
   return slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 }
@@ -33,7 +32,6 @@ function buildCanonical(
   if (stateSlug) return `${base}/${stateSlug}`;
   return base;
 }
-
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
@@ -62,7 +60,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const service: ServiceData = await res.json();
-    const cityName  = citySlug  ? toTitleCase(citySlug)  : null;
+    const cityName = citySlug ? toTitleCase(citySlug) : null;
     const stateName = stateSlug ? toTitleCase(stateSlug) : null;
     const canonicalUrl = buildCanonical(serviceSlug, stateSlug, citySlug);
     const imageUrl =
@@ -70,14 +68,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `https://www.taskoria.com/og-images/${serviceSlug}.jpg`;
 
     const title = cityName
-      ? `${service.name} in ${cityName}${stateName ? `, ${stateName}` : ""} | Get Free Quotes – Taskoria`
-      : `${service.name} Services in Australia | Trusted Professionals – Taskoria`;
+      ? `Hire ${service.name} in ${cityName} | Get Free Quotes`
+      : `Find trusted ${service.name} near you | Free quotes`;
 
     const description = cityName
       ? `Looking for reliable ${service.name.toLowerCase()} in ${cityName}? Compare verified professionals, read real reviews and get free quotes fast on Taskoria.`
       : service.description
-      ? `${service.description.slice(0, 130).trimEnd()}. Get free quotes from verified professionals across Australia – only on Taskoria.`
-      : `Hire trusted ${service.name.toLowerCase()} professionals across Australia. Compare verified providers, read reviews and get instant free quotes on Taskoria.`;
+        ? `${service.description.slice(0, 130).trimEnd()}. Get free quotes from verified professionals across Australia – only on Taskoria.`
+        : `Hire trusted ${service.name.toLowerCase()} professionals across Australia. Compare verified providers, read reviews and get instant free quotes on Taskoria.`;
 
     const keywords = cityName
       ? [
@@ -162,12 +160,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-
 export default async function ServicePage({ params }: Props) {
   const { slug = [] } = await params;
   const [serviceSlug, stateSlug = null, citySlug = null, subCitySlug = null] =
     slug;
-console.log(slug,"slugwefwe");
 
   let service: ServiceData | null = null;
   let fetchError = false;
@@ -207,19 +203,23 @@ console.log(slug,"slugwefwe");
   const cities = citiesRes.ok ? await citiesRes.json() : [];
 
   const selectedLocation = citySlug
-    ? cities.find((city: any) => city.slug === citySlug) ?? null
+    ? (cities.find((city: any) => city.slug === citySlug) ?? null)
     : null;
 
   const selectedSubCity = subCitySlug
-    ? selectedLocation?.subcities?.find(
-        (s: any) => s.slug === subCitySlug
-      ) ?? null
+    ? (selectedLocation?.subcities?.find((s: any) => s.slug === subCitySlug) ??
+      null)
     : null;
 
   const activeLocation = selectedSubCity ?? selectedLocation;
 
   return (
     <>
+      <h1 className="sr-only">
+        {citySlug
+          ? `Hire ${service.name} in ${toTitleCase(citySlug)}`
+          : `Find trusted ${service.name} near you`}
+      </h1>{" "}
       <StructuredData
         service={service}
         city={selectedLocation}
@@ -227,7 +227,6 @@ console.log(slug,"slugwefwe");
         stateSlug={stateSlug}
         providers={selectedLocation?.providers || []}
       />
-
       {/* <nav
         aria-label="Breadcrumb"
         className="sr-only"
@@ -261,8 +260,6 @@ console.log(slug,"slugwefwe");
           </span>
         ))}
       </nav> */}
-
-  
       <ServicePageWrapper
         service={service}
         cities={cities}
@@ -274,7 +271,6 @@ console.log(slug,"slugwefwe");
     </>
   );
 }
-
 
 export async function generateStaticParams() {
   try {

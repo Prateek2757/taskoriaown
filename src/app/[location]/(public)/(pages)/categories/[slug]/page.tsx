@@ -175,6 +175,7 @@ export default function CategoryPage() {
                 className="flex items-center gap-4"
               >
                 <Image
+                title="profile"
                 height={12}
                 width={12}
                   src={p.avatar_url || "/default-avatar.png"}

@@ -9,6 +9,8 @@ import { AnalyticsPage } from "@/components/affiliate-dashboard/AnalyticsPage";
 import { DashboardOverview } from "@/components/affiliate-dashboard/DashboardOverview";
 import { DashboardLayout } from "@/components/affiliate-dashboard/DashboardLayout";
 import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { AlertCircle } from "lucide-react";
 
 type AuthView = "login" | "register" | "forgot-password" | "otp-verification";
 type DashboardView =
@@ -63,13 +65,24 @@ function AppContent() {
   //     }
   //   }
 
+  if (!session) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 gap-3 text-center">
+        <AlertCircle className="w-12 h-12 text-amber-400" />
+        <p className="text-slate-600 font-medium">
+          Please login to access your affiliate dashboard.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <DashboardLayout activeView={dashboardView} onViewChange={setDashboardView}>
       {/* {dashboardView === "dashboard" && <DashboardOverview />}
       {dashboardView === "analytics" && <AnalyticsPage />} */}
       {dashboardView === "referrals" && <ReferralsPage />}
-      {/* {dashboardView === "payouts" && <PayoutsPage />}
-      {dashboardView === "resources" && <ResourcesPage />}
+      {dashboardView === "payouts" && <PayoutsPage />}
+      {/* {dashboardView === "resources" && <ResourcesPage />}
       {dashboardView === "settings" && <SettingsPage />} */}
     </DashboardLayout>
   );
