@@ -1,20 +1,20 @@
 "use client";
 
 import { type ComponentType, useMemo, useState } from "react";
-import {
-  FolderOpen,
-  Search,
-  X
-} from "lucide-react";
+import { BadgeCheck, Clock3, FolderOpen, Search, X } from "lucide-react";
 import Link from "next/link";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import NewRequestModal from "../leads/RequestModal";
 import Image from "next/image";
+import Services from "../Categories";
+import FilterServices from "./FilterServices";
+import usePagination from "@/hooks/usePagination";
 
 interface ServiceCategory {
   category_id?: string | number;
   name: string;
+  main_category?: string;
   slug: string;
 }
 
@@ -80,6 +80,8 @@ export default function ServiceCategoriesClient({
   } | null>(null);
   const [showAll, setShowAll] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterData, setFilterData] = useState("All");
+  const [showData, setShowData] = useState(false);
 
   const categoriesWithSignals = useMemo(() => {
     return categories.map((cat, index) => ({
@@ -94,7 +96,7 @@ export default function ServiceCategoriesClient({
     return categoriesWithSignals.filter(
       (category) =>
         category.name.toLowerCase().includes(query) ||
-        category.slug.toLowerCase().includes(query)
+        category.slug.toLowerCase().includes(query),
     );
   }, [categoriesWithSignals, searchQuery]);
 
@@ -134,6 +136,26 @@ export default function ServiceCategoriesClient({
     setOpenModal(true);
   };
 
+const filteredData = useMemo(() => {
+  let data = hasSearchQuery ? filteredCategories :secondaryCategories;
+
+  // filter by category tab
+  if (filterData !== "All") {
+    data = data.filter(
+      (c) =>
+        c.main_category?.toLowerCase().trim() ===
+        filterData.toLowerCase().trim()
+    );
+  }
+
+  return data; 
+}, [hasSearchQuery, filteredCategories ,secondaryCategories,filterData]); 
+  const { paginatedData } = usePagination(
+    filteredData,
+    9,
+    filterData,
+  );
+  const displayData = showData ? filteredData : paginatedData;
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-sky-50 px-4 py-12 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
       <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-blue-200/40 blur-3xl dark:bg-blue-700/20" />
@@ -301,22 +323,34 @@ export default function ServiceCategoriesClient({
         {topCategories.length > 0 ? (
           <section className="space-y-5">
             <div className="flex items-center justify-between">
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+              {/* <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                 {hasSearchQuery
                   ? "Best matching services"
                   : "Most requested services"}
-              </h3>
-              <Button
+              </h3> */}
+              <FilterServices
+                filterData={filterData}
+                onChangeFilterData={setFilterData} 
+              />
+              {/* <Button
                 variant="outline"
                 onClick={() => handlePostJob()}
                 className="hidden sm:inline-flex"
               >
                 Post a Custom Job
-              </Button>
+              </Button> */}
             </div>
 
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowData((prev) => !prev)}
+                className=" flex text-blue-400 "
+              >
+                {showData ? "Show less" : `Show all (${filteredData.length})`}
+              </button>
+            </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {topCategories.map((category , index) => (
+              {displayData.map((category, index) => (
                 <article
                   key={category.category_id}
                   className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900"
@@ -328,33 +362,30 @@ export default function ServiceCategoriesClient({
 
                         return (
                           <>
-                         <Image
-  src={staticImage?.url || "/images/default.webp"}
-  alt={category.name}
-  fill
-  className="object-cover transition duration-300 group-hover:scale-105"
-  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-  priority={index === 0}
-/>
-
+                            <Image
+                              src={staticImage?.url || "/images/default.webp"}
+                              alt={category.name}
+                              fill
+                              className="object-cover  transition duration-300 group-hover:scale-105"
+                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                              priority={index === 0}
+                            />
                             <div
-                              className={`absolute inset-0 bg-linear-to-t ${
-                                "from-black/60 to-transparent"
-                              }`}
+                              className={`absolute inset-0 bg-linear-to-t ${"from-black/60 to-transparent"}`}
                             />
                           </>
                         );
                       })()}
 
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
-
-                      <h4 className="absolute bottom-3 left-4 right-4 text-lg font-semibold text-white">
+      <h4 className="absolute bottom-3 left-4 right-4 text-lg font-semibold text-white">
                         {highlightMatch(category.name, searchQuery)}
                       </h4>
-                    </div>
+                       </div>
                   </Link>
+               
 
-                  {/* <div className="p-5">
+                {/* <div className="p-5">
                   <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-300">
                     <span className="inline-flex items-center gap-1">
                       <Clock3 className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
@@ -373,6 +404,7 @@ export default function ServiceCategoriesClient({
                     Post this job
                   </Button>
                 </div> */}
+                  
                 </article>
               ))}
             </div>
