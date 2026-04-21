@@ -14,6 +14,7 @@ import { SparklesCoreLight } from "./ui/sparklesLight";
 import ScrollPopularSection from "./ScrollPopularSection";
 import Image from "next/image";
 
+
 interface Category {
   category_id: number;
   name: string;

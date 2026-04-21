@@ -9,6 +9,7 @@ interface Category {
   name: string;
   slug: string;
   keywords: string[] | null;
+   main_category?: string;
 }
 
 const fetcher = async (url: string) => {
