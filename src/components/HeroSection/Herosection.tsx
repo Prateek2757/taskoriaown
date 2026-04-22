@@ -3,6 +3,7 @@ import ScrollPopularSection from "../ScrollPopularSection";
 import HeroInteractive from "./HeroInteractive";
 import SparklesThemed from "./SparklesThemed";
 
+
 export default function HeroSection() {
   return (
     <>
@@ -17,7 +18,6 @@ export default function HeroSection() {
             h-full w-full absolute left-0 top-0 right-0 bottom-0"
           aria-hidden="true"
         />
-
         <div
           className="container md:pt-10 pt-6 max-md:bg-linear-to-r from-[#3C7DED]/25 via-[#41A6EE]/20
             to-[#46CBEE]/25 mx-auto md:px-4 relative z-10"
@@ -92,7 +92,6 @@ export default function HeroSection() {
               </span>
             </div>
           </div>
-
           <div className="flex flex-col items-center gap-2 max-w-auto mx-auto px-4 pb-2">
             <HeroInteractive />
           </div>
