@@ -81,8 +81,8 @@ export default function PopularServices({
       (cat) => cat.slug === activeSlug || cat.main_category === activeSlug,
     );
   }, [activeButton, apiCategories]);
-  
-  console.log("apiCategories on filter:", apiCategories);
+  const {paginatedData: filteredPaginatedCategories}= usePagination(filteredCategories ,4)
+
   return (
     <section className="relative py-4 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -141,8 +141,8 @@ export default function PopularServices({
         </button>
       </div>
       <div className="max-w-7xl mx-auto mt-8 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {filteredCategories.length > 0 ? (
-          filteredCategories.map((cat) => (
+        {filteredPaginatedCategories.length > 0 ? (
+          filteredPaginatedCategories.map((cat) => (
             <article
               key={cat.category_id ?? cat.slug}
               className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900"
@@ -161,9 +161,10 @@ export default function PopularServices({
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                          
                         /> */}
-                        <div
+                        {/* <div
                           className={`absolute inset-0 bg-linear-to-t ${"from-black/60 to-transparent"}`}
-                        />
+                        /> */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                       </div>
                     );
                   })()}
