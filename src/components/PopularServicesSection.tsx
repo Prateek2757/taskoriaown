@@ -35,11 +35,11 @@ const popularServicesFilters = [
   { label: "Electricians", icon: <MdElectricalServices size={32} /> },
   { label: "Lawn Mowing", icon: <GiFlowerPot size={32} /> },
   { label: "Painters", icon: <AiOutlineFormatPainter size={32} /> },
-  {label:"Events & Catering" , icon:<MdOutlineEventAvailable size={32} />},
-  {label: "Air Conditioning & Heating", icon: <TbAirConditioning size={32} />},
+  {label:"Events" , icon:<MdOutlineEventAvailable size={32} />},
+  {label: "Air Conditioning ", icon: <TbAirConditioning size={32} />},
   { label: "Roofing", icon: <MdRoofing size={32} /> },
   { label: "Rubbish Removal", icon: <TbGardenCart size={32} /> },
-  {label:"IT & Digital Services"  ,icon:<BiLogoDigitalocean size={32} />},
+  {label:"IT Services"  ,icon:<BiLogoDigitalocean size={32} />},
   {label: "Pet Services" ,icon:<MdOutlinePets size={32}/>}
 ];
 const categoryMap: Record<string, string> = {
