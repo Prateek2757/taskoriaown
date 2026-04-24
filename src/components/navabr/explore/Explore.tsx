@@ -98,7 +98,7 @@ export default function Explore() {
   return (
     <div ref={containerRef}>
       <div className="flex justify-between mx-4">
-        <h1 className="text-sm semi-bold hover:underline">Explore</h1>
+        <h1 className="text-md semi-bold hover:underline" onClick={() => setShowMenu(!showMenu)}>Explore</h1>
         <button onClick={() => setShowMenu(!showMenu)}>
           {showMenu ? <IoCaretUp size={16} /> : <IoCaretDown size={16} />}
         </button>
@@ -239,10 +239,6 @@ export default function Explore() {
                         <span className="text-sm text-gray-600 px-2 mt-2 light:hover:!text-black hover:underline hover:decoration-2 underline-offset-4 dark:text-gray-400">
                           <Link href={`/services/${cat.slug}`}>{cat.name}</Link>
                         </span>
-                        <MdKeyboardArrowRight
-                          size={16}
-                          className="text-gray-400 group-hover:text-gray-600 shrink-0 ml-2 transition-colors"
-                        />
                       </div>
                     ))
                   ) : (

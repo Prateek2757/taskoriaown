@@ -1,183 +1,175 @@
 "use client";
 import { PiSprayBottle } from "react-icons/pi";
 import { GoTools } from "react-icons/go";
-import { MdElectricalServices } from "react-icons/md";
+import { MdElectricalServices, MdFastfood } from "react-icons/md";
 import { MdOutlineWaterDrop } from "react-icons/md";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import { GiFlowerPot } from "react-icons/gi";
-import { AiOutlineFormatPainter } from "react-icons/ai";
-import { TbAirConditioning } from "react-icons/tb";
 import { MdRoofing } from "react-icons/md";
 import { TbGardenCart } from "react-icons/tb";
 import { MdOutlinePets } from "react-icons/md";
-import { useMemo, useState } from "react";
+import { BiLogoDigitalocean } from "react-icons/bi";
+import { IoHeartOutline } from "react-icons/io5";
+import { MdOutlineEventAvailable } from "react-icons/md";
+import { useMemo, useRef } from "react";
+import { useState } from "react";
 import usePagination from "@/hooks/usePagination";
 import { useCategories } from "@/hooks/useCategories";
-import { MdOutlineEventAvailable } from "react-icons/md";
 import Link from "next/link";
-import { BiLogoDigitalocean } from "react-icons/bi";
-
+import Image from "next/image";
 
 interface ServiceCategory {
   category_id?: string | number;
   name: string;
   main_category?: string;
   slug: string;
+  image?: { url: string };
 }
 interface ServiceCategoriesProps {
   categories: ServiceCategory[];
 }
 
 const popularServicesFilters = [
-  { label: "Cleaners", icon: <PiSprayBottle size={33} /> },
-  { label: "Handymen", icon: <GoTools size={30} /> },
-  { label: "Plumbers", icon: <MdOutlineWaterDrop size={30} /> },
-  { label: "Electricians", icon: <MdElectricalServices size={32} /> },
-  { label: "Lawn Mowing", icon: <GiFlowerPot size={32} /> },
-  { label: "Painters", icon: <AiOutlineFormatPainter size={32} /> },
-  {label:"Events" , icon:<MdOutlineEventAvailable size={32} />},
-  {label: "Air Conditioning ", icon: <TbAirConditioning size={32} />},
-  { label: "Roofing", icon: <MdRoofing size={32} /> },
-  { label: "Rubbish Removal", icon: <TbGardenCart size={32} /> },
-  {label:"IT Services"  ,icon:<BiLogoDigitalocean size={32} />},
-  {label: "Pet Services" ,icon:<MdOutlinePets size={32}/>}
+  { label: "Cleaners", icon: <PiSprayBottle size={28} /> },
+  { label: "Handymen", icon: <GoTools size={26} /> },
+  // { label: "Plumbers", icon: <MdOutlineWaterDrop size={26} /> },
+  { label: "Electricians", icon: <MdElectricalServices size={28} /> },
+  { label: "Lawn Mowing", icon: <GiFlowerPot size={28} /> },
+  { label: "Events", icon: <MdOutlineEventAvailable size={28} /> },
+  { label: "Roofing", icon: <MdRoofing size={28} /> },
+  { label: "Rubbish Removal", icon: <TbGardenCart size={28} /> },
+  { label: "IT Services", icon: <BiLogoDigitalocean size={28} /> },
+  { label: "Pet Services", icon: <MdOutlinePets size={28} /> },
+  { label: "Healthcare Services", icon: <IoHeartOutline size={28} /> },
+  { label: "Food & Beverages", icon: <MdFastfood size={22} /> },
 ];
+
 const categoryMap: Record<string, string> = {
   Cleaners: "Cleaning Services",
   Handymen: "Home Improvement & Trades",
-  Plumbers: "plumbing",
   Electricians: "Electrical & HVAC",
   "Lawn Mowing": "Gardening & Outdoor",
-  Painters: "painting",
-  "Air Conditioning & Heating": "air-conditioning",
   Roofing: "Home Improvement & Trades",
   "Rubbish Removal": "Transport & Moving",
-  "Events & Catering": "Events & Catering", 
-  "IT & Digital Services" :"IT & Digital Services",
+  Events: "Events & Catering",
+  "IT Services": "IT & Digital Services",
   "Pet Services": "Pet Services",
-}
+  "Healthcare Services": "Healthcare Services",
+  "Food & Beverages": "Food & Beverages",
+};
 
-const highlightMatch = (text: string) => text;
-
-export default function PopularServices({
-  categories,
-}: ServiceCategoriesProps) {
-  const [activeButton, setActiveButton] = useState<string | null>(
-    popularServicesFilters[0]?.label ?? null,
+export default function PopularServices({ categories }: ServiceCategoriesProps) {
+  const [activeButton, setActiveButton] = useState<string>(
+    popularServicesFilters[0].label
   );
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const { categories: apiCategories } = useCategories();
-  console.log("main:", apiCategories);
 
-  const { paginatedData, currentPage, setCurrentPage, totalPages } =
-    usePagination(popularServicesFilters, 6);
-
-  //filteration logic
   const filteredCategories = useMemo(() => {
-    
     if (!activeButton || !apiCategories) return [];
     const activeSlug = categoryMap[activeButton];
     return apiCategories.filter(
-      (cat) => cat.slug === activeSlug || cat.main_category === activeSlug,
+      (cat) => cat.slug === activeSlug || cat.main_category === activeSlug
     );
   }, [activeButton, apiCategories]);
-  const {paginatedData: filteredPaginatedCategories}= usePagination(filteredCategories ,4)
+
+
+  const displayedCategories = filteredCategories.slice(0, 5);
+
+  const scroll = (dir: "left" | "right") => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollBy({ left: dir === "left" ? -200 : 200, behavior: "smooth" });
+  };
 
   return (
-    <section className="relative py-4 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <button
-          onClick={() => setCurrentPage((p) => p - 1)}
-          className={`shrink-0 flex items-center justify-center w-12 h-12 rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 transition-opacity ${
-            currentPage > 1 ? "opacity-100" : "opacity-0 pointer-events-none"
-          }`}
-        >
-          <SlArrowLeft size={20} />
-        </button>
+    <section className="relative py-6 px-4 sm:px-6 lg:px-8">
+   
+      <div className="max-w-4xl mx-auto">
+        <div className="relative flex items-center border-b border-gray-200 pb-1">
 
-        <div className="flex flex-1 justify-around px-4">
-          {paginatedData.map((serviceFilter) => {
-            const isActive = activeButton === serviceFilter.label;
-            const matchedCategory = apiCategories?.find(
-              (cat) => cat.slug === categoryMap[serviceFilter.label],
-            );
-            console.log("data:", matchedCategory);
+ 
+          <button
+            onClick={() => scroll("left")}
+            aria-label="Scroll left"
+            className="shrink-0 z-10 flex items-center justify-center w-8 h-8 rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 mr-2"
+          >
+            <SlArrowLeft size={14} />
+          </button>
 
-            return (
-              <button
-                key={serviceFilter.label}
-                onClick={() => setActiveButton(serviceFilter.label)}
-                className={`flex flex-col items-center justify-between gap-2 shrink-0 relative pb-3 transition-colors ${
-                  isActive
-                    ? "text-blue-600"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                <span>{serviceFilter.icon}</span>
+         
+          <div
+            ref={scrollRef}
+            className="flex flex-1 gap-2 overflow-x-auto scroll-smooth"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            <style>{`div::-webkit-scrollbar { display: none; }`}</style>
 
-                <span className="text-sm font-semibold">
-                  {serviceFilter.label}
-                </span>
+            {popularServicesFilters.map((filter) => {
+              const isActive = activeButton === filter.label;
+              return (
+                <button
+                  key={filter.label}
+                  onClick={() => setActiveButton(filter.label)}
+                  className={`
+                    flex flex-col items-center justify-between shrink-0
+                    relative pb-3 pt-1 px-2 min-w-[64px] sm:min-w-[72px]
+                    transition-colors
+                    ${isActive ? "text-blue-600" : "text-gray-500 hover:text-black"}
+                  `}
+                >
+                  <span>{filter.icon}</span>
+                  <span className="text-[14px] sm:text-xs lg:text-sm mt-1.5 text-center leading-tight whitespace-nowrap">
+                    {filter.label}
+                  </span>
+                  {isActive && (
+                    <span className="absolute bottom-0 left-0 w-full h-[2.5px] rounded-full bg-blue-600" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
 
-                <span
-                  className={`absolute bottom-0 left-0 w-full h-[3px] rounded-full transition-all duration-300 ${
-                    isActive ? "bg-blue-600" : "bg-transparent"
-                  }`}
-                />
-              </button>
-            );
-          })}
+          {/* Right arrow */}
+          <button
+            onClick={() => scroll("right")}
+            aria-label="Scroll right"
+            className="shrink-0 z-10 flex items-center justify-center w-8 h-8 rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 ml-2"
+          >
+            <SlArrowRight size={14} />
+          </button>
         </div>
-
-        <button
-          onClick={() => setCurrentPage((p) => p + 1)}
-          className={`shrink-0 flex items-center justify-center w-12 h-12 rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 transition-opacity ${
-            currentPage < totalPages
-              ? "opacity-100"
-              : "opacity-0 pointer-events-none"
-          }`}
-        >
-          <SlArrowRight size={20} />
-        </button>
       </div>
-      <div className="max-w-7xl mx-auto mt-8 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {filteredPaginatedCategories.length > 0 ? (
-          filteredPaginatedCategories.map((cat) => (
-            <article
-              key={cat.category_id ?? cat.slug}
-              className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900"
-            >
-              <Link href={`/services/${cat.slug}`} className="block">
-                <div className="relative h-48 w-full overflow-hidden">
-                  {(() => {
-                    
-                    return (
-                      <div className="mt-4">
-                        {/* <Image
-                          src={staticImage?.url || "/images/default.webp"}
-                          alt={cat.name}
-                          fill
-                          className="object-cover  transition duration-300 group-hover:scale-105"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                         
-                        /> */}
-                        {/* <div
-                          className={`absolute inset-0 bg-linear-to-t ${"from-black/60 to-transparent"}`}
-                        /> */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                      </div>
-                    );
-                  })()}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
-                  <h4 className="absolute bottom-3 left-4 right-4 text-lg font-semibold text-white">
-                    {highlightMatch(cat.name)}
-                  </h4>
-                </div>
-              </Link>
-            </article>
-          ))
+
+      {/*  Category cards  */}
+      <div className="max-w-4xl mx-auto mt-6">
+        {displayedCategories.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {displayedCategories.map((cat,index) => (
+              <article
+                key={cat.category_id ?? cat.slug}
+                className={`group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900 ${index >=4 ?"hidden sm:block": ""}`}
+              >
+                <Link href={`/services/${cat.slug}`} className="block">
+                  <div className="relative h-44 sm:h-52 w-full overflow-hidden">
+                    <Image
+                      src={cat.image?.url || "/images/default.webp"}
+                      fill
+                      className="object-cover transition duration-300 group-hover:scale-105 "
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+                      alt={cat.name}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                    <h4 className="absolute bottom-3 left-3 right-3 text-sm sm:text-base font-semibold text-white leading-snug">
+                      {cat.name}
+                    </h4>
+                  </div>
+                </Link>
+              </article>
+            ))}
+          </div>
         ) : (
-          <p className="col-span-4 text-center text-gray-400 py-6">
+          <p className="text-center text-gray-400 py-8">
             No categories found for{" "}
             <span className="font-medium">{activeButton}</span>.
           </p>
