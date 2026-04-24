@@ -153,7 +153,7 @@ export default function PopularServices({ categories }: ServiceCategoriesProps) 
                 <Link href={`/services/${cat.slug}`} className="block">
                   <div className="relative h-44 sm:h-52 w-full overflow-hidden">
                     <Image
-                      src={cat.image?.url || "/images/default.webp"}
+                      src={cat.image_url || "/images/default.webp"}
                       fill
                       className="object-cover transition duration-300 group-hover:scale-105 "
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
