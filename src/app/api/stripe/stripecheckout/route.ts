@@ -171,7 +171,7 @@ export async function POST(request: Request) {
     }
 
     const successUrl = credits
-      ? `${process.env.NEXT_PUBLIC_APP_URL}/settings/billing/my_credits`
+      ? `${process.env.NEXT_PUBLIC_APP_URL}/provider/leads`
       : `${process.env.NEXT_PUBLIC_APP_URL}/provider/dashboard`;
 
     let sessionData: any = {

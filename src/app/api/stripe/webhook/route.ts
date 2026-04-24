@@ -3,6 +3,47 @@ import pool from "@/lib/dbConnect";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
+async function triggerAffiliateCommission(
+  subscriptionId: string,
+  paymentTransactionId?: number
+) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/affiliate/commission/subcription-trigger`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-affiliate-secret":
+            process.env.NEXT_PUBLIC_AFFILIATE_WEBHOOK_SECRET ?? "",
+        },
+        body: JSON.stringify({ subscriptionId, paymentTransactionId }),
+      }
+    );
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      console.error("[affiliate-commission] trigger failed:", result);
+      return;
+    }
+
+    if (result.skipped) {
+      console.log("[affiliate-commission] skipped:", result.reason);
+      return;
+    }
+
+    console.log("[affiliate-commission] ✅ commission created:", {
+      referrer_id: result.summary?.referrer_id,
+      commission_amount: result.summary?.commission_amount,
+      subscription_month: result.summary?.subscription_month,
+      eligible_until: result.summary?.eligible_until,
+    });
+  } catch (err) {
+    console.error("[affiliate-commission] unexpected error (non-fatal):", err);
+  }
+}
+
 export async function POST(req: Request) {
   const raw = await req.text();
   const sig = req.headers.get("stripe-signature") || "";
@@ -67,25 +108,20 @@ function extractSubscriptionId(invoice: any): string | null {
   );
 }
 
-
 function extractInvoiceMeta(invoice: any): Record<string, string> {
   if (invoice.metadata && Object.keys(invoice.metadata).length > 0) {
     return invoice.metadata;
   }
-
   const parentMeta = invoice.parent?.subscription_details?.metadata;
   if (parentMeta && Object.keys(parentMeta).length > 0) {
     return parentMeta;
   }
-
   const lineItemMeta = invoice.lines?.data?.[0]?.metadata;
   if (lineItemMeta && Object.keys(lineItemMeta).length > 0) {
     return lineItemMeta;
   }
-
   return {};
 }
-
 
 async function handleCheckoutCompleted(session: any) {
   console.log("🎯 checkout.session.completed:", session.id);
@@ -124,12 +160,24 @@ async function getSubscriptionType(session: any): Promise<string> {
 }
 
 async function handleInvoicePaid(invoice: any) {
-  console.log("💰 invoice.paid:", invoice.id, "| reason:", invoice.billing_reason);
+  console.log(
+    "💰 invoice.paid:",
+    invoice.id,
+    "| reason:",
+    invoice.billing_reason
+  );
 
   let subscriptionId = extractSubscriptionId(invoice);
 
-  if (!subscriptionId && invoice.billing_reason === "subscription_create" && invoice.customer) {
-    console.log("🔍 Falling back to customer subscription lookup:", invoice.customer);
+  if (
+    !subscriptionId &&
+    invoice.billing_reason === "subscription_create" &&
+    invoice.customer
+  ) {
+    console.log(
+      "🔍 Falling back to customer subscription lookup:",
+      invoice.customer
+    );
     try {
       const subscriptions = await stripe.subscriptions.list({
         customer: invoice.customer,
@@ -141,7 +189,10 @@ async function handleInvoicePaid(invoice: any) {
         const now = Math.floor(Date.now() / 1000);
         const recent = subscriptions.data.find((s) => now - s.created < 60);
         subscriptionId = (recent ?? subscriptions.data[0]).id;
-        console.log("✅ Resolved subscription via customer lookup:", subscriptionId);
+        console.log(
+          "✅ Resolved subscription via customer lookup:",
+          subscriptionId
+        );
       }
     } catch (error) {
       console.error("❌ Customer subscription lookup failed:", error);
@@ -149,17 +200,24 @@ async function handleInvoicePaid(invoice: any) {
   }
 
   if (!subscriptionId) {
-    console.warn("⚠️ Could not resolve subscription ID — skipping invoice:", invoice.id);
+    console.warn(
+      "⚠️ Could not resolve subscription ID — skipping invoice:",
+      invoice.id
+    );
     return;
   }
 
   if (invoice.billing_reason === "subscription_create") {
-    console.log("ℹ️ subscription_create already handled by checkout.session.completed — skipping.");
+    console.log(
+      "ℹ️ subscription_create already handled by checkout.session.completed — skipping."
+    );
     return;
   }
 
   if (invoice.billing_reason !== "subscription_cycle") {
-    console.log(`ℹ️ Unhandled billing_reason '${invoice.billing_reason}' — skipping.`);
+    console.log(
+      `ℹ️ Unhandled billing_reason '${invoice.billing_reason}' — skipping.`
+    );
     return;
   }
 
@@ -174,16 +232,18 @@ async function handleInvoicePaid(invoice: any) {
   const meta = extractInvoiceMeta(invoice);
   console.log("📋 Resolved metadata:", meta);
 
-  const subscriptionType = subscription.metadata?.type ?? meta?.type ?? "pro_subscription";
+  const subscriptionType =
+    subscription.metadata?.type ?? meta?.type ?? "pro_subscription";
 
   if (subscriptionType !== "pro_subscription") {
-    console.log(`ℹ️ Not a pro_subscription (${subscriptionType}) — skipping recurring handler.`);
+    console.log(
+      `ℹ️ Not a pro_subscription (${subscriptionType}) — skipping recurring handler.`
+    );
     return;
   }
 
   await handleRecurringPayment(invoice, subscription, meta);
-  console.log(subscription,"subidddddd");
-  
+  console.log(subscription, "subidddddd");
 }
 
 async function handleCreditTopup(session: any) {
@@ -236,7 +296,9 @@ async function handleProSubscription(session: any) {
   );
 
   if (pkgCheck.rows.length === 0) {
-    throw new Error(`Package ID ${packageId} does not exist in professional_packages`);
+    throw new Error(
+      `Package ID ${packageId} does not exist in professional_packages`
+    );
   }
 
   const subscriptionId =
@@ -272,7 +334,16 @@ async function handleProSubscription(session: any) {
       (user_id, package_id, status, start_date, end_date, trail_end_date, payment_transaction_id, subscription_id)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
      ON CONFLICT (subscription_id) DO NOTHING`,
-    [professionalId, packageId, subscription.status, trialStart, billingAnchor, trialEnd, txId, subscriptionId]
+    [
+      professionalId,
+      packageId,
+      subscription.status,
+      trialStart,
+      billingAnchor,
+      trialEnd,
+      txId,
+      subscriptionId,
+    ]
   );
 
   await pool.query(
@@ -281,9 +352,14 @@ async function handleProSubscription(session: any) {
   );
 
   console.log("✅ Pro subscription created for professional:", professionalId);
+
+  // ── COMMISSION TRIGGER (first subscription purchase) ──────────────────────
+  // Fires after the subscription row is safely inserted.
+  // Non-fatal — any error here is swallowed so subscription flow is unaffected.
+  await triggerAffiliateCommission(subscriptionId, txId);
 }
 
-
+// ─── CHANGED: wired commission trigger after recurring renewal is recorded ────
 async function handleRecurringPayment(
   invoice: any,
   subscription: Stripe.Subscription,
@@ -291,8 +367,12 @@ async function handleRecurringPayment(
 ) {
   const subscriptionId = subscription.id;
 
-  console.log("🔄 Recurring payment:", subscriptionId, "| invoice:", invoice.id);
-
+  console.log(
+    "🔄 Recurring payment:",
+    subscriptionId,
+    "| invoice:",
+    invoice.id
+  );
 
   let professionalId = Number(meta?.professionalId) || null;
   let packageId = Number(meta?.packageId) || null;
@@ -321,11 +401,12 @@ async function handleRecurringPayment(
   );
 
   if (pkgRes.rows.length === 0) {
-    throw new Error(`Package ${packageId} no longer exists. Cannot renew subscription.`);
+    throw new Error(
+      `Package ${packageId} no longer exists. Cannot renew subscription.`
+    );
   }
 
   const durationMonths: number = pkgRes.rows[0].duration_months || 1;
-
 
   const lineItemPeriod = invoice.lines?.data?.[0]?.period;
   const newStartDate = lineItemPeriod?.start
@@ -340,7 +421,7 @@ async function handleRecurringPayment(
         return d;
       })();
 
-  const amountPaid = invoice.amount_paid / 100; 
+  const amountPaid = invoice.amount_paid / 100;
 
   const txRes = await pool.query(
     `INSERT INTO payment_transactions
@@ -372,6 +453,11 @@ async function handleRecurringPayment(
   console.log(
     `✅ Renewed subscription for professional ${professionalId} | ${newStartDate.toISOString()} → ${newEndDate.toISOString()}`
   );
+
+  // ── COMMISSION TRIGGER (monthly renewal) ───────────────────────────────────
+  // Fires after the renewal row is safely updated.
+  // commission/trigger internally checks the 12-month window and month number.
+  await triggerAffiliateCommission(subscriptionId, txId);
 }
 
 async function handleInvoicePaymentFailed(invoice: any) {

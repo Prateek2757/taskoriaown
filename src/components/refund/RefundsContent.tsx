@@ -9,6 +9,7 @@ import { ReviewDialog } from "./ReviewDialog";
 // import { Toast } from "./Toast";
 import type { RefundRequest, ApiResponse, Status, IssueType } from "@/types/refunds";
 import { toast } from "sonner";
+import { AdminBreadcrumb } from "@/app/[location]/(public)/(pages)/admin/components/Adminbreadcrumb";
 
 export function RefundsContent() {
   const [allData, setAllData] = useState<RefundRequest[]>([]);
@@ -108,11 +109,11 @@ export function RefundsContent() {
     setStatusFilter((prev) => (prev === s ? "" : s));
 
   return (
-    <div className="min-h-screen bg-stone-50 dark:bg-zinc-950 transition-colors">
+    <div className="min-h-screen p-6 space-y-6 bg-stone-50 dark:bg-zinc-950 transition-colors">
       {/* {toast && <Toast msg={toast.msg} type={toast.type} />} */}
 
-
-      <div className="max-w-7xl mx-auto px-3 py-10">
+        <AdminBreadcrumb/>
+      <div className="max-w-7xl mx-auto">
         <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
           <div>
             <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 leading-tight">

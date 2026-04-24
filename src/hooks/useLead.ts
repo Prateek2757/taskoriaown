@@ -28,7 +28,7 @@ export function useLeads() {
       await axios.put(`/api/lead/${taskId}`, { seen: true });
     } catch (err) {
       console.error("Failed to mark lead as seen:", err);
-      mutate(); // revert on failure
+      mutate(); 
     }
   };
 

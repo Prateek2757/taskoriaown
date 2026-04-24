@@ -37,6 +37,8 @@ import {
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import PageSkeleton from "@/components/skeleton/PageSkeleton";
+import { AdminBreadcrumb } from "../components/Adminbreadcrumb";
+import { useTasksWithoutBudget } from "@/hooks/Admin/useTasksWithoutBudget";
 
 interface Task {
   task_id: number;
@@ -61,8 +63,8 @@ export default function AdminBudgetManager() {
   const item_per_page = 5;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
+  // const [tasks, setTasks] = useState<Task[]>([]);
+  // const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState<number | null>(null);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [budgetValues, setBudgetValues] = useState<{ [key: number]: string }>(
@@ -72,22 +74,7 @@ export default function AdminBudgetManager() {
   const [filterCategory, setFilterCategory] = useState("all");
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
-  useEffect(() => {
-    fetchTasksWithoutBudget();
-  }, []);
-
-  const fetchTasksWithoutBudget = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get("/api/admin/tasks-without-budget");
-      setTasks(response.data);
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-      toast.error("Failed to load tasks");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { tasks, loading, refresh } = useTasksWithoutBudget();
 
   const handleBudgetChange = (taskId: number, value: string) => {
     const cleanValue = value.replace(/[^0-9]/g, "");
@@ -128,7 +115,7 @@ export default function AdminBudgetManager() {
         setSelectedTask(null);
         setShowDetailsModal(false);
 
-        fetchTasksWithoutBudget();
+        refresh();
       }
     } catch (error: any) {
       console.error("Error setting budget:", error);
@@ -143,7 +130,7 @@ export default function AdminBudgetManager() {
     setShowDetailsModal(true);
   };
 
-  const filteredTasks = tasks.filter((task) => {
+  const filteredTasks = tasks.filter((task: Task) => {
     const matchesSearch =
       task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       task.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -197,8 +184,9 @@ export default function AdminBudgetManager() {
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
-      <div className="mb-8">
+    <div className="container space-y-6 mx-auto p-6 max-w-7xl">
+      <AdminBreadcrumb />
+      <div className="">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Tasks Without Budget
         </h1>
@@ -284,12 +272,12 @@ export default function AdminBudgetManager() {
         </Card>
       ) : (
         <div className="grid grid-cols-1 gap-4">
-          {paginatedTasks.map((task) => (
+          {paginatedTasks.map((task:Task) => (
             <Card
               key={task.task_id}
               className="hover:shadow-lg transition-shadow"
             >
-              <CardContent className="px-6 " >
+              <CardContent className="px-6 ">
                 <div className="flex flex-col lg:flex-row gap-6">
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-4">

@@ -193,7 +193,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
 
   return (
     <div className="max-w-2xl mx-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm dark:shadow-gray-900/50 p-8 space-y-10 transition-colors duration-200">
-      {/* Personal Section */}
       <section className="space-y-4">
         <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">

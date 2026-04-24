@@ -33,7 +33,10 @@ export async function POST(req: Request) {
       const currentBalance = Number(userRows[0].total_credits);
       if (currentBalance < credits) {
         await client.query("ROLLBACK");
-        return NextResponse.json({ error: "Insufficient credits" }, { status: 400 });
+        return NextResponse.json(
+          { error: "Insufficient credits" },
+          { status: 400 }
+        );
       }
 
       if (taskId) {
@@ -70,26 +73,40 @@ export async function POST(req: Request) {
         [newBalance, professionalId]
       );
 
+      let responseId: number | null = null;
+
       if (taskId) {
-        await client.query(
+        const result = await client.query(
           `
+      
           INSERT INTO task_responses(task_id, professional_id, credits_spent, created_at)
+      
           VALUES($1, $2, $3, NOW())
+      
+          RETURNING response_id
+      
           `,
+
           [taskId, professionalId, credits]
         );
+
+        responseId = result.rows[0].response_id;
       }
 
       await client.query("COMMIT");
       return NextResponse.json({
         success: true,
+        responseId,
         balance: newBalance,
         message: "Credits deducted and lead response recorded",
       });
     } catch (err) {
       await client.query("ROLLBACK");
       console.error("Deduct credits error:", err);
-      return NextResponse.json({ error: "Failed to deduct credits" }, { status: 500 });
+      return NextResponse.json(
+        { error: "Failed to deduct credits" },
+        { status: 500 }
+      );
     } finally {
       client.release();
     }

@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import axios from "axios";
+import { fetcher } from "@/lib/fetcher";
 
 export interface Photo {
   id: string;
@@ -21,10 +22,10 @@ interface PhotoResponse {
   photo: Photo;
 }
 
-const fetcher = async (url: string) => {
-  const response = await axios.get(url);
-  return response.data;
-};
+// const fetcher = async (url: string) => {
+//   const response = await axios.get(url);
+//   return response.data;
+// };
 
 export function useProfilePhotos() {
   const { data, error, isLoading, mutate } = useSWR<PhotosResponse>(

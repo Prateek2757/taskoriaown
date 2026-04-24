@@ -9,7 +9,7 @@ export interface CreditPackage {
   name: string;
   credits: number;
   price: number;
-  stripe_price_id:string;
+  stripe_price_id: string;
   original_price?: number;
   price_per_credit: number;
   leads_estimate: number;
@@ -20,7 +20,7 @@ export interface CreditPackage {
 interface CreditState {
   balance: number;
   packages: CreditPackage[];
-  taskCredits: Record<number, number>; 
+  taskCredits: Record<number, number>;
   loading: boolean;
 }
 
@@ -42,12 +42,13 @@ export function useCredit(professionalId?: string) {
       return data.balance;
     } catch (error: any) {
       console.error("Balance fetch error:", error);
-      toast.error(error.response?.data?.error || "Failed to fetch credit balance");
+      toast.error(
+        error.response?.data?.error || "Failed to fetch credit balance"
+      );
     } finally {
       setState((s) => ({ ...s, loading: false }));
     }
   }, [professionalId]);
-
 
   const fetchPackages = useCallback(async () => {
     setState((s) => ({ ...s, loading: true }));
@@ -58,24 +59,31 @@ export function useCredit(professionalId?: string) {
       return data;
     } catch (error: any) {
       console.error("Credit packages error:", error);
-      toast.error(error.response?.data?.error || "Unable to load credit packages");
+      toast.error(
+        error.response?.data?.error || "Unable to load credit packages"
+      );
     } finally {
       setState((s) => ({ ...s, loading: false }));
     }
   }, []);
 
-  const estimateCredits = useCallback(async (taskId: number, action = "lead_response") => {
-    try {
-      const { data } = await axios.get(`/api/credits/estimate`, {
-        params: { task_id: taskId, action },
-      });
-      return data.estimated || 0;
-    } catch (error: any) {
-      console.error("Credit estimate error:", error);
-      toast.error(error.response?.data?.error || "Unable to estimate credits");
-      return 0;
-    }
-  }, []);
+  const estimateCredits = useCallback(
+    async (taskId: number, action = "lead_response") => {
+      try {
+        const { data } = await axios.get(`/api/credits/estimate`, {
+          params: { task_id: taskId, action },
+        });
+        return data.estimated || 0;
+      } catch (error: any) {
+        console.error("Credit estimate error:", error);
+        toast.error(
+          error.response?.data?.error || "Unable to estimate credits"
+        );
+        return 0;
+      }
+    },
+    []
+  );
 
   const fetchCreditEstimates = useCallback(async () => {
     setState((s) => ({ ...s, loading: true }));
@@ -97,7 +105,9 @@ export function useCredit(professionalId?: string) {
       }
     } catch (error: any) {
       console.error("Credit estimate fetch error:", error);
-      toast.error(error.response?.data?.error || "Failed to fetch credit estimates");
+      toast.error(
+        error.response?.data?.error || "Failed to fetch credit estimates"
+      );
       return {};
     } finally {
       setState((s) => ({ ...s, loading: false }));
@@ -117,10 +127,10 @@ export function useCredit(professionalId?: string) {
           taskId,
           credits: creditsUsed,
         });
-
+        const { success, responseId, balance } = data;
         // toast.success(`Credits deducted successfully ${creditsUsed}`);
         await fetchBalance();
-        return true;
+        return { success, responseId, balance };
       } catch (error: any) {
         console.error("Credit deduction error:", error);
         toast.error(error.response?.data?.error || "Credit deduction failed");
@@ -172,7 +182,7 @@ export function useCredit(professionalId?: string) {
     fetchBalance,
     fetchPackages,
     estimateCredits,
-    fetchCreditEstimates, 
+    fetchCreditEstimates,
     deductCredits,
     purchaseCredits,
   };

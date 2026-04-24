@@ -9,6 +9,7 @@ export async function GET() {
       SELECT 
         category_id, 
         name, 
+        image_url,
         public_id,
         slug, main_category,
         faqs,

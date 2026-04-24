@@ -30,6 +30,8 @@ import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import SlidingUnderlineNav from "./slidingUnderline";
 import NotificationBell from "../notification/NotificationBell";
 import TaskoriaSasthoreDirect from "../sastoticket/taskoriasasthoredirect";
+import Explore from "./Explore/Explore";
+import { IoCaretDown } from "react-icons/io5";
 
 type ViewMode = "customer" | "provider" | null;
 
@@ -128,7 +130,7 @@ export default function ModernNavbar() {
     setIsProfileOpen(false);
     setIsMenuOpen(false);
     router.push(
-      newView === "provider" ? "/provider/dashboard" : "/customer/dashboard"
+      newView === "provider" ? "/provider/dashboard" : "/customer/dashboard",
     );
   };
 
@@ -168,7 +170,7 @@ export default function ModernNavbar() {
               >
                 {session?.user?.image ? (
                   <Image
-                  title="Profile Pic "
+                    title="Profile Pic "
                     src={session.user.image}
                     alt="profile pic"
                     fill
@@ -210,7 +212,7 @@ export default function ModernNavbar() {
             <button
               onClick={() =>
                 handleSwitchView(
-                  viewMode === "provider" ? "customer" : "provider"
+                  viewMode === "provider" ? "customer" : "provider",
                 )
               }
               className="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-600 transition-colors"
@@ -309,18 +311,18 @@ export default function ModernNavbar() {
             className="flex gap-1 items-center hover:opacity-90 transition-opacity flex-1 md:flex-none min-w-0"
           >
             <Image
-            title="Taskoria Logo Navbar"
+              title="Taskoria Logo Navbar"
               src="/images/taskoria_logo.svg"
               alt="taskorialogo"
               height={41}
               width={25}
               className="shrink-0 "
-           
             />
             <span className="text-2xl font-bold bg-[#2563EB] bg-clip-text text-transparent truncate">
               Taskoria
             </span>
           </Link>
+          <Explore />
 
           {/* Desktop centered nav */}
           {!minimalPages.includes(pathname) && (
@@ -363,7 +365,7 @@ export default function ModernNavbar() {
                       >
                         {session?.user?.image ? (
                           <Image
-                          title="Session User Image"
+                            title="Session User Image"
                             src={session.user.image}
                             alt="profile pic"
                             fill
@@ -424,9 +426,7 @@ export default function ModernNavbar() {
 
           {/* Mobile: notification bell + hamburger grouped together on the right */}
           <div className="flex items-center gap-1 md:hidden">
-            {session && (
-              <NotificationBell userId={Number(session?.user?.id)} />
-            )}
+            {session && <NotificationBell userId={Number(session?.user?.id)} />}
             <Button
               variant="ghost"
               onClick={() => setIsMenuOpen((p) => !p)}
@@ -466,13 +466,12 @@ export default function ModernNavbar() {
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <Image
-                    title="taskoria logo mobile"
+                      title="taskoria logo mobile"
                       src="/images/taskoria_logo.svg"
                       alt="logo taskoria"
                       height={32}
                       width={22}
                       className="shrink-0"
-                  
                     />
                     <span className="text-xl font-bold bg-[#3C7DED] bg-clip-text text-transparent truncate">
                       Taskoria
@@ -505,7 +504,7 @@ export default function ModernNavbar() {
                         >
                           {session?.user?.image ? (
                             <Image
-                            title="session profile picture"
+                              title="session profile picture"
                               src={session.user.image}
                               alt="profile pic"
                               fill
@@ -581,7 +580,7 @@ export default function ModernNavbar() {
                 })}
                 {session?.user.adminrole === "admin" ? (
                   <Link
-                    href="/admin/adminbudgetmanager"
+                    href="/admin"
                     onClick={() => setIsMenuOpen(false)}
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
                   >
@@ -635,7 +634,7 @@ export default function ModernNavbar() {
                   <button
                     onClick={() =>
                       handleSwitchView(
-                        viewMode === "provider" ? "customer" : "provider"
+                        viewMode === "provider" ? "customer" : "provider",
                       )
                     }
                     className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"

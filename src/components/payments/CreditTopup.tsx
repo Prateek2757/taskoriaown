@@ -1,7 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { ChevronDown, Sparkles, Shield, Zap, Check, ArrowLeft, CreditCard, Wallet } from "lucide-react";
+import {
+  ChevronDown,
+  Sparkles,
+  Shield,
+  Zap,
+  Check,
+  ArrowLeft,
+  CreditCard,
+  Wallet,
+} from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -47,7 +56,7 @@ interface CreditPurchaseProps {
   onPurchaseSuccess?: () => void;
 }
 
- function CreditPurchase({
+function CreditPurchase({
   mode = "page",
   requiredCredits,
   contactName,
@@ -108,8 +117,25 @@ interface CreditPurchaseProps {
 
     setLoadingButton(true);
     try {
-      const result = await deductCredits(Number(taskId), Number(requiredCredits));
+      const result = await deductCredits(
+        Number(taskId),
+        Number(requiredCredits)
+      );
       if (!result) throw new Error("Failed to deduct");
+
+     
+      if (result.responseId) {
+        const res = await fetch("/api/affiliate/commission/task-trigger", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ responseId: result.responseId }),
+        });
+        
+        const data = await res.json();
+        
+        console.log("STATUS:", res.status);
+        console.log("RESPONSE:", data);
+      }
 
       await fetchBalance();
       toast.success(`Deducted ${requiredCredits} credits`);
@@ -163,7 +189,7 @@ interface CreditPurchaseProps {
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/20 dark:via-blue-950/20 dark:to-blue-950/20 rounded-2xl -z-10" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-400/10 dark:bg-blue-400/5 rounded-full blur-3xl -z-10" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-400/10 dark:bg-purple-400/5 rounded-full blur-3xl -z-10" />
-          
+
           <div className="relative py-4 px-4">
             {/* <div className="inline-flex items-center gap-2 px-4 py-2 mb-2 bg-blue-100 dark:bg-blue-900/30 rounded-full">
               <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -171,12 +197,16 @@ interface CreditPurchaseProps {
                 Premium Lead Access
               </span>
             </div> */}
-            
+
             <h2 className="text-2xl  font-bold mb-3 bg-gradient-to-r from-gray-900 via-blue-900 to-blue-900 dark:from-white dark:via-blue-200 dark:to-blue-200 bg-clip-text text-transparent">
               Unlock {contactName}'s Profile
             </h2>
             <p className="text-gray-600 dark:text-gray-400 text-base max-w-md mx-auto">
-              You need <span className="font-bold text-blue-600 dark:text-blue-400">{requiredCredits} credits</span> to contact this lead
+              You need{" "}
+              <span className="font-bold text-blue-600 dark:text-blue-400">
+                {requiredCredits} credits
+              </span>{" "}
+              to contact this lead
             </p>
           </div>
         </div>
@@ -192,9 +222,14 @@ interface CreditPurchaseProps {
                   <Wallet className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <p className="text-blue-100 text-sm font-medium">Available Balance</p>
+                  <p className="text-blue-100 text-sm font-medium">
+                    Available Balance
+                  </p>
                   <p className="text-3xl font-bold text-white mt-1">
-                    {balance ?? 0} <span className="text-lg font-normal text-blue-100">credits</span>
+                    {balance ?? 0}{" "}
+                    <span className="text-lg font-normal text-blue-100">
+                      credits
+                    </span>
                   </p>
                 </div>
               </div>
@@ -203,8 +238,6 @@ interface CreditPurchaseProps {
           </div>
         </div>
       </div>
-
-    
 
       <div className="mb-8">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
@@ -255,18 +288,22 @@ interface CreditPurchaseProps {
                 <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 dark:border-gray-700"></div>
                 <div className="animate-spin rounded-full h-16 w-16 border-4 border-t-blue-600 dark:border-t-blue-400 absolute top-0 left-0"></div>
               </div>
-              <p className="text-gray-500 dark:text-gray-400 mt-4 font-medium">Loading credit packages...</p>
+              <p className="text-gray-500 dark:text-gray-400 mt-4 font-medium">
+                Loading credit packages...
+              </p>
             </div>
           ) : packages.length === 0 ? (
             <div className="text-center py-12 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border-2 border-dashed border-gray-300 dark:border-gray-700">
-              <p className="text-gray-500 dark:text-gray-400">No credit packages available.</p>
+              <p className="text-gray-500 dark:text-gray-400">
+                No credit packages available.
+              </p>
             </div>
           ) : (
             <div className="grid gap-4">
               {packages.map((pkg, index) => {
-                const isPopular = index === 1; 
-                const isBestValue = index === packages.length - 1; 
-                
+                const isPopular = index === 1;
+                const isBestValue = index === packages.length - 1;
+
                 return (
                   <div
                     key={pkg.package_id}
@@ -284,7 +321,7 @@ interface CreditPurchaseProps {
                         </div>
                       </div>
                     )}
-                    
+
                     {isBestValue && (
                       <div className="absolute -top-3 right-4">
                         <div className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold rounded-full shadow-lg">
@@ -305,7 +342,7 @@ interface CreditPurchaseProps {
                             </div>
                           )}
                         </div>
-                        
+
                         <div className="flex items-center gap-4 flex-wrap">
                           <div className="flex items-center gap-2">
                             <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -327,7 +364,7 @@ interface CreditPurchaseProps {
                           </span>
                         </div>
                       </div>
-                      
+
                       <div className="text-right ml-4">
                         <div className="text-3xl md:text-4xl font-bold bg-gradient-to-br from-blue-600 to-blue-600 dark:from-blue-400 dark:to-blue-400 bg-clip-text text-transparent">
                           A${pkg.price}
@@ -381,26 +418,34 @@ interface CreditPurchaseProps {
               ) : (
                 <div className="flex items-center justify-center gap-2">
                   <CreditCard className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                  <span>Buy {selected.credits} credits for A${selected.price}</span>
+                  <span>
+                    Buy {selected.credits} credits for A${selected.price}
+                  </span>
                 </div>
               )}
             </Button>
           )
         )}
-          <div className="grid grid-cols-3 gap-3 m-3">
-        <div className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
-          <Shield className="w-6 h-6 text-green-600 dark:text-green-400 mb-2" />
-          <span className="text-xs text-gray-600 dark:text-gray-400 text-center font-medium">Secure Payment</span>
+        <div className="grid grid-cols-3 gap-3 m-3">
+          <div className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+            <Shield className="w-6 h-6 text-green-600 dark:text-green-400 mb-2" />
+            <span className="text-xs text-gray-600 dark:text-gray-400 text-center font-medium">
+              Secure Payment
+            </span>
+          </div>
+          <div className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+            <Zap className="w-6 h-6 text-yellow-600 dark:text-yellow-400 mb-2" />
+            <span className="text-xs text-gray-600 dark:text-gray-400 text-center font-medium">
+              Instant Access
+            </span>
+          </div>
+          <div className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+            <Check className="w-6 h-6 text-blue-600 dark:text-blue-400 mb-2" />
+            <span className="text-xs text-gray-600 dark:text-gray-400 text-center font-medium">
+              Guaranteed
+            </span>
+          </div>
         </div>
-        <div className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
-          <Zap className="w-6 h-6 text-yellow-600 dark:text-yellow-400 mb-2" />
-          <span className="text-xs text-gray-600 dark:text-gray-400 text-center font-medium">Instant Access</span>
-        </div>
-        <div className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
-          <Check className="w-6 h-6 text-blue-600 dark:text-blue-400 mb-2" />
-          <span className="text-xs text-gray-600 dark:text-gray-400 text-center font-medium">Guaranteed</span>
-        </div>
-      </div>
 
         <div className="flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400 pt-2">
           <Shield className="w-4 h-4" />
@@ -432,7 +477,7 @@ interface CreditPurchaseProps {
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="font-medium">Back to Settings</span>
           </button>
-          
+
           <div className="flex items-center gap-4 mb-2">
             <div className="p-3 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl shadow-lg">
               <Wallet className="w-8 h-8 text-white" />

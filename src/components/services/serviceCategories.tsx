@@ -13,6 +13,7 @@ interface ServiceCategory {
   name: string;
   main_category?: string;
   slug: string;
+  image_url?:string;
 }
 
 interface ServiceCategoriesProps {
@@ -259,8 +260,21 @@ export default function ServiceCategoriesClient({
                               fill
                               className="object-cover transition duration-300 group-hover:scale-105"
                               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                              priority={index === 0}
+                              priority
                             />
+                              {/* <Image
+                              src={
+                                category.image_url
+                                  ? category.image_url
+                                  : "/taskorialogonew.png"
+                              }
+                              alt={category.name || "category image"}
+                              width={300}
+                              height={200}
+                              onError={(e) => {
+                                e.currentTarget.src = "/images/default.webp";
+                              }}
+                            /> */}
 
                             <div
                               className={`absolute inset-0 bg-linear-to-t ${"from-black/60 to-transparent"}`}

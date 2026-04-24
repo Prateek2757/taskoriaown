@@ -1,4 +1,5 @@
 
+import { fetcher } from "@/lib/fetcher";
 import axios from "axios";
 import useSWR from "swr";
 
@@ -19,10 +20,10 @@ interface ServiceResponse {
   service: Service;
 }
 
-const fetcher = async (url: string) => {
-  const response = await axios.get(url);
-  return response.data;
-};
+// const fetcher = async (url: string) => {
+//   const response = await axios.get(url);
+//   return response.data;
+// };
 
 export function useProfileServices() {
   const { data, error, isLoading, mutate } = useSWR<ServicesResponse>(

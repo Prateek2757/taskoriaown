@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import axios from "axios";
+import { fetcher } from "@/lib/fetcher";
 
 export interface FAQ {
   presetId?: string; 
@@ -22,10 +23,10 @@ interface FAQResponse {
   faq: FAQ;
 }
 
-const fetcher = async (url: string) => {
-  const response = await axios.get(url);
-  return response.data;
-};
+// const fetcher = async (url: string) => {
+//   const response = await axios.get(url);
+//   return response.data;
+// };
 
 export function useFAQs() {
   const { data, error, isLoading, mutate } = useSWR<FAQsResponse>(

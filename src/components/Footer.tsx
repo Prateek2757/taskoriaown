@@ -27,6 +27,20 @@ import { useRouter } from "next/navigation";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import { join } from "path";
 
+const services = [
+  { href: "/services/house-cleaning", label: "Cleaner" },
+  { href: "/services/removalists", label: "Removalist" },
+  { href: "/services/accounting-taxation", label: "Tax Accountant" },
+  { href: "/services/plumbers", label: "Plumber" },
+  { href: "/services/building-and-construction", label: "Builder" },
+  { href: "/services", label: "More Services" },
+
+  // { href: "/services/photographers", label: "Photographer" },
+  // { href: "/services/carpet-steam-cleaning", label: "Carpet Cleaning" },
+  // { href: "/services/garden-maintenance-weeding", label: "Gardening" },
+  // { href: "/services/painters", label: "Painter" },
+];
+
 const letters = "TASKORIA".split("");
 const letterPositions = [35, 75, 125, 175, 225, 275, 325, 355];
 
@@ -236,62 +250,17 @@ const Footer = () => {
 
                 <div
                   className={`sm:block overflow-hidden transition-all duration-300 
-          ${openSection === "categories" ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
+  ${openSection === "categories" ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
                 >
-                  <Link
-                    href="/services/house-cleaning"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
-                  >
-                    Cleaner
-                  </Link>
-                  <Link
-                    href="/services/removalists"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
-                  >
-                    Removalist{" "}
-                  </Link>
-                  <Link
-                    href="/services/accounting-taxation"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
-                  >
-                    Tax Accountant
-                  </Link>
-                  <Link
-                    href="/services/plumbers"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
-                  >
-                    Plumber{" "}
-                  </Link>
-                  <Link
-                    href="/services/building-and-construction"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
-                  >
-                    Builder{" "}
-                  </Link>
-                  <Link
-                    href="/services/photographers"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
-                  >
-                    Photographer
-                  </Link>
-                  <Link
-                    href="/services/carpet-steam-cleaning"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
-                  >
-                    Carpet Cleaning{" "}
-                  </Link>
-                  <Link
-                    href="/services/garden-maintenance-weeding"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
-                  >
-                    Gardening{" "}
-                  </Link>
-                  <Link
-                    href="/services/painters"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
-                  >
-                    Painter{" "}
-                  </Link>
+                  {services.map((service) => (
+                    <Link
+                      key={service.href}
+                      href={service.href}
+                      className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    >
+                      {service.label}
+                    </Link>
+                  ))}
                 </div>
               </div>
               <div className="sm:border-none">
@@ -584,14 +553,14 @@ const Footer = () => {
               >
                 Privacy Policy
               </Link>
-              {" / "}
+              {" | "}
               <Link
                 href="/terms-and-conditions"
                 className="hover:text-[#3C7DED] transition-colors"
               >
                 Terms & Conditions
               </Link>
-              {" / "}
+              {" | "}
               <Link
                 href="/cookie-policy"
                 className="hover:text-[#3C7DED] transition-colors"

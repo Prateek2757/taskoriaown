@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { ProviderResponse } from "@/types";
 import { timeAgo, formatDate } from "./helpers";
+import { fetcher } from "@/lib/fetcher";
 
 
 type ActivityType = "email_sent" | "estimate_sent" | "response_sent";
@@ -26,11 +27,11 @@ interface EstimateActivityProps {
 }
 
 
-const fetcher = (url: string) =>
-  fetch(url).then((res) => {
-    if (!res.ok) throw new Error("Failed to fetch");
-    return res.json();
-  });
+// const fetcher = (url: string) =>
+//   fetch(url).then((res) => {
+//     if (!res.ok) throw new Error("Failed to fetch");
+//     return res.json();
+//   });
 
 
 const ACTIVITY_CONFIG = {

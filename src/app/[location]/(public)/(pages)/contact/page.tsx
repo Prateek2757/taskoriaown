@@ -1,13 +1,23 @@
-"use client"
-import React, { useState } from 'react';
-import { Mail, Phone, MessageCircle, Clock, HelpCircle, Send, CheckCircle, Locate, MapPin } from 'lucide-react';
+"use client";
+import React, { useState } from "react";
+import {
+  Mail,
+  Phone,
+  MessageCircle,
+  Clock,
+  HelpCircle,
+  Send,
+  CheckCircle,
+  Locate,
+  MapPin,
+} from "lucide-react";
 
 export default function ContactSupport() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
   const [submitted, setSubmitted] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
@@ -17,14 +27,18 @@ export default function ContactSupport() {
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
-      setFormData({ name: '', email: '', subject: '', message: '' });
+      setFormData({ name: "", email: "", subject: "", message: "" });
     }, 3000);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -40,7 +54,6 @@ export default function ContactSupport() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors duration-300">
-
       <div className="relative overflow-hidden bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800">
         <div className="absolute -top-20 -left-20 w-64 h-64 bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -top-10 -right-32 w-80 h-80 bg-purple-500/5 dark:bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -49,13 +62,18 @@ export default function ContactSupport() {
           <div className="text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 mb-5">
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-              <span className="text-sm font-medium text-blue-600 dark:text-blue-400">Support Team Online</span>
+              <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                Support Team Online
+              </span>
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-3 tracking-tight">
-              Contact <span className=" bg-clip-text text-blue-600">Taskoria</span> Support
+              Contact{" "}
+              <span className=" bg-clip-text text-blue-600">Taskoria</span>{" "}
+              Support
             </h1>
             <p className="text-lg text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
-              We're here to help. Reach out and we'll get back to you as quickly as possible.
+              We're here to help. Reach out and we'll get back to you as quickly
+              as possible.
             </p>
           </div>
         </div>
@@ -63,17 +81,19 @@ export default function ContactSupport() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid md:grid-cols-3 gap-8 mb-10">
-
           <div className="md:col-span-1 space-y-4">
-
             <div className="group bg-white dark:bg-gray-900 rounded-2xl shadow-sm hover:shadow-md dark:shadow-gray-900/30 dark:hover:shadow-gray-900/50 p-3 border border-gray-100 dark:border-gray-800 transition-all duration-300">
               <div className="flex items-start gap-4">
                 <div className="bg-blue-50 dark:bg-blue-500/10 rounded-xl p-3 group-hover:scale-105 transition-transform duration-200">
                   <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-0.5">Email Support</h3>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-2.5">Get help via email</p>
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-0.5">
+                    Email Support
+                  </h3>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-2.5">
+                    Get help via email
+                  </p>
                   <a
                     href="mailto:contactus@taskoria.com"
                     className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm inline-flex items-center gap-1.5 group/link truncate"
@@ -95,13 +115,28 @@ export default function ContactSupport() {
                   <Phone className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-0.5">Phone Support</h3>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-2.5">Speak with our team</p>
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-0.5">
+                    Phone Support
+                  </h3>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-2.5">
+                    Speak with our team
+                  </p>
+                  <a
+                    href="tel:1300531727"
+                    className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-bold text-lg"
+                  >
+                    1300 531 727
+                  </a>
+
+                  <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                    Toll-free (Australia)
+                  </div>
+
                   <a
                     href="tel:+61474655902"
-                    className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-semibold text-base"
+                    className="text-xs text-gray-500 dark:text-gray-400 underline mt-1 inline-block"
                   >
-                    +61 474 655 902
+                    Or call: +61 474 655 902
                   </a>
                   <div className="mt-2.5 space-y-1">
                     <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-600">
@@ -139,10 +174,12 @@ export default function ContactSupport() {
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">Location</h4>
+                  <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                    Location
+                  </h4>
                   <div className="mt-2.5 flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-                   Level 34, 1 Eagle Street, Brisbane QLD 4000
-                  </div>                 
+                    Level 34, 1 Eagle Street, Brisbane QLD 4000
+                  </div>
                 </div>
               </div>
             </div>
@@ -150,28 +187,38 @@ export default function ContactSupport() {
 
           <div className="md:col-span-2">
             <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm dark:shadow-gray-900/30 p-7 sm:p-8 border border-gray-100 dark:border-gray-800">
-
               {submitted ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
                   <div className="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center mb-5">
                     <CheckCircle className="w-8 h-8 text-emerald-500" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Message Sent!</h3>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                    Message Sent!
+                  </h3>
                   <p className="text-gray-500 dark:text-gray-400 text-sm max-w-sm">
-                    Thank you for reaching out. Our team will get back to you within 24 hours.
+                    Thank you for reaching out. Our team will get back to you
+                    within 24 hours.
                   </p>
                 </div>
               ) : (
                 <>
                   <div className="mb-7">
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1.5">Send us a message</h2>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Fill out the form below and we'll respond as soon as possible.</p>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1.5">
+                      Send us a message
+                    </h2>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Fill out the form below and we'll respond as soon as
+                      possible.
+                    </p>
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-5">
                     <div className="grid sm:grid-cols-2 gap-5">
                       <div>
-                        <label htmlFor="name" className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+                        <label
+                          htmlFor="name"
+                          className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2"
+                        >
                           Full Name <span className="text-red-400">*</span>
                         </label>
                         <input
@@ -181,7 +228,7 @@ export default function ContactSupport() {
                           required
                           value={formData.name}
                           onChange={handleChange}
-                          onFocus={() => setFocused('name')}
+                          onFocus={() => setFocused("name")}
                           onBlur={() => setFocused(null)}
                           className={inputBase}
                           placeholder="Full Name"
@@ -189,7 +236,10 @@ export default function ContactSupport() {
                       </div>
 
                       <div>
-                        <label htmlFor="email" className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+                        <label
+                          htmlFor="email"
+                          className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2"
+                        >
                           Email Address <span className="text-red-400">*</span>
                         </label>
                         <input
@@ -199,7 +249,7 @@ export default function ContactSupport() {
                           required
                           value={formData.email}
                           onChange={handleChange}
-                          onFocus={() => setFocused('email')}
+                          onFocus={() => setFocused("email")}
                           onBlur={() => setFocused(null)}
                           className={inputBase}
                           placeholder="email@example.com"
@@ -208,7 +258,10 @@ export default function ContactSupport() {
                     </div>
 
                     <div>
-                      <label htmlFor="subject" className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+                      <label
+                        htmlFor="subject"
+                        className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2"
+                      >
                         Subject <span className="text-red-400">*</span>
                       </label>
                       <select
@@ -217,11 +270,13 @@ export default function ContactSupport() {
                         required
                         value={formData.subject}
                         onChange={handleChange}
-                        onFocus={() => setFocused('subject')}
+                        onFocus={() => setFocused("subject")}
                         onBlur={() => setFocused(null)}
                         className={`${inputBase} cursor-pointer appearance-none`}
                       >
-                        <option value="" disabled>Select a topic</option>
+                        <option value="" disabled>
+                          Select a topic
+                        </option>
                         <option value="general">General Inquiry</option>
                         <option value="technical">Technical Support</option>
                         <option value="billing">Billing & Payments</option>
@@ -234,7 +289,10 @@ export default function ContactSupport() {
 
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <label htmlFor="message" className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                        <label
+                          htmlFor="message"
+                          className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+                        >
                           Message <span className="text-red-400">*</span>
                         </label>
                         <span className="text-xs text-gray-400 dark:text-gray-600">
@@ -247,7 +305,7 @@ export default function ContactSupport() {
                         required
                         value={formData.message}
                         onChange={handleChange}
-                        onFocus={() => setFocused('message')}
+                        onFocus={() => setFocused("message")}
                         onBlur={() => setFocused(null)}
                         rows={5}
                         className={`${inputBase} resize-none`}
@@ -263,11 +321,24 @@ export default function ContactSupport() {
                         required
                         className="mt-0.5 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500/20 dark:bg-gray-800 cursor-pointer"
                       />
-                      <label htmlFor="privacy" className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed cursor-pointer">
-                        I agree to the{' '}
-                        <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline">privacy policy</a>
-                        {' '}and{' '}
-                        <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline">terms of service</a>
+                      <label
+                        htmlFor="privacy"
+                        className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed cursor-pointer"
+                      >
+                        I agree to the{" "}
+                        <a
+                          href="#"
+                          className="text-blue-600 dark:text-blue-400 hover:underline"
+                        >
+                          privacy policy
+                        </a>{" "}
+                        and{" "}
+                        <a
+                          href="#"
+                          className="text-blue-600 dark:text-blue-400 hover:underline"
+                        >
+                          terms of service
+                        </a>
                       </label>
                     </div>
 
@@ -291,13 +362,17 @@ export default function ContactSupport() {
               </h3>
               <div className="space-y-2">
                 {[
-                  'Check if your question is answered in our Help Center',
-                  'Have your account information ready for faster assistance',
-                  'Include relevant screenshots or error messages if applicable',
+                  "Check if your question is answered in our Help Center",
+                  "Have your account information ready for faster assistance",
+                  "Include relevant screenshots or error messages if applicable",
                 ].map((tip, i) => (
                   <div key={i} className="flex items-start gap-2">
-                    <span className="text-blue-400 dark:text-blue-500 mt-0.5 text-xs">●</span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">{tip}</span>
+                    <span className="text-blue-400 dark:text-blue-500 mt-0.5 text-xs">
+                      ●
+                    </span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {tip}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -314,9 +389,12 @@ export default function ContactSupport() {
           </div>
 
           <div className="relative">
-            <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">Need immediate assistance?</h3>
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
+              Need immediate assistance?
+            </h3>
             <p className="text-gray-400 mb-6 max-w-xl mx-auto text-sm">
-              For urgent matters, our phone support team is ready to help during business hours.
+              For urgent matters, our phone support team is ready to help during
+              business hours.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <a

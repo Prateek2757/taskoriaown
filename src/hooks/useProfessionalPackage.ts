@@ -2,6 +2,7 @@
 
 import useSWR from "swr";
 import { useMemo } from "react";
+import { fetcher } from "@/lib/fetcher";
 
 export interface ProfessionalPackage {
   package_id: number;
@@ -28,15 +29,15 @@ interface PackageResponse {
   packages: ProfessionalPackage[];
 }
 
-const fetcher = async (url: string): Promise<PackageResponse> => {
-  const res = await fetch(url, { cache: "no-store" });
+// const fetcher = async (url: string): Promise<PackageResponse> => {
+//   const res = await fetch(url, { cache: "no-store" });
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch: ${res.status}`);
-  }
+//   if (!res.ok) {
+//     throw new Error(`Failed to fetch: ${res.status}`);
+//   }
 
-  return res.json();
-};
+//   return res.json();
+// };
 
 export function useProfessionalPackages() {
   const { data, error, isLoading, mutate } = useSWR<PackageResponse>(

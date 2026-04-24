@@ -62,21 +62,22 @@ const nextConfig: NextConfig = {
 
   images: {
     formats: ["image/avif", "image/webp"],
-        remotePatterns: [
+    remotePatterns: [
       {
         protocol: "https",
-        hostname: "eoicjmcyigolwgjantsl.supabase.co",
-        pathname: "/**",
+        hostname: "images.unsplash.com",
       },
       {
         protocol: "https",
-        hostname: "*.unsplash.com",
-        pathname: "/**",
+        hostname: "plus.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "eoicjmcyigolwgjantsl.supabase.co",
       },
       {
         protocol: "https",
         hostname: "avatar.vercel.sh",
-        pathname: "/**",
       },
     ],
   },

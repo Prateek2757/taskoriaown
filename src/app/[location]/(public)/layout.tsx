@@ -12,7 +12,6 @@ import NotificationHandler from "@/components/NotificationHandler";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import SupportChatbot from "@/components/supportChatbox";
 import Script from "next/script";
-import { GoogleAnalytics } from "@next/third-parties/google";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -141,8 +140,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${poppins.variable} ${bricolage.variable}`}
-      suppressHydrationWarning
-      data-scroll-behavior="smooth"
+      data-scroll-behavior="smooth" suppressHydrationWarning
     >
       <AuthProvider>
         <body className="antialiased dark:bg-black" suppressHydrationWarning>

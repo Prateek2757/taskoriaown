@@ -51,6 +51,7 @@ function SlidingUnderlineNav({ currentLinks, pathname }: { currentLinks: any; pa
             {currentLinks.map((link: any) => (
                 <Link
                     key={link.href}
+                    prefetch={true}
                     data-nav-item={link.href}
                     href={link.href}
                     onMouseEnter={() => setHovered(link.href)}

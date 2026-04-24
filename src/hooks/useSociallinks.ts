@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import axios from "axios";
+import { fetcher } from "@/lib/fetcher";
 
 export interface SocialLink {
   id: string;
@@ -21,10 +22,10 @@ interface SocialLinkResponse {
   socialLink: SocialLink;
 }
 
-const fetcher = async (url: string) => {
-  const response = await axios.get(url);
-  return response.data;
-};
+// const fetcher = async (url: string) => {
+//   const response = await axios.get(url);
+//   return response.data;
+// };
 
 export function useSocialLinks() {
   const { data, error, isLoading, mutate } = useSWR<SocialLinksResponse>(

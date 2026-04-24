@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import axios from "axios";
+import { fetcher } from "@/lib/fetcher";
 
 export interface Accreditation {
   id: string;
@@ -19,10 +20,10 @@ interface AccreditationResponse {
   accreditation: Accreditation;
 }
 
-const fetcher = async (url: string) => {
-  const response = await axios.get(url);
-  return response.data;
-};
+// const fetcher = async (url: string) => {
+//   const response = await axios.get(url);
+//   return response.data;
+// };
 
 export function useAccreditations() {
   const { data, error, isLoading, mutate } = useSWR<AccreditationsResponse>(

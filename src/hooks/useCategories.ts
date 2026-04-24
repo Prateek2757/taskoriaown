@@ -3,18 +3,21 @@
 import useSWR from "swr";
 import { toast } from "sonner";
 import axios from "axios";
+import { fetcher } from "@/lib/fetcher";
 
 interface Category {
   category_id: number;
   name: string;
   slug: string;
   keywords: string[] | null;
+  main_category?:string;
+  image_url?:string;
 }
 
-const fetcher = async (url: string) => {
-  const response = await axios.get(url);
-  return response.data;
-};
+// const fetcher = async (url: string) => {
+//   const response = await axios.get(url);
+//   return response.data;
+// };
 
 export const useCategories = (limit?: number) => {
   const { data, error, isLoading } = useSWR<Category[]>(

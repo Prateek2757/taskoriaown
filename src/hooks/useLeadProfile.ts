@@ -2,6 +2,7 @@
 
 import useSWR from "swr";
 import axios from "axios";
+import { fetcher } from "@/lib/fetcher";
 
 export type Category = {
   category_id: number;
@@ -46,7 +47,7 @@ export type Profile = {
   referral_code?:string;
 };
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+// const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 export function useLeadProfile() {
   const {
