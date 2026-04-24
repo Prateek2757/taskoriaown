@@ -10,6 +10,7 @@ interface Category {
   slug: string;
   keywords: string[] | null;
    main_category?: string;
+   image_url?:string;
 }
 
 const fetcher = async (url: string) => {

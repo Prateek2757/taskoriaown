@@ -23,7 +23,7 @@ interface ServiceCategory {
   name: string;
   main_category?: string;
   slug: string;
-  image?: { url: string };
+  image_url?: { url: string };
 }
 interface ServiceCategoriesProps {
   categories: ServiceCategory[];
