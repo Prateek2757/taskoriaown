@@ -235,7 +235,7 @@ export default function ModernNavbar() {
           </Link>
           {session?.user.adminrole === "admin" ? (
             <Link
-              href="/admin/adminbudgetmanager"
+              href="/admin"
               onClick={() => {
                 setIsMenuOpen(false);
                 setIsProfileOpen(false);
