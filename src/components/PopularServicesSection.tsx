@@ -85,7 +85,7 @@ export default function PopularServices({ categories }: ServiceCategoriesProps) 
   return (
     <section className="relative py-6 px-4 sm:px-6 lg:px-8">
    
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <div className="relative flex items-center border-b border-gray-200 pb-1">
 
  
@@ -119,7 +119,7 @@ export default function PopularServices({ categories }: ServiceCategoriesProps) 
                   `}
                 >
                   <span>{filter.icon}</span>
-                  <span className="text-[14px] sm:text-xs lg:text-sm mt-1.5 text-center leading-tight whitespace-nowrap">
+                  <span className="text-[14px]  mt-1.5 text-center leading-tight whitespace-nowrap">
                     {filter.label}
                   </span>
                   {isActive && (
@@ -142,7 +142,7 @@ export default function PopularServices({ categories }: ServiceCategoriesProps) 
       </div>
 
       {/*  Category cards  */}
-      <div className="max-w-4xl mx-auto mt-6">
+      <div className="max-w-5xl mx-auto mt-6">
         {displayedCategories.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {displayedCategories.map((cat,index) => (
@@ -151,7 +151,7 @@ export default function PopularServices({ categories }: ServiceCategoriesProps) 
                 className={`group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900 ${index >=4 ?"hidden sm:block": ""}`}
               >
                 <Link href={`/services/${cat.slug}`} className="block">
-                  <div className="relative h-44 sm:h-52 w-full overflow-hidden">
+                  <div className="relative  h-42 sm:h-62 w-full overflow-hidden">
                     <Image
                       src={cat.image_url || "/images/default.webp"}
                       fill
