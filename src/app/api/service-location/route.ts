@@ -13,6 +13,7 @@ export async function GET() {
         c.parent_city_id,
         c.latitude,
         c.longitude,
+        c.image_url,
         s.slug  AS state_slug,
         s.name  AS state_name,
         co.name AS country_name
@@ -22,23 +23,24 @@ export async function GET() {
       ORDER BY c.popularity DESC;
     `);
 
-    const map    = new Map<number, any>();
+    const map = new Map<number, any>();
     const cities: any[] = [];
 
     for (const row of result.rows) {
       if (!row.parent_city_id) {
         const city = {
-          city_id:      row.city_id,
-          name:         row.name,
-          slug:         row.slug,
+          city_id: row.city_id,
+          name: row.name,
+          slug: row.slug,
+          image_url: row.image_url,
           display_name: row.display_name,
-          popularity:   row.popularity,
-          latitude:     row.latitude  ? parseFloat(row.latitude)  : null,
-          longitude:    row.longitude ? parseFloat(row.longitude) : null,
-          state_slug:   row.state_slug,
-          state_name:   row.state_name,
+          popularity: row.popularity,
+          latitude: row.latitude ? parseFloat(row.latitude) : null,
+          longitude: row.longitude ? parseFloat(row.longitude) : null,
+          state_slug: row.state_slug,
+          state_name: row.state_name,
           country_name: row.country_name,
-          subcities:    [] as any[],
+          subcities: [] as any[],
         };
 
         map.set(row.city_id, city);
@@ -49,13 +51,14 @@ export async function GET() {
     for (const row of result.rows) {
       if (row.parent_city_id && map.has(row.parent_city_id)) {
         map.get(row.parent_city_id).subcities.push({
-          city_id:      row.city_id,
-          name:         row.name,
-          slug:         row.slug,
+          city_id: row.city_id,
+          name: row.name,
+          slug: row.slug,
+          image_url:row.image_url,
           display_name: row.display_name,
-          popularity:   row.popularity,
-          latitude:     row.latitude  ? parseFloat(row.latitude)  : null,
-          longitude:    row.longitude ? parseFloat(row.longitude) : null,
+          popularity: row.popularity,
+          latitude: row.latitude ? parseFloat(row.latitude) : null,
+          longitude: row.longitude ? parseFloat(row.longitude) : null,
         });
       }
     }

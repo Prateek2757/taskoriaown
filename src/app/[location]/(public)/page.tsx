@@ -4,7 +4,9 @@ import HeroSection from "@/components/HeroSection/Herosection";
 import Script from "next/script";
 const HowTaskoriaWorks = lazy(() => import("@/components/how-taskoria-works"));
 const Categories = lazy(() => import("@/components/Categories"));
-const PopularServicesSection = lazy(()=>import("@/components/PopularServicesSection"))
+const PopularServicesSection = lazy(
+  () => import("@/components/PopularServicesSection")
+);
 const FeaturesPage = lazy(() => import("@/components/Features"));
 const Testomonail = lazy(() => import("@/components/Testomonail"));
 const CTA = lazy(() => import("@/components/CTA"));
@@ -12,7 +14,8 @@ const CTA = lazy(() => import("@/components/CTA"));
 const BASE_URL = "https://www.taskoria.com";
 
 export const metadata: Metadata = {
-  title: "Connect with Local Experts to Get Anything Done & Earn Money | Taskoria",
+  title:
+    "Connect with Local Experts to Get Anything Done & Earn Money | Taskoria",
   description:
     "Find trusted, verified local professionals across Australia. Get free quotes, compare services, and hire with confidence on Taskoria — fast, easy, and reliable.",
 
@@ -273,7 +276,12 @@ export default function HomePage() {
           <HeroSection />
         </section>
 
-        <Suspense fallback={<div className="min-h-[200px]" />}>
+        <Suspense fallback={<div className="min-h-50]" />}>
+          <section aria-label="Browse service categories">
+            <PopularServicesSection />
+          </section>
+        </Suspense>
+        <Suspense fallback={<div className="min-h-50" />}>
           <section aria-label="How Taskoria works — step by step">
             <HowTaskoriaWorks />{" "}
           </section>
@@ -284,25 +292,20 @@ export default function HomePage() {
             <Categories />
           </section>
         </Suspense> */}
-            <Suspense fallback={<div className="min-h-[200px]" />}>
-          <section aria-label="Browse service categories">
-            <PopularServicesSection />
-          </section>
-        </Suspense>
 
-        <Suspense fallback={<div className="min-h-[300px]" />}>
+        <Suspense fallback={<div className="min-h-75" />}>
           <section aria-label="Platform features and benefits">
             <FeaturesPage />
           </section>
         </Suspense>
 
-        <Suspense fallback={<div className="min-h-[200px]" />}>
+        <Suspense fallback={<div className="min-h-50" />}>
           <section aria-label="Customer reviews and testimonials">
             <Testomonail />
           </section>
         </Suspense>
 
-        <Suspense fallback={<div className="min-h-[100px]" />}>
+        <Suspense fallback={<div className="min-h-50" />}>
           <section aria-label="Get started — post your first job free">
             <CTA />
           </section>

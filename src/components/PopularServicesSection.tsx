@@ -2,7 +2,6 @@
 import { PiSprayBottle } from "react-icons/pi";
 import { GoTools } from "react-icons/go";
 import { MdElectricalServices, MdFastfood } from "react-icons/md";
-import { MdOutlineWaterDrop } from "react-icons/md";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import { GiFlowerPot } from "react-icons/gi";
 import { MdRoofing } from "react-icons/md";
@@ -13,7 +12,6 @@ import { IoHeartOutline } from "react-icons/io5";
 import { MdOutlineEventAvailable } from "react-icons/md";
 import { useMemo, useRef } from "react";
 import { useState } from "react";
-import usePagination from "@/hooks/usePagination";
 import { useCategories } from "@/hooks/useCategories";
 import Link from "next/link";
 import Image from "next/image";
@@ -58,13 +56,13 @@ const categoryMap: Record<string, string> = {
   "Food & Beverages": "Food & Beverages",
 };
 
-export default function PopularServices({ categories }: ServiceCategoriesProps) {
+export default function PopularServices() {
   const [activeButton, setActiveButton] = useState<string>(
     popularServicesFilters[0].label
   );
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { categories: apiCategories } = useCategories();
+  const { categories: apiCategories , loading } = useCategories();
 
   const filteredCategories = useMemo(() => {
     if (!activeButton || !apiCategories) return [];
@@ -130,7 +128,6 @@ export default function PopularServices({ categories }: ServiceCategoriesProps) 
             })}
           </div>
 
-          {/* Right arrow */}
           <button
             onClick={() => scroll("right")}
             aria-label="Scroll right"
@@ -141,40 +138,55 @@ export default function PopularServices({ categories }: ServiceCategoriesProps) 
         </div>
       </div>
 
-      {/*  Category cards  */}
-      <div className="max-w-5xl mx-auto mt-6">
-        {displayedCategories.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {displayedCategories.map((cat,index) => (
-              <article
-                key={cat.category_id ?? cat.slug}
-                className={`group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900 ${index >=4 ?"hidden sm:block": ""}`}
-              >
-                <Link href={`/services/${cat.slug}`} className="block">
-                  <div className="relative  h-42 sm:h-62 w-full overflow-hidden">
-                    <Image
-                      src={cat.image_url || "/images/default.webp"}
-                      fill
-                      className="object-cover transition duration-300 group-hover:scale-105 "
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
-                      alt={cat.name}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                    <h4 className="absolute bottom-3 left-3 right-3 text-sm sm:text-base font-semibold text-white leading-snug">
-                      {cat.name}
-                    </h4>
-                  </div>
-                </Link>
-              </article>
-            ))}
+    <div className="max-w-5xl mx-auto mt-6">
+  {loading ? (
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+      {[...Array(5)].map((_, i) => (
+        <div
+          key={i}
+          className="animate-pulse rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden"
+        >
+          <div className="h-40 sm:h-52 w-full bg-gray-200" />
+          <div className="p-3">
+            <div className="h-4 bg-gray-200 rounded w-3/4" />
           </div>
-        ) : (
-          <p className="text-center text-gray-400 py-8">
-            No categories found for{" "}
-            <span className="font-medium">{activeButton}</span>.
-          </p>
-        )}
-      </div>
+        </div>
+      ))}
+    </div>
+  ) : displayedCategories.length > 0 ? (
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+      {displayedCategories.map((cat, index) => (
+        <article
+          key={cat.category_id ?? cat.slug}
+          className={`group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900 ${
+            index >= 4 ? "hidden sm:block" : ""
+          }`}
+        >
+          <Link href={`/services/${cat.slug}`} className="block">
+            <div className="relative h-42 sm:h-65 w-full overflow-hidden">
+              <Image
+                src={cat.image_url || "/images/default.webp"}
+                fill
+                className="object-cover transition duration-300 group-hover:scale-105"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+                alt={cat.name}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+              <h4 className="absolute bottom-3 left-3 right-3 text-sm sm:text-base font-semibold text-white leading-snug">
+                {cat.name}
+              </h4>
+            </div>
+          </Link>
+        </article>
+      ))}
+    </div>
+  ) : (
+    <p className="text-center text-gray-400 py-8">
+      No categories found for{" "}
+      <span className="font-medium">{activeButton}</span>.
+    </p>
+  )}
+</div>
     </section>
   );
 }

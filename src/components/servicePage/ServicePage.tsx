@@ -129,7 +129,6 @@ export default function ServicePageClient({
             </>
           )}
 
-          {/* ── SUB-CITY AREA LINKS (city page, no subcity selected) ── */}
           {citySlug &&
             !subCitySlug &&
             selectedLocation?.subcities?.length > 0 && (

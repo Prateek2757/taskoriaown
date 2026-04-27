@@ -63,7 +63,6 @@ export default function LocationSearch({
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  // ── Sync loading state outward ──────────────────────────────────────────
   const setLoadingState = useCallback(
     (val: boolean) => {
       setLoading(val);
@@ -72,14 +71,12 @@ export default function LocationSearch({
     [onLoadingChange]
   );
 
-  // ── Sync preset ─────────────────────────────────────────────────────────
   useEffect(() => {
     if (presetLocation?.display_name) {
       setQuery(stripCountry(presetLocation.display_name));
     }
   }, [presetLocation?.display_name]);
 
-  // ── Close on outside click ───────────────────────────────────────────────
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (!containerRef.current?.contains(e.target as Node)) {
@@ -90,7 +87,6 @@ export default function LocationSearch({
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // ── Cleanup on unmount ───────────────────────────────────────────────────
   useEffect(() => {
     return () => {
       debounceRef.current && clearTimeout(debounceRef.current);
@@ -164,10 +160,8 @@ export default function LocationSearch({
     setShowDropdown(false);
     setActiveIndex(-1);
 
-    // Refresh session token after each selection (Google best practice)
     sessionToken.current = newSessionToken();
 
-    // Immediately signal resolving so parent can disable the CTA
     onSelect?.({ ...loc, display_name: loc.display_name, _resolving: true });
 
     setLoadingState(true);
@@ -204,7 +198,6 @@ export default function LocationSearch({
   const handleChange = (value: string) => {
     setQuery(value);
 
-    // Clear selection when user edits
     if (presetLocation) onSelect?.(null);
 
     debounceRef.current && clearTimeout(debounceRef.current);
