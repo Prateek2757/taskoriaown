@@ -13,6 +13,7 @@ import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import { SparklesCoreLight } from "./ui/sparklesLight";
 import ScrollPopularSection from "./ScrollPopularSection";
 import Image from "next/image";
+import Explore from "./navabr/explore/Explore";
 
 interface Category {
   category_id: number;
@@ -24,7 +25,7 @@ export default function HeroSection() {
   const [openModal, setOpenModal] = useState(false);
   const [slugvalue, setSlugValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-    null
+    null,
   );
   const { data: session } = useSession();
   const router = useRouter();
@@ -139,7 +140,7 @@ export default function HeroSection() {
             role="banner"
           >
             <Image
-            title="Australia Flag"
+              title="Australia Flag"
               src="/flag-aus.png"
               alt="Australian flag"
               width={18}
@@ -217,7 +218,7 @@ export default function HeroSection() {
 "
               >
                 <Image
-                title="Hero Background "
+                  title="Hero Background "
                   src="/images/herobgnew.avif"
                   alt="background"
                   fill

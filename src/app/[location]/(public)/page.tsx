@@ -4,6 +4,7 @@ import HeroSection from "@/components/HeroSection/Herosection";
 import Script from "next/script";
 const HowTaskoriaWorks = lazy(() => import("@/components/how-taskoria-works"));
 const Categories = lazy(() => import("@/components/Categories"));
+const PopularServicesSection = lazy(()=>import("@/components/PopularServicesSection"))
 const FeaturesPage = lazy(() => import("@/components/Features"));
 const Testomonail = lazy(() => import("@/components/Testomonail"));
 const CTA = lazy(() => import("@/components/CTA"));
@@ -278,9 +279,14 @@ export default function HomePage() {
           </section>
         </Suspense>
 
-        <Suspense fallback={<div className="min-h-[200px]" />}>
+        {/* <Suspense fallback={<div className="min-h-[200px]" />}>
           <section aria-label="Browse service categories">
             <Categories />
+          </section>
+        </Suspense> */}
+            <Suspense fallback={<div className="min-h-[200px]" />}>
+          <section aria-label="Browse service categories">
+            <PopularServicesSection />
           </section>
         </Suspense>
 
