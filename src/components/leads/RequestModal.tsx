@@ -68,6 +68,8 @@ export default function NewRequestModal({
   useEffect(() => {
     if (!selectedCategoryId) return;
 
+    
+
     setQuestions([]);
     setQuestionsLoading(true);
 
@@ -97,6 +99,11 @@ useEffect(() => {
     setStep(1);
     setStepTwoKey((k) => k + 1);
   };
+  useEffect(() => {
+  if (open) {
+    setStep(initialStep);
+  }
+}, [open, initialStep]);
   const close = () => {
     onClose();
     setStep(1);
@@ -119,6 +126,7 @@ useEffect(() => {
       <DialogContent
         onInteractOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
+        onOpenAutoFocus={(e)=>e.preventDefault()}
         className="
           max-w-2xl w-[95%] p-0 rounded-2xl
           max-h-[90vh] overflow-visible flex flex-col

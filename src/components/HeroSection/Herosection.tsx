@@ -97,7 +97,7 @@ export default function HeroSection() {
             <HeroInteractive />
           </div>
 
-          <div className="flex items-center justify-center gap-2 pb-2 sm:mt-4 text-sm text-gray-500 dark:text-gray-400">
+          {/* <div className="flex items-center justify-center gap-2 pb-2 sm:mt-4 text-sm text-gray-500 dark:text-gray-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -114,7 +114,7 @@ export default function HeroSection() {
               <circle cx="12" cy="10" r="3" />
             </svg>
             <span>Serving 50+ cities across Australia</span>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex-1 flex flex-col justify-center">
@@ -126,7 +126,7 @@ export default function HeroSection() {
             <div className="mx-auto max-w-4xl relative" />
 
             <div
-              className="relative -mt-32 h-76 overflow-hidden
+              className="relative -mt-48 h-76 overflow-hidden
                 mask-[radial-gradient(50%_50%,black,transparent)]
                 dark:mask-[radial-gradient(50%_50%,white,transparent)]
                 before:absolute before:inset-0
@@ -139,13 +139,13 @@ export default function HeroSection() {
                 after:bg-zinc-100 dark:after:bg-zinc-900"
               aria-hidden="true"
             >
-              <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#ffffff2c_1px,transparent_1px),linear-gradient(to_bottom,#3a3a3a01_1px,transparent_1px)] bg-size-[70px_80px]" />
+              {/* <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#ffffff2c_1px,transparent_1px),linear-gradient(to_bottom,#3a3a3a01_1px,transparent_1px)] bg-size-[70px_80px]" />
               <SparklesThemed
                 variant="fullbleed"
                 particleDensity={800}
                 speed={1}
                 maxSize={1.7}
-              />
+              /> */}
             </div>
 
             <div className="w-full px-8 absolute bottom-2 left-1/2 -translate-x-1/2 text-center">

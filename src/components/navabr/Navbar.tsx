@@ -111,6 +111,21 @@ export default function ModernNavbar() {
     return () => window.removeEventListener("viewModeChanged", update);
   }, []);
 
+  useEffect(() => {
+    const routesToPrefetch = [
+      "/signin",
+      "/services",
+      "/",
+      "provider/leads",
+      "/customer/dashboard",
+      "/provider/dashboard",
+      "/provider/leads",
+      "/messages/null",
+      "/settings/profile/my-profile",
+    ];
+    routesToPrefetch.forEach((route) => router.prefetch(route));
+  }, [router]);
+
   const handleLogout = async () => {
     setIsProfileOpen(false);
     setIsMenuOpen(false);
@@ -326,12 +341,7 @@ export default function ModernNavbar() {
 
           {/* Desktop centered nav */}
           {!minimalPages.includes(pathname) && (
-            <motion.nav
-              className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 px-5 py-2 rounded-full space-x-2"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
+            <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 px-5 py-2 rounded-full space-x-2">
               <SlidingUnderlineNav
                 currentLinks={currentLinks.map((link) => ({
                   ...link,
@@ -339,7 +349,7 @@ export default function ModernNavbar() {
                 }))}
                 pathname={pathname}
               />
-            </motion.nav>
+            </nav>
           )}
 
           {!minimalPages.includes(pathname) && (
@@ -403,13 +413,13 @@ export default function ModernNavbar() {
                 </div>
               ) : (
                 <>
-                  <Button
-                    variant="ghost"
-                    onClick={() => router.push("/signin")}
-                    className="font-medium text-gray-700 dark:text-gray-300"
+                  <Link
+                    href="/signin"
+                    prefetch={true}
+                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 font-medium text-gray-700 dark:text-gray-300"
                   >
                     Sign In
-                  </Button>
+                  </Link>
                   <Button
                     onClick={() => joinAsProvider()}
                     className="bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
@@ -446,7 +456,7 @@ export default function ModernNavbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.15 }}
               className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998]"
               onClick={() => setIsMenuOpen(false)}
             />
@@ -455,7 +465,7 @@ export default function ModernNavbar() {
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
-              transition={{ type: "spring", damping: 40, stiffness: 300 }}
+              transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
               className="fixed left-0 top-0 bottom-0 w-[min(320px,85vw)] bg-white dark:bg-gray-900 shadow-2xl z-[9999] overflow-y-auto"
             >
               <div className="p-4 border-b border-gray-100 dark:border-gray-800">
@@ -560,6 +570,7 @@ export default function ModernNavbar() {
                     <Link
                       key={link.name}
                       href={link.href}
+                      prefetch={true}
                       onClick={() => setIsMenuOpen(false)}
                       className={`flex items-center gap-3 px-4 py-3 rounded-full font-medium transition-colors ${
                         isActive
@@ -663,16 +674,14 @@ export default function ModernNavbar() {
                   </>
                 ) : (
                   <>
-                    <Button
-                      variant="outline"
-                      className="w-full border-gray-300 dark:border-gray-700 font-medium"
-                      onClick={() => {
-                        router.push("/signin");
-                        setIsMenuOpen(false);
-                      }}
+                    <Link
+                      href="/signin"
+                      prefetch={true}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="inline-flex items-center justify-center w-full border border-gray-300 dark:border-gray-700 font-medium rounded-md h-10 px-4 py-2 text-sm bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                     >
                       Sign In
-                    </Button>
+                    </Link>
                     <Button
                       onClick={async () => {
                         await joinAsProvider();

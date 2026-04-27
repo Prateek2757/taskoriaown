@@ -9,7 +9,7 @@ type Category = {
   category_id: number;
   name: string;
   slug?: string;
-  keywords?: string[] | null; 
+  keywords?: string[] | null;
 };
 
 type Props = {
@@ -75,14 +75,14 @@ export default function CategorySearch({
     if (!categories) return [];
     if (selected && query === selected.name) return [];
     if (!query.trim()) return categories.slice(0, 10);
-  
+
     const q = query.toLowerCase().trim();
-  
+
     return categories.filter((c) => {
       const nameMatch = c.name.toLowerCase().includes(q);
       const keywordMatch = c.keywords?.some((k) => k.toLowerCase().includes(q));
-      return nameMatch 
-      || keywordMatch;
+      return nameMatch
+        || keywordMatch;
     });
   }, [query, categories, selected]);
 
@@ -133,7 +133,7 @@ export default function CategorySearch({
         onChange={(e) => handleChange(e.target.value)}
         placeholder={placeholder ?? "Search category..."}
         onFocus={handleFocus}
-        className="pl-9 pr-9 border- py-5 max-sm:text-sm"
+        className="pl-9 pr-9 border-  py-5 max-sm:text-sm"
       />
 
       {query && (
