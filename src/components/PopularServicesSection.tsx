@@ -113,7 +113,7 @@ export default function PopularServices() {
                     flex flex-col items-center justify-between shrink-0
                     relative pb-3 pt-1 px-2 min-w-[64px] sm:min-w-[72px]
                     transition-colors
-                    ${isActive ? "text-blue-600" : "text-gray-500 hover:text-black"}
+                    ${isActive ? "text-blue-600" : "text-gray-500 hover:text-black dark:hover:text-white"}
                   `}
                 >
                   <span>{filter.icon}</span>

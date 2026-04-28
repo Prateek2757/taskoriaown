@@ -1,4 +1,3 @@
-
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Script from "next/script";
@@ -41,7 +40,6 @@ export interface CategoryWithSubs {
   description?: string;
   image_url?: string;
 }
-
 
 function distanceKm(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371;
@@ -91,7 +89,6 @@ async function getCategories(): Promise<CategoryWithSubs[]> {
   }
 }
 
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const [stateSlug, citySlug] = slug;
@@ -102,7 +99,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (isStatePage) {
     const stateCities = cities.filter((c) => c.state_slug === stateSlug);
     if (!stateCities.length)
-      return { title: "State Not Found | Taskoria", robots: { index: false, follow: false } };
+      return {
+        title: "State Not Found | Taskoria",
+        robots: { index: false, follow: false },
+      };
 
     const stateName = stateCities[0].state_name;
     const title = `Services in ${stateName} | Find Local Professionals | Taskoria`;
@@ -112,34 +112,102 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title,
       description,
-      keywords: [`services in ${stateName}`, `${stateName} professionals`, `local services ${stateName}`, `hire ${stateName}`, `tradespeople ${stateName}`].join(", "),
-      robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
-      openGraph: { title, description, type: "website", locale: "en_AU", url: canonicalUrl, siteName: "Taskoria" },
+      keywords: [
+        `services in ${stateName}`,
+        `${stateName} professionals`,
+        `local services ${stateName}`,
+        `hire ${stateName}`,
+        `tradespeople ${stateName}`,
+      ].join(", "),
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-image-preview": "large",
+          "max-snippet": -1,
+        },
+      },
+      openGraph: {
+        title,
+        description,
+        type: "website",
+        locale: "en_AU",
+        url: canonicalUrl,
+        siteName: "Taskoria",
+      },
       twitter: { card: "summary_large_image", title, description },
       alternates: { canonical: canonicalUrl },
     };
   }
 
-  const city = cities.find((c) => c.slug === citySlug && c.state_slug === stateSlug);
+  const city = cities.find(
+    (c) => c.slug === citySlug && c.state_slug === stateSlug
+  );
   if (!city)
-    return { title: "City Not Found | Taskoria", robots: { index: false, follow: false } };
+    return {
+      title: "City Not Found | Taskoria",
+      robots: { index: false, follow: false },
+    };
 
   const cityName = city.display_name ?? city.name;
   const title = `Services in ${cityName} | Find Local Professionals | Taskoria`;
   const description = `Discover trusted local service providers in ${cityName}, ${city.state_name}. From cleaning to removals, find and compare professionals for any task — get free quotes on Taskoria.`;
   const canonicalUrl = `https://www.taskoria.com/cities/${stateSlug}/${citySlug}`;
-  const imageUrl = city.image_url ?? `https://www.taskoria.com/og-images/cities/${citySlug}.jpg`;
+  const imageUrl =
+    city.image_url ??
+    `https://www.taskoria.com/og-images/cities/${citySlug}.jpg`;
 
   return {
     title,
     description,
-    keywords: [`services in ${cityName}`, `${cityName} professionals`, `hire ${cityName}`, `local services ${cityName}`, `${cityName} ${city.state_name} services`, `tradespeople ${cityName}`].join(", "),
+    keywords: [
+      `services in ${cityName}`,
+      `${cityName} professionals`,
+      `hire ${cityName}`,
+      `local services ${cityName}`,
+      `${cityName} ${city.state_name} services`,
+      `tradespeople ${cityName}`,
+    ].join(", "),
     authors: [{ name: "Taskoria", url: "https://www.taskoria.com" }],
     creator: "Taskoria",
     publisher: "Taskoria",
-    robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large", "max-snippet": -1 } },
-    openGraph: { title, description, type: "website", locale: "en_AU", url: canonicalUrl, siteName: "Taskoria", images: [{ url: imageUrl, width: 1200, height: 630, alt: `Services in ${cityName}` }] },
-    twitter: { card: "summary_large_image", title, description, images: [imageUrl], creator: "@taskoria", site: "@taskoria" },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      locale: "en_AU",
+      url: canonicalUrl,
+      siteName: "Taskoria",
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: `Services in ${cityName}`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+      creator: "@taskoria",
+      site: "@taskoria",
+    },
     alternates: { canonical: canonicalUrl },
   };
 }
@@ -153,17 +221,16 @@ export default async function CityOrStatePage({ params }: Props) {
     getAllCities(),
     getCategories(),
   ]);
-//  const {categories,loading}= useCategories()
-
+  //  const {categories,loading}= useCategories()
 
   if (isStatePage) {
     const stateCitiesRaw = allCities
-    .filter((c) => c.state_slug === stateSlug)
-    .sort((a, b) => b.popularity - a.popularity);
-  
-  const stateCities = Array.from(
-    new Map(stateCitiesRaw.map((c) => [c.name.toLowerCase(), c])).values()
-  );
+      .filter((c) => c.state_slug === stateSlug)
+      .sort((a, b) => b.popularity - a.popularity);
+
+    const stateCities = Array.from(
+      new Map(stateCitiesRaw.map((c) => [c.name.toLowerCase(), c])).values()
+    );
 
     if (!stateCities.length) notFound();
 
@@ -229,8 +296,10 @@ export default async function CityOrStatePage({ params }: Props) {
     .map((c) => ({
       ...c,
       _dist:
-        city.latitude != null && city.longitude != null &&
-        c.latitude != null && c.longitude != null
+        city.latitude != null &&
+        city.longitude != null &&
+        c.latitude != null &&
+        c.longitude != null
           ? distanceKm(city.latitude, city.longitude, c.latitude, c.longitude)
           : Infinity,
     }))
@@ -240,10 +309,10 @@ export default async function CityOrStatePage({ params }: Props) {
     .slice(0, 10)
     .map(({ _dist: _, ...rest }) => rest as City);
 
-    const sameStateRaw = allCities
+  const sameStateRaw = allCities
     .filter((c) => c.state_slug === stateSlug && c.city_id !== city.city_id)
     .sort((a, b) => b.popularity - a.popularity);
-  
+
   const sameStateCities: City[] = Array.from(
     new Map(sameStateRaw.map((c) => [c.name.toLowerCase(), c])).values()
   ).slice(0, 12);
@@ -292,7 +361,6 @@ export default async function CityOrStatePage({ params }: Props) {
     </>
   );
 }
-
 
 export async function generateStaticParams() {
   try {

@@ -159,19 +159,22 @@ export default function LocationSearch({
     setResults([]);
     setShowDropdown(false);
     setActiveIndex(-1);
-
+  
     sessionToken.current = newSessionToken();
-
-    onSelect?.({ ...loc, display_name: loc.display_name, _resolving: true });
-
+  
+    // ✅ Optimistic: forward immediately with basic data so the parent can proceed
+    onSelect?.({ ...loc, display_name: loc.display_name, _resolving: false });
+  
+    // 🔄 Enrich in background — parent state silently updates when ready
     setLoadingState(true);
     try {
       const details = await fetchPlaceDetails(loc.place_id);
       if (!details) return;
-
+  
       const cityRes = await axios.post("/api/signup/location", details);
       const city_id = cityRes.data.city_id;
-
+  
+      // Silent patch — UI is already on step 2 by now
       onSelect?.({
         ...details,
         city_id,
@@ -180,7 +183,8 @@ export default function LocationSearch({
       });
     } catch (err) {
       console.error("Location enrichment failed:", err);
-      onSelect?.(null);
+      // Don't call onSelect(null) here — user has already moved forward
+      // city_id will just be missing, handle gracefully in submit
     } finally {
       setLoadingState(false);
     }
