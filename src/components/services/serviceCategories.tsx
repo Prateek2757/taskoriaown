@@ -286,12 +286,12 @@ const filteredData = useMemo(() => {
                   <Link href={`/services/${category.slug}`} className="block">
                     <div className="relative h-40 w-full overflow-hidden">
                       {(() => {
-                        const staticImage = staticServiceImages[category.name];
+                        // const staticImage = staticServiceImages[category.name];
 
                         return (
                           <>
                             <Image
-                              src={staticImage?.url || "/images/default.webp"}
+                              src={category?.image_url || "/images/default.webp"}
                               alt={category.name}
                               fill
                               className="object-cover  transition duration-300 group-hover:scale-105"
