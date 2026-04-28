@@ -445,7 +445,6 @@ export default function ModernNavbar() {
             </nav>
           )}
 
-          {/* Desktop right actions */}
           {!isMinimal && (
             <div className="hidden md:flex items-center gap-3 ml-auto">
               {isLoggedIn ? (
@@ -461,7 +460,7 @@ export default function ModernNavbar() {
                   >
                     <Avatar
                       src={session?.user?.image}
-                      size="sm"
+                      size="md"
                       isPro={isPro}
                     />
                     <span className="font-medium text-gray-700 dark:text-gray-300">
@@ -511,7 +510,6 @@ export default function ModernNavbar() {
             </div>
           )}
 
-          {/* Mobile: bell + hamburger */}
           <div className="flex items-center gap-1 md:hidden ml-auto">
             {isLoggedIn && session && (
               <NotificationBell userId={Number(session.user?.id)} />
@@ -528,7 +526,6 @@ export default function ModernNavbar() {
         </div>
       </header>
 
-      {/* ── Mobile drawer ────────────────────────────────────────────────── */}
       <AnimatePresence>
         {isMenuOpen && (
           <>
@@ -544,7 +541,6 @@ export default function ModernNavbar() {
               aria-hidden
             />
 
-            {/* Drawer */}
             <motion.div
               key="drawer"
               initial={{ x: "-100%" }}
@@ -555,7 +551,6 @@ export default function ModernNavbar() {
                 bg-white dark:bg-gray-900 shadow-2xl z-[9999] overflow-y-auto
                 flex flex-col"
             >
-              {/* Drawer header */}
               <div className="p-4 border-b border-gray-100 dark:border-gray-800 shrink-0">
                 <div className="flex items-center justify-between mb-4 gap-2">
                   <Link
@@ -588,7 +583,6 @@ export default function ModernNavbar() {
                   </div>
                 </div>
 
-                {/* Session card */}
                 {session && (
                   <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-4">
                     <div className="flex items-center gap-3 mb-3">
@@ -616,9 +610,7 @@ export default function ModernNavbar() {
                 )}
               </div>
 
-              {/* Drawer nav */}
               <nav className="p-4 space-y-1 flex-1">
-                {/* Main nav links */}
                 {currentLinks.map((link) => (
                   <MobileNavLink
                     key={link.href + link.name}
@@ -634,7 +626,6 @@ export default function ModernNavbar() {
                   />
                 ))}
 
-                {/* Admin */}
                 {session?.user?.adminrole === "admin" && (
                   <MobileNavLink
                     href="/admin"
@@ -645,7 +636,6 @@ export default function ModernNavbar() {
                   />
                 )}
 
-                {/* Public profile */}
                 {session?.user?.public_id && (
                   <MobileNavLink
                     href={`/providerprofile/${session.user.company_slug}`}
@@ -656,7 +646,6 @@ export default function ModernNavbar() {
                   />
                 )}
 
-                {/* Plans */}
                 {session && (
                   <MobileNavLink
                     href="/settings/billing/taskoria_pro"
@@ -667,7 +656,6 @@ export default function ModernNavbar() {
                   />
                 )}
 
-                {/* Affiliate */}
                 {session && (
                   <MobileNavLink
                     href="/affiliate-dashboard-portal"
@@ -678,7 +666,6 @@ export default function ModernNavbar() {
                   />
                 )}
 
-                {/* Switch view */}
                 {session?.user?.role === "provider" && (
                   <button
                     onClick={() =>
@@ -699,12 +686,11 @@ export default function ModernNavbar() {
                 )}
               </nav>
 
-              {/* Drawer footer */}
               <div className="p-4 border-t border-gray-100 dark:border-gray-800 space-y-2 shrink-0">
                 {session ? (
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl
+                    className="w-full flex items-center  border gap-3 px-4 py-3 rounded-xl border-gray-300 dark:border-gray-700
                       text-red-600 dark:text-red-400
                       hover:bg-red-50 dark:hover:bg-red-950
                       font-medium transition-colors"

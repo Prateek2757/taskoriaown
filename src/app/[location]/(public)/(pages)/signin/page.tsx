@@ -1,6 +1,6 @@
 "use client";
 
-import { type ComponentType, Suspense, useEffect, useState } from "react";
+import { type ComponentType, Suspense, useEffect, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import {
@@ -15,125 +15,139 @@ import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import axios from "axios";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 export const dynamic = "force-dynamic";
 
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function resolveRedirect(opts: {
+  hasPendingLead: boolean;
+  resumeRequest: boolean;
+  next: string | null;
+}): string {
+  if (opts.hasPendingLead) return "/customer/dashboard";
+  if (opts.resumeRequest && opts.next) return opts.next;
+  return "/provider/dashboard";
+}
+
+
 function SignInForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail]           = useState("");
+  const [password, setPassword]     = useState("");
+  const [message, setMessage]       = useState("");
+  const [loading, setLoading]       = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const router = useRouter();
+  const router                          = useRouter();
   const { joinAsProvider, loading: joinLoading } = useJoinAsProvider();
-  const searchParams = useSearchParams();
-  const next = searchParams.get("next");
-  const resumeRequest = searchParams.get("resume_request") === "1";
+  const searchParams                    = useSearchParams();
+  const next                            = searchParams.get("next");
+  const resumeRequest                   = searchParams.get("resume_request") === "1";
 
   useEffect(() => {
-    const savedLead = localStorage.getItem("pendingpayload");
+    router.prefetch("/provider/dashboard");
+    router.prefetch("/customer/dashboard");
+    if (next) router.prefetch(next);
+  }, [router, next]);
 
-    if (savedLead) {
-      localStorage.setItem("viewMode", "customer");
-    } else {
-      localStorage.setItem("viewMode", "provider");
-    }
-
+  useEffect(() => {
+    const hasPending = !!localStorage.getItem("pendingpayload");
+    localStorage.setItem("viewMode", hasPending ? "customer" : "provider");
     window.dispatchEvent(new Event("viewModeChanged"));
   }, []);
 
   useEffect(() => {
     const error = searchParams.get("error");
+    if (!error) return;
 
     if (error === "not_registered") {
-      setMessage(
-        "This Google account is not registered. Create an account first."
-      );
-    }
-
-    if (error === "OAuthAccountNotLinked") {
+      setMessage("This Google account is not registered. Create an account first.");
+    } else if (error === "OAuthAccountNotLinked") {
       setMessage("This email is already linked to a different sign-in method.");
     }
 
-    if (error) {
-      const base =
-        resumeRequest && next
-          ? `/signin?next=${encodeURIComponent(next)}&resume_request=1`
-          : "/signin";
-      router.replace(base, { scroll: false });
-    }
+    const base =
+      resumeRequest && next
+        ? `/signin?next=${encodeURIComponent(next)}&resume_request=1`
+        : "/signin";
+    router.replace(base, { scroll: false });
   }, [searchParams, router, next, resumeRequest]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    const res = await signIn("credentials", {
-      redirect: false,
-      email: email.trim().toLowerCase(),
-      password,
-    });
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email.trim())) {
-      setMessage("Please enter a valid email address.");
-      setLoading(false);
-      return;
-    }
-
-    setLoading(false);
-
-    if (res?.error) {
-      setMessage(res.error);
-      return;
-    }
-    const resSession = await fetch("/api/auth/register-session", { method: "POST" });
-    const { token } = await resSession.json();
-  
-    localStorage.setItem("redirect_token", token);
-
-    const savedLead = localStorage.getItem("pendingpayload");
-    if (savedLead) {
-      try {
-        const parsedData = JSON.parse(savedLead);
-
-        if (Date.now() > parsedData.expiry) {
-          localStorage.removeItem("pendingpayload");
-        } else {
-          const payload = parsedData.value;
-          const submitRes = await axios.post("/api/leads", payload);
-
-          if (!submitRes.data.error) {
-            localStorage.removeItem("pendingpayload");
-            localStorage.setItem("viewMode", "customer");
-            window.dispatchEvent(new Event("viewModeChanged"));
-            setMessage("Request submitted. Redirecting to your dashboard...");
-            setTimeout(() => router.push("/customer/dashboard"), 400);
-          } else {
-            setMessage(submitRes.data.error);
-          }
-          return;
-        }
-      } catch (error) {
-        console.error("Auto Submit Failed", error);
+      if (!EMAIL_RE.test(email.trim())) {
+        setMessage("Please enter a valid email address.");
+        return;
       }
-    }
 
-    if (resumeRequest && next) {
-      setMessage("Signed in. Returning to your request...");
-      setTimeout(() => router.push(next), 300);
-      return;
-    }
+      setLoading(true);
+      setMessage("");
 
-    setMessage("Signed in. Redirecting...");
-    setTimeout(() => router.push("/provider/dashboard"), 300);
-  };
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: email.trim().toLowerCase(),
+        password,
+      });
+
+      if (res?.error) {
+        setMessage(res.error);
+        setLoading(false);
+        return;
+      }
+
+     
+      fetch("/api/auth/register-session", { method: "POST" })
+        .then((r) => r.json())
+        .then(({ token }) => localStorage.setItem("redirect_token", token))
+        .catch(() => {/* non-critical */});
+
+      const savedLead = localStorage.getItem("pendingpayload");
+      if (savedLead) {
+        try {
+          const parsedData = JSON.parse(savedLead);
+          if (Date.now() <= parsedData.expiry) {
+            const submitRes = await axios.post("/api/leads", parsedData.value);
+            if (!submitRes.data.error) {
+              localStorage.removeItem("pendingpayload");
+              localStorage.setItem("viewMode", "customer");
+              window.dispatchEvent(new Event("viewModeChanged"));
+            } else {
+              setMessage(submitRes.data.error);
+              setLoading(false);
+              return;
+            }
+          } else {
+            localStorage.removeItem("pendingpayload");
+          }
+        } catch (err) {
+          console.error("Auto-submit failed:", err);
+        }
+      }
+
+      const destination = resolveRedirect({
+        hasPendingLead: !!savedLead,
+        resumeRequest,
+        next,
+      });
+
+      router.replace(destination);
+    },
+    [email, password, resumeRequest, next, router],
+  );
+
+  const handleGoogleSignIn = useCallback(() => {
+    signIn("google", {
+      callbackUrl: resumeRequest && next ? next : "/provider/dashboard",
+    });
+  }, [resumeRequest, next]);
 
   return (
-    <div className=" bg-linear-to-b from-slate-50  via-white to-slate-100 px-4 py-10 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
-      <div className="  flex  mx-auto items-center justify-center  max-w-6xl gap-6 ">
+    <div className="bg-linear-to-b from-slate-50 via-white to-slate-100 px-4 py-10 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
+      <div className="flex mx-auto items-center justify-center max-w-6xl gap-6">
         <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:p-10">
           <div className="mb-6">
             <p className="text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
@@ -147,17 +161,22 @@ function SignInForm() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div>
               <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-200">
                 Email
               </label>
               <input
-                type="text"
+                type="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-11 w-full rounded-xl border border-slate-300 px-3 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100 dark:focus:ring-blue-900"
+                autoComplete="email"
+                autoCapitalize="none"
+                spellCheck={false}
+                className="h-11 w-full rounded-xl border border-slate-300 px-3 text-slate-900 outline-none transition
+                  focus:border-blue-500 focus:ring-2 focus:ring-blue-200
+                  dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100 dark:focus:ring-blue-900"
                 required
               />
             </div>
@@ -180,14 +199,18 @@ function SignInForm() {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="h-11 w-full rounded-xl border border-slate-300 px-3 pr-10 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100 dark:focus:ring-blue-900"
+                  autoComplete="current-password"
+                  className="h-11 w-full rounded-xl border border-slate-300 px-3 pr-10 text-slate-900 outline-none transition
+                    focus:border-blue-500 focus:ring-2 focus:ring-blue-200
+                    dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100 dark:focus:ring-blue-900"
                   required
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword((prev) => !prev)}
+                  onClick={() => setShowPassword((p) => !p)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-200"
-                  aria-label="Toggle password visibility"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  tabIndex={-1}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -197,7 +220,7 @@ function SignInForm() {
             <Button
               disabled={loading}
               type="submit"
-              className="h-11 w-full bg-blue-600 text-white hover:bg-blue-700"
+              className="h-11 w-full bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-70"
             >
               {loading ? (
                 <span className="inline-flex items-center gap-2">
@@ -209,31 +232,29 @@ function SignInForm() {
             </Button>
           </form>
 
-          {message ? (
+          {message && (
             <p
-              className={`mt-3 text-sm ${message.toLowerCase().includes("signed") || message.toLowerCase().includes("request") ? "text-emerald-600" : "text-red-500"}`}
+              className={`mt-3 text-sm ${
+                message.toLowerCase().includes("signed") ||
+                message.toLowerCase().includes("request")
+                  ? "text-emerald-600 dark:text-emerald-400"
+                  : "text-red-500 dark:text-red-400"
+              }`}
             >
               {message}
             </p>
-          ) : null}
+          )}
 
           <div className="my-5 flex items-center gap-3">
             <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
-            <span className="text-xs uppercase tracking-wide text-slate-400">
-              or
-            </span>
+            <span className="text-xs uppercase tracking-wide text-slate-400">or</span>
             <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
           </div>
 
           <Button
             type="button"
             variant="outline"
-            onClick={() =>
-              signIn("google", {
-                callbackUrl:
-                  resumeRequest && next ? next : "/provider/dashboard",
-              })
-            }
+            onClick={handleGoogleSignIn}
             className="h-11 w-full"
           >
             <img
@@ -264,6 +285,7 @@ function SignInForm() {
   );
 }
 
+
 function ProofRow({
   icon: Icon,
   title,
@@ -276,13 +298,12 @@ function ProofRow({
   return (
     <div className="rounded-xl border border-blue-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800/70">
       <Icon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-      <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-slate-100">
-        {title}
-      </p>
+      <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-slate-100">{title}</p>
       <p className="text-xs text-slate-600 dark:text-slate-300">{body}</p>
     </div>
   );
 }
+
 
 function SignInLoading() {
   return (
@@ -293,6 +314,7 @@ function SignInLoading() {
     </div>
   );
 }
+
 
 export default function SignInPage() {
   return (
