@@ -1,8 +1,6 @@
 "use client";
-
 import useSWR from "swr";
 import { toast } from "sonner";
-import axios from "axios";
 import { fetcher } from "@/lib/fetcher";
 
 interface Category {

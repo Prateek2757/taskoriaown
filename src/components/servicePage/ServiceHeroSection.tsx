@@ -26,11 +26,12 @@ export default function ServiceHeroSection({
 
   return (
     <section className="relative">
-      <div className="absolute inset-0 bg-linear-to-br from-[#03070d] via-[#16364e] to-[#13404c] dark:from-slate-950 dark:via-indigo-950 dark:to-slate-900 opacity-95"></div>
-      <div
+      <div className="absolute inset-0 bg-linear-to-br from-[#03070d] via-[#16364e] to-[#13404c]  opacity-95"></div>
+      {/* <div
         className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-40 dark:opacity-20"
         style={{ backgroundImage: `url(${service.hero_image})` }}
-      />
+      /> */}
+      
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-10 md:py-10">
         <div className="text-center mb-6">

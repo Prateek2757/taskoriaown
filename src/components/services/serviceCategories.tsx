@@ -16,7 +16,7 @@ interface ServiceCategory {
   name: string;
   main_category?: string;
   slug: string;
-  image_url?:string;
+  image_url?: string;
 }
 
 interface ServiceCategoriesProps {
@@ -97,7 +97,7 @@ export default function ServiceCategoriesClient({
     return categoriesWithSignals.filter(
       (category) =>
         category.name.toLowerCase().includes(query) ||
-        category.slug.toLowerCase().includes(query),
+        category.slug.toLowerCase().includes(query)
     );
   }, [categoriesWithSignals, searchQuery]);
 
@@ -137,25 +137,20 @@ export default function ServiceCategoriesClient({
     setOpenModal(true);
   };
 
-const filteredData = useMemo(() => {
-  let data = hasSearchQuery ? filteredCategories :secondaryCategories;
+  const filteredData = useMemo(() => {
+    let data = hasSearchQuery ? filteredCategories : secondaryCategories;
 
-  // filter by category tab
-  if (filterData !== "All") {
-    data = data.filter(
-      (c) =>
-        c.main_category?.toLowerCase().trim() ===
-        filterData.toLowerCase().trim()
-    );
-  }
+    if (filterData !== "All") {
+      data = data.filter(
+        (c) =>
+          c.main_category?.toLowerCase().trim() ===
+          filterData.toLowerCase().trim()
+      );
+    }
 
-  return data; 
-}, [hasSearchQuery, filteredCategories ,secondaryCategories,filterData]); 
-  const { paginatedData } = usePagination(
-    filteredData,
-    9,
-    filterData,
-  );
+    return data;
+  }, [hasSearchQuery, filteredCategories, secondaryCategories, filterData]);
+  const { paginatedData } = usePagination(filteredData, 9, filterData);
   const displayData = showData ? filteredData : paginatedData;
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-sky-50 px-4 py-12 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
@@ -258,7 +253,7 @@ const filteredData = useMemo(() => {
               </h3> */}
               <FilterServices
                 filterData={filterData}
-                onChangeFilterData={setFilterData} 
+                onChangeFilterData={setFilterData}
               />
               {/* <Button
                 variant="outline"
@@ -285,49 +280,27 @@ const filteredData = useMemo(() => {
                 >
                   <Link href={`/services/${category.slug}`} className="block">
                     <div className="relative h-40 w-full overflow-hidden">
-                      {(() => {
-                        const staticImage = staticServiceImages[category.name];
-
-                        return (
-                          <>
-                            <Image
-                              src={staticImage?.url || "/images/default.webp"}
-                              alt={category.name}
-                              fill
-                              className="object-cover  transition duration-300 group-hover:scale-105"
-                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                              priority
-                            />
-                              {/* <Image
-                              src={
-                                category.image_url
-                                  ? category.image_url
-                                  : "/taskorialogonew.png"
-                              }
-                              alt={category.name || "category image"}
-                              width={300}
-                              height={200}
-                              onError={(e) => {
-                                e.currentTarget.src = "/images/default.webp";
-                              }}
-                            /> */}
-
-                            <div
-                              className={`absolute inset-0 bg-linear-to-t ${"from-black/60 to-transparent"}`}
-                            />
-                          </>
-                        );
-                      })()}
+                      <Image
+                        src={category.image_url || "/taskorialogonew.png"}
+                        alt={category.name || "category image"}
+                        fill
+                        className="object-cover transition duration-300 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        onError={(e) => {
+                          e.currentTarget.src = "/taskorialogonew.png";
+                        }}
+                        priority={index < 9} 
+                      />
 
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
-      <h4 className="absolute bottom-3 left-4 right-4 text-lg font-semibold text-white">
+
+                      <h4 className="absolute bottom-3 left-4 right-4 text-lg font-semibold text-white">
                         {highlightMatch(category.name, searchQuery)}
                       </h4>
-                       </div>
+                    </div>
                   </Link>
-               
 
-                {/* <div className="p-5">
+                  {/* <div className="p-5">
                   <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-300">
                     <span className="inline-flex items-center gap-1">
                       <Clock3 className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
@@ -346,7 +319,6 @@ const filteredData = useMemo(() => {
                     Post this job
                   </Button>
                 </div> */}
-                  
                 </article>
               ))}
             </div>

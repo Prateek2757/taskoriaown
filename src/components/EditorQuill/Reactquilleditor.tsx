@@ -1,24 +1,4 @@
 "use client";
-
-/**
- * ReactQuillEditor
- * ─────────────────────────────────────────────────────────────
- * Drop-in replacement for the CKEditor wrapper.
- * Usage (same API as before):
- *   <ReactQuillEditor value={field.value} onChange={field.onChange} placeholder="…" />
- *
- * Install once:
- *   npm install react-quill-new
- *   # react-quill is unmaintained; react-quill-new is the maintained fork
- *   # that works with React 18/19 without the findDOMNode warning.
- *
- * The component is intentionally client-only. Import it with next/dynamic:
- *   const QuillEditor = dynamic(
- *     () => import("@/components/editor/ReactQuillEditor"),
- *     { ssr: false, loading: () => <div className="h-36 animate-pulse rounded-xl bg-zinc-100 dark:bg-zinc-800" /> }
- *   );
- */
-
 import { useEffect, useRef } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";

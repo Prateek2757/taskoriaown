@@ -30,7 +30,7 @@ import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import SlidingUnderlineNav from "./slidingUnderline";
 import NotificationBell from "../notification/NotificationBell";
 import TaskoriaSasthoreDirect from "../sastoticket/taskoriasasthoredirect";
-import Explore from "./Explore/Explore";
+import Explore from "./explore/Explore";
 import { IoCaretDown } from "react-icons/io5";
 
 type ViewMode = "customer" | "provider" | null;

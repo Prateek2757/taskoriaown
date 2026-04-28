@@ -12,6 +12,7 @@ const protectedPaths = [
   "/provider/message",
   "/provider/leads",
   "/settings",
+  "/admin/*",
   "/admin/adminbudgetmanager",
   "/provider-responses",
 ];

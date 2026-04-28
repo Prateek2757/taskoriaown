@@ -29,7 +29,7 @@ export async function GET(req: Request) {
       `?place_id=${placeId}` +
       `&fields=name,geometry,address_component,place_id` +
       `&sessiontoken=${session}` +
-      `&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`;
+      `&key=${process.env.GOOGLE_MAPS_API_KEY}`;
 
     const res = await axios.get(url);
     const data = res.data;
