@@ -1,9 +1,15 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+  memo,
+} from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { FaMoneyCheck } from "react-icons/fa6";
-
 import Image from "next/image";
 import {
   Menu as MenuIcon,
@@ -11,7 +17,6 @@ import {
   User,
   ChevronDown,
   Search,
-  Users,
   LayoutDashboard,
   MessageSquare,
   LogOut,
@@ -19,65 +24,320 @@ import {
   HandPlatter,
   Binoculars,
   Star,
-  LayoutDashboardIcon,
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ThemeToggle } from "../theme-toggle";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import SlidingUnderlineNav from "./slidingUnderline";
 import NotificationBell from "../notification/NotificationBell";
-import TaskoriaSasthoreDirect from "../sastoticket/taskoriasasthoredirect";
 import Explore from "./explore/Explore";
-import { IoCaretDown } from "react-icons/io5";
 
-type ViewMode = "customer" | "provider" | null;
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+type ViewMode = "customer" | "provider";
+
+type NavLink = {
+  name: string;
+  href: string;
+  icon: React.ElementType;
+};
+
+// ─── Constants (stable — defined outside component, never recreated) ──────────
+
+const NAV_LINKS: Record<"public" | "customer" | "provider", NavLink[]> = {
+  public: [
+    { name: "Home", href: "/", icon: Home },
+    { name: "Services", href: "/services", icon: HandPlatter },
+  ],
+  customer: [
+    { name: "Home", href: "/", icon: Home },
+    { name: "My Requests", href: "/customer/dashboard", icon: Search },
+    { name: "Discover", href: "/services", icon: Binoculars },
+    { name: "Messages", href: "/messages/null", icon: MessageSquare },
+  ],
+  provider: [
+    { name: "Home", href: "/", icon: Home },
+    { name: "Leads", href: "/provider/leads", icon: Search },
+    { name: "Inbox", href: "/messages/null", icon: MessageSquare },
+    { name: "My Responses", href: "/provider-responses", icon: MessageSquare },
+    { name: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
+  ],
+};
+
+const MINIMAL_PAGES = ["/create", "/create-account"];
+
+const PREFETCH_ROUTES = [
+  "/signin",
+  "/services",
+  "/",
+  "/provider/leads",
+  "/customer/dashboard",
+  "/provider/dashboard",
+  "/messages/null",
+  "/settings/profile/my-profile",
+];
+
+// ─── Helper — read viewMode from localStorage synchronously ──────────────────
+
+function readStoredViewMode(role?: string): ViewMode {
+  if (typeof window === "undefined") return "customer";
+  return (
+    (localStorage.getItem("viewMode") as ViewMode | null) ??
+    (role === "provider" ? "provider" : "customer")
+  );
+}
+
+// ─── Sub-components (memoized to avoid cascade re-renders) ───────────────────
+
+interface AvatarProps {
+  src?: string | null;
+  size?: "sm" | "md";
+  isPro?: boolean;
+}
+
+const Avatar = memo(function Avatar({ src, size = "md", isPro }: AvatarProps) {
+  const dim = size === "sm" ? "w-8 h-8" : "w-10 h-10";
+  const starDim = size === "sm" ? "w-4 h-4" : "w-5 h-5";
+  const iconSize = size === "sm" ? "w-4 h-4" : "w-6 h-6";
+
+  return (
+    <div className="relative flex-shrink-0">
+      <div
+        className={`${dim} rounded-full flex items-center justify-center
+          bg-gradient-to-br from-blue-100 to-cyan-100
+          dark:from-blue-900 dark:to-cyan-900 overflow-hidden
+          ${isPro ? "ring-2 ring-yellow-400" : ""}`}
+      >
+        {src ? (
+          <Image
+            src={src}
+            alt="Profile"
+            fill
+            className="object-cover rounded-full"
+            sizes={size === "sm" ? "32px" : "40px"}
+            priority
+          />
+        ) : (
+          <User className={`${iconSize} text-blue-600 dark:text-blue-300`} />
+        )}
+      </div>
+      {isPro && (
+        <div
+          className={`absolute -bottom-1 -right-1 ${starDim} rounded-full
+            bg-gradient-to-br from-yellow-400 to-orange-500
+            flex items-center justify-center
+            ring-2 ring-white dark:ring-slate-900 shadow-md`}
+        >
+          <Star className="w-2.5 h-2.5 text-white fill-white" />
+        </div>
+      )}
+    </div>
+  );
+});
+
+// ─── Dropdown ────────────────────────────────────────────────────────────────
+
+interface DropdownProps {
+  session: any;
+  viewMode: ViewMode;
+  onSwitchView: (v: ViewMode) => void;
+  onClose: () => void;
+  onLogout: () => void;
+}
+
+const ProfileDropdown = memo(function ProfileDropdown({
+  session,
+  viewMode,
+  onSwitchView,
+  onClose,
+  onLogout,
+}: DropdownProps) {
+  const canSwitch = session?.user?.role === "provider";
+  const isPro =
+    session?.user?.status === "active" ||
+    session?.user?.status === "trialing";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -8, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -8, scale: 0.97 }}
+      transition={{ duration: 0.12, ease: "easeOut" }}
+      className="absolute right-0 top-full mt-2 w-72
+        bg-white dark:bg-gray-900 rounded-xl shadow-xl
+        border border-gray-100 dark:border-gray-800
+        overflow-hidden z-[999]"
+    >
+      {/* Header */}
+      <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-3">
+          <Avatar src={session?.user?.image} size="md" isPro={isPro} />
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-gray-900 dark:text-gray-100 truncate">
+              {session?.user?.name || "User"}
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+              {session?.user?.email}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="py-1">
+        {canSwitch && (
+          <button
+            onClick={() =>
+              onSwitchView(viewMode === "provider" ? "customer" : "provider")
+            }
+            className="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium
+              text-gray-700 dark:text-gray-300
+              hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-600
+              transition-colors"
+          >
+            <span>
+              Switch to {viewMode === "provider" ? "Customer" : "Provider"}
+            </span>
+            <ChevronDown className="w-4 h-4 -rotate-90" />
+          </button>
+        )}
+
+        {[
+          {
+            href: "/settings/billing/taskoria_pro",
+            label: "Taskoria Plans & Pricing",
+          },
+          ...(session?.user?.adminrole === "admin"
+            ? [{ href: "/admin", label: "Admin Menu" }]
+            : []),
+          ...(session?.user?.public_id
+            ? [
+                {
+                  href: `/providerprofile/${session.user.company_slug}`,
+                  label: "View Public Profile",
+                },
+              ]
+            : []),
+          { href: "/affiliate-dashboard-portal", label: "Affiliate Hub" },
+          { href: "/settings/profile/my-profile", label: "Settings" },
+        ].map(({ href, label }) => (
+          <Link
+            key={href}
+            href={href}
+            onClick={onClose}
+            className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300
+              hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          >
+            {label}
+          </Link>
+        ))}
+      </div>
+
+      {/* Sign out */}
+      <div className="border-t border-gray-200 dark:border-gray-700 p-2">
+        <button
+          onClick={onLogout}
+          className="w-full px-4 py-2.5 text-sm font-medium rounded-lg
+            text-red-600 dark:text-red-400
+            hover:bg-red-50 dark:hover:bg-red-950
+            transition-colors"
+        >
+          Sign Out
+        </button>
+      </div>
+    </motion.div>
+  );
+});
+
+// ─── Mobile drawer nav link ───────────────────────────────────────────────────
+
+const MobileNavLink = memo(function MobileNavLink({
+  href,
+  icon: Icon,
+  label,
+  isActive,
+  onClick,
+}: {
+  href: string;
+  icon: React.ElementType;
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <Link
+      href={href}
+      prefetch
+      onClick={onClick}
+      className={`flex items-center gap-3 px-4 py-3 rounded-full font-medium transition-colors ${
+        isActive
+          ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md"
+          : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+      }`}
+    >
+      <Icon
+        className={`w-5 h-5 ${
+          isActive ? "text-white" : "text-gray-500 dark:text-gray-400"
+        }`}
+      />
+      <span>{label}</span>
+    </Link>
+  );
+});
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function ModernNavbar() {
+  const { joinAsProvider } = useJoinAsProvider();
+  const { data: session, status } = useSession();
+  const pathname = usePathname();
+  const router = useRouter();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>(null);
-  const { joinAsProvider, loading } = useJoinAsProvider();
-  const { data: session, status } = useSession();
 
-  const pathname = usePathname();
+  // ── Synchronous init from localStorage — zero flicker ──────────────────────
+  const [viewMode, setViewMode] = useState<ViewMode>(() =>
+    readStoredViewMode(),
+  );
 
-  const params = useParams();
-  const router = useRouter();
   const profileRef = useRef<HTMLDivElement>(null);
+  const isMinimal = MINIMAL_PAGES.includes(pathname);
+  const isLoggedIn = status === "authenticated";
 
-  // const locale = (params.locale as string) || "en-au";
+  const isPro =
+    session?.user?.status === "active" ||
+    session?.user?.status === "trialing";
 
-  const minimalPages = ["/create", "/create-account"];
-
-  const navLinks = {
-    public: [
-      { name: "Home", href: "/", icon: Home },
-      { name: "Services", href: "/services", icon: HandPlatter },
-    ],
-    customer: [
-      { name: "Home", href: "/", icon: Home },
-      { name: "My Requests", href: "/customer/dashboard", icon: Search },
-      { name: "Discover", href: "/services", icon: Binoculars },
-      { name: "Messages", href: "/messages/null", icon: MessageSquare },
-    ],
-    provider: [
-      { name: "Home", href: "/", icon: Home },
-      { name: "Leads", href: "/provider/leads", icon: Search },
-      { name: "Inbox", href: "/messages/null", icon: MessageSquare },
-      {
-        name: "My Responses",
-        href: "/provider-responses",
-        icon: MessageSquare,
-      },
-      { name: "Dashboard", href: "/provider/dashboard", icon: LayoutDashboard },
-    ],
-  };
-
+  // ── Sync viewMode once session resolves ─────────────────────────────────────
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
+    if (status !== "authenticated" || !session) return;
+    const stored = localStorage.getItem("viewMode") as ViewMode | null;
+    if (!stored) {
+      const def: ViewMode =
+        session.user.role === "provider" ? "provider" : "customer";
+      localStorage.setItem("viewMode", def);
+      setViewMode(def);
+    }
+  }, [status, session]);
+
+  // ── Cross-tab viewMode sync ─────────────────────────────────────────────────
+  useEffect(() => {
+    const update = () => {
+      const stored = localStorage.getItem("viewMode") as ViewMode | null;
+      if (stored) setViewMode(stored);
+    };
+    window.addEventListener("viewModeChanged", update);
+    return () => window.removeEventListener("viewModeChanged", update);
+  }, []);
+
+  // ── Click-outside to close profile dropdown ─────────────────────────────────
+  useEffect(() => {
+    if (!isProfileOpen) return;
+    const handler = (e: MouseEvent) => {
       if (
         profileRef.current &&
         !profileRef.current.contains(e.target as Node)
@@ -85,390 +345,218 @@ export default function ModernNavbar() {
         setIsProfileOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [isProfileOpen]);
 
+  // ── Close mobile menu on route change ──────────────────────────────────────
   useEffect(() => {
-    if (!session) return;
-    const stored = localStorage.getItem("viewMode") as ViewMode;
-    if (stored) {
-      setViewMode(stored);
-      return;
-    }
-    const defaultView =
-      session.user.role === "provider" ? "provider" : "customer";
-    setViewMode(defaultView);
-    localStorage.setItem("viewMode", defaultView);
-  }, [session]);
+    setIsMenuOpen(false);
+    setIsProfileOpen(false);
+  }, [pathname]);
 
+  // ── Prefetch routes ─────────────────────────────────────────────────────────
   useEffect(() => {
-    const update = () => {
-      const stored = localStorage.getItem("viewMode") as ViewMode;
-      setViewMode(stored);
-    };
-    window.addEventListener("viewModeChanged", update);
-    return () => window.removeEventListener("viewModeChanged", update);
-  }, []);
-
-  useEffect(() => {
-    const routesToPrefetch = [
-      "/signin",
-      "/services",
-      "/",
-      "provider/leads",
-      "/customer/dashboard",
-      "/provider/dashboard",
-      "/provider/leads",
-      "/messages/null",
-      "/settings/profile/my-profile",
-    ];
-    routesToPrefetch.forEach((route) => router.prefetch(route));
+    PREFETCH_ROUTES.forEach((r) => router.prefetch(r));
   }, [router]);
 
-  const handleLogout = async () => {
-    setIsProfileOpen(false);
+  // ── Memoized current links ──────────────────────────────────────────────────
+  const currentLinks = useMemo<NavLink[]>(() => {
+    if (!isLoggedIn) return NAV_LINKS.public;
+    return viewMode === "provider"
+      ? NAV_LINKS.provider
+      : NAV_LINKS.customer;
+  }, [isLoggedIn, viewMode]);
+
+  // ── Stable handlers ─────────────────────────────────────────────────────────
+  const closeAll = useCallback(() => {
     setIsMenuOpen(false);
+    setIsProfileOpen(false);
+  }, []);
+
+  const handleLogout = useCallback(async () => {
+    closeAll();
     await signOut({ redirect: false });
     if (typeof window !== "undefined") {
       localStorage.removeItem("viewMode");
       localStorage.removeItem("draftProviderId");
     }
-    setViewMode(null);
+    setViewMode("customer");
     router.push("/signin");
-  };
+  }, [closeAll, router]);
 
-  const handleSwitchView = (newView: "customer" | "provider") => {
-    if (!session) return;
-    setViewMode(newView);
-    localStorage.setItem("viewMode", newView);
-    setIsProfileOpen(false);
+  const handleSwitchView = useCallback(
+    (newView: ViewMode) => {
+      setViewMode(newView);
+      localStorage.setItem("viewMode", newView);
+      window.dispatchEvent(new Event("viewModeChanged"));
+      closeAll();
+      router.push(
+        newView === "provider" ? "/provider/dashboard" : "/customer/dashboard",
+      );
+    },
+    [closeAll, router],
+  );
+
+  const handleJoinAsProvider = useCallback(async () => {
+    await joinAsProvider();
     setIsMenuOpen(false);
-    router.push(
-      newView === "provider" ? "/provider/dashboard" : "/customer/dashboard",
-    );
-  };
+  }, [joinAsProvider]);
 
-  const getCurrentLinks = () => {
-    if (!session) return navLinks.public;
-    if (viewMode === "provider") return navLinks.provider;
-    if (viewMode === "customer") return navLinks.customer;
-    return navLinks.public;
-  };
-
-  const currentLinks = getCurrentLinks();
-  const isLoggedIn = status === "authenticated";
-  // const getLocalizedHref = (href: string) => {
-  //   if (href === "/") return `/`;
-  //   return `/${href}`;
-  // };
-
-  const renderProfileDropdown = () => {
-    const canSwitchView = session?.user?.role === "provider";
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ duration: 0.15 }}
-        className="absolute right-0 mt- w-72 bg-white dark:bg-gray-900 rounded-xl shadow-xl overflow-hidden z-[999]"
-      >
-        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 p-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <div
-                className={`w-13 h-13 rounded-full flex items-center justify-center
-      bg-gradient-to-br from-blue-100 to-cyan-100
-      dark:from-blue-900 dark:to-cyan-900
-      transition-all group-hover:scale-[1.05] overflow-hidden
-      ${session?.user.status === "active" || session?.user.status === "trialing" ? "ring-2 ring-yellow-400" : ""}`}
-              >
-                {session?.user?.image ? (
-                  <Image
-                    title="Profile Pic "
-                    src={session.user.image}
-                    alt="profile pic"
-                    fill
-                    className="object-cover rounded-full"
-                    sizes="52px"
-                    priority
-                  />
-                ) : (
-                  <User className="w-6 h-6 text-blue-600 dark:text-blue-300" />
-                )}
-              </div>
-
-              {session?.user.status === "active" ||
-                (session?.user.status === "trialing" && (
-                  <div
-                    className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full
-                 bg-gradient-to-br from-yellow-400 to-orange-500
-                 flex items-center justify-center
-                 ring-2 ring-white dark:ring-slate-900 shadow-md"
-                  >
-                    <Star className="w-3 h-3 text-white fill-white" />
-                  </div>
-                ))}
-            </div>
-
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-gray-900 dark:text-gray-100 truncate">
-                {session?.user?.name || "User"}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                {session?.user?.email}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="py-2">
-          {canSwitchView && (
-            <button
-              onClick={() =>
-                handleSwitchView(
-                  viewMode === "provider" ? "customer" : "provider",
-                )
-              }
-              className="w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-800 hover:text-blue-600 transition-colors"
-            >
-              <span>
-                Switch to {viewMode === "provider" ? "Customer" : "Provider"}
-              </span>
-              <ChevronDown className="w-4 h-4 -rotate-90" />
-            </button>
-          )}
-          <Link
-            href="/settings/billing/taskoria_pro"
-            onClick={() => {
-              setIsMenuOpen(false);
-              setIsProfileOpen(false);
-            }}
-            className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-          >
-            Taskoria Plans & Pricing{" "}
-          </Link>
-          {session?.user.adminrole === "admin" ? (
-            <Link
-              href="/admin"
-              onClick={() => {
-                setIsMenuOpen(false);
-                setIsProfileOpen(false);
-              }}
-              className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-            >
-              Admin Menu
-            </Link>
-          ) : (
-            ""
-          )}
-          {session?.user.public_id ? (
-            <Link
-              href={`/providerprofile/${session.user.company_slug}`}
-              onClick={() => {
-                setIsMenuOpen(false);
-                setIsProfileOpen(false);
-              }}
-              className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-            >
-              View Public Profile
-            </Link>
-          ) : (
-            ""
-          )}
-          <Link
-            href={`/affiliate-dashboard-portal`}
-            className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-          >
-            Affiliate Hub
-          </Link>
-
-          <Link
-            href="/settings/profile/my-profile"
-            onClick={() => setIsProfileOpen(false)}
-            className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-          >
-            Settings
-          </Link>
-        </div>
-
-        <div className="border-t border-gray-200 dark:border-gray-700 p-2">
-          <button
-            onClick={handleLogout}
-            className="w-full px-4 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 rounded-md"
-          >
-            Sign Out
-          </button>
-        </div>
-      </motion.div>
-    );
-  };
-
-  // if (status === "loading") {
-  //   return (
-  //     <header className="bg-white dark:bg-gray-900/95 backdrop-blur-md border-b sticky top-0 z-50 shadow-sm">
-  //       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-  //         <div className="flex items-center gap-2">
-  //           <div className="w-10 h-10 bg-[#3C7DED] rounded-xl animate-pulse" />
-  //           <div className="h-8 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
-  //         </div>
-  //       </div>
-  //     </header>
-  //   );
-  // }
+  // ─── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <>
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/30 dark:bg-gray-900/20 border-b border-white/40 dark:border-white/10 shadow-lg shadow-black/5 dark:shadow-white/5 transition-colors w-full">
+      {/* ── Desktop / sticky header ─────────────────────────────────────── */}
+      <header
+        className="sticky top-0 z-50
+          backdrop-blur-xl bg-white/70 dark:bg-gray-900/70
+          border-b border-white/40 dark:border-white/10
+          shadow-sm transition-colors w-full"
+      >
         <div className="container mx-auto px-4 py-2 flex items-center gap-2 relative">
+          {/* Logo */}
           <Link
             href="/"
             className="flex gap-1 items-center hover:opacity-90 transition-opacity flex-1 md:flex-none min-w-0"
           >
             <Image
-              title="Taskoria Logo Navbar"
               src="/images/taskoria_logo.svg"
-              alt="taskorialogo"
+              alt="Taskoria"
               height={41}
               width={25}
-              className="shrink-0 "
+              className="shrink-0"
+              priority
             />
-            <span className="text-2xl font-bold bg-[#2563EB] bg-clip-text text-transparent truncate">
+            <span className="text-2xl font-bold text-[#2563EB] truncate">
               Taskoria
             </span>
           </Link>
+
           <Explore />
 
           {/* Desktop centered nav */}
-          {!minimalPages.includes(pathname) && (
-            <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 px-5 py-2 rounded-full space-x-2">
+          {!isMinimal && (
+            <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 px-5 py-2 rounded-full space-x-2">
               <SlidingUnderlineNav
-                currentLinks={currentLinks.map((link) => ({
-                  ...link,
-                  href: link.href,
-                }))}
+                currentLinks={currentLinks}
                 pathname={pathname}
               />
             </nav>
           )}
 
-          {!minimalPages.includes(pathname) && (
+          {/* Desktop right actions */}
+          {!isMinimal && (
             <div className="hidden md:flex items-center gap-3 ml-auto">
               {isLoggedIn ? (
-                <div className="relative flex" ref={profileRef}>
-                  <div className="">
-                    <NotificationBell userId={Number(session?.user?.id)} />
-                  </div>
+                <div className="relative flex items-center" ref={profileRef}>
+                  <NotificationBell userId={Number(session?.user?.id)} />
+
                   <Button
                     onClick={() => setIsProfileOpen((p) => !p)}
                     variant="ghost"
-                    className="flex items-center gap-2 px py-2 rounded-full transition-all"
+                    className="flex items-center gap-2 px-3 py-2 rounded-full transition-all"
+                    aria-haspopup="true"
+                    aria-expanded={isProfileOpen}
                   >
-                    <div className="relative">
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center
-      bg-gradient-to-br from-blue-100 to-cyan-100
-      dark:from-blue-900 dark:to-cyan-900
-      transition-all group-hover:scale-[1.05] overflow-hidden
-      ${session?.user.status === "active" || session?.user.status === "trialing" ? "ring-2 ring-yellow-400" : ""}
-      `}
-                      >
-                        {session?.user?.image ? (
-                          <Image
-                            title="Session User Image"
-                            src={session.user.image}
-                            alt="profile pic"
-                            fill
-                            className="object-cover rounded-full"
-                            sizes="52px"
-                            priority
-                          />
-                        ) : (
-                          <User className="w-6 h-6 text-blue-600 dark:text-blue-300" />
-                        )}
-                      </div>
-
-                      {session?.user.status === "active" ||
-                        (session?.user.status === "trialing" && (
-                          <div
-                            className="absolute -bottom-1 -right-1 w-5 h-5 py-1 rounded-full
-                 bg-gradient-to-br from-yellow-400 to-orange-500
-                 flex items-center justify-center
-                 ring-2 ring-white dark:ring-slate-900 shadow-md"
-                          >
-                            <Star className=" text-white fill-white" />
-                          </div>
-                        ))}
-                    </div>
+                    <Avatar
+                      src={session?.user?.image}
+                      size="sm"
+                      isPro={isPro}
+                    />
                     <span className="font-medium text-gray-700 dark:text-gray-300">
-                      {session.user?.name?.split(" ")[0] || "User"}
+                      {session?.user?.name?.split(" ")[0] || "User"}
                     </span>
                     <ChevronDown
-                      className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform ${isProfileOpen ? "rotate-180" : ""}`}
+                      className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
+                        isProfileOpen ? "rotate-180" : ""
+                      }`}
                     />
                   </Button>
+
                   <AnimatePresence>
-                    {isProfileOpen && renderProfileDropdown()}
+                    {isProfileOpen && (
+                      <ProfileDropdown
+                        session={session}
+                        viewMode={viewMode}
+                        onSwitchView={handleSwitchView}
+                        onClose={closeAll}
+                        onLogout={handleLogout}
+                      />
+                    )}
                   </AnimatePresence>
                 </div>
               ) : (
                 <>
                   <Link
                     href="/signin"
-                    prefetch={true}
-                    className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 font-medium text-gray-700 dark:text-gray-300"
+                    prefetch
+                    className="inline-flex items-center justify-center h-10 px-4 rounded-md text-sm font-medium
+                      text-gray-700 dark:text-gray-300
+                      hover:bg-accent hover:text-accent-foreground transition-colors"
                   >
                     Sign In
                   </Link>
                   <Button
-                    onClick={() => joinAsProvider()}
-                    className="bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
+                    onClick={handleJoinAsProvider}
+                    className="bg-[#3C7DED] text-white hover:opacity-90 font-medium shadow-md"
                   >
                     Join as Provider
                   </Button>
                 </>
               )}
-              <div className="" suppressHydrationWarning>
+              <div suppressHydrationWarning>
                 <ThemeToggle />
               </div>
             </div>
           )}
 
-          {/* Mobile: notification bell + hamburger grouped together on the right */}
-          <div className="flex items-center gap-1 md:hidden">
-            {session && <NotificationBell userId={Number(session?.user?.id)} />}
+          {/* Mobile: bell + hamburger */}
+          <div className="flex items-center gap-1 md:hidden ml-auto">
+            {isLoggedIn && session && (
+              <NotificationBell userId={Number(session.user?.id)} />
+            )}
             <Button
               variant="ghost"
               onClick={() => setIsMenuOpen((p) => !p)}
               className="p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl"
-              aria-label="Open Menu"
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             >
-              {isMenuOpen ? <X /> : <MenuIcon />}
+              {isMenuOpen ? <X className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
             </Button>
           </div>
         </div>
       </header>
 
+      {/* ── Mobile drawer ────────────────────────────────────────────────── */}
       <AnimatePresence>
         {isMenuOpen && (
           <>
+            {/* Backdrop */}
             <motion.div
+              key="backdrop"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
               className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998]"
               onClick={() => setIsMenuOpen(false)}
+              aria-hidden
             />
 
+            {/* Drawer */}
             <motion.div
+              key="drawer"
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
-              className="fixed left-0 top-0 bottom-0 w-[min(320px,85vw)] bg-white dark:bg-gray-900 shadow-2xl z-[9999] overflow-y-auto"
+              className="fixed left-0 top-0 bottom-0 w-[min(320px,85vw)]
+                bg-white dark:bg-gray-900 shadow-2xl z-[9999] overflow-y-auto
+                flex flex-col"
             >
-              <div className="p-4 border-b border-gray-100 dark:border-gray-800">
+              {/* Drawer header */}
+              <div className="p-4 border-b border-gray-100 dark:border-gray-800 shrink-0">
                 <div className="flex items-center justify-between mb-4 gap-2">
                   <Link
                     href="/"
@@ -476,18 +564,16 @@ export default function ModernNavbar() {
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <Image
-                      title="taskoria logo mobile"
                       src="/images/taskoria_logo.svg"
-                      alt="logo taskoria"
+                      alt="Taskoria"
                       height={32}
                       width={22}
                       className="shrink-0"
                     />
-                    <span className="text-xl font-bold bg-[#3C7DED] bg-clip-text text-transparent truncate">
+                    <span className="text-xl font-bold text-[#3C7DED] truncate">
                       Taskoria
                     </span>
                   </Link>
-
                   <div className="flex items-center gap-1 shrink-0">
                     <div suppressHydrationWarning>
                       <ThemeToggle />
@@ -495,152 +581,104 @@ export default function ModernNavbar() {
                     <button
                       onClick={() => setIsMenuOpen(false)}
                       className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                      aria-label="Close menu"
                     >
                       <X className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                     </button>
                   </div>
                 </div>
 
+                {/* Session card */}
                 {session && (
-                  <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-4 mb-4">
+                  <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-4">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="relative">
-                        <div
-                          className={`w-13 h-13 rounded-full flex items-center justify-center
-      bg-gradient-to-br from-blue-100 to-cyan-100
-      dark:from-blue-900 dark:to-cyan-900
-      transition-all group-hover:scale-[1.05] overflow-hidden
-      ${session?.user.status === "active" || session?.user.status === "trialing" ? "ring-2 ring-yellow-400" : ""}`}
-                        >
-                          {session?.user?.image ? (
-                            <Image
-                              title="session profile picture"
-                              src={session.user.image}
-                              alt="profile pic"
-                              fill
-                              className="object-cover rounded-full"
-                              sizes="52px"
-                              priority
-                            />
-                          ) : (
-                            <User className="w-6 h-6 text-blue-600 dark:text-blue-300" />
-                          )}
-                        </div>
-
-                        {session?.user.status === "active" ||
-                          (session?.user.status === "trialing" && (
-                            <div
-                              className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full
-                 bg-gradient-to-br from-yellow-400 to-orange-500
-                 flex items-center justify-center
-                 ring-2 ring-white dark:ring-slate-900 shadow-md"
-                            >
-                              <Star className="w-3 h-3 text-white fill-white" />
-                            </div>
-                          ))}
-                      </div>
+                      <Avatar
+                        src={session.user?.image}
+                        size="md"
+                        isPro={isPro}
+                      />
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-gray-900 dark:text-gray-100 truncate text-lg">
+                        <p className="font-bold text-gray-900 dark:text-gray-100 truncate text-base">
                           {session.user?.name}
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                           {session.user?.email}
                         </p>
                       </div>
                     </div>
-                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/80 dark:bg-gray-800 backdrop-blur-sm text-xs font-medium text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
-                      {viewMode === "provider"
-                        ? "Provider View"
-                        : "Customer View"}
+                    <div className="inline-flex items-center px-3 py-1 rounded-full
+                      bg-white/80 dark:bg-gray-800 backdrop-blur-sm
+                      text-xs font-medium text-blue-700 dark:text-blue-400
+                      border border-blue-200 dark:border-blue-800">
+                      {viewMode === "provider" ? "Provider View" : "Customer View"}
                     </div>
                   </div>
                 )}
               </div>
 
-              <nav className="p-4 space-y-2">
-                {currentLinks.map((link) => {
-                  const Icon = link.icon;
+              {/* Drawer nav */}
+              <nav className="p-4 space-y-1 flex-1">
+                {/* Main nav links */}
+                {currentLinks.map((link) => (
+                  <MobileNavLink
+                    key={link.href + link.name}
+                    href={link.href}
+                    icon={link.icon}
+                    label={link.name}
+                    isActive={
+                      link.href === "/"
+                        ? pathname === "/"
+                        : pathname.startsWith(link.href)
+                    }
+                    onClick={() => setIsMenuOpen(false)}
+                  />
+                ))}
 
-                  const isActive =
-                    link.href === "/"
-                      ? pathname === "/"
-                      : pathname.startsWith(link.href);
-
-                  return (
-                    <Link
-                      key={link.name}
-                      href={link.href}
-                      prefetch={true}
-                      onClick={() => setIsMenuOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-full font-medium transition-colors ${
-                        isActive
-                          ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg"
-                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-                      }`}
-                    >
-                      <Icon
-                        className={`w-5 h-5 ${
-                          isActive
-                            ? "text-white"
-                            : "text-gray-500 dark:text-gray-400"
-                        }`}
-                      />
-                      <span>{link.name}</span>
-                    </Link>
-                  );
-                })}
-                {session?.user.adminrole === "admin" ? (
-                  <Link
+                {/* Admin */}
+                {session?.user?.adminrole === "admin" && (
+                  <MobileNavLink
                     href="/admin"
+                    icon={LayoutDashboard}
+                    label="Admin Menu"
+                    isActive={pathname.startsWith("/admin")}
                     onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
-                  >
-                    <LayoutDashboard className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                    Adminmenu
-                  </Link>
-                ) : (
-                  ""
-                )}
-                {session?.user.public_id ? (
-                  <Link
-                    href={`/providerprofile/${session.user.company_slug}`}
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      setIsProfileOpen(true);
-                    }}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
-                  >
-                    <User className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                    View Public Profile
-                  </Link>
-                ) : (
-                  ""
-                )}
-                {session ? (
-                  <Link
-                    href="/settings/billing/taskoria_pro"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
-                  >
-                    <FaMoneyCheck className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                    Taskoria Plans & Pricing
-                  </Link>
-                ) : (
-                  ""
-                )}
-                {session ? (
-                  <Link
-                    href="/affiliate-dashboard-portal"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
-                  >
-                    <LayoutDashboard className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-                    Affilate Hub
-                  </Link>
-                ) : (
-                  ""
+                  />
                 )}
 
+                {/* Public profile */}
+                {session?.user?.public_id && (
+                  <MobileNavLink
+                    href={`/providerprofile/${session.user.company_slug}`}
+                    icon={User}
+                    label="View Public Profile"
+                    isActive={false}
+                    onClick={() => setIsMenuOpen(false)}
+                  />
+                )}
+
+                {/* Plans */}
+                {session && (
+                  <MobileNavLink
+                    href="/settings/billing/taskoria_pro"
+                    icon={FaMoneyCheck}
+                    label="Taskoria Plans & Pricing"
+                    isActive={pathname.startsWith("/settings/billing")}
+                    onClick={() => setIsMenuOpen(false)}
+                  />
+                )}
+
+                {/* Affiliate */}
+                {session && (
+                  <MobileNavLink
+                    href="/affiliate-dashboard-portal"
+                    icon={LayoutDashboard}
+                    label="Affiliate Hub"
+                    isActive={pathname.startsWith("/affiliate")}
+                    onClick={() => setIsMenuOpen(false)}
+                  />
+                )}
+
+                {/* Switch view */}
                 {session?.user?.role === "provider" && (
                   <button
                     onClick={() =>
@@ -648,52 +686,54 @@ export default function ModernNavbar() {
                         viewMode === "provider" ? "customer" : "provider",
                       )
                     }
-                    className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl
+                      text-gray-700 dark:text-gray-300
+                      hover:bg-gray-50 dark:hover:bg-gray-800
+                      font-medium transition-colors"
                   >
-                    <div className="flex items-center gap-3">
-                      <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-400 -rotate-90" />
-                      <span>
-                        Switch to{" "}
-                        {viewMode === "provider" ? "Customer" : "Provider"}
-                      </span>
-                    </div>
+                    <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-400 -rotate-90" />
+                    <span>
+                      Switch to {viewMode === "provider" ? "Customer" : "Provider"}
+                    </span>
                   </button>
                 )}
+              </nav>
+
+              {/* Drawer footer */}
+              <div className="p-4 border-t border-gray-100 dark:border-gray-800 space-y-2 shrink-0">
                 {session ? (
-                  <>
-                    <button
-                      onClick={() => {
-                        handleLogout();
-                        setIsMenuOpen(false);
-                      }}
-                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900 font-medium"
-                    >
-                      <LogOut className="w-5 h-5" />
-                      Sign Out
-                    </button>
-                  </>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl
+                      text-red-600 dark:text-red-400
+                      hover:bg-red-50 dark:hover:bg-red-950
+                      font-medium transition-colors"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    Sign Out
+                  </button>
                 ) : (
                   <>
                     <Link
                       href="/signin"
-                      prefetch={true}
+                      prefetch
                       onClick={() => setIsMenuOpen(false)}
-                      className="inline-flex items-center justify-center w-full border border-gray-300 dark:border-gray-700 font-medium rounded-md h-10 px-4 py-2 text-sm bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                      className="flex items-center justify-center w-full border border-gray-300 dark:border-gray-700
+                        font-medium rounded-xl h-10 px-4 py-2 text-sm
+                        bg-transparent text-gray-700 dark:text-gray-300
+                        hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                     >
                       Sign In
                     </Link>
                     <Button
-                      onClick={async () => {
-                        await joinAsProvider();
-                        setIsMenuOpen(false);
-                      }}
-                      className="w-full bg-[#3C7DED] text-white hover:from-blue-700 hover:to-cyan-700 font-medium"
+                      onClick={handleJoinAsProvider}
+                      className="w-full bg-[#3C7DED] text-white hover:opacity-90 font-medium"
                     >
                       Join as Provider
                     </Button>
                   </>
                 )}
-              </nav>
+              </div>
             </motion.div>
           </>
         )}
