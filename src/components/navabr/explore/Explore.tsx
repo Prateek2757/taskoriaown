@@ -16,10 +16,10 @@ import { PiSprayBottle } from "react-icons/pi";
 import { BiArrowBack } from "react-icons/bi";
 import { IoIosMore } from "react-icons/io";
 import { LiaTruckMovingSolid } from "react-icons/lia";
-import usePagination from "@/hooks/usePagination";
 import { useCategories } from "@/hooks/useCategories";
 import Link from "next/link";
 import { TbGardenCart } from "react-icons/tb";
+import usePagination from "@/hooks/usePagination";
 
 const exploreServices = [
   { label: "Cleaning Services", icon: <PiSprayBottle size={20} /> },

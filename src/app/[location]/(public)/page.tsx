@@ -10,7 +10,7 @@ const PopularServicesSection = lazy(
 const FeaturesPage = lazy(() => import("@/components/Features"));
 const Testomonail = lazy(() => import("@/components/Testomonail"));
 const CTA = lazy(() => import("@/components/CTA"));
-
+const TestomonailNew = lazy(() => import("@/components/TestomonailNew"));
 const BASE_URL = "https://www.taskoria.com";
 
 export const metadata: Metadata = {
@@ -299,12 +299,16 @@ export default function HomePage() {
           </section>
         </Suspense>
 
-        <Suspense fallback={<div className="min-h-50" />}>
+        {/* <Suspense fallback={<div className="min-h-50" />}>
           <section aria-label="Customer reviews and testimonials">
             <Testomonail />
           </section>
+        </Suspense> */}
+         <Suspense fallback={<div className="min-h-50" />}>
+          <section aria-label="Customer reviews and testimonials">
+            <TestomonailNew />
+          </section>
         </Suspense>
-
         <Suspense fallback={<div className="min-h-50" />}>
           <section aria-label="Get started — post your first job free">
             <CTA />
