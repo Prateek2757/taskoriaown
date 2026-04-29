@@ -2,7 +2,6 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { Quote, Star, Loader2, AlertCircle } from "lucide-react";
-import Marquee from "./ui/marquee";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import NewMarquee from "./ui/new-marquee";
