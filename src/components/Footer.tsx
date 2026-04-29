@@ -165,16 +165,16 @@ const Footer = () => {
                   <Mail className="w-5" />{" "}
                   <span className="underline">contact@taskoria.com</span>
                 </a>
-                <a
+                {/* <a
                   href="tel:61 474 655 902"
                   className="inline-flex items-center ml-2 gap-1 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
                 >
                   <Phone className="w-4" />{" "}
                   <span className="">+61 474 655 902</span>
-                </a>
+                </a> */}
                 <a
                   href="tel:61 474 655 902"
-                  className="inline-flex items-center  gap-1 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
+                  className="inline-flex items-center ml-2  gap-1 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
                 >
                   <Phone className="w-4" />
                   {"   "} Toll Free
