@@ -190,7 +190,7 @@ const Footer = () => {
                   <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
                     Trusted by customers worldwide
                   </p>
-
+{/*scvx*/}
                   <a
                     href="https://www.trustpilot.com/review/taskoria.com"
                     target="_blank"
