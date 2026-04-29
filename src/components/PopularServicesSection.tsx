@@ -83,7 +83,7 @@ export default function PopularServices() {
   return (
     <section className="relative py-6 px-4 sm:px-6 lg:px-8">
    
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="relative flex items-center border-b border-gray-200 pb-1">
 
  
@@ -138,7 +138,7 @@ export default function PopularServices() {
         </div>
       </div>
 
-    <div className="max-w-5xl mx-auto mt-6">
+    <div className="max-w-6xl mx-auto mt-6">
   {loading ? (
     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
       {[...Array(5)].map((_, i) => (
@@ -163,7 +163,7 @@ export default function PopularServices() {
           }`}
         >
           <Link href={`/services/${cat.slug}`} className="block">
-            <div className="relative h-42 sm:h-65 w-full overflow-hidden">
+            <div className="relative h-42 sm:h-70 w-full overflow-hidden">
               <Image
                 src={cat.image_url || "/images/default.webp"}
                 fill
@@ -171,7 +171,7 @@ export default function PopularServices() {
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
                 alt={cat.name}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
               <h4 className="absolute bottom-3 left-3 right-3 text-sm sm:text-base font-semibold text-white leading-snug">
                 {cat.name}
               </h4>

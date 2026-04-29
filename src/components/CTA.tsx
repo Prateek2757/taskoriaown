@@ -2,10 +2,16 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
+import { useState } from "react";
+import NewRequestModal from "./leads/RequestModal";
 
 function CTA() {
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <section className="relative py-6 px-2 sm:px-4  dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_50%,rgba(0,0,0,1)_90%)] overflow-hidden">
+      <NewRequestModal open={openModal} onClose={() => setOpenModal(false)} />
+
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-5 w-36 h-36 bg-blue-400/10 rounded-full blur-2xl animate-pulse"></div>
         <div
@@ -52,8 +58,8 @@ function CTA() {
               </span>
             </h2>
             <p className="text-slate-400 text-sm sm:text-base mt-1 max-w-xl leading-relaxed">
-              Get quotesfor free, compare responses, and choose the right provider
-              for your timeline and budget.
+              Get quotesfor free, compare responses, and choose the right
+              provider for your timeline and budget.
             </p>
 
             <div className="flex flex-wrap justify-center gap-3 mt-4">
@@ -65,13 +71,14 @@ function CTA() {
                   See Safety & Support
                 </Button>
               </Link>
-              <Link href="/create">
-                <Button className="relative overflow-hidden bg-[#3C7DED]   text-white hover:scale-105 border-0 flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 px-6 py-3 text-xs sm:text-base font-semibold group">
+                <Button
+                  onClick={() => setOpenModal(true)}
+                  className="relative overflow-hidden bg-[#3C7DED]   text-white hover:scale-105 border-0 flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 px-6 py-3 text-xs sm:text-base font-semibold group"
+                >
                   <span className="relative z-10">Post a Job Free</span>
                   <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
                   <div className="absolute inset-0 bg-[#3C7DED] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </Button>
-              </Link>
+              </Button>
             </div>
 
             <div className="pt-3">
