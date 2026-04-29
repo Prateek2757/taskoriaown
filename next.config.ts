@@ -79,6 +79,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "avatar.vercel.sh",
       },
+        {
+    protocol: "https",
+    hostname: "lh3.googleusercontent.com",
+  },
     ],
   },
 
@@ -106,7 +110,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-
   async rewrites() {
     return [
       { source: "/proposal", destination: "/views/proposal" },
