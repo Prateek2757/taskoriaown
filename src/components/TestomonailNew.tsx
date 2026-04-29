@@ -171,7 +171,7 @@ export default function Testimonial() {
         </p>
       )}
       {!loading && reviews.length > 0 && (
-        <div className="max-w-7xl mx-auto overflow-x-auto md:overflow-visible">
+        <div className="max-w-7xl mx-auto overflow-x-auto md:overflow-hidden">
           <NewMarquee pauseOnHover speed={35}>
             {reviews.map((review) => (
               <ReviewCard key={review.id} {...review} />
