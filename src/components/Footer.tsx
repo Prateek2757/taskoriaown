@@ -165,7 +165,7 @@ const Footer = () => {
                   className="inline-flex items-center  gap-1 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
                 >
                   <Phone className="w-4" />{"   "} Toll Free
-                  <span className="">1300 531 727</span>
+                  <span className="">+1300 531 727</span>
                 </a>
 
                 <motion.div
