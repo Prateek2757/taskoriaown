@@ -18,13 +18,15 @@ export default function NewMarquee({
 }: NewMarqueeProps) {
   return (
     <div
-      className={cn("relative flex ", className)}
-      style={{
-        maskImage:
-          "linear-gradient(to right,  black 100%)",
-        WebkitMaskImage:
-          "linear-gradient(to right, black 100%)",
-      }}
+      className={cn(
+        "relative flex ", // ✅ added overflow-hidden
+        pauseOnHover && "group",          // ✅ added group here
+        className
+      )}
+      // style={{
+      //   maskImage: "linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)",
+      //   WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)",
+      // }}
     >
       {[0, 1].map((i) => (
         <div
@@ -33,7 +35,7 @@ export default function NewMarquee({
           className={cn(
             "flex shrink-0 gap-4 pr-4",
             reverse ? "animate-marquee-reverse" : "animate-marquee",
-            pauseOnHover && "group-hover:[animation-play-state:paused]"
+            pauseOnHover && "group-hover:[animation-play-state:paused]" // ✅ now works
           )}
           style={{
             animationDuration: `${speed}s`,
