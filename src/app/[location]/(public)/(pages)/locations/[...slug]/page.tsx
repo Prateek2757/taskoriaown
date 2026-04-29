@@ -107,7 +107,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const stateName = stateCities[0].state_name;
     const title = `Services in ${stateName} | Find Local Professionals | Taskoria`;
     const description = `Find trusted local service providers across ${stateName}. Browse all cities and categories — get free quotes from verified professionals on Taskoria.`;
-    const canonicalUrl = `https://www.taskoria.com/cities/${stateSlug}`;
+    const canonicalUrl = `https://www.taskoria.com/locations/${stateSlug}`;
 
     return {
       title,
@@ -154,10 +154,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cityName = city.display_name ?? city.name;
   const title = `Services in ${cityName} | Find Local Professionals | Taskoria`;
   const description = `Discover trusted local service providers in ${cityName}, ${city.state_name}. From cleaning to removals, find and compare professionals for any task — get free quotes on Taskoria.`;
-  const canonicalUrl = `https://www.taskoria.com/cities/${stateSlug}/${citySlug}`;
+  const canonicalUrl = `https://www.taskoria.com/locations/${stateSlug}/${citySlug}`;
   const imageUrl =
     city.image_url ??
-    `https://www.taskoria.com/og-images/cities/${citySlug}.jpg`;
+    `https://www.taskoria.com/og-images/locations/${citySlug}.jpg`;
 
   return {
     title,
@@ -253,7 +253,7 @@ export default async function CityOrStatePage({ params }: Props) {
       "@type": "WebPage",
       name: `Services in ${stateName}`,
       description: `Find local service professionals across ${stateName}, ${countryName}`,
-      url: `https://www.taskoria.com/cities/${stateSlug}`,
+      url: `https://www.taskoria.com/locations/${stateSlug}`,
       areaServed: {
         "@type": "State",
         name: stateName,
@@ -291,23 +291,33 @@ export default async function CityOrStatePage({ params }: Props) {
   if (!city) notFound();
 
   type CityWithDist = City & { _dist: number };
-  const nearbyCities: City[] = (allCities as CityWithDist[])
-    .filter((c) => c.city_id !== city.city_id)
-    .map((c) => ({
-      ...c,
-      _dist:
-        city.latitude != null &&
-        city.longitude != null &&
-        c.latitude != null &&
-        c.longitude != null
-          ? distanceKm(city.latitude, city.longitude, c.latitude, c.longitude)
-          : Infinity,
-    }))
-    .sort((a, b) =>
-      a._dist !== b._dist ? a._dist - b._dist : b.popularity - a.popularity
-    )
-    .slice(0, 10)
-    .map(({ _dist: _, ...rest }) => rest as City);
+  const seen = new Set<string>();
+
+const nearbyCities: City[] = (allCities as CityWithDist[])
+  .filter((c) => c.city_id !== city.city_id)
+  .map((c) => ({
+    ...c,
+    _dist:
+      city.latitude != null &&
+      city.longitude != null &&
+      c.latitude != null &&
+      c.longitude != null
+        ? distanceKm(city.latitude, city.longitude, c.latitude, c.longitude)
+        : Infinity,
+  }))
+  .sort((a, b) =>
+    a._dist !== b._dist
+      ? a._dist - b._dist
+      : b.popularity - a.popularity
+  )
+  .filter((c) => {
+    const key = c.name.trim().toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  })
+  .slice(0, 10)
+  .map(({ _dist: _, ...rest }) => rest as City);
 
   const sameStateRaw = allCities
     .filter((c) => c.state_slug === stateSlug && c.city_id !== city.city_id)
@@ -322,7 +332,7 @@ export default async function CityOrStatePage({ params }: Props) {
     "@type": "WebPage",
     name: `Services in ${city.display_name ?? city.name}`,
     description: `Find local service professionals in ${city.name}, ${city.state_name}`,
-    url: `https://www.taskoria.com/cities/${stateSlug}/${citySlug}`,
+    url: `https://www.taskoria.com/locations/${stateSlug}/${citySlug}`,
     ...(city.latitude && city.longitude
       ? {
           spatialCoverage: {

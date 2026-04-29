@@ -1,7 +1,14 @@
 "use client";
 
 import { type ComponentType, useMemo, useState } from "react";
-import { BadgeCheck, Clock3, FolderOpen, Search, X } from "lucide-react";
+import {
+  BadgeCheck,
+  ChevronRight,
+  Clock3,
+  FolderOpen,
+  Search,
+  X,
+} from "lucide-react";
 import Link from "next/link";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -153,7 +160,7 @@ export default function ServiceCategoriesClient({
   const { paginatedData } = usePagination(filteredData, 9, filterData);
   const displayData = showData ? filteredData : paginatedData;
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 via-white to-sky-50 px-4 py-12 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
+    <section className="relative overflow-hidden bg-linear-to-b from-slate-50 via-white to-sky-50 px-4 py-12 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
       <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-blue-200/40 blur-3xl dark:bg-blue-700/20" />
       <div className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-sky-200/50 blur-3xl dark:bg-sky-700/20" />
 
@@ -289,10 +296,10 @@ export default function ServiceCategoriesClient({
                         onError={(e) => {
                           e.currentTarget.src = "/taskorialogonew.png";
                         }}
-                        priority={index < 9} 
+                        priority={index < 9}
                       />
 
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
+                      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/40 to-transparent" />
 
                       <h4 className="absolute bottom-3 left-4 right-4 text-lg font-semibold text-white">
                         {highlightMatch(category.name, searchQuery)}

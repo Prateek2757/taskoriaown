@@ -33,12 +33,24 @@ const services = [
   { href: "/services/accounting-taxation", label: "Tax Accountant" },
   { href: "/services/plumbers", label: "Plumber" },
   { href: "/services/building-and-construction", label: "Builder" },
+  { href: "/services/photographers", label: "Photographer" },
+
   { href: "/services", label: "More Services" },
 
   // { href: "/services/photographers", label: "Photographer" },
   // { href: "/services/carpet-steam-cleaning", label: "Carpet Cleaning" },
   // { href: "/services/garden-maintenance-weeding", label: "Gardening" },
   // { href: "/services/painters", label: "Painter" },
+];
+
+const locations = [
+  { href: "/locations/queensland/brisbane", label: "Brisbane" },
+  { href: "/locations/new-south-wales/sydney", label: "Sydney" },
+  { href: "/locations/victoria/melbourne", label: "Melbourne" },
+  { href: "/locations/western-australia/perth", label: "Perth" },
+  { href: "/locations/south-australia/adelaide", label: "Adelaide" },
+  { href: "/locations/new-south-wales/newcastle", label: "New Castle" },
+  { href: "/locations", label: "More Locations" },
 ];
 
 const letters = "TASKORIA".split("");
@@ -112,7 +124,7 @@ const Footer = () => {
       <NewRequestModal open={openModal} onClose={() => setOpenModal(false)} />
 
       <div
-        className="relative h-full overflow-hidden sm:pt-14 pt-8 
+        className="relative max-w-7xl mx-auto h-full overflow-hidden sm:pt-14 pt-8 
         dark:bg-[radial-gradient(circle_at_bottom,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
         dark:text-white text-gray-600 "
         ref={container}
@@ -157,14 +169,15 @@ const Footer = () => {
                   href="tel:61 474 655 902"
                   className="inline-flex items-center ml-2 gap-1 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
                 >
-                  <Phone className="w-4" />{" "} 
+                  <Phone className="w-4" />{" "}
                   <span className="">+61 474 655 902</span>
                 </a>
                 <a
                   href="tel:61 474 655 902"
                   className="inline-flex items-center  gap-1 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
                 >
-                  <Phone className="w-4" />{"   "} Toll Free
+                  <Phone className="w-4" />
+                  {"   "} Toll Free
                   <span className="">+1300 531 727</span>
                 </a>
 
@@ -231,7 +244,39 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="sm:grid sm:grid-cols-4 gap-8 lg:gap-6 w-full lg:w-auto mt-0 lg:mt-0">
+            <div className="sm:grid sm:grid-cols-5 gap-8 lg:gap-6 w-full lg:w-auto mt-0 lg:mt-0">
+              <div className="sm:border-none">
+                <h2 className="hidden sm:block text-[18px] pb-3 font-semibold">
+                  Popular Cities
+                </h2>
+
+                <button
+                  className="sm:hidden w-full flex justify-between items-center text-[18px] pb-1 font-semibold border-gray-700"
+                  onClick={() =>
+                    setOpenSection(openSection === "cities" ? "" : "cities")
+                  }
+                >
+                  Popular Cities
+                  <span>
+                    {openSection === "cities" ? <ChevronUp /> : <ChevronDown />}
+                  </span>
+                </button>
+
+                <div
+                  className={`sm:block overflow-hidden transition-all duration-300 
+  ${openSection === "cities" ? "max-h-55" : "max-h-0 sm:max-h-none"}`}
+                >
+                  {locations.map((loc) => (
+                    <Link
+                      key={loc.href}
+                      href={loc.href}
+                      className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    >
+                      {loc.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
               <div className="sm:border-none">
                 <h2 className="hidden sm:block text-[18px] pb-3 font-semibold">
                   Categories
@@ -257,7 +302,7 @@ const Footer = () => {
 
                 <div
                   className={`sm:block overflow-hidden transition-all duration-300 
-  ${openSection === "categories" ? "max-h-40" : "max-h-0 sm:max-h-none"}`}
+  ${openSection === "categories" ? "max-h-55" : "max-h-0 sm:max-h-none"}`}
                 >
                   {services.map((service) => (
                     <Link
@@ -276,7 +321,7 @@ const Footer = () => {
                 </h2>
 
                 <button
-                  className="sm:hidden w-full flex justify-between items-center text-xl font-semibold border-gray-700 py-3"
+                  className="sm:hidden w-full flex justify-between items-center text-xl font-semibold border-gray-700 pb-1"
                   onClick={() =>
                     setOpenSection(
                       openSection === "customers" ? "" : "customers"
@@ -345,7 +390,7 @@ const Footer = () => {
                 </h2>
 
                 <button
-                  className="sm:hidden w-full flex justify-between items-center text-xl pb-3 font-semibold border-gray-700"
+                  className="sm:hidden w-full flex justify-between items-center text-xl  font-semibold border-gray-700"
                   onClick={() =>
                     setOpenSection(
                       openSection === "providers" ? "" : "providers"

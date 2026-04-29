@@ -1,11 +1,9 @@
-
 "use client";
 import { cn } from "@/lib/utils";
 import { Quote, Star, Loader2, AlertCircle } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import NewMarquee from "./ui/new-marquee";
-
 
 interface Review {
   id: string;
@@ -22,7 +20,8 @@ interface Meta {
   total: number;
 }
 
-const AVATAR_BASE = "https://ui-avatars.com/api/?background=3b82f6&color=fff&bold=true&name=";
+const AVATAR_BASE =
+  "https://ui-avatars.com/api/?background=3b82f6&color=fff&bold=true&name=";
 
 function avatarFallback(name: string) {
   return `${AVATAR_BASE}${encodeURIComponent(name)}`;
@@ -40,8 +39,9 @@ function transform(r: any, i: number): Review {
   };
 }
 
-
 function ReviewCard({ img, name, location, body, rating, time }: Review) {
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <figure
       className={cn(
@@ -70,9 +70,7 @@ function ReviewCard({ img, name, location, body, rating, time }: Review) {
 
           <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">
             {location}
-            {time && (
-              <span className="ml-1 text-gray-400">· {time}</span>
-            )}
+            {time && <span className="ml-1 text-gray-400">· {time}</span>}
           </p>
 
           <div className="flex items-center gap-0.5 mt-1">
@@ -93,13 +91,26 @@ function ReviewCard({ img, name, location, body, rating, time }: Review) {
         <Quote className="shrink-0 h-4 w-4 text-blue-400 dark:text-blue-400 opacity-60" />
       </div>
 
-      <blockquote className="mt-3 text-sm text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-3">
+      <blockquote
+        className={cn(
+          "mt-3 text-sm text-gray-700 dark:text-gray-300 leading-relaxed",
+          !expanded && "line-clamp-3"
+        )}
+      >
         {body}
       </blockquote>
+
+      {body.length > 180 && (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="mt-1 text-xs font-medium text-blue-500 hover:opacity-75"
+        >
+          {expanded ? "See less" : "See more"}
+        </button>
+      )}
     </figure>
   );
 }
-
 
 export default function Testimonial() {
   const [reviews, setReviews] = useState<Review[]>([]);

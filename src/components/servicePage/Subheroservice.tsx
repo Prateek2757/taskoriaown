@@ -77,8 +77,7 @@ export default function SubHeroService({
         aria-label={`Find ${proLabel} in ${cityName} on Taskoria`}
         className="w-full bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800/60"
       >
-        <div className="max-w-6xl mx-auto py-10 md:py-8 px-0">
-          {/* Headline */}
+        <div className="max-w-6xl mx-auto py-5 md:py-0  px-0">
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-6">
             Need to find {article}{" "}
             <span className="text-[#2563eb] dark:text-[#60a5fa]">
@@ -87,7 +86,6 @@ export default function SubHeroService({
             in {cityName}?
           </h1>
 
-          {/* Paragraphs */}
           <div className="flex flex-col gap-3 mb-6 max-w-2xl">
             {cityParagraphs!.slice(0, -1).map((p, i) => (
               <p

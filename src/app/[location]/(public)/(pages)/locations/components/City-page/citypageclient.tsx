@@ -13,14 +13,16 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NewRequestModal from "@/components/leads/RequestModal";
-import { CategoryWithSubs, City } from "@/app/[location]/(public)/(pages)/cities/[...slug]/page";
-
+import {
+  CategoryWithSubs,
+  City,
+} from "@/app/[location]/(public)/(pages)/locations/[...slug]/page";
 
 interface Props {
   city: City;
   categoryTree: CategoryWithSubs[];
-  nearbyCities: City[];      
-  sameStateCities: City[];     
+  nearbyCities: City[];
+  sameStateCities: City[];
   stateSlug: string;
 }
 
@@ -41,15 +43,16 @@ const DEFAULT_ACCENT = "#1d4ed8";
 
 const Static_State_Image: Record<string, string> = {
   "new-south-wales": "/nsw-sydney.png",
-  "australian-capital-territory":"/act.png",
-  "norfolk-island":"/norfolkisland.png",
-  "northern-territory":"/northern-territory.png",
-  "queensland":"/queensland.png",
-  "south-australia":"south-australia.png",
-  "tasmania":"/tasmania.png",
-  "western-australia":"/western-australia.png"
+  "australian-capital-territory": "/act.png",
+  "norfolk-island": "/norfolkisland.png",
+  "northern-territory": "/northern-territory.png",
+  queensland: "/queensland.png",
+  "south-australia": "/south-australia.png",
+  tasmania: "/tasmania.png",
+  "western-australia": "/western-australia.png",
+  "victoria":"/victoria.png"
 
-}; 
+};
 
 export default function CityPageClient({
   city,
@@ -63,11 +66,17 @@ export default function CityPageClient({
   const [activeLetter, setActiveLetter] = useState<string | null>(null);
   const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
 
-  const cityName =  city.name;
+  const cityName = city.name;
   const bgImage = Static_State_Image[stateSlug];
 
-  const popularCategories = useMemo(() => categoryTree.slice(0, 5), [categoryTree]);
-  const trendingCategories = useMemo(() => categoryTree.slice(5, 10), [categoryTree]);
+  const popularCategories = useMemo(
+    () => categoryTree.slice(0, 5),
+    [categoryTree]
+  );
+  const trendingCategories = useMemo(
+    () => categoryTree.slice(5, 10),
+    [categoryTree]
+  );
 
   const filteredCategories = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -93,7 +102,10 @@ export default function CityPageClient({
 
   const scrollToLetter = (letter: string) => {
     setActiveLetter(letter);
-    categoryRefs.current[letter]?.scrollIntoView({ behavior: "smooth", block: "start" });
+    categoryRefs.current[letter]?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
 
   return (
@@ -105,14 +117,18 @@ export default function CityPageClient({
         initialStep={1}
       />
 
-<section
+      <section
         className={`relative overflow-hidden h-full ${
           !bgImage ? `` : "bg-cover bg-center"
         }`}
         style={{
-          backgroundImage: bgImage ? ` linear-gradient(to bottom right, rgba(15,23,42,0.55), rgba(51,65,85,0.65)),url('${bgImage}')` : undefined,
+          backgroundImage: bgImage
+            ? ` linear-gradient(to bottom right, rgba(15,23,42,0.55), rgba(51,65,85,0.65)),url('${bgImage}')`
+            : undefined,
         }}
-      >        {/* {city.image_url ? (
+      >
+        {" "}
+        {/* {city.image_url ? (
           <img
             src={city.image_url}
             alt={cityName}
@@ -122,18 +138,26 @@ export default function CityPageClient({
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900" />
         )} */}
-
         {/* <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/50 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent" /> */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
-
         <div className="relative z-10 h-full flex flex-col md:py-20 py-10 justify-center px-6 md:px-16 max-w-7xl mx-auto">
           <nav className="flex items-center gap-2 text-xs text-white/55 mb-6">
-            <Link href="/" className="hover:text-white/90 transition-colors">Home</Link>
+            <Link href="/" className="hover:text-white/90 transition-colors">
+              Home
+            </Link>
             <ChevronRight className="w-3 h-3" />
-            <Link href="/cities" className="hover:text-white/90 transition-colors">Cities</Link>
+            <Link
+              href="/locations"
+              className="hover:text-white/90 transition-colors"
+            >
+              Cities
+            </Link>
             <ChevronRight className="w-3 h-3" />
-            <Link href={`/cities/${stateSlug}`} className="hover:text-white/90 transition-colors">
+            <Link
+              href={`/locations/${stateSlug}`}
+              className="hover:text-white/90 transition-colors"
+            >
               {city.state_name}
             </Link>
             <ChevronRight className="w-3 h-3" />
@@ -141,18 +165,19 @@ export default function CityPageClient({
           </nav>
 
           <h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-extrabold text-white leading-[1.1] max-w-3xl mb-4 tracking-tight">
-            Discover what you can<br />
-            get done in{" "}
-            <span className="text-blue-400">{cityName}</span>
+            Discover what you can
+            <br />
+            get done in <span className="text-blue-400">{cityName}</span>
           </h1>
 
           <p className="text-white/70 text-base md:text-lg max-w-md mb-8 leading-relaxed">
-            Find all kinds of services available in {cityName} — from home cleaning to graphic design.
+            Find all kinds of services available in {cityName} — from home
+            cleaning to graphic design.
           </p>
 
           <div className="flex flex-wrap gap-3">
             <Button
-            variant="default"
+              variant="default"
               onClick={() => setOpenModal(true)}
               className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full px-7 py-6 text-sm font-semibold shadow-lg shadow-blue-600/30 transition-colors"
             >
@@ -168,7 +193,6 @@ export default function CityPageClient({
             </Link>
           </div>
         </div>
-
         {/* Coordinates badge */}
         {/* {city.latitude && city.longitude && (
           <div className="absolute bottom-5 left-6 md:left-16 flex items-center gap-1.5 text-white/55 text-xs">
@@ -198,7 +222,6 @@ export default function CityPageClient({
       </div> */}
 
       <div className="max-w-7xl mx-auto px-6 md:px-16">
-
         <section className="pt-14 pb-2">
           <SectionHeader
             title={`Popular services in ${cityName}`}
@@ -267,11 +290,11 @@ export default function CityPageClient({
               {sameStateCities.map((sc) => (
                 <Link
                   key={sc.city_id}
-                  href={`/cities/${stateSlug}/${sc.slug}`}
+                  href={`/locations/${stateSlug}/${sc.slug}`}
                   className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-blue-950/40 text-slate-700 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 rounded-full px-4 py-2 text-sm font-medium transition-colors border border-transparent hover:border-blue-200 dark:hover:border-blue-800"
                 >
                   <MapPin className="w-3 h-3 opacity-50" />
-                  {sc.display_name ?? sc.name}
+                  { sc.name}
                 </Link>
               ))}
             </div>
@@ -284,7 +307,6 @@ export default function CityPageClient({
           </h2>
 
           <div className="flex gap-10 items-start">
-
             <aside className="hidden lg:flex flex-col w-52 shrink-0 sticky top-6 gap-5">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
@@ -311,8 +333,8 @@ export default function CityPageClient({
                           !active
                             ? "text-slate-300 dark:text-slate-700 cursor-default"
                             : activeLetter === l
-                            ? "bg-blue-600 text-white"
-                            : "text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 cursor-pointer"
+                              ? "bg-blue-600 text-white"
+                              : "text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 cursor-pointer"
                         }`}
                       >
                         {l}
@@ -336,7 +358,6 @@ export default function CityPageClient({
             </aside>
 
             <div className="flex-1 min-w-0 space-y-12">
-
               <div className="relative lg:hidden">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                 <input
@@ -350,7 +371,9 @@ export default function CityPageClient({
               {availableLetters.map((letter) => (
                 <div
                   key={letter}
-                  ref={(el) => { categoryRefs.current[letter] = el; }}
+                  ref={(el) => {
+                    categoryRefs.current[letter] = el;
+                  }}
                   className="scroll-mt-6 space-y-10"
                 >
                   {alphabetGroups[letter].map((cat) => (
@@ -441,7 +464,6 @@ export default function CityPageClient({
     </main>
   );
 }
-
 
 function SectionHeader({
   title,
@@ -538,7 +560,7 @@ function CategoryCard({
 function NearbyCity({ city, stateSlug }: { city: City; stateSlug: string }) {
   return (
     <Link
-      href={`/cities/${stateSlug}/${city.slug}`}
+      href={`/locations/${stateSlug}/${city.slug}`}
       className="group relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-300 dark:hover:border-blue-700 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
     >
       {/* {city.image_url && (
@@ -553,7 +575,7 @@ function NearbyCity({ city, stateSlug }: { city: City; stateSlug: string }) {
       <div className="px-3 py-2.5 flex items-center gap-1.5">
         <MapPin className="w-3 h-3 text-slate-400 group-hover:text-blue-500 flex-shrink-0 transition-colors" />
         <span className="text-sm font-medium text-slate-800 dark:text-slate-200 group-hover:text-blue-700 dark:group-hover:text-blue-400 truncate">
-          {city.display_name ?? city.name}
+          { city.name}
         </span>
       </div>
     </Link>

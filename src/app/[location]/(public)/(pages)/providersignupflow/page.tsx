@@ -30,9 +30,9 @@ export default function Onboarding() {
   });
 
   // Fetch categories and cities from backend
-  useEffect(() => {
-    axios.get("/api/categories").then((res) => setCategoriesList(res.data));
-  }, []);
+  // useEffect(() => {
+  //   axios.get("/api/categories").then((res) => setCategoriesList(res.data));
+  // }, []);
 
   // Draft user creation
   const createDraftUser = async () => {

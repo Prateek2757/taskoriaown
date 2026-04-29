@@ -37,7 +37,7 @@ const NavProfileDropdown = memo(function NavProfileDropdown({
         border border-gray-100 dark:border-gray-800
         overflow-hidden z-[999]"
     >
-      <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-900 p-3 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-3">
           <NavAvatar src={session?.user?.image} size="md" isPro={isPro} />
           <div className="flex-1 min-w-0">
@@ -100,7 +100,6 @@ const NavProfileDropdown = memo(function NavProfileDropdown({
         ))}
       </div>
 
-      {/* Sign out */}
       <div className="border-t border-gray-200 dark:border-gray-700 p-2">
         <button
           onClick={onLogout}

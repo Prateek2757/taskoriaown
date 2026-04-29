@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Find Services by City | Taskoria",
   description:
     "Browse local service professionals across Australia. Select your city to find trusted providers near you.",
-  alternates: { canonical: "https://www.taskoria.com/cities" },
+  alternates: { canonical: "https://www.taskoria.com/locations" },
 };
 
 interface City {
@@ -64,36 +64,38 @@ export default async function CitiesIndexPage() {
 
   return (
     <main className="min-h-screen bg-white dark:bg-slate-950">
-<section className="relative text-white py-30 px-6 md:px-16 overflow-hidden">
-  <Image
-    src="/australia.png"
-    alt="Australia cities"
-    fill
-    priority
-    className="object-cover"
-    sizes="100vw"
-  />
+      <section className="relative text-white py-30 px-6 md:px-16 overflow-hidden">
+        <Image
+          src="/sydney-bridge.webp"
+          alt="Australia cities"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
 
-  {/* Gradient Overlay */}
-  <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
 
-  {/* Content */}
-  <div className="relative z-10 max-w-7xl mx-auto">
-    <div className="flex items-center gap-2 text-blue-300 text-sm mb-4">
-      <Link href="/" className="hover:text-white">Home</Link>
-      <span>/</span>
-      <span className="text-white">Cities</span>
-    </div>
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <div className="flex items-center gap-2 text-blue-300 text-sm mb-4">
+            <Link href="/" className="hover:text-white">
+              Home
+            </Link>
+            <span>/</span>
+            <span className="text-white">Cities</span>
+          </div>
 
-    <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-      Find services in your <span className="text-blue-400">city</span>
-    </h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
+            Find services in your <span className="text-blue-400">city</span>
+          </h1>
 
-    <p className="text-white/90 text-lg max-w-xl">
-      Browse trusted local professionals across Australia.
-    </p>
-  </div>
-</section>
+          <p className="text-white/90 text-lg max-w-xl">
+            Browse trusted local professionals across Australia.
+          </p>
+        </div>
+      </section>
 
       <div className="max-w-7xl mx-auto px-6 md:px-16 py-16 space-y-14">
         {states.map((state) => (
@@ -105,7 +107,7 @@ export default async function CitiesIndexPage() {
               {state.cities.map((city) => (
                 <Link
                   key={city.city_id}
-                  href={`/cities/${state.stateSlug}/${city.slug}`}
+                  href={`/locations/${state.stateSlug}/${city.slug}`}
                   className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-300 dark:hover:border-blue-700 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
                 >
                   {/* {city.image_url && (

@@ -50,10 +50,10 @@ export default function ModernNavbar({
       <header
         className="sticky top-0 z-50
           backdrop-blur-xl bg-white/70 dark:bg-gray-900/70
-          border-b border-white/40 dark:border-white/10
+          border-b border-white/40 dark:border-white/10 
           shadow-sm transition-colors w-full"
       >
-        <div className="container mx-auto px-4 py-2 flex items-center gap-2 relative">
+        <div className="container max-w-7xl mx-auto px-4 py-2 flex items-center gap-2 relative">
           <Link
             href="/"
             className="flex gap-1 items-center hover:opacity-90 transition-opacity flex-1 md:flex-none min-w-0"

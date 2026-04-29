@@ -31,7 +31,7 @@ export default function ChatWindow({
   me: { id: string; name?: string };
   taskId: number;
   OtherUserId?: string;
-  otherProfileImage?:string;
+  otherProfileImage?: string;
   conversationTitle?: string;
   otherName?: string;
 }) {
@@ -55,12 +55,10 @@ export default function ChatWindow({
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-  
+
     const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
     setShowTaskDetails(isDesktop);
   }, []);
-  
-
 
   useEffect(() => {
     if (!conversationId) return;
@@ -84,46 +82,114 @@ export default function ChatWindow({
 
     loadMessages();
 
+    // const chan = supabaseBrowser.channel(`conversation:${conversationId}`, {
+    //   config: {
+    //     broadcast: { self: false },
+    //     presence: { key: me.id },
+    //   },
+    // });
+    // chan
+    // .on("presence", { event: "sync" }, () => {   // 👈 presence FIRST
+    //   const state = chan.presenceState();
+    //   const users = Object.values(state)
+    //     .flat()
+    //     .map((p: any) => p.user_id);
+    //   setActiveUsers(users);
+    // })
+    // .on("broadcast", { event: "message" }, (payload) => {
+    //   const msg: Message = payload.payload?.message;
+    //   if (!msg?.id) return;
+    //   if (msg.user_id !== me.id) {
+    //     setMessages((prev) => sortMessages(uniqueMessages([...prev, msg])));
+    //   }
+    // })
+    // .on("broadcast", { event: "typing" }, (payload) => {
+    //   const uid = payload.payload?.user_id;
+    //   if (!uid || uid === me.id) return;
+    //   setTypingUsers((prev) => ({ ...prev, [uid]: Date.now() }));
+    // })
+    // .subscribe(async (status) => {
+    //   if (status === "SUBSCRIBED") {
+    //     channelRef.current = chan;
+    //     await chan.track({
+    //       user_id: me.id,
+    //       conversation_id: conversationId,
+    //     });
+    //   }
+    // });
+
+    // chan
+    // .on("broadcast", { event: "message" }, (payload) => {
+    //   const msg: Message = payload.payload?.message;
+    //   if (!msg?.id) return;
+
+    //   if (msg.user_id !== me.id) {
+    //     setMessages((prev) => sortMessages(uniqueMessages([...prev, msg])));
+    //   }
+    // });
+
+    // chan.on("broadcast", { event: "typing" }, (payload) => {
+    //   const uid = payload.payload?.user_id;
+    //   if (!uid || uid === me.id) return;
+
+    //   setTypingUsers((prev) => ({ ...prev, [uid]: Date.now() }));
+    // });
+
+    // chan.on("presence", { event: "sync" }, () => {
+    //   const state = chan.presenceState();
+    //   const users = Object.values(state)
+    //     .flat()
+    //     .map((p: any) => p.user_id);
+    //   setActiveUsers(users);
+    // });
+
+    // chan.subscribe(async (status) => {
+    //   if (status === "SUBSCRIBED") {
+    //     channelRef.current = chan;
+    //     await chan.track({
+    //       user_id: me.id,
+    //       conversation_id: conversationId,
+    //     });
+    //   }
+    // });
+
+
     const chan = supabaseBrowser.channel(`conversation:${conversationId}`, {
       config: {
         broadcast: { self: false },
         presence: { key: me.id },
       },
     });
-
-    chan.on("broadcast", { event: "message" }, (payload) => {
-      const msg: Message = payload.payload?.message;
-      if (!msg?.id) return;
-
-      if (msg.user_id !== me.id) {
-        setMessages((prev) => sortMessages(uniqueMessages([...prev, msg])));
-      }
-    });
-
-    chan.on("broadcast", { event: "typing" }, (payload) => {
-      const uid = payload.payload?.user_id;
-      if (!uid || uid === me.id) return;
-
-      setTypingUsers((prev) => ({ ...prev, [uid]: Date.now() }));
-    });
-
-    chan.on("presence", { event: "sync" }, () => {
-      const state = chan.presenceState();
-      const users = Object.values(state)
-        .flat()
-        .map((p: any) => p.user_id);
-      setActiveUsers(users);
-    });
-
-    chan.subscribe(async (status) => {
-      if (status === "SUBSCRIBED") {
-        channelRef.current = chan;
-        await chan.track({
-          user_id: me.id,
-          conversation_id: conversationId,
-        });
-      }
-    });
+    
+    chan
+      .on("presence", { event: "sync" }, () => {
+        const state = chan.presenceState();
+        const users = Object.values(state)
+          .flat()
+          .map((p: any) => p.user_id);
+        setActiveUsers(users);
+      })
+      .on("broadcast", { event: "message" }, (payload) => {
+        const msg: Message = payload.payload?.message;
+        if (!msg?.id) return;
+        if (msg.user_id !== me.id) {
+          setMessages((prev) => sortMessages(uniqueMessages([...prev, msg])));
+        }
+      })
+      .on("broadcast", { event: "typing" }, (payload) => {
+        const uid = payload.payload?.user_id;
+        if (!uid || uid === me.id) return;
+        setTypingUsers((prev) => ({ ...prev, [uid]: Date.now() }));
+      })
+      .subscribe(async (status) => {
+        if (status === "SUBSCRIBED") {
+          channelRef.current = chan;
+          await chan.track({
+            user_id: me.id,
+            conversation_id: conversationId,
+          });
+        }
+      });
 
     const cleanTyping = setInterval(() => {
       const now = Date.now();
@@ -138,11 +204,10 @@ export default function ChatWindow({
 
     return () => {
       clearInterval(cleanTyping);
-      if (channelRef.current) {
-        channelRef.current.untrack();
-        supabaseBrowser.removeChannel(channelRef.current);
-        channelRef.current = null;
-      }
+      // ✅ Use `chan` directly — don't rely on channelRef which may not be set yet
+      chan.unsubscribe();
+      supabaseBrowser.removeChannel(chan);
+      channelRef.current = null;
     };
   }, [conversationId, me.id]);
 
@@ -218,9 +283,8 @@ export default function ChatWindow({
 
       const otherUserIsViewing =
         OtherUserId && activeUsers.includes(String(OtherUserId));
- 
-        const role = localStorage.getItem("viewMode")
 
+      const role = localStorage.getItem("viewMode");
 
       if (!otherUserIsViewing && OtherUserId) {
         await createNotification({
@@ -229,8 +293,8 @@ export default function ChatWindow({
           user_name: `${session?.user.name}`,
           title: `${session?.user.name} is messaging you`,
           body: `You have received a message from ${session?.user.name}`,
-          action_url:`/messages/${conversationId}`,
-          role:String(role)
+          action_url: `/messages/${conversationId}`,
+          role: String(role),
         });
       }
     } catch (err) {
@@ -262,7 +326,7 @@ export default function ChatWindow({
               with {otherName}
             </p>
           </div> */}
-          
+
           <button
             onClick={() => setShowTaskDetails(!showTaskDetails)}
             className={`
