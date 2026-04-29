@@ -1,10 +1,8 @@
-
 "use client";
 import { cn } from "@/lib/utils";
 import { Quote, Star, Loader2, AlertCircle } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import NewMarquee from "./ui/new-marquee";
 
 
 interface Review {
@@ -22,7 +20,8 @@ interface Meta {
   total: number;
 }
 
-const AVATAR_BASE = "https://ui-avatars.com/api/?background=3b82f6&color=fff&bold=true&name=";
+const AVATAR_BASE =
+  "https://ui-avatars.com/api/?background=3b82f6&color=fff&bold=true&name=";
 
 function avatarFallback(name: string) {
   return `${AVATAR_BASE}${encodeURIComponent(name)}`;
@@ -40,7 +39,6 @@ function transform(r: any, i: number): Review {
   };
 }
 
-
 function ReviewCard({ img, name, location, body, rating, time }: Review) {
   return (
     <figure
@@ -48,7 +46,7 @@ function ReviewCard({ img, name, location, body, rating, time }: Review) {
         "relative w-76 shrink-0 cursor-pointer overflow-hidden rounded-xl border p-4",
         "border-gray-950/10 bg-gray-950/[0.01] hover:bg-gray-950/5",
         "dark:border-gray-50/10 dark:bg-gray-50/10 dark:hover:bg-gray-50/15",
-        "transition-colors duration-200"
+        "transition-colors duration-200",
       )}
     >
       <div className="flex items-start gap-3">
@@ -64,15 +62,13 @@ function ReviewCard({ img, name, location, body, rating, time }: Review) {
         />
 
         <div className="flex flex-col flex-1 min-w-0">
-          <figcaption className="text-sm font-semibold truncate dark:text-white">
+          <figcaption className="text-base font-semibold truncate dark:text-white">
             {name}
           </figcaption>
 
           <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5">
             {location}
-            {time && (
-              <span className="ml-1 text-gray-400">· {time}</span>
-            )}
+            {time && <span className="ml-1 text-gray-400">· {time}</span>}
           </p>
 
           <div className="flex items-center gap-0.5 mt-1">
@@ -83,7 +79,7 @@ function ReviewCard({ img, name, location, body, rating, time }: Review) {
                   "w-3 h-3",
                   i < rating
                     ? "text-yellow-400 fill-yellow-400"
-                    : "text-gray-300 fill-gray-300"
+                    : "text-gray-300 fill-gray-300",
                 )}
               />
             ))}
@@ -99,7 +95,6 @@ function ReviewCard({ img, name, location, body, rating, time }: Review) {
     </figure>
   );
 }
-
 
 export default function Testimonial() {
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -171,12 +166,10 @@ export default function Testimonial() {
         </p>
       )}
       {!loading && reviews.length > 0 && (
-        <div className="max-w-7xl mx-auto overflow-x-auto md:overflow-hidden">
-          <NewMarquee pauseOnHover speed={35}>
-            {reviews.map((review) => (
-              <ReviewCard key={review.id} {...review} />
-            ))}
-          </NewMarquee>
+        <div className="max-w-7xl flex shrink-0 gap-4 pr-4 mx-auto overflow-x-auto md:overflow-hidden">
+          {reviews.map((review) => (
+            <ReviewCard key={review.id} {...review} />
+          ))}
         </div>
       )}
       {reviews.length > 0 && (
