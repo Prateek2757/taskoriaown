@@ -139,18 +139,14 @@ export default function HeroInteractive() {
               </Link>
 
               {!session && (
-                <Link
-                  href="/join-provider"
-                  aria-label="Register as a service provider"
-                  onClick={(e) => {
-                    e.preventDefault(); // keep modal behavior
-                    joinAsProvider(); // open modal
-                    window.history.pushState({}, "", "/"); // route sync
-                  }}
+                <Button
+                  variant="outline"
+                  onClick={() => joinAsProvider()}
                   className="w-58 h-10 rounded-lg font-medium border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200"
+                  aria-label="Register as a service provider"
                 >
                   Join as Provider
-                </Link>
+                </Button>
               )}
             </div>
           </div>
