@@ -218,7 +218,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const city of sortedCities) {
     if (!city.state_slug) continue;
     const rank = sortedCities.indexOf(city);
-    const cityPriority = rank < 10 ? 0.75 : rank < 30 ? 0.7 : 0.65;q
+    const cityPriority = rank < 10 ? 0.75 : rank < 30 ? 0.7 : 0.65;
 
     entries.push(
       url(`/cities/${city.state_slug}/${city.slug}`, {
