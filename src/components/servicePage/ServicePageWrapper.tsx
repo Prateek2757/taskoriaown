@@ -1,10 +1,14 @@
-"use client"
+"use client";
+
+
+
 import dynamic from "next/dynamic";
 import PageSkeleton from "../skeleton/PageSkeleton";
 
 const ServicePageClient = dynamic(
   () => import("@/components/servicePage/ServicePage"),
   {
+    ssr: false,
     loading: () => (
       <div className="min-h-screen w-full">
         <div className="animate-pulse text-gray-400"><PageSkeleton/></div>
