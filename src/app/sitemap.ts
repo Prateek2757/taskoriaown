@@ -29,12 +29,14 @@ interface BlogPost {
 }
 
 
+
 async function fetchCategories(): Promise<Category[]> {
   try {
     const res = await fetch(`${BASE_URL}/api/signup/category-selection`, {
       next: { revalidate: 3600 },
     });
-    return res.ok ? res.json() : [];
+    if (!res.ok) return [];
+    return await res.json();
   } catch {
     return [];
   }
@@ -45,7 +47,8 @@ async function fetchCities(): Promise<City[]> {
     const res = await fetch(`${BASE_URL}/api/service-location`, {
       next: { revalidate: 3600 },
     });
-    return res.ok ? res.json() : [];
+    if (!res.ok) return [];
+    return await res.json();
   } catch {
     return [];
   }
@@ -56,12 +59,12 @@ async function fetchBlogPosts(): Promise<BlogPost[]> {
     const res = await fetch(`${BASE_URL}/api/blog`, {
       next: { revalidate: 3600 },
     });
-    return res.ok ? res.json() : [];
+    if (!res.ok) return [];
+    return await res.json();
   } catch {
     return [];
   }
 }
-
 
 function url(
   path: string,
