@@ -75,9 +75,22 @@ async function proxy(req: NextRequest) {
   const rewriteUrl = req.nextUrl.clone();
   rewriteUrl.pathname = `/${defaultLocale}${pathname}`;
   const response = NextResponse.rewrite(rewriteUrl);
+if (
+  pathname === "/sitemap.xml" ||
+  pathname.startsWith("/sitemap_") || 
+  pathname === "/robots.txt" ||
+  pathname.startsWith("/_next") ||
+  pathname.startsWith("/api") ||
+  pathname.startsWith("/static") ||
+  pathname.includes("/favicon") ||
+  /\.(.*)$/.test(pathname)
+) {
+  return NextResponse.next();
+}
 
   return applySecurityHeaders(response);
 }
+
 
 export { proxy };
 
