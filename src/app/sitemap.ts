@@ -4,12 +4,24 @@ export const revalidate = 3600;
 
 const BASE_URL = "https://www.taskoria.com";
 
+const SITEMAP_ID = {
+  STATIC:     0,
+  CATEGORIES: 1,
+  CITIES:     2,
+  BLOG:       3,
+} as const;
+
+type SitemapId = (typeof SITEMAP_ID)[keyof typeof SITEMAP_ID];
 
 interface Category {
   category_id: number;
   name: string;
   slug: string;
-  parent_category_id: number | null;
+  updated_at?: string;
+}
+
+interface Subcity {
+  slug: string;
   updated_at?: string;
 }
 
@@ -19,7 +31,7 @@ interface City {
   state_slug: string;
   popularity: number;
   updated_at?: string;
-  subcities?: { slug: string; updated_at?: string }[];
+  subcities?: Subcity[];
 }
 
 interface BlogPost {
@@ -28,210 +40,188 @@ interface BlogPost {
   published_at?: string;
 }
 
+type ChangeFreq = MetadataRoute.Sitemap[number]["changeFrequency"];
 
 
-async function fetchCategories(): Promise<Category[]> {
+
+async function safeFetch<T>(url: string): Promise<T[]> {
   try {
-    const res = await fetch(`${BASE_URL}/api/signup/category-selection`, {
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) return [];
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    if (!res.ok) {
+      console.warn(`[sitemap] ${url} responded ${res.status}`);
+      return [];
+    }
     return await res.json();
-  } catch {
+  } catch (err) {
+    console.error(`[sitemap] Failed to fetch ${url}:`, err);
     return [];
   }
 }
 
-async function fetchCities(): Promise<City[]> {
-  try {
-    const res = await fetch(`${BASE_URL}/api/service-location`, {
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) return [];
-    return await res.json();
-  } catch {
-    return [];
-  }
-}
+const fetchCategories = () =>
+  safeFetch<Category>(`${BASE_URL}/api/signup/category-selection`);
 
-async function fetchBlogPosts(): Promise<BlogPost[]> {
-  try {
-    const res = await fetch(`${BASE_URL}/api/blog`, {
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) return [];
-    return await res.json();
-  } catch {
-    return [];
-  }
-}
+const fetchCities = () =>
+  safeFetch<City>(`${BASE_URL}/api/service-location`);
 
-function url(
+const fetchBlogPosts = () =>
+  safeFetch<BlogPost>(`${BASE_URL}/api/blog`);
+
+
+
+function makeEntry(
   path: string,
-  opts: {
-    lastModified?: string | Date;
-    priority: number;
-    changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"];
-  }
+  priority: number,
+  changeFrequency: ChangeFreq,
+  lastModified?: string | Date
 ): MetadataRoute.Sitemap[number] {
   return {
     url: `${BASE_URL}${path}`,
-    lastModified: opts.lastModified ? new Date(opts.lastModified) : new Date(),
-    changeFrequency: opts.changeFrequency,
-    priority: opts.priority,
+    lastModified: lastModified ? new Date(lastModified) : new Date(),
+    changeFrequency,
+    priority,
   };
 }
 
-function uniqueStates(cities: City[]): string[] {
+function uniqueStateslugs(cities: City[]): string[] {
   return [...new Set(cities.map((c) => c.state_slug).filter(Boolean))];
 }
 
+function cityPriorityByRank(rank: number): number {
+  if (rank < 10) return 0.75;
+  if (rank < 30) return 0.70;
+  if (rank < 60) return 0.65;
+  return 0.60;
+}
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [categories, cities, blogPosts] = await Promise.all([
-    fetchCategories(),
-    fetchCities(),
-    fetchBlogPosts(),
-  ]);
+export function generateSitemaps() {
+  return Object.values(SITEMAP_ID).map((id) => ({ id }));
+}
 
-  // Split categories into parents and children
-  const parentCategories = categories.filter((c) => !c.parent_category_id);
-  const childCategories  = categories.filter((c) =>  c.parent_category_id);
+export default async function sitemap({
+  id,
+}: {
+  id: SitemapId;
+}): Promise<MetadataRoute.Sitemap> {
+  switch (id) {
+    case SITEMAP_ID.STATIC: {
+      const pages: { path: string; priority: number; freq: ChangeFreq }[] = [
+        { path: "/",                       priority: 1.0, freq: "daily"   },
+        { path: "/services",               priority: 0.9, freq: "daily"   },
+        { path: "/cities",                 priority: 0.8, freq: "weekly"  },
+        { path: "/blog",                   priority: 0.8, freq: "daily"   },
+        { path: "/about-us",               priority: 0.6, freq: "monthly" },
+        { path: "/trust-safety",           priority: 0.7, freq: "monthly" },
+        { path: "/careers",               priority: 0.5, freq: "monthly" },
+        { path: "/privacy-policy",         priority: 0.3, freq: "yearly"  },
+        { path: "/terms-and-conditions",   priority: 0.3, freq: "yearly"  },
+        { path: "/cookie-policy",          priority: 0.3, freq: "yearly"  },
+      ];
 
-  // Unique state slugs
-  const stateslugs = uniqueStates(cities);
-
-  const entries: MetadataRoute.Sitemap = [];
-
-  // ── 1. CORE PAGES ──────────────────────────────────────────────────────────
-  const corePages = [
-    { path: "/",                   priority: 1.0, freq: "daily"   },
-    { path: "/services",           priority: 0.9, freq: "daily"   },
-    { path: "/cities",             priority: 0.8, freq: "weekly"  },
-    { path: "/blog",               priority: 0.8, freq: "daily"   },
-    { path: "/about-us",           priority: 0.6, freq: "monthly" },
-    { path: "/trust-safety",       priority: 0.7, freq: "monthly" },
-    { path: "/careers",            priority: 0.5, freq: "monthly" },
-    { path: "/privacy-policy",     priority: 0.3, freq: "yearly"  },
-    { path: "/terms-and-conditions", priority: 0.3, freq: "yearly" },
-    { path: "/cookie-policy",      priority: 0.3, freq: "yearly"  },
-  ] as const;
-
-  for (const p of corePages) {
-    entries.push(url(p.path, { priority: p.priority, changeFrequency: p.freq }));
-  }
-
- 
-  for (const cat of parentCategories) {
-    entries.push(
-      url(`/services/${cat.slug}`, {
-        lastModified: cat.updated_at,
-        priority: 0.9,
-        changeFrequency: "weekly",
-      })
-    );
-  }
-
-  for (const cat of childCategories) {
-    entries.push(
-      url(`/services/${cat.slug}`, {
-        lastModified: cat.updated_at,
-        priority: 0.7,
-        changeFrequency: "weekly",
-      })
-    );
-  }
-
-  for (const cat of parentCategories) {
-    for (const stateSlug of stateslugs) {
-      entries.push(
-        url(`/services/${cat.slug}/${stateSlug}`, {
-          priority: 0.8,
-          changeFrequency: "weekly",
-        })
-      );
-    }
-  }
-
-  for (const cat of childCategories) {
-    for (const stateSlug of stateslugs) {
-      entries.push(
-        url(`/services/${cat.slug}/${stateSlug}`, {
-          priority: 0.65,
-          changeFrequency: "weekly",
-        })
-      );
-    }
-  }
-
-
-  const sortedCities = [...cities].sort((a, b) => b.popularity - a.popularity);
-
-  for (const city of sortedCities) {
-    if (!city.state_slug) continue;
-
-    const rank = sortedCities.indexOf(city);
-    const cityPriority = rank < 10 ? 0.75 : rank < 30 ? 0.7 : rank < 60 ? 0.65 : 0.6;
-
-    for (const cat of parentCategories) {
-      entries.push(
-        url(`/services/${cat.slug}/${city.state_slug}/${city.slug}`, {
-          lastModified: city.updated_at,
-          priority: cityPriority,
-          changeFrequency: "weekly",
-        })
-      );
+      return pages.map((p) => makeEntry(p.path, p.priority, p.freq));
     }
 
-    for (const cat of childCategories) {
-      entries.push(
-        url(`/services/${cat.slug}/${city.state_slug}/${city.slug}`, {
-          lastModified: city.updated_at,
-          priority: Math.max(0.5, cityPriority - 0.1),
-          changeFrequency: "weekly",
-        })
-      );
-    }
+    case SITEMAP_ID.CATEGORIES: {
+      const [categories, cities] = await Promise.all([
+        fetchCategories(),
+        fetchCities(),
+      ]);
 
-    for (const sub of city.subcities ?? []) {
-      for (const cat of parentCategories) {
+      const stateslugs = uniqueStateslugs(cities);
+      const entries: MetadataRoute.Sitemap = [];
+
+      for (const cat of categories) {
         entries.push(
-          url(
-            `/services/${cat.slug}/${city.state_slug}/${city.slug}/${sub.slug}`,
-            {
-              lastModified: sub.updated_at ?? city.updated_at,
-              priority: 0.55,
-              changeFrequency: "monthly",
-            }
+          makeEntry(`/services/${cat.slug}`, 0.9, "weekly", cat.updated_at)
+        );
+      }
+
+      for (const cat of categories) {
+        for (const stateSlug of stateslugs) {
+          entries.push(
+            makeEntry(`/services/${cat.slug}/${stateSlug}`, 0.8, "weekly")
+          );
+        }
+      }
+
+      return entries;
+    }
+
+    case SITEMAP_ID.CITIES: {
+      const [categories, cities] = await Promise.all([
+        fetchCategories(),
+        fetchCities(),
+      ]);
+
+      const stateslugs   = uniqueStateslugs(cities);
+      const sortedCities = [...cities].sort((a, b) => b.popularity - a.popularity);
+      const entries: MetadataRoute.Sitemap = [];
+
+      for (const stateSlug of stateslugs) {
+        entries.push(makeEntry(`/cities/${stateSlug}`, 0.8, "weekly"));
+      }
+
+      for (const [rank, city] of sortedCities.entries()) {
+        if (!city.state_slug) continue;
+        const priority = rank < 10 ? 0.75 : rank < 30 ? 0.7 : 0.65;
+
+        entries.push(
+          makeEntry(
+            `/cities/${city.state_slug}/${city.slug}`,
+            priority,
+            "weekly",
+            city.updated_at
           )
         );
       }
+
+      for (const [rank, city] of sortedCities.entries()) {
+        if (!city.state_slug) continue;
+        const cityPriority = cityPriorityByRank(rank);
+
+        for (const cat of categories) {
+          entries.push(
+            makeEntry(
+              `/services/${cat.slug}/${city.state_slug}/${city.slug}`,
+              cityPriority,
+              "weekly",
+              city.updated_at
+            )
+          );
+        }
+
+        for (const sub of city.subcities ?? []) {
+          for (const cat of categories) {
+            entries.push(
+              makeEntry(
+                `/services/${cat.slug}/${city.state_slug}/${city.slug}/${sub.slug}`,
+                0.55,
+                "monthly",
+                sub.updated_at ?? city.updated_at
+              )
+            );
+          }
+        }
+      }
+
+      return entries;
     }
+
+    // ── 3. Blog posts ────────────────────────────────────────────────────────
+    // case SITEMAP_ID.BLOG: {
+    //   const blogPosts = await fetchBlogPosts();
+
+    //   return blogPosts.map((post) =>
+    //     makeEntry(
+    //       `/blog/${post.slug}`,
+    //       0.6,
+    //       "monthly",
+    //       post.updated_at ?? post.published_at
+    //     )
+    //   );
+    // }
+
+    default:
+      return [];
   }
-
-  for (const stateSlug of stateslugs) {
-    entries.push(
-      url(`/cities/${stateSlug}`, {
-        priority: 0.8,
-        changeFrequency: "weekly",
-      })
-    );
-  }
-
-  for (const city of sortedCities) {
-    if (!city.state_slug) continue;
-    const rank = sortedCities.indexOf(city);
-    const cityPriority = rank < 10 ? 0.75 : rank < 30 ? 0.7 : 0.65;
-
-    entries.push(
-      url(`/cities/${city.state_slug}/${city.slug}`, {
-        lastModified: city.updated_at,
-        priority: cityPriority,
-        changeFrequency: "weekly",
-      })
-    );
-  }
-
-
-  return entries;
 }
