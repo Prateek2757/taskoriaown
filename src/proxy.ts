@@ -17,28 +17,11 @@ const protectedPaths = [
   "/provider-responses",
 ];
 
-const SECURITY_HEADERS: Record<string, string> = {
-  "Referrer-Policy": "strict-origin-when-cross-origin",
-  "X-Content-Type-Options": "nosniff",
-  "X-Frame-Options": "SAMEORIGIN",
-  "X-Robots-Tag": "index, follow",
-  "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
-  "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
-};
-
-function applySecurityHeaders(response: NextResponse): NextResponse {
-  for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
-    response.headers.set(key, value);
-  }
-  return response;
-}
-
 async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
   if (
     pathname === "/sitemap.xml" ||
-    pathname.startsWith("/sitemap_") ||
     pathname === "/robots.txt" ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
@@ -62,35 +45,19 @@ async function proxy(req: NextRequest) {
 
   if (protectedPaths.some((path) => pathname.startsWith(path))) {
     if (!token) {
-      const signinUrl = new URL("/signin", req.url);
-      signinUrl.searchParams.set("callbackUrl", pathname + search);
-      return NextResponse.redirect(signinUrl, 307);
+      const url = new URL(`/signin`, req.url);
+      url.searchParams.set("callbackUrl", pathname + search);
+      return NextResponse.redirect(url, 307);
     }
   }
 
-  if (pathname === "/en-au") {
-    return NextResponse.redirect(new URL("/", req.url), 301);
-  }
+  const url = req.nextUrl.clone();
+  url.pathname = `/${defaultLocale}${pathname}`;
+  const response = NextResponse.rewrite(url);
 
-  const rewriteUrl = req.nextUrl.clone();
-  rewriteUrl.pathname = `/${defaultLocale}${pathname}`;
-  const response = NextResponse.rewrite(rewriteUrl);
-if (
-  pathname === "/sitemap.xml" ||
-  pathname.startsWith("/sitemap_") || 
-  pathname === "/robots.txt" ||
-  pathname.startsWith("/_next") ||
-  pathname.startsWith("/api") ||
-  pathname.startsWith("/static") ||
-  pathname.includes("/favicon") ||
-  /\.(.*)$/.test(pathname)
-) {
-  return NextResponse.next();
+  response.headers.set("X-Robots-Tag", "index, follow");
+  return response;
 }
-
-  return applySecurityHeaders(response);
-}
-
 
 export { proxy };
 
