@@ -54,8 +54,11 @@ async function proxy(req: NextRequest) {
   const url = req.nextUrl.clone();
   url.pathname = `/${defaultLocale}${pathname}`;
   const response = NextResponse.rewrite(url);
+  if (pathname === "/en-au") {
+    return NextResponse.redirect(new URL("/", req.url), 301);
+  }
 
-  response.headers.set("X-Robots-Tag", "index, follow");
+  // response.headers.set("X-Robots-Tag", "index, follow");
   return response;
 }
 

@@ -44,10 +44,7 @@ export const metadata: Metadata = {
 
   alternates: {
     canonical: BASE_URL,
-    languages: {
-      "en-AU": BASE_URL,
-      "x-default": BASE_URL,
-    },
+  
   },
 
   robots: {

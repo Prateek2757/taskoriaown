@@ -9,6 +9,7 @@ import CategorySearch from "../category/CategorySearch";
 import LocationSearch from "../Location/locationsearch";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Category {
   category_id: number;
@@ -123,24 +124,33 @@ export default function HeroInteractive() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button
-                onClick={handlePostJob}
+              <Link
+                href="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handlePostJob();
+                  window.history.pushState({}, "", "/");
+                }}
                 className="w-58 h-10 bg-[#2563EB] hover:bg-[#1d4fd8] text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
                 aria-label="Post a job to find service providers"
               >
                 Get Free Quotes
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              </Button>
+              </Link>
 
               {!session && (
-                <Button
-                  variant="outline"
-                  onClick={() => joinAsProvider()}
-                  className="w-58 h-10 rounded-lg font-medium border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200"
+                <Link
+                  href="/join-provider"
                   aria-label="Register as a service provider"
+                  onClick={(e) => {
+                    e.preventDefault(); // keep modal behavior
+                    joinAsProvider(); // open modal
+                    window.history.pushState({}, "", "/"); // route sync
+                  }}
+                  className="w-58 h-10 rounded-lg font-medium border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200"
                 >
                   Join as Provider
-                </Button>
+                </Link>
               )}
             </div>
           </div>

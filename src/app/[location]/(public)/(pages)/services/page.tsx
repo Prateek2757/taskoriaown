@@ -42,10 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
     alternates: {
       canonical: PAGE_URL,
-      languages: {
-        "en-AU":   PAGE_URL,
-        "x-default": PAGE_URL,
-      },
+    
     },
 
     robots: {

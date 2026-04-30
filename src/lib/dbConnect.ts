@@ -12,8 +12,8 @@ const pool =
     ssl: process.env.NODE_ENV === "production"
       ? { rejectUnauthorized: false }
       : false,
-    max: 10,                    // limit connections
-    idleTimeoutMillis: 30000,   // close idle after 30s
+    max: 10,                   
+    idleTimeoutMillis: 30000,   
     connectionTimeoutMillis: 2000,
   });
 

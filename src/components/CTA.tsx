@@ -58,26 +58,37 @@ function CTA() {
               </span>
             </h2>
             <p className="text-slate-400 text-sm sm:text-base mt-1 max-w-xl leading-relaxed">
-              Get quotesfor free, compare responses, and choose the right
+              Get quotes for free, compare responses, and choose the right
               provider for your timeline and budget.
             </p>
 
             <div className="flex flex-wrap justify-center gap-3 mt-4">
-              <Link href="/trust-safety">
-                <Button
-                  variant="outline"
-                  className="bg-white/80 border-2 border-gray-300 text-slate-900 dark:text-white hover:bg-white hover:border-gray-400 hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg px-6 py-3 text-xs sm:text-base font-semibold"
-                >
-                  See Safety & Support
-                </Button>
+              <Link
+                href="/trust-safety"
+                className="relative overflow-hidden bg-white rounded-md  text-black hover:scale-105 border-0 flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 px-6  text-xs sm:text-base font-semibold group"
+              >
+                See Safety & Support
               </Link>
-                <Button
-                  onClick={() => setOpenModal(true)}
-                  className="relative overflow-hidden bg-[#3C7DED]   text-white hover:scale-105 border-0 flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 px-6 py-3 text-xs sm:text-base font-semibold group"
+
+              <Button
+                asChild
+                className="relative overflow-hidden bg-[#3C7DED] text-white hover:scale-105 border-0 flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 px-6 py-3 text-xs sm:text-base font-semibold group"
+              >
+                <Link
+                  href="/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setOpenModal(true);
+                    window.history.pushState({}, "", "/");
+                  }}
+                  className="flex items-center gap-2"
                 >
                   <span className="relative z-10">Post a Job Free</span>
+
                   <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
+
                   <div className="absolute inset-0 bg-[#3C7DED] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </Link>
               </Button>
             </div>
 
