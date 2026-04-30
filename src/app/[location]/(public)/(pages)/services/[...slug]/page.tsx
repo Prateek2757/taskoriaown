@@ -275,42 +275,42 @@ export default async function ServicePage({ params }: Props) {
 }
 
 
-export async function generateStaticParams() {
-  try {
-    const [ citiesRes] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`),
-    ]);
+// export async function generateStaticParams() {
+//   try {
+//     const [ citiesRes] = await Promise.all([
+//       fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`),
+//     ]);
 
-    const cities: City[] = citiesRes.ok ? await citiesRes.json() : [];
+//     const cities: City[] = citiesRes.ok ? await citiesRes.json() : [];
 
-    const params: { slug: string[] }[] = [];
+//     const params: { slug: string[] }[] = [];
 
-    const statesSeen = new Set<string>();
-    for (const c of cities) {
-      if (c.state_slug) statesSeen.add(c.state_slug);
-    }
+//     const statesSeen = new Set<string>();
+//     for (const c of cities) {
+//       if (c.state_slug) statesSeen.add(c.state_slug);
+//     }
 
-    // for (const service of services) {
-    //   params.push({ slug: [service.slug] });
+//     // for (const service of services) {
+//     //   params.push({ slug: [service.slug] });
 
-    //   for (const stateSlug of statesSeen) {
-    //     params.push({ slug: [service.slug, stateSlug] });
-    //   }
+//     //   for (const stateSlug of statesSeen) {
+//     //     params.push({ slug: [service.slug, stateSlug] });
+//     //   }
 
-    //   for (const city of cities) {
-    //     if (!city.state_slug) continue;
+//     //   for (const city of cities) {
+//     //     if (!city.state_slug) continue;
 
-    //     params.push({ slug: [service.slug, city.state_slug, city.slug] });
+//     //     params.push({ slug: [service.slug, city.state_slug, city.slug] });
 
-    //     for (const sub of city.subcities ?? []) {
-    //       params.push({ slug: [service.slug, city.state_slug, city.slug, sub.slug] });
-    //     }
-    //   }
-    // }
+//     //     for (const sub of city.subcities ?? []) {
+//     //       params.push({ slug: [service.slug, city.state_slug, city.slug, sub.slug] });
+//     //     }
+//     //   }
+//     // }
 
-    return params;
-  } catch (err) {
-    console.error("generateStaticParams error:", err);
-    return [];
-  }
-}
+//     return params;
+//   } catch (err) {
+//     console.error("generateStaticParams error:", err);
+//     return [];
+//   }
+// }

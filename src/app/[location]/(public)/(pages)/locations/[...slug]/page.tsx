@@ -372,31 +372,31 @@ const nearbyCities: City[] = (allCities as CityWithDist[])
   );
 }
 
-export async function generateStaticParams() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`
-    );
-    const cities: City[] = res.ok ? await res.json() : [];
+// export async function generateStaticParams() {
+//   try {
+//     const res = await fetch(
+//       `${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`
+//     );
+//     const cities: City[] = res.ok ? await res.json() : [];
 
-    const params: { slug: string[] }[] = [];
+//     const params: { slug: string[] }[] = [];
 
-    const statesSeen = new Set<string>();
-    for (const c of cities) {
-      if (c.state_slug && !statesSeen.has(c.state_slug)) {
-        statesSeen.add(c.state_slug);
-        params.push({ slug: [c.state_slug] });
-      }
-    }
+//     const statesSeen = new Set<string>();
+//     for (const c of cities) {
+//       if (c.state_slug && !statesSeen.has(c.state_slug)) {
+//         statesSeen.add(c.state_slug);
+//         params.push({ slug: [c.state_slug] });
+//       }
+//     }
 
-    for (const c of cities) {
-      if (c.state_slug && c.slug) {
-        params.push({ slug: [c.state_slug, c.slug] });
-      }
-    }
+//     for (const c of cities) {
+//       if (c.state_slug && c.slug) {
+//         params.push({ slug: [c.state_slug, c.slug] });
+//       }
+//     }
 
-    return params;
-  } catch {
-    return [];
-  }
-}
+//     return params;
+//   } catch {
+//     return [];
+//   }
+// }
