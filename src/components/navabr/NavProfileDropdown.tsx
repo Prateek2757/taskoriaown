@@ -91,6 +91,7 @@ const NavProfileDropdown = memo(function NavProfileDropdown({
           <Link
             key={href}
             href={href}
+            prefetch
             onClick={onClose}
             className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300
               hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"

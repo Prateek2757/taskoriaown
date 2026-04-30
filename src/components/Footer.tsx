@@ -26,6 +26,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import { join } from "path";
+import { TrustBadges } from "./TrustBadges";
 
 const services = [
   { href: "/services/house-cleaning", label: "Cleaner" },
@@ -173,15 +174,15 @@ const Footer = () => {
                   <span className="">+61 474 655 902</span>
                 </a> */}
                 <a
-                  href="tel:61 474 655 902"
+                  href="tel:1300 531 727"
                   className="inline-flex items-center ml-2  gap-1 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
                 >
                   <Phone className="w-4" />
                   {"   "} Toll Free
-                  <span className="">+1300 531 727</span>
+                  <span className="">1300 531 727</span>
                 </a>
 
-                <motion.div
+                {/* <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 }}
@@ -190,7 +191,6 @@ const Footer = () => {
                   <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
                     Trusted by customers worldwide
                   </p>
-{/*scvx*/}
                   <a
                     href="https://www.trustpilot.com/review/taskoria.com"
                     target="_blank"
@@ -223,13 +223,15 @@ const Footer = () => {
                         </span>
                       </div>
                     </div>
-                  </a>
+                  </a>  
+                  <TrustBadges/>
 
-                  {/* Additional info */}
-                  {/* <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                  Additional info
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                     Rated 4.8/5 based on 100+ reviews
-                  </p> */}
-                </motion.div>
+                  </p>
+                </motion.div> */}
+                <TrustBadges/>
 
                 {openPopup && (
                   <motion.p

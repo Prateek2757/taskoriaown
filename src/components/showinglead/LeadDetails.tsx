@@ -23,6 +23,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import ContactActions from "../provider-responses/ContactActions";
 import { ProviderResponse } from "@/types";
+import { useCredit } from "@/hooks/useCredit";
 
 interface LeadAnswer {
   question_id?: string | number;
@@ -84,6 +85,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   const [isSaved, setIsSaved] = useState(false);
   const [showCreditModal, setShowCreditModal] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
+  const [isDeducting, setIsDeducting] = useState(false);
 
   const cacheKey = taskId ? `lead_status_${taskId}` : null;
 
@@ -111,6 +113,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   });
 
   const { loading: subscriptionLoading } = useSubscription();
+
+  const { balance, deductCredits, fetchBalance } = useCredit(session?.user?.id);
 
   const maxResponses = 5;
 
@@ -249,6 +253,48 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     leadStatus.count,
   ]);
 
+  const handleContactClick = useCallback(async () => {
+    if (!requiredCredits || !taskId) return;
+
+    if (balance >= requiredCredits) {
+      setIsDeducting(true);
+      try {
+        const result = await deductCredits(
+          Number(taskId),
+          Number(requiredCredits)
+        );
+        if (!result) throw new Error("Failed to deduct credits");
+
+        if (result.responseId) {
+          try {
+            await axios.post("/api/affiliate/commission/task-trigger", {
+              responseId: result.responseId,
+            });
+          } catch (error) {
+            console.error("Task trigger failed:", error);
+          }
+        }
+        await fetchBalance();
+        await handlePurchaseSuccess();
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to deduct credits. Please try again.");
+      } finally {
+        setIsDeducting(false);
+      }
+      return;
+    }
+
+    setShowCreditModal(true);
+  }, [
+    balance,
+    requiredCredits,
+    taskId,
+    deductCredits,
+    fetchBalance,
+    handlePurchaseSuccess,
+  ]);
+
   const formatTimeAgo = useCallback((timestamp: string): string => {
     const now = new Date();
     const created = new Date(timestamp);
@@ -312,9 +358,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                   />
                 </div>
               ) : ( */}
-                <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-lg font-bold">
-                  {getInitials(lead.customer_name || "N A")}
-                </div>
+              <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-lg font-bold">
+                {getInitials(lead.customer_name || "N A")}
+              </div>
               {/* )} */}
               {lead.status === "Open" && (
                 <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-900" />
@@ -559,11 +605,21 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               </button>
             ) : (
               <button
-                onClick={() => setShowCreditModal(true)}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl bg-linear-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all"
+                onClick={handleContactClick}
+                disabled={isDeducting}
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl bg-linear-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                <MessageSquare className="w-5 h-5" />
-                Contact {customerFirstName}
+                {isDeducting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Contacting...
+                  </>
+                ) : (
+                  <>
+                    <MessageSquare className="w-5 h-5" />
+                    Contact {customerFirstName}
+                  </>
+                )}
               </button>
             )}
           </div>

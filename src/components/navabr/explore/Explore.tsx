@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { FaDigitalOcean } from "react-icons/fa";
 import { GoTools } from "react-icons/go";
@@ -44,6 +45,9 @@ export default function Explore() {
   const [showMore, setShowMore] = useState(false);
   const { categories } = useCategories();
   const { paginatedData } = usePagination(exploreServices, 6);
+  const router = useRouter();
+
+  useEffect(() => { router.prefetch("/services"); }, [router]);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -136,7 +140,7 @@ export default function Explore() {
                     Services
                   </h1>
                   <span className="text-sm font-medium text-blue-600 cursor-pointer underline">
-                    <Link href="/services">See all</Link>
+                    <Link href="/services" prefetch>See all</Link>
                   </span>
                 </div>
                 <div className="flex flex-col pb-2">
@@ -176,7 +180,7 @@ export default function Explore() {
                         className="flex items-center gap-3 px-4 py-1"
                       >
                         <span className="text-sm text-gray-600 dark:text-gray-400 hover:text-black hover:underline">
-                          <Link href={`/services/${popularService.slug}`} onClick={closeMenu} >
+                          <Link href={`/services/${popularService.slug}`} prefetch onClick={closeMenu} >
                             {popularService?.name}
                           </Link>
                         </span>
@@ -221,7 +225,7 @@ export default function Explore() {
                     </h3>
                   </div>
                   <div className="flex">
-                    <Link href="/services">
+                    <Link href="/services" prefetch>
                       <span className="text-sm font-medium text-blue-600 cursor-pointer underline">
                         See all
                       </span>
@@ -260,6 +264,7 @@ export default function Explore() {
                         <span className="text-sm text-gray-600 px-2 mt-2 light:hover:!text-black hover:underline hover:decoration-2 underline-offset-4 dark:text-gray-400">
                           <Link
                             href={`/services/${cat.slug}`}
+                            prefetch
                             onClick={()=> closeMenu()}
                           >
                             {cat.name}{" "}

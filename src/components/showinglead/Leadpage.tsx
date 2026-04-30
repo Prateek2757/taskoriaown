@@ -249,7 +249,7 @@ const LeadsPage: React.FC = () => {
                           !(typeof val === "boolean" && val === null) &&
                           !(val === "Open")
                       ).length
-                    }
+                    }2
                   </span>
                 )}
               </button>

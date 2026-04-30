@@ -373,16 +373,14 @@ export default function SecurityPolicyPage() {
             {sections[1].subsections?.map((sub) => (
               <div
                 key={sub.title}
-                className={`rounded-xl border p-5 ${
-                  sub.type === "in"
+                className={`rounded-xl border p-5 ${sub.type === "in"
                     ? "border-emerald-100 bg-emerald-50"
                     : "border-red-100 bg-red-50"
-                }`}
+                  }`}
               >
                 <p
-                  className={`text-xs font-semibold uppercase tracking-widest mb-3 ${
-                    sub.type === "in" ? "text-emerald-600" : "text-red-500"
-                  }`}
+                  className={`text-xs font-semibold uppercase tracking-widest mb-3 ${sub.type === "in" ? "text-emerald-600" : "text-red-500"
+                    }`}
                 >
                   {sub.title}
                 </p>
@@ -393,9 +391,8 @@ export default function SecurityPolicyPage() {
                       className="flex items-start gap-2 text-sm text-gray-700"
                     >
                       <span
-                        className={`mt-1.5 shrink-0 w-1.5 h-1.5 rounded-full ${
-                          sub.type === "in" ? "bg-emerald-400" : "bg-red-400"
-                        }`}
+                        className={`mt-1.5 shrink-0 w-1.5 h-1.5 rounded-full ${sub.type === "in" ? "bg-emerald-400" : "bg-red-400"
+                          }`}
                       />
                       {item}
                     </li>

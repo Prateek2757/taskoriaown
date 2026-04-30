@@ -186,11 +186,11 @@ function CreditPurchase({
     <div className="w-full">
       {mode === "modal" && requiredCredits && (
         <div className="relative mb-4 text-center overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/20 dark:via-blue-950/20 dark:to-blue-950/20 rounded-2xl -z-10" />
+          <div className="absolute inset-0 bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/20 dark:via-blue-950/20 dark:to-blue-950/20 rounded-2xl -z-10" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-400/10 dark:bg-blue-400/5 rounded-full blur-3xl -z-10" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-400/10 dark:bg-purple-400/5 rounded-full blur-3xl -z-10" />
 
-          <div className="relative py-4 px-4">
+          <div className="relative py-3 px-4">
             {/* <div className="inline-flex items-center gap-2 px-4 py-2 mb-2 bg-blue-100 dark:bg-blue-900/30 rounded-full">
               <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
@@ -198,7 +198,7 @@ function CreditPurchase({
               </span>
             </div> */}
 
-            <h2 className="text-2xl  font-bold mb-3 bg-gradient-to-r from-gray-900 via-blue-900 to-blue-900 dark:from-white dark:via-blue-200 dark:to-blue-200 bg-clip-text text-transparent">
+            <h2 className="text-2xl  font-bold mb-3 bg-linear-to-r from-gray-900 via-blue-900 to-blue-900 dark:from-white dark:via-blue-200 dark:to-blue-200 bg-clip-text text-transparent">
               Unlock {contactName}'s Profile
             </h2>
             <p className="text-gray-600 dark:text-gray-400 text-base max-w-md mx-auto">
@@ -214,8 +214,8 @@ function CreditPurchase({
 
       <div className="mb-4">
         <div className="relative group">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity" />
-          <div className="relative bg-gradient-to-br from-blue-600 to-blue-600 dark:from-blue-600 dark:to-blue-400 rounded-2xl p-4 ">
+          <div className="absolute inset-0 bg-linear-to-r from-blue-500 to-blue-600 rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity" />
+          <div className="relative bg-linear-to-br from-blue-600 to-blue-600 dark:from-blue-600 dark:to-blue-400 rounded-2xl p-3 ">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
@@ -239,11 +239,11 @@ function CreditPurchase({
         </div>
       </div>
 
-      <div className="mb-8">
+      <div className="mb-6">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
           <span className="text-2xl">💡</span> Frequently Asked Questions
         </h3>
-        <div className="space-y-3">
+        <div className="space-y-2">
           {FAQS.map((faq) => (
             <div
               key={faq.id}
@@ -251,7 +251,7 @@ function CreditPurchase({
             >
               <button
                 onClick={() => toggleFaq(faq.id)}
-                className="w-full px-5 py-4 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors flex items-center justify-between text-left group"
+                className="w-full px-5 py-2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors flex items-center justify-between text-left group"
               >
                 <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm md:text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                   {faq.question}
@@ -274,7 +274,7 @@ function CreditPurchase({
 
       {showPackages && (
         <div className="mb-8">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
+          <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
             <CreditCard className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             Choose Your Package
           </h3>
@@ -283,7 +283,7 @@ function CreditPurchase({
           </p>
 
           {loading ? (
-            <div className="text-center py-12">
+            <div className="text-center py-6">
               <div className="relative inline-flex">
                 <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 dark:border-gray-700"></div>
                 <div className="animate-spin rounded-full h-16 w-16 border-4 border-t-blue-600 dark:border-t-blue-400 absolute top-0 left-0"></div>
@@ -308,15 +308,15 @@ function CreditPurchase({
                   <div
                     key={pkg.package_id}
                     onClick={() => setSelectedPackage(pkg.package_id)}
-                    className={`relative border-2 rounded-2xl p-6 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
+                    className={`relative border-2 rounded-2xl p-3 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
                       selectedPackage === pkg.package_id
-                        ? "border-blue-600 dark:border-blue-400 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 shadow-xl shadow-blue-200/50 dark:shadow-blue-900/30"
+                        ? "border-blue-600 dark:border-blue-400 bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 shadow-xl shadow-blue-200/50 dark:shadow-blue-900/30"
                         : "border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 bg-white dark:bg-gray-800 hover:shadow-lg"
                     }`}
                   >
                     {isPopular && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                        <div className="px-4 py-1 bg-gradient-to-r from-orange-500 to-pink-500 text-white text-xs font-bold rounded-full shadow-lg">
+                        <div className="px-4 py-1 bg-linear-to-r from-orange-500 to-pink-500 text-white text-xs font-bold rounded-full shadow-lg">
                           ⭐ MOST POPULAR
                         </div>
                       </div>
@@ -324,7 +324,7 @@ function CreditPurchase({
 
                     {isBestValue && (
                       <div className="absolute -top-3 right-4">
-                        <div className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold rounded-full shadow-lg">
+                        <div className="px-3 py-1 bg-linear-to-r from-green-500 to-emerald-500 text-white text-xs font-bold rounded-full shadow-lg">
                           💎 BEST VALUE
                         </div>
                       </div>
@@ -333,7 +333,7 @@ function CreditPurchase({
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100">
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                             {pkg.name}
                           </h3>
                           {selectedPackage === pkg.package_id && (
@@ -366,7 +366,7 @@ function CreditPurchase({
                       </div>
 
                       <div className="text-right ml-4">
-                        <div className="text-3xl md:text-4xl font-bold bg-gradient-to-br from-blue-600 to-blue-600 dark:from-blue-400 dark:to-blue-400 bg-clip-text text-transparent">
+                        <div className="text-3xl md:text-4xl font-bold bg-linear-to-br from-blue-600 to-blue-600 dark:from-blue-400 dark:to-blue-400 bg-clip-text text-transparent">
                           A${pkg.price}
                         </div>
                         <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -387,7 +387,7 @@ function CreditPurchase({
           <Button
             onClick={handleDeduct}
             disabled={loadingButton}
-            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600 font-semibold py-7 text-base shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40 transition-all duration-300 rounded-xl group"
+            className="w-full bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white dark:from-green-500 dark:to-emerald-500 dark:hover:from-green-600 dark:hover:to-emerald-600 font-semibold py-7 text-base shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40 transition-all duration-300 rounded-xl group"
             size="lg"
           >
             {loadingButton ? (
@@ -407,7 +407,7 @@ function CreditPurchase({
             <Button
               onClick={handlePurchase}
               disabled={loadingButton}
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-600 text-white dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-600 font-semibold py-7 text-base shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 rounded-xl group"
+              className="w-full bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-600 text-white dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-600 font-semibold py-7 text-base shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 rounded-xl group"
               size="lg"
             >
               {loadingButton ? (
@@ -427,19 +427,19 @@ function CreditPurchase({
           )
         )}
         <div className="grid grid-cols-3 gap-3 m-3">
-          <div className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
             <Shield className="w-6 h-6 text-green-600 dark:text-green-400 mb-2" />
             <span className="text-xs text-gray-600 dark:text-gray-400 text-center font-medium">
               Secure Payment
             </span>
           </div>
-          <div className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
             <Zap className="w-6 h-6 text-yellow-600 dark:text-yellow-400 mb-2" />
             <span className="text-xs text-gray-600 dark:text-gray-400 text-center font-medium">
               Instant Access
             </span>
           </div>
-          <div className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col items-center p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
             <Check className="w-6 h-6 text-blue-600 dark:text-blue-400 mb-2" />
             <span className="text-xs text-gray-600 dark:text-gray-400 text-center font-medium">
               Guaranteed
@@ -467,7 +467,7 @@ function CreditPurchase({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       <div className="max-w-4xl mx-auto p-4 md:p-8">
         <div className="mb-8">
           <button
@@ -479,11 +479,11 @@ function CreditPurchase({
           </button>
 
           <div className="flex items-center gap-4 mb-2">
-            <div className="p-3 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl shadow-lg">
+            <div className="p-3 bg-linear-to-br from-blue-600 to-blue-700 rounded-2xl shadow-lg">
               <Wallet className="w-8 h-8 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-blue-500 dark:from-white dark:via-blue-200 dark:to-purple-200 bg-clip-text text-transparent">
+              <h1 className="text-4xl md:text-5xl font-bold bg-linear-to-r from-gray-900 via-blue-900 to-blue-500 dark:from-white dark:via-blue-200 dark:to-purple-200 bg-clip-text text-transparent">
                 My Credits
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-1">

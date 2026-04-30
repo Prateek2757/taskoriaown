@@ -2,7 +2,7 @@ import "../../globals.css";
 import { UserProvider } from "@/context/userContext";
 import AuthProvider from "@/context/AuthProvider";
 import { Toaster } from "sonner";
-import ModernNavbar from "@/components/navabr/Navbar";
+import NavbarServer from "@/components/navabr/NavbarServer";
 import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
 import { Poppins, Bricolage_Grotesque } from "next/font/google";
@@ -225,7 +225,7 @@ export default function RootLayout({
           >
             <Analytics />
             <UserProvider>
-              <ModernNavbar />
+              <NavbarServer />
               <main>{children}</main>
               <SpeedInsights />
               <Toaster position="top-right" richColors expand closeButton />

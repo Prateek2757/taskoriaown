@@ -2,7 +2,7 @@
 import { Button } from "../components/ui/button";
 import { MapPin, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import NewRequestModal from "./leads/RequestModal";
@@ -32,7 +32,11 @@ export default function HeroSection() {
   const [loading, setLoading] = useState(false);
   const { joinAsProvider } = useJoinAsProvider();
 
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  // Use resolvedTheme after mount; fall back to "light" for SSR/first render
+  const particleColor = mounted && resolvedTheme === "dark" ? "#fff" : "#000";
   const handlePostJob = async () => {
     // if (!session) {
     //   toast.error("Please sign in first", {
@@ -189,7 +193,7 @@ export default function HeroSection() {
                     maxSize={1.7}
                     particleDensity={1100}
                     className="w-full h-full"
-                    particleColor={theme === "dark" ? "#fff" : "#000"}
+                    particleColor={particleColor}
                   />
                   <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-indigo-500 to-transparent h-0.5 w-3/4 blur-sm" />
                   <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
@@ -376,7 +380,7 @@ export default function HeroSection() {
               particleDensity={800}
               speed={1}
               maxSize={1.7}
-              particleColor={theme === "dark" ? "#fff" : "#000"}
+              particleColor={particleColor}
               className="absolute inset-x-0 bottom-0 h-full w-full mask-[radial-gradient(50%_50%,black,transparent_85%)] dark:mask-[radial-gradient(50%_50%,white,transparent_85%)] dark:hidden"
             />
             <SparklesCore
@@ -384,7 +388,7 @@ export default function HeroSection() {
               particleDensity={800}
               speed={1}
               maxSize={1.7}
-              particleColor={theme === "dark" ? "#fff" : "#000"}
+              particleColor={particleColor}
               className="absolute inset-x-0 bottom-0 h-full w-full mask-[radial-gradient(50%_50%,black,transparent_85%)] dark:mask-[radial-gradient(50%_50%,white,transparent_85%)] hidden dark:block"
             />
           </div>

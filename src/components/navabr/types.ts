@@ -49,4 +49,8 @@ export const PREFETCH_ROUTES = [
   "/provider/dashboard",
   "/messages/null",
   "/settings/profile/my-profile",
+  "/settings/billing/taskoria_pro",
+  "/settings/billing/unsubscription",
+  "/affiliate-dashboard-portal",
+  "/provider-responses",
 ];

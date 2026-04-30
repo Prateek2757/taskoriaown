@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Expert Guides & Insights | Taskoria Blog",
   description:
     "Explore the Taskoria Blog for expert tips, service guides, and insights on hiring professionals, growing your business, and getting tasks done efficiently.",
+  alternates: {
+    canonical: "https://www.taskoria.com/blog",
+  },
   keywords: [
     "Taskoria blog",
     "hire professionals",
@@ -17,11 +20,11 @@ export const metadata: Metadata = {
     title: "Taskoria Blog",
     description:
       "Expert tips, service guides, and insights to help you hire smarter and grow faster.",
-    url: "https://taskoria.com/blog",
+    url: "https://www.taskoria.com/blog",
     siteName: "Taskoria",
     images: [
       {
-        url: "https://taskoria.com/og-image.png", 
+        url: "https://taskoria.com/og-image.png",
         width: 1200,
         height: 630,
         alt: "Taskoria Blog",
@@ -37,7 +40,6 @@ export const metadata: Metadata = {
     images: ["https://taskoria.com/og-image.png"],
   },
 };
-
 const page = () => {
   return (
     <main className="min-h-screen">
