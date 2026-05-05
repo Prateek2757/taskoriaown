@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server";
-import pool from "@/lib/dbConnect";
+import { getCategoryQuestionsFromDB } from "@/lib/cache";
+
+export const revalidate = 21600;
 
 export async function GET(
-  req: Request,
-   context : { params: Promise<{ category_id: string }> }
+  _req: Request,
+  context: { params: Promise<{ category_id: string }> }
 ) {
   try {
-    const categoryId =   parseInt((await context.params).category_id, 10);
+    const categoryId = parseInt((await context.params).category_id, 10);
+
     if (isNaN(categoryId)) {
       return NextResponse.json(
         { message: "Invalid category_id" },
@@ -14,28 +17,21 @@ export async function GET(
       );
     }
 
-    const result = await pool.query(
-      `
-      SELECT 
-        category_question_id,
-        question,
-        field_type,
-        options,
-        is_required,
-        sort_order
-      FROM category_questions
-      WHERE category_id = $1
-      ORDER BY sort_order ASC;
-      `,
-      [categoryId]
-    );
+    const rows = await getCategoryQuestionsFromDB(categoryId);
 
-    return NextResponse.json(result.rows);
-  } catch (err: any) {
+    return NextResponse.json(rows, {
+      headers: {
+        "Cache-Control": "public, s-maxage=21600, stale-while-revalidate=86400",
+      },
+    });
+  } catch (err: unknown) {
     console.error("Error fetching category questions:", err);
-    return NextResponse.json(
-      { message: "Server error", error: err.message },
-      { status: 500 }
-    );
+    if (err instanceof Error) {
+      return NextResponse.json(
+        { message: "Server error", error: err.message },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }

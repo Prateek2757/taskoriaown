@@ -57,7 +57,7 @@ async function getService(serviceSlug: string): Promise<ServiceData | null> {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_APP_URL}/api/categories/${serviceSlug}`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 84600 } }
     );
     return res.ok ? res.json() : null;
   } catch {
@@ -103,7 +103,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonicalUrl = buildCanonical(serviceSlug, stateSlug, citySlug);
   const imageUrl = service.hero_image ?? `https://www.taskoria.com/og-images/${serviceSlug}.jpg`;
 
-  // ── State-level title/description ─────────────────────────────────────────
   const title = cityName
     ? `Hire ${service.name} in ${cityName} | Get Free Quotes`
     : isStatePage
@@ -275,42 +274,3 @@ export default async function ServicePage({ params }: Props) {
 }
 
 
-// export async function generateStaticParams() {
-//   try {
-//     const [ citiesRes] = await Promise.all([
-//       fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`),
-//     ]);
-
-//     const cities: City[] = citiesRes.ok ? await citiesRes.json() : [];
-
-//     const params: { slug: string[] }[] = [];
-
-//     const statesSeen = new Set<string>();
-//     for (const c of cities) {
-//       if (c.state_slug) statesSeen.add(c.state_slug);
-//     }
-
-//     // for (const service of services) {
-//     //   params.push({ slug: [service.slug] });
-
-//     //   for (const stateSlug of statesSeen) {
-//     //     params.push({ slug: [service.slug, stateSlug] });
-//     //   }
-
-//     //   for (const city of cities) {
-//     //     if (!city.state_slug) continue;
-
-//     //     params.push({ slug: [service.slug, city.state_slug, city.slug] });
-
-//     //     for (const sub of city.subcities ?? []) {
-//     //       params.push({ slug: [service.slug, city.state_slug, city.slug, sub.slug] });
-//     //     }
-//     //   }
-//     // }
-
-//     return params;
-//   } catch (err) {
-//     console.error("generateStaticParams error:", err);
-//     return [];
-//   }
-// }

@@ -1,27 +1,18 @@
-
-
 import { NextResponse } from "next/server";
-import pool from "@/lib/dbConnect";
+import { getCategoriesFromDB } from "@/lib/cache";
+
+export const revalidate = 3600;
 
 export async function GET() {
   try {
-    const result = await pool.query(`
-      SELECT 
-        category_id, 
-        name, 
-        image_url,
-        public_id,
-        slug, main_category,
-        faqs,
-        rank,
-        keywords
-      FROM service_categories
-      WHERE is_active = true
-      ORDER BY rank ASC;
-    `);
+    const rows = await getCategoriesFromDB();
 
-    return NextResponse.json(result.rows);
-    
+    return NextResponse.json(rows, {
+      headers: {
+        
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+      },
+    });
   } catch (err) {
     console.error("Error fetching categories:", err);
     if (err instanceof Error) {

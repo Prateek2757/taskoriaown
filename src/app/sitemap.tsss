@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 const BASE_URL = "https://www.taskoria.com";
 
@@ -33,7 +33,7 @@ interface BlogPost {
 async function fetchCategories(): Promise<Category[]> {
   try {
     const res = await fetch(`${BASE_URL}/api/signup/category-selection`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 86400 },
     });
     if (!res.ok) return [];
     return await res.json();
@@ -45,7 +45,7 @@ async function fetchCategories(): Promise<Category[]> {
 async function fetchCities(): Promise<City[]> {
   try {
     const res = await fetch(`${BASE_URL}/api/service-location`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 86400 },
     });
     if (!res.ok) return [];
     return await res.json();
@@ -57,7 +57,7 @@ async function fetchCities(): Promise<City[]> {
 async function fetchBlogPosts(): Promise<BlogPost[]> {
   try {
     const res = await fetch(`${BASE_URL}/api/blog`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 86400 },
     });
     if (!res.ok) return [];
     return await res.json();
@@ -98,12 +98,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const parentCategories = categories.filter((c) => !c.parent_category_id);
   const childCategories  = categories.filter((c) =>  c.parent_category_id);
 
-  // Unique state slugs
   const stateslugs = uniqueStates(cities);
 
   const entries: MetadataRoute.Sitemap = [];
 
-  // ── 1. CORE PAGES ──────────────────────────────────────────────────────────
   const corePages = [
     { path: "/",                   priority: 1.0, freq: "daily"   },
     { path: "/services",           priority: 0.9, freq: "daily"   },

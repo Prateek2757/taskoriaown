@@ -26,7 +26,7 @@ interface City {
 export default async function CitiesIndexPage() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`,
-    { next: { revalidate: 3600 } }
+    { next: { revalidate: 84600 } }
   );
   const cities: City[] = res.ok ? await res.json() : [];
 

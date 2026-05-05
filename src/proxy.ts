@@ -55,7 +55,7 @@ async function proxy(req: NextRequest) {
   url.pathname = `/${defaultLocale}${pathname}`;
   const response = NextResponse.rewrite(url);
 
-  response.headers.set("X-Robots-Tag", "index, follow");
+  // response.headers.set("X-Robots-Tag", "index, follow");
   return response;
 }
 

@@ -2,7 +2,9 @@
 import { cn } from "@/lib/utils";
 import { Quote, Star, Loader2, AlertCircle } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
+import useSWR from "swr";
+import { fetcher } from "@/lib/fetcher";
 
 interface Review {
   id: string;
@@ -112,36 +114,59 @@ function ReviewCard({ img, name, location, body, rating, time }: Review) {
 }
 
 export default function Testimonial() {
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [meta, setMeta] = useState<Meta | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // const [reviews, setReviews] = useState<Review[]>([]);
+  // const [meta, setMeta] = useState<Meta | null>(null);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchReviews() {
-      try {
-        const res = await fetch("/api/google-reviews");
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+  // useEffect(() => {
+  //   async function fetchReviews() {
+  //     try {
+  //       const res = await fetch("/api/google-reviews");
+  //       if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  //       const data = await res.json();
 
-        const raw: any[] = data?.reviews ?? [];
-        const filtered = raw
-          .filter((r) => r.text && r.text.length > 20)
-          .map(transform);
+  //       const raw: any[] = data?.reviews ?? [];
+  //       const filtered = raw
+  //         .filter((r) => r.text && r.text.length > 20)
+  //         .map(transform);
 
-        setReviews(filtered);
-        if (data.ratings) {
-          setMeta({ rating: data.ratings, total: data.totalRatings });
-        }
-      } catch (err: any) {
-        setError(err.message ?? "Failed to load reviews");
-      } finally {
-        setLoading(false);
-      }
+  //       setReviews(filtered);
+  //       if (data.ratings) {
+  //         setMeta({ rating: data.ratings, total: data.totalRatings });
+  //       }
+  //     } catch (err: any) {
+  //       setError(err.message ?? "Failed to load reviews");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+
+  //   fetchReviews();
+  // }, []);
+
+  const { data, error, isLoading:loading } = useSWR(
+    "/api/google-reviews",
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      revalidateOnMount: false,
+      revalidateIfStale: false,
+      dedupingInterval: 86_400_000,
     }
+  );
 
-    fetchReviews();
-  }, []);
+  const raw = data?.reviews ?? [];
+
+const reviews = raw
+  .filter((r: any) => r.text && r.text.length > 20)
+  .map(transform);
+
+const meta = {
+  rating: data?.ratings,
+  total: data?.totalRatings,
+};
 
   return (
     <section

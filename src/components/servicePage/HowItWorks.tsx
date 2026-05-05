@@ -47,8 +47,7 @@ const DARK = {
   radiusMd: 12,
 };
 
-// ─── Theme context ────────────────────────────────────────────────────────────
-// Avoids prop-drilling T into every sub-component.
+
 
 const ThemeCtx = createContext(LIGHT);
 const useT = () => useContext(ThemeCtx);

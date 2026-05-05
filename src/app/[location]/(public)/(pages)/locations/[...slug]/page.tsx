@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import Script from "next/script";
 import StatePageClient from "../components/state-page/state-page";
 import CityPageClient from "../components/City-page/citypageclient";
-import { useCategories } from "@/hooks/useCategories";
 
 type Props = {
   params: Promise<{ slug: string[] }>;
@@ -56,7 +55,7 @@ async function getAllCities(): Promise<City[]> {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 84600 } }
     );
     return res.ok ? await res.json() : [];
   } catch {
@@ -68,7 +67,7 @@ async function getCategories(): Promise<CategoryWithSubs[]> {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_APP_URL}/api/signup/category-selection`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 84600 } }
     );
     if (!res.ok) return [];
     const raw: Array<{

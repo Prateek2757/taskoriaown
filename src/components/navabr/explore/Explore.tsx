@@ -113,12 +113,12 @@ export default function Explore() {
   return (
     <div ref={containerRef}>
       <div className="flex justify-between mx-4">
-        <h1
+        <button
           className="text-md semi-bold hover:underline"
           onClick={() => setShowMenu(!showMenu)}
         >
           Explore
-        </h1>
+        </button>
         <button onClick={() => setShowMenu(!showMenu)}>
           {showMenu ? <IoCaretUp size={16} /> : <IoCaretDown size={16} />}
         </button>

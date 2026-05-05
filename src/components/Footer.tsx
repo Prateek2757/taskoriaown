@@ -623,7 +623,7 @@ const Footer = () => {
               </Link>
               <br />
               <span className="text-xs text-gray-400">
-                ABN: 658 760 831 | ACN Registered | Level 34, 1 Eagle Street,
+                ABN:37 658 760 831 | ACN Registered | Level 34, 1 Eagle Street,
                 Brisbane QLD 4000 Proudly Australian Owned & Operated
               </span>
             </span>

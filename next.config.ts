@@ -96,10 +96,11 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: securityHeaders,
       },
-      // {
-      //   source: "/_next/static/:path*",
-      //   headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
-      // },
+      {
+        // Next.js content-hashes all static filenames, so immutable 1-year caching is safe.
+        source: "/_next/static/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
       {
         source: "/images/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
@@ -107,6 +108,26 @@ const nextConfig: NextConfig = {
       {
         source: "/fonts/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
+        // CDN-level cache for the categories list — 1 hour, stale-while-revalidate 24 h.
+        source: "/api/signup/category-selection",
+        headers: [{ key: "Cache-Control", value: "public, s-maxage=3600, stale-while-revalidate=86400" }],
+      },
+      {
+        // CDN-level cache for individual category pages — 1 hour.
+        source: "/api/categories/:path*",
+        headers: [{ key: "Cache-Control", value: "public, s-maxage=3600, stale-while-revalidate=86400" }],
+      },
+      {
+        // CDN-level cache for category questions — 6 hours.
+        source: "/api/category-questions/:path*",
+        headers: [{ key: "Cache-Control", value: "public, s-maxage=21600, stale-while-revalidate=86400" }],
+      },
+      {
+        // CDN-level cache for public service-provider listings — 5 minutes.
+        source: "/api/service-providers",
+        headers: [{ key: "Cache-Control", value: "public, s-maxage=300, stale-while-revalidate=3600" }],
       },
     ];
   },

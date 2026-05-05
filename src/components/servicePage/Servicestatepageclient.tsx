@@ -97,6 +97,25 @@ export default function ServiceStatePageClient({
 
   return (
     <main className="min-h-screen bg-white dark:bg-slate-950">
+      {(service.faqs ?? []).length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: (service.faqs ?? []).map((faq) => ({
+                "@type": "Question",
+                name: faq.question,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: faq.answer,
+                },
+              })),
+            }),
+          }}
+        />
+      )}
       <NewRequestModal
         open={openModal}
         onClose={() => setOpenModal(false)}
@@ -364,7 +383,6 @@ export default function ServiceStatePageClient({
           </section>
         )}
 
-        {/* ══════ FAQS ═════════════════════════════════════════════════════ */}
         {service.faqs && service.faqs.length > 0 && (
           <section className="py-14 border-t border-slate-100 dark:border-slate-800">
             <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-8 tracking-tight">

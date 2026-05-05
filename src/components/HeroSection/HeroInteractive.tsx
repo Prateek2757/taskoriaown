@@ -124,25 +124,40 @@ export default function HeroInteractive() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link
-                href="/"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handlePostJob();
-                  window.history.pushState({}, "", "/");
-                }}
-                className="w-58 h-10 bg-[#2563EB] hover:bg-[#1d4fd8] text-white font-semibold rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+              <Button
+                onClick={() => handlePostJob()}
+                className="
+                w-58 h-10
+                border border-gray-200 dark:border-gray-700
+                text-gray-600 dark:text-gray-300 bg-w
+                hover:bg-[#1d4fd8]
+                hover:text-white
+                rounded-lg
+                transition-all duration-200
+                flex items-center justify-center gap-2
+              "
                 aria-label="Post a job to find service providers"
               >
                 Get Free Quotes
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
-              </Link>
+              </Button>
 
               {!session && (
                 <Button
-                  variant="outline"
                   onClick={() => joinAsProvider()}
-                  className="w-58 h-10 rounded-lg font-medium border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200"
+                  className="
+               w-58 h-10
+               rounded-lg
+               text-base font-semibold
+               bg-[#2563EB]
+               hover:bg-[#1D4FD8]
+               text-white
+               shadow-lg shadow-blue-500/25
+               hover:shadow-xl hover:shadow-blue-500/40
+               hover:-translate-y-0.5
+               transition-all duration-300
+               border border-blue-400/20
+             "
                   aria-label="Register as a service provider"
                 >
                   Join as Provider

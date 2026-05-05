@@ -153,7 +153,6 @@ interface ServiceData {
           }
         : null;
   
-    // ── 4. WebPage Schema ──────────────────────────────────────────────────────
     const webPageSchema = {
       "@context": "https://schema.org",
       "@type": "WebPage",
