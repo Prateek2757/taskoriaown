@@ -1,0 +1,51 @@
+"use client";
+import FilterServices from "@/components/cost-guide/FilterServices";
+import { useCategories } from "@/hooks/useCategories";
+import { useState } from "react";
+import Services from "./Services";
+
+export default function CostGuides() {
+  const { categories, loading } = useCategories();
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+
+  return (
+    <div
+      className="relative max-w-7xl mx-auto h-full overflow-hidden sm:pt-14 pt-8
+        dark:bg-[radial-gradient(circle_at_bottom,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
+        dark:text-white text-gray-600 "
+    >
+      <div>
+        <div>
+          <h1 className="text-2xl text-gray-800 font-semibold">
+            Explore Our Pricing Resources
+          </h1>
+        </div>
+        <div className="mt-6">
+          <p className="text-md ">
+            Not sure what a service should cost? Browse our comprehensive
+            pricing guides covering everything from home renovations and
+            maintenance to cleaning, gardening, pet care, fitness, and beyond —
+            all tailored for Australians.
+          </p>
+        </div>
+      </div>
+      <div className="flex mt-6">
+        {/* left */}
+        <div className="w-1/4 shrink-0 ">
+          <FilterServices
+            activeFilter={activeFilter}
+            onFilterChange={setActiveFilter}
+          />
+        </div>
+        {/* right */}
+        <div>
+          <Services
+            categories={categories ?? []}
+            activeFilter={activeFilter}
+            loading={loading}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
