@@ -225,7 +225,7 @@ export default function AboutUs() {
               </div>
             ))}
           </div>
-             </div>
+          </div>
       </section> 
     </div>
   );
