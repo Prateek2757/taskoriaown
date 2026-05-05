@@ -14,14 +14,19 @@ interface Category {
 interface ServicesProps {
   categories: Category[];
   activeFilter: string | null;
+   setActiveFilter: (filter: string) => void;
   loading: boolean;
 }
 export default function Services({
   categories,
   activeFilter,
+  setActiveFilter,
   loading,
 }: ServicesProps) {
   const filtered = [...new Set(categories.map((cat) => cat.main_category))];
+
+const getId = (text: string) =>
+  text?.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
   // if (loading){
   // return (
@@ -43,7 +48,7 @@ export default function Services({
   return (
     <div className="flex flex-col gap-8 py-4">
       {filtered.map((filter) => (
-        <div key={filter}>
+        <div key={filter} id={getId(filter)}>
           <h2 className="text-base font-semibold text-gray-800 dark:text-white mb-4">
             {filter}
           </h2>

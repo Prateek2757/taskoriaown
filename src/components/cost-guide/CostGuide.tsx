@@ -7,7 +7,18 @@ import Services from "./Services";
 export default function CostGuides() {
   const { categories, loading } = useCategories();
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
+const getId = (text: string) =>
+  text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
+const handleScroll = (filter: string) => {
+  setActiveFilter(filter);
+
+  const section = document.getElementById(getId(filter));
+
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+};
   return (
     <div
       className="relative max-w-7xl mx-auto h-full overflow-hidden sm:pt-14 pt-8
@@ -33,8 +44,8 @@ export default function CostGuides() {
         {/* left */}
         <div className="w-1/4 shrink-0 ">
           <FilterServices
-            activeFilter={activeFilter}
-            onFilterChange={setActiveFilter}
+            filterData={activeFilter || ""}
+            onChangeFilterData={handleScroll}
           />
         </div>
         {/* right */}
