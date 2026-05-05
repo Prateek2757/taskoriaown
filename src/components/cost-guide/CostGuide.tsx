@@ -7,18 +7,18 @@ import Services from "./Services";
 export default function CostGuides() {
   const { categories, loading } = useCategories();
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
-const getId = (text: string) =>
-  text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const getId = (text: string) =>
+    text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
-const handleScroll = (filter: string) => {
-  setActiveFilter(filter);
+  const handleScroll = (filter: string) => {
+    setActiveFilter(filter);
 
-  const section = document.getElementById(getId(filter));
+    const section = document.getElementById(getId(filter));
 
-  if (section) {
-    section.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-};
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
   return (
     <div
       className="relative max-w-7xl mx-auto h-full overflow-hidden sm:pt-14 pt-8
@@ -27,12 +27,12 @@ const handleScroll = (filter: string) => {
     >
       <div>
         <div>
-          <h1 className="text-2xl text-gray-800 font-semibold">
+          <h1 className="text-2xl text-blue-500 font-semibold">
             Explore Our Pricing Resources
           </h1>
         </div>
         <div className="mt-6">
-          <p className="text-md ">
+          <p className="text-sm text-black mt-2">
             Not sure what a service should cost? Browse our comprehensive
             pricing guides covering everything from home renovations and
             maintenance to cleaning, gardening, pet care, fitness, and beyond —
@@ -42,7 +42,7 @@ const handleScroll = (filter: string) => {
       </div>
       <div className="flex mt-6">
         {/* left */}
-        <div className="w-1/4 shrink-0 ">
+        <div className="w-1/4 shrink-0 hidden sm:block ">
           <FilterServices
             filterData={activeFilter || ""}
             onChangeFilterData={handleScroll}
@@ -54,6 +54,7 @@ const handleScroll = (filter: string) => {
             categories={categories ?? []}
             activeFilter={activeFilter}
             loading={loading}
+            setActiveFilter={setActiveFilter}
           />
         </div>
       </div>

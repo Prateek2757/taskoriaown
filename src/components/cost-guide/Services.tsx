@@ -1,7 +1,4 @@
 "use client";
-import { useCategories } from "@/hooks/useCategories";
-import FilterServices from "./FilterServices";
-import { useState } from "react";
 
 interface Category {
   category_id: number;
@@ -14,42 +11,43 @@ interface Category {
 interface ServicesProps {
   categories: Category[];
   activeFilter: string | null;
-   setActiveFilter: (filter: string) => void;
+  setActiveFilter: (filter: string) => void;
   loading: boolean;
 }
-export default function Services({
-  categories,
-  activeFilter,
-  setActiveFilter,
-  loading,
-}: ServicesProps) {
+export default function Services({ categories, loading }: ServicesProps) {
   const filtered = [...new Set(categories.map((cat) => cat.main_category))];
 
-const getId = (text: string) =>
-  text?.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const getId = (text: string) =>
+    text?.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
-  // if (loading){
-  // return (
-  //   <div>
-  //     <div>
-  //       {categories?.map((services) => (
-  //         <div key={services.category_id}>
-  //           <p>{services.main_category}</p>
-  //         </div>
-  //       ))}
-  //     </div>
-
-  //   </div>
-  // );
-  // }
+  //  skeleton
+  if (loading) {
+    return (
+      <div className="flex flex-col gap-8 py-4">
+        {[...Array(3)].map((_, i) => (
+          <div key={i}>
+            <div className="h-16 w-90 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-4" />
+            <ul className="grid grid-cols-3 gap-4">
+              {[...Array(6)].map((_, j) => (
+                <li
+                  key={j}
+                  className="h-4 bg-gray-100 dark:bg-gray-800 rounded animate-pulse"
+                />
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    );
+  }
   if (filtered.length === 0) {
     return <p className="text-sm text-gray-400 mt-8">No services found</p>;
   }
   return (
     <div className="flex flex-col gap-8 py-4">
       {filtered.map((filter) => (
-        <div key={filter} id={getId(filter)}>
-          <h2 className="text-base font-semibold text-gray-800 dark:text-white mb-4">
+        <div key={filter} id={getId(filter ?? "")}>
+          <h2 className="text-base font-semibold text-blue-600 cursor-pointer dark:text-blue-500 mb-4">
             {filter}
           </h2>
           <ul className="grid grid-cols-3 gap-4">
@@ -57,7 +55,7 @@ const getId = (text: string) =>
               .filter((cat) => cat.main_category === filter)
               .map((cat) => (
                 <li
-                  className=" flex gap-4 text-sm text-gray-600 dark:text-gray-300"
+                  className=" flex gap-4 text-sm text-black dark:text-gray-300 cursor-pointer"
                   key={cat.name}
                 >
                   {cat.name}
