@@ -29,15 +29,15 @@ export async function GET() {
   }
 
   // /cities/[state]/[city]
-  for (const [rank, city] of sortedCities.entries()) {
-    if (!city.state_slug) continue;
-    entries.push({
-      loc: `${BASE_URL}/locations/${city.state_slug}/${city.slug}`,
-      lastmod: city.updated_at,
-      changefreq: "weekly",
-      priority: rank < 10 ? 0.75 : rank < 30 ? 0.7 : 0.65,
-    });
-  }
+  // for (const [rank, city] of sortedCities.entries()) {
+  //   if (!city.state_slug) continue;
+  //   entries.push({
+  //     loc: `${BASE_URL}/locations/${city.state_slug}/${city.slug}`,
+  //     lastmod: city.updated_at,
+  //     changefreq: "weekly",
+  //     priority: rank < 10 ? 0.75 : rank < 30 ? 0.7 : 0.65,
+  //   });
+  // }
 
   // /services/[category]/[state]/[city]
   // for (const [rank, city] of sortedCities.entries()) {
