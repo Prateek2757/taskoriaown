@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 interface Category {
   category_id: number;
   name: string;
@@ -8,13 +10,15 @@ interface Category {
   main_category?: string;
   image_url?: string;
 }
-interface ServicesProps {
+interface Props {
   categories: Category[];
   activeFilter: string | null;
   setActiveFilter: (filter: string) => void;
   loading: boolean;
+  slug: string;
 }
-export default function Services({ categories, loading }: ServicesProps) {
+
+export default function Services({ categories, loading, slug }: Props) {
   const filtered = [...new Set(categories.map((cat) => cat.main_category))];
 
   const getId = (text: string) =>
@@ -58,7 +62,7 @@ export default function Services({ categories, loading }: ServicesProps) {
                   className=" flex gap-4 text-sm text-black dark:text-gray-300 cursor-pointer"
                   key={cat.name}
                 >
-                  {cat.name}
+                  <Link href={`/cost-guides/${cat.slug}`}>{cat.name}</Link>
                 </li>
               ))}
           </ul>
