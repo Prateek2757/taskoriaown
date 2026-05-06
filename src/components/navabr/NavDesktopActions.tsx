@@ -87,7 +87,8 @@ export default function NavDesktopActions({
           </Link>
           <Button
             onClick={onJoinAsProvider}
-            className="bg-[#2563EB] text-white hover:opacity-90 font-medium shadow-md"
+            className="bg-[#2563EB]  hover:shadow-xl hover:shadow-blue-500/40
+               hover:-translate-y-0.5  text-white transition-all duration-30 font-medium border-none hover:bg-[#1D4FD8]"
           >
             Join as Provider
           </Button>

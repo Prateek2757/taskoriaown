@@ -248,7 +248,7 @@ export default function HowTaskoriaWorks() {
             <Link href="/signin" aria-label="Start setting up your account">
               <Button
                 size={"lg"}
-                className="group bg-white dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300 font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30"
+                className="group bg-white py-4 dark:bg-transparent border-1 border-blue-500 text-blue-500 dark:text-blue-300 font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30"
               >
                 <span className="flex items-center gap-2">
                   Post a Job Free

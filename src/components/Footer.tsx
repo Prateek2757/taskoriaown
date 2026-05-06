@@ -253,7 +253,7 @@ const Footer = () => {
                 </h2>
 
                 <button
-                  className="sm:hidden w-full flex justify-between items-center text-[18px] pb-1 font-semibold border-gray-700"
+                  className="sm:hidden w-full flex justify-between items-center text-lg pb-1 font-semibold border-gray-700"
                   onClick={() =>
                     setOpenSection(openSection === "cities" ? "" : "cities")
                   }
@@ -285,7 +285,7 @@ const Footer = () => {
                 </h2>
 
                 <button
-                  className="sm:hidden w-full flex justify-between items-center text-[18px] pb-1 font-semibold border-gray-700"
+                  className="sm:hidden w-full flex justify-between items-center text-lg pb-1 font-semibold border-gray-700"
                   onClick={() =>
                     setOpenSection(
                       openSection === "categories" ? "" : "categories"
@@ -323,7 +323,7 @@ const Footer = () => {
                 </h2>
 
                 <button
-                  className="sm:hidden w-full flex justify-between items-center text-xl font-semibold border-gray-700 pb-1"
+                  className="sm:hidden w-full flex justify-between items-center text-lg font-semibold border-gray-700 pb-1"
                   onClick={() =>
                     setOpenSection(
                       openSection === "customers" ? "" : "customers"
@@ -392,7 +392,7 @@ const Footer = () => {
                 </h2>
 
                 <button
-                  className="sm:hidden w-full flex justify-between items-center text-xl  font-semibold border-gray-700"
+                  className="sm:hidden w-full flex justify-between items-center text-lg  font-semibold border-gray-700"
                   onClick={() =>
                     setOpenSection(
                       openSection === "providers" ? "" : "providers"
@@ -471,7 +471,7 @@ const Footer = () => {
                 </h2>
 
                 <button
-                  className="sm:hidden w-full flex justify-between items-center text-[18px] pb-1 font-semibold border-gray-700"
+                  className="sm:hidden w-full flex justify-between items-center text-lg pb-1 font-semibold border-gray-700"
                   onClick={() =>
                     setOpenSection(openSection === "company" ? "" : "company")
                   }

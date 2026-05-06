@@ -97,7 +97,7 @@ export default function ServiceStatePageClient({
 
   return (
     <main className="min-h-screen bg-white dark:bg-slate-950">
-      {(service.faqs ?? []).length > 0 && (
+      {/* {(service.faqs ?? []).length > 0 && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -115,7 +115,7 @@ export default function ServiceStatePageClient({
             }),
           }}
         />
-      )}
+      )} */}
       <NewRequestModal
         open={openModal}
         onClose={() => setOpenModal(false)}

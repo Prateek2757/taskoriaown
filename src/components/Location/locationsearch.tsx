@@ -162,10 +162,8 @@ export default function LocationSearch({
   
     sessionToken.current = newSessionToken();
   
-    // ✅ Optimistic: forward immediately with basic data so the parent can proceed
     onSelect?.({ ...loc, display_name: loc.display_name, _resolving: false });
   
-    // 🔄 Enrich in background — parent state silently updates when ready
     setLoadingState(true);
     try {
       const details = await fetchPlaceDetails(loc.place_id);
@@ -174,7 +172,6 @@ export default function LocationSearch({
       const cityRes = await axios.post("/api/signup/location", details);
       const city_id = cityRes.data.city_id;
   
-      // Silent patch — UI is already on step 2 by now
       onSelect?.({
         ...details,
         city_id,
@@ -183,8 +180,7 @@ export default function LocationSearch({
       });
     } catch (err) {
       console.error("Location enrichment failed:", err);
-      // Don't call onSelect(null) here — user has already moved forward
-      // city_id will just be missing, handle gracefully in submit
+    
     } finally {
       setLoadingState(false);
     }
@@ -304,22 +300,22 @@ export default function LocationSearch({
                     aria-selected={isActive}
                     onClick={() => handleSelect(r)}
                     onMouseEnter={() => setActiveIndex(i)}
-                    className={`flex cursor-pointer items-center gap-3 px-3 py-2.5 transition-colors
+                    className={`flex cursor-pointer items-start gap-3 px-3 py-2 transition-colors
                       ${
                         isActive
                           ? "bg-blue-500 text-white"
                           : "text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800"
                       }`}
                   >
-                    <MapPin
+                    {/* <MapPin
                       className={`h-3.5 w-3.5 shrink-0 ${
                         isActive
                           ? "text-white"
                           : "text-gray-400 dark:text-gray-500"
                       }`}
-                    />
+                    /> */}
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-medium">
+                      <span className="block  text-sm font-semibold">
                         {primary}
                       </span>
                       {secondary && (

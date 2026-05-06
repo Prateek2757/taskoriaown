@@ -107,11 +107,11 @@ useEffect(() => {
   const close = () => {
     onClose();
     setStep(1);
-    setSelectedCategoryId("");
-    setSelectedLocationId("");
-    setSelectedCategoryTitle("");
-    setSelectedLocation(null);
-    setQuestions([]);
+    // setSelectedCategoryId("");
+    // setSelectedLocationId("");
+    // setSelectedCategoryTitle("");
+    // setSelectedLocation(null);
+    // setQuestions([]);
   };
 
   return (
@@ -132,7 +132,7 @@ useEffect(() => {
           max-h-[90vh] overflow-visible flex flex-col
         "
       >
-        <DialogHeader className="border-b bg-gray-50 dark:bg-slate-900 rounded-t-2xl p-4 text-center flex-shrink-0">
+        <DialogHeader className="border-b bg-gray-50 dark:bg-slate-900 rounded-t-2xl p-4 text-center shrink-0">
           <DialogTitle className="text-xl text-center font-semibold">
             {step === 1 ? "Place a new request" : "A few quick questions"}
           </DialogTitle>

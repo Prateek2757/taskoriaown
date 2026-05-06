@@ -156,8 +156,7 @@ export default function HeroInteractive() {
                hover:shadow-xl hover:shadow-blue-500/40
                hover:-translate-y-0.5
                transition-all duration-300
-               border border-blue-400/20
-             "
+norder-none             "
                   aria-label="Register as a service provider"
                 >
                   Join as Provider

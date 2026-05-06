@@ -48,7 +48,7 @@ export const getCategoryBySlug = unstable_cache(
   },
   ["category-by-slug"],
   {
-    revalidate: 3600, // 1 hour
+    revalidate: 3600, 
     tags: ["categories"],
   }
 );
