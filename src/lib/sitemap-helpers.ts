@@ -131,4 +131,4 @@ export async function getServiceSitemapCount(): Promise<number> {
   return Math.ceil(total / URLS_PER_SITEMAP);
 }
 
-export const URLS_PER_SITEMAP = 30000;
+export const URLS_PER_SITEMAP = 5000;
