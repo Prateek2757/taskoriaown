@@ -48,7 +48,7 @@ export const FeatureProvider = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-blue-50 dark:from-blue-900 dark:to-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800"
           >
             <Award className="w-3.5 h-3.5" />
             Top Talent
@@ -103,7 +103,7 @@ export const FeatureProvider = () => {
                     <div className="relative h-20 w-20 overflow-hidden rounded-2xl">
                       {p.image ? (
                         <Image
-                        title="provider profile image"
+                          title="provider profile image"
                           src={p.image}
                           alt={p.name}
                           fill
@@ -116,7 +116,7 @@ export const FeatureProvider = () => {
                           <div className="flex flex-col items-center hover:opacity-90 transition-opacity">
                             <div>
                               <Image
-                              title="taskoria logo "
+                                title="taskoria logo "
                                 src="/images/taskoria_logo.svg"
                                 alt="logo taskoria"
                                 height={0}
@@ -124,7 +124,6 @@ export const FeatureProvider = () => {
                                 sizes="(max-width: 640px) 100vw,
                                 (max-width: 1024px) 50vw,
                                 33vw"
-
                               />
                             </div>
                             <span className="text-sm font-bold bg-[#3C7DED] bg-clip-text text-transparent">

@@ -43,7 +43,11 @@ const scrollbarStyles = `
 interface AddLocationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  addLocation: (cityId: number, cityName: string, radius: number) => Promise<void>;
+  addLocation: (
+    cityId: number,
+    cityName: string,
+    radius: number
+  ) => Promise<void>;
 }
 
 export default function AddLocationDialog({
@@ -54,15 +58,20 @@ export default function AddLocationDialog({
   const [locationError, setLocationError] = useState<string | null>(null);
   const [locationSuccess, setLocationSuccess] = useState<string | null>(null);
   const [selectedRadius, setSelectedRadius] = useState<number>(10);
-  const [selectedLocation, setSelectedLocation] = useState<{ city_id: number; city: string } | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<{
+    city_id: number;
+    city: string;
+  } | null>(null);
   const [isAdding, setIsAdding] = useState(false);
 
-  const handleLocationSelect = (data: { city_id?: number; city?: string } | null) => {
+  const handleLocationSelect = (
+    data: { city_id?: number; city?: string } | null
+  ) => {
     if (!data || !data.city_id || !data.city) {
       setSelectedLocation(null);
       return;
     }
-    
+
     setSelectedLocation({ city_id: data.city_id, city: data.city });
     setLocationError(null);
   };
@@ -79,8 +88,14 @@ export default function AddLocationDialog({
     setIsAdding(true);
 
     try {
-      await addLocation(selectedLocation.city_id, selectedLocation.city, selectedRadius);
-      setLocationSuccess(`${selectedLocation.city} (${selectedRadius} mile radius) added successfully!`);
+      await addLocation(
+        selectedLocation.city_id,
+        selectedLocation.city,
+        selectedRadius
+      );
+      setLocationSuccess(
+        `${selectedLocation.city} (${selectedRadius} mile radius) added successfully!`
+      );
 
       setTimeout(() => {
         onOpenChange(false);
@@ -181,13 +196,17 @@ export default function AddLocationDialog({
               <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800 animate-in fade-in slide-in-from-top-2 duration-300">
                 <div className="flex items-center gap-2 text-sm">
                   <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                  <span className="text-gray-700 dark:text-gray-300">Selected:</span>
-                  <span className="font-semibold text-blue-700 dark:text-blue-300">{selectedLocation.city}</span>
+                  <span className="text-gray-700 dark:text-gray-300">
+                    Selected:
+                  </span>
+                  <span className="font-semibold text-blue-700 dark:text-blue-300">
+                    {selectedLocation.city}
+                  </span>
                 </div>
               </div>
             )}
 
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-3 rounded-xl border border-blue-200 dark:border-gray-700">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 p-3 rounded-xl border border-blue-200 dark:border-gray-700">
               <div className="flex items-center gap-2 mb-2">
                 <Radar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 <label className="text-sm font-semibold text-gray-900 dark:text-gray-100">
@@ -218,7 +237,9 @@ export default function AddLocationDialog({
                     )}
                     <div className="flex flex-col items-center gap-0.5">
                       <span className="text-lg font-bold">{radius}</span>
-                      <span className="text-[10px] opacity-90 leading-none">mi</span>
+                      <span className="text-[10px] opacity-90 leading-none">
+                        mi
+                      </span>
                     </div>
                   </Button>
                 ))}

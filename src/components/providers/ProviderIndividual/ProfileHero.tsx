@@ -87,8 +87,7 @@ function ShareButton({
         ? "Shared!"
         : "Share";
 
-  const Icon =
-    state === "copied" || state === "shared" ? Check : Share2;
+  const Icon = state === "copied" || state === "shared" ? Check : Share2;
 
   return (
     <div className="relative">
@@ -117,9 +116,13 @@ function ShareButton({
             animate-in fade-in slide-in-from-bottom-1 duration-150 pointer-events-none"
         >
           {state === "copied" ? (
-            <><LinkIcon className="w-3 h-3" /> Link copied</>
+            <>
+              <LinkIcon className="w-3 h-3" /> Link copied
+            </>
           ) : (
-            <><Check className="w-3 h-3" /> Shared!</>
+            <>
+              <Check className="w-3 h-3" /> Shared!
+            </>
           )}
         </div>
       )}
@@ -198,7 +201,7 @@ function Lightbox({ src, alt, onClose }: LightboxProps) {
       >
         <div className="relative w-full h-full">
           <Image
-          title="Profile Hero Cover Image"
+            title="Profile Hero Cover Image"
             src={src || "coverimage"}
             alt={alt}
             fill
@@ -214,8 +217,8 @@ function Lightbox({ src, alt, onClose }: LightboxProps) {
 
 function ProBadge({ size = 28 }: { size?: number }) {
   const half = size / 2;
-  const R = half * 0.84; 
-  const r = half * 0.38;   
+  const R = half * 0.84;
+  const r = half * 0.38;
   const pts = Array.from({ length: 5 }, (_, i) => {
     const outerAngle = (i * 72 - 90) * (Math.PI / 180);
     const innerAngle = (i * 72 - 90 + 36) * (Math.PI / 180);
@@ -223,7 +226,9 @@ function ProBadge({ size = 28 }: { size?: number }) {
       `${half + R * Math.cos(outerAngle)},${half + R * Math.sin(outerAngle)}`,
       `${half + r * Math.cos(innerAngle)},${half + r * Math.sin(innerAngle)}`,
     ];
-  }).flat().join(" ");
+  })
+    .flat()
+    .join(" ");
 
   return (
     <svg
@@ -242,13 +247,13 @@ function ProBadge({ size = 28 }: { size?: number }) {
         </linearGradient> */}
         {/* Dark shell */}
         <linearGradient id="pb-shell" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stopColor="#FF9800" />
+          <stop offset="0%" stopColor="#FF9800" />
           <stop offset="100%" stopColor="#FF9800" />
         </linearGradient>
         {/* Gold disc */}
         <linearGradient id="pb-gold" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stopColor="#FF9800" />
-          
+          <stop offset="0%" stopColor="#FF9800" />
+
           <stop offset="100%" stopColor="#FF9800" />
         </linearGradient>
         {/* Gloss shine */}
@@ -260,16 +265,15 @@ function ProBadge({ size = 28 }: { size?: number }) {
 
       {/* 1. Outer glow ring (stroke only) */}
       <circle
-        cx={half} cy={half} r={half - 0.5}
+        cx={half}
+        cy={half}
+        r={half - 0.5}
         fill="url(#pb-shell)"
         stroke="url(#pb-ring)"
         strokeWidth="1.6"
       />
 
-      <circle
-        cx={half} cy={half} r={half - 2.4}
-        fill="url(#pb-gold)"
-      />
+      <circle cx={half} cy={half} r={half - 2.4} fill="url(#pb-gold)" />
 
       {/* 3. Gloss shine — top-center ellipse */}
       {/* <ellipse
@@ -281,11 +285,7 @@ function ProBadge({ size = 28 }: { size?: number }) {
       /> */}
 
       {/* 4. Star — mathematically centered */}
-      <polygon
-        points={pts}
-        fill="#ffffff"
-        opacity="0.92"
-      />
+      <polygon points={pts} fill="#ffffff" opacity="0.92" />
     </svg>
   );
 }
@@ -329,7 +329,6 @@ export function ProfileHero({
       )}
 
       <div className="bg-white dark:bg-[#1d2226]  border border-[#e2e2e2] dark:border-white/10 rounded-xl shadow-sm overflow-hidden">
-
         <div className="relative h-36 sm:h-52 w-full overflow-hidden rounded-t-xl">
           {hasCover ? (
             <button
@@ -344,7 +343,7 @@ export function ProfileHero({
               }
             >
               <Image
-              title="Company Cover Photo"
+                title="Company Cover Photo"
                 src={companySrc! || "coverphoto"}
                 alt={`${provider.name ?? "Provider"} cover photo`}
                 fill
@@ -356,7 +355,7 @@ export function ProfileHero({
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" />
             </button>
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-indigo-100 to-violet-100 dark:from-blue-950 dark:via-indigo-950 dark:to-slate-900 flex items-center justify-center">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-blue-100 to-violet-100 dark:from-blue-950 dark:via-blue-950 dark:to-slate-900 flex items-center justify-center">
               <svg
                 className="absolute inset-0 w-full h-full opacity-20"
                 aria-hidden="true"
@@ -365,7 +364,10 @@ export function ProfileHero({
                 <defs>
                   <pattern
                     id="hero-dots"
-                    x="0" y="0" width="24" height="24"
+                    x="0"
+                    y="0"
+                    width="24"
+                    height="24"
                     patternUnits="userSpaceOnUse"
                   >
                     <circle cx="1.5" cy="1.5" r="1.5" fill="#3b82f6" />
@@ -385,76 +387,79 @@ export function ProfileHero({
           className="relative px-5 sm:px-6 flex items-end justify-between"
           style={{ marginTop: "-52px" }}
         >
-         <div className="w-24 h-24  relative z-10 group">
-
-<button
-  type="button"
-  aria-label="View profile photo"
-  className={`
+          <div className="w-24 h-24  relative z-10 group">
+            <button
+              type="button"
+              aria-label="View profile photo"
+              className={`
     w-full h-full block rounded-full focus-visible:outline-none focus-visible:ring-2
     focus-visible:ring-blue-500 focus-visible:ring-offset-2
     ${provider.image ? "cursor-zoom-in" : "cursor-default pointer-events-none"}
   `}
-  onClick={
-    provider.cover_image
-      ? () =>
-          openLightbox(
-            provider.cover_image!,
-            `${provider.name ?? "Provider"} profile photo`
-          )
-      : undefined
-  }
-  disabled={!provider.cover_image}
->
-  {provider.cover_image ? (
-    <div
-      className={`
+              onClick={
+                provider.cover_image
+                  ? () =>
+                      openLightbox(
+                        provider.cover_image!,
+                        `${provider.name ?? "Provider"} profile photo`
+                      )
+                  : undefined
+              }
+              disabled={!provider.cover_image}
+            >
+              {provider.cover_image ? (
+                <div
+                  className={`
         w-full h-full rounded-full overflow-hidden shadow-xl
         ${provider.ispro ? "ring-2 ring-yellow-400" : ""}
         transition-transform duration-200 group-hover:scale-105
       `}
-    >
-      <div className="relative w-full h-full">
-        <Image
-        title="Provider Cover Image"
-          src={provider.cover_image}
-          alt={provider.name ?? "Provider"}
-          fill
-          className="object-cover"
-          sizes="(max-width: 640px) 96px, 128px"
-          priority
-        />
-      </div>
-    </div>
-  ) : (
-    <div className="h-full w-full shrink-0 text-2xl rounded-full bg-linear-to-br from-blue-600 via-blue-400 to-[#2536EB] text-white grid place-content-center font-semibold uppercase">
-    {provider.company_name
-      ?.split(" ")
-      .map((w: string) => w[0])
-      .join("")}
-  </div>
-  )}
-</button>
+                >
+                  <div className="relative w-full h-full">
+                    <Image
+                      title="Provider Cover Image"
+                      src={provider.cover_image}
+                      alt={provider.name ?? "Provider"}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 96px, 128px"
+                      priority
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="h-full w-full shrink-0 text-2xl rounded-full bg-linear-to-br from-blue-600 via-blue-400 to-[#2563EB] text-white grid place-content-center font-semibold uppercase">
+                  {provider.company_name
+                    ?.split(" ")
+                    .map((w: string) => w[0])
+                    .join("")}
+                </div>
+              )}
+            </button>
 
-{provider.ispro && (
-  <div className="absolute bottom-0 right-1 z-20" title="Pro member" aria-label="Pro member">
-    <ProBadge size={30} />
-  </div>
-)}
+            {provider.ispro && (
+              <div
+                className="absolute bottom-0 right-1 z-20"
+                title="Pro member"
+                aria-label="Pro member"
+              >
+                <ProBadge size={30} />
+              </div>
+            )}
 
-{provider.verified && (
-  <div
-    className={`absolute z-20 rounded-full p-0.5  bg-white dark:bg-[#1d2226] shadow-md ring-2 ring-white dark:ring-[#1d2226] ${
-      provider.ispro ? "bottom-2 left-0" : "bottom-1 right-1"
-    }`}
-  >
-    <CheckCircle2
-      className="w-5 h-5 sm:w-6 sm:h-6 fill-blue-600 text-white"
-      strokeWidth={1.5}
-    />
-  </div>
-)}
-</div>
+            {provider.verified && (
+              <div
+                className={`absolute z-20 rounded-full p-0.5  bg-white dark:bg-[#1d2226] shadow-md ring-2 ring-white dark:ring-[#1d2226] ${
+                  provider.ispro ? "bottom-2 left-0" : "bottom-1 right-1"
+                }`}
+              >
+                <CheckCircle2
+                  className="w-5 h-5 sm:w-6 sm:h-6 fill-blue-600 text-white"
+                  strokeWidth={1.5}
+                />
+              </div>
+            )}
+          </div>
 
           <div className="flex items-center gap-2 pt-2">
             <ShareButton

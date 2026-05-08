@@ -1,17 +1,17 @@
 // "use client";
 
 import Link from "next/link";
-import './globals.css'
+import "./globals.css";
 import { Button } from "@/components/ui/button";
 // import { useEffect, useState } from "react";
-import { 
-  Home, 
-  Search, 
-  ArrowLeft, 
+import {
+  Home,
+  Search,
+  ArrowLeft,
   Sparkles,
   Map,
   Compass,
-  MessageCircle
+  MessageCircle,
 } from "lucide-react";
 
 export default function NotFound() {
@@ -20,7 +20,7 @@ export default function NotFound() {
 
   // useEffect(() => {
   //   setMounted(true);
-    
+
   //   const handleMouseMove = (e: MouseEvent) => {
   //     setMousePosition({
   //       x: (e.clientX / window.innerWidth) * 20 - 10,
@@ -44,24 +44,24 @@ export default function NotFound() {
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Floating Orbs */}
-        <div 
+        <div
           className="absolute top-20 left-20 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl animate-float"
           style={{
             // transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)`,
             transition: "transform 0.3s ease-out",
           }}
         />
-        <div 
+        <div
           className="absolute bottom-20 right-20 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl animate-float-delayed"
           style={{
             // transform: `translate(${-mousePosition.x}px, ${-mousePosition.y}px)`,
             transition: "transform 0.3s ease-out",
           }}
         />
-        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-indigo-400/20 rounded-full blur-3xl animate-pulse-slow" />
-        
+        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-blue-400/20 rounded-full blur-3xl animate-pulse-slow" />
+
         {/* Grid Pattern */}
-        <div 
+        <div
           className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage: `
@@ -91,7 +91,7 @@ export default function NotFound() {
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
         {/* 404 Number with 3D Effect */}
         <div className="relative mb-8 group">
-          <div 
+          <div
             className="text-[12rem] md:text-[20rem] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-blue-600 via-blue-600 to-blue-500 select-none"
             style={{
               fontFamily: '"Space Grotesk", "DM Sans", sans-serif',
@@ -106,22 +106,25 @@ export default function NotFound() {
           >
             404
           </div>
-          
+
           {/* Floating Sparkles */}
-          <Sparkles 
-            className="absolute -top-8 -right-8 w-12 h-12 text-yellow-400 animate-spin-slow" 
+          <Sparkles
+            className="absolute -top-8 -right-8 w-12 h-12 text-yellow-400 animate-spin-slow"
             strokeWidth={1.5}
           />
-          <Sparkles 
-            className="absolute -bottom-4 -left-4 w-8 h-8 text-blue-400 animate-spin-slow-reverse" 
+          <Sparkles
+            className="absolute -bottom-4 -left-4 w-8 h-8 text-blue-400 animate-spin-slow-reverse"
             strokeWidth={1.5}
           />
         </div>
 
         {/* Lost Compass Icon */}
         <div className="mb-8 relative">
-          <div className="w-24 h-24 mx-auto bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center shadow-xl animate-bounce-subtle">
-            <Compass className="w-12 h-12 text-blue-600 animate-spin-very-slow" strokeWidth={1.5} />
+          <div className="w-24 h-24 mx-auto bg-gradient-to-br from-blue-100 to-blue-100 rounded-full flex items-center justify-center shadow-xl animate-bounce-subtle">
+            <Compass
+              className="w-12 h-12 text-blue-600 animate-spin-very-slow"
+              strokeWidth={1.5}
+            />
           </div>
           <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-xl animate-pulse-slow" />
         </div>
@@ -133,7 +136,7 @@ export default function NotFound() {
 
         {/* Subheading */}
         <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl animate-fade-in-up animation-delay-100">
-          Looks like this page went on a task without leaving a note. 
+          Looks like this page went on a task without leaving a note.
           <span className="block mt-2 text-base text-slate-500">
             Don't worry — our AI can help you find your way back!
           </span>
@@ -157,7 +160,7 @@ export default function NotFound() {
             <div className="absolute right-2 top-1/2 -translate-y-1/2">
               <Button 
                 size="sm" 
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl px-6 shadow-lg hover:shadow-xl transition-all"
+                className="bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white rounded-xl px-6 shadow-lg hover:shadow-xl transition-all"
               >
                 Search
               </Button>
@@ -195,18 +198,18 @@ export default function NotFound() {
         {/* Primary CTA */}
         <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up animation-delay-400">
           <Link href="/">
-            <Button 
+            <Button
               size="lg"
-              className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-6 rounded-2xl text-lg font-semibold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+              className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white px-8 py-6 rounded-2xl text-lg font-semibold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
               <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
               <span className="relative z-10">Back to Home</span>
             </Button>
           </Link>
-          
+
           <Link href="/services">
-            <Button 
+            <Button
               size="lg"
               variant="outline"
               className="group px-8 py-6 rounded-2xl text-lg font-semibold border-2 border-slate-300 hover:border-blue-600 hover:bg-blue-50 hover:shadow-lg transition-all duration-300"
@@ -220,7 +223,9 @@ export default function NotFound() {
         {/* Fun Stats or Message */}
         <div className="mt-16 p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-slate-200 max-w-2xl animate-fade-in-up animation-delay-500">
           <p className="text-sm text-slate-600 mb-3">
-            <span className="font-semibold text-slate-900">Did you know?</span> Over 5,000+ Australians use Taskoria every day to find trusted professionals.
+            <span className="font-semibold text-slate-900">Did you know?</span>{" "}
+            Over 5,000+ Australians use Taskoria every day to find trusted
+            professionals.
           </p>
           <div className="flex items-center justify-center gap-8 text-center">
             <div>
@@ -256,7 +261,13 @@ export default function NotFound() {
             className="animate-wave"
           />
           <defs>
-            <linearGradient id="wave-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <linearGradient
+              id="wave-gradient"
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="0%"
+            >
               <stop offset="0%" stopColor="rgba(60, 125, 237, 0.1)" />
               <stop offset="50%" stopColor="rgba(99, 102, 241, 0.1)" />
               <stop offset="100%" stopColor="rgba(139, 92, 246, 0.1)" />

@@ -47,7 +47,11 @@ const DEFAULT_STEPS = (serviceName: string): Step[] => [
   },
 ];
 
-const CITY_STEPS = (serviceName: string, proLabel: string, city: string): Step[] => [
+const CITY_STEPS = (
+  serviceName: string,
+  proLabel: string,
+  city: string
+): Step[] => [
   {
     title: `Need ${proLabel.endsWith("s") ? "a " + proLabel.slice(0, -1).toLowerCase() : "a " + proLabel.toLowerCase()} in ${city}?`,
     description: `Choosing the right ${serviceName.toLowerCase()} professional for your home can feel overwhelming. At Taskoria, we take the hassle out of finding and contacting verified ${proLabel.toLowerCase()} across ${city}. Simply tell us what you need and we'll do the rest.`,
@@ -113,7 +117,7 @@ export default function StepWiseHowItWorks({
                 transform: visible ? "translateY(0)" : "translateY(16px)",
                 transition: `opacity 0.45s ease ${i * 100}ms, transform 0.45s ease ${i * 100}ms`,
               }}
-              className="group relative bg-white dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700/60 rounded-2xl p-5 flex flex-col gap-5 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-lg hover:shadow-indigo-100/60 dark:hover:shadow-indigo-950/40 transition-all duration-300"
+              className="group relative bg-white dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700/60 rounded-2xl p-5 flex flex-col gap-5 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-lg hover:shadow-blue-100/60 dark:hover:shadow-blue-950/40 transition-all duration-300"
             >
               <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 text-sm font-bold shrink-0 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 dark:group-hover:bg-blue-500 dark:group-hover:border-blue-500 transition-all duration-300">
                 {i + 1}
@@ -141,7 +145,7 @@ export default function StepWiseHowItWorks({
         <div className="flex justify-center">
           <button
             onClick={onPostJob}
-            className="inline-flex items-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold px-8 py-4 text-base shadow-md shadow-blue-200 dark:shadow-blue-950 hover:shadow-lg hover:shadow-blue-300 dark:hover:shadow-blue-900 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] hover:bg-blue-700 active:bg-blue-800 text-white font-semibold px-8 py-3 text-base shadow-md shadow-blue-200 dark:shadow-blue-950 hover:shadow-lg hover:shadow-blue-300 dark:hover:shadow-blue-900 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             aria-label={`Get free quotes for ${serviceName}${cityName ? ` in ${cityName}` : ""}`}
           >
             {cityName

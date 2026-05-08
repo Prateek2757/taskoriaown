@@ -129,9 +129,9 @@ export default function HeroInteractive() {
                 className="
                 w-58 h-10
                 border border-gray-200 dark:border-gray-700
-                text-gray-600 dark:text-gray-300 bg-w
+                text-gray-600 dark:text-gray-300 bg-w font-semibold
                 hover:bg-[#1d4fd8]
-                hover:text-white
+                hover:text-white text-base
                 rounded-lg
                 transition-all duration-200
                 flex items-center justify-center gap-2

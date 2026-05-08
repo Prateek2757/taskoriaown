@@ -29,7 +29,7 @@ function getBreadcrumbLabel(name: string) {
     Tiling: "Tilers",
     Plastering: "Plasterers",
   };
-  return irregulars[name] ?? `${name} Professionals`;
+  return irregulars[name] ?? `${name} Pros`;
 }
 
 function getArticle(name: string) {
@@ -110,7 +110,7 @@ export default function SubHeroService({
           <div className="pt-1">
             <button
               onClick={onPostJob}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#2563eb] hover:bg-[#1d4ed8] active:bg-[#1e40af] text-white font-bold text-base px-7 py-4 shadow-lg shadow-blue-200 dark:shadow-blue-950 hover:shadow-xl hover:shadow-blue-300 dark:hover:shadow-blue-900 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#2563eb] hover:bg-[#1d4ed8] active:bg-[#1e40af] text-white font-bold text-base px-7 py-3 shadow-lg shadow-blue-200 dark:shadow-blue-950 hover:shadow-xl hover:shadow-blue-300 dark:hover:shadow-blue-900 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
               aria-label={`Find ${article} ${service.name} professional in ${cityName} today`}
             >
               Find {article} {proLabel.endsWith("s") ? proLabel.slice(0, -1).toLowerCase() : proLabel.toLowerCase()} in {cityName} today!
@@ -122,7 +122,6 @@ export default function SubHeroService({
     );
   }
 
-  // ── DEFAULT (NO CITY) LAYOUT ──────────────────────────────────────────────────
   return (
     <section
       aria-label={`Find ${proLabel} on Taskoria`}
@@ -146,8 +145,8 @@ export default function SubHeroService({
         </nav>
 
         <div className="grid lg:grid-cols-2 gap-6 items-start">
-          <div className="flex flex-col gap-3">
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1]">
+          <div className="flex flex-col gap-4">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[2]">
               Need help finding{" "}
               {getArticle(proLabel)}{" "}
               <span className="relative inline-block">
@@ -178,7 +177,7 @@ export default function SubHeroService({
             <div className="pt-1">
               <button
                 onClick={onPostJob}
-                className="inline-flex items-center gap-2 rounded-xl bg-[#2563eb] hover:bg-[#1d4ed8] active:bg-[#1e40af] text-white font-bold text-base px-7 py-4 shadow-lg shadow-blue-200 dark:shadow-blue-950 hover:shadow-xl hover:shadow-blue-300 dark:hover:shadow-blue-900 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#2563eb] hover:bg-[#1d4ed8] active:bg-[#1e40af] text-white font-bold text-base px-7 py-3 shadow-lg shadow-blue-200 dark:shadow-blue-950 hover:shadow-xl hover:shadow-blue-300 dark:hover:shadow-blue-900 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                 aria-label={`Find ${getArticle(proLabel)} ${service.name} professional today`}
               >
                 Find {getArticle(proLabel)} {service.name.toLowerCase()} today

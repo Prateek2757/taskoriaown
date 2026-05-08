@@ -123,16 +123,15 @@ function CreditPurchase({
       );
       if (!result) throw new Error("Failed to deduct");
 
-     
       if (result.responseId) {
         const res = await fetch("/api/affiliate/commission/task-trigger", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ responseId: result.responseId }),
         });
-        
+
         const data = await res.json();
-        
+
         console.log("STATUS:", res.status);
         console.log("RESPONSE:", data);
       }
@@ -186,7 +185,7 @@ function CreditPurchase({
     <div className="w-full">
       {mode === "modal" && requiredCredits && (
         <div className="relative mb-4 text-center overflow-hidden">
-          <div className="absolute inset-0 bg-linear-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/20 dark:via-blue-950/20 dark:to-blue-950/20 rounded-2xl -z-10" />
+          <div className="absolute inset-0 bg-linear-to-br from-blue-50 via-blue-50 to-purple-50 dark:from-blue-950/20 dark:via-blue-950/20 dark:to-blue-950/20 rounded-2xl -z-10" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-400/10 dark:bg-blue-400/5 rounded-full blur-3xl -z-10" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-400/10 dark:bg-purple-400/5 rounded-full blur-3xl -z-10" />
 
@@ -310,7 +309,7 @@ function CreditPurchase({
                     onClick={() => setSelectedPackage(pkg.package_id)}
                     className={`relative border-2 rounded-2xl p-3 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
                       selectedPackage === pkg.package_id
-                        ? "border-blue-600 dark:border-blue-400 bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 shadow-xl shadow-blue-200/50 dark:shadow-blue-900/30"
+                        ? "border-blue-600 dark:border-blue-400 bg-linear-to-br from-blue-50 to-blue-50 dark:from-blue-950/30 dark:to-blue-950/30 shadow-xl shadow-blue-200/50 dark:shadow-blue-900/30"
                         : "border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 bg-white dark:bg-gray-800 hover:shadow-lg"
                     }`}
                   >

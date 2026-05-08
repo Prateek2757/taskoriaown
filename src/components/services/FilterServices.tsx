@@ -30,8 +30,8 @@ console.log("activefilter:", filterData)
           className={`whitespace-nowrap rounded-xl border px-3 py-2 text-sm transition
             ${
               filterData === filter
-                ? "border-blue-600 bg-[#3C7DED] text-white"
-                : "border-slate-300 bg-gray-100 text-slate-600 hover:bg-blue-300 hover:text-white-600"
+                ? "border-blue-600 bg-[#2563EB] text-white"
+                : "border-slate-300 bg-gray-100 text-slate-600 hover:bg-blue-600 hover:text-white"
             }`}
         >
           {filter}

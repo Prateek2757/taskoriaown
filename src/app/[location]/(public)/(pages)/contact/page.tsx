@@ -345,7 +345,7 @@ export default function ContactSupport() {
                     {/* Submit */}
                     <button
                       type="submit"
-                      className="w-full bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-indigo-700 dark:from-blue-500 dark:to-blue-500 dark:hover:from-blue-600 dark:hover:to-indigo-600 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 active:scale-[0.98] shadow-md shadow-blue-500/20 dark:shadow-blue-500/10 inline-flex items-center justify-center gap-2"
+                      className="w-full bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 dark:from-blue-500 dark:to-blue-500 dark:hover:from-blue-600 dark:hover:to-blue-600 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 active:scale-[0.98] shadow-md shadow-blue-500/20 dark:shadow-blue-500/10 inline-flex items-center justify-center gap-2"
                     >
                       <Send className="w-4 h-4" />
                       Send Message

@@ -52,15 +52,15 @@ const staticServiceImages: Record<string, { url: string; gradient: string }> = {
   },
   Painters: {
     url: "/images/painting.png",
-    gradient: "from-indigo-500/20 to-blue-500/20",
+    gradient: "from-blue-500/20 to-blue-500/20",
   },
   "Handyman & General Repair": {
     url: "/images/handymann.png",
-    gradient: "from-indigo-500/20 to-blue-500/20",
+    gradient: "from-blue-500/20 to-blue-500/20",
   },
   "Carpet Steam Cleaning": {
     url: "/images/carpetsteam.png",
-    gradient: "from-indigo-500/20 to-blue-500/20",
+    gradient: "from-blue-500/20 to-blue-500/20",
   },
 
   "Rubbish Removal": {
@@ -274,7 +274,7 @@ export default function ServiceCategoriesClient({
             <div className="flex justify-end">
               <button
                 onClick={() => setShowData((prev) => !prev)}
-                className=" flex text-blue-400 "
+                className=" flex text-[#2563EB] "
               >
                 {showData ? "Show less" : `Show all (${filteredData.length})`}
               </button>

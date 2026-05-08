@@ -121,8 +121,6 @@ function classify(s: any) {
   return "prose";
 }
 
-// ─── Animation ────────────────────────────────────────────────────────────────
-
 const up = {
   hidden: { opacity: 0, y: 12 },
   visible: (i = 0) => ({
@@ -208,7 +206,6 @@ function Divider() {
   );
 }
 
-// ─── Service card (accordion) ─────────────────────────────────────────────────
 
 function ServiceCard({ sub, i }: any) {
   const T = useT();

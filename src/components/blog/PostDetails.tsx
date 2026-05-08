@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { BlogCard } from "./BlogCard";
 
-
 export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -18,9 +17,9 @@ export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
   const renderContent = (content) => {
     const lines = content.replace(/\r\n/g, "\n").split("\n");
 
-    const blocks = []; 
-    let paraBuffer = []; 
-    let bulletBuffer = []; 
+    const blocks = [];
+    let paraBuffer = [];
+    let bulletBuffer = [];
 
     const flushPara = () => {
       if (paraBuffer.length === 0) return;
@@ -28,26 +27,41 @@ export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
       paraBuffer = [];
       if (!text) return;
 
-      if (text.startsWith("**") && text.endsWith("**") && text.length > 4 && text.indexOf("**", 2) === text.length - 2) {
+      if (
+        text.startsWith("**") &&
+        text.endsWith("**") &&
+        text.length > 4 &&
+        text.indexOf("**", 2) === text.length - 2
+      ) {
         blocks.push(
-          <p key={blocks.length} className="text-lg font-bold text-gray-900 dark:text-zinc-100 my-6">
+          <p
+            key={blocks.length}
+            className="text-lg font-bold text-gray-900 dark:text-zinc-100 my-6"
+          >
             {text.slice(2, -2)}
           </p>
         );
-      }
-      else if (text.startsWith("**") && text.includes("**", 2)) {
+      } else if (text.startsWith("**") && text.includes("**", 2)) {
         const closingIdx = text.indexOf("**", 2);
         const boldPart = text.slice(2, closingIdx);
         const restPart = text.slice(closingIdx + 2);
         blocks.push(
-          <p key={blocks.length} className="text-gray-700 dark:text-zinc-300 text-lg leading-relaxed my-6">
-            <strong className="text-gray-900 dark:text-zinc-100">{boldPart}</strong>{restPart}
+          <p
+            key={blocks.length}
+            className="text-gray-700 dark:text-zinc-300 text-lg leading-relaxed my-6"
+          >
+            <strong className="text-gray-900 dark:text-zinc-100">
+              {boldPart}
+            </strong>
+            {restPart}
           </p>
         );
-      }
-      else {
+      } else {
         blocks.push(
-          <p key={blocks.length} className="text-gray-700 dark:text-zinc-300 text-lg leading-relaxed my-6">
+          <p
+            key={blocks.length}
+            className="text-gray-700 dark:text-zinc-300 text-lg leading-relaxed my-6"
+          >
             {text}
           </p>
         );
@@ -61,7 +75,10 @@ export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
       blocks.push(
         <ul key={blocks.length} className="my-6 ml-6 space-y-2 list-disc">
           {items.map((item, i) => (
-            <li key={i} className="text-gray-700 dark:text-zinc-300 text-lg leading-relaxed">
+            <li
+              key={i}
+              className="text-gray-700 dark:text-zinc-300 text-lg leading-relaxed"
+            >
               {item}
             </li>
           ))}
@@ -82,7 +99,10 @@ export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
         flushBullets();
         flushPara();
         blocks.push(
-          <h2 key={blocks.length} className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mt-12 mb-6">
+          <h2
+            key={blocks.length}
+            className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mt-12 mb-6"
+          >
             {line.slice(3)}
           </h2>
         );
@@ -93,7 +113,10 @@ export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
         flushBullets();
         flushPara();
         blocks.push(
-          <h3 key={blocks.length} className="text-xl font-semibold text-gray-800 dark:text-zinc-200 mt-8 mb-3">
+          <h3
+            key={blocks.length}
+            className="text-xl font-semibold text-gray-800 dark:text-zinc-200 mt-8 mb-3"
+          >
             {line.slice(4)}
           </h3>
         );
@@ -101,7 +124,7 @@ export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
       }
 
       if (line.startsWith("- ")) {
-        flushPara(); 
+        flushPara();
         bulletBuffer.push(line.slice(2));
         continue;
       }
@@ -110,7 +133,10 @@ export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
         flushBullets();
         flushPara();
         blocks.push(
-          <p key={blocks.length} className="text-base font-medium text-blue-700 dark:text-blue-300 my-4 pl-2 border-l-4 border-blue-400 dark:border-blue-600">
+          <p
+            key={blocks.length}
+            className="text-base font-medium text-blue-700 dark:text-blue-300 my-4 pl-2 border-l-4 border-blue-400 dark:border-blue-600"
+          >
             {line}
           </p>
         );
@@ -142,7 +168,7 @@ export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
             Back to Blog
           </button>
 
-          <div className="mt-3 self-start inline-flex items-center px-5 py-2 rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-500/20 dark:to-indigo-500/20 text-blue-700 dark:text-blue-300 font-semibold text-sm shadow-sm">
+          <div className="mt-3 self-start inline-flex items-center px-5 py-2 rounded-full bg-gradient-to-r from-blue-100 to-blue-100 dark:from-blue-500/20 dark:to-blue-500/20 text-blue-700 dark:text-blue-300 font-semibold text-sm shadow-sm">
             {post.category}
           </div>
         </div>
@@ -170,7 +196,10 @@ export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
 
           <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600 dark:text-zinc-400">
             <div className="flex items-center gap-1.5">
-              <Calendar size={16} className="text-blue-600 dark:text-blue-400" />
+              <Calendar
+                size={16}
+                className="text-blue-600 dark:text-blue-400"
+              />
               <span className="font-medium">
                 {new Date(post.publishedDate).toLocaleDateString("en-AU", {
                   day: "numeric",
@@ -209,14 +238,11 @@ export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
             onClick={() => setIsBookmarked(!isBookmarked)}
             className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
               isBookmarked
-                ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/30 dark:shadow-blue-500/20 scale-105"
+                ? "bg-gradient-to-r from-blue-600 to-blue-600 text-white shadow-lg shadow-blue-500/30 dark:shadow-blue-500/20 scale-105"
                 : "bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300 hover:bg-gray-200 dark:hover:bg-zinc-700"
             }`}
           >
-            <Bookmark
-              size={18}
-              fill={isBookmarked ? "currentColor" : "none"}
-            />
+            <Bookmark size={18} fill={isBookmarked ? "currentColor" : "none"} />
             {isBookmarked ? "Saved" : "Save"}
           </button>
         </div>

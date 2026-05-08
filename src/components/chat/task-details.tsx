@@ -36,7 +36,7 @@ interface TaskDetails {
   category_name: string;
   category_icon?: string | null;
   customer_id: number;
-  additional_queries?:string; 
+  additional_queries?: string;
   customer_email?: string;
   customer_profile_picture?: string | null;
   customer_display_name: string | null;
@@ -135,7 +135,7 @@ export default function TaskDetailsPanel({
     if (isoDateRegex.test(value)) return value.split("T")[0];
     return value;
   };
-  
+
   const formatRelativeTime = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -215,7 +215,7 @@ export default function TaskDetailsPanel({
                 </div>
               ) : task ? (
                 <>
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-50 dark:from-blue-900/10 dark:to-blue-900/10 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
                     <div className="flex items-start justify-between mb-3">
                       <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-base">
                         {task.title}
@@ -410,26 +410,26 @@ export default function TaskDetailsPanel({
                                     {answer.question}
                                   </p>
                                   <p className="text-sm text-gray-900 dark:text-gray-100">
-                                    { formatAnswerValue( answer.answer)}
+                                    {formatAnswerValue(answer.answer)}
                                   </p>
                                 </div>
                               ))}
                             </div>
                             {task.additional_queries && (
-  <div className="bg-white dark:bg-gray-800/50 rounded-lg  ">
-    <div className="p-4">
-      <h5 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
-        Additional Queries
-      </h5>
+                              <div className="bg-white dark:bg-gray-800/50 rounded-lg  ">
+                                <div className="p-4">
+                                  <h5 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                                    Additional Queries
+                                  </h5>
 
-      <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-        <p className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap">
-          {task.additional_queries}
-        </p>
-      </div>
-    </div>
-  </div>
-)}
+                                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+                                    <p className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap">
+                                      {task.additional_queries}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
                           </motion.div>
                         )}
                       </AnimatePresence>

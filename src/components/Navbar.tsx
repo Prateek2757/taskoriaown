@@ -290,8 +290,8 @@ export default function Navbar() {
                     Sign In
                   </Button>
                   <Button
-                    onClick={()=>handleJoinAsProvider()}
-                    className="bg-[#2536EB] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
+                    onClick={() => handleJoinAsProvider()}
+                    className="bg-[#2563EB] text-white hover:from-blue-700 hover:to-cyan-700 font-medium shadow-md"
                   >
                     Join as Provider
                   </Button>

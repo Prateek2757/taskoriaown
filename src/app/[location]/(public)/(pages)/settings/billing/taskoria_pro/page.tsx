@@ -2,7 +2,16 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Star, Check, ArrowLeft, Sparkles, TrendingUp, Shield, Zap, Users } from "lucide-react";
+import {
+  Star,
+  Check,
+  ArrowLeft,
+  Sparkles,
+  TrendingUp,
+  Shield,
+  Zap,
+  Users,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
@@ -20,7 +29,7 @@ export default function TaskoriaProPage() {
   const { data: session } = useSession();
 
   console.log(packages);
-  
+
   const handleActivate = async (pkg: ProfessionalPackage) => {
     if (!session?.user?.id) {
       toast.error("Please login to continue");
@@ -30,14 +39,13 @@ export default function TaskoriaProPage() {
     setLoadingPackage(pkg.package_id);
     try {
       const response = await axios.post("/api/stripe/stripecheckout", {
-        
-          professionalId: session.user.id,
-          packageId: pkg.package_id,
-          amount: pkg.price,
-          packageName: pkg.name,
-          freeTrailDays: pkg.free_trail_days,
+        professionalId: session.user.id,
+        packageId: pkg.package_id,
+        amount: pkg.price,
+        packageName: pkg.name,
+        freeTrailDays: pkg.free_trail_days,
       });
-console.log('price_1SzFaCF0IhXFWFdOp4NVpoIW');
+      console.log("price_1SzFaCF0IhXFWFdOp4NVpoIW");
 
       if (!response.status) {
         const errorData = await response.data.catch(() => ({}));
@@ -106,7 +114,7 @@ console.log('price_1SzFaCF0IhXFWFdOp4NVpoIW');
         {highlighted && (
           <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-300" />
         )}
-        
+
         <Card
           className={`relative h-full overflow-hidden transition-all duration-300 border-2 ${
             highlighted
@@ -141,7 +149,9 @@ console.log('price_1SzFaCF0IhXFWFdOp4NVpoIW');
               </h3>
               <p
                 className={`text-sm leading-relaxed min-h-[36px] ${
-                  highlighted ? "text-blue-100" : "text-gray-600 dark:text-gray-400"
+                  highlighted
+                    ? "text-blue-100"
+                    : "text-gray-600 dark:text-gray-400"
                 }`}
               >
                 {pkg.description}
@@ -152,14 +162,18 @@ console.log('price_1SzFaCF0IhXFWFdOp4NVpoIW');
               <div className="flex items-baseline gap-1.5">
                 <span
                   className={`text-sm font-medium ${
-                    highlighted ? "text-blue-200" : "text-gray-600 dark:text-gray-400"
+                    highlighted
+                      ? "text-blue-200"
+                      : "text-gray-600 dark:text-gray-400"
                   }`}
                 >
                   A$
                 </span>
-                <span className={`text-4xl font-bold tracking-tight ${
-                  highlighted ? "text-white" : "text-gray-900 dark:text-white"
-                }`}>
+                <span
+                  className={`text-4xl font-bold tracking-tight ${
+                    highlighted ? "text-white" : "text-gray-900 dark:text-white"
+                  }`}
+                >
                   {typeof pkg.price === "number"
                     ? pkg.price.toFixed(0)
                     : pkg.price}
@@ -176,24 +190,36 @@ console.log('price_1SzFaCF0IhXFWFdOp4NVpoIW');
               </div>
               <p
                 className={`text-xs mt-1 ${
-                  highlighted ? "text-blue-200" : "text-gray-500 dark:text-gray-400"
+                  highlighted
+                    ? "text-blue-200"
+                    : "text-gray-500 dark:text-gray-400"
                 }`}
               >
                 ex. GST • Billed monthly
               </p>
             </div>
 
-            <div className={`mb-4 pb-4 border-b ${
-              highlighted ? "border-blue-500/30" : "border-gray-200 dark:border-gray-700"
-            }`}>
+            <div
+              className={`mb-4 pb-4 border-b ${
+                highlighted
+                  ? "border-blue-500/30"
+                  : "border-gray-200 dark:border-gray-700"
+              }`}
+            >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <TrendingUp className={`w-4 h-4 ${
-                    highlighted ? "text-blue-200" : "text-blue-600 dark:text-blue-400"
-                  }`} />
+                  <TrendingUp
+                    className={`w-4 h-4 ${
+                      highlighted
+                        ? "text-blue-200"
+                        : "text-blue-600 dark:text-blue-400"
+                    }`}
+                  />
                   <span
                     className={`text-sm font-semibold ${
-                      highlighted ? "text-white" : "text-gray-900 dark:text-white"
+                      highlighted
+                        ? "text-white"
+                        : "text-gray-900 dark:text-white"
                     }`}
                   >
                     Profile Visibility
@@ -290,9 +316,9 @@ console.log('price_1SzFaCF0IhXFWFdOp4NVpoIW');
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50/50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-400/5 dark:bg-blue-600/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-blue-500/5 dark:bg-blue-500/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
-      
+
       <div className="relative max-w-7xl mx-auto px-4 py-6">
-     <div className="">
+        <div className="">
           <Button
             variant="ghost"
             className="group flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
@@ -310,12 +336,13 @@ console.log('price_1SzFaCF0IhXFWFdOp4NVpoIW');
               Get More Clients
             </span>
           </div>
-          
+
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-gray-900 via-blue-900 to-blue-800 dark:from-white dark:via-blue-200 dark:to-blue-300 bg-clip-text text-transparent leading-tight">
             This is where clients find you
           </h1>
           <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-            With the right plan, your profile gets seen by more people looking to hire
+            With the right plan, your profile gets seen by more people looking
+            to hire
           </p>
 
           <div className="flex items-center justify-center gap-6 mt-5">
@@ -378,7 +405,7 @@ console.log('price_1SzFaCF0IhXFWFdOp4NVpoIW');
             </div>
 
             <div className="max-w-4xl mx-auto">
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-2xl p-6 border border-blue-200 dark:border-blue-800">
+              <div className="bg-gradient-to-r from-blue-50 to-blue-50 dark:from-blue-950/30 dark:to-blue-950/30 rounded-2xl p-6 border border-blue-200 dark:border-blue-800">
                 <div className="text-center mb-4">
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
                     All plans include
@@ -387,25 +414,33 @@ console.log('price_1SzFaCF0IhXFWFdOp4NVpoIW');
                     Everything you need to succeed on Taskoria
                   </p>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="flex items-start gap-3 p-3 bg-white dark:bg-gray-800/50 rounded-xl">
                     <div className="flex-shrink-0 w-9 h-9 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
                       <Shield className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 dark:text-white mb-0.5 text-sm">Taskoria Verified Badge</h4>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Show clients you're a trusted professional</p>
+                      <h4 className="font-semibold text-gray-900 dark:text-white mb-0.5 text-sm">
+                        Taskoria Verified Badge
+                      </h4>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">
+                        Show clients you're a trusted professional
+                      </p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start gap-3 p-3 bg-white dark:bg-gray-800/50 rounded-xl">
                     <div className="flex-shrink-0 w-9 h-9 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
                       <Zap className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 dark:text-white mb-0.5 text-sm">Unlocked Inbox</h4>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Reply to enquiries and connect with clients</p>
+                      <h4 className="font-semibold text-gray-900 dark:text-white mb-0.5 text-sm">
+                        Unlocked Inbox
+                      </h4>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">
+                        Reply to enquiries and connect with clients
+                      </p>
                     </div>
                   </div>
                 </div>

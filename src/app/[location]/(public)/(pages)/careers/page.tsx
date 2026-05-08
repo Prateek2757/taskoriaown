@@ -33,10 +33,10 @@ export const metadata: Metadata = {
 
 export default function CareersComingSoonPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/40 dark:from-slate-950 dark:via-blue-950/30 dark:to-indigo-950/40 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-blue-50/40 dark:from-slate-950 dark:via-blue-950/30 dark:to-blue-950/40 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-400/20 dark:bg-blue-500/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-indigo-400/20 dark:bg-indigo-500/10 rounded-full blur-3xl animate-float-delayed"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-400/20 dark:bg-blue-500/10 rounded-full blur-3xl animate-float-delayed"></div>
         <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-cyan-400/15 dark:bg-cyan-500/8 rounded-full blur-3xl animate-float-slow"></div>
 
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0ea5e915_1px,transparent_1px),linear-gradient(to_bottom,#0ea5e915_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#0ea5e915_1px,transparent_1px),linear-gradient(to_bottom,#0ea5e915_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
@@ -47,7 +47,7 @@ export default function CareersComingSoonPage() {
           <div className="max-w-7xl mx-auto px-6 absolute md:top-10 top-5 md:left-1 left-[-10]   flex items-center ">
             {/* <Link
               href="/"
-              className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent hover:from-blue-700 hover:to-indigo-700 dark:hover:from-blue-300 dark:hover:to-indigo-300 transition-all duration-300"
+              className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-600 dark:from-blue-400 dark:to-blue-400 bg-clip-text text-transparent hover:from-blue-700 hover:to-blue-700 dark:hover:from-blue-300 dark:hover:to-blue-300 transition-all duration-300"
             >
               Taskoria
             </Link> */}
@@ -104,7 +104,7 @@ export default function CareersComingSoonPage() {
                       engineering
                     </span>
                     ,{" "}
-                    <span className="font-semibold text-blue-400 dark:text-indigo-400">
+                    <span className="font-semibold text-blue-400 dark:text-blue-400">
                       growth
                     </span>
                     ,{" "}
@@ -136,7 +136,7 @@ export default function CareersComingSoonPage() {
                 title: "Innovation",
                 description:
                   "Work with clean engineering and thoughtful design principles",
-                color: "indigo",
+                color: "blue",
               },
               {
                 icon: "🚀",
@@ -169,7 +169,7 @@ export default function CareersComingSoonPage() {
                 href="https://www.linkedin.com/company/taskoria-au"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 dark:from-blue-500 dark:to-indigo-500 dark:hover:from-blue-600 dark:hover:to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 dark:from-blue-500 dark:to-blue-500 dark:hover:from-blue-600 dark:hover:to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
               >
                 <svg
                   className="w-5 h-5"
@@ -215,7 +215,7 @@ export default function CareersComingSoonPage() {
                     reliability
                   </span>
                   ,{" "}
-                  <span className="font-semibold text-indigo-500 dark:text-indigo-400">
+                  <span className="font-semibold text-blue-500 dark:text-blue-400">
                     transparency
                   </span>
                   , and{" "}

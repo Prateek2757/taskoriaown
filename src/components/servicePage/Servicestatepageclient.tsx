@@ -160,14 +160,14 @@ export default function ServiceStatePageClient({
               <div className="flex flex-wrap gap-3">
                 <Button
                   onClick={() => setOpenModal(true)}
-                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8 py-6 text-sm font-semibold shadow-xl shadow-blue-600/30 transition-colors"
+                  className="inline-flex items-center gap-2 bg-[#2563EB] hover:bg-blue-500 text-white rounded-xl px-8 py-6 text-sm font-semibold shadow-xl shadow-blue-600/30 transition-colors"
                 >
                   Get Free Quotes in {stateName}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
                 <Link
                   href={`/services/${serviceSlug}`}
-                  className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white border border-white/25 rounded-full px-6 py-3.5 text-sm font-medium transition-colors"
+                  className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white border border-white/25 rounded-xl px-6 py-3.5 text-sm font-medium transition-colors"
                 >
                   View all locations
                 </Link>
@@ -266,7 +266,7 @@ export default function ServiceStatePageClient({
                       />
                     </div>
                   ) : (
-                    <div className="h-28 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950/30 dark:to-indigo-950/30 flex items-center justify-center">
+                    <div className="h-28 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-950/30 flex items-center justify-center">
                       <Building2 className="w-8 h-8 text-blue-300 dark:text-blue-700" />
                     </div>
                   )} */}
@@ -435,7 +435,7 @@ export default function ServiceStatePageClient({
         )}
       </div>
 
-      <aside className="bg-gradient-to-br from-slate-900 to-indigo-900 text-white mt-6">
+      <aside className="bg-gradient-to-br from-slate-900 to-blue-900 text-white mt-6">
         <div className="max-w-7xl mx-auto px-6 md:px-16 py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           <div>
             <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
@@ -448,7 +448,7 @@ export default function ServiceStatePageClient({
           </div>
           <Button
             onClick={() => setOpenModal(true)}
-            className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-400 text-white rounded-2xl px-10 py-5 text-lg font-bold flex-shrink-0"
+            className="inline-flex items-center gap-2 bg-[#2563EB] hover:bg-blue-500 text-white rounded-xl px-10 py-5 text-lg font-bold flex-shrink-0"
           >
             Get Free Quotes
             <ArrowRight className="w-5 h-5" />

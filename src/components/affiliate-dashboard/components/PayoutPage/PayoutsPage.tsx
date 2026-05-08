@@ -251,7 +251,9 @@ function StatPill({
   color: string;
 }) {
   return (
-    <div className={`px-3 py-2 rounded-lg ${color} flex items-center justify-between gap-4`}>
+    <div
+      className={`px-3 py-2 rounded-lg ${color} flex items-center justify-between gap-4`}
+    >
       <span className="text-xs font-medium opacity-80">{label}</span>
       <span className="text-sm font-bold">{value}</span>
     </div>
@@ -265,30 +267,32 @@ function OverviewTab({
   accountNumber,
   WithdrawDialog,
 }: {
-  earnings:      ReturnType<typeof useAffiliate>['earnings'];
-  withdraw:      ReturnType<typeof useAffiliate>['withdraw'];
-  bankName:      string;
+  earnings: ReturnType<typeof useAffiliate>["earnings"];
+  withdraw: ReturnType<typeof useAffiliate>["withdraw"];
+  bankName: string;
   accountNumber: string;
   WithdrawDialog: React.ComponentType<any>;
 }) {
-  const data           = earnings.data;
+  const data = earnings.data;
   const payoutProgress = data
     ? Math.min((data.approved / data.payoutThreshold) * 100, 100)
     : 0;
 
   return (
     <div className="space-y-6">
-
       {/* ── How it works banner ── */}
-      <Card className="border-0 bg-gradient-to-r from-blue-50 to-indigo-50 shadow-none">
+      <Card className="border-0 bg-gradient-to-r from-blue-50 to-blue-50 shadow-none">
         <CardContent className="p-4 flex items-center gap-4 flex-wrap">
           <BadgePercent className="w-8 h-8 text-blue-500 flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-blue-900">How commissions work</p>
+            <p className="text-sm font-semibold text-blue-900">
+              How commissions work
+            </p>
             <p className="text-sm text-blue-700">
-              You earn <strong>20% of the subscription price</strong> each time a referred
-              user pays — for the first <strong>12 months</strong> of their subscription.
-              Commissions are approved by our team before becoming withdrawable.
+              You earn <strong>20% of the subscription price</strong> each time
+              a referred user pays — for the first <strong>12 months</strong> of
+              their subscription. Commissions are approved by our team before
+              becoming withdrawable.
             </p>
           </div>
         </CardContent>
@@ -297,20 +301,30 @@ function OverviewTab({
       {/* ── Earnings cards ── */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {earnings.loading ? (
-          <><EarningsSkeleton /><EarningsSkeleton /><EarningsSkeleton /></>
+          <>
+            <EarningsSkeleton />
+            <EarningsSkeleton />
+            <EarningsSkeleton />
+          </>
         ) : (
           <>
             <Card className="border-0 shadow-card">
               <CardContent className="p-5">
                 <div className="flex items-center justify-between mb-3">
                   <Clock className="w-5 h-5 text-amber-500" />
-                  <Badge variant="secondary" className="bg-amber-100 text-amber-700">
+                  <Badge
+                    variant="secondary"
+                    className="bg-amber-100 text-amber-700"
+                  >
                     Pending Review
                   </Badge>
                 </div>
-                <p className="text-3xl font-bold text-slate-900">${fmt(data?.pending ?? 0)}</p>
+                <p className="text-3xl font-bold text-slate-900">
+                  ${fmt(data?.pending ?? 0)}
+                </p>
                 <p className="text-xs text-slate-500 mt-1">
-                  {data?.pendingCount ?? 0} commission{data?.pendingCount !== 1 ? 's' : ''} awaiting admin approval
+                  {data?.pendingCount ?? 0} commission
+                  {data?.pendingCount !== 1 ? "s" : ""} awaiting admin approval
                 </p>
               </CardContent>
             </Card>
@@ -319,13 +333,19 @@ function OverviewTab({
               <CardContent className="p-5">
                 <div className="flex items-center justify-between mb-3">
                   <CheckCircle className="w-5 h-5 text-green-500" />
-                  <Badge variant="secondary" className="bg-green-100 text-green-700">
+                  <Badge
+                    variant="secondary"
+                    className="bg-green-100 text-green-700"
+                  >
                     Approved
                   </Badge>
                 </div>
-                <p className="text-3xl font-bold text-slate-900">${fmt(data?.approved ?? 0)}</p>
+                <p className="text-3xl font-bold text-slate-900">
+                  ${fmt(data?.approved ?? 0)}
+                </p>
                 <p className="text-xs text-slate-500 mt-1">
-                  {data?.approvedCount ?? 0} commission{data?.approvedCount !== 1 ? 's' : ''} ready to withdraw
+                  {data?.approvedCount ?? 0} commission
+                  {data?.approvedCount !== 1 ? "s" : ""} ready to withdraw
                 </p>
               </CardContent>
             </Card>
@@ -334,12 +354,19 @@ function OverviewTab({
               <CardContent className="p-5">
                 <div className="flex items-center justify-between mb-3">
                   <DollarSign className="w-5 h-5 text-blue-500" />
-                  <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+                  <Badge
+                    variant="secondary"
+                    className="bg-blue-100 text-blue-700"
+                  >
                     Paid Out
                   </Badge>
                 </div>
-                <p className="text-3xl font-bold text-slate-900">${fmt(data?.paid ?? 0)}</p>
-                <p className="text-xs text-slate-500 mt-1">Total lifetime earnings paid</p>
+                <p className="text-3xl font-bold text-slate-900">
+                  ${fmt(data?.paid ?? 0)}
+                </p>
+                <p className="text-xs text-slate-500 mt-1">
+                  Total lifetime earnings paid
+                </p>
               </CardContent>
             </Card>
           </>
@@ -351,11 +378,15 @@ function OverviewTab({
         <CardContent className="p-6">
           <div className="flex items-center gap-3 mb-4">
             <Users className="w-5 h-5 text-slate-500" />
-            <h3 className="text-base font-semibold text-slate-900">Referral Pipeline</h3>
+            <h3 className="text-base font-semibold text-slate-900">
+              Referral Pipeline
+            </h3>
           </div>
           {earnings.loading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {[1,2,3,4].map(i => <Skeleton key={i} className="h-14 w-full rounded-lg" />)}
+              {[1, 2, 3, 4].map((i) => (
+                <Skeleton key={i} className="h-14 w-full rounded-lg" />
+              ))}
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -382,8 +413,8 @@ function OverviewTab({
             </div>
           )}
           <p className="text-xs text-slate-400 mt-3">
-            "Awaiting subscription" users signed up via your link but haven't purchased a plan yet —
-            you'll start earning once they subscribe.
+            "Awaiting subscription" users signed up via your link but haven't
+            purchased a plan yet — you'll start earning once they subscribe.
           </p>
         </CardContent>
       </Card>
@@ -401,13 +432,17 @@ function OverviewTab({
             <>
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-900">Payout Threshold</h3>
+                  <h3 className="text-lg font-semibold text-slate-900">
+                    Payout Threshold
+                  </h3>
                   <p className="text-sm text-slate-500">
                     Approved commissions needed before you can withdraw
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-slate-900">${data?.payoutThreshold}</p>
+                  <p className="text-2xl font-bold text-slate-900">
+                    ${data?.payoutThreshold}
+                  </p>
                   <p className="text-sm text-slate-500">AUD minimum</p>
                 </div>
               </div>
@@ -415,7 +450,9 @@ function OverviewTab({
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-500">Progress</span>
-                  <span className="font-medium">{payoutProgress.toFixed(1)}%</span>
+                  <span className="font-medium">
+                    {payoutProgress.toFixed(1)}%
+                  </span>
                 </div>
                 <div className="relative pb-1">
                   <Progress value={payoutProgress} className="h-4" />
@@ -438,11 +475,14 @@ function OverviewTab({
                 <div className="mt-4 p-4 bg-amber-50 rounded-xl flex items-start gap-3">
                   <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-amber-800">Not yet eligible</p>
+                    <p className="text-sm font-medium text-amber-800">
+                      Not yet eligible
+                    </p>
                     <p className="text-sm text-amber-700">
-                      You need ${fmt(Math.max(data.payoutThreshold - data.approved, 0))} more in
-                      approved commissions. Pending commissions are reviewed by our team
-                      typically within 48 hours.
+                      You need $
+                      {fmt(Math.max(data.payoutThreshold - data.approved, 0))}{" "}
+                      more in approved commissions. Pending commissions are
+                      reviewed by our team typically within 48 hours.
                     </p>
                   </div>
                 </div>
@@ -453,7 +493,9 @@ function OverviewTab({
                   <div className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-green-800">Ready to withdraw!</p>
+                      <p className="text-sm font-medium text-green-800">
+                        Ready to withdraw!
+                      </p>
                       <p className="text-sm text-green-700">
                         You have ${fmt(data.approved)} in approved commissions.
                       </p>
@@ -482,8 +524,12 @@ function OverviewTab({
                 <Calendar className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-slate-900">Next Payout Date</h3>
-                <p className="text-sm text-slate-500">Automatic monthly payout cycle</p>
+                <h3 className="text-lg font-semibold text-slate-900">
+                  Next Payout Date
+                </h3>
+                <p className="text-sm text-slate-500">
+                  Automatic monthly payout cycle
+                </p>
               </div>
             </div>
             <div className="text-right">
@@ -493,15 +539,22 @@ function OverviewTab({
                 <>
                   <p className="text-2xl font-bold text-slate-900">
                     {data?.nextPayoutDate
-                      ? new Date(data.nextPayoutDate).toLocaleDateString('en-AU', {
-                          day: 'numeric', month: 'short',
-                        })
-                      : '—'}
+                      ? new Date(data.nextPayoutDate).toLocaleDateString(
+                          "en-AU",
+                          {
+                            day: "numeric",
+                            month: "short",
+                          }
+                        )
+                      : "—"}
                   </p>
                   <p className="text-sm text-slate-500">
                     {data?.nextPayoutDate
-                      ? new Date(data.nextPayoutDate).toLocaleDateString('en-AU', { weekday: 'long' })
-                      : ''}
+                      ? new Date(data.nextPayoutDate).toLocaleDateString(
+                          "en-AU",
+                          { weekday: "long" }
+                        )
+                      : ""}
                   </p>
                 </>
               )}
@@ -509,7 +562,6 @@ function OverviewTab({
           </div>
         </CardContent>
       </Card>
-
     </div>
   );
 }
@@ -922,7 +974,6 @@ function HistoryTab({
     </Card>
   );
 }
-
 
 export function PayoutsPage() {
   const [activeTab, setActiveTab] = useState("overview");

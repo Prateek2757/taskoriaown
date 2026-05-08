@@ -272,7 +272,7 @@ export default function AdminBudgetManager() {
         </Card>
       ) : (
         <div className="grid grid-cols-1 gap-4">
-          {paginatedTasks.map((task:Task) => (
+          {paginatedTasks.map((task: Task) => (
             <Card
               key={task.task_id}
               className="hover:shadow-lg transition-shadow"
@@ -346,7 +346,7 @@ export default function AdminBudgetManager() {
                   </div>
 
                   <div className="lg:w-80 border-t lg:border-t-0 lg:border-l pt-6 lg:pt-0 lg:pl-6">
-                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-700 p-4 rounded-lg">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-50 dark:from-slate-800 dark:to-slate-700 p-4 rounded-lg">
                       <Label className="text-sm font-semibold mb-3 block">
                         Set Estimated Budget
                       </Label>

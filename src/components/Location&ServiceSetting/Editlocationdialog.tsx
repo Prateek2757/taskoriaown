@@ -48,7 +48,12 @@ interface EditLocationDialogProps {
     city_name: string;
     radius: number;
   };
-  updateLocation: (oldCityId: number, newCityId: number, newCityName: string, radius: number) => Promise<void>;
+  updateLocation: (
+    oldCityId: number,
+    newCityId: number,
+    newCityName: string,
+    radius: number
+  ) => Promise<void>;
   existingCityIds: number[];
 }
 
@@ -96,18 +101,20 @@ export default function EditLocationDialog({
     onOpenChange(isOpen);
   };
 
-  const hasChanges = 
-    selectedRadius !== location.radius || 
+  const hasChanges =
+    selectedRadius !== location.radius ||
     selectedCity?.city_id !== location.city_id;
 
-  const handleLocationSelect = (data: { city_id?: number; city?: string } | null) => {
+  const handleLocationSelect = (
+    data: { city_id?: number; city?: string } | null
+  ) => {
     if (!data || !data.city_id || !data.city) {
       setSelectedCity(null);
       return;
     }
 
     if (
-      existingCityIds.includes(data.city_id) && 
+      existingCityIds.includes(data.city_id) &&
       data.city_id !== location.city_id
     ) {
       setError("This location is already in your list");
@@ -144,8 +151,8 @@ export default function EditLocationDialog({
         selectedRadius
       );
       setSuccess(true);
-      setIsUpdating(false); 
-      
+      setIsUpdating(false);
+
       setTimeout(() => {
         handleDialogChange(false);
         setSuccess(false);
@@ -189,7 +196,9 @@ export default function EditLocationDialog({
           {success && (
             <div className="bg-green-50 dark:bg-green-900/50 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 px-4 py-3 rounded-lg flex items-center gap-2 animate-in fade-in">
               <Check className="w-5 h-5" />
-              <p className="font-semibold text-sm">Location updated successfully!</p>
+              <p className="font-semibold text-sm">
+                Location updated successfully!
+              </p>
             </div>
           )}
 
@@ -213,29 +222,34 @@ export default function EditLocationDialog({
             <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
               <div className="space-y-3">
                 <div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Current Location</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+                    Current Location
+                  </p>
                   <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
                       {location.city_name}
                     </p>
                     <span className="text-sm text-gray-600 dark:text-gray-400">
-                      ({location.radius} mile{location.radius !== 1 ? 's' : ''})
+                      ({location.radius} mile{location.radius !== 1 ? "s" : ""})
                     </span>
                   </div>
                 </div>
-                
+
                 {hasChanges && (
                   <>
                     <div className="border-t border-blue-200 dark:border-blue-700 pt-3">
-                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">New Location</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">
+                        New Location
+                      </p>
                       <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4 text-green-600 dark:text-green-400" />
                         <p className="text-lg font-bold text-green-600 dark:text-green-400">
                           {selectedCity?.city || "Not selected"}
                         </p>
                         <span className="text-sm text-gray-600 dark:text-gray-400">
-                          ({selectedRadius} mile{selectedRadius !== 1 ? 's' : ''})
+                          ({selectedRadius} mile
+                          {selectedRadius !== 1 ? "s" : ""})
                         </span>
                       </div>
                     </div>
@@ -249,17 +263,14 @@ export default function EditLocationDialog({
                 <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 Select New City
               </label>
-              <LocationSearch 
-                onSelect={handleLocationSelect}
-            
-              />
+              <LocationSearch onSelect={handleLocationSelect} />
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 Search and select a different city, or keep the current one
               </p>
             </div>
 
             {/* Radius Selector */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-5 rounded-xl border border-blue-200 dark:border-gray-700">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 p-5 rounded-xl border border-blue-200 dark:border-gray-700">
               <div className="flex items-center gap-2 mb-2">
                 <Radar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 <label className="text-sm font-semibold text-gray-900 dark:text-gray-100">
@@ -290,7 +301,9 @@ export default function EditLocationDialog({
                     )}
                     <div className="flex flex-col items-center gap-0.5">
                       <span className="text-lg font-bold">{radius}</span>
-                      <span className="text-[10px] opacity-90 leading-none">mi</span>
+                      <span className="text-[10px] opacity-90 leading-none">
+                        mi
+                      </span>
                     </div>
                   </button>
                 ))}
@@ -308,7 +321,8 @@ export default function EditLocationDialog({
                   <span>Coverage area:</span>
                 </div>
                 <span className="font-semibold text-blue-600 dark:text-blue-400">
-                  {selectedRadius} mile radius from {selectedCity?.city || location.city_name}
+                  {selectedRadius} mile radius from{" "}
+                  {selectedCity?.city || location.city_name}
                 </span>
               </div>
             </div>
@@ -327,13 +341,18 @@ export default function EditLocationDialog({
               onClick={handleUpdate}
               disabled={!hasChanges || isUpdating || !selectedCity}
               className={`
-                ${hasChanges && selectedCity
-                  ? "bg-blue-600 hover:bg-blue-700" 
-                  : "bg-gray-400 cursor-not-allowed"
+                ${
+                  hasChanges && selectedCity
+                    ? "bg-blue-600 hover:bg-blue-700"
+                    : "bg-gray-400 cursor-not-allowed"
                 }
               `}
             >
-              {isUpdating ? "Updating..." : hasChanges ? "Update Location" : "No Changes"}
+              {isUpdating
+                ? "Updating..."
+                : hasChanges
+                  ? "Update Location"
+                  : "No Changes"}
             </Button>
           </div>
         </DialogContent>

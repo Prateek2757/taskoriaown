@@ -25,7 +25,7 @@ export default function HeroSection() {
   const [openModal, setOpenModal] = useState(false);
   const [slugvalue, setSlugValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-    null,
+    null
   );
   const { data: session } = useSession();
   const router = useRouter();
@@ -195,8 +195,8 @@ export default function HeroSection() {
                     className="w-full h-full"
                     particleColor={particleColor}
                   />
-                  <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-indigo-500 to-transparent h-0.5 w-3/4 blur-sm" />
-                  <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
+                  <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-blue-500 to-transparent h-0.5 w-3/4 blur-sm" />
+                  <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-blue-500 to-transparent h-px w-3/4" />
                   <div className="absolute inset-x-60 top-0 bg-linear-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
                   <div className="absolute inset-x-60 top-0 bg-linear-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
                 </span>

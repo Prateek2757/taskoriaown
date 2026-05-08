@@ -278,7 +278,7 @@ export default function StepOneCategoryForm({
               onClick={handleSubmit(onContinue)}
               disabled={!isContinueEnabled || locationLoading}
               className={cn(
-                "flex-1 rounded-lg bg-[#3C7DED] text-white font-medium shadow-lg hover:shadow-xl transition-all",
+                "flex-1 rounded-lg bg-[#2563EB] text-white font-medium shadow-lg hover:shadow-xl transition-all",
                 (!isContinueEnabled || locationLoading) &&
                   "opacity-60 cursor-not-allowed"
               )}

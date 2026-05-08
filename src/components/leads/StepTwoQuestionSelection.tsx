@@ -85,7 +85,6 @@ export default function StepTwoQuestionsForm({
     reset();
   }, [questions]);
 
-
   const currentQuestion = questions[currentIndex];
 
   const handleNextQuestion = (e?: React.MouseEvent | React.FormEvent) => {
@@ -361,7 +360,7 @@ export default function StepTwoQuestionsForm({
             </p>
           </div>
 
-          <div className="bg-linear-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-700 rounded-xl p-3 border border-blue-100 dark:border-gray-600 shadow-sm">
+          <div className="bg-linear-to-br from-blue-50 to-blue-50 dark:from-slate-800 dark:to-slate-700 rounded-xl p-3 border border-blue-100 dark:border-gray-600 shadow-sm">
             <label className="text-gray-900 flex dark:text-white text-base font-semibold mb-3 gap-1">
               <ShieldQuestionIcon className="w-5" /> Do you have a budget in
               mind? <span className="text-red-500">*</span>
@@ -548,8 +547,9 @@ export default function StepTwoQuestionsForm({
           type="submit"
           disabled={loading}
           onClick={handleSubmit(onSubmit)}
-          className={`rounded-lg px-8 bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105 ${loading ? "opacity-70 cursor-not-allowed" : ""
-            }`}
+          className={`rounded-lg px-8 bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105 ${
+            loading ? "opacity-70 cursor-not-allowed" : ""
+          }`}
         >
           {loading ? (
             <span className="flex items-center gap-2">

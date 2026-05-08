@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import { Quote, Star, Loader2, AlertCircle } from "lucide-react";
 import Image from "next/image";
-import {  useState } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "@/lib/fetcher";
 
@@ -49,7 +49,7 @@ function ReviewCard({ img, name, location, body, rating, time }: Review) {
         "relative w-76 shrink-0 cursor-pointer overflow-hidden rounded-xl border p-4",
         "border-gray-950/10 bg-gray-950/[0.01] hover:bg-gray-950/5",
         "dark:border-gray-50/10 dark:bg-gray-50/10 dark:hover:bg-gray-50/15",
-        "transition-colors duration-200",
+        "transition-colors duration-200"
       )}
     >
       <div className="flex items-start gap-3">
@@ -82,7 +82,7 @@ function ReviewCard({ img, name, location, body, rating, time }: Review) {
                   "w-3 h-3",
                   i < rating
                     ? "text-yellow-400 fill-yellow-400"
-                    : "text-gray-300 fill-gray-300",
+                    : "text-gray-300 fill-gray-300"
                 )}
               />
             ))}
@@ -145,28 +145,28 @@ export default function Testimonial() {
   //   fetchReviews();
   // }, []);
 
-  const { data, error, isLoading:loading } = useSWR(
-    "/api/google-reviews",
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      revalidateOnMount: false,
-      revalidateIfStale: false,
-      dedupingInterval: 86_400_000,
-    }
-  );
+  const {
+    data,
+    error,
+    isLoading: loading,
+  } = useSWR("/api/google-reviews", fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    revalidateOnMount: false,
+    revalidateIfStale: false,
+    dedupingInterval: 86_400_000,
+  });
 
   const raw = data?.reviews ?? [];
 
-const reviews = raw
-  .filter((r: any) => r.text && r.text.length > 20)
-  .map(transform);
+  const reviews = raw
+    .filter((r: any) => r.text && r.text.length > 20)
+    .map(transform);
 
-const meta = {
-  rating: data?.ratings,
-  total: data?.totalRatings,
-};
+  const meta = {
+    rating: data?.ratings,
+    total: data?.totalRatings,
+  };
 
   return (
     <section
@@ -174,7 +174,7 @@ const meta = {
       id="customer-reviews"
     >
       <div className="text-center mb-10">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-blue-50 dark:from-blue-900 dark:to-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800">
           Customer stories
         </div>
 

@@ -24,7 +24,7 @@ interface City {
   city_id?: number;
   display_name?: string;
   city?: string;
-  slug?:string
+  slug?: string;
   name?: string;
   image?: string;
   providers?: CityProvider[];
@@ -35,13 +35,14 @@ const popularCityImages = [
   "https://images.unsplash.com/photo-1523059623039-a9ed027e7fad?w=800&h=600&fit=crop",
   "https://images.unsplash.com/photo-1609036394821-b63e8168dc64?q=80&w=1548&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1702252212983-db7e428cc3cf?q=80&w=1880&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1574471101497-d958f6e3ebd4?q=80&w=1548&auto=format&fit=crop"
+  "https://images.unsplash.com/photo-1574471101497-d958f6e3ebd4?q=80&w=1548&auto=format&fit=crop",
 ];
 
 const popularCities: City[] = [
   {
     name: "Sydney",
-    image: "https://images.unsplash.com/photo-1523059623039-a9ed027e7fad?w=800&h=600&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1523059623039-a9ed027e7fad?w=800&h=600&fit=crop",
     // activeProviders: 248,
     // providers: [
     //   { name: "Elite Home Services", rating: 4.9, logo: "🏆", completedJobs: 156 },
@@ -51,7 +52,8 @@ const popularCities: City[] = [
   },
   {
     name: "Melbourne",
-    image: "https://images.unsplash.com/photo-1609036394821-b63e8168dc64?q=80&w=1548&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1609036394821-b63e8168dc64?q=80&w=1548&auto=format&fit=crop",
     // activeProviders: 192,
     // providers: [
     //   { name: "Expert Hands", rating: 4.9, logo: "🎯", completedJobs: 178 },
@@ -61,7 +63,8 @@ const popularCities: City[] = [
   },
   {
     name: "Adelaide",
-    image: "https://images.unsplash.com/photo-1702252212983-db7e428cc3cf?q=80&w=1880&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1702252212983-db7e428cc3cf?q=80&w=1880&auto=format&fit=crop",
     // activeProviders: 156,
     // providers: [
     //   { name: "Top Tier Pros", rating: 4.8, logo: "🔥", completedJobs: 134 },
@@ -71,15 +74,15 @@ const popularCities: City[] = [
   },
   {
     name: "Perth",
-    image: "https://images.unsplash.com/photo-1574471101497-d958f6e3ebd4?q=80&w=1548&auto=format&fit=crop",
-   
-  }
+    image:
+      "https://images.unsplash.com/photo-1574471101497-d958f6e3ebd4?q=80&w=1548&auto=format&fit=crop",
+  },
 ];
 
-export default function PopularLocationsSection({ 
-  cities, 
-  serviceSlug, 
-  currentCity 
+export default function PopularLocationsSection({
+  cities,
+  serviceSlug,
+  currentCity,
 }: PopularLocationsSectionProps) {
   const displayCities = cities.slice(0, 30);
   const router = useRouter();
@@ -91,24 +94,27 @@ export default function PopularLocationsSection({
 
   const totalPages = Math.ceil(displayCities.length / 3);
 
-  const scrollToIndex = useCallback((index: number) => {
-    if (!scrollContainerRef.current) return;
-    
-    const container = scrollContainerRef.current;
-    const cardWidth = container.scrollWidth / displayCities.length;
-    const scrollPosition = index * cardWidth * 3;
-    
-    container.scrollTo({
-      left: scrollPosition,
-      behavior: 'smooth'
-    });
-    setCurrentIndex(index);
-  }, [displayCities.length]);
+  const scrollToIndex = useCallback(
+    (index: number) => {
+      if (!scrollContainerRef.current) return;
+
+      const container = scrollContainerRef.current;
+      const cardWidth = container.scrollWidth / displayCities.length;
+      const scrollPosition = index * cardWidth * 3;
+
+      container.scrollTo({
+        left: scrollPosition,
+        behavior: "smooth",
+      });
+      setCurrentIndex(index);
+    },
+    [displayCities.length]
+  );
 
   const handlePrevious = () => {
     setIsAutoPlaying(false);
     const newIndex = currentIndex === 0 ? totalPages - 1 : currentIndex - 1;
-    scrollToIndex(newIndex); 
+    scrollToIndex(newIndex);
   };
 
   const handleNext = () => {
@@ -135,12 +141,12 @@ export default function PopularLocationsSection({
 
   const handleScroll = () => {
     if (!scrollContainerRef.current || isDragging) return;
-    
+
     const container = scrollContainerRef.current;
     const cardWidth = container.scrollWidth / displayCities.length;
     const scrollPosition = container.scrollLeft;
     const newIndex = Math.round(scrollPosition / (cardWidth * 3));
-    
+
     if (newIndex !== currentIndex) {
       setCurrentIndex(Math.min(newIndex, totalPages - 1));
     }
@@ -194,35 +200,45 @@ export default function PopularLocationsSection({
           onMouseLeave={handleMouseUp}
           className="overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing snap-x snap-mandatory"
           style={{
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
-            WebkitOverflowScrolling: 'touch'
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            WebkitOverflowScrolling: "touch",
           }}
         >
-          <div className="flex gap-6 px-1 pb-2" style={{ width: 'max-content' }}>
+          <div
+            className="flex gap-6 px-1 pb-2"
+            style={{ width: "max-content" }}
+          >
             {displayCities.map((city, index) => {
-              const citySlug = city.name.toLowerCase().replace(/\s+/g, '-');
+              const citySlug = city.name.toLowerCase().replace(/\s+/g, "-");
               const isCurrentCity = currentCity === citySlug;
-              
+
               return (
                 <div
                   key={city.display_name}
                   className="snap-start flex-shrink-0"
-                  style={{ width: 'calc((100vw - 8rem) / 3)', minWidth: '300px', maxWidth: '350px' }}
+                  style={{
+                    width: "calc((100vw - 8rem) / 3)",
+                    minWidth: "300px",
+                    maxWidth: "350px",
+                  }}
                 >
                   <Link
                     href={`/services/${serviceSlug}/${city.state_slug}/${city.slug}`}
                     className={`block h-full bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border ${
-                      isCurrentCity 
-                        ? 'border-indigo-500 ring-2 ring-indigo-300 dark:ring-indigo-700' 
-                        : 'border-gray-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-700'
+                      isCurrentCity
+                        ? "border-blue-500 ring-2 ring-blue-300 dark:ring-blue-700"
+                        : "border-gray-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-700"
                     } hover:-translate-y-2`}
                   >
                     <div className="relative h-52 overflow-hidden">
                       <Image
-                      title="Location Image"
+                        title="Location Image"
                         fill
-                        src={popularCities[index % popularCities.length]?.image || "/default-image.jpg"}
+                        src={
+                          popularCities[index % popularCities.length]?.image ||
+                          "/default-image.jpg"
+                        }
                         alt={city.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         sizes="(max-width: 640px) 100vw,
@@ -231,19 +247,21 @@ export default function PopularLocationsSection({
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                       {isCurrentCity && (
-                        <div className="absolute top-4 right-4 px-3 py-1 bg-indigo-600 text-white text-xs font-bold rounded-full">
+                        <div className="absolute top-4 right-4 px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">
                           Current
                         </div>
                       )}
                       <div className="absolute bottom-4 left-4 right-4">
-                        <h3 className="text-2xl font-bold text-white mb-1">{city.name}</h3>
+                        <h3 className="text-2xl font-bold text-white mb-1">
+                          {city.name}
+                        </h3>
                         {/* <div className="flex items-center gap-2 text-white/90 text-sm">
                           <TrendingUp className="w-4 h-4" />
                           <span>{popularCities[index % popularCities.length]?.activeProviders || 150}+ Active Providers</span>
                         </div> */}
                       </div>
                     </div>
-                  
+
                     <div className="p-2">
                       {/* <div className="space-y-3 mb-5"> 
                         {popularCities[index % popularCities.length]?.providers?.slice(0, 3).map((provider, i) => (
@@ -265,13 +283,15 @@ export default function PopularLocationsSection({
                           </div>
                         ))}
                       </div> */}
-                        
-                      <Button 
+
+                      <Button
                         onClick={(e) => {
                           e.preventDefault();
-                          router.push(`/services/${serviceSlug}/${city.state_slug}/${city.slug}`);
+                          router.push(
+                            `/services/${serviceSlug}/${city.state_slug}/${city.slug}`
+                          );
                         }}
-                        className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-indigo-500 dark:to-blue-500 text-white font-semibold rounded-2xl hover:shadow-lg transition-all"
+                        className="w-full py-3 bg-[#2563EB] text-white font-semibold rounded-lg hover:shadow-lg transition-all"
                       >
                         Search {city.name}
                       </Button>
@@ -293,8 +313,8 @@ export default function PopularLocationsSection({
               }}
               className={`h-2 rounded-full transition-all ${
                 index === currentIndex
-                  ? 'w-8 bg-indigo-600 dark:bg-indigo-500'
-                  : 'w-2 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
+                  ? "w-8 bg-blue-600 dark:bg-blue-500"
+                  : "w-2 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500"
               }`}
               aria-label={`Go to page ${index + 1}`}
             />

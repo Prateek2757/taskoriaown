@@ -72,7 +72,7 @@ function CTA() {
 
               <Button
                 asChild
-                className="relative overflow-hidden bg-[#3C7DED] text-white hover:scale-105 border-0 flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 px-6 py-3 text-xs sm:text-base font-semibold group"
+                className="relative overflow-hidden bg-[#2563EB] text-white hover:scale-105 border-0 flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-blue-500/50 px-6 py-3 text-xs sm:text-base font-semibold group"
               >
                 <Link
                   href="/"
