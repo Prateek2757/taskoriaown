@@ -126,12 +126,23 @@ export default function HowTaskoriaWorks() {
             id="how-it-works-heading"
             className="text-4xl md:text-5xl flex justify-center font-black"
           >
-            How hiring works on Taskoria
+            How hiring works on TaskoriaASA
             <span className="block opacity-0 md:opacity-100 animate-fade-in">
               ...
             </span>
           </h1>
-          <p className="text-lg my-1 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+
+          <div
+            className="text-4xl md:text-xl lg:text-5xl text-gray-800 dark:text-white font-extrabold tracking-tight mb-2
+                
+                  "
+          >
+            How hiring works on{" "}
+            <span className="bg-[#2563EB] bg-clip-text text-transparent">
+              Taskoria ...
+            </span>{" "}
+          </div>
+          <p className="text-lg my-1 flex justify-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Post for free, receive responses, and hire with confidence.
           </p>
 

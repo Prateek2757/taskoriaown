@@ -121,7 +121,7 @@ export default function ProviderDashboard() {
             <h1
               className="
                 text-3xl font-bold 
-              text-[#3C7DED] bg-clip-text 
+              text-[#2563EB] bg-clip-text 
               "
             >
               {greeting}, {user.name?.split(" ")[0] || "User"}!
@@ -196,7 +196,7 @@ export default function ProviderDashboard() {
               <CardContent className="pt-6 text-center relative overflow-hidden">
                 {isPro && (
                   <>
-                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-amber-500/5 to-yellow-600/5 pointer-events-none"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-yellow-500/5 via-amber-500/5 to-yellow-600/5 pointer-events-none"></div>
                     <div className="absolute top-0 right-0 w-full h-32 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none"></div>
                     <div className="absolute bottom-0 left-0 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
                   </>
@@ -229,10 +229,10 @@ export default function ProviderDashboard() {
                               className="absolute inset-0 animate-pulse"
                               style={{ animationDuration: "3s" }}
                             >
-                              <div className="absolute top-1/2 left-1/2 w-20 h-0.5 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent -translate-x-1/2 -translate-y-1/2 rotate-0"></div>
-                              <div className="absolute top-1/2 left-1/2 w-20 h-0.5 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent -translate-x-1/2 -translate-y-1/2 rotate-45"></div>
-                              <div className="absolute top-1/2 left-1/2 w-20 h-0.5 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent -translate-x-1/2 -translate-y-1/2 rotate-90"></div>
-                              <div className="absolute top-1/2 left-1/2 w-20 h-0.5 bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent -translate-x-1/2 -translate-y-1/2 rotate-[135deg]"></div>
+                              <div className="absolute top-1/2 left-1/2 w-20 h-0.5 bg-linear-to-r from-transparent via-yellow-400/60 to-transparent -translate-x-1/2 -translate-y-1/2 rotate-0"></div>
+                              <div className="absolute top-1/2 left-1/2 w-20 h-0.5 bg-linear-to-r from-transparent via-yellow-400/60 to-transparent -translate-x-1/2 -translate-y-1/2 rotate-45"></div>
+                              <div className="absolute top-1/2 left-1/2 w-20 h-0.5 bg-linear-to-r from-transparent via-yellow-400/60 to-transparent -translate-x-1/2 -translate-y-1/2 rotate-90"></div>
+                              <div className="absolute top-1/2 left-1/2 w-20 h-0.5 bg-linear-to-r from-transparent via-yellow-400/60 to-transparent -translate-x-1/2 -translate-y-1/2 rotate-135"></div>
                             </div>
                           </div>
                         </div>
@@ -253,8 +253,8 @@ export default function ProviderDashboard() {
                         <div
                           className={`w-28 h-28 rounded-full flex items-center justify-center shadow-2xl relative z-10 ${
                             isPro
-                              ? "bg-gradient-to-br from-yellow-500 via-amber-500 to-yellow-600"
-                              : "bg-gradient-to-br from-blue-600 to-cyan-500"
+                              ? "bg-linear-to-br from-yellow-500 via-amber-500 to-yellow-600"
+                              : "bg-linear-to-br from-blue-600 to-cyan-500"
                           }`}
                         >
                           <User className="w-14 h-14 text-white drop-shadow-lg" />
@@ -282,7 +282,7 @@ export default function ProviderDashboard() {
                           <path d="M12 2l3 7h7l-5.5 4.1L18 21l-6-4-6 4 1.5-7.9L2 9h7z" />
                         </svg>
                         <span className="drop-shadow-sm">Plus</span>
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent to-white/20 pointer-events-none"></div>
+                        <div className="absolute inset-0 rounded-full bg-linear-to-t from-transparent to-white/20 pointer-events-none"></div>
                       </div>
                     )}
                   </div>
@@ -290,7 +290,7 @@ export default function ProviderDashboard() {
                   <h2
                     className={`text-xl font-semibold mb-1 ${
                       isPro
-                        ? "bg-gradient-to-r from-yellow-600 via-amber-400 to-yellow-400 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(234,179,8,0.3)]"
+                        ? "bg-linear-to-r from-yellow-600 via-amber-400 to-yellow-400 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(234,179,8,0.3)]"
                         : "dark:text-white"
                     }`}
                   >
@@ -380,7 +380,7 @@ export default function ProviderDashboard() {
 
                     <div className="relative">
                       {isPro && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-full blur-md"></div>
+                        <div className="absolute inset-0 bg-linear-to-r from-yellow-500/20 to-amber-500/20 rounded-full blur-md"></div>
                       )}
                       <Progress
                         value={27}
@@ -400,7 +400,7 @@ export default function ProviderDashboard() {
                   </div>
 
                   {isPro && (
-                    <div className="mt-6 p-3 mb-4 rounded-xl bg-gradient-to-r from-yellow-500/10 via-amber-500/10 to-yellow-500/10 border border-yellow-500/20 backdrop-blur-sm">
+                    <div className="mt-6 p-3 mb-4 rounded-xl bg-linear-to-r from-yellow-500/10 via-amber-500/10 to-yellow-500/10 border border-yellow-500/20 backdrop-blur-sm">
                       <div className="flex items-center justify-center gap-2 text-xs text-yellow-500/90 font-medium">
                         <svg
                           className="w-4 h-4"
@@ -445,7 +445,7 @@ export default function ProviderDashboard() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {isPro ? (
-                  <div className="relative group overflow-hidden rounded-xl border-2 border-emerald-400/50 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 p-4 hover:border-emerald-400 transition-colors">
+                  <div className="relative group overflow-hidden rounded-xl border-2 border-emerald-400/50 bg-linear-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 p-4 hover:border-emerald-400 transition-colors">
                     <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-400/20 rounded-full blur-2xl" />
                     <div className="relative">
                       <div className="flex items-start justify-between mb-3">
@@ -455,7 +455,7 @@ export default function ProviderDashboard() {
                             Taskoria PRO Active
                           </h3>
                         </div>
-                        <Badge className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-0">
+                        <Badge className="bg-linear-to-r from-emerald-500 to-teal-600 text-white border-0">
                           Active
                         </Badge>
                       </div>
@@ -477,7 +477,7 @@ export default function ProviderDashboard() {
                     </div>
                   </div>
                 ) : (
-                  <div className="relative group overflow-hidden rounded-xl border-2 border-amber-400/50 bg-gradient-to-br from-amber-50 to-yellow-50 dark:from-amber-950/30 dark:to-yellow-950/30 p-4 hover:border-amber-400 transition-colors">
+                  <div className="relative group overflow-hidden rounded-xl border-2 border-amber-400/50 bg-linear-to-br from-amber-50 to-yellow-50 dark:from-amber-950/30 dark:to-yellow-950/30 p-4 hover:border-amber-400 transition-colors">
                     <div className="absolute top-0 right-0 w-24 h-24 bg-amber-400/20 rounded-full blur-2xl" />
                     <div className="relative">
                       <div className="flex items-start justify-between mb-3">
@@ -487,7 +487,7 @@ export default function ProviderDashboard() {
                             Taskoria PRO
                           </h3>
                         </div>
-                        <Badge className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-0">
+                        <Badge className="bg-linear-to-r from-amber-500 to-yellow-600 text-white border-0">
                           Popular
                         </Badge>
                       </div>
@@ -496,7 +496,7 @@ export default function ProviderDashboard() {
                         exclusive features
                       </p>
                       <Link href="/settings/billing/taskoria_pro">
-                        <Button className="w-full bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-semibold shadow-lg shadow-amber-500/20">
+                        <Button className="w-full bg-linear-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-semibold shadow-lg shadow-amber-500/20">
                           Upgrade to PRO
                           <ArrowUpRight className="w-4 h-4 ml-2" />
                         </Button>
@@ -505,7 +505,7 @@ export default function ProviderDashboard() {
                   </div>
                 )}
 
-                <div className="relative group overflow-hidden rounded-xl border border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 p-4 hover:border-blue-400 dark:hover:border-blue-600 transition-colors">
+                <div className="relative group overflow-hidden rounded-xl border border-blue-200 dark:border-blue-800 bg-linear-to-br from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 p-4 hover:border-blue-400 dark:hover:border-blue-600 transition-colors">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />

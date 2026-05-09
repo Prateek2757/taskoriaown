@@ -337,7 +337,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         <div className="p-2">
           <div className="flex items-start gap-3">
             <div className="relative shrink-0">
-              <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-lg font-bold">
+              <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#2563EB] to-blue-600 flex items-center justify-center text-white text-2xl font-bold">
                 {getInitials(lead.customer_name || "N A")}
               </div>
               {lead.status === "Open" && (
@@ -371,7 +371,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                   <Clock className="w-3.5 h-3.5" />
                   {formatTimeAgo(lead.created_at)}
                 </span>
-                <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-full border border-blue-100 dark:border-blue-800">
+                <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-xl border border-blue-100 dark:border-blue-800">
                   {lead.category_name}
                 </span>
               </div>

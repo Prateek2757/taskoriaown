@@ -231,7 +231,7 @@ const Footer = () => {
                     Rated 4.8/5 based on 100+ reviews
                   </p>
                 </motion.div> */}
-                <TrustBadges/>
+                <TrustBadges />
 
                 {openPopup && (
                   <motion.p

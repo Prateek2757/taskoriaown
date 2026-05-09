@@ -206,7 +206,7 @@ export default function FeaturesStacking() {
                     aria-label="Taskoria Logo"
                   >
                     <Image
-                    title="taskoria logo features"
+                      title="taskoria logo features"
                       src="/images/taskoria_logo.svg"
                       alt="Taskoria service marketplace logo"
                       height={28}
@@ -344,17 +344,15 @@ export const Card = ({
       >
         <div className="flex flex-col gap-0 md:gap-6 h-full p-6 md:py-4 md:px-10">
           <div
-            className={`flex flex-col space-y-4 ${
-              isEven ? "md:text-end" : "text-start"
-            }`}
+            className={`flex flex-col space-y-4 ${isEven ? "md:text-end" : "text-start"
+              }`}
           >
             <h2
               className={`text-2xl  font-extrabold  inlin
-              ${
-                isEven
+              ${isEven
                   ? " bg-linear-to-r  from-[#1D4ED8]  via-[#2563EB] to-[#60A5FA] "
                   : "bg-linear-to-r from-[#1D4ED8]   via-[#60A5FA] to-[#60A5FA] "
-              } 
+                } 
 
                bg-clip-text 
                text-transparent 

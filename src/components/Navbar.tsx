@@ -246,11 +246,10 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-4 py-1 rounded-md font-medium transition-all ${
-                    pathname === link.href
+                  className={`px-4 py-1 rounded-md font-medium transition-all ${pathname === link.href
                       ? "bg-blue-50 text-blue-600 shadow-sm"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                  }`}
+                    }`}
                 >
                   {link.name}
                 </Link>
@@ -271,9 +270,8 @@ export default function Navbar() {
                         "User"}
                     </span>
                     <ChevronDown
-                      className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
-                        isProfileOpen ? "rotate-180" : ""
-                      }`}
+                      className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isProfileOpen ? "rotate-180" : ""
+                        }`}
                     />
                   </button>
                   <AnimatePresence>
@@ -329,11 +327,10 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-4 py-2.5 rounded-xl font-medium transition-colors ${
-                    pathname === link.href
+                  className={`px-4 py-2.5 rounded-xl font-medium transition-colors ${pathname === link.href
                       ? "bg-blue-50 text-blue-600"
                       : "text-gray-700 hover:bg-gray-50"
-                  }`}
+                    }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.name}

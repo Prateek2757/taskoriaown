@@ -1,6 +1,6 @@
 import { BASE_URL, buildUrlsetXml, xmlResponse } from "@/lib/sitemap-helpers";
 
-export const revalidate = 3600;
+export const revalidate =  604800;
 
 export async function GET() {
   const pages = [

@@ -174,7 +174,7 @@ function SignInForm() {
                 autoComplete="email"
                 autoCapitalize="none"
                 spellCheck={false}
-                className="h-11 w-full rounded-xl border border-slate-300 px-3 text-slate-900 outline-none transition
+                className="h-11 w-full rounded-lg border border-slate-300 px-3 text-slate-900 outline-none transition
                   focus:border-blue-500 focus:ring-2 focus:ring-blue-200
                   dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100 dark:focus:ring-blue-900"
                 required
@@ -200,7 +200,7 @@ function SignInForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
-                  className="h-11 w-full rounded-xl border border-slate-300 px-3 pr-10 text-slate-900 outline-none transition
+                  className="h-11 w-full rounded-lg border border-slate-300 px-3 pr-10 text-slate-900 outline-none transition
                     focus:border-blue-500 focus:ring-2 focus:ring-blue-200
                     dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100 dark:focus:ring-blue-900"
                   required
@@ -220,7 +220,7 @@ function SignInForm() {
             <Button
               disabled={loading}
               type="submit"
-              className="h-11 w-full bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-70"
+              className="h-11 w-full bg-[#2563EB] text-white hover:bg-blue-700 disabled:opacity-70"
             >
               {loading ? (
                 <span className="inline-flex items-center gap-2">

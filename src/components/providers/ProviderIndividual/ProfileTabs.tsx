@@ -133,8 +133,6 @@ export function ProfileTabs({
 
   return (
     <div className="flex flex-col gap-3">
-
-      {/* ════ PORTFOLIO ════ */}
       {hasPhotos && (
         <Section
           icon={<ImageIcon className="w-4 h-4" />}

@@ -69,7 +69,7 @@ export default function LeadSettingsCard() {
           <Button
             size="sm"
             variant="outline"
-            className="h-8 text-xs font-semibold border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-[#3C7DED] hover:text-white hover:border-[#3C7DED] transition-all"
+            className="h-8 text-xs font-semibold border-gray-200 bg-[#2563EB] dark:border-gray-700 text-white dark:text-gray-300 hover:bg-[#3C7DED] hover:text-white hover:border-[#3C7DED] transition-all"
           >
             Manage <ArrowUpRight className="w-3 h-3 ml-0.5" />
           </Button>
@@ -97,7 +97,7 @@ export default function LeadSettingsCard() {
                   key={c.category_id}
                   className="
                     bg-[#3C7DED]/8 text-[#3C7DED] border border-[#3C7DED]/20 
-                    px-3 py-1 text-xs font-medium rounded-full
+                    px-3 py-1 text-xs font-medium rounded-lg
                     hover:bg-[#3C7DED]/15 transition-colors cursor-default
                     dark:bg-[#3C7DED]/10 dark:text-[#60A5FA] dark:border-[#3C7DED]/25
                   "

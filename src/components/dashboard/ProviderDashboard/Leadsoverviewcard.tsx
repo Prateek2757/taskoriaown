@@ -17,7 +17,7 @@ export function LeadsOverviewCard({
 
   return (
     <div className="rounded-2xl overflow-hidden border-2 border-gray-200 dark:border-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <div className="relative h-40 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-700 flex flex-col justify-between p-6 overflow-hidden">
+      <div className="relative h-40 bg-linear-to-br from-blue-600 via-[#2563EB] to-blue-700 flex flex-col justify-between p-6 overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-2xl" />
         <div className="absolute top-1/2 left-1/2 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />

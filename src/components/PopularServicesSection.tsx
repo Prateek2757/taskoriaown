@@ -111,8 +111,8 @@ export default function PopularServices() {
                   onClick={() => setActiveButton(filter.label)}
                   className={`
                     flex flex-col items-center justify-between shrink-0
-                    relative pb-3 pt-1 px-2 min-w-[64px] sm:min-w-[72px]
-                    transition-colors
+                    relative pb-3 pt-1 px-2 min-w-16 sm:min-w-18
+                    transition-colors font-semibold
                     ${isActive ? "text-blue-600" : "text-gray-500 hover:text-black dark:hover:text-white"}
                   `}
                 >

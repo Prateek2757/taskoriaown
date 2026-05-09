@@ -35,7 +35,7 @@ export default function ServiceHeroSection({
         style={{ backgroundImage: `url(${service.hero_image})` }}
       /> */}
 
-      <nav className="flex items-center gap-2 text-xs text-white/50 mb-7 flex-wrap">
+      {/* <nav className="flex items-center gap-2 text-xs text-white/50 mb-7 flex-wrap">
         <Link href="/" className="hover:text-white/80 transition-colors">
           Home
         </Link>
@@ -47,12 +47,12 @@ export default function ServiceHeroSection({
           Services
         </Link>
         <ChevronRight className="w-3 h-3 flex-shrink-0" />
-        {/* <Link href={`/services/${serviceSlug}`} className="hover:text-white/80 transition-colors">
+        <Link href={`/services/${serviceSlug}`} className="hover:text-white/80 transition-colors">
               {service.name}
-            </Link> */}
+            </Link>
         <ChevronRight className="w-3 h-3 flex-shrink-0" />
-        {/* <span className="text-white/80 font-medium">{stateName}</span> */}
-      </nav>
+        <span className="text-white/80 font-medium">{stateName}</span>
+      </nav> */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 py-10 md:py-10">
         {/* <nav className="flex items-center gap-2 text-xs text-white/50 mb-7 flex-wrap">
             <Link  href="/" className="hover:text-white/80 transition-colors">Home</Link>
@@ -99,7 +99,7 @@ export default function ServiceHeroSection({
         <div className="max-w-2xl mx-auto">
           <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg rounded-3xl shadow-2xl p-4 md:p-3 border border-white/20 dark:border-slate-700/50">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-14 h-14 bg-linear-to-br from-blue-600 to-blue-500 dark:from-blue-500 dark:to-blue-400 rounded-2xl flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 bg-linear-to-br from-blue-600 to-blue-500 dark:from-blue-500 dark:to-blue-400 rounded-xl flex items-center justify-center shadow-lg">
                 <MapPin className="w-7 h-7 text-white" />
               </div>
               <div>

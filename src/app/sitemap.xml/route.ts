@@ -31,7 +31,7 @@
 
 import { BASE_URL, getServiceSitemapCount, xmlResponse } from "@/lib/sitemap-helpers";
 
-export const revalidate = 84600;
+export const revalidate =  604800;
 
 const STATIC_SITEMAPS = [
   "sitemap_static.xml",
