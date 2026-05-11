@@ -42,15 +42,15 @@ interface Props {
 // };
 
 const Static_State_Image: Record<string, string> = {
-  "new-south-wales": "/nsw-sydney.png",
-  "australian-capital-territory": "/act.png",
-  "norfolk-island": "/norfolkisland.png",
+  "new-south-wales": "/nsw-sydney.jpg",
+  "australian-capital-territory": "/act.jpg",
+  "norfolk-island": "/Norfolk_Island.avif",
   "northern-territory": "/northern-territory.png",
-  queensland: "/queensland.png",
-  "south-australia": "/south-australia.png",
-  tasmania: "/tasmania.png",
-  "western-australia": "/western-australia.png",
-  victoria: "/victoria.png",
+  queensland: "/queensland.jpg",
+  "south-australia": "/south-australia.jpg",
+  tasmania: "/tasmania.jpg",
+  "western-australia": "/western-australia.jpg",
+  victoria: "/victoria.jpg",
 };
 
 const ACCENT = "#1d4ed8";

@@ -42,15 +42,15 @@ const ACCENT: Record<string, string> = {
 const DEFAULT_ACCENT = "#1d4ed8";
 
 const Static_State_Image: Record<string, string> = {
-  "new-south-wales": "/nsw-sydney.png",
-  "australian-capital-territory": "/act.png",
-  "norfolk-island": "/norfolkisland.png",
+  "new-south-wales": "/nsw-sydney.jpg",
+  "australian-capital-territory": "/act.jpg",
+  "norfolk-island": "/Norfolk_Island.avif",
   "northern-territory": "/northern-territory.png",
-  queensland: "/queensland.png",
+  queensland: "/queensland.jpg",
   "south-australia": "/south-australia.png",
-  tasmania: "/tasmania.png",
-  "western-australia": "/western-australia.png",
-  victoria: "/victoria.png",
+  tasmania: "/tasmania.jpg",
+  "western-australia": "/western-australia.jpg",
+  victoria: "/victoria.jpg",
 };
 
 export default function CityPageClient({

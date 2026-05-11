@@ -13,7 +13,7 @@ const reviews = [
     service: "Home Cleaning",
     rating: 4,
     body: "My first time using Taskoria and it was smooth from start to finish. The provider was professional and communication was easy. A great overall experience.",
-    img: "/chongmin.png",
+    img: "/chongmin.jpg",
   },
   {
     id: "2",
@@ -22,7 +22,7 @@ const reviews = [
     service: "Electrical Services",
     rating: 5,
     body: "I needed an electrician urgently and found great options quickly. Comparing quotes was simple and the job was completed on time.",
-    img: "/aayushka.png",
+    img: "/aayushka.jpg",
   },
   {
     id: "3",
@@ -31,7 +31,7 @@ const reviews = [
     service: "Graphic Design",
     rating: 5,
     body: "I hired a graphic designer and received highly relevant matches. The work matched my brief perfectly and the process was seamless.",
-    img: "/zaya.png",
+    img: "/zaya.jpg",
   },
   {
     id: "4",
@@ -40,7 +40,7 @@ const reviews = [
     service: "Web Development",
     rating: 5,
     body: "I posted a project for a website redesign and got quality responses within minutes. The developer I chose delivered exactly what I needed on time. Super smooth experience!",
-    img: "/nimesh.png",
+    img: "/nimesh.jpg",
   },
 ];
 const firstRow = reviews.slice(0, reviews.length);
