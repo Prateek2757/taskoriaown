@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Script from "next/script";
 import StatePageClient from "../components/state-page/state-page";
 import CityPageClient from "../components/City-page/citypageclient";
+import { getAllCities, getCategoriesFromDB } from "@/lib/cache";
 
 type Props = {
   params: Promise<{ slug: string[] }>;
@@ -51,36 +52,27 @@ function distanceKm(lat1: number, lon1: number, lat2: number, lon2: number) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-async function getAllCities(): Promise<City[]> {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`,
-      { next: { revalidate: 84600 } }
-    );
-    return res.ok ? await res.json() : [];
-  } catch {
-    return [];
-  }
-}
+// async function getAllCities(): Promise<City[]> {
+//   try {
+//     const res = await fetch(
+//       `${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`,
+//       { next: { revalidate: 84600 } }
+//     );
+//     return res.ok ? await res.json() : [];
+//   } catch {
+//     return [];
+//   }
+// }
 
 async function getCategories(): Promise<CategoryWithSubs[]> {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/signup/category-selection`,
-      { next: { revalidate: 84600 } }
-    );
-    if (!res.ok) return [];
-    const raw: Array<{
-      category_id: number;
-      name: string;
-      slug: string;
-      description?: string;
-      image_url?: string;
-      parent_category_id?: number | null;
-    }> = await res.json();
+    const raw = await getCategoriesFromDB();
+
     const parents = raw.filter((c) => !c.parent_category_id);
+
     return parents.map((p) => ({
       ...p,
+
       subcategories: raw.filter((c) => c.parent_category_id === p.category_id),
     }));
   } catch {
@@ -154,9 +146,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `Services in ${cityName} | Find Local Professionals | Taskoria`;
   const description = `Discover trusted local service providers in ${cityName}, ${city.state_name}. From cleaning to removals, find and compare professionals for any task — get free quotes on Taskoria.`;
   const canonicalUrl = `https://www.taskoria.com/locations/${stateSlug}/${citySlug}`;
-  const imageUrl =
-    city.image_url ??
-    `https://www.taskoria.com/${citySlug}.jpg`;
+  const imageUrl = city.image_url ?? `https://www.taskoria.com/${citySlug}.jpg`;
 
   return {
     title,
@@ -292,31 +282,29 @@ export default async function CityOrStatePage({ params }: Props) {
   type CityWithDist = City & { _dist: number };
   const seen = new Set<string>();
 
-const nearbyCities: City[] = (allCities as CityWithDist[])
-  .filter((c) => c.city_id !== city.city_id)
-  .map((c) => ({
-    ...c,
-    _dist:
-      city.latitude != null &&
-      city.longitude != null &&
-      c.latitude != null &&
-      c.longitude != null
-        ? distanceKm(city.latitude, city.longitude, c.latitude, c.longitude)
-        : Infinity,
-  }))
-  .sort((a, b) =>
-    a._dist !== b._dist
-      ? a._dist - b._dist
-      : b.popularity - a.popularity
-  )
-  .filter((c) => {
-    const key = c.name.trim().toLowerCase();
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  })
-  .slice(0, 10)
-  .map(({ _dist: _, ...rest }) => rest as City);
+  const nearbyCities: City[] = (allCities as CityWithDist[])
+    .filter((c) => c.city_id !== city.city_id)
+    .map((c) => ({
+      ...c,
+      _dist:
+        city.latitude != null &&
+        city.longitude != null &&
+        c.latitude != null &&
+        c.longitude != null
+          ? distanceKm(city.latitude, city.longitude, c.latitude, c.longitude)
+          : Infinity,
+    }))
+    .sort((a, b) =>
+      a._dist !== b._dist ? a._dist - b._dist : b.popularity - a.popularity
+    )
+    .filter((c) => {
+      const key = c.name.trim().toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .slice(0, 10)
+    .map(({ _dist: _, ...rest }) => rest as City);
 
   const sameStateRaw = allCities
     .filter((c) => c.state_slug === stateSlug && c.city_id !== city.city_id)

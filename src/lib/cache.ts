@@ -1,6 +1,7 @@
 
 import { unstable_cache } from "next/cache";
 import pool from "@/lib/dbConnect";
+import { City } from "@/app/[location]/(public)/(pages)/services/[...slug]/page";
 
 export const getCategoriesFromDB = unstable_cache(
   async () => {
@@ -12,6 +13,7 @@ export const getCategoriesFromDB = unstable_cache(
         public_id,
         slug,
         main_category,
+        parent_category_id,
         faqs,
         rank,
         keywords
@@ -19,11 +21,12 @@ export const getCategoriesFromDB = unstable_cache(
       WHERE is_active = true
       ORDER BY rank ASC;
     `);
+
     return result.rows;
   },
   ["all-categories"],
   {
-    revalidate: 3600, // 1 hour
+    revalidate: 86400,
     tags: ["categories"],
   }
 );
@@ -48,7 +51,7 @@ export const getCategoryBySlug = unstable_cache(
   },
   ["category-by-slug"],
   {
-    revalidate: 3600, 
+    revalidate: 86400, 
     tags: ["categories"],
   }
 );
@@ -125,3 +128,68 @@ export const getServiceProvidersFromDB = unstable_cache(
     tags: ["service-providers"],
   }
 );
+
+
+
+export const getAllCities = unstable_cache(
+  async (): Promise<City[]> => {
+    const result = await pool.query(`
+      SELECT
+        c.city_id, c.name, c.slug, c.display_name,
+        c.popularity, c.parent_city_id,
+        c.latitude, c.longitude, c.image_url,
+        s.slug  AS state_slug,
+        s.name  AS state_name,
+        co.name AS country_name
+      FROM cities c
+      LEFT JOIN states   s  ON c.state_id   = s.state_id
+      JOIN      countries co ON c.country_id = co.country_id
+      ORDER BY c.popularity DESC
+    `);
+
+    const map = new Map<number, City>();
+    const cities: City[] = [];
+
+    for (const row of result.rows) {
+      if (!row.parent_city_id) {
+        const city: City = {
+          city_id:      row.city_id,
+          name:         row.name,
+          slug:         row.slug,
+          display_name: row.display_name,
+          popularity:   row.popularity,
+          latitude:     row.latitude  ? parseFloat(row.latitude)  : undefined,
+          longitude:    row.longitude ? parseFloat(row.longitude) : undefined,
+          image_url:    row.image_url,
+          state_slug:   row.state_slug,
+          state_name:   row.state_name,
+          country_name: row.country_name,
+          subcities:    [],
+        };
+        map.set(row.city_id, city);
+        cities.push(city);
+      }
+    }
+
+    for (const row of result.rows) {
+      if (row.parent_city_id && map.has(row.parent_city_id)) {
+        map.get(row.parent_city_id)!.subcities.push({
+          city_id:      row.city_id,
+          name:         row.name,
+          slug:         row.slug,
+          display_name: row.display_name,
+          popularity:   row.popularity,
+          image_url:    row.image_url,
+        });
+      }
+    }
+
+    return cities;
+  },
+  ["all-cities"],
+  {
+    revalidate: 86400, 
+    tags: ["cities"],
+  }
+);
+

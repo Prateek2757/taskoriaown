@@ -2,6 +2,7 @@
 import ServicePageWrapper from "@/components/servicePage/ServicePageWrapper";
 import ServiceStatePageClient from "@/components/servicePage/Servicestatepageclient";
 import StructuredData from "@/components/servicePage/StructureData";
+import { getAllCities, getCategoryBySlug } from "@/lib/cache";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -20,7 +21,7 @@ interface ServiceData {
   faqs?: { question: string; answer: string }[];
 }
 
-interface City {
+export interface City {
   city_id: number;
   name: string;
   slug: string;
@@ -53,29 +54,34 @@ function buildCanonical(
 }
 
 
-async function getService(serviceSlug: string): Promise<ServiceData | null> {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/categories/${serviceSlug}`,
-      { next: { revalidate: 84600 } }
-    );
-    return res.ok ? res.json() : null;
-  } catch {
-    return null;
-  }
+// async function getService(serviceSlug: string): Promise<ServiceData | null> {
+//   try {
+//     const res = await fetch(
+//       `${process.env.NEXT_PUBLIC_APP_URL}/api/categories/${serviceSlug}`,
+//       { next: { revalidate: 84600 } }
+//     );
+//     return res.ok ? res.json() : null;
+//   } catch {
+//     return null;
+//   }
+// }
+async function getService(serviceSlug: string) {
+
+  return await getCategoryBySlug(serviceSlug);
+
 }
 
-async function getAllCities(): Promise<City[]> {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`,
-      { next: { revalidate: 3600 } }
-    );
-    return res.ok ? res.json() : [];
-  } catch {
-    return [];
-  }
-}
+// async function getAllCities(): Promise<City[]> {
+//   try {
+//     const res = await fetch(
+//       `${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`,
+//       { next: { revalidate: 3600 } }
+//     );
+//     return res.ok ? res.json() : [];
+//   } catch {
+//     return [];
+//   }
+// }
 
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
