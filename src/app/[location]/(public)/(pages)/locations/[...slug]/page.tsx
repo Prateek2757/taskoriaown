@@ -156,7 +156,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonicalUrl = `https://www.taskoria.com/locations/${stateSlug}/${citySlug}`;
   const imageUrl =
     city.image_url ??
-    `https://www.taskoria.com/og-images/locations/${citySlug}.jpg`;
+    `https://www.taskoria.com/${citySlug}.jpg`;
 
   return {
     title,
