@@ -132,7 +132,7 @@ export default function ServicePageClient({
             selectedLocation?.subcities?.length > 0 && (
               <section className="mt-14 m-4">
                 <div className="mb-6 flex flex-col gap-2">
-                  <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">
+                  <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white ">
                     Popular areas in {selectedLocation.name}
                   </h2>
                   <p className="text-slate-600 max-w-2xl">

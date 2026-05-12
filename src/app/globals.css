@@ -130,6 +130,7 @@ body {
 }
 
 :root {
+  --ck-content-font-family: 'Lato';
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.11 0.03 264);
@@ -238,6 +239,41 @@ body {
     --sidebar-ring: oklch(0.439 0 0);
   }
 
+  .main-container {
+    font-family: var(--ck-content-font-family);
+    width: 100%;
+  }
+  
+  .editor-container_classic-editor .editor-container__editor {
+    min-width: 100%;
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  /* Let the editor body fill its container */
+  .editor-container_classic-editor .ck-editor__editable {
+    min-height: 400px;
+    width: 100% !important;
+  }
+  
+  /* Fix dropdown clipping */
+  .ck.ck-dropdown__panel {
+    position: fixed !important;
+    z-index: 9999 !important;
+  }
+  
+  .ck.ck-dropdown__panel .ck-list {
+    max-height: 280px;
+    overflow-y: auto !important;
+  }
+  
+  /* Fix the floating body wrapper getting clipped */
+  .ck-body-wrapper {
+    position: fixed !important;
+    z-index: 9999 !important;
+    top: 0;
+    left: 0;
+  }
 
   .bg-gradient-primary {
     background: var(--gradient-primary);

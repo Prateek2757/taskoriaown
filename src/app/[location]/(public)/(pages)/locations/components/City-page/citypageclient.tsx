@@ -47,7 +47,7 @@ const Static_State_Image: Record<string, string> = {
   "norfolk-island": "/Norfolk_Island.avif",
   "northern-territory": "/northern-territory.png",
   queensland: "/queensland.jpg",
-  "south-australia": "/south-australia.png",
+  "south-australia": "/south-australia.jpg",
   tasmania: "/tasmania.jpg",
   "western-australia": "/western-australia.jpg",
   victoria: "/victoria.jpg",

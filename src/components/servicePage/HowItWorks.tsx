@@ -12,8 +12,7 @@ import {
   ShieldCheck,
   Clock,
 } from "lucide-react";
-
-// ─── Theme tokens ─────────────────────────────────────────────────────────────
+import * as cheerio from "cheerio";
 
 const LIGHT = {
   bg: "#ffffff",
@@ -52,56 +51,80 @@ const DARK = {
 const ThemeCtx = createContext(LIGHT);
 const useT = () => useContext(ThemeCtx);
 
-// ─── HTML parser ──────────────────────────────────────────────────────────────
+
 
 function parseHTML(html: string) {
-  const body = new DOMParser().parseFromString(html, "text/html").body;
-  const title = body.querySelector("h1")?.textContent?.trim() ?? "";
+  const $ = cheerio.load(html);
+
+  const title = $("h1").first().text().trim();
 
   const intros: string[] = [];
-  const firstH2 = body.querySelector("h2");
-  if (firstH2) {
-    let sib = firstH2.previousElementSibling;
-    while (sib) {
-      if (sib.tagName === "P") intros.unshift(sib.textContent!.trim());
-      sib = sib.previousElementSibling;
-    }
+
+  const firstH2 = $("h2").first();
+
+  if (firstH2.length) {
+    firstH2.prevAll("p").each((_, el) => {
+      intros.unshift($(el).text().trim());
+    });
   }
 
   const sections: any[] = [];
-  body.querySelectorAll("h2").forEach((h2, idx) => {
+
+  $("h2").each((idx, h2) => {
     const section: any = {
       id: `s${idx}`,
-      heading: h2.textContent!.trim(),
+      heading: $(h2).text().trim(),
       paragraphs: [],
       lists: [],
       subsections: [],
     };
-    let cur = h2.nextElementSibling;
+
     let sub: any = null;
-    while (cur && cur.tagName !== "H2") {
-      if (cur.tagName === "H3") {
+
+    let cur = $(h2).next();
+
+    while (cur.length && cur[0].tagName !== "h2") {
+      const tag = cur[0].tagName;
+
+      if (tag === "h3") {
         if (sub) section.subsections.push(sub);
-        sub = { heading: cur.textContent!.trim(), paragraphs: [], items: [] };
-      } else if (cur.tagName === "P") {
-        const t = cur.textContent!.trim();
-        if (t) (sub ? sub.paragraphs : section.paragraphs).push(t);
-      } else if (cur.tagName === "UL" || cur.tagName === "OL") {
-        const items = Array.from(cur.querySelectorAll("li")).map((li) =>
-          li.textContent!.trim()
-        );
+
+        sub = {
+          heading: cur.text().trim(),
+          paragraphs: [],
+          items: [],
+        };
+      }
+
+      else if (tag === "p") {
+        const text = cur.text().trim();
+
+        if (text) {
+          if (sub) sub.paragraphs.push(text);
+          else section.paragraphs.push(text);
+        }
+      }
+
+      else if (tag === "ul" || tag === "ol") {
+        const items = cur
+          .find("li")
+          .map((_, li) => $(li).text().trim())
+          .get();
+
         if (sub) sub.items.push(...items);
         else section.lists.push(...items);
       }
-      cur = cur.nextElementSibling;
+
+      cur = cur.next();
     }
+
     if (sub) section.subsections.push(sub);
+
     sections.push(section);
   });
 
   return { title, intros, sections };
 }
-
 // ─── Classifiers ─────────────────────────────────────────────────────────────
 
 const STEPS_RE = /how.it.works|get.started|steps|process|works/i;

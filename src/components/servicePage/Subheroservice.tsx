@@ -13,7 +13,7 @@ interface ServiceHeroSectionProps {
   onLocationSelect?: (location: any) => void;
   onPostJob?: () => void;
   presetLocation?: any;
-  cityName?: string; // e.g. "Sydney" or "Liverpool"
+  cityName?: string; 
 }
 
 function getBreadcrumbLabel(name: string) {
@@ -100,13 +100,11 @@ export default function SubHeroService({
               </p>
             ))}
 
-            {/* "Best of all" highlight */}
             <p className="text-base font-semibold text-slate-700 dark:text-slate-200">
               {cityParagraphs![cityParagraphs!.length - 1]}
             </p>
           </div>
 
-          {/* CTA button */}
           <div className="pt-1">
             <button
               onClick={onPostJob}

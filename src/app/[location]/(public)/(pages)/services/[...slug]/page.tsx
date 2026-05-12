@@ -45,11 +45,23 @@ function toTitleCase(slug: string) {
 function buildCanonical(
   serviceSlug: string,
   stateSlug: string | null,
-  citySlug: string | null
+  citySlug: string | null,
+  subCitySlug: string | null
 ) {
   const base = `https://www.taskoria.com/services/${serviceSlug}`;
-  if (stateSlug && citySlug) return `${base}/${stateSlug}/${citySlug}`;
-  if (stateSlug) return `${base}/${stateSlug}`;
+
+  if (stateSlug && citySlug && subCitySlug) {
+    return `${base}/${stateSlug}/${citySlug}/${subCitySlug}`;
+  }
+
+  if (stateSlug && citySlug) {
+    return `${base}/${stateSlug}/${citySlug}`;
+  }
+
+  if (stateSlug) {
+    return `${base}/${stateSlug}`;
+  }
+
   return base;
 }
 
@@ -86,7 +98,8 @@ async function getService(serviceSlug: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
-  const [serviceSlug, stateSlug = null, citySlug = null] = slug;
+  const [serviceSlug, stateSlug = null, citySlug = null , subCitySlug = null] = slug;
+  
 
   if (!serviceSlug) {
     return {
@@ -106,7 +119,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cityName   = citySlug   ? toTitleCase(citySlug)   : null;
   const stateName  = stateSlug  ? toTitleCase(stateSlug)  : null;
   const isStatePage = stateSlug && !citySlug;
-  const canonicalUrl = buildCanonical(serviceSlug, stateSlug, citySlug);
+  const canonicalUrl = buildCanonical(serviceSlug, stateSlug, citySlug,subCitySlug);
   const imageUrl = service.hero_image ?? `https://www.taskoria.com/og-images/${serviceSlug}.jpg`;
 
   const title = cityName
@@ -274,7 +287,7 @@ export default async function ServicePage({ params }: Props) {
         citySlug={citySlug}
         stateSlug={stateSlug}
         subCitySlug={subCitySlug}
-      />
+      />z
     </>
   );
 }
