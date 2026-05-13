@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase-server"; 
 import { uploadToSupabase } from "@/lib/uploadFileToSupabase";
+import ImageUpload from "@/components/ImageUpload/image-upload";
 
 
 interface ServiceCategory {
@@ -201,6 +202,20 @@ function CategoryRow({
           <p className="text-xs text-red-500 mt-1 max-w-[160px]">{error}</p>
         )}
       </td>
+      <ImageUpload
+  value={category.image_url ?? undefined}
+  folder="service-categories"
+  onChange={async (url) => {
+    // still need to save to DB for categories
+    const { error } = await supabaseBrowser
+      .from("service_categories")
+      .update({ image_url: url, updated_at: new Date().toISOString() })
+      .eq("category_id", category.category_id);
+
+    if (!error) onUpdated(category.category_id, url);
+  }}
+/>
+
     </tr>
   );
 }

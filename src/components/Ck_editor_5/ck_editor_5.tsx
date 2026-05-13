@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { CKEditor, useCKEditorCloud } from "@ckeditor/ckeditor5-react";
 
 interface CkEditorProps {
@@ -10,7 +10,7 @@ interface CkEditorProps {
   placeholder?: string;
 }
 
-const LICENSE_KEY = process.env.NEXT_PUBLIC_CK_EDITOR_5!
+const LICENSE_KEY = process.env.NEXT_PUBLIC_CK_EDITOR_5!;
 
 export default function CkEditor({
   value = "",
@@ -18,18 +18,12 @@ export default function CkEditor({
   height = "300px",
   placeholder = "Write your content here...",
 }: CkEditorProps) {
-  const [mounted, setMounted] = useState(false);
-
   const cloud = useCKEditorCloud({
     version: "48.0.1",
   });
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const editorSetup = useMemo(() => {
-    if (!mounted || cloud.status !== "success") {
+    if (cloud.status !== "success") {
       return null;
     }
 
@@ -53,12 +47,8 @@ export default function CkEditor({
       Link,
       Table,
       TableToolbar,
-      Image,
-      ImageToolbar,
-      ImageUpload,
       BlockQuote,
       Heading,
-      Undo,
     } = cloud.CKEditor;
 
     return {
@@ -87,12 +77,8 @@ export default function CkEditor({
           Link,
           Table,
           TableToolbar,
-          Image,
-          ImageToolbar,
-          ImageUpload,
           BlockQuote,
           Heading,
-          Undo,
         ],
 
         toolbar: {
@@ -145,9 +131,9 @@ export default function CkEditor({
         },
       },
     };
-  }, [cloud, mounted, placeholder]);
+  }, [cloud, placeholder]);
 
-  if (!editorSetup) {
+  if (cloud.status === "loading") {
     return (
       <div className="flex h-[200px] items-center justify-center rounded-lg border">
         Loading editor...
@@ -155,8 +141,16 @@ export default function CkEditor({
     );
   }
 
+  if (cloud.status === "error" || !editorSetup) {
+    return (
+      <div className="flex h-[200px] items-center justify-center rounded-lg border text-red-500">
+        Failed to load editor
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full rounded-xl border border-gray-200 overflow-hidden bg-white">
+    <div className="w-full overflow-hidden rounded-xl border border-gray-200 bg-white">
       <style jsx global>{`
         .ck.ck-editor {
           width: 100%;
@@ -166,7 +160,7 @@ export default function CkEditor({
           border: none !important;
           border-bottom: 1px solid #e5e7eb !important;
           padding: 10px !important;
-          background: #ffffff !important;
+          background: #fff !important;
         }
 
         .ck.ck-editor__main > .ck-editor__editable {
@@ -182,8 +176,8 @@ export default function CkEditor({
         }
 
         .ck.ck-editor__editable:focus {
-          box-shadow: none !important;
           outline: none !important;
+          box-shadow: none !important;
         }
 
         .ck.ck-content {
@@ -198,8 +192,7 @@ export default function CkEditor({
           initialData: value,
         }}
         onChange={(_, editor) => {
-          const data = editor.getData();
-          onChange?.(data);
+          onChange?.(editor.getData());
         }}
       />
     </div>

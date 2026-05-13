@@ -149,12 +149,10 @@ function GoogleBadge({ data }: { data: ReviewData | null }) {
               <div className="flex items-center gap-1.5">
                 <StarRow rating={data.ratings} color="#f59e0b" size={13} />
                 <span className="text-xs font-semibold text-gray-700 dark:text-gray-200 tabular-nums">
-                  {data.ratings.toFixed(1)}
-                </span>
+                {Number(data?.ratings || 0).toFixed(1)}                </span>
               </div>
               <span className="text-[11px] text-gray-400 dark:text-gray-500 leading-none">
-                {data.totalRatings.toLocaleString()} Google reviews
-              </span>
+              {Number(data?.totalRatings || 0).toLocaleString()}              </span>
             </motion.div>
           </AnimatePresence>
         )}

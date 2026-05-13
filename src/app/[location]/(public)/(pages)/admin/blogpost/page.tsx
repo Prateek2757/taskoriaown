@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useForm, Controller, type SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 import CkEditor from "@/components/Ck_editor_5/ck_editor_5";
+import { Switch } from "@/components/ui/switch";
+import ImageUpload from "@/components/ImageUpload/image-upload";
 
-interface FormState {
+interface FormValues {
   title: string;
   slug: string;
   excerpt: string;
@@ -15,12 +18,14 @@ interface FormState {
   author_image: string;
   image_url: string;
   category: string;
+  tagInput: string;
   tags: string[];
   is_featured: boolean;
   is_published: boolean;
   published_at: string;
-  read_time: string;
 }
+
+// ─── Constants ────────────────────────────────────────────────────────────────
 
 const CATEGORIES = [
   "Tips & Guides",
@@ -33,7 +38,9 @@ const CATEGORIES = [
 
 const today = new Date().toISOString().split("T")[0];
 
-function toSlug(title: string): string {
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function toSlug(title: string) {
   return title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, "")
@@ -41,21 +48,79 @@ function toSlug(title: string): string {
     .replace(/\s+/g, "-");
 }
 
-function calcReadTime(text: string): string {
-  const words = text.split(/\s+/).filter(Boolean).length;
+function calcReadTime(html: string) {
+  const plain = html.replace(/<[^>]+>/g, " ");
+  const words = plain.split(/\s+/).filter(Boolean).length;
   return `${Math.max(1, Math.round(words / 200))} min read`;
 }
 
-function calcWordCount(text: string): number {
-  return text.split(/\s+/).filter(Boolean).length;
+function calcWordCount(html: string) {
+  return html
+    .replace(/<[^>]+>/g, " ")
+    .split(/\s+/)
+    .filter(Boolean).length;
 }
 
+// ─── Shared styles ────────────────────────────────────────────────────────────
 
-function Label({ children }: { children: React.ReactNode }) {
+const inputCls =
+  "w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 " +
+  "rounded-lg px-3 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 " +
+  "placeholder-zinc-400 dark:placeholder-zinc-500 " +
+  "focus:outline-none focus:ring-1 focus:ring-orange-400 focus:border-orange-400 transition-colors";
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[11px] font-semibold uppercase tracking-widest text-zinc-400 mb-2">
+    <p className="text-[11px] font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
       {children}
     </p>
+  );
+}
+
+function FieldLabel({
+  children,
+  hint,
+}: {
+  children: React.ReactNode;
+  hint?: string;
+}) {
+  return (
+    <div className="flex items-baseline gap-1.5 mb-1.5">
+      <span className="text-[11px] font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+        {children}
+      </span>
+      {hint && (
+        <span className="text-[11px] text-zinc-400 dark:text-zinc-500 normal-case tracking-normal font-normal">
+          {hint}
+        </span>
+      )}
+    </div>
+  );
+}
+
+function FieldError({ message }: { message?: string }) {
+  if (!message) return null;
+  return <p className="text-[11px] text-red-500 mt-1">{message}</p>;
+}
+
+function Card({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={
+        "bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 space-y-3 " +
+        className
+      }
+    >
+      {children}
+    </div>
   );
 }
 
@@ -72,349 +137,407 @@ function Toggle({
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className={`relative w-10 h-5 rounded-full transition-colors ${
-        checked ? "bg-orange-500" : "bg-zinc-600"
-      }`}
+      style={{
+        background: checked ? "#f97316" : "#2563EB",
+      }}
+      className={`relative shrink-0 w-10 h-[2px]  rounded-full transition-all duration-200
+        focus-visible:outline focus-visible:outline-2  focus-visible:outline-offset-2
+        focus-visible:outline-orange-500
+        ${checked ? "" : "bg-zinc-900 dark:bg-zinc-700"}`}
     >
       <span
-        className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${
-          checked ? "translate-x-5" : "translate-x-0"
-        }`}
+        style={{
+          transform: checked ? "translateX(18px)" : "translateX(0px)",
+          transition: "transform 200ms ease",
+          position: "absolute",
+          bottom: "3px",
+          left: "3px",
+          width: "16px",
+          height: "16px",
+          background: "white",
+          borderRadius: "50%",
+          boxShadow: "0 1px 2px rgba(0,0,0,0.15)",
+          display: "block",
+        }}
       />
     </button>
   );
 }
 
+function ToggleRow({
+  title,
+  subtitle,
+  checked,
+  onChange,
+}: {
+  title: string;
+  subtitle: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-4 py-2.5 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
+      <div className="min-w-0">
+        <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+          {title}
+        </p>
+        <p className="text-xs text-zinc-400 dark:text-zinc-500">{subtitle}</p>
+      </div>
+      <Toggle checked={checked} onChange={onChange} />
+    </div>
+  );
+}
+
 export default function NewBlogPostPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<"write" | "preview">("write");
-  const [tagInput, setTagInput] = useState("");
 
-  const [form, setForm] = useState<FormState>({
-    title: "",
-    slug: "",
-    excerpt: "",
-    content: "",
-    author_name: "",
-    author_role: "",
-    author_image: "",
-    image_url: "",
-    category: "",
-    tags: [],
-    is_featured: false,
-    is_published: false,
-    published_at: today,
-    read_time: "",
+  const {
+    register,
+    control,
+    handleSubmit,
+    setValue,
+    getValues,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({
+    defaultValues: {
+      title: "",
+      slug: "",
+      excerpt: "",
+      content: "",
+      author_name: "",
+      author_role: "",
+      author_image: "",
+      image_url: "",
+      category: "",
+      tagInput: "",
+      tags: [],
+      is_featured: false,
+      is_published: false,
+      published_at: today,
+    },
   });
 
-  const set = useCallback(
-    <K extends keyof FormState>(key: K, value: FormState[K]) => {
-      setForm((prev) => {
-        const next = { ...prev, [key]: value };
-        // Auto-slug from title
-        if (key === "title") {
-          next.slug = toSlug(value as string);
-        }
-        // Auto read time from content
-        if (key === "content") {
-          next.read_time = calcReadTime(value as string);
-        }
-        return next;
-      });
+  const tags = watch("tags");
+  const content = watch("content");
+  const slug = watch("slug");
+  const excerpt = watch("excerpt");
+  const isPublished = watch("is_published");
+
+  const readTime = content ? calcReadTime(content) : "—";
+  const wordCount = content ? calcWordCount(content) : 0;
+
+  // Auto-slug on title change
+  const handleTitleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value;
+      setValue("title", val, { shouldValidate: true });
+      setValue("slug", toSlug(val));
     },
-    []
+    [setValue]
   );
 
   function addTag() {
-    const t = tagInput.trim();
-    if (!t || form.tags.includes(t)) return;
-    set("tags", [...form.tags, t]);
-    setTagInput("");
+    const raw = getValues("tagInput").trim();
+    if (!raw) return;
+    const current = getValues("tags");
+    if (!current.includes(raw)) {
+      setValue("tags", [...current, raw]);
+    }
+    setValue("tagInput", "");
   }
 
-  function removeTag(t: string) {
-    set(
+  function removeTag(tag: string) {
+    setValue(
       "tags",
-      form.tags.filter((x) => x !== t)
+      getValues("tags").filter((t) => t !== tag)
     );
   }
 
-  // async function submit(publish: boolean) {
-  //   if (!form.title || !form.content || !form.category) {
-  //     toast.error("Title, content and category are required.");
-  //     return;
-  //   }
-
-  //   setLoading(true);
-  //   try {
-  //     const res = await fetch("/api/admin/blog/write-mdx", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         ...form,
-  //         is_published: publish,
-  //         published_at: publish ? form.published_at : undefined,
-  //       }),
-  //     });
-
-  //     const data = await res.json();
-
-  //     if (res.status === 409) {
-  //       toast.error("Slug already exists — edit the slug field.");
-  //       return;
-  //     }
-  //     if (!res.ok) throw new Error(data.message);
-
-  //     toast.success(
-  //       publish
-  //         ? `Published → content/blog/${form.slug}.mdx`
-  //         : `Draft saved → content/blog/${form.slug}.mdx`
-  //     );
-  //     router.push("/admin/blog");
-  //   } catch (err) {
-  //     toast.error(err instanceof Error ? err.message : "Failed to save");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
-  async function submit(publish: boolean) {
-    if (!form.title || !form.content || !form.category) {
-      toast.error("Title, content and category are required.");
-      return;
-    }
-
-    const plainText = form.content.replace(/<[^>]+>/g, " ");
-    const words = plainText.split(/\s+/).filter(Boolean).length;
-    const readTime = `${Math.max(1, Math.round(words / 200))} min read`;
-
-    setLoading(true);
-    try {
+  // Core submit — called by both Save draft and Publish
+  const onSubmit = useCallback(
+    async (data: FormValues, publish: boolean) => {
       const res = await fetch("/api/blog", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...form,
-          read_time: readTime,
+          slug: data.slug,
+          title: data.title,
+          excerpt: data.excerpt,
+          content: data.content,
+          author_name: data.author_name,
+          author_role: data.author_role,
+          author_image: data.author_image,
+          image_url: data.image_url,
+          category: data.category,
+          tags: data.tags,
+          is_featured: data.is_featured,
           is_published: publish,
+          published_at: publish ? data.published_at : null,
+          read_time: data.content ? calcReadTime(data.content) : null,
         }),
       });
 
       if (res.status === 409) {
-        toast.error("Slug already exists.");
+        toast.error("Slug already exists — edit the slug field.");
         return;
       }
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message);
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message ?? "Failed to save");
       }
 
       toast.success(publish ? "Post published!" : "Draft saved!");
       router.push("/admin/blog");
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to save");
-    } finally {
-      setLoading(false);
-    }
-  }
+    },
+    [router]
+  );
 
-  const wordCount = calcWordCount(form.content);
-  const isDraft = !form.is_published;
+  const handleSaveDraft: SubmitHandler<FormValues> = async (data) => {
+    try {
+      await onSubmit(data, false);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to save draft");
+    }
+  };
+
+  const handlePublish: SubmitHandler<FormValues> = async (data) => {
+    try {
+      await onSubmit(data, true);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to publish");
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-[#111111] text-zinc-100">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800">
-        <div className="flex items-center gap-3">
-          <h1 className="text-[22px] font-semibold text-white">New post</h1>
-          <span className="text-xs px-2.5 py-1 rounded-full border border-zinc-700 text-zinc-400 font-medium">
-            {isDraft ? "Draft" : "Published"}
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => submit(false)}
-            disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-zinc-700 text-sm font-medium text-zinc-300 hover:bg-zinc-800 transition-colors disabled:opacity-40"
-          >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path
-                d="M2 2h8l2 2v8a1 1 0 01-1 1H3a1 1 0 01-1-1V2z"
-                stroke="currentColor"
-                strokeWidth="1.2"
-              />
-              <path
-                d="M4 2v4h6V2M4 8h6"
-                stroke="currentColor"
-                strokeWidth="1.2"
-              />
-            </svg>
-            Save draft
-          </button>
-          <button
-            onClick={() => submit(true)}
-            disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-zinc-100 text-zinc-900 text-sm font-semibold hover:bg-white transition-colors disabled:opacity-40"
-          >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path
-                d="M2 2h8l2 2v8a1 1 0 01-1 1H3a1 1 0 01-1-1V2z"
-                stroke="currentColor"
-                strokeWidth="1.2"
-              />
-            </svg>
-            {loading ? "Saving…" : "Publish"}
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen  text-zinc-900 dark:text-zinc-100 transition-colors">
+      <header className="sticky top-0 z-20  backdrop-blur border-b border-zinc-200 dark:border-zinc-800">
+        <div className="flex items-center justify-between gap-4 px-6 h-14">
+          <div className="flex items-center gap-3 min-w-0">
+            <h1 className="text-[17px] font-semibold text-zinc-900 dark:text-white truncate">
+              New post
+            </h1>
+            <span
+              className={`shrink-0 inline-flex items-center text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${
+                isPublished
+                  ? "bg-green-50 dark:bg-green-950/60 border-green-200 dark:border-green-800 text-green-700 dark:text-green-400"
+                  : "bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400"
+              }`}
+            >
+              {isPublished ? "Published" : "Draft"}
+            </span>
+          </div>
 
-      <div className="grid grid-cols-[1fr_300px] gap-0 h-[calc(100vh-57px)]">
-        <div className="overflow-y-auto p-6 space-y-4 border-r border-zinc-800">
-          <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-5 space-y-4">
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={handleSubmit(handleSaveDraft)}
+              disabled={isSubmitting}
+              className="inline-flex items-center justify-center gap-1.5
+                h-9 px-4 rounded-lg text-sm font-medium
+                bg-white dark:bg-zinc-800
+                border border-zinc-200 dark:border-zinc-700
+                text-zinc-700 dark:text-zinc-300
+                hover:bg-zinc-50 dark:hover:bg-zinc-700
+                disabled:opacity-40 transition-colors"
+            >
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 13 13"
+                fill="none"
+                aria-hidden="true"
+              >
+                <rect
+                  x="1"
+                  y="1"
+                  width="11"
+                  height="11"
+                  rx="1.5"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                />
+                <path
+                  d="M3.5 1v3.5h6V1M3.5 7.5h6"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                />
+              </svg>
+              Save draft
+            </button>
+
+            <button
+              type="button"
+              onClick={handleSubmit(handlePublish)}
+              disabled={isSubmitting}
+              className="inline-flex items-center justify-center gap-1.5
+                h-9 px-4 rounded-lg text-sm font-semibold
+                bg-orange-500 hover:bg-orange-600
+                text-white
+                disabled:opacity-40 transition-colors"
+            >
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 13 13"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M2 9L5 6l2.5 2.5 2.5-3.5L12 7"
+                  stroke="currentColor"
+                  strokeWidth="1.3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              {isSubmitting ? "Saving…" : "Publish"}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px]">
+        <div className="p-6  space-y-4 border-r border-zinc-200 dark:border-zinc-800 min-h-[calc(100vh-56px)]">
+          <Card>
             <div>
-              <Label>Title</Label>
+              <FieldLabel>Title</FieldLabel>
               <input
-                value={form.title}
-                onChange={(e) => set("title", e.target.value)}
+                {...register("title", { required: "Title is required" })}
+                onChange={handleTitleChange}
                 placeholder="Enter post title…"
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500"
+                className={inputCls}
               />
+              <FieldError message={errors.title?.message} />
             </div>
+
             <div>
-              <Label>Slug</Label>
+              <FieldLabel>Slug</FieldLabel>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-zinc-500 shrink-0">/blog/</span>
+                <span className="text-xs text-zinc-400 dark:text-zinc-500 shrink-0 select-none">
+                  /blog/
+                </span>
                 <input
-                  value={form.slug}
-                  onChange={(e) => set("slug", e.target.value)}
+                  {...register("slug")}
                   placeholder="auto-generated-from-title"
-                  className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500"
+                  className={inputCls}
                 />
               </div>
             </div>
+
             <div>
-              <Label>
-                Excerpt{" "}
-                <span className="normal-case text-zinc-500 tracking-normal font-normal">
-                  (shown in card previews)
-                </span>
-              </Label>
+              <FieldLabel hint="(shown in card previews)">Excerpt</FieldLabel>
               <textarea
-                value={form.excerpt}
-                onChange={(e) => set("excerpt", e.target.value)}
+                {...register("excerpt")}
                 rows={3}
                 maxLength={160}
                 placeholder="Short description shown on listing pages…"
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 resize-none"
+                className={`${inputCls} resize-none`}
               />
-              <p className="text-right text-xs text-zinc-600 mt-1">
-                {form.excerpt.length}/160
+              <p className="text-right text-[11px] text-zinc-400 dark:text-zinc-500 mt-1">
+                {excerpt?.length ?? 0}/160
               </p>
             </div>
-          </div>
+          </Card>
 
-          <div className="bg-zinc-900 relative overflow-y-auto rounded-xl border border-zinc-800 p-5">
-            <CkEditor
-              value={form.content}
-              onChange={(html) => set("content", html)}
-            />
-            {/* <div className="flex gap-0 border-b border-zinc-800 mb-4">
-              {(["write", "preview"] as const).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2 text-sm font-medium capitalize transition-colors border-b-2 -mb-px ${
-                    activeTab === tab
-                      ? "text-white border-white"
-                      : "text-zinc-500 border-transparent hover:text-zinc-300"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div> */}
-
-            {/* {activeTab === "write" ? (
-              <textarea
-                value={form.content}
-                onChange={(e) => set("content", e.target.value)}
-                rows={22}
-                placeholder={`Write your post in Markdown…\n\n## Heading\n\nParagraph text here.\n\n- List item\n- Another item`}
-                className="w-full bg-transparent text-sm text-zinc-200 placeholder-zinc-600 focus:outline-none resize-none font-mono leading-relaxed"
-              />
-            ) : (
-              <div className="min-h-[300px] text-sm text-zinc-400 leading-relaxed whitespace-pre-wrap font-mono">
-                {form.content || (
-                  <span className="text-zinc-600 italic">
-                    Nothing to preview yet.
-                  </span>
+          {/* CKEditor card */}
+          <Card className="!p-0 overflow-visible">
+            <div className="px-4 pt-4">
+              <SectionLabel>Content</SectionLabel>
+            </div>
+            <div className="px-4 pb-4 pt-3">
+              <Controller
+                name="content"
+                control={control}
+                rules={{ required: "Content is required" }}
+                render={({ field }) => (
+                  <CkEditor value={field.value} onChange={field.onChange} />
                 )}
-              </div>
-            )} */}
-          </div>
+              />
+              <FieldError message={errors.content?.message} />
+            </div>
+          </Card>
         </div>
 
-        <div className="overflow-y-auto p-4 space-y-3">
-          <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-4">
-            <Label>Publish settings</Label>
-            <div className="space-y-0">
-              <div className="flex items-center justify-between py-3 border-b border-zinc-800">
-                <div>
-                  <p className="text-sm text-zinc-200 font-medium">Published</p>
-                  <p className="text-xs text-zinc-500">Visible to public</p>
-                </div>
-                <Toggle
-                  checked={form.is_published}
-                  onChange={(v) => set("is_published", v)}
-                />
-              </div>
-              <div className="flex items-center justify-between py-3 border-b border-zinc-800">
-                <div>
-                  <p className="text-sm text-zinc-200 font-medium">Featured</p>
-                  <p className="text-xs text-zinc-500">Show on homepage</p>
-                </div>
-                <Toggle
-                  checked={form.is_featured}
-                  onChange={(v) => set("is_featured", v)}
-                />
-              </div>
-              <div className="pt-3">
-                <p className="text-xs text-zinc-400 mb-1.5">Publish date</p>
-                <input
-                  type="date"
-                  value={form.published_at}
-                  onChange={(e) => set("published_at", e.target.value)}
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-zinc-500"
-                />
-              </div>
-            </div>
-          </div>
+        <div className="p-4 space-y-3  border-t lg:border-t-0 border-zinc-200 dark:border-zinc-800">
+          <Card>
+            <SectionLabel>Publish settings</SectionLabel>
 
-          <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-4">
-            <Label>Author</Label>
-            <div className="space-y-2">
-              <input
-                value={form.author_name}
-                onChange={(e) => set("author_name", e.target.value)}
-                placeholder="e.g. Patrick"
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500"
-              />
-              <input
-                value={form.author_role}
-                onChange={(e) => set("author_role", e.target.value)}
-                placeholder="e.g. Head of Product Innovation"
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500"
+            <div className="flex items-center justify-between py-2.5 border-b border-zinc-100 dark:border-zinc-800">
+              <div>
+                <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+                  Published
+                </p>
+                <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                  Visible to public
+                </p>
+              </div>
+              <Controller
+                name="is_published"
+                control={control}
+                render={({ field }) => (
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                )}
               />
             </div>
-          </div>
 
-          <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-4">
-            <Label>Categorisation</Label>
-            <div className="space-y-3">
+            <div className="flex items-center  justify-between py-2.5 border-b border-zinc-100 dark:border-zinc-800">
+              <div>
+                <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+                  Featured
+                </p>
+                <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                  Show on homepage
+                </p>
+              </div>
+              <Controller
+                name="is_featured"
+                control={control}
+                render={({ field }) => (
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                )}
+              />
+            </div>
+
+            <div className="pt-1">
+              <FieldLabel>Publish date</FieldLabel>
+              <input
+                type="date"
+                {...register("published_at")}
+                className={inputCls}
+              />
+            </div>
+          </Card>
+
+          {/* Author */}
+          <Card>
+            <SectionLabel>Author</SectionLabel>
+            <input
+              {...register("author_name")}
+              placeholder="e.g. Patrick"
+              className={inputCls}
+            />
+            <input
+              {...register("author_role")}
+              placeholder="e.g. Head of Product Innovation"
+              className={inputCls}
+            />
+          </Card>
+
+          <Card>
+            <SectionLabel>Categorisation</SectionLabel>
+
+            <div>
+              <FieldLabel>Category</FieldLabel>
               <select
-                value={form.category}
-                onChange={(e) => set("category", e.target.value)}
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-zinc-500"
+                {...register("category", { required: "Category is required" })}
+                className={inputCls}
               >
                 <option value="">Select category…</option>
                 {CATEGORIES.map((c) => (
@@ -423,62 +546,77 @@ export default function NewBlogPostPage() {
                   </option>
                 ))}
               </select>
-
-              <div>
-                <p className="text-xs text-zinc-400 mb-1.5">Tags</p>
-                <div className="flex gap-2">
-                  <input
-                    value={tagInput}
-                    onChange={(e) => setTagInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        addTag();
-                      }
-                    }}
-                    placeholder="Add a tag…"
-                    className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500"
-                  />
-                  <button
-                    onClick={addTag}
-                    className="px-3 py-2 bg-zinc-700 hover:bg-zinc-600 text-sm text-zinc-200 rounded-lg transition-colors"
-                  >
-                    Add
-                  </button>
-                </div>
-                {form.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mt-2">
-                    {form.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="inline-flex items-center gap-1 text-xs bg-zinc-800 border border-zinc-700 text-zinc-300 px-2.5 py-1 rounded-full"
-                      >
-                        {t}
-                        <button
-                          onClick={() => removeTag(t)}
-                          className="text-zinc-500 hover:text-zinc-200 leading-none"
-                          aria-label={`Remove tag ${t}`}
-                        >
-                          ×
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <FieldError message={errors.category?.message} />
             </div>
-          </div>
+
+            <div>
+              <FieldLabel>Tags</FieldLabel>
+              <div className="flex gap-2">
+                <input
+                  {...register("tagInput")}
+                  placeholder="Add a tag…"
+                  className={`${inputCls} flex-1`}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addTag();
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={addTag}
+                  className="h-[38px] px-3 shrink-0 rounded-lg text-sm font-medium
+                    bg-zinc-100 dark:bg-zinc-700
+                    hover:bg-zinc-200 dark:hover:bg-zinc-600
+                    text-zinc-700 dark:text-zinc-300 transition-colors"
+                >
+                  Add
+                </button>
+              </div>
+              {tags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-2">
+                  {tags.map((t) => (
+                    <span
+                      key={t}
+                      className="inline-flex items-center gap-1 text-xs
+                        bg-zinc-100 dark:bg-zinc-800
+                        border border-zinc-200 dark:border-zinc-700
+                        text-zinc-600 dark:text-zinc-300
+                        px-2.5 py-1 rounded-full"
+                    >
+                      {t}
+                      <button
+                        type="button"
+                        onClick={() => removeTag(t)}
+                        className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-100 leading-none"
+                        aria-label={`Remove tag ${t}`}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </Card>
 
           {/* Cover image */}
-          <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-4">
-            <Label>Cover image</Label>
-            <div className="border border-dashed border-zinc-700 rounded-lg p-5 text-center mb-2 cursor-pointer hover:border-zinc-500 transition-colors">
+          {/* <Card>
+            <SectionLabel>Cover image</SectionLabel>
+            <div
+              className="border border-dashed border-zinc-300 dark:border-zinc-700
+                rounded-lg p-5 text-center cursor-pointer
+                hover:border-zinc-400 dark:hover:border-zinc-500
+                hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
+            >
               <svg
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
                 fill="none"
-                className="mx-auto mb-2 text-zinc-600"
+                className="mx-auto mb-2 text-zinc-400 dark:text-zinc-600"
+                aria-hidden="true"
               >
                 <rect
                   x="2"
@@ -503,52 +641,67 @@ export default function NewBlogPostPage() {
                   strokeLinecap="round"
                 />
               </svg>
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">
                 Click to upload or paste a URL
               </p>
             </div>
             <input
-              value={form.image_url}
-              onChange={(e) => set("image_url", e.target.value)}
+              {...register("image_url")}
               placeholder="or paste image URL…"
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500"
+              className={inputCls}
             />
-          </div>
+          </Card> */}
 
+          <Card>
+  <SectionLabel>Cover image</SectionLabel>
+  <Controller
+    name="image_url"
+    control={control}
+    render={({ field }) => (
+      <ImageUpload
+        value={field.value}
+        onChange={field.onChange}
+        folder="blog-post-image-url"
+      />
+    )}
+  />
+</Card>
           {/* Stats */}
-          <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-4">
-            <Label>Stats</Label>
-            <div className="space-y-0">
-              {[
-                ["Estimated read time", form.read_time || "—"],
+          <Card>
+            <SectionLabel>Stats</SectionLabel>
+            {(
+              [
+                ["Estimated read time", readTime],
                 ["Word count", wordCount.toLocaleString()],
                 ["Views", "0"],
                 ["Likes", "0"],
-              ].map(([label, val]) => (
-                <div
-                  key={label}
-                  className="flex justify-between py-2 border-b border-zinc-800 last:border-0 text-sm"
-                >
-                  <span className="text-zinc-400">{label}</span>
-                  <span className="text-zinc-200 font-medium">{val}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+              ] as [string, string][]
+            ).map(([label, val]) => (
+              <div
+                key={label}
+                className="flex items-center justify-between py-2 text-sm
+                  border-b border-zinc-100 dark:border-zinc-800 last:border-0"
+              >
+                <span className="text-zinc-500 dark:text-zinc-400">
+                  {label}
+                </span>
+                <span className="font-medium text-zinc-800 dark:text-zinc-200">
+                  {val}
+                </span>
+              </div>
+            ))}
+          </Card>
 
-          {/* MDX output preview */}
-          <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-4">
-            <Label>MDX file output</Label>
-            <p className="text-xs text-zinc-500 leading-relaxed">
-              Saves to{" "}
-              <code className="text-orange-400 bg-zinc-800 px-1 py-0.5 rounded text-[11px]">
-                content/blog/{form.slug || "your-slug"}.mdx
-              </code>
-              . Picked up by{" "}
-              <code className="text-zinc-400 text-[11px]">getAllPosts()</code>{" "}
-              automatically on next request.
+          {/* Live URL preview */}
+          <Card>
+            <SectionLabel>Post URL</SectionLabel>
+            <p className="text-xs text-zinc-400 dark:text-zinc-500 leading-relaxed break-all">
+              taskoria.com/blog/
+              <span className="text-orange-500 font-medium">
+                {slug || "your-slug"}
+              </span>
             </p>
-          </div>
+          </Card>
         </div>
       </div>
     </div>

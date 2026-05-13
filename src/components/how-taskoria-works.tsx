@@ -122,7 +122,7 @@ export default function HowTaskoriaWorks() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <h1
+          {/* <h1
             id="how-it-works-heading"
             className="text-4xl md:text-5xl flex justify-center font-black"
           >
@@ -130,7 +130,7 @@ export default function HowTaskoriaWorks() {
             <span className="block opacity-0 md:opacity-100 animate-fade-in">
               ...
             </span>
-          </h1>
+          </h1> */}
 
           <div
             className="text-4xl md:text-xl lg:text-5xl text-gray-800 dark:text-white font-extrabold tracking-tight mb-2
