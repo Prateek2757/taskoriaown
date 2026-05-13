@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 export const dynamic = "force-static";
 
-// ── FAQ ───────────────────────────────────────────────────────────────────────
 const faqs = [
   {
     q: "Is it free to join as a tradie or professional?",

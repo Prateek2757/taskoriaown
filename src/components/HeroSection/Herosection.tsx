@@ -146,9 +146,9 @@ export default function HeroSection() {
             </div>
 
             <div className="w-full px-8 absolute bottom-2 left-1/2 -translate-x-1/2 text-center">
-              <h3 className="text-gray-600 text-lg sm:text-xl lg:text-2xl dark:text-white font-semibold leading-tight mb-2">
+              <p className="text-gray-600 text-lg sm:text-xl lg:text-2xl dark:text-white font-semibold leading-tight mb-2">
                 Need a provider fast?
-              </h3>
+              </p>
               <p className="text-gray-500 text-sm dark:text-gray-400 mb-4">
                 Get free quotes and receive responses from trusted local
                 professionals, with clearer quotes and safer hiring support.
