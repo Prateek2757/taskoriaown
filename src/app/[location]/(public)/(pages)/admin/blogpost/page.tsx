@@ -653,20 +653,19 @@ export default function NewBlogPostPage() {
           </Card> */}
 
           <Card>
-  <SectionLabel>Cover image</SectionLabel>
-  <Controller
-    name="image_url"
-    control={control}
-    render={({ field }) => (
-      <ImageUpload
-        value={field.value}
-        onChange={field.onChange}
-        folder="blog-post-image-url"
-      />
-    )}
-  />
-</Card>
-          {/* Stats */}
+            <SectionLabel>Cover image</SectionLabel>
+            <Controller
+              name="image_url"
+              control={control}
+              render={({ field }) => (
+                <ImageUpload
+                  value={field.value}
+                  onChange={field.onChange}
+                  folder="blog-post-image-url"
+                />
+              )}
+            />
+          </Card>
           <Card>
             <SectionLabel>Stats</SectionLabel>
             {(

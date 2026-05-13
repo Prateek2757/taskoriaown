@@ -168,7 +168,6 @@ function CategoryRow({
         )}
       </td>
 
-      {/* action */}
       <td className="py-3 px-4">
         <button
           disabled={state === "uploading" || state === "saving"}
@@ -206,7 +205,6 @@ function CategoryRow({
   value={category.image_url ?? undefined}
   folder="service-categories"
   onChange={async (url) => {
-    // still need to save to DB for categories
     const { error } = await supabaseBrowser
       .from("service_categories")
       .update({ image_url: url, updated_at: new Date().toISOString() })
