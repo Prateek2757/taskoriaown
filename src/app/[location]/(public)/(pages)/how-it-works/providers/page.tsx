@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+export const dynamic = "force-static";
 
 // ── FAQ ───────────────────────────────────────────────────────────────────────
 const faqs = [

@@ -1,6 +1,7 @@
 import ServiceCategoriesClient from "@/components/services/serviceCategories";
 import { fetchCategories } from "@/utils/api";
 import { Metadata } from "next";
+export const dynamic = "force-static";
 
 const BASE_URL = "https://www.taskoria.com";
 const PAGE_URL = `${BASE_URL}/services`;

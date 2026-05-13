@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { MapPin } from "lucide-react";
 import Image from "next/image";
+export const dynamic = "force-static";
 
 export const metadata: Metadata = {
   title: "Find Services by City | Taskoria",

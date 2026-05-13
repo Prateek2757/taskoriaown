@@ -5,6 +5,7 @@ import StructuredData from "@/components/servicePage/StructureData";
 import { getAllCities, getCategoryBySlug } from "@/lib/cache";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+export const dynamic = "force-static";
 
 type Props = {
   params: Promise<{ slug?: string[] }>;

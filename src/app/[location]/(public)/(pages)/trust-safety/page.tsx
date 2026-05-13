@@ -1,4 +1,5 @@
 import TrustSafety from "@/components/Trust&safety/trust-safety";
+export const dynamic = "force-static";
 
 export const metadata = {
   title: "Trust & Safety | Taskoria",

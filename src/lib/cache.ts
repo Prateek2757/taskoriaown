@@ -26,7 +26,7 @@ export const getCategoriesFromDB = unstable_cache(
   },
   ["all-categories"],
   {
-    revalidate: 86400,
+    revalidate: 604800,
     tags: ["categories"],
   }
 );
@@ -75,7 +75,7 @@ export const getCategoryQuestionsFromDB = unstable_cache(
   },
   ["category-questions"],
   {
-    revalidate: 21600, // 6 hours
+    revalidate: 604800, 
     tags: ["category-questions"],
   }
 );
@@ -124,7 +124,7 @@ export const getServiceProvidersFromDB = unstable_cache(
   },
   ["service-providers"],
   {
-    revalidate: 300, // 5 minutes
+    revalidate: 900, 
     tags: ["service-providers"],
   }
 );
@@ -193,3 +193,52 @@ export const getAllCities = unstable_cache(
   }
 );
 
+
+export const getCityBySlug = unstable_cache(
+  async (slug: string) => {
+    const result = await pool.query(
+      `
+      SELECT
+        c.city_id, c.name, c.slug, c.display_name,
+        c.popularity, c.latitude, c.longitude, c.image_url,
+        c.parent_city_id,
+        s.slug AS state_slug,
+        s.name AS state_name,
+        co.name AS country_name
+      FROM cities c
+      LEFT JOIN states s ON c.state_id = s.state_id
+      JOIN countries co ON c.country_id = co.country_id
+      WHERE c.slug = $1
+      LIMIT 1
+    `,
+      [slug]
+    );
+
+    return result.rows[0] || null;
+  },
+  ["city-by-slug"],
+  {
+    revalidate: 86400,
+  }
+);
+
+export const getSubcities = unstable_cache(
+  async (cityId: number) => {
+    const result = await pool.query(
+      `
+      SELECT city_id, name, slug, display_name,
+             popularity, latitude, longitude, image_url
+      FROM cities
+      WHERE parent_city_id = $1
+      ORDER BY popularity DESC
+    `,
+      [cityId]
+    );
+
+    return result.rows;
+  },
+  ["subcities"],
+  {
+    revalidate: 86400,
+  }
+);

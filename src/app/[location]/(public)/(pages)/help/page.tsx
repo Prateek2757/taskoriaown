@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Search, Mail } from "lucide-react";
 import { ARTICLES, POPULAR_ARTICLES } from "../help-center/articles";
 import HelpSearch from "../help-center/HelpSearch";
+export const dynamic = "force-static";
 
 export const metadata = {
   title: "Help Center | Taskoria",

@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
 import { getServiceProvidersFromDB } from "@/lib/cache";
+import { NextRequest } from "next/server";
 
-export const revalidate = 300;
-
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
-    const serviceSlug = searchParams.get("service");
-    const citySlug = searchParams.get("city");
+    const serviceSlug = req.nextUrl.searchParams.get("service");
+    const citySlug = req.nextUrl.searchParams.get("city");
 
     if (!serviceSlug || !citySlug) {
       return NextResponse.json(
@@ -20,7 +18,8 @@ export async function GET(req: Request) {
 
     return NextResponse.json(rows, {
       headers: {
-        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600",
+        "Cache-Control":
+          "public, s-maxage=300, stale-while-revalidate=3600",
       },
     });
   } catch (error) {

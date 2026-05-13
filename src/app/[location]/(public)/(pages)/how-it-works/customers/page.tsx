@@ -3,8 +3,8 @@
 import NewRequestModal from "@/components/leads/RequestModal";
 import Link from "next/link";
 import { useState } from "react";
+export const dynamic = "force-static";
 
-// ── FAQ ───────────────────────────────────────────────────────────────────────
 const faqs = [
   {
     q: "Is it free to post a task?",

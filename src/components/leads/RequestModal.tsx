@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Dialog,
@@ -65,14 +65,17 @@ export default function NewRequestModal({
   const [stepTwoKey, setStepTwoKey] = useState(0);
   const [initialized, setInitialized] = useState(false);
 
+  const fetchedRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (!selectedCategoryId) return;
-
-    
-
+  
+    if (fetchedRef.current === selectedCategoryId) return;
+    fetchedRef.current = selectedCategoryId;
+  
     setQuestions([]);
     setQuestionsLoading(true);
-
+  
     axios
       .get(`/api/category-questions/${selectedCategoryId}`)
       .then((res) => setQuestions(res.data))

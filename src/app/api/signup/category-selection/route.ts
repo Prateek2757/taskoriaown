@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCategoriesFromDB } from "@/lib/cache";
 
-export const revalidate = 3600;
 
 export async function GET() {
   try {
@@ -10,7 +9,7 @@ export async function GET() {
     return NextResponse.json(rows, {
       headers: {
         
-        "Cache-Control": "public, s-maxage=84600, stale-while-revalidate=86400",
+        "Cache-Control": "public, s-maxage=604800, stale-while-revalidate=86400",
       },
     });
   } catch (err) {

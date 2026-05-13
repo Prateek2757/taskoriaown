@@ -11,6 +11,7 @@ import {
   Locate,
   MapPin,
 } from "lucide-react";
+export const dynamic = "force-static";
 
 export default function ContactSupport() {
   const [formData, setFormData] = useState({
