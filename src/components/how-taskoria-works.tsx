@@ -133,9 +133,7 @@ export default function HowTaskoriaWorks() {
           </h1> */}
 
           <div
-            className="text-4xl md:text-xl lg:text-5xl text-gray-800 dark:text-white font-extrabold tracking-tight mb-2
-                
-                  "
+            className=" flex text-4xl md:text-xl lg:text-5xl justify-center text-gray-800 dark:text-white font-extrabold tracking-tight mb-2 "
           >
             How hiring works on{" "}
             <span className="bg-[#2563EB] bg-clip-text text-transparent">
