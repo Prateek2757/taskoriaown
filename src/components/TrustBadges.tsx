@@ -151,8 +151,8 @@ function GoogleBadge({ data }: { data: ReviewData | null }) {
                 <span className="text-xs font-semibold text-gray-700 dark:text-gray-200 tabular-nums">
                 {Number(data?.ratings || 0).toFixed(1)}                </span>
               </div>
-              <span className="text-[11px] text-gray-400 dark:text-gray-500 leading-none">
-              {Number(data?.totalRatings || 0).toLocaleString()}              </span>
+              {/* <span className="text-[11px] text-gray-400 dark:text-gray-500 leading-none">
+              {Number(data?.totalRatings || 0).toLocaleString()}              </span> */}
             </motion.div>
           </AnimatePresence>
         )}

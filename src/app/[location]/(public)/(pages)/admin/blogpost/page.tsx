@@ -25,7 +25,6 @@ interface FormValues {
   published_at: string;
 }
 
-// ─── Constants ────────────────────────────────────────────────────────────────
 
 const CATEGORIES = [
   "Tips & Guides",
@@ -227,7 +226,6 @@ export default function NewBlogPostPage() {
   const readTime = content ? calcReadTime(content) : "—";
   const wordCount = content ? calcWordCount(content) : 0;
 
-  // Auto-slug on title change
   const handleTitleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const val = e.target.value;
@@ -239,11 +237,30 @@ export default function NewBlogPostPage() {
 
   function addTag() {
     const raw = getValues("tagInput").trim();
+  
     if (!raw) return;
+  
+    // Split by newline or comma
+    const parsedTags = raw
+      .split(/\n|,/)
+      .map((tag) =>
+        tag
+          .replace(/^\*\s*/, "") // remove leading *
+          .trim()
+      )
+      .filter(Boolean);
+  
     const current = getValues("tags");
-    if (!current.includes(raw)) {
-      setValue("tags", [...current, raw]);
-    }
+  
+    const uniqueTags = [
+      ...new Set([...current, ...parsedTags]),
+    ];
+  
+    setValue("tags", uniqueTags, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+  
     setValue("tagInput", "");
   }
 
@@ -254,7 +271,6 @@ export default function NewBlogPostPage() {
     );
   }
 
-  // Core submit — called by both Save draft and Publish
   const onSubmit = useCallback(
     async (data: FormValues, publish: boolean) => {
       const res = await fetch("/api/blog", {
@@ -288,18 +304,18 @@ export default function NewBlogPostPage() {
       }
 
       toast.success(publish ? "Post published!" : "Draft saved!");
-      router.push("/admin/blog");
+      router.push("/blog");
     },
     [router]
   );
 
-  const handleSaveDraft: SubmitHandler<FormValues> = async (data) => {
-    try {
-      await onSubmit(data, false);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to save draft");
-    }
-  };
+  // const handleSaveDraft: SubmitHandler<FormValues> = async (data) => {
+  //   try {
+  //     await onSubmit(data, false);
+  //   } catch (err) {
+  //     toast.error(err instanceof Error ? err.message : "Failed to save draft");
+  //   }
+  // };
 
   const handlePublish: SubmitHandler<FormValues> = async (data) => {
     try {
@@ -317,7 +333,7 @@ export default function NewBlogPostPage() {
             <h1 className="text-[17px] font-semibold text-zinc-900 dark:text-white truncate">
               New post
             </h1>
-            <span
+            {/* <span
               className={`shrink-0 inline-flex items-center text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${
                 isPublished
                   ? "bg-green-50 dark:bg-green-950/60 border-green-200 dark:border-green-800 text-green-700 dark:text-green-400"
@@ -325,11 +341,11 @@ export default function NewBlogPostPage() {
               }`}
             >
               {isPublished ? "Published" : "Draft"}
-            </span>
+            </span> */}
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <button
+            {/* <button
               type="button"
               onClick={handleSubmit(handleSaveDraft)}
               disabled={isSubmitting}
@@ -364,7 +380,7 @@ export default function NewBlogPostPage() {
                 />
               </svg>
               Save draft
-            </button>
+            </button> */}
 
             <button
               type="button"
@@ -397,7 +413,7 @@ export default function NewBlogPostPage() {
         </div>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px]">
+      <div className="grid">
         <div className="p-6  space-y-4 border-r border-zinc-200 dark:border-zinc-800 min-h-[calc(100vh-56px)]">
           <Card>
             <div>
