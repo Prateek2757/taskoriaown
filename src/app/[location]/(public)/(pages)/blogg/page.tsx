@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "Taskoria",
     images: [
       {
-        url: "https://taskoria.com/og-image.png",
+        url: "https://www.taskoria.com/og-image.png",
         width: 1200,
         height: 630,
         alt: "Taskoria Blog",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     title: "Taskoria Blog",
     description:
       "Expert tips and insights for hiring and growing your business.",
-    images: ["https://taskoria.com/og-image.png"],
+    images: ["https://www.taskoria.com/og-image.png"],
   },
 };
 const page = () => {

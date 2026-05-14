@@ -30,6 +30,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  alternates: {
+    canonical: "https://www.taskoria.com./careers",
+  }
 };
 
 export default function CareersComingSoonPage() {

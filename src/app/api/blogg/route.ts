@@ -2,27 +2,56 @@ import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import { getAllBlogPosts } from "@/lib/cache";
-import { revalidateTag } from "next/cache";
 
 export async function GET(req: Request) {
-    const { searchParams } = new URL(req.url);
-    const category = searchParams.get("category") ?? undefined;
-    const featured = searchParams.get("featured") === "true";
-    const limit = Number(searchParams.get("limit") ?? 20);
-    const offset = Number(searchParams.get("offset") ?? 0);
-  
-    try {
-      const posts = await getAllBlogPosts(category, featured, limit, offset);
-  
-      return NextResponse.json(posts, {
-        headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600" },
-      });
-    } catch (err) {
-      console.error(err);
-      return NextResponse.json({ message: "Failed to fetch posts" }, { status: 500 });
-    }
+  const { searchParams } = new URL(req.url);
+  const category = searchParams.get("category");
+  const featured = searchParams.get("featured");
+  const limit = Number(searchParams.get("limit") ?? 20);
+  const offset = Number(searchParams.get("offset") ?? 0);
+
+  const session = await getServerSession(authOptions);
+  if (!session ) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
+
+  const client = await pool.connect();
+  try {
+    const conditions = ["is_published = true"];
+    const values: unknown[] = [];
+
+    if (category) {
+      values.push(category);
+      conditions.push(`category = $${values.length}`);
+    }
+    if (featured === "true") {
+      conditions.push("is_featured = true");
+    }
+
+    values.push(limit, offset);
+
+    const { rows } = await client.query(
+      `SELECT
+        post_id, slug, title, excerpt, author_name, author_role,
+        author_image, image_url, category, tags, is_featured,
+        views, likes, read_time, published_at
+       FROM blog_posts
+       WHERE ${conditions.join(" AND ")}
+       ORDER BY published_at DESC
+       LIMIT $${values.length - 1} OFFSET $${values.length}`,
+      values
+    );
+
+    return NextResponse.json(rows, {
+      headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600" },
+    });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ message: "Failed to fetch posts" }, { status: 500 });
+  } finally {
+    client.release();
+  }
+}
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -57,7 +86,7 @@ export async function POST(req: Request) {
         is_published, read_time, Number(session.user.id),
       ]
     );
-    revalidateTag("blog-posts", "default");
+
     return NextResponse.json(rows[0], { status: 201 });
   } catch (err: unknown) {
     if ((err as { code?: string }).code === "23505") {

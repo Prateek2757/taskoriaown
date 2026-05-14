@@ -242,3 +242,56 @@ export const getSubcities = unstable_cache(
     revalidate: 86400,
   }
 );
+
+export const getAllBlogPosts = unstable_cache(
+  async (category?: string, featured?: boolean, limit = 20, offset = 0) => {
+    const conditions = ["is_published = true"];
+    const values: unknown[] = [];
+
+    if (category) {
+      values.push(category);
+      conditions.push(`category = $${values.length}`);
+    }
+    if (featured) {
+      conditions.push("is_featured = true");
+    }
+
+    values.push(limit, offset);
+
+    const result = await pool.query(
+      `SELECT
+        post_id, slug, title, excerpt, author_name, author_role,
+        author_image, image_url, category, tags, is_featured,
+        views, likes, read_time, published_at
+       FROM blog_posts
+       WHERE ${conditions.join(" AND ")}
+       ORDER BY published_at DESC
+       LIMIT $${values.length - 1} OFFSET $${values.length}`,
+      values
+    );
+
+    return result.rows;
+  },
+  ["all-blog-posts"],
+  {
+    revalidate: 300,
+    tags: ["blog-posts"],
+  }
+);
+
+export const getBlogPostBySlug = unstable_cache(
+  async (slug: string) => {
+    const result = await pool.query(
+      `SELECT * FROM blog_posts
+       WHERE slug = $1 AND is_published = true
+       LIMIT 1`,
+      [slug]
+    );
+    return result.rows[0] ?? null;
+  },
+  ["blog-post-by-slug"],
+  {
+    revalidate: 300,
+    tags: ["blog-posts"],
+  }
+);

@@ -102,7 +102,7 @@ const TaskoriaBlog = () => {
             </div>
             <div className="flex">
               <div className="flex flex-col sm:flex-row gap-5  sm:items-start">
-                <div className="relative w-full sm:w-72 hidden">
+                <div className="relative w-full sm:w-72 hidden sm:block">
                   <input
                     type="text"
                     placeholder="Search..."
