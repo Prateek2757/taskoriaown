@@ -8,6 +8,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+
 export const BlogCard = ({ post, onClick, featured = false }) => {
   return (
     <article
@@ -21,7 +22,7 @@ export const BlogCard = ({ post, onClick, featured = false }) => {
     >
       <div className={`relative overflow-hidden ${featured ? "h-48" : "h-48"}`}>
         <img
-          src={post.image}
+          src={post.image_url}
           alt={post.title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
@@ -52,10 +53,10 @@ export const BlogCard = ({ post, onClick, featured = false }) => {
         <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-zinc-400 mb-3">
           <div className="flex items-center gap-1.5">
             <p className="text-sm font-semibold text-gray-900 dark:text-zinc-100">
-              {post.author} |
+              {post.author_name} |
             </p>
             <span className="font-semibold text-gray-900">
-              {post.publishedDate}
+              {post.published_at}
             </span>
           </div>
         </div>

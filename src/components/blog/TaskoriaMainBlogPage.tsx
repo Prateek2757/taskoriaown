@@ -1,24 +1,44 @@
 "use client";
 import { useState, useMemo, useRef, useEffect } from "react";
-import { TrendingUp, Sparkles } from "lucide-react";
+import { TrendingUp, Sparkles, Loader2 } from "lucide-react";
 import { BlogCard } from "./BlogCard";
 import { PostDetail } from "./PostDetails";
 import { blogPosts } from "./BlogData";
 import { Select } from "react-day-picker";
 import { MdArrowDropDown } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
-
+import { useRouter } from "next/navigation";
 
 const categories = ["All Posts", "For Providers", "Future of Work"];
 
+type Blog = {
+  post_id: number;
+  slug: string;
+  title: string;
+  excerpt: string;
+
+  author_name: string;
+  author_role: string;
+  category: string;
+  tags: string[];
+  is_featured: boolean;
+  views: number;
+  likes: number;
+  read_time: string;
+
+  published_at: string;
+  image_url: string;
+};
 const TaskoriaBlog = () => {
   const [currentView, setCurrentView] = useState("home");
   const [selectedPost, setSelectedPost] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("All Posts");
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [posts, setPosts] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+const router= useRouter();
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -32,30 +52,33 @@ const TaskoriaBlog = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
   const filteredPosts = useMemo(() => {
-    let posts =
+    let filtered =
       selectedCategory === "All Posts"
-        ? blogPosts
-        : blogPosts.filter((p) => p.category === selectedCategory);
+        ? posts
+        : posts.filter((p) => p.category === selectedCategory);
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      posts = posts.filter(
+      filtered = filtered.filter(
         (post) =>
           post.title.toLowerCase().includes(query) ||
           post.excerpt.toLowerCase().includes(query) ||
           post.tags.some((tag) => tag.toLowerCase().includes(query)),
       );
     }
-    return posts;
+    return filtered;
   }, [selectedCategory, searchQuery]);
 
-  const featuredPosts = blogPosts.filter((p) => p.featured);
-  const regularPosts = filteredPosts.filter((p) => !p.featured);
+  const featuredPosts = posts.filter((p) => p.is_featured);
+  const regularPosts = filteredPosts.filter((p) => !p.is_featured);
 
-  const handleSelectPost = (post) => {
-    setSelectedPost(post);
-    setCurrentView("post");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  // const handleSelectPost = (post) => {
+  //   setSelectedPost(post);
+  //   setCurrentView("post");
+  //   window.scrollTo({ top: 0, behavior: "smooth" });
+  // };
+    const handleSelectPost = (post:Blog) => {
+  router.push(`/blog/${post.slug}`);
   };
 
   const handleBackToHome = () => {
@@ -81,6 +104,20 @@ const TaskoriaBlog = () => {
     );
   }
 
+  useEffect(() => {
+    fetch("/api/blog")
+      .then((res) => res.json())
+      .then(setPosts)
+      .finally(() => setLoading(false));
+  }, []);
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <Loader2 className="animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+  console.log("output:", posts);
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-zinc-950 dark:to-zinc-900">
       <section className="relative overflow-hidden my-6">
@@ -187,7 +224,7 @@ const TaskoriaBlog = () => {
             <div className="grid md:grid-cols-6 gap-8">
               {featuredPosts.map((post) => (
                 <BlogCard
-                  key={post.id}
+                  key={post.post_id}
                   post={post}
                   onClick={() => handleSelectPost(post)}
                   featured={true}
@@ -209,7 +246,7 @@ const TaskoriaBlog = () => {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {regularPosts.map((post) => (
               <BlogCard
-                key={post.id}
+                key={post.post_id}
                 post={post}
                 onClick={() => handleSelectPost(post)}
               />
