@@ -1,19 +1,25 @@
 "use client";
-import { Calendar, Clock, ArrowRight, Eye, Heart, TrendingUp } from "lucide-react";
-
+import {
+  Calendar,
+  Clock,
+  ArrowRight,
+  Eye,
+  Heart,
+  TrendingUp,
+} from "lucide-react";
 
 export const BlogCard = ({ post, onClick, featured = false }) => {
   return (
     <article
       onClick={onClick}
-      className={`group relative rounded-2xl overflow-hidden cursor-pointer
+      className={`group relative rounded-xl overflow-hidden cursor-pointer
         bg-white dark:bg-zinc-900
         border border-gray-200 dark:border-zinc-800
         shadow-lg hover:shadow-2xl dark:shadow-zinc-950/50
         transition-all duration-500
         ${featured ? "md:col-span-2" : ""}`}
     >
-      <div className={`relative overflow-hidden ${featured ? "h-80" : "h-56"}`}>
+      <div className={`relative overflow-hidden ${featured ? "h-48" : "h-48"}`}>
         <img
           src={post.image}
           alt={post.title}
@@ -42,69 +48,46 @@ export const BlogCard = ({ post, onClick, featured = false }) => {
         )} */}
       </div>
 
-      <div className={`p-6 ${featured ? "md:p-8" : ""}`}>
+      <div className={`p-5 ${featured ? "md:p-6" : ""}`}>
         <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-zinc-400 mb-3">
           <div className="flex items-center gap-1.5">
-            <Calendar size={14} />
-            <span>{new Date(post.publishedDate).toLocaleDateString()}</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Clock size={14} />
-            <span>{post.readTime}</span>
+            <p className="text-sm font-semibold text-gray-900 dark:text-zinc-100">
+              {post.author} |
+            </p>
+            <span className="font-semibold text-gray-900">
+              {post.publishedDate}
+            </span>
           </div>
         </div>
 
         <h3
-          className={`font-bold italic mb-3 line-clamp-2
+          className={`font-bold  mb-1 line-clamp-2
             text-gray-900 dark:text-zinc-50
             group-hover:text-blue-600 dark:group-hover:text-blue-400
             transition-colors duration-300
-            ${featured ? "text-2xl" : "text-xl"}`}
+            ${featured ? "text-md" : "text-md"}`}
         >
           {post.title}
         </h3>
 
         <p
-          className={`mb-4 text-gray-700 dark:text-zinc-300 ${
-            featured ? "text-base line-clamp-3" : "text-sm line-clamp-2"
+          className={`mb-1 text-gray-700 dark:text-zinc-300 ${
+            featured ? "text-sm line-clamp-3" : "text-sm line-clamp-2"
           }`}
         >
           {post.excerpt}
         </p>
-
-        <div className="flex flex-wrap gap-2 mb-4">
-          {post.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="px-3 py-1 rounded-lg text-xs font-medium bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
-            >
-              #{tag.replace(/\s+/g, "")}
-            </span>
-          ))}
+        <div className="flex items-center gap-2 text-sm font-semibold underline text-blue-600 dark:text-blue-400 group-hover:gap-3 transition-all">
+          Learn More
         </div>
 
-        <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-zinc-800">
+        {/* <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-zinc-800">
           <div className="flex items-center gap-3">
-            <img
-              src={post.authorImage}
-              alt={post.author}
-              className="w-10 h-10 rounded-full object-cover ring-2 ring-blue-100 dark:ring-blue-500/30"
-            />
-            <div>
-              <p className="text-sm font-semibold text-gray-900 dark:text-zinc-100">
-                {post.author}
-              </p>
-              <p className="text-xs text-gray-600 dark:text-zinc-400">
-                {post.authorRole}
-              </p>
-            </div>
+     
           </div>
 
-          <div className="flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400 group-hover:gap-3 transition-all">
-            Read More
-            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </div>
-        </div>
+     
+        </div> */}
       </div>
 
       {post.views > 3000 && (
