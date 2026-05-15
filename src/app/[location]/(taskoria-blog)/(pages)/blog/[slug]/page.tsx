@@ -8,7 +8,7 @@ type Props = {
     slug: string;
   }>;
 };
-interface post {
+interface Post {
   post_id: number;
   slug: string;
   title: string;
@@ -22,7 +22,7 @@ interface post {
   views: number;
   likes: number;
   read_time: string;
-
+content?:string;
   published_at: string;
   image_url: string;
 }
@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function page({ params }: Props) {
   const { slug } = await params;
-  const post: post | null = await getBlogPostBySlug(slug);
+  const post: Post | null = await getBlogPostBySlug(slug);
   if (!post) notFound();
   return (
     <>

@@ -1,4 +1,3 @@
-
 import parse, {
   domToReact,
   HTMLReactParserOptions,

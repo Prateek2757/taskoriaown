@@ -21,7 +21,7 @@ interface Post {
 
   published_at: string;
   image_url: string;
-  content: string;
+  content?: string;
 }
 
 interface Props {
