@@ -3,7 +3,7 @@
 import {  Tag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
-
+import { renderContent } from "../renderContent";
 interface Post {
   post_id: number;
   slug: string;
@@ -68,10 +68,12 @@ export default function BlogDetails({ post }: Props) {
           <img src={post.image_url} alt={post.author_name} />
         </div>
 
-        <div
-          className="prose prose-xl text-gray-800 leading-7 tracking-wider dark:prose-invert max-w-none"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
+        {/* <div >
+         <p>{renderContent(post.content)}</p>
+      </div> */}
+      <div className="prose dark:prose-invert max-w-none">
+  {renderContent(post.content)}
+</div>
         <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-200 dark:border-zinc-800">
           {post.tags.map((tag) => (
             <span

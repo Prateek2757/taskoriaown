@@ -29,7 +29,7 @@ type Blog = {
 const TaskoriaBlog = () => {
   const [currentView, setCurrentView] = useState("home");
   const [selectedPost, setSelectedPost] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState("All Posts");
+  const [selectedCategory, setSelectedCategory] = useState("Blog Categories");
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [posts, setPosts] = useState<Blog[]>([]);
@@ -39,12 +39,12 @@ const TaskoriaBlog = () => {
 
   const categories = useMemo(() => {
     const category = [...new Set(posts.map((p) => p.category))];
-    return ["All Posts", ...category];
+    return ["Blog Categories", ...category];
   }, [posts]);
 
 const filteredPosts = useMemo(() => {
   let filtered =
-    selectedCategory === "All Posts"
+    selectedCategory === "Blog Categories"
       ? posts
       : posts.filter((p) => p.category === selectedCategory);
 
@@ -106,7 +106,7 @@ const filteredPosts = useMemo(() => {
     );
   }
   const displayPosts =
-    searchQuery || selectedCategory !== "All Posts"
+    searchQuery || selectedCategory !== "Blog Categories"
       ? filteredPosts
       : regularPosts;
   // const handleSelectPost = (post) => {
@@ -238,7 +238,7 @@ const filteredPosts = useMemo(() => {
           </div>
         </div>
 
-        {selectedCategory === "All Posts" && searchQuery === "" && (
+        {selectedCategory === "Blog Categories" && searchQuery === "" && (
           <section className="mb-8 -mt-10 ">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-8 flex items-center gap-3">
               <TrendingUp className="text-blue-600 dark:text-blue-400" />
@@ -261,7 +261,7 @@ const filteredPosts = useMemo(() => {
         <section className="-mt-6">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-4 flex items-center gap-3">
             <Sparkles className="text-blue-600 dark:text-blue-400" />
-            {selectedCategory === "All Posts"
+            {selectedCategory === "Blog Categories"
               ? "Latest Articles"
               : selectedCategory}
           </h2>
