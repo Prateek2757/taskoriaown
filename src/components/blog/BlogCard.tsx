@@ -1,14 +1,19 @@
 "use client";
 import {
-  Calendar,
-  Clock,
-  ArrowRight,
-  Eye,
-  Heart,
   TrendingUp,
 } from "lucide-react";
 
+
+
 export const BlogCard = ({ post, onClick, featured = false }) => {
+    const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   return (
     <article
       onClick={onClick}
@@ -21,7 +26,7 @@ export const BlogCard = ({ post, onClick, featured = false }) => {
     >
       <div className={`relative overflow-hidden ${featured ? "h-48" : "h-48"}`}>
         <img
-          src={post.image}
+          src={post.image_url}
           alt={post.title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
@@ -52,10 +57,10 @@ export const BlogCard = ({ post, onClick, featured = false }) => {
         <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-zinc-400 mb-3">
           <div className="flex items-center gap-1.5">
             <p className="text-sm font-semibold text-gray-900 dark:text-zinc-100">
-              {post.author} |
+              {post.author_name} |
             </p>
             <span className="font-semibold text-gray-900">
-              {post.publishedDate}
+              {formatDate(post.published_at)}
             </span>
           </div>
         </div>
@@ -81,13 +86,6 @@ export const BlogCard = ({ post, onClick, featured = false }) => {
           Learn More
         </div>
 
-        {/* <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-zinc-800">
-          <div className="flex items-center gap-3">
-     
-          </div>
-
-     
-        </div> */}
       </div>
 
       {post.views > 3000 && (

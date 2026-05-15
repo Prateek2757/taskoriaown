@@ -1,24 +1,70 @@
 "use client";
 import { useState, useMemo, useRef, useEffect } from "react";
-import { TrendingUp, Sparkles } from "lucide-react";
+import { TrendingUp, Sparkles, Loader2 } from "lucide-react";
 import { BlogCard } from "./BlogCard";
 import { PostDetail } from "./PostDetails";
 import { blogPosts } from "./BlogData";
-import { Select } from "react-day-picker";
 import { MdArrowDropDown } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
+type Blog = {
+  post_id: number;
+  slug: string;
+  title: string;
+  excerpt: string;
 
-const categories = ["All Posts", "For Providers", "Future of Work"];
+  author_name: string;
+  author_role: string;
+  category: string;
+  tags: string[];
+  is_featured: boolean;
+  views: number;
+  likes: number;
+  read_time: string;
 
+  published_at: string;
+  image_url: string;
+};
 const TaskoriaBlog = () => {
   const [currentView, setCurrentView] = useState("home");
   const [selectedPost, setSelectedPost] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("All Posts");
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [posts, setPosts] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
+  const categories = useMemo(() => {
+    const category = [...new Set(posts.map((p) => p.category))];
+    return ["All Posts", ...category];
+  }, [posts]);
+
+const filteredPosts = useMemo(() => {
+  let filtered =
+    selectedCategory === "All Posts"
+      ? posts
+      : posts.filter((p) => p.category === selectedCategory);
+
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase();
+
+    filtered = filtered.filter((post) => {
+      return (
+        post.title.toLowerCase().includes(query) ||
+        post.excerpt.toLowerCase().includes(query) ||
+        post.category.toLowerCase().includes(query)
+      );
+    });
+  }
+
+  return filtered;
+}, [posts, selectedCategory, searchQuery]);
+
+  const featuredPosts = filteredPosts.filter((p) => p.is_featured);
+  const regularPosts = filteredPosts.filter((p) => !p.is_featured);
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -31,31 +77,30 @@ const TaskoriaBlog = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  const filteredPosts = useMemo(() => {
-    let posts =
-      selectedCategory === "All Posts"
-        ? blogPosts
-        : blogPosts.filter((p) => p.category === selectedCategory);
-
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      posts = posts.filter(
-        (post) =>
-          post.title.toLowerCase().includes(query) ||
-          post.excerpt.toLowerCase().includes(query) ||
-          post.tags.some((tag) => tag.toLowerCase().includes(query)),
-      );
-    }
-    return posts;
-  }, [selectedCategory, searchQuery]);
-
-  const featuredPosts = blogPosts.filter((p) => p.featured);
-  const regularPosts = filteredPosts.filter((p) => !p.featured);
-
-  const handleSelectPost = (post) => {
-    setSelectedPost(post);
-    setCurrentView("post");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  useEffect(() => {
+    fetch("/api/blog")
+      .then((res) => res.json())
+      .then(setPosts)
+      .finally(() => setLoading(false));
+  }, []);
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <Loader2 className="animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+  const displayPosts =
+    searchQuery || selectedCategory !== "All Posts"
+      ? filteredPosts
+      : regularPosts;
+  // const handleSelectPost = (post) => {
+  //   setSelectedPost(post);
+  //   setCurrentView("post");
+  //   window.scrollTo({ top: 0, behavior: "smooth" });
+  // };
+  const handleSelectPost = (post: Blog) => {
+    router.push(`/blog/${post.slug}`);
   };
 
   const handleBackToHome = () => {
@@ -64,7 +109,7 @@ const TaskoriaBlog = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (currentView === "post" && selectedPost) {
+  if (currentView === "All Post" && selectedPost) {
     const relatedPosts = blogPosts
       .filter(
         (p) => p.id !== selectedPost.id && p.category === selectedPost.category,
@@ -80,6 +125,7 @@ const TaskoriaBlog = () => {
       />
     );
   }
+  console.log("seachQuery", searchQuery);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-zinc-950 dark:to-zinc-900">
@@ -127,15 +173,17 @@ const TaskoriaBlog = () => {
         <div className=" px-8 pb-14 -mt-4  mb-8 rounded-sm w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-end">
             <div>
-              <p className="text-md font-semibold text-blue-700 mb-4">Filter</p>
+              <p className=" text-xl sm:text-3xl font-semibold text-blue-600 mb-4">
+                Filter
+              </p>
 
               <div className="relative w-full max-w-xs" ref={dropdownRef}>
                 <div
                   onClick={() => setIsOpen((prev) => !prev)}
                   className="flex items-center justify-between cursor-pointer"
                 >
-                  <span className="text-sm text-gray-700 font-medium">
-                    {selectedCategory || "Blog Categories"}
+                  <span className="text-md text-gray-700 font-medium">
+                    Blog Categories
                   </span>
 
                   <MdArrowDropDown
@@ -146,10 +194,10 @@ const TaskoriaBlog = () => {
                   />
                 </div>
 
-                <div className="mt-2 h-[2px] w-full bg-gray-300"></div>
+                <div className="mt-2 h-[2px]  bg-gray-300"></div>
 
                 {isOpen && (
-                  <div className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 shadow-lg z-50 rounded-md overflow-hidden">
+                  <div className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 shadow-lg z-50 rounded-sm overflow-hidden">
                     {categories.map((category, index) => (
                       <button
                         key={category}
@@ -176,7 +224,6 @@ const TaskoriaBlog = () => {
           </div>
         </div>
 
-        {/* Featured Section */}
         {selectedCategory === "All Posts" && searchQuery === "" && (
           <section className="mb-8 -mt-10 ">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-8 flex items-center gap-3">
@@ -187,7 +234,7 @@ const TaskoriaBlog = () => {
             <div className="grid md:grid-cols-6 gap-8">
               {featuredPosts.map((post) => (
                 <BlogCard
-                  key={post.id}
+                  key={post.post_id}
                   post={post}
                   onClick={() => handleSelectPost(post)}
                   featured={true}
@@ -197,7 +244,6 @@ const TaskoriaBlog = () => {
           </section>
         )}
 
-        {/* Latest Articles */}
         <section className="-mt-6">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-4 flex items-center gap-3">
             <Sparkles className="text-blue-600 dark:text-blue-400" />
@@ -205,16 +251,24 @@ const TaskoriaBlog = () => {
               ? "Latest Articles"
               : selectedCategory}
           </h2>
-
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {regularPosts.map((post) => (
+            {displayPosts.map((post) => (
               <BlogCard
-                key={post.id}
+                key={post.post_id}
                 post={post}
                 onClick={() => handleSelectPost(post)}
               />
             ))}
           </div>
+          {/* <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {regularPosts.map((post) => (
+              <BlogCard
+                key={post.post_id}
+                post={post}
+                onClick={() => handleSelectPost(post)}
+              />
+            ))}
+          </div> */}
         </section>
       </main>
       <style>{`
