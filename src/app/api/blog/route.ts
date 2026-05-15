@@ -6,13 +6,7 @@ import { getAllBlogPosts } from "@/lib/cache";
 import { revalidateTag } from "next/cache";
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const category = searchParams.get("category") ?? undefined;
-  const featured = searchParams.get("featured") === "true";
-  const limit = Number(searchParams.get("limit") ?? 20);
-  const offset = Number(searchParams.get("offset") ?? 0);
-  const isAdmin = searchParams.get("admin") === "true";
-
+ 
   try {
     const client = await pool.connect();
     try {

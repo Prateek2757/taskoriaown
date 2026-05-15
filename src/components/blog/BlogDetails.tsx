@@ -44,7 +44,7 @@ export default function BlogDetails({ post }: Props) {
         <div className="mb-3 flex flex-col">
           <button
             className="group inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-all hover:gap-3"
-            onClick={() => router.back()}
+            onClick={() => router.push("./")}
           >
             <IoIosArrowBack  size={32}
               className="group-hover:-translate-x-1 transition-transform duration-300"/><span className="text-left">Back</span>

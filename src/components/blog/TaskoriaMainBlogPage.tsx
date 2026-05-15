@@ -26,14 +26,14 @@ type Blog = {
   published_at: string;
   image_url: string;
 };
-const TaskoriaBlog = () => {
+const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
   const [currentView, setCurrentView] = useState("home");
   const [selectedPost, setSelectedPost] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("All Posts");
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [posts, setPosts] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState<Blog[]>(initialPosts);
+  // const [loading, setLoading] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -77,34 +77,33 @@ const filteredPosts = useMemo(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const res = await fetch("/api/blog");
-        const data = await res.json();
-  console.log(
-    data,"data"
-  );
+  // useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     try {
+  //       const res = await fetch("/api/blog");
+  //       const data = await res.json();
+  // console.log(
+  //   data,"data"
+  // );
 
-        setPosts(data.posts);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       setPosts(data.posts);
+  //     } catch (error) {
+  //       console.error(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
   
-    fetchPosts();
-  }, []);
-  console.log(posts,"psotes");
+  //   fetchPosts();
+  // }, []);
   
-  if (loading) {
-    return (
-      <div className="flex justify-center py-10">
-        <Loader2 className="animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center py-10">
+  //       <Loader2 className="animate-spin text-muted-foreground" />
+  //     </div>
+  //   );
+  // }
   const displayPosts =
     searchQuery || selectedCategory !== "All Posts"
       ? filteredPosts

@@ -257,7 +257,7 @@ function PostRow({
 
       <td className="py-3 px-4">
         <div className="flex items-center gap-1  transition-opacity">
-          <Link
+          {/* <Link
             href={`/admin/blog/edit/${post.slug}`}
             className="inline-flex items-center justify-center w-7 h-7 rounded-md
               hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-500 dark:text-zinc-600
@@ -265,7 +265,7 @@ function PostRow({
             title="Edit post"
           >
             <Pen className="w-5 h-5" />
-          </Link>
+          </Link> */}
           <a
             href={`/blog/${post.slug}`}
             target="_blank"
@@ -383,7 +383,7 @@ export default function AdminBlogPage() {
                 onClick={() => setFilter(f)}
                 className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors capitalize ${
                   filter === f
-                    ? "bg-zinc-500 dark:bg-zinc-400 text-[#2563EB] dark:text-zinc-900 border-zinc-900 dark:border-blue-600"
+                    ? "bg-zinc-200 dark:bg-zinc-400 text-[#2563EB] dark:text-zinc-900 border-zinc-900 dark:border-blue-600"
                     : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-600 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800"
                 }`}
               >

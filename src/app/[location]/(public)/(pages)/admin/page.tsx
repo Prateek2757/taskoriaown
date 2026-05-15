@@ -12,6 +12,7 @@ import {
   CheckCircle,
   DollarSign,
   AlertTriangle,
+  BookOpen,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -133,6 +134,19 @@ const SECTIONS = [
     badgeKey: null,
     badgeLabel: null,
   },
+  // Add to SECTIONS array after the Refunds entry:
+{
+  label: "Blog",
+  href: "/admin/blog",
+  icon: BookOpen,        // add to lucide imports
+  accent: "from-blue-500 to-blue-700",
+  ring: "ring-violet-500/20",
+  shadow: "shadow-violet-500/10",
+  desc: "Create, edit, and publish SEO blog posts. Manage drafts, featured posts, and content for the Taskoria blog.",
+  actions: ["Write new post", "Manage drafts", "Edit published posts"],
+  badgeKey: "draftPosts" as const,
+  badgeLabel: "unpublished drafts",
+},
 ] as const;
 
 export default function AdminHubPage() {
@@ -244,6 +258,13 @@ export default function AdminHubPage() {
             color: "text-blue-400",
             bg: "bg-blue-500/10",
           },
+          // {
+          //   icon: BookOpen,
+          //   label: "Blog Posts",
+          //   value: stats.loading ? null : "",
+          //   color: "text-violet-400",
+          //   bg: "bg-violet-500/10",
+          // },
         ].map(({ icon: Icon, label, value, color, bg }) => (
           <div
             key={label}
