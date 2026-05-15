@@ -1,6 +1,7 @@
 import { Poppins } from "next/font/google";
 import "../../globals.css";
 import AuthProvider from "@/context/AuthProvider";
+import BlogNavbar from "@/components/Blog-Navbar";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -19,6 +20,8 @@ export default function DashboardLayout({
         className="min-h-screen bg-slate-100 dark:bg-slate-950"
         suppressHydrationWarning
       >
+        {" "}
+        <BlogNavbar />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

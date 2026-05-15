@@ -4,7 +4,6 @@ import { TrendingUp, Sparkles, Loader2 } from "lucide-react";
 import { BlogCard } from "./BlogCard";
 import { PostDetail } from "./PostDetails";
 import { blogPosts } from "./BlogData";
-import { Select } from "react-day-picker";
 import { MdArrowDropDown } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import { useRouter } from "next/navigation";
@@ -38,7 +37,51 @@ const TaskoriaBlog = () => {
   const [posts, setPosts] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
-const router= useRouter();
+  const router = useRouter();
+
+  
+
+
+  // const filteredPosts = useMemo(() => {
+  //   let filtered =
+  //     selectedCategory === "All Posts"
+  //       ? posts
+  //       : posts.filter((p) => p.category === selectedCategory);
+
+  //   if (searchQuery.trim()) {
+  //     const query = searchQuery.toLowerCase();
+  //     filtered = filtered.filter(
+  //       (post) =>
+  //         post.title.toLowerCase().includes(query) ||
+  //         post.excerpt.toLowerCase().includes(query) ||
+  //         post.tags.some((tag) => tag.toLowerCase().includes(query)),
+  //     );
+  //   }
+  //   return filtered;
+  // }, [selectedCategory, searchQuery]);
+ 
+ const categories = useMemo(() => {
+    const category = [...new Set(posts.map((p) => p.category))];
+    return ["All Posts", ...category];
+  }, [posts]);
+  const filteredPosts = useMemo(() => {
+    let filtered =
+      selectedCategory === "All Posts"
+        ? posts
+        : posts.filter((p) => p.category === selectedCategory);
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (post) =>
+          post.title.toLowerCase().includes(query) ||
+          post.excerpt.toLowerCase().includes(query) ||
+          post.title.toLowerCase().includes(query),
+      );
+    }
+    return filtered;
+  }, [posts, selectedCategory, searchQuery]);
+  const featuredPosts = filteredPosts.filter((p) => p.is_featured);
+  const regularPosts = filteredPosts.filter((p) => !p.is_featured);
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -51,34 +94,26 @@ const router= useRouter();
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  const filteredPosts = useMemo(() => {
-    let filtered =
-      selectedCategory === "All Posts"
-        ? posts
-        : posts.filter((p) => p.category === selectedCategory);
-
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (post) =>
-          post.title.toLowerCase().includes(query) ||
-          post.excerpt.toLowerCase().includes(query) ||
-          post.tags.some((tag) => tag.toLowerCase().includes(query)),
-      );
-    }
-    return filtered;
-  }, [selectedCategory, searchQuery]);
-
-  const featuredPosts = posts.filter((p) => p.is_featured);
-  const regularPosts = filteredPosts.filter((p) => !p.is_featured);
-
+  useEffect(() => {
+    fetch("/api/blog")
+      .then((res) => res.json())
+      .then(setPosts)
+      .finally(() => setLoading(false));
+  }, []);
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <Loader2 className="animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
   // const handleSelectPost = (post) => {
   //   setSelectedPost(post);
   //   setCurrentView("post");
   //   window.scrollTo({ top: 0, behavior: "smooth" });
   // };
-    const handleSelectPost = (post:Blog) => {
-  router.push(`/blog/${post.slug}`);
+  const handleSelectPost = (post: Blog) => {
+    router.push(`/blog/${post.slug}`);
   };
 
   const handleBackToHome = () => {
@@ -87,7 +122,7 @@ const router= useRouter();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (currentView === "post" && selectedPost) {
+  if (currentView === "All Post" && selectedPost) {
     const relatedPosts = blogPosts
       .filter(
         (p) => p.id !== selectedPost.id && p.category === selectedPost.category,
@@ -104,19 +139,6 @@ const router= useRouter();
     );
   }
 
-  useEffect(() => {
-    fetch("/api/blog")
-      .then((res) => res.json())
-      .then(setPosts)
-      .finally(() => setLoading(false));
-  }, []);
-  if (loading) {
-    return (
-      <div className="flex justify-center py-10">
-        <Loader2 className="animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-zinc-950 dark:to-zinc-900">
       <section className="relative overflow-hidden my-6">

@@ -5,7 +5,7 @@ import TaskoriaBlog from "@/components/blog/TaskoriaMainBlogPage";
 const page = () => {
   return (
     <>
-      <BlogNavbar />
+    
       <TaskoriaBlog />
       
     </>
