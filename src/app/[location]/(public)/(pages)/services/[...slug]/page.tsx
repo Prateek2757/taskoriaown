@@ -2,10 +2,11 @@
 import ServicePageWrapper from "@/components/servicePage/ServicePageWrapper";
 import ServiceStatePageClient from "@/components/servicePage/Servicestatepageclient";
 import StructuredData from "@/components/servicePage/StructureData";
-import { getAllCities, getCategoryBySlug } from "@/lib/cache";
+import { getAllCities, getCategoriesFromDB, getCategoryBySlug } from "@/lib/cache";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 export const dynamic = "force-static";
+export const revalidate = 604800;
 
 type Props = {
   params: Promise<{ slug?: string[] }>;
@@ -35,7 +36,7 @@ export interface City {
   state_name: string;
   country_name: string;
   subcities: { city_id: number; name: string; slug: string }[];
-  providers?: any[]; // Add this property if providers are expected
+  providers?: any[]; 
 }
 
 
@@ -288,9 +289,65 @@ export default async function ServicePage({ params }: Props) {
         citySlug={citySlug}
         stateSlug={stateSlug}
         subCitySlug={subCitySlug}
-      />z
+      />
+      
     </>
   );
+  
 }
 
+export async function generateStaticParams() {
+  try {
+    const [cities, categoriesRaw] = await Promise.all([
+      getAllCities(),
+      getCategoriesFromDB(),
+    ]);
+
+    const params: { slug: string[] }[] = [];
+
+    const categories = categoriesRaw.filter((c) => !c.parent_category_id);
+
+  
+    for (const cat of categories) {
+      if (cat.slug) params.push({ slug: [cat.slug] });
+    }
+  
+    const uniqueStates = [
+      ...new Map(
+        cities
+          .filter((c) => c.state_slug)
+          .map((c) => [c.state_slug, c.state_slug])
+      ).values(),
+    ];
+
+    for (const cat of categories) {
+      for (const stateSlug of uniqueStates) {
+        if (cat.slug) params.push({ slug: [cat.slug, stateSlug] });
+      }
+    }
+
+ 
+    const topCities = [...cities]
+      .sort((a, b) => b.popularity - a.popularity)
+      .filter(
+        (c, i, arr) =>
+          arr.findIndex((x) => x.slug === c.slug) === i 
+      )
+      .slice(0, 30);
+
+    for (const cat of categories) {
+      for (const city of topCities) {
+        if (cat.slug && city.state_slug && city.slug) {
+          params.push({ slug: [cat.slug, city.state_slug, city.slug] });
+        }
+      }
+    }
+
+    // console.log(`Generated ${params.length} static params for service pages`);
+    return params;
+  } catch (e) {
+    console.error("generateStaticParams failed:", e);
+    return [];
+  }
+}
 

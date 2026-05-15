@@ -2,8 +2,10 @@ import { Metadata } from "next";
 import { lazy, Suspense } from "react";
 import HeroSection from "@/components/HeroSection/Herosection";
 import Script from "next/script";
+import { BASE_URL, LOGO, OG_IMAGE, SITE_NAME, TWITTER_HANDLE } from "./layout";
+
 const HowTaskoriaWorks = lazy(() => import("@/components/how-taskoria-works"));
-const Categories = lazy(() => import("@/components/Categories"));
+// const Categories = lazy(() => import("@/components/Categories"));
 const PopularServicesSection = lazy(
   () => import("@/components/PopularServicesSection")
 );
@@ -11,7 +13,6 @@ const FeaturesPage = lazy(() => import("@/components/Features"));
 const Testomonail = lazy(() => import("@/components/Testomonail"));
 const CTA = lazy(() => import("@/components/CTA"));
 const TestomonailNew = lazy(() => import("@/components/TestomonailNew"));
-const BASE_URL = "https://www.taskoria.com";
 
 export const metadata: Metadata = {
   title:
@@ -37,14 +38,13 @@ export const metadata: Metadata = {
     "trusted professionals australia",
   ],
 
-  authors: [{ name: "Taskoria", url: BASE_URL }],
-  creator: "Taskoria",
-  publisher: "Taskoria",
+  authors: [{ name: SITE_NAME, url: BASE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
   category: "Business",
 
   alternates: {
     canonical: BASE_URL,
-  
   },
 
   robots: {
@@ -63,13 +63,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_AU",
     url: BASE_URL,
-    siteName: "Taskoria",
+    siteName: SITE_NAME,
     title: "Hire Verified Local Professionals Across Australia | Taskoria",
     description:
       "Connect with 1,000+ verified Australian professionals. Get instant quotes for cleaning, trades, tech and more. Serving 50+ cities nationwide.",
     images: [
       {
-        url: `${BASE_URL}/og-image.png`,
+        url: OG_IMAGE,
         width: 1200,
         height: 630,
         alt: "Taskoria — Hire Verified Professionals Across Australia",
@@ -82,9 +82,9 @@ export const metadata: Metadata = {
     title: "Taskoria | Hire Verified Professionals Across Australia",
     description:
       "Post a job free and get matched with trusted local professionals. 4.8★ rated across 50+ Australian cities.",
-    images: [`${BASE_URL}/og-image.png`],
-    creator: "@taskoria",
-    site: "@taskoria",
+    images: [OG_IMAGE],
+    creator: TWITTER_HANDLE,
+    site: TWITTER_HANDLE,
   },
 };
 
@@ -94,11 +94,11 @@ const structuredData = {
     {
       "@type": "Organization",
       "@id": `${BASE_URL}/#organization`,
-      name: "Taskoria",
+      name: SITE_NAME,
       url: BASE_URL,
       logo: {
         "@type": "ImageObject",
-        url: `${BASE_URL}/images/taskoria_logo.svg`,
+        url: LOGO,
         width: 250,
         height: 60,
       },
@@ -117,10 +117,11 @@ const structuredData = {
         "https://www.facebook.com/taskoria",
         "https://twitter.com/taskoria",
       ],
+  
       aggregateRating: {
         "@type": "AggregateRating",
-        ratingValue: "4.8",
-        reviewCount: "1200",
+        ratingValue: "4.7",
+        reviewCount: "120",
         bestRating: "5",
         worstRating: "1",
       },
@@ -130,7 +131,7 @@ const structuredData = {
       "@type": "WebSite",
       "@id": `${BASE_URL}/#website`,
       url: BASE_URL,
-      name: "Taskoria",
+      name: SITE_NAME,
       inLanguage: "en-AU",
       publisher: { "@id": `${BASE_URL}/#organization` },
       potentialAction: {
@@ -147,7 +148,7 @@ const structuredData = {
       "@type": "WebPage",
       "@id": `${BASE_URL}/#webpage`,
       url: BASE_URL,
-      name: " Hire Verified Local Professionals Across Australia | Taskoria ",
+      name: "Hire Verified Local Professionals Across Australia | Taskoria",
       description:
         "Find and hire trusted local professionals across Australia. Get instant quotes from verified tradespeople, cleaners, tech experts and more.",
       inLanguage: "en-AU",
@@ -155,7 +156,7 @@ const structuredData = {
       about: { "@id": `${BASE_URL}/#organization` },
       primaryImageOfPage: {
         "@type": "ImageObject",
-        url: `${BASE_URL}/og-image.png`,
+        url: OG_IMAGE,
       },
     },
 
@@ -216,7 +217,6 @@ const structuredData = {
     },
 
     {
-      "@context": "https://schema.org",
       "@type": "FAQPage",
       mainEntity: [
         {
@@ -259,11 +259,14 @@ const structuredData = {
 export default function HomePage() {
   return (
     <>
+
       <Script
+        id="homepage-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
+    
       <h1 className="sr-only">
         Hire Verified Local Professionals Across Australia
       </h1>
@@ -273,40 +276,31 @@ export default function HomePage() {
           <HeroSection />
         </section>
 
-        <Suspense fallback={<div className="min-h-50]" />}>
+        <Suspense fallback={<div className="min-h-12.5" />}>
           <section aria-label="Browse service categories">
             <PopularServicesSection />
           </section>
         </Suspense>
-        <Suspense fallback={<div className="min-h-50" />}>
+
+        <Suspense fallback={<div className="min-h-12.5" />}>
           <section aria-label="How Taskoria works — step by step">
-            <HowTaskoriaWorks />{" "}
+            <HowTaskoriaWorks />
           </section>
         </Suspense>
 
-        {/* <Suspense fallback={<div className="min-h-[200px]" />}>
-          <section aria-label="Browse service categories">
-            <Categories />
-          </section>
-        </Suspense> */}
-
-        <Suspense fallback={<div className="min-h-75" />}>
+        <Suspense fallback={<div className="min-h-12.5" />}>
           <section aria-label="Platform features and benefits">
             <FeaturesPage />
           </section>
         </Suspense>
 
-        {/* <Suspense fallback={<div className="min-h-50" />}>
-          <section aria-label="Customer reviews and testimonials">
-            <Testomonail />
-          </section>
-        </Suspense> */}
-         <Suspense fallback={<div className="min-h-50" />}>
+        <Suspense fallback={<div className="min-h-12.5" />}>
           <section aria-label="Customer reviews and testimonials">
             <TestomonailNew />
           </section>
         </Suspense>
-        <Suspense fallback={<div className="min-h-50" />}>
+
+        <Suspense fallback={<div className="min-h-12.5" />}>
           <section aria-label="Get started — post your first job free">
             <CTA />
           </section>

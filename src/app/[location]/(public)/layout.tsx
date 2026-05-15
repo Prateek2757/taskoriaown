@@ -13,6 +13,12 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import SupportChatbot from "@/components/supportChatbox";
 import Script from "next/script";
 
+export const BASE_URL = "https://www.taskoria.com";
+export const SITE_NAME = "Taskoria";
+export const TWITTER_HANDLE = "@taskoria";
+export const OG_IMAGE = `${BASE_URL}/og-image.png`;
+export const LOGO = `${BASE_URL}/images/taskoria_logo.svg`;
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
@@ -29,14 +35,12 @@ const bricolage = Bricolage_Grotesque({
   preload: true,
 });
 
-const BASE_URL = "https://www.taskoria.com";
-
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
 
   title: {
-    default: " Find Trusted Local Professionals Across Australia | Taskoria" ,
-    template: "",
+    default: "Find Trusted Local Professionals Across Australia | Taskoria",
+    template: `%s | ${SITE_NAME}`,
   },
 
   description:
@@ -56,14 +60,9 @@ export const metadata: Metadata = {
     "electrician australia",
   ],
 
-  authors: [{ name: "Taskoria", url: BASE_URL }],
-  creator: "Taskoria",
-  publisher: "Taskoria",
-
-  alternates: {
-    canonical: BASE_URL,
- 
-  },
+  authors: [{ name: SITE_NAME, url: BASE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
 
   robots: {
     index: true,
@@ -78,16 +77,16 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Find Trusted Local Professionals Across Australia | Taskoria  ",
+    title: "Find Trusted Local Professionals Across Australia | Taskoria",
     description:
       "Connect with verified Australian professionals for home, business, and digital services. AI-powered matching, transparent pricing, and secure payments.",
     url: BASE_URL,
-    siteName: "Taskoria",
+    siteName: SITE_NAME,
     locale: "en_AU",
     type: "website",
     images: [
       {
-        url: `${BASE_URL}/og-image.png`,
+        url: OG_IMAGE,
         width: 1200,
         height: 630,
         alt: "Taskoria – Find Trusted Local Professionals Across Australia",
@@ -100,23 +99,23 @@ export const metadata: Metadata = {
     title: "Taskoria | Trusted Local Professionals Across Australia",
     description:
       "Discover and hire verified professionals near you. Compare quotes, read reviews, and book instantly with Taskoria.",
-    images: [`${BASE_URL}/og-image.png`],
-    creator: "@taskoria",
-    site: "@taskoria",
+    images: [OG_IMAGE],
+    creator: TWITTER_HANDLE,
+    site: TWITTER_HANDLE,
   },
 
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Taskoria",
+    title: SITE_NAME,
   },
   formatDetection: {
     telephone: false,
   },
   icons: {
     icon: [{ url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" }],
-    apple: [{ url: "/images/taskoria_logo.svg", sizes: "140x140" }],
+    apple: [{ url: LOGO, sizes: "140x140" }],
   },
 };
 
@@ -137,59 +136,11 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${poppins.variable} ${bricolage.variable}`}
-      data-scroll-behavior="smooth" suppressHydrationWarning
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
     >
       <AuthProvider>
         <body className="antialiased dark:bg-black" suppressHydrationWarning>
-          <Script
-            id="schema-org"
-            type="application/ld+json"
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "Organization",
-                name: "Taskoria",
-                url: BASE_URL,
-                logo: `${BASE_URL}/images/taskoria_logo.svg`,
-                description:
-                  "Taskoria connects Australians with verified local professionals for home, business, and digital services.",
-                address: { "@type": "PostalAddress", addressCountry: "AU" },
-                contactPoint: {
-                  "@type": "ContactPoint",
-                  contactType: "customer support",
-                  availableLanguage: "English",
-                },
-                sameAs: [
-                  "https://www.facebook.com/taskoria",
-                  "https://twitter.com/taskoria",
-                ],
-              }),
-            }}
-          />
-          <Script
-            id="schema-website"
-            type="application/ld+json"
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "WebSite",
-                name: "Taskoria",
-                url: BASE_URL,
-                inLanguage: "en-AU",
-                potentialAction: {
-                  "@type": "SearchAction",
-                  target: {
-                    "@type": "EntryPoint",
-                    urlTemplate: `${BASE_URL}/services?q={search_term_string}`,
-                  },
-                  "query-input": "required name=search_term_string",
-                },
-              }),
-            }}
-          />
-
           {GA_ID && (
             <>
               <Script

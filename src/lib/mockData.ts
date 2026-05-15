@@ -355,4 +355,4 @@ export const affiliateTiers: AffiliateTier[] = [
   },
 ];
 
-export const defaultReferralLink = 'https://taskoria.com.au/ref/AFF-2024-7842';
+export const defaultReferralLink = 'https://www.taskoria.com.au/ref/AFF-2024-7842';

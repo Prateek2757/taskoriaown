@@ -4,7 +4,7 @@ import Script from "next/script";
 import StatePageClient from "../components/state-page/state-page";
 import CityPageClient from "../components/City-page/citypageclient";
 import { getAllCities, getCategoriesFromDB } from "@/lib/cache";
-export const revalidate = 86400;
+export const revalidate = 604800;
 
 export const dynamic = "force-static";
 type Props = {

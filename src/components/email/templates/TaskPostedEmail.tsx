@@ -125,7 +125,7 @@ export const TaskPostedEmail = ({
             </Link>
             {" | "}
             <Link
-              href="https://taskoria.com/terms-and-conditions"
+              href="https://www.taskoria.com/terms-and-conditions"
               style={{ color: "#2563eb", textDecoration: "underline" }}
             >
               Terms of Service
