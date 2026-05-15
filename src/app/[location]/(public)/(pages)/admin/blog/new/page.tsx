@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import CkEditor from "@/components/Ck_editor_5/ck_editor_5";
 import { Switch } from "@/components/ui/switch";
 import ImageUpload from "@/components/ImageUpload/image-upload";
+import { BookCheck } from "lucide-react";
 
 interface FormValues {
   title: string;
@@ -37,7 +38,6 @@ const CATEGORIES = [
 
 const today = new Date().toISOString().split("T")[0];
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function toSlug(title: string) {
   return title
@@ -60,15 +60,12 @@ function calcWordCount(html: string) {
     .filter(Boolean).length;
 }
 
-// ─── Shared styles ────────────────────────────────────────────────────────────
-
 const inputCls =
   "w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 " +
   "rounded-lg px-3 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 " +
   "placeholder-zinc-400 dark:placeholder-zinc-500 " +
   "focus:outline-none focus:ring-1 focus:ring-orange-400 focus:border-orange-400 transition-colors";
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -327,7 +324,7 @@ export default function NewBlogPostPage() {
 
   return (
     <div className="min-h-screen  text-zinc-900 dark:text-zinc-100 transition-colors">
-      <header className="sticky top-0 z-20  backdrop-blur border-b border-zinc-200 dark:border-zinc-800">
+      <header className="sticky top-13 z-20  backdrop-blur border-b border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center justify-between gap-4 px-6 h-14">
           <div className="flex items-center gap-3 min-w-0">
             <h1 className="text-[17px] font-semibold text-zinc-900 dark:text-white truncate">
@@ -388,25 +385,11 @@ export default function NewBlogPostPage() {
               disabled={isSubmitting}
               className="inline-flex items-center justify-center gap-1.5
                 h-9 px-4 rounded-lg text-sm font-semibold
-                bg-orange-500 hover:bg-orange-600
+                bg-[#2563EB] hover:bg-blue-900
                 text-white
                 disabled:opacity-40 transition-colors"
             >
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 13 13"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M2 9L5 6l2.5 2.5 2.5-3.5L12 7"
-                  stroke="currentColor"
-                  strokeWidth="1.3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+            <BookCheck className="w-5 h-5"/>
               {isSubmitting ? "Saving…" : "Publish"}
             </button>
           </div>

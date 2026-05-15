@@ -72,7 +72,7 @@ export default function CustomerDashboard() {
       <main className="container mx-auto px-4 sm:px-6 py-12 space-y-16">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center sm:text-left">
-            <h1 className="text-4xl font-extrabold bg-[#3C7DED] bg-clip-text text-transparent tracking-tight">
+            <h1 className="text-4xl font-extrabold bg-[#2563EB] bg-clip-text text-transparent tracking-tight">
               Your Requests
             </h1>
             <p className="text-muted-foreground text-sm">
@@ -82,7 +82,7 @@ export default function CustomerDashboard() {
 
           <Button
             onClick={() => setOpenModal(true)}
-            className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-medium shadow-lg hover:shadow-xl transition-all flex items-center gap-2 rounded-xl"
+            className="bg-[#2563EB] hover:from-blue-700 hover:to-cyan-700 text-white font-medium shadow-lg hover:shadow-xl transition-all flex items-center gap-2 rounded-xl"
           >
             <PlusCircle className="w-4 h-4" />
             Place New Request

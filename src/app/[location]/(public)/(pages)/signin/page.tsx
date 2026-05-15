@@ -7,9 +7,7 @@ import {
   Eye,
   EyeOff,
   Loader2,
-  ShieldCheck,
-  Clock3,
-  BadgeCheck,
+ 
 } from "lucide-react";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import axios from "axios";
@@ -17,7 +15,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

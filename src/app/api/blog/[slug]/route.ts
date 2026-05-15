@@ -57,7 +57,7 @@ export async function PUT(req: Request,   context: { params: Promise<{ slug: str
         title, excerpt, content, author_name, author_role,
         author_image, image_url, category, tags,
         is_featured, is_published, read_time,
-        new_slug, // optional — rename the slug
+        new_slug, 
       } = body;
   
       const { rows } = await client.query(

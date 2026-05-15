@@ -11,13 +11,34 @@ export async function GET(req: Request) {
     const featured = searchParams.get("featured") === "true";
     const limit = Number(searchParams.get("limit") ?? 20);
     const offset = Number(searchParams.get("offset") ?? 0);
-  
+    const isAdmin = searchParams.get("admin") === "true";
+
     try {
-      const posts = await getAllBlogPosts(category, featured, limit, offset);
-  
-      return NextResponse.json(posts, {
-        headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600" },
-      });
+      if (isAdmin) {
+        const session = await getServerSession(authOptions);
+        if (!session || session.user?.adminrole !== "admin") {
+          return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        }
+
+        const client = await pool.connect();
+        try {
+          const result = await client.query(
+            `SELECT
+              post_id, slug, title, excerpt, author_name, author_role,
+              author_image, image_url, category, tags, is_featured, is_published,
+              views, likes, read_time, published_at, created_at
+             FROM blog_posts
+             ORDER BY created_at DESC`
+          );
+          return NextResponse.json({ posts: result.rows, total: result.rows.length }, {
+            headers: {
+              "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+            },
+          });
+        } finally {
+          client.release();
+        }
+      }
     } catch (err) {
       console.error(err);
       return NextResponse.json({ message: "Failed to fetch posts" }, { status: 500 });
@@ -42,19 +63,31 @@ export async function POST(req: Request) {
     if (!slug || !title || !content || !category) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
+    const publishedAt = is_published ? new Date() : null;
 
     const { rows } = await client.query(
       `INSERT INTO blog_posts
         (slug, title, excerpt, content, author_name, author_role,
          author_image, image_url, category, tags, is_featured,
          is_published, read_time, published_at, created_by)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,
-         CASE WHEN $12 THEN NOW() ELSE NULL END, $14)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
        RETURNING *`,
       [
-        slug, title, excerpt, content, author_name, author_role,
-        author_image, image_url, category, tags, is_featured,
-        is_published, read_time, Number(session.user.id),
+        slug,
+        title,
+        excerpt,
+        content,
+        author_name,
+        author_role,
+        author_image,
+        image_url,
+        category,
+        tags,
+        is_featured,
+        is_published,
+        read_time,
+        publishedAt,
+        Number(session.user.id),
       ]
     );
     revalidateTag("blog-posts", "default");

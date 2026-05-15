@@ -261,13 +261,11 @@ export const getAllBlogPosts = unstable_cache(
     const result = await pool.query(
       `SELECT
         post_id, slug, title, excerpt, author_name, author_role,
-        author_image, image_url, category, tags, is_featured,
+        author_image, image_url, category, tags, is_featured,is_published,
         views, likes, read_time, published_at
        FROM blog_posts
        WHERE ${conditions.join(" AND ")}
-       ORDER BY published_at DESC
-       LIMIT $${values.length - 1} OFFSET $${values.length}`,
-      values
+       ORDER BY published_at DESC`
     );
 
     return result.rows;
