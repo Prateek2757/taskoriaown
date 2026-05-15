@@ -6,44 +6,44 @@ import { getAllBlogPosts } from "@/lib/cache";
 import { revalidateTag } from "next/cache";
 
 export async function GET(req: Request) {
-    const { searchParams } = new URL(req.url);
-    const category = searchParams.get("category") ?? undefined;
-    const featured = searchParams.get("featured") === "true";
-    const limit = Number(searchParams.get("limit") ?? 20);
-    const offset = Number(searchParams.get("offset") ?? 0);
-    const isAdmin = searchParams.get("admin") === "true";
+  const { searchParams } = new URL(req.url);
+  const category = searchParams.get("category") ?? undefined;
+  const featured = searchParams.get("featured") === "true";
+  const limit = Number(searchParams.get("limit") ?? 20);
+  const offset = Number(searchParams.get("offset") ?? 0);
+  const isAdmin = searchParams.get("admin") === "true";
 
+  try {
+    const client = await pool.connect();
     try {
-      if (isAdmin) {
-        const session = await getServerSession(authOptions);
-        if (!session || session.user?.adminrole !== "admin") {
-          return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-        }
-
-        const client = await pool.connect();
-        try {
-          const result = await client.query(
-            `SELECT
+      const result = await client.query(
+        `SELECT
               post_id, slug, title, excerpt, author_name, author_role,
               author_image, image_url, category, tags, is_featured, is_published,
               views, likes, read_time, published_at, created_at
              FROM blog_posts
              ORDER BY created_at DESC`
-          );
-          return NextResponse.json({ posts: result.rows, total: result.rows.length }, {
-            headers: {
-              "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-            },
-          });
-        } finally {
-          client.release();
+      );
+      return NextResponse.json(
+        { posts: result.rows, total: result.rows.length },
+        {
+          headers: {
+            "Cache-Control":
+              "no-store, no-cache, must-revalidate, proxy-revalidate",
+          },
         }
-      }
-    } catch (err) {
-      console.error(err);
-      return NextResponse.json({ message: "Failed to fetch posts" }, { status: 500 });
+      );
+    } finally {
+      client.release();
     }
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(
+      { message: "Failed to fetch posts" },
+      { status: 500 }
+    );
   }
+}
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -55,13 +55,26 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const {
-      slug, title, excerpt, content, author_name, author_role,
-      author_image, image_url, category, tags = [],
-      is_featured = false, is_published = false, read_time,
+      slug,
+      title,
+      excerpt,
+      content,
+      author_name,
+      author_role,
+      author_image,
+      image_url,
+      category,
+      tags = [],
+      is_featured = false,
+      is_published = false,
+      read_time,
     } = body;
 
     if (!slug || !title || !content || !category) {
-      return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
     }
     const publishedAt = is_published ? new Date() : null;
 
@@ -94,10 +107,16 @@ export async function POST(req: Request) {
     return NextResponse.json(rows[0], { status: 201 });
   } catch (err: unknown) {
     if ((err as { code?: string }).code === "23505") {
-      return NextResponse.json({ message: "Slug already exists" }, { status: 409 });
+      return NextResponse.json(
+        { message: "Slug already exists" },
+        { status: 409 }
+      );
     }
     console.error(err);
-    return NextResponse.json({ message: "Failed to create post" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Failed to create post" },
+      { status: 500 }
+    );
   } finally {
     client.release();
   }

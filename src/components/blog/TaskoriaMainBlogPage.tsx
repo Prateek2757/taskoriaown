@@ -78,11 +78,26 @@ const filteredPosts = useMemo(() => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
   useEffect(() => {
-    fetch("/api/blog")
-      .then((res) => res.json())
-      .then(setPosts)
-      .finally(() => setLoading(false));
+    const fetchPosts = async () => {
+      try {
+        const res = await fetch("/api/blog");
+        const data = await res.json();
+  console.log(
+    data,"data"
+  );
+
+        setPosts(data.posts);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchPosts();
   }, []);
+  console.log(posts,"psotes");
+  
   if (loading) {
     return (
       <div className="flex justify-center py-10">
@@ -125,7 +140,6 @@ const filteredPosts = useMemo(() => {
       />
     );
   }
-  console.log("seachQuery", searchQuery);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-zinc-950 dark:to-zinc-900">
