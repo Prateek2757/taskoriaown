@@ -9,7 +9,7 @@ import { MdArrowDropDown } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 
-const categories = ["All Posts", "For Providers", "Future of Work"];
+// const categories = ["All Posts", "For Providers", "Future of Work"];
 
 type Blog = {
   post_id: number;
@@ -117,7 +117,6 @@ const router= useRouter();
       </div>
     );
   }
-  console.log("output:", posts);
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-zinc-950 dark:to-zinc-900">
       <section className="relative overflow-hidden my-6">

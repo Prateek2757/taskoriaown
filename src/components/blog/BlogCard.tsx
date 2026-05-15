@@ -91,13 +91,6 @@ export const BlogCard = ({ post, onClick, featured = false }) => {
           Learn More
         </div>
 
-        {/* <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-zinc-800">
-          <div className="flex items-center gap-3">
-     
-          </div>
-
-     
-        </div> */}
       </div>
 
       {post.views > 3000 && (
