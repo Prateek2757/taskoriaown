@@ -1,10 +1,5 @@
 "use client";
 import {
-  Calendar,
-  Clock,
-  ArrowRight,
-  Eye,
-  Heart,
   TrendingUp,
 } from "lucide-react";
 
