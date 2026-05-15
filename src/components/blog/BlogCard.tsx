@@ -9,7 +9,16 @@ import {
 } from "lucide-react";
 
 
+
 export const BlogCard = ({ post, onClick, featured = false }) => {
+    const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   return (
     <article
       onClick={onClick}
@@ -56,7 +65,7 @@ export const BlogCard = ({ post, onClick, featured = false }) => {
               {post.author_name} |
             </p>
             <span className="font-semibold text-gray-900">
-              {post.published_at}
+              {formatDate(post.published_at)}
             </span>
           </div>
         </div>
