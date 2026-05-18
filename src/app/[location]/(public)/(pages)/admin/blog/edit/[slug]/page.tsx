@@ -9,9 +9,9 @@ import CkEditor from "@/components/Ck_editor_5/ck_editor_5";
 import { Switch } from "@/components/ui/switch";
 import ImageUpload from "@/components/ImageUpload/image-upload";
 import { fetcher } from "@/lib/fetcher";
-import { BlogPost } from "../../page";
 import { Circle, Eye, Save } from "lucide-react";
-
+import { BlogPost } from "../../page";
+import CalendarInput from "@/components/CalenderInput";
 
 interface FormValues {
   title: string;
@@ -30,7 +30,6 @@ interface FormValues {
   published_at: string;
 }
 
-
 const CATEGORIES = [
   "Tips & Guides",
   "Technology",
@@ -39,8 +38,6 @@ const CATEGORIES = [
   "Case Studies",
   "Local Services",
 ];
-
-
 
 function toSlug(title: string) {
   return title
@@ -57,16 +54,17 @@ function calcReadTime(html: string) {
 }
 
 function calcWordCount(html: string) {
-  return html.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
+  return html
+    .replace(/<[^>]+>/g, " ")
+    .split(/\s+/)
+    .filter(Boolean).length;
 }
-
 
 const inputCls =
   "w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 " +
   "rounded-lg px-3 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 " +
   "placeholder-zinc-400 dark:placeholder-zinc-500 " +
   "focus:outline-none focus:ring-1 focus:ring-orange-400 focus:border-orange-400 transition-colors";
-
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -76,7 +74,13 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-function FieldLabel({ children, hint }: { children: React.ReactNode; hint?: string }) {
+function FieldLabel({
+  children,
+  hint,
+}: {
+  children: React.ReactNode;
+  hint?: string;
+}) {
   return (
     <div className="flex items-baseline gap-1.5 mb-1.5">
       <span className="text-[11px] font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
@@ -96,9 +100,17 @@ function FieldError({ message }: { message?: string }) {
   return <p className="text-[11px] text-red-500 mt-1">{message}</p>;
 }
 
-function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function Card({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div className={`bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 space-y-3 ${className}`}>
+    <div
+      className={`bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 space-y-3 ${className}`}
+    >
       {children}
     </div>
   );
@@ -118,7 +130,9 @@ function ToggleRow({
   return (
     <div className="flex items-center justify-between gap-4 py-2.5 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
       <div>
-        <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">{title}</p>
+        <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+          {title}
+        </p>
         <p className="text-xs text-zinc-400 dark:text-zinc-500">{subtitle}</p>
       </div>
       <Switch checked={checked} onCheckedChange={onChange} />
@@ -128,7 +142,9 @@ function ToggleRow({
 
 function Skeleton({ className = "" }: { className?: string }) {
   return (
-    <div className={`animate-pulse bg-zinc-200 dark:bg-zinc-800 rounded-lg ${className}`} />
+    <div
+      className={`animate-pulse bg-zinc-200 dark:bg-zinc-800 rounded-lg ${className}`}
+    />
   );
 }
 
@@ -175,12 +191,14 @@ export default function EditBlogPostPage() {
   const params = useParams();
   const originalSlug = params.slug as string;
 
-  const { data: post, isLoading, error } = useSWR<BlogPost>(
+  const {
+    data: post,
+    isLoading,
+    error,
+  } = useSWR<BlogPost>(
     originalSlug ? `/api/blog/${originalSlug}` : null,
     fetcher
   );
-
-  
 
   const {
     register,
@@ -219,7 +237,7 @@ export default function EditBlogPostPage() {
       content: post.content ?? "",
       author_name: post.author_name ?? "",
       author_role: post.author_role ?? "",
-    //   author_image: post.author_image ?? "",
+      //   author_image: post.author_image ?? "",
       image_url: post.image_url ?? "",
       category: post.category ?? "",
       tagInput: "",
@@ -232,7 +250,6 @@ export default function EditBlogPostPage() {
     });
   }, [post, reset]);
 
-  
   const tags = watch("tags");
   const content = watch("content");
   const slug = watch("slug");
@@ -262,7 +279,11 @@ export default function EditBlogPostPage() {
   }
 
   function removeTag(tag: string) {
-    setValue("tags", getValues("tags").filter((t) => t !== tag), { shouldDirty: true });
+    setValue(
+      "tags",
+      getValues("tags").filter((t) => t !== tag),
+      { shouldDirty: true }
+    );
   }
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -319,7 +340,9 @@ export default function EditBlogPostPage() {
     return (
       <div className="min-h-screen bg-zinc-50 dark:bg-[#111111] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-zinc-500 dark:text-zinc-400 mb-3">Post not found.</p>
+          <p className="text-zinc-500 dark:text-zinc-400 mb-3">
+            Post not found.
+          </p>
           <button
             onClick={() => router.push("/admin/blog")}
             className="text-sm text-orange-500 hover:text-orange-600"
@@ -333,10 +356,8 @@ export default function EditBlogPostPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-[#111111] text-zinc-900 dark:text-zinc-100 transition-colors">
-
       <header className="sticky top-13 z-20 bg-white/90 dark:bg-zinc-950/90 backdrop-blur border-b border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center justify-between gap-4 px-6 h-14">
-
           <div className="flex items-center gap-3 min-w-0">
             <button
               onClick={() => router.push("/admin/blog")}
@@ -345,7 +366,13 @@ export default function EditBlogPostPage() {
                 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M9 2L4 7l5 5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                <path
+                  d="M9 2L4 7l5 5"
+                  stroke="currentColor"
+                  strokeWidth="1.3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
             <div className="min-w-0">
@@ -353,11 +380,13 @@ export default function EditBlogPostPage() {
                 <h1 className="text-[16px] font-semibold text-zinc-900 dark:text-white truncate max-w-[300px]">
                   {post.title}
                 </h1>
-                <span className={`shrink-0 text-[11px] font-semibold px-2 py-0.5 rounded-full border ${
-                  isPublished
-                    ? "bg-green-50 dark:bg-green-950/60 border-green-200 dark:border-green-800 text-green-700 dark:text-green-400"
-                    : "bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400"
-                }`}>
+                <span
+                  className={`shrink-0 text-[11px] font-semibold px-2 py-0.5 rounded-full border ${
+                    isPublished
+                      ? "bg-green-50 dark:bg-green-950/60 border-green-200 dark:border-green-800 text-green-700 dark:text-green-400"
+                      : "bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400"
+                  }`}
+                >
                   {isPublished ? "Published" : "Draft"}
                 </span>
                 {isDirty && (
@@ -382,7 +411,7 @@ export default function EditBlogPostPage() {
                 text-sm font-medium text-zinc-600 dark:text-zinc-400
                 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors"
             >
-             <Eye className="h-5 w-5"/>
+              <Eye className="h-5 w-5" />
               Preview
             </a>
             <button
@@ -395,13 +424,12 @@ export default function EditBlogPostPage() {
             >
               {isSubmitting ? (
                 <>
-                 <Circle className="h-5 w-5" />
+                  <Circle className="h-5 w-5" />
                   Saving…
                 </>
               ) : (
                 <>
-                 
-                  <Save/>
+                  <Save />
                   Save changes
                 </>
               )}
@@ -411,9 +439,7 @@ export default function EditBlogPostPage() {
       </header>
 
       <div className="grid  ">
-
         <div className="p-6 space-y-4 border-r border-zinc-200 dark:border-zinc-800 min-h-[calc(100vh-56px)]">
-
           <Card>
             <div>
               <FieldLabel>Title</FieldLabel>
@@ -429,7 +455,9 @@ export default function EditBlogPostPage() {
             <div>
               <FieldLabel>Slug</FieldLabel>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-zinc-400 dark:text-zinc-500 shrink-0">/blog/</span>
+                <span className="text-xs text-zinc-400 dark:text-zinc-500 shrink-0">
+                  /blog/
+                </span>
                 <input
                   {...register("slug")}
                   placeholder="post-slug"
@@ -442,7 +470,10 @@ export default function EditBlogPostPage() {
                   <code className="bg-zinc-100 dark:bg-zinc-800 px-1 rounded">
                     /blog/{originalSlug}
                   </code>{" "}
-                  → <code className="bg-zinc-100 dark:bg-zinc-800 px-1 rounded">/blog/{watch("slug")}</code>
+                  →{" "}
+                  <code className="bg-zinc-100 dark:bg-zinc-800 px-1 rounded">
+                    /blog/{watch("slug")}
+                  </code>
                 </p>
               )}
             </div>
@@ -472,10 +503,7 @@ export default function EditBlogPostPage() {
                 control={control}
                 rules={{ required: "Content is required" }}
                 render={({ field }) => (
-                  <CkEditor
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
+                  <CkEditor value={field.value} onChange={field.onChange} />
                 )}
               />
               <FieldError message={errors.content?.message} />
@@ -484,7 +512,6 @@ export default function EditBlogPostPage() {
         </div>
 
         <div className="p-4 space-y-3 bg-zinc-50 dark:bg-[#111111]">
-
           <Card>
             <SectionLabel>Publish settings</SectionLabel>
             <Controller
@@ -513,10 +540,19 @@ export default function EditBlogPostPage() {
             />
             <div className="pt-1">
               <FieldLabel>Publish date</FieldLabel>
-              <input
-                type="date"
-                {...register("published_at")}
-                className={inputCls}
+              <CalendarInput
+                label="Publish date"
+                value={
+                  watch("published_at")
+                    ? new Date(watch("published_at"))
+                    : undefined
+                }
+                minDate={new Date()}
+                onChange={(date) => {
+                  if (date) {
+                    setValue("published_at", date.toISOString());
+                  }
+                }}
               />
             </div>
           </Card>
@@ -551,7 +587,9 @@ export default function EditBlogPostPage() {
               >
                 <option value="">Select category…</option>
                 {CATEGORIES.map((c) => (
-                  <option key={c} value={c}>{c}</option>
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
                 ))}
               </select>
               <FieldError message={errors.category?.message} />
@@ -565,7 +603,10 @@ export default function EditBlogPostPage() {
                   placeholder="Add a tag…"
                   className={`${inputCls} flex-1`}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") { e.preventDefault(); addTag(); }
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addTag();
+                    }
                   }}
                 />
                 <button
@@ -632,8 +673,12 @@ export default function EditBlogPostPage() {
                 className="flex items-center justify-between py-2 text-sm
                   border-b border-zinc-100 dark:border-zinc-800 last:border-0"
               >
-                <span className="text-zinc-500 dark:text-zinc-400">{label}</span>
-                <span className="font-medium text-zinc-800 dark:text-zinc-200">{val}</span>
+                <span className="text-zinc-500 dark:text-zinc-400">
+                  {label}
+                </span>
+                <span className="font-medium text-zinc-800 dark:text-zinc-200">
+                  {val}
+                </span>
               </div>
             ))}
           </Card>
@@ -643,7 +688,9 @@ export default function EditBlogPostPage() {
             <SectionLabel>Post URL</SectionLabel>
             <p className="text-xs text-zinc-400 dark:text-zinc-500 leading-relaxed break-all">
               taskoria.com/blog/
-              <span className="text-orange-500 font-medium">{slug || "your-slug"}</span>
+              <span className="text-orange-500 font-medium">
+                {slug || "your-slug"}
+              </span>
             </p>
           </Card>
 
@@ -656,8 +703,11 @@ export default function EditBlogPostPage() {
             <button
               type="button"
               onClick={async () => {
-                if (!confirm(`Delete "${post.title}"? This cannot be undone.`)) return;
-                const res = await fetch(`/api/blog/${originalSlug}`, { method: "DELETE" });
+                if (!confirm(`Delete "${post.title}"? This cannot be undone.`))
+                  return;
+                const res = await fetch(`/api/blog/${originalSlug}`, {
+                  method: "DELETE",
+                });
                 if (res.ok) {
                   toast.success("Post deleted");
                   router.push("/admin/blog");

@@ -98,12 +98,28 @@ export default function CalendarInput({
               month={month}
               onMonthChange={setMonth}
               onSelect={(d) => {
-                if (minDate && d && d < minDate) return; // prevent invalid selection
-                onChange(d);
+                if (minDate && d) {
+                  const min = new Date(minDate);
+                  min.setHours(0, 0, 0, 0);
+                
+                  const selected = new Date(d);
+                  selected.setHours(0, 0, 0, 0);
+                
+                  if (selected < min) return;
+                }                onChange(d);
                 setOpen(false);
               }}
-              disabled={(d) => (minDate ? d < minDate : false)}
-            />
+              disabled={(d) => {
+                if (!minDate) return false;
+              
+                const min = new Date(minDate);
+                min.setHours(0, 0, 0, 0);
+              
+                const current = new Date(d);
+                current.setHours(0, 0, 0, 0);
+              
+                return current < min;
+              }}            />
           </PopoverContent>
         </Popover>
       </div>

@@ -1,36 +1,56 @@
-"use client";
-import {
-  TrendingUp,
-} from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { TrendingUp } from "lucide-react";
 
+type Blog = {
+  post_id: number;
+  slug: string;
+  title: string;
+  excerpt: string;
+  author_name: string;
+  category: string;
+  views: number;
+  published_at: string;
+  image_url: string;
+  is_featured?: boolean;
+};
 
-
-export const BlogCard = ({ post, onClick, featured = false }) => {
-    const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+export const BlogCard = ({
+  post,
+  featured = false,
+}: {
+  post: Blog;
+  featured?: boolean;
+  onClick?: () => void; // kept for backward compat, but link handles nav
+}) => {
+  const formatDate = (dateString: string) =>
+    new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
     });
-  };
 
   return (
-    <article
-      onClick={onClick}
-      className={`group relative rounded-xl overflow-hidden cursor-pointer
+    <Link
+      href={`/blog/${post.slug}`}
+      prefetch={false}
+      className={`group relative rounded-xl overflow-hidden
         bg-white dark:bg-zinc-900
         border border-gray-200 dark:border-zinc-800
         shadow-lg hover:shadow-2xl dark:shadow-zinc-950/50
-        transition-all duration-500
+        transition-all duration-500 block
         ${featured ? "md:col-span-2" : ""}`}
     >
-      <div className={`relative overflow-hidden ${featured ? "h-48" : "h-48"}`}>
-        <img
+      <div className="relative h-48 overflow-hidden">
+        <Image
           src={post.image_url}
           alt={post.title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          title={post.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
+          quality={90}
+          className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
-
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
 
         <div className="absolute top-4 left-4">
@@ -39,63 +59,39 @@ export const BlogCard = ({ post, onClick, featured = false }) => {
           </span>
         </div>
 
-        {/* {featured && (
-          <div className="absolute bottom-4 left-4 flex items-center gap-4 text-sm text-white">
-            <div className="flex items-center gap-1.5 bg-black/50 dark:bg-black/60 px-3 py-1 rounded-full backdrop-blur-sm">
-              <Eye size={14} />
-              <span>{post.views.toLocaleString()}</span>
-            </div>
-            <div className="flex items-center gap-1.5 bg-black/50 dark:bg-black/60 px-3 py-1 rounded-full backdrop-blur-sm">
-              <Heart size={14} />
-              <span>{post.likes}</span>
+        {/* Trending badge */}
+        {post.views > 3000 && (
+          <div className="absolute top-4 right-4">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white text-xs font-bold shadow-lg">
+              <TrendingUp size={12} />
+              Trending
             </div>
           </div>
-        )} */}
+        )}
       </div>
 
-      <div className={`p-5 ${featured ? "md:p-6" : ""}`}>
-        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-zinc-400 mb-3">
-          <div className="flex items-center gap-1.5">
-            <p className="text-sm font-semibold text-gray-900 dark:text-zinc-100">
-              {post.author_name} |
-            </p>
-            <span className="font-semibold text-gray-900">
-              {formatDate(post.published_at)}
-            </span>
-          </div>
-        </div>
+      {/* Content */}
+      <div className="p-5">
+        <p className="text-sm text-gray-500 dark:text-zinc-400 mb-2">
+          <span className="font-semibold text-gray-900 dark:text-zinc-100">
+            {post.author_name}
+          </span>
+          {" · "}
+          {formatDate(post.published_at)}
+        </p>
 
-        <h3
-          className={`font-bold  mb-1 line-clamp-2
-            text-gray-900 dark:text-zinc-50
-            group-hover:text-blue-600 dark:group-hover:text-blue-400
-            transition-colors duration-300
-            ${featured ? "text-md" : "text-md"}`}
-        >
+        <h3 className="font-bold text-md mb-1 line-clamp-2 text-gray-900 dark:text-zinc-50 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
           {post.title}
         </h3>
 
-        <p
-          className={`mb-1 text-gray-700 dark:text-zinc-300 ${
-            featured ? "text-sm line-clamp-3" : "text-sm line-clamp-2"
-          }`}
-        >
+        <p className="text-sm text-gray-600 dark:text-zinc-300 line-clamp-2 mb-3">
           {post.excerpt}
         </p>
-        <div className="flex items-center gap-2 text-sm font-semibold underline text-blue-600 dark:text-blue-400 group-hover:gap-3 transition-all">
-          Learn More
-        </div>
 
+        <span className="text-sm font-semibold underline text-blue-600 dark:text-blue-400">
+          Read more
+        </span>
       </div>
-
-      {post.views > 3000 && (
-        <div className="absolute top-4 right-4">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white text-xs font-bold shadow-lg">
-            <TrendingUp size={12} />
-            Trending
-          </div>
-        </div>
-      )}
-    </article>
+    </Link>
   );
 };
