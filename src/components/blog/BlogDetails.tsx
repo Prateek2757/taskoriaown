@@ -4,8 +4,7 @@ import { Tag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import { renderContent } from "../renderContent";
-import SimilarPost from "./SimilarPost";
-import { useState } from "react";
+import Image from "next/image";
 interface Post {
   post_id: number;
   slug: string;
@@ -65,18 +64,23 @@ export default function BlogDetails({ post ,posts}: Props) {
         <h1 className="text-4xl md:text-5xl font-extrabold text-blue-700 dark:text-zinc-50 leading-tight tracking-tight">
           {post.title}
 
-          <p className="text-sm font-semibold text-gray-400 mt-2">
-            By{"  "}
+          <p className="text-sm font-semibold text-gray-500 mt-2">
+            By{" "}
             {post.author_name}
           </p>
         </h1>
         <p className="mt-2">Updated : {formatDate(post.published_at)}</p>
-        <p className="mt-4 text-2xl text-gray-400">{post.excerpt}</p>
+        <p className="mt-4 text-2xl text-gray-500">{post.excerpt}</p>
 
         <div className="flex flex-wrap items-center gap-6 pb-8 border-b border-gray-200 dark:border-zinc-800 mt-4 mb-3">
-          <img src={post.image_url} alt={post.author_name} />
-        </div>
-
+  <Image
+    src={post.image_url}
+    alt={post.author_name}
+    width={800}
+    height={500}
+    className="rounded-md object-cover"
+  />
+</div>
         {/* <div >
          <p>{renderContent(post.content)}</p>
       </div> */}

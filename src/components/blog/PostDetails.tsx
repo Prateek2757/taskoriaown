@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { BlogCard } from "./BlogCard";
 
-export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
+export const PostDetail = ({ post, onBack, onSelectPost }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -273,7 +273,7 @@ export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
         </div>
       </article>
 
-      {relatedPosts.length > 0 && (
+      {/* {relatedPosts.length > 0 && (
         <section className="bg-gray-100 dark:bg-zinc-900/50 py-10 mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h3 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-8">
@@ -290,7 +290,7 @@ export const PostDetail = ({ post, relatedPosts, onBack, onSelectPost }) => {
             </div>
           </div>
         </section>
-      )}
+      )} */}
     </div>
   );
 };

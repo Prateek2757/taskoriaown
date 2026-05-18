@@ -6,7 +6,6 @@ import useSWR from "swr";
 import { toast } from "sonner";
 import Link from "next/link";
 import { fetcher } from "@/lib/fetcher";
-import { Switch } from "@/components/ui/switch";
 import {
   Dialog,
   DialogContent,
@@ -257,15 +256,16 @@ function PostRow({
 
       <td className="py-3 px-4">
         <div className="flex items-center gap-1  transition-opacity">
-          {/* <Link
+          <Link
             href={`/admin/blog/edit/${post.slug}`}
             className="inline-flex items-center justify-center w-7 h-7 rounded-md
               hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-500 dark:text-zinc-600
               hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
-            title="Edit post"
-          >
+            title="Edit post">
+
             <Pen className="w-5 h-5" />
-          </Link> */}
+          </Link>
+
           <a
             href={`/blog/${post.slug}`}
             target="_blank"
@@ -329,7 +329,7 @@ export default function AdminBlogPage() {
               Blog posts
             </h1>
             <p className="text-sm text-zinc-600 dark:text-zinc-500 mt-0.5">
-              {data?.total ?? 0} total · {published} published · {drafts} drafts
+              {data?.total ?? 0} total · {published} published 
             </p>
           </div>
           <Link
@@ -377,7 +377,7 @@ export default function AdminBlogPage() {
               focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400"
           />
           <div className="flex gap-2">
-            {(["all", "published", "draft"] as const).map((f) => (
+            {(["all", "published"] as const).map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}

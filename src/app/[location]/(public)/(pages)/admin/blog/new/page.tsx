@@ -8,6 +8,7 @@ import CkEditor from "@/components/Ck_editor_5/ck_editor_5";
 import { Switch } from "@/components/ui/switch";
 import ImageUpload from "@/components/ImageUpload/image-upload";
 import { BookCheck } from "lucide-react";
+import CalendarInput from "@/components/CalenderInput";
 
 interface FormValues {
   title: string;
@@ -26,7 +27,6 @@ interface FormValues {
   published_at: string;
 }
 
-
 const CATEGORIES = [
   "Tips & Guides",
   "Technology",
@@ -37,7 +37,6 @@ const CATEGORIES = [
 ];
 
 const today = new Date().toISOString().split("T")[0];
-
 
 function toSlug(title: string) {
   return title
@@ -65,7 +64,6 @@ const inputCls =
   "rounded-lg px-3 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 " +
   "placeholder-zinc-400 dark:placeholder-zinc-500 " +
   "focus:outline-none focus:ring-1 focus:ring-orange-400 focus:border-orange-400 transition-colors";
-
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -234,9 +232,9 @@ export default function NewBlogPostPage() {
 
   function addTag() {
     const raw = getValues("tagInput").trim();
-  
+
     if (!raw) return;
-  
+
     // Split by newline or comma
     const parsedTags = raw
       .split(/\n|,/)
@@ -246,18 +244,16 @@ export default function NewBlogPostPage() {
           .trim()
       )
       .filter(Boolean);
-  
+
     const current = getValues("tags");
-  
-    const uniqueTags = [
-      ...new Set([...current, ...parsedTags]),
-    ];
-  
+
+    const uniqueTags = [...new Set([...current, ...parsedTags])];
+
     setValue("tags", uniqueTags, {
       shouldDirty: true,
       shouldValidate: true,
     });
-  
+
     setValue("tagInput", "");
   }
 
@@ -389,7 +385,7 @@ export default function NewBlogPostPage() {
                 text-white
                 disabled:opacity-40 transition-colors"
             >
-            <BookCheck className="w-5 h-5"/>
+              <BookCheck className="w-5 h-5" />
               {isSubmitting ? "Saving…" : "Publish"}
             </button>
           </div>
@@ -505,11 +501,19 @@ export default function NewBlogPostPage() {
             </div>
 
             <div className="pt-1">
-              <FieldLabel>Publish date</FieldLabel>
-              <input
-                type="date"
-                {...register("published_at")}
-                className={inputCls}
+              <CalendarInput
+                label="Publish date"
+                value={
+                  watch("published_at")
+                    ? new Date(watch("published_at"))
+                    : undefined
+                }
+                minDate={new Date()}
+                onChange={(date) => {
+                  if (date) {
+                    setValue("published_at", date.toISOString());
+                  }
+                }}
               />
             </div>
           </Card>

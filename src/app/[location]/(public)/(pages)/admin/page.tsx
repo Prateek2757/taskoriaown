@@ -134,7 +134,6 @@ const SECTIONS = [
     badgeKey: null,
     badgeLabel: null,
   },
-  // Add to SECTIONS array after the Refunds entry:
 {
   label: "Blog",
   href: "/admin/blog",
