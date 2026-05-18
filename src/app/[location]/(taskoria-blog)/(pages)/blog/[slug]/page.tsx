@@ -1,5 +1,5 @@
 import BlogDetails from "@/components/blog/BlogDetails";
-import { getBlogPostBySlug } from "@/lib/cache";
+import { getAllBlogPosts, getBlogPostBySlug } from "@/lib/cache";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -22,7 +22,7 @@ interface Post {
   views: number;
   likes: number;
   read_time: string;
-content?:string;
+  content?: string;
   published_at: string;
   image_url: string;
 }
@@ -33,8 +33,12 @@ function toTitleCase(slug: string) {
 function buildCanonical(slug: string) {
   return `https://www.taskoria.com/blog/${slug}`;
 }
+
+
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+
   const post: Post | null = await getBlogPostBySlug(slug);
   if (!post) return {};
   return {
@@ -54,10 +58,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function page({ params }: Props) {
   const { slug } = await params;
   const post: Post | null = await getBlogPostBySlug(slug);
+
   if (!post) notFound();
+  const allPosts = await getAllBlogPosts();
+ const filteredPosts = allPosts.filter((p) => p.category === post.category && p.slug !== post.slug);
   return (
     <>
-      <BlogDetails post={post}  />
+      <BlogDetails post={post} filteredPosts={filteredPosts} />
     </>
   );
 }

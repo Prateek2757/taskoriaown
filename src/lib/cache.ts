@@ -266,6 +266,7 @@ export const getAllBlogPosts = unstable_cache(
        FROM blog_posts
        WHERE ${conditions.join(" AND ")}
        ORDER BY published_at DESC`
+    ,
     );
 
     return result.rows;
@@ -292,4 +293,4 @@ export const getBlogPostBySlug = unstable_cache(
     revalidate: 300,
     tags: ["blog-posts"],
   }
-);
+); 

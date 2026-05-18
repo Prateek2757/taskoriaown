@@ -4,6 +4,7 @@ import { Tag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import { renderContent } from "../renderContent";
+import {  BlogCardList } from "./BlogCard";
 import Image from "next/image";
 interface Post {
   post_id: number;
@@ -27,7 +28,7 @@ interface Post {
 
 interface Props {
   post: Post;
-  posts: post[];
+  filteredPosts: Post[];
 }
 
 const formatDate = (dateString: string) => {
@@ -38,17 +39,15 @@ const formatDate = (dateString: string) => {
   });
 };
 
-
-export default function BlogDetails({ post ,posts}: Props) {
-    const router = useRouter();
-
-  const filteredCategroy = posts.filter((p) => p.category === post.category && p.post_id !== post.post_id)
+export default function BlogDetails({ post, filteredPosts }: Props) {
+  const router = useRouter();
+  console.log("filtered", filteredPosts)
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950">
       <article className="max-w-3xl mx-auto px-6 sm:px-6 lg:px-8 py-4">
         <div className="mb-3 flex flex-col">
           <button
-            className="group inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-all hover:gap-3"
+            className="group inline-flex items-center gap-2 text-[#2563EB] dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-all hover:gap-3"
             onClick={() => router.push("./")}
           >
             <IoIosArrowBack
@@ -65,22 +64,21 @@ export default function BlogDetails({ post ,posts}: Props) {
           {post.title}
 
           <p className="text-sm font-semibold text-gray-500 mt-2">
-            By{" "}
-            {post.author_name}
+            By {post.author_name}
           </p>
         </h1>
         <p className="mt-2">Updated : {formatDate(post.published_at)}</p>
         <p className="mt-4 text-2xl text-gray-500">{post.excerpt}</p>
 
         <div className="flex flex-wrap items-center gap-6 pb-8 border-b border-gray-200 dark:border-zinc-800 mt-4 mb-3">
-  <Image
-    src={post.image_url}
-    alt={post.author_name}
-    width={800}
-    height={500}
-    className="rounded-md object-cover"
-  />
-</div>
+          <Image
+            src={post.image_url}
+            alt={post.author_name}
+            width={800}
+            height={500}
+            className="rounded-md object-cover"
+          />
+        </div>
         {/* <div >
          <p>{renderContent(post.content)}</p>
       </div> */}
@@ -91,7 +89,7 @@ export default function BlogDetails({ post ,posts}: Props) {
           {post.tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-semibold text-sm shadow-sm hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-blue-50 dark:bg-blue-500/10 text-[#2563EB] dark:text-blue-400 font-semibold text-sm shadow-sm hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-all"
             >
               {tag}
               <Tag size={14} />
@@ -101,7 +99,11 @@ export default function BlogDetails({ post ,posts}: Props) {
       </article>
 
       <article className="max-w-3xl mx-auto px-6 sm:px-6 lg:px-8 py-4">
-       <SimilarPost  posts={filteredCategroy}/>
+            <h3 className="text-sm  text-gray-400 uppercase dark:text-zinc-50 mb-8 flex items-center gap-3">
+          You might also be interested in:
+        </h3>
+
+        <BlogCardList  posts={filteredPosts} />
       </article>
     </div>
   );
