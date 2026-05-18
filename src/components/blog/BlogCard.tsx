@@ -12,6 +12,7 @@ type Blog = {
   views: number;
   published_at: string;
   image_url: string;
+  updated_at?:string;
   is_featured?: boolean;
 };
 
@@ -21,10 +22,10 @@ export const BlogCard = ({
 }: {
   post: Blog;
   featured?: boolean;
-  onClick?: () => void; // kept for backward compat, but link handles nav
+  onClick?: () => void; 
 }) => {
   const formatDate = (dateString: string) =>
-    new Date(dateString).toLocaleDateString("en-US", {
+    new Date(dateString).toLocaleDateString("en-AU", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -51,7 +52,7 @@ export const BlogCard = ({
           quality={90}
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
 
         <div className="absolute top-4 left-4">
           <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold bg-white/95 dark:bg-zinc-900/95 backdrop-blur-sm text-blue-600 dark:text-blue-400 shadow-lg">
@@ -62,7 +63,7 @@ export const BlogCard = ({
         {/* Trending badge */}
         {post.views > 3000 && (
           <div className="absolute top-4 right-4">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 text-white text-xs font-bold shadow-lg">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-linear-to-r from-orange-500 to-pink-500 text-white text-xs font-bold shadow-lg">
               <TrendingUp size={12} />
               Trending
             </div>
@@ -77,7 +78,7 @@ export const BlogCard = ({
             {post.author_name}
           </span>
           {" · "}
-          {formatDate(post.published_at)}
+          {formatDate(post.updated_at || post.published_at)}
         </p>
 
         <h3 className="font-bold text-md mb-1 line-clamp-2 text-gray-900 dark:text-zinc-50 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">

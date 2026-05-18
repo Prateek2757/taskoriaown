@@ -22,8 +22,9 @@ interface Post {
   views: number;
   likes: number;
   read_time: string;
-content?:string;
+  content?: string;
   published_at: string;
+  updated_at?: string;
   image_url: string;
 }
 
@@ -50,14 +51,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
   };
 }
-
-export default async function page({ params }: Props) {
+export default async function Page({ params }: Props) {
   const { slug } = await params;
-  const post: Post | null = await getBlogPostBySlug(slug);
-  if (!post) notFound();
-  return (
-    <>
-      <BlogDetails post={post} />
-    </>
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/blog/${slug}`,
+    {
+      cache: "no-store",
+    }
   );
+
+  if (!res.ok) notFound();
+
+  const post: Post = await res.json();
+
+  return <BlogDetails post={post} />;
 }

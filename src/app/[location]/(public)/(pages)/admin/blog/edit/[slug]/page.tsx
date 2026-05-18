@@ -307,7 +307,6 @@ export default function EditBlogPostPage() {
           is_published: data.is_published,
           published_at: data.published_at,
           read_time: data.content ? calcReadTime(data.content) : null,
-          // only send new_slug if it actually changed
           ...(slugChanged ? { new_slug: data.slug } : {}),
         }),
       });
@@ -323,7 +322,6 @@ export default function EditBlogPostPage() {
 
       toast.success("Post updated!");
 
-      // If slug changed, redirect to new slug
       if (slugChanged) {
         router.push(`/admin/blog/edit/${data.slug}`);
       } else {
@@ -377,7 +375,7 @@ export default function EditBlogPostPage() {
             </button>
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h1 className="text-[16px] font-semibold text-zinc-900 dark:text-white truncate max-w-[300px]">
+                <h1 className="text-[16px] font-semibold text-zinc-900 dark:text-white truncate max-w-75">
                   {post.title}
                 </h1>
                 <span
@@ -493,7 +491,7 @@ export default function EditBlogPostPage() {
             </div>
           </Card>
 
-          <Card className="!p-0 overflow-visible">
+          <Card className="p-0! overflow-visible">
             <div className="px-4 pt-4">
               <SectionLabel>Content</SectionLabel>
             </div>
@@ -612,7 +610,7 @@ export default function EditBlogPostPage() {
                 <button
                   type="button"
                   onClick={addTag}
-                  className="h-[38px] px-3 shrink-0 rounded-lg text-sm font-medium
+                  className="h-9.5 px-3 shrink-0 rounded-lg text-sm font-medium
                     bg-zinc-100 dark:bg-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-600
                     text-zinc-700 dark:text-zinc-300 transition-colors"
                 >

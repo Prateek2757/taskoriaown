@@ -14,7 +14,7 @@ export async function GET(req: Request) {
         `SELECT
               post_id, slug, title, excerpt, author_name, author_role,
               author_image, image_url, category, tags, is_featured, is_published,
-              views, likes, read_time, published_at, created_at
+              views, likes, read_time, published_at, created_at,updated_at
              FROM blog_posts
              ORDER BY created_at DESC`
       );

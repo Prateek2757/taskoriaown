@@ -20,6 +20,7 @@ type Blog = {
   likes: number;
   read_time: string;
   published_at: string;
+  updated_at?: string;
   image_url: string;
 };
 
@@ -75,15 +76,15 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
   // };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-zinc-950 dark:to-zinc-900">
-      <section className="relative overflow-hidden my-6">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-blue-950/20 dark:via-zinc-950 dark:to-indigo-950/20 opacity-70" />
+    <div className="min-h-screen bg-linear-to-b from-gray-50 mb-4 to-white dark:from-zinc-950 dark:to-zinc-900">
+      <section className="relative overflow-hidden mb-6">
+        <div className="absolute inset-0 bg-linear-to-br from-blue-50 via-white to-indigo-50 dark:from-blue-950/20 dark:via-zinc-950 dark:to-indigo-950/20 opacity-70" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-8 md:px-4">
           <div className="flex justify-between">
             <div className="text-left max-w-7xl px-4 mx-auto">
               <h1 className="text-2xl md:text-6xl font-extrabold text-gray-900 dark:text-zinc-50 mb-6 leading-tight">
                 Discover Better Ways to
-                <span className="block mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
+                <span className="block mt-2 bg-linear-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
                   Get Things Done
                 </span>
               </h1>
@@ -130,7 +131,7 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
               />
             </div>
 
-            <div className="mt-2 h-[2px] bg-gray-300" />
+            <div className="mt-2 h-0.5 bg-gray-300" />
 
             {isOpen && (
               <div className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 shadow-lg z-50 rounded-sm overflow-hidden">

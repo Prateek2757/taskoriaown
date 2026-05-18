@@ -435,7 +435,6 @@ export default function NewBlogPostPage() {
             </div>
           </Card>
 
-          {/* CKEditor card */}
           <Card className="!p-0 overflow-visible">
             <div className="px-4 pt-4">
               <SectionLabel>Content</SectionLabel>

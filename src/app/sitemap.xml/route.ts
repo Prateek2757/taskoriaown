@@ -37,6 +37,7 @@ const STATIC_SITEMAPS = [
   "sitemap_static.xml",
   "sitemap_categories.xml",
   "sitemap_cities.xml",
+  "sitemap_blog.xml"
 ];
 
 
