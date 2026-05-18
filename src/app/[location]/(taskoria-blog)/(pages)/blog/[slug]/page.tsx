@@ -57,7 +57,7 @@ export default async function page({ params }: Props) {
   if (!post) notFound();
   return (
     <>
-      <BlogDetails post={post} />
+      <BlogDetails post={post}  />
     </>
   );
 }

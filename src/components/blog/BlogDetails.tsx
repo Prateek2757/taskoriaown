@@ -1,9 +1,11 @@
 "use client";
 
-import {  Tag } from "lucide-react";
+import { Tag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import { renderContent } from "../renderContent";
+import SimilarPost from "./SimilarPost";
+import { useState } from "react";
 interface Post {
   post_id: number;
   slug: string;
@@ -26,6 +28,7 @@ interface Post {
 
 interface Props {
   post: Post;
+  posts: post[];
 }
 
 const formatDate = (dateString: string) => {
@@ -36,8 +39,11 @@ const formatDate = (dateString: string) => {
   });
 };
 
-export default function BlogDetails({ post }: Props) {
-  const router = useRouter();
+
+export default function BlogDetails({ post ,posts}: Props) {
+    const router = useRouter();
+
+  const filteredCategroy = posts.filter((p) => p.category === post.category && p.post_id !== post.post_id)
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950">
       <article className="max-w-3xl mx-auto px-6 sm:px-6 lg:px-8 py-4">
@@ -46,8 +52,11 @@ export default function BlogDetails({ post }: Props) {
             className="group inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-all hover:gap-3"
             onClick={() => router.push("./")}
           >
-            <IoIosArrowBack  size={32}
-              className="group-hover:-translate-x-1 transition-transform duration-300"/><span className="text-left">Back</span>
+            <IoIosArrowBack
+              size={32}
+              className="group-hover:-translate-x-1 transition-transform duration-300"
+            />
+            <span className="text-left">Back</span>
           </button>
         </div>
         <div className="mt-3 mb-3 self-start inline-flex items-center px-5 py-2 rounded-full bg-gradient-to-r from-blue-100 to-blue-100 dark:from-blue-500/20 dark:to-blue-500/20 text-blue-700 dark:text-blue-300 font-semibold text-sm shadow-sm">
@@ -71,9 +80,9 @@ export default function BlogDetails({ post }: Props) {
         {/* <div >
          <p>{renderContent(post.content)}</p>
       </div> */}
-      <div className="prose dark:prose-invert max-w-none">
-  {renderContent(post.content)}
-</div>
+        <div className="prose dark:prose-invert max-w-none">
+          {renderContent(post.content)}
+        </div>
         <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-200 dark:border-zinc-800">
           {post.tags.map((tag) => (
             <span
@@ -85,6 +94,10 @@ export default function BlogDetails({ post }: Props) {
             </span>
           ))}
         </div>
+      </article>
+
+      <article className="max-w-3xl mx-auto px-6 sm:px-6 lg:px-8 py-4">
+       <SimilarPost  posts={filteredCategroy}/>
       </article>
     </div>
   );

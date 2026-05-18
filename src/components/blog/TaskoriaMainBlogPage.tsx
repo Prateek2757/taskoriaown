@@ -251,6 +251,7 @@ const filteredPosts = useMemo(() => {
                   post={post}
                   onClick={() => handleSelectPost(post)}
                   featured={true}
+                  filteredPosts={filteredPosts}
                 />
               ))}
             </div>
@@ -269,7 +270,7 @@ const filteredPosts = useMemo(() => {
               <BlogCard
                 key={post.post_id}
                 post={post}
-                onClick={() => handleSelectPost(post)}
+                onClick={() => handleSelectPost(post)} 
               />
             ))}
           </div>

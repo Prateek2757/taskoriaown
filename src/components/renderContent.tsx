@@ -61,6 +61,7 @@ export function renderContent(html: string) {
           </h4>
         );
       }
+      
 
       if (element.name === "ul") {
         return (
@@ -118,8 +119,7 @@ export function renderContent(html: string) {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-700 dark:text-blue-400 underline underline-offset-2 hover:text-blue-900"
-          >
+            className="text-blue-700 dark:text-blue-400 underline underline-offset-2 hover:text-blue-900">
             {children}
           </a>
         );
