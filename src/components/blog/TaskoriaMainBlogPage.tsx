@@ -5,6 +5,7 @@ import { BlogCard } from "./BlogCard";
 import { MdArrowDropDown } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import usePagination from "@/hooks/usePagination";
 
 type Blog = {
   post_id: number;
@@ -48,7 +49,7 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
         (post) =>
           post.title.toLowerCase().includes(query) ||
           post.excerpt.toLowerCase().includes(query) ||
-          post.category.toLowerCase().includes(query)
+          post.category.toLowerCase().includes(query),
       );
     }
 
@@ -59,11 +60,58 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
   const regularPosts = filteredPosts.filter((p) => !p.is_featured);
 
   const displayPosts =
-    searchQuery || selectedCategory !== "All Posts" ? filteredPosts : regularPosts;
+    searchQuery || selectedCategory !== "All Posts"
+      ? filteredPosts
+      : regularPosts;
+  const {
+    paginatedData: PaginatedDisplayPosts,
+    loadMore,
+    hasMore,
+  } = usePagination(displayPosts, 3);
+
+  //pagination
+  const [allPosts, setAllPosts] = useState([]);
+  // useEffect(() => {
+  //   setAllPosts((prev) => {
+  //     const existingIds = new Set(prev.map((p) => p.post_id));
+
+  //     const newPosts = PaginatedDisplayPosts.filter(
+  //       (p) => !existingIds.has(p.post_id),
+  //     );
+
+  //     return [...prev, ...newPosts];
+  //   });
+  // }, [PaginatedDisplayPosts]);
+
+  const prevPaginatedRef = useRef<Blog[]>([]);
+
+  useEffect(() => {
+    setAllPosts([]);
+    prevPaginatedRef.current = [];
+  }, [selectedCategory, searchQuery]);
+
+  useEffect(() => {
+    const prev = prevPaginatedRef.current;
+
+    if (prev === PaginatedDisplayPosts) return;
+    prevPaginatedRef.current = PaginatedDisplayPosts;
+
+    setAllPosts((existing) => {
+      const existingIds = new Set(existing.map((p) => p.post_id));
+      const newPosts = PaginatedDisplayPosts.filter(
+        (p) => !existingIds.has(p.post_id),
+      );
+      if (newPosts.length === 0) return existing;
+      return [...existing, ...newPosts];
+    });
+  }, [PaginatedDisplayPosts]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -89,8 +137,9 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
                 </span>
               </h1>
               <p className="text-base md:text-lg text-gray-600 dark:text-zinc-400 leading-relaxed">
-                Discover helpful resources, professional insights, and fresh ideas from a
-                platform built to connect Australians with trusted local professionals.
+                Discover helpful resources, professional insights, and fresh
+                ideas from a platform built to connect Australians with trusted
+                local professionals.
               </p>
             </div>
 
@@ -115,7 +164,9 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="px-8 pb-14 -mt-4 mb-8 rounded-sm w-full">
-          <p className="text-xl sm:text-3xl font-semibold text-blue-600 mb-4">Filter</p>
+          <p className="text-xl sm:text-3xl font-semibold text-[#2563EB] mb-4">
+            Filter
+          </p>
 
           <div className="relative w-full max-w-xs" ref={dropdownRef}>
             <div
@@ -155,35 +206,44 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
           </div>
         </div>
 
-        {selectedCategory === "All Posts" && searchQuery === "" && featuredPosts.length > 0 && (
-          <section className="mb-8 -mt-10">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-8 flex items-center gap-3">
-              <TrendingUp className="text-blue-600 dark:text-blue-400" />
-              Featured Articles
-            </h2>
-            <div className="grid md:grid-cols-6 gap-8">
-              {featuredPosts.map((post) => (
-                <BlogCard
-                  key={post.post_id}
-                  post={post}
-                  featured={true}
-                />
-              ))}
-            </div>
-          </section>
-        )}
+        {selectedCategory === "All Posts" &&
+          searchQuery === "" &&
+          featuredPosts.length > 0 && (
+            <section className="mb-8 -mt-10">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-8 flex items-center gap-3">
+                <TrendingUp className="text-#2563EB dark:text-blue-400" />
+                Featured Articles
+              </h2>
+              <div className="grid md:grid-cols-6 gap-8">
+                {featuredPosts.map((post) => (
+                  <BlogCard key={post.post_id} post={post} featured={true} />
+                ))}
+              </div>
+            </section>
+          )}
 
-        {displayPosts.length > 0 && (
+        {allPosts.length > 0 && (
           <section className="-mt-6">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-4 flex items-center gap-3">
-              <Sparkles className="text-blue-600 dark:text-blue-400" />
-              {selectedCategory === "All Posts" ? "Latest Articles" : selectedCategory}
+              <Sparkles className="text-[#2563EB] dark:text-blue-400" />
+              {selectedCategory === "All Posts"
+                ? "Latest Articles"
+                : selectedCategory}
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {displayPosts.map((post) => (
+              {allPosts.map((post) => (
                 <BlogCard key={post.post_id} post={post} />
               ))}
             </div>
+
+            {hasMore && (
+              <button
+                onClick={loadMore}
+                className="ml-auto block  w-24 p-1 rounded-md text-white bg-[#2563EB]  hover:bg-blue-600 hover:transition-colors"
+              >
+                See More
+              </button>
+            )}
           </section>
         )}
       </main>
