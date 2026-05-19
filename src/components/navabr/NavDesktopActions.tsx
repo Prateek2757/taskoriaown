@@ -80,15 +80,15 @@ export default function NavDesktopActions({
             href="/signin"
             prefetch
             className="inline-flex items-center justify-center h-10 px-4 rounded-md text-sm font-medium
-              text-gray-700 dark:text-gray-300
-              hover:bg-accent hover:text-accent-foreground transition-colors"
+              text-gray-700 dark:text-gray-300 hover:scale-105 transition-all duration-300 
+              hover:bg-accent hover:text-accent-foreground "
           >
             Sign In
           </Link>
           <Button
             onClick={onJoinAsProvider}
             className="bg-[#2563EB]  hover:shadow-xl hover:shadow-blue-500/40
-               hover:-translate-y-0.5  text-white transition-all duration-30 font-medium border-none hover:bg-[#1D4FD8]"
+               hover:scale-105  text-white transition-all duration-300 font-medium border-none hover:bg-[#1D4FD8]"
           >
             Join as Provider
           </Button>

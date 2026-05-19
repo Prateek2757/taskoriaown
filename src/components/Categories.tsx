@@ -98,7 +98,7 @@ export default function Services() {
             <div className="text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white  md:leading-tight drop-shadow-sm">
               Popular services on Taskoria
               <br />
-              {/* <span className="text-[#3C7DED]">Empowered and Rewarded</span> */}
+              {/* <span className="text-[#2563EB]">Empowered and Rewarded</span> */}
             </div>
           </div>
 
@@ -115,8 +115,9 @@ export default function Services() {
             {Array.from({ length: 4 }).map((_, index) => (
               <div
                 key={index}
-                className={`relative overflow-hidden rounded-3xl bg-gray-200 animate-pulse ${index === 0 ? "lg:col-span-2 lg:row-span-2" : ""
-                  } ${index === 3 ? "lg:col-span-2" : ""}`}
+                className={`relative overflow-hidden rounded-3xl bg-gray-200 animate-pulse ${
+                  index === 0 ? "lg:col-span-2 lg:row-span-2" : ""
+                } ${index === 3 ? "lg:col-span-2" : ""}`}
               >
                 <div className="h-full min-h-80 lg:min-h-75" />
               </div>
@@ -196,13 +197,15 @@ export default function Services() {
               <motion.div
                 key={category.category_id}
                 variants={itemVariants}
-                className={`group relative overflow-hidden rounded-3xl max-md:flex-[1_0_300px] ${index === 0 ? "lg:col-span-2 lg:row-span-" : ""
-                  } ${index === 3 ? "lg:col-span-3  " : ""}`}
+                className={`group relative overflow-hidden rounded-3xl max-md:flex-[1_0_300px] ${
+                  index === 0 ? "lg:col-span-2 lg:row-span-" : ""
+                } ${index === 3 ? "lg:col-span-3  " : ""}`}
               >
                 <Link
-                  href={`/services/${category.slug ||
+                  href={`/services/${
+                    category.slug ||
                     category.name.toLowerCase().replace(/\s+/g, "-")
-                    }`}
+                  }`}
                   className="block"
                 >
                   <div className="relative  h-full min-h-80 lg:min-h-66.25">
@@ -219,9 +222,10 @@ export default function Services() {
                         33vw"
                       />
                       <div
-                        className={`absolute inset-0 bg-linear-to-t ${staticImages[index]?.gradient ||
+                        className={`absolute inset-0 bg-linear-to-t ${
+                          staticImages[index]?.gradient ||
                           staticImages[0].gradient
-                          } to-transparent opacity-60`}
+                        } to-transparent opacity-60`}
                       />
                       <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
                       <div className=" absolute p-3 right-0  flex justify-end">

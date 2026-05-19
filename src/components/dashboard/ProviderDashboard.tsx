@@ -242,7 +242,7 @@ export default function ProviderDashboard() {
                     <Avatar className="relative h-28 w-28 mx-auto">
                       {imageToShow ? (
                         <Image
-                        title="Provider Dashboard Profile"
+                          title="Provider Dashboard Profile"
                           src={imageToShow as string}
                           width={112}
                           height={112}
@@ -460,7 +460,8 @@ export default function ProviderDashboard() {
                         </Badge>
                       </div>
                       <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                        You have access to priority support, weekly free leads & exclusive features.
+                        You have access to priority support, weekly free leads &
+                        exclusive features.
                       </p>
                       <div className="flex items-center gap-3">
                         <Link href="/settings/billing" className="flex-1">
@@ -468,8 +469,14 @@ export default function ProviderDashboard() {
                             Manage Billing
                           </Button>
                         </Link>
-                        <Link href="/settings/billing/unsubscription" className="flex-none">
-                          <Button variant="outline" className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-300 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-950/30 font-medium whitespace-nowrap">
+                        <Link
+                          href="/settings/billing/unsubscription"
+                          className="flex-none"
+                        >
+                          <Button
+                            variant="outline"
+                            className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-300 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-950/30 font-medium whitespace-nowrap"
+                          >
                             Cancel Plan
                           </Button>
                         </Link>
@@ -541,7 +548,7 @@ export default function ProviderDashboard() {
 
           <div className="space-y-6">
             <div className="rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800">
-              <div className="relative h-36 bg-[#3C7DED] flex flex-col justify-between p-5">
+              <div className="relative h-36 bg-[#2563EB] flex flex-col justify-between p-5">
                 <div className="absolute top-0 right-0 w-28 h-28 bg-white/10 rounded-full blur-2xl" />
                 <div className="absolute bottom-0 left-0 w-20 h-20 bg-white/10 rounded-full blur-xl" />
                 <div className="relative flex items-start justify-between">

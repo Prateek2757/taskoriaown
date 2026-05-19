@@ -1,8 +1,7 @@
 "use client";
 
-import { ChevronRight, MapPin, Users } from "lucide-react";
+import { MapPin, Users } from "lucide-react";
 import LocationSearch from "@/components/Location/locationsearch";
-import Link from "next/link";
 
 interface HeroSectionProps {
   service: any;
@@ -27,9 +26,9 @@ export default function ServiceHeroSection({
 
   return (
     <section className="relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-blue-900" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-black/20" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-blue-950 to-blue-900" />
+      <div className="absolute inset-0 bg-linear-to-r from-black/75 via-black/50 to-black/20" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
       {/* <div
         className="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-40 dark:opacity-20"
         style={{ backgroundImage: `url(${service.hero_image})` }}
@@ -65,7 +64,7 @@ export default function ServiceHeroSection({
           </nav> */}
         <div className="text-center mb-6">
           <h1 className="text-4xl md:text-5xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-6">
-            <span className="bg-[#3C7DED] bg-clip-text text-transparent drop-shadow-lg">
+            <span className="bg-[#2563EB] bg-clip-text text-transparent drop-shadow-lg">
               {title}
             </span>
             <span className="block mt-3 text-2xl md:text-2xl font-medium text-white/90">

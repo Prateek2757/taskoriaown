@@ -17,7 +17,7 @@ export default function HeroSection() {
           aria-hidden="true"
         />
         <div
-          className="container md:pt-10 pt-6 max-md:bg-linear-to-r from-[#3C7DED]/25 via-[#41A6EE]/20
+          className="container md:pt-10 pt-6 max-md:bg-linear-to-r from-[#2563EB]/25 via-[#A6B4FA]/20
             to-[#46CBEE]/25 mx-auto md:px-4 relative z-10"
         >
           <div className="flex flex-col items-center gap-4 max-w-auto mx-auto ">

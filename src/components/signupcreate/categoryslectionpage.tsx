@@ -26,8 +26,8 @@ export default function CategorySelectionContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isNavigating, setIsNavigating] = useState(false);
- const searchparams = useSearchParams()
- const ref = searchparams.get("ref")
+  const searchparams = useSearchParams();
+  const ref = searchparams.get("ref");
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -41,7 +41,7 @@ export default function CategorySelectionContent() {
     fetchCategories();
 
     const savedDraft = localStorage.getItem("draftProviderPublicId");
-    // console.log("Draft ID from localStorage:", savedDraft); 
+    // console.log("Draft ID from localStorage:", savedDraft);
 
     if (savedDraft) setDraftId(String(savedDraft));
   }, []);
@@ -89,7 +89,7 @@ export default function CategorySelectionContent() {
       <Card className="max-w-2xl w-full shadow-2xl border border-gray-200/40 dark:border-gray-700/40 rounded-3xl backdrop-blur-xl bg-white/80 dark:bg-black/40 transition-colors">
         <CardContent className="p-8">
           <div className="text-center mb-6">
-            <h1 className="text-4xl font-extrabold bg-blue-500 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-extrabold bg-[#2563EB] bg-clip-text text-transparent">
               What service do you provide?
             </h1>
             <p className="text-gray-600 dark:text-gray-300 mt-2">
@@ -124,7 +124,7 @@ export default function CategorySelectionContent() {
                         whileHover={{ scale: 1.03 }}
                         className={`cursor-pointer border rounded-xl py-2 text-center font-medium transition-all duration-200 ${
                           selectedCategory === String(c.public_id)
-                            ? "bg-blue-500 text-white border-cyan-600 shadow-md"
+                            ? "bg-[#2563EB] text-white border-cyan-600 shadow-md"
                             : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-100 hover:bg-cyan-50 dark:hover:bg-cyan-900/20"
                         }`}
                         onClick={() =>
@@ -159,10 +159,10 @@ export default function CategorySelectionContent() {
                       setSelectedCategory(String(c.public_id));
                       setSearchQuery(c.name);
                     }}
-                    className={`rounded-full px-4 py-2 text-sm transition  ${
+                    className={`rounded-xl px-4 py-2 text-sm transition  ${
                       selectedCategory === String(c.public_id)
                         ? "bg-cyan-600 text-white border-cyan-600"
-                        : "hover:bg-cyan-100 dark:hover:bg-cyan-900/20 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700"
+                        : "hover:bg-blue-100 dark:hover:bg-blue-900/20 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700"
                     }`}
                   >
                     {c.name}
@@ -176,7 +176,7 @@ export default function CategorySelectionContent() {
             <Button
               disabled={isNavigating}
               onClick={goNext}
-              className="bg-gradient-to-r bg-blue-600 text-white px-10 py-5 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-cyan-700 hover:to-blue-700 dark:hover:from-cyan-600 dark:hover:to-blue-600 transition-all w-full"
+              className=" bg-blue-600 text-white px-10 py-5 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl hover:from-cyan-700 hover:to-blue-700 dark:hover:from-cyan-600 dark:hover:to-blue-600 transition-all w-full"
             >
               {isNavigating ? (
                 <>

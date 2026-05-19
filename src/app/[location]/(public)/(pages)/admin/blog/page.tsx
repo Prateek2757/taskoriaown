@@ -171,7 +171,6 @@ function DeleteDialog({
 //   );
 // }
 
-
 function PostRow({
   post,
   onDelete,
@@ -261,8 +260,8 @@ function PostRow({
             className="inline-flex items-center justify-center w-7 h-7 rounded-md
               hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-500 dark:text-zinc-600
               hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
-            title="Edit post">
-
+            title="Edit post"
+          >
             <Pen className="w-5 h-5" />
           </Link>
 
@@ -329,7 +328,7 @@ export default function AdminBlogPage() {
               Blog posts
             </h1>
             <p className="text-sm text-zinc-600 dark:text-zinc-500 mt-0.5">
-              {data?.total ?? 0} total · {published} published 
+              {data?.total ?? 0} total · {published} published
             </p>
           </div>
           <Link
@@ -471,21 +470,18 @@ export default function AdminBlogPage() {
         post={deleteTarget}
         onClose={() => setDeleteTarget(null)}
         onDeleted={() => {
-          mutate(
-            (current) => {
-              if (!current) return current;
-        
-              return {
-                ...current,
-                posts: current.posts.filter(
-                  (p) => p.post_id !== deleteTarget?.post_id
-                ),
-                total: current.total - 1,
-              };
-            },
-            false
-          );
-        
+          mutate((current) => {
+            if (!current) return current;
+
+            return {
+              ...current,
+              posts: current.posts.filter(
+                (p) => p.post_id !== deleteTarget?.post_id
+              ),
+              total: current.total - 1,
+            };
+          }, false);
+
           mutate();
         }}
       />

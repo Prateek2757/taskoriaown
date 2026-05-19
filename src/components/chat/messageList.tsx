@@ -156,7 +156,7 @@ export default function MessageList({
           <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 shadow-md">
             {otherProfileImage ? (
               <Image
-              title="Profile Image of Messages Inbox"
+                title="Profile Image of Messages Inbox"
                 src={otherProfileImage}
                 alt="Profile image"
                 width={44}
@@ -164,7 +164,7 @@ export default function MessageList({
                 className="object-cover w-full h-full transition-transform group-hover:scale-105"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
+              <div className="w-full h-full bg-gradient-to-br from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
                 {getInitials(otherName)}
               </div>
             )}
@@ -221,22 +221,22 @@ export default function MessageList({
                             <div
                               className={`w-8 h-8 ${showAvatar ? "opacity-100" : "opacity-0"}`}
                             >
-                                  <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 shadow-md">
-            {otherProfileImage ? (
-              <Image
-              title="Other Profile image"
-                src={otherProfileImage}
-                alt="Profile image"
-                width={44}
-                height={44}
-                className="object-cover w-full h-full transition-transform group-hover:scale-105"
-              />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
-                {getInitials(otherName)}
-              </div>
-            )}
-          </div>
+                              <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 shadow-md">
+                                {otherProfileImage ? (
+                                  <Image
+                                    title="Other Profile image"
+                                    src={otherProfileImage}
+                                    alt="Profile image"
+                                    width={44}
+                                    height={44}
+                                    className="object-cover w-full h-full transition-transform group-hover:scale-105"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full bg-gradient-to-br from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
+                                    {getInitials(otherName)}
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           )}
 
@@ -250,7 +250,7 @@ export default function MessageList({
                             <div
                               className={`px-4 py-2 rounded-2xl shadow-sm ${
                                 isMe
-                                  ? "bg-[#3C7DED] text-white rounded-br-md shadow-md"
+                                  ? "bg-[#2563EB] text-white rounded-br-md shadow-md"
                                   : "bg-gray-100 dark:bg-[#1A1C1F] text-gray-900 dark:text-white rounded-bl-md"
                               }`}
                             >
@@ -272,7 +272,7 @@ export default function MessageList({
                                     <Clock className="w-3 h-3 text-gray-400 animate-pulse" />
                                   )}
                                   {m.status === "sent" && (
-                                    <CheckCheck className="w-3 h-3 text-[#3C7DED]" />
+                                    <CheckCheck className="w-3 h-3 text-[#2563EB]" />
                                   )}
                                   {m.status === "failed" && (
                                     <AlertCircle className="w-3 h-3 text-red-500" />
@@ -298,7 +298,7 @@ export default function MessageList({
                   exit={{ opacity: 0 }}
                   className="flex items-end gap-2"
                 >
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#3C7DED] to-[#41A6EE] text-white flex items-center justify-center text-xs font-semibold shadow">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#2563EB] to-[#A6B4FA] text-white flex items-center justify-center text-xs font-semibold shadow">
                     {getInitials(otherName)}
                   </div>
 
@@ -359,7 +359,7 @@ export default function MessageList({
             rows={1}
             className={`flex-1 px-4 py-2 rounded-full border-2 bg-gray-50 dark:bg-[#101114] text-gray-900 dark:text-white placeholder-gray-500 resize-none max-h-[120px] scrollbar-thin transition-all ${
               isFocused
-                ? "border-[#3C7DED] bg-white dark:bg-[#1A1C1F]"
+                ? "border-[#2563EB] bg-white dark:bg-[#1A1C1F]"
                 : "border-gray-200 dark:border-gray-700"
             }`}
           />
@@ -369,7 +369,7 @@ export default function MessageList({
             disabled={!input.trim()}
             className={`p-2 rounded-full transition-all ${
               input.trim()
-                ? "bg-[#3C7DED] hover:bg-[#3574d1] text-white shadow"
+                ? "bg-[#2563EB] hover:bg-[#3574d1] text-white shadow"
                 : "bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed"
             }`}
           >
@@ -384,7 +384,7 @@ export default function MessageList({
 function LoadingState() {
   return (
     <div className="flex flex-col items-center justify-center h-full">
-      <Loader2 className="w-8 h-8 text-[#3C7DED] animate-spin mb-2" />
+      <Loader2 className="w-8 h-8 text-[#2563EB] animate-spin mb-2" />
       <p className="text-sm text-gray-500 dark:text-gray-400">
         Loading messages...
       </p>
@@ -395,9 +395,9 @@ function LoadingState() {
 function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center">
-      <div className="w-20 h-20 rounded-full bg-[#3C7DED]/10 flex items-center justify-center mb-4">
+      <div className="w-20 h-20 rounded-full bg-[#2563EB]/10 flex items-center justify-center mb-4">
         <svg
-          className="w-10 h-10 text-[#3C7DED]"
+          className="w-10 h-10 text-[#2563EB]"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

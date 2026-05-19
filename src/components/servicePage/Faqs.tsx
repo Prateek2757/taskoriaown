@@ -28,12 +28,12 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
               onClick={() => setActiveFaq(activeFaq === i ? null : i)}
               className="w-full text-left py-5 px-1 flex items-center justify-between gap-4 group"
             >
-              <span className="font-semibold text-gray-900 dark:text-white text-base group-hover:text-[#3C7DED] transition-colors">
+              <span className="font-semibold text-gray-900 dark:text-white text-base group-hover:text-[#2563EB] transition-colors">
                 {faq.question}
               </span>
               <ChevronDown
                 className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-200 ${
-                  activeFaq === i ? "rotate-180 text-[#3C7DED]" : ""
+                  activeFaq === i ? "rotate-180 text-[#2563EB]" : ""
                 }`}
               />
             </button>

@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { TrendingUp } from "lucide-react";
 
-
 type Blog = {
   post_id: number;
   slug: string;
@@ -13,7 +12,7 @@ type Blog = {
   views: number;
   published_at: string;
   image_url: string;
-  updated_at?:string;
+  updated_at?: string;
   is_featured?: boolean;
 };
 
@@ -23,7 +22,7 @@ export const BlogCard = ({
 }: {
   post: Blog;
   featured?: boolean;
-  onClick?: () => void; 
+  onClick?: () => void;
 }) => {
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleDateString("en-AU", {
@@ -99,7 +98,7 @@ export const BlogCard = ({
 };
 
 export const BlogCardList = ({ posts }: { posts: Blog[] }) => {
-    if (!posts || !posts.length) return <p>No related posts found.</p>;
+  if (!posts || !posts.length) return <p>No related posts found.</p>;
 
   return (
     <div className=" max-w-6xl mx-auto">
@@ -109,6 +108,5 @@ export const BlogCardList = ({ posts }: { posts: Blog[] }) => {
         ))}
       </div>
     </div>
-    
   );
 };

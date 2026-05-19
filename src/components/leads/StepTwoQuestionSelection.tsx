@@ -288,12 +288,12 @@ export default function StepTwoQuestionsForm({
   if (currentStep === "questions") {
     return (
       <div className="flex flex-col h-full max-h-[calc(90vh-8rem)]">
-        <div className="flex-1 overflow-y-auto px-1">
-          <div className="flex flex-col gap-4">
+        <div className="flex-1 overflow-y-auto p-1">
+          <div className="flex flex-col ">
             <div className="flex items-center gap-3 mb-2">
-              <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                 <div
-                  className="bg-[#2563EB] h-2 rounded-full transition-all duration-300"
+                  className="bg-[#2563EB] h-1.5 rounded-full transition-all duration-300"
                   style={{
                     width: `${((currentIndex + 1) / questions.length) * 100}%`,
                   }}
@@ -322,7 +322,7 @@ export default function StepTwoQuestionsForm({
           </div>
         </div>
 
-        <div className="flex justify-between pt-6 border-t mt-6 border-gray-200 dark:border-gray-700">
+        <div className="flex justify-between pt-2 border-t mt-2 border-gray-200 dark:border-gray-700">
           <Button
             variant="outline"
             type="button"
@@ -547,7 +547,7 @@ export default function StepTwoQuestionsForm({
           type="submit"
           disabled={loading}
           onClick={handleSubmit(onSubmit)}
-          className={`rounded-lg px-8 bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105 ${
+          className={`rounded-lg px-8 bg-[#2563EB] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105 ${
             loading ? "opacity-70 cursor-not-allowed" : ""
           }`}
         >

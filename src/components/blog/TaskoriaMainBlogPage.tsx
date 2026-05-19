@@ -49,7 +49,7 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
         (post) =>
           post.title.toLowerCase().includes(query) ||
           post.excerpt.toLowerCase().includes(query) ||
-          post.category.toLowerCase().includes(query),
+          post.category.toLowerCase().includes(query)
       );
     }
 
@@ -99,7 +99,7 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
     setAllPosts((existing) => {
       const existingIds = new Set(existing.map((p) => p.post_id));
       const newPosts = PaginatedDisplayPosts.filter(
-        (p) => !existingIds.has(p.post_id),
+        (p) => !existingIds.has(p.post_id)
       );
       if (newPosts.length === 0) return existing;
       return [...existing, ...newPosts];

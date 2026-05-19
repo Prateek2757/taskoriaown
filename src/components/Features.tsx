@@ -109,7 +109,7 @@ export default function FeaturesStacking() {
               transparent 0deg,
               transparent 260deg,
               #1e40af 270deg,
-              #3b82f6 290deg,
+              var(--color-brand-accent-light) 290deg,
               #60a5fa 310deg,
               #93c5fd 330deg,
               #dbeafe 345deg,
@@ -140,16 +140,16 @@ export default function FeaturesStacking() {
         <div className=" pb-3  px-4">
           <header className="sm:text-center mx-auto">
             <div
-              className="text-4xl md:text-xl lg:text-5xl text-gray-800 dark:text-white font-extrabold tracking-tight mb-2
+              className=" text-4xl  text-gray-800 dark:text-white font-bold tracking-tight mb-2
                 
                   "
             >
               Why hire through{" "}
               <span className="bg-[#2563EB] bg-clip-text text-transparent">
-                Taskoria
+                Taskoria ...
               </span>{" "}
             </div>
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg  text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
               Designed to make service hiring simpler, clearer, and safer.
             </p>
           </header>
@@ -344,15 +344,17 @@ export const Card = ({
       >
         <div className="flex flex-col gap-0 md:gap-6 h-full p-6 md:py-4 md:px-10">
           <div
-            className={`flex flex-col space-y-4 ${isEven ? "md:text-end" : "text-start"
-              }`}
+            className={`flex flex-col space-y-4 ${
+              isEven ? "md:text-end" : "text-start"
+            }`}
           >
             <h2
               className={`text-2xl  font-extrabold  inlin
-              ${isEven
+              ${
+                isEven
                   ? " bg-linear-to-r  from-[#1D4ED8]  via-[#2563EB] to-[#60A5FA] "
                   : "bg-linear-to-r from-[#1D4ED8]   via-[#60A5FA] to-[#60A5FA] "
-                } 
+              } 
 
                bg-clip-text 
                text-transparent 

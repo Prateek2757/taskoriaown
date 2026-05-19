@@ -373,7 +373,7 @@ export default function AdminBudgetManager() {
                           processing === task.task_id ||
                           !budgetValues[task.task_id]
                         }
-                        className="w-full bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold"
+                        className="w-full bg-gradient-to-r from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] text-white font-semibold"
                       >
                         {processing === task.task_id ? (
                           <>
@@ -560,7 +560,7 @@ export default function AdminBudgetManager() {
                       processing === selectedTask.task_id ||
                       !budgetValues[selectedTask.task_id]
                     }
-                    className="bg-gradient-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold px-6"
+                    className="bg-gradient-to-r from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] text-white font-semibold px-6"
                   >
                     {processing === selectedTask.task_id ? (
                       <>

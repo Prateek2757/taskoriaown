@@ -80,16 +80,22 @@ function PostTaskCard() {
   return (
     <Card>
       <div className="p-5">
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Post a task</p>
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">
+          Post a task
+        </p>
         <div className="space-y-3 mb-4">
           <div>
-            <p className="text-[11px] text-gray-400 mb-1">What do you need done?</p>
+            <p className="text-[11px] text-gray-400 mb-1">
+              What do you need done?
+            </p>
             <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl px-3 py-2.5 text-sm text-gray-900 dark:text-white font-medium">
               Bathroom deep clean ✦
             </div>
           </div>
           <div>
-            <p className="text-[11px] text-gray-400 mb-1">When do you need it?</p>
+            <p className="text-[11px] text-gray-400 mb-1">
+              When do you need it?
+            </p>
             <div className="flex gap-2">
               {["ASAP", "This week", "Flexible"].map((opt, i) => (
                 <div
@@ -131,15 +137,41 @@ function PostTaskCard() {
 
 function OffersCard() {
   const pros = [
-    { init: "SB", name: "Sarah B.", role: "Cleaner", rating: "4.9", reviews: "87", price: "$110", time: "Tomorrow" },
-    { init: "JM", name: "Jake M.", role: "Home Pro", rating: "4.8", reviews: "54", price: "$130", time: "Today" },
-    { init: "AL", name: "Amy L.", role: "Cleaner", rating: "5.0", reviews: "121", price: "$120", time: "This week" },
+    {
+      init: "SB",
+      name: "Sarah B.",
+      role: "Cleaner",
+      rating: "4.9",
+      reviews: "87",
+      price: "$110",
+      time: "Tomorrow",
+    },
+    {
+      init: "JM",
+      name: "Jake M.",
+      role: "Home Pro",
+      rating: "4.8",
+      reviews: "54",
+      price: "$130",
+      time: "Today",
+    },
+    {
+      init: "AL",
+      name: "Amy L.",
+      role: "Cleaner",
+      rating: "5.0",
+      reviews: "121",
+      price: "$120",
+      time: "This week",
+    },
   ];
   return (
     <Card>
       <div className="p-5">
         <div className="flex items-center justify-between mb-4">
-          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Quotes received</p>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+            Quotes received
+          </p>
           <span className="text-[10px] bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-2 py-0.5 rounded-full font-semibold">
             3 new
           </span>
@@ -158,13 +190,17 @@ function OffersCard() {
                 {p.init}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">{p.name}</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                  {p.name}
+                </p>
                 <p className="text-[11px] text-gray-400">
                   ★ {p.rating} · {p.reviews} reviews · {p.time}
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm font-bold text-[#2563EB] dark:text-blue-400">{p.price}</p>
+                <p className="text-sm font-bold text-[#2563EB] dark:text-blue-400">
+                  {p.price}
+                </p>
                 <p className="text-[10px] text-gray-400">{p.role}</p>
               </div>
             </div>
@@ -185,16 +221,40 @@ function EscrowCard() {
         <div className="flex items-center gap-3 mb-5 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800/40">
           <span className="text-2xl">🔒</span>
           <div>
-            <p className="text-sm font-bold text-gray-900 dark:text-white">Payment protected</p>
-            <p className="text-xs text-gray-400">Funds held safely until you approve</p>
+            <p className="text-sm font-bold text-gray-900 dark:text-white">
+              Payment protected
+            </p>
+            <p className="text-xs text-gray-400">
+              Funds held safely until you approve
+            </p>
           </div>
         </div>
         <div className="space-y-3 mb-5">
           {[
-            { step: "1", label: "You book & pay", status: "done", note: "Funds go to secure escrow" },
-            { step: "2", label: "Tradie completes the job", status: "done", note: "Job tracked in-app" },
-            { step: "3", label: "You review & approve", status: "active", note: "Your call — no pressure" },
-            { step: "4", label: "Tradie gets paid", status: "pending", note: "Released within 24 hours" },
+            {
+              step: "1",
+              label: "You book & pay",
+              status: "done",
+              note: "Funds go to secure escrow",
+            },
+            {
+              step: "2",
+              label: "Tradie completes the job",
+              status: "done",
+              note: "Job tracked in-app",
+            },
+            {
+              step: "3",
+              label: "You review & approve",
+              status: "active",
+              note: "Your call — no pressure",
+            },
+            {
+              step: "4",
+              label: "Tradie gets paid",
+              status: "pending",
+              note: "Released within 24 hours",
+            },
           ].map((s) => (
             <div key={s.step} className="flex items-start gap-3">
               <div
@@ -202,14 +262,16 @@ function EscrowCard() {
                   s.status === "done"
                     ? "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400"
                     : s.status === "active"
-                    ? "bg-[#2563EB] text-white"
-                    : "bg-gray-100 dark:bg-gray-700 text-gray-400"
+                      ? "bg-[#2563EB] text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-400"
                 }`}
               >
                 {s.status === "done" ? "✓" : s.step}
               </div>
               <div>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">{s.label}</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                  {s.label}
+                </p>
                 <p className="text-[11px] text-gray-400">{s.note}</p>
               </div>
             </div>
@@ -236,8 +298,12 @@ function ReviewCard() {
               SB
             </div>
             <div>
-              <p className="text-sm font-bold text-gray-900 dark:text-white">Sarah B.</p>
-              <p className="text-xs text-gray-400">Cleaning · Completed today · New Farm</p>
+              <p className="text-sm font-bold text-gray-900 dark:text-white">
+                Sarah B.
+              </p>
+              <p className="text-xs text-gray-400">
+                Cleaning · Completed today · New Farm
+              </p>
             </div>
           </div>
           <div className="flex gap-1 mb-3">
@@ -249,7 +315,8 @@ function ReviewCard() {
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-xl p-3 border border-gray-100 dark:border-gray-700">
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              &quot;Absolutely spotless — best cleaner I&apos;ve ever had in Brisbane. Will definitely rebook!&quot;
+              &quot;Absolutely spotless — best cleaner I&apos;ve ever had in
+              Brisbane. Will definitely rebook!&quot;
             </p>
           </div>
         </div>
@@ -307,11 +374,10 @@ function FAQ() {
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function HowItWorksCustomers() {
-    const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   return (
     <div className="bg-white dark:bg-gray-900 min-h-screen">
-
       {/* Nav */}
       {/* <nav className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur border-b border-gray-100 dark:border-gray-800">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -357,14 +423,14 @@ export default function HowItWorksCustomers() {
             Taskoria for Customers
           </h1>
           <p className="text-lg text-gray-500 dark:text-gray-400 font-light max-w-xl mx-auto mb-8 leading-relaxed">
-            Find trusted, vetted tradies and professionals across Brisbane — from
-            Fortitude Valley to the Sunshine Coast. Post a task for free and get
-            competitive quotes fast.
+            Find trusted, vetted tradies and professionals across Brisbane —
+            from Fortitude Valley to the Sunshine Coast. Post a task for free
+            and get competitive quotes fast.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
-onClick={()=> setOpenModal(true)}
-className="bg-[#2563EB] text-white font-semibold px-8 py-3.5 rounded-full hover:bg-[#1D4ED8] transition-colors shadow-md shadow-blue-200 dark:shadow-blue-900/50"
+              onClick={() => setOpenModal(true)}
+              className="bg-[#2563EB] text-white font-semibold px-8 py-3.5 rounded-full hover:bg-[#1D4ED8] transition-colors shadow-md shadow-blue-200 dark:shadow-blue-900/50"
             >
               Post a Task — It&apos;s Free
             </button>
@@ -378,16 +444,25 @@ className="bg-[#2563EB] text-white font-semibold px-8 py-3.5 rounded-full hover:
 
           {/* Location pills */}
           <div className="mt-10 flex flex-wrap justify-center gap-2">
-            {["Brisbane CBD", "Southbank", "New Farm", "Fortitude Valley", "West End", "Chermside", "Carindale", "Ipswich", "Gold Coast", "Sunshine Coast"].map(
-              (suburb) => (
-                <span
-                  key={suburb}
-                  className="text-xs bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-100 dark:border-gray-700 px-3 py-1.5 rounded-full"
-                >
-                  {suburb}
-                </span>
-              )
-            )}
+            {[
+              "Brisbane CBD",
+              "Southbank",
+              "New Farm",
+              "Fortitude Valley",
+              "West End",
+              "Chermside",
+              "Carindale",
+              "Ipswich",
+              "Gold Coast",
+              "Sunshine Coast",
+            ].map((suburb) => (
+              <span
+                key={suburb}
+                className="text-xs bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-100 dark:border-gray-700 px-3 py-1.5 rounded-full"
+              >
+                {suburb}
+              </span>
+            ))}
           </div>
         </section>
 
@@ -400,10 +475,10 @@ className="bg-[#2563EB] text-white font-semibold px-8 py-3.5 rounded-full hover:
           body={
             <>
               <p>
-                We support every imaginable service across Brisbane and South East
-                Queensland — home repairs, cleaning, landscaping, digital services,
-                and more. Describe your job, set your budget, and we&apos;ll handle
-                the rest.
+                We support every imaginable service across Brisbane and South
+                East Queensland — home repairs, cleaning, landscaping, digital
+                services, and more. Describe your job, set your budget, and
+                we&apos;ll handle the rest.
               </p>
               <p>
                 Smart Brisbane locals Taskoria it, not Google it. We connect you
@@ -437,13 +512,13 @@ className="bg-[#2563EB] text-white font-semibold px-8 py-3.5 rounded-full hover:
           body={
             <>
               <p>
-                Verified tradies and professionals in your area see your task and
-                send personalised quotes. Most Brisbane customers receive their
-                first quote within minutes of posting.
+                Verified tradies and professionals in your area see your task
+                and send personalised quotes. Most Brisbane customers receive
+                their first quote within minutes of posting.
               </p>
               <p>
-                Compare ratings, verified reviews, pricing, and availability all in
-                one place. Message any tradie directly before you commit — no
+                Compare ratings, verified reviews, pricing, and availability all
+                in one place. Message any tradie directly before you commit — no
                 obligation, no pressure.
               </p>
               <ul className="mt-3 space-y-2">
@@ -473,9 +548,9 @@ className="bg-[#2563EB] text-white font-semibold px-8 py-3.5 rounded-full hover:
           body={
             <>
               <p>
-                When you book a professional on Taskoria, your payment is held in
-                secure escrow. It&apos;s only released when you confirm the job is
-                done to your satisfaction — not a moment earlier.
+                When you book a professional on Taskoria, your payment is held
+                in secure escrow. It&apos;s only released when you confirm the
+                job is done to your satisfaction — not a moment earlier.
               </p>
               <p>
                 If something isn&apos;t right, don&apos;t approve it. Our
@@ -511,8 +586,8 @@ className="bg-[#2563EB] text-white font-semibold px-8 py-3.5 rounded-full hover:
             <>
               <p>
                 Once your job is done, leave a verified review to help other
-                Brisbane residents and reward professionals who do great work. Every
-                review on Taskoria comes from a real, completed booking.
+                Brisbane residents and reward professionals who do great work.
+                Every review on Taskoria comes from a real, completed booking.
               </p>
               <p>
                 Found someone brilliant? Save them to your favourites and rebook
@@ -600,8 +675,8 @@ className="bg-[#2563EB] text-white font-semibold px-8 py-3.5 rounded-full hover:
               Plus heaps of other benefits
             </h2>
             <p className="text-gray-500 dark:text-gray-400 text-center text-base mb-12 max-w-xl mx-auto font-light">
-              Every Taskoria customer account is free and comes packed with features
-              designed to make your life easier.
+              Every Taskoria customer account is free and comes packed with
+              features designed to make your life easier.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {[
@@ -633,17 +708,18 @@ className="bg-[#2563EB] text-white font-semibold px-8 py-3.5 rounded-full hover:
                   <div className="w-11 h-11 bg-white dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-xl flex items-center justify-center text-xl mb-4 shadow-sm">
                     {b.icon}
                   </div>
-                  <p className="font-bold text-gray-900 dark:text-white text-sm mb-2">{b.title}</p>
-                  <p className="text-xs text-gray-400 leading-relaxed">{b.desc}</p>
+                  <p className="font-bold text-gray-900 dark:text-white text-sm mb-2">
+                    {b.title}
+                  </p>
+                  <p className="text-xs text-gray-400 leading-relaxed">
+                    {b.desc}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
         </section>
-              <NewRequestModal
-                open={openModal}
-                onClose={() => setOpenModal(false)}
-              />
+        <NewRequestModal open={openModal} onClose={() => setOpenModal(false)} />
 
         {/* Testimonials */}
         {/* <section className="py-20 px-6">

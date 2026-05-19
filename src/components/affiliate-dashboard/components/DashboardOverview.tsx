@@ -42,23 +42,23 @@ import {
 } from 'recharts';
 import { QRCodeSVG } from 'qrcode.react';
 
-const KPICard = ({ 
-  title, 
-  value, 
-  growth, 
-  icon: Icon, 
+const KPICard = ({
+  title,
+  value,
+  growth,
+  icon: Icon,
   color,
-  data 
-}: { 
-  title: string; 
-  value: string | number; 
-  growth: number; 
-  icon: any; 
+  data
+}: {
+  title: string;
+  value: string | number;
+  growth: number;
+  icon: any;
   color: string;
   data: any[];
 }) => {
   const isPositive = growth >= 0;
-  
+
   return (
     <Card className="border-0 shadow-card hover:shadow-card-hover transition-shadow">
       <CardContent className="p-5">
@@ -227,7 +227,7 @@ export function DashboardOverview() {
                   <p className="text-xl font-bold text-blue-600">${earningsSummary.paid.toLocaleString()}</p>
                 </div>
               </div>
-              
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-slate-500">Payout Threshold</span>
@@ -235,7 +235,7 @@ export function DashboardOverview() {
                 </div>
                 <div className="relative">
                   <Progress value={payoutProgress} className="h-3" />
-                  <div 
+                  <div
                     className="absolute top-0 -translate-x-1/2 -mt-1"
                     style={{ left: `${Math.min(payoutProgress, 100)}%` }}
                   >
@@ -245,10 +245,10 @@ export function DashboardOverview() {
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-slate-500">Next Payout</span>
                   <span className="font-medium text-blue-600">
-                    {earningsSummary.nextPayoutDate.toLocaleDateString('en-AU', { 
-                      day: 'numeric', 
-                      month: 'short', 
-                      year: 'numeric' 
+                    {earningsSummary.nextPayoutDate.toLocaleDateString('en-AU', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric'
                     })}
                   </span>
                 </div>
@@ -268,25 +268,25 @@ export function DashboardOverview() {
                     <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
                     <XAxis dataKey="date" stroke="#94A3B8" fontSize={12} />
                     <YAxis stroke="#94A3B8" fontSize={12} />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'white', 
-                        border: 'none', 
-                        borderRadius: '12px', 
-                        boxShadow: '0 4px 24px -4px rgba(0,0,0,0.1)' 
-                      }} 
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: 'white',
+                        border: 'none',
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 24px -4px rgba(0,0,0,0.1)'
+                      }}
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="clicks" 
-                      stroke="#2563EB" 
+                    <Line
+                      type="monotone"
+                      dataKey="clicks"
+                      stroke="#2563EB"
                       strokeWidth={2}
                       dot={false}
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="conversions" 
-                      stroke="#10B981" 
+                    <Line
+                      type="monotone"
+                      dataKey="conversions"
+                      stroke="#10B981"
                       strokeWidth={2}
                       dot={false}
                     />
@@ -334,7 +334,7 @@ export function DashboardOverview() {
                   Copy
                 </Button>
               </div>
-              
+
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" className="flex-1" onClick={() => setShowQR(!showQR)}>
                   <QrCode className="w-4 h-4 mr-1" />
@@ -379,18 +379,17 @@ export function DashboardOverview() {
             </CardHeader>
             <CardContent className="space-y-3">
               {aiInsights.map((insight) => (
-                <div 
-                  key={insight.id} 
+                <div
+                  key={insight.id}
                   className="p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl border border-purple-100"
                 >
                   <div className="flex items-start gap-3">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      insight.type === 'performance' ? 'bg-green-100' :
-                      insight.type === 'opportunity' ? 'bg-amber-100' : 'bg-blue-100'
-                    }`}>
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${insight.type === 'performance' ? 'bg-green-100' :
+                        insight.type === 'opportunity' ? 'bg-amber-100' : 'bg-blue-100'
+                      }`}>
                       {insight.type === 'performance' ? <TrendingUp className="w-4 h-4 text-green-600" /> :
-                       insight.type === 'opportunity' ? <Target className="w-4 h-4 text-amber-600" /> :
-                       <Zap className="w-4 h-4 text-blue-600" />}
+                        insight.type === 'opportunity' ? <Target className="w-4 h-4 text-amber-600" /> :
+                          <Zap className="w-4 h-4 text-blue-600" />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-slate-900">{insight.title}</p>

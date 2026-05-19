@@ -14,7 +14,7 @@ const TaskoriaSasthoRedirect = () => {
   const handleRedirect = async () => {
     if (!session?.user) {
       toast.error("Sign in required. Please log in or create an account.");
-            setTimeout(() => router.push("/signin"));
+      setTimeout(() => router.push("/signin"));
       return;
     }
 
@@ -34,31 +34,30 @@ const TaskoriaSasthoRedirect = () => {
       toast.dismiss(loadingToast);
       toast.success("Opening Sasto Ticket...");
       window.open(url, "_blank");
-
     } catch (error: any) {
-      toast.dismiss(loadingToast); 
+      toast.dismiss(loadingToast);
       console.error(error);
       toast.error(
-        error?.response?.data?.error || "Something went wrong. Please try again."
+        error?.response?.data?.error ||
+          "Something went wrong. Please try again."
       );
     } finally {
       setLoading(false);
     }
   };
-if(session){
-  return (
-    <button
-      onClick={handleRedirect}
-      disabled={loading}
-      className="block text-gray-600 dark:text-gray-300 
-      hover:text-[#3C7DED] dark:hover:text-[#41A6EE] 
+  if (session) {
+    return (
+      <button
+        onClick={handleRedirect}
+        disabled={loading}
+        className="block text-gray-600 dark:text-gray-300 
+      hover:text-[#2563EB] dark:hover:text-[#A6B4FA] 
       transition-colors mb-2 disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      {loading ? "Redirecting..." : "Find Cheap Flights"}
-    </button>
-  );
-}
-
+      >
+        {loading ? "Redirecting..." : "Find Cheap Flights"}
+      </button>
+    );
+  }
 };
 
 export default TaskoriaSasthoRedirect;

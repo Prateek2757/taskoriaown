@@ -226,7 +226,7 @@ export default function JobPostingForm() {
                 size="lg"
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-1 bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white"
+                className="flex-1 bg-gradient-to-r from-[#2563EB]  via-[#A6B4FA] to-[#46CBEE] text-white"
               >
                 {isSubmitting ? "Posting..." : "Post Job"}
               </Button>

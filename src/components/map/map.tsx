@@ -49,9 +49,9 @@ export default function LocationMap({
         map: mapInstance.current,
         center: { lat: latitude, lng: longitude },
         radius: 800,
-        fillColor: "#3b82f6",
+        fillColor: "var(--color-brand-accent-light)",
         fillOpacity: 0.2,
-        strokeColor: "#3b82f6",
+        strokeColor: "var(--color-brand-accent-light)",
         strokeWeight: 2,
       });
 

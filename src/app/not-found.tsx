@@ -40,7 +40,7 @@ export default function NotFound() {
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-blue-50">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-50 via-blue-50 to-blue-50">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Floating Orbs */}
@@ -65,8 +65,8 @@ export default function NotFound() {
           className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage: `
-              linear-gradient(to right, #3C7DED 1px, transparent 1px),
-              linear-gradient(to bottom, #3C7DED 1px, transparent 1px)
+              linear-linear(to right, #2563EB 1px, transparent 1px),
+              linear-linear(to bottom, #2563EB 1px, transparent 1px)
             `,
             backgroundSize: "60px 60px",
           }}
@@ -92,7 +92,7 @@ export default function NotFound() {
         {/* 404 Number with 3D Effect */}
         <div className="relative mb-8 group">
           <div
-            className="text-[12rem] md:text-[20rem] font-black leading-none text-transparent bg-clip-text bg-gradient-to-br from-blue-600 via-blue-600 to-blue-500 select-none"
+            className="text-[12rem] md:text-[20rem] font-black leading-none text-transparent bg-clip-text bg-linear-to-br from-blue-600 via-blue-600 to-blue-500 select-none"
             style={{
               fontFamily: '"Space Grotesk", "DM Sans", sans-serif',
               textShadow: `
@@ -120,7 +120,7 @@ export default function NotFound() {
 
         {/* Lost Compass Icon */}
         <div className="mb-8 relative">
-          <div className="w-24 h-24 mx-auto bg-gradient-to-br from-blue-100 to-blue-100 rounded-full flex items-center justify-center shadow-xl animate-bounce-subtle">
+          <div className="w-24 h-24 mx-auto bg-linear-to-br from-blue-100 to-blue-100 rounded-full flex items-center justify-center shadow-xl animate-bounce-subtle">
             <Compass
               className="w-12 h-12 text-blue-600 animate-spin-very-slow"
               strokeWidth={1.5}
@@ -160,7 +160,7 @@ export default function NotFound() {
             <div className="absolute right-2 top-1/2 -translate-y-1/2">
               <Button 
                 size="sm" 
-                className="bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white rounded-xl px-6 shadow-lg hover:shadow-xl transition-all"
+                className="bg-linear-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white rounded-xl px-6 shadow-lg hover:shadow-xl transition-all"
               >
                 Search
               </Button>
@@ -185,7 +185,7 @@ export default function NotFound() {
                       animationDelay: `${index * 100}ms`,
                     }}
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 via-blue-600/10 to-blue-600/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                    <div className="absolute inset-0 bg-linear-to-r from-blue-600/0 via-blue-600/10 to-blue-600/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
                     <Icon className="w-4 h-4 mr-2 group-hover:text-blue-600 transition-colors" />
                     <span className="relative z-10">{link.label}</span>
                   </Button>
@@ -200,9 +200,9 @@ export default function NotFound() {
           <Link href="/">
             <Button
               size="lg"
-              className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white px-8 py-6 rounded-2xl text-lg font-semibold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+              className="group relative overflow-hidden bg-linear-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white px-8 py-6 rounded-2xl text-lg font-semibold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
               <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
               <span className="relative z-10">Back to Home</span>
             </Button>
@@ -257,12 +257,12 @@ export default function NotFound() {
         >
           <path
             d="M0,64 C240,96 480,96 720,64 C960,32 1200,32 1440,64 L1440,120 L0,120 Z"
-            fill="url(#wave-gradient)"
+            fill="url(#wave-linear)"
             className="animate-wave"
           />
           <defs>
-            <linearGradient
-              id="wave-gradient"
+            <linearlinear
+              id="wave-linear"
               x1="0%"
               y1="0%"
               x2="100%"
@@ -271,7 +271,7 @@ export default function NotFound() {
               <stop offset="0%" stopColor="rgba(60, 125, 237, 0.1)" />
               <stop offset="50%" stopColor="rgba(99, 102, 241, 0.1)" />
               <stop offset="100%" stopColor="rgba(139, 92, 246, 0.1)" />
-            </linearGradient>
+            </linearlinear>
           </defs>
         </svg>
       </div>

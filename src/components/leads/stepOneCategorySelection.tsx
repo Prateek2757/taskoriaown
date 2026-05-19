@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -53,7 +52,7 @@ export default function StepOneCategoryForm({
   const [showCategorySuggestions, setShowCategorySuggestions] = useState(false);
   const [searchCategoryTerm, setSearchCategoryTerm] = useState("");
 
-  const [userInteracted, setUserInteracted] = useState(false);
+  const presetsApplied = useRef(false);
 
   const { handleSubmit, setValue, watch } = useForm({
     defaultValues: {
@@ -66,51 +65,48 @@ export default function StepOneCategoryForm({
 
   const categoryId = watch("category_id");
   const location = watch("location");
-  const locationRef = useRef<{
-    city_id?: number;
-    resolved: boolean;
-  }>({ resolved: false });
+  const locationRef = useRef<{ city_id?: number; resolved: boolean }>({
+    resolved: false,
+  });
+
   const isContinueEnabled = categoryId > 0 && location?.trim() !== "";
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const res = await axios.get("/api/signup/category-selection");
-  //       setCategories(res.data);
-  //     } catch {
-  //       toast.error("Failed to load categories");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-
   useEffect(() => {
-    if (presetCategory && !userInteracted) {
+    if (presetCategory) {
       setValue("category_id", presetCategory.category_id);
       setValue("category_name", presetCategory.name);
       setSelectedCategoryTitle(presetCategory.name);
     }
-  }, [presetCategory?.category_id, userInteracted]);
+  }, [presetCategory?.category_id]);
 
   useEffect(() => {
     if (presetLocation) {
       setValue("city_id", presetLocation.city_id || 0);
-      setValue("location", presetLocation.display_name || "");
+      setValue(
+        "location",
+        presetLocation.display_name || presetLocation.city || ""
+      );
       setSelectedLocationId(String(presetLocation.city_id || 0));
     }
-  }, [presetLocation, setValue, setSelectedLocationId]);
+    const t = setTimeout(() => {
+      presetsApplied.current = true;
+    }, 0);
+    return () => clearTimeout(t);
+  }, [presetLocation]);
+
+  useEffect(() => {
+    if (!presetLocation) {
+      presetsApplied.current = true;
+    }
+  }, []);
 
   useEffect(() => {
     const term = searchCategoryTerm.trim().toLowerCase();
-
     if (!term) {
       setFilteredCategories([]);
       setShowCategorySuggestions(false);
       return;
     }
-
     const currentlySelected = categories.find(
       (c) => c.category_id === categoryId
     );
@@ -119,22 +115,12 @@ export default function StepOneCategoryForm({
       setShowCategorySuggestions(false);
       return;
     }
-
     const filtered = categories.filter((c) =>
       c.name.toLowerCase().includes(term)
     );
     setFilteredCategories(filtered);
     setShowCategorySuggestions(filtered.length > 0);
   }, [searchCategoryTerm, categories, categoryId]);
-
-  useEffect(() => {
-    if (!userInteracted) return;
-    if (categoryId > 0 && location?.trim() !== "" && !locationLoading) {
-      setSelectedCategoryId(String(categoryId));
-      setSelectedLocationId(String(watch("city_id")));
-      onNext();
-    }
-  }, [categoryId, location, locationLoading, userInteracted]);
 
   const handleSelectCategory = (cat: Category) => {
     setValue("category_id", cat.category_id, {
@@ -147,6 +133,34 @@ export default function StepOneCategoryForm({
     setSelectedCategoryTitle(cat.name);
   };
 
+  // ✅ Called only when user manually picks a location from LocationSearch
+  const handleLocationSelect = (data: any) => {
+    if (!data) {
+      locationRef.current = { resolved: false };
+      setValue("city_id", 0);
+      setValue("location", "");
+      setSelectedLocation(null);
+      return;
+    }
+
+    setValue("location", data.city || data.display_name);
+
+    if (data._resolving) {
+      locationRef.current = { resolved: false };
+      return;
+    }
+
+    locationRef.current = { city_id: data.city_id, resolved: true };
+    setValue("city_id", data.city_id ?? 0);
+    setSelectedLocationId(String(data.city_id ?? 0));
+    setSelectedLocation({ ...data });
+
+    if (presetsApplied.current && watch("category_id") > 0) {
+      setSelectedCategoryId(String(watch("category_id")));
+      onNext();
+    }
+  };
+
   const onContinue = (data: any) => {
     if (!data.category_id || data.category_id === 0) {
       return toast.error("Please select a service category");
@@ -154,7 +168,6 @@ export default function StepOneCategoryForm({
     if (!data.location) {
       return toast.error("Please select a location");
     }
-
     setSelectedCategoryId(String(data.category_id));
     setSelectedLocationId(String(data.city_id));
     onNext();
@@ -191,14 +204,12 @@ export default function StepOneCategoryForm({
                     setSelectedCategoryTitle("");
                     return;
                   }
-
                   setValue("category_id", data.category_id, {
                     shouldDirty: true,
                     shouldTouch: true,
                   });
                   setValue("category_name", data.name);
                   setSelectedCategoryTitle(data.name);
-                  setUserInteracted(true);
                 }}
               />
             </div>
@@ -237,31 +248,7 @@ export default function StepOneCategoryForm({
               <LocationSearch
                 presetLocation={presetLocation}
                 onLoadingChange={(isLoading) => setLocationLoading(isLoading)}
-                onSelect={(data) => {
-                  if (!data) {
-                    locationRef.current = { resolved: false };
-                    setValue("city_id", 0);
-                    setValue("location", "");
-                    setSelectedLocation(null);
-                    return;
-                  }
-
-                  setValue("location", data.city || data.display_name);
-
-                  if (data._resolving) {
-                    locationRef.current = { resolved: false };
-                  } else {
-                    locationRef.current = {
-                      city_id: data.city_id,
-                      resolved: true,
-                    };
-                    setValue("city_id", data.city_id ?? 0);
-                    setSelectedLocationId(String(data.city_id ?? 0));
-                    setSelectedLocation({ ...data });
-                  }
-
-                  setUserInteracted(true);
-                }}
+                onSelect={handleLocationSelect} // ✅ unified handler
               />
             </div>
           </div>

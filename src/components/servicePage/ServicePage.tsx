@@ -206,32 +206,30 @@ export default function ServicePageClient({
           {!citySlug && service.faqs && service.faqs.length > 0 && (
             <FAQSection faqs={service.faqs} />
           )}
-
-          {/* ── BOTTOM CTA BANNER ── */}
-          <aside className="rounded-3xl bg-linear-to-br from-slate-900 to-blue-900 text-white p-8 md:p-6">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div>
-                <h2 className="text-3xl font-bold mb-2">
-                  Ready to get {service.name} done
-                  {activeCityName ? ` in ${activeCityName}` : ""}?
-                </h2>
-                <p className="text-lg text-white/80">
-                  Post your job once—receive quotes fast, compare providers, and
-                  book with confidence.
-                </p>
-              </div>
-              <Button
-                onClick={handleSelectCategory}
-                className="inline-flex bg-[#2563EB] items-center gap-2 rounded-lg px-8 py-4 text-lg font-semibold"
-                aria-label={`Get free quotes for ${service.name}`}
-              >
-                Get Free Quotes
-                <ArrowRight className="w-5 h-5" />
-              </Button>
-            </div>
-          </aside>
         </section>
       </article>
+      <aside className="  bg-linear-to-br from-slate-900 via-blue-950 to-blue-900 text-white p-8 ">
+        <div className="flex max-w-7xl mx-auto flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <h2 className="text-3xl font-bold mb-2">
+              Ready to get {service.name} done
+              {activeCityName ? ` in ${activeCityName}` : ""}?
+            </h2>
+            <p className="text-lg text-white/80">
+              Post your job once—receive quotes fast, compare providers, and
+              book with confidence.
+            </p>
+          </div>
+          <Button
+            onClick={handleSelectCategory}
+            className="inline-flex bg-[#2563EB] items-center gap-2 rounded-lg px-8 py-4 text-lg font-semibold"
+            aria-label={`Get free quotes for ${service.name}`}
+          >
+            Get Free Quotes
+            <ArrowRight className="w-5 h-5" />
+          </Button>
+        </div>
+      </aside>
     </main>
   );
 }

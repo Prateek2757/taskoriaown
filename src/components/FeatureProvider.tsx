@@ -126,7 +126,7 @@ export const FeatureProvider = () => {
                                 33vw"
                               />
                             </div>
-                            <span className="text-sm font-bold bg-[#3C7DED] bg-clip-text text-transparent">
+                            <span className="text-sm font-bold bg-[#2563EB] bg-clip-text text-transparent">
                               Taskoria
                             </span>
                           </div>

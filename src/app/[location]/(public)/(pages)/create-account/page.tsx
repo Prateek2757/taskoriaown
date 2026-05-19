@@ -43,14 +43,17 @@ const onboardingSchema = z.object({
   companyName: z.string().optional(),
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  phone: z.string().min(10,"Phonenumber must be required").refine(
-    (val) => {
-      if (!val || val === "") return true;
-      const cleaned = val.replace(/\s/g, "");
-      return /^(04\d{8}|0[2378]\d{8})$/.test(cleaned);
-    },
-    { message: "Please enter a valid Australian phone number" }
-  ),
+  phone: z
+    .string()
+    .min(10, "Phonenumber must be required")
+    .refine(
+      (val) => {
+        if (!val || val === "") return true;
+        const cleaned = val.replace(/\s/g, "");
+        return /^(04\d{8}|0[2378]\d{8})$/.test(cleaned);
+      },
+      { message: "Please enter a valid Australian phone number" }
+    ),
   password: z.string().min(8, "Password must be at least 8 characters"),
   hasWebsite: z.enum(["yes", "no"]).optional(),
   websiteUrl: z
@@ -79,10 +82,10 @@ const Req = () => <span className="text-red-500 ml-0.5">*</span>;
 
 function OnboardingContent() {
   const router = useRouter();
-  const params = useSearchParams()
+  const params = useSearchParams();
   const userId = params.get("user_id");
   const categoryId = params.get("cn");
-  const refFromUrl = params.get("ref"); 
+  const refFromUrl = params.get("ref");
   const { setUser } = useUser();
   const [step, setStep] = useState<"location" | "details">("location");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -113,7 +116,7 @@ function OnboardingContent() {
   const isNationwide = watch("is_nationwide");
   const hasWebsite = watch("hasWebsite");
   const referralCode = watch("referralCode");
- 
+
   const validateReferralCode = async (code: string) => {
     if (!code || code.trim() === "") {
       setReferralStatus("idle");
@@ -137,7 +140,7 @@ function OnboardingContent() {
       setReferralMessage("Could not verify code. You can still continue.");
     }
   };
-   useEffect(() => {
+  useEffect(() => {
     if (refFromUrl) {
       validateReferralCode(refFromUrl);
     }
@@ -400,22 +403,25 @@ function OnboardingContent() {
                     You can update your service area later.
                   </div>
 
-<Button
-  type="button"
-  className="w-full bg-[#3C7DED] text-white hover:opacity-90 py-5 rounded-xl shadow-md"
-  onClick={async () => {
-    const isNationwide = form.getValues("is_nationwide");
+                  <Button
+                    type="button"
+                    className="w-full bg-[#2563EB] text-white hover:opacity-90 py-5 rounded-xl shadow-md"
+                    onClick={async () => {
+                      const isNationwide = form.getValues("is_nationwide");
 
-    if (!isNationwide) {
-      const valid = await form.trigger(["distance", "city_id"]);
-      if (!valid) return;
-    }
+                      if (!isNationwide) {
+                        const valid = await form.trigger([
+                          "distance",
+                          "city_id",
+                        ]);
+                        if (!valid) return;
+                      }
 
-    setStep("details");
-  }}
->
-  Continue
-</Button>
+                      setStep("details");
+                    }}
+                  >
+                    Continue
+                  </Button>
                 </motion.div>
               )}
 
@@ -513,7 +519,7 @@ function OnboardingContent() {
                         <FormItem>
                           <FormLabel className="dark:text-gray-200">
                             Phone Number
-                            <Req/>
+                            <Req />
                           </FormLabel>
                           <FormControl>
                             <div className={inputWrapperClasses}>
@@ -792,7 +798,7 @@ function OnboardingContent() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-[#3C7DED] text-white hover:opacity-90 py-5 rounded-xl shadow-md mt-4"
+                    className="w-full bg-[#2563EB] text-white hover:opacity-90 py-5 rounded-xl shadow-md mt-4"
                   >
                     {isSubmitting ? (
                       <span className="flex items-center justify-center gap-2">

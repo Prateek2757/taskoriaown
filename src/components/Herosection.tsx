@@ -136,7 +136,7 @@ export default function HeroSection() {
           aria-hidden="true"
         ></div> */}
         <div
-          className="container md:pt-10 pt-6   max-md:bg-linear-to-r from-[#3C7DED]/25 via-[#41A6EE]/20 to-[#46CBEE]/25 
+          className="container md:pt-10 pt-6   max-md:bg-linear-to-r from-[#2563EB]/25 via-[#A6B4FA]/20 to-[#46CBEE]/25 
       mx-auto    md:px-4  relative z-10"
         >
           <div
@@ -236,7 +236,7 @@ export default function HeroSection() {
               <div className="relative w-full max-w-3xl group flex sm:items-center max-sm:gap-2">
                 <div className="relative flex-1 sm:mr-4 w-full">
                   <div
-                    className="absolute -inset-[2px] rounded-lg bg-[#3C7DED] blur-md opacity-0 group-hover:opacity-100 transition duration-500"
+                    className="absolute -inset-[2px] rounded-lg bg-[#2563EB] blur-md opacity-0 group-hover:opacity-100 transition duration-500"
                     aria-hidden="true"
                   />
                   <div className="relative flex items-center bg-white dark:bg-gray-800 rounded-lg hover:shadow-lg transition-all duration-300">

@@ -3,85 +3,91 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 
-function SlidingUnderlineNav({ currentLinks, pathname }: { currentLinks: any; pathname: string; }) {
-    const [hovered, setHovered] = useState<string | null>(null);
-    const [positions, setPositions] = useState<Record<string, { width: number; left: number }>>({});
-    const containerRef = useRef<HTMLDivElement>(null);
+function SlidingUnderlineNav({
+  currentLinks,
+  pathname,
+}: {
+  currentLinks: any;
+  pathname: string;
+}) {
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [positions, setPositions] = useState<
+    Record<string, { width: number; left: number }>
+  >({});
+  const containerRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-      
-        const items = container.querySelectorAll<HTMLElement>("[data-nav-item]");
-      
-        const calculate = () => {
-          const c = containerRef.current;
-          if (!c) return;
-          const containerRect = c.getBoundingClientRect();
-          const newPos: Record<string, { width: number; left: number }> = {};
-          items.forEach((el) => {
-            const rect = el.getBoundingClientRect();
-            newPos[el.dataset.navItem!] = {
-              width: rect.width,
-              left: rect.left - containerRect.left,
-            };
-          });
-          setPositions(newPos);
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const items = container.querySelectorAll<HTMLElement>("[data-nav-item]");
+
+    const calculate = () => {
+      const c = containerRef.current;
+      if (!c) return;
+      const containerRect = c.getBoundingClientRect();
+      const newPos: Record<string, { width: number; left: number }> = {};
+      items.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        newPos[el.dataset.navItem!] = {
+          width: rect.width,
+          left: rect.left - containerRect.left,
         };
-      
-        requestAnimationFrame(calculate);
-      
-        const observer = new ResizeObserver(() => {
-          requestAnimationFrame(calculate);
-        });
-      
-        items.forEach((el) => observer.observe(el));
-      
-        return () => observer.disconnect();
-      }, [currentLinks]);
+      });
+      setPositions(newPos);
+    };
 
-    const activeLink = currentLinks.find((link: any) => link.href === pathname);
-    const activeKey = hovered || (activeLink?.href);
-    const activePos = activeKey ? positions[activeKey] : null;
+    requestAnimationFrame(calculate);
 
-  
+    const observer = new ResizeObserver(() => {
+      requestAnimationFrame(calculate);
+    });
 
-    return (
-        <div ref={containerRef} className="relative flex">
-            {currentLinks.map((link: any) => (
-                <Link
-                    key={link.href}
-                    prefetch={true}
-                    data-nav-item={link.href}
-                    href={link.href}
-                    onMouseEnter={() => setHovered(link.href)}
-                    onMouseLeave={() => setHovered(null)}
-                    className={`relative py-3.5 font-medium text-sm px-6 transition-colors ${
-                        pathname === link.href 
-                            ? "text-[#2563EB] dark:text-[#4d86e7] " 
-                            : "text-gray-700 dark:text-gray-300"
-                    }`}
-                >
-                    {link.name}
-                </Link>
-            ))}
+    items.forEach((el) => observer.observe(el));
 
-            {activePos && (
-                <motion.span
-                    className="absolute bottom-[-3px] h-[3px] bg-[#3C7DED] rounded-full"
-                    initial={false}
-                    animate={{
-                        width: activePos.width - 48,
-                        left: activePos.left + 24,
-                    }}
-                    transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 30,
-                    }}
-                />
-            )}
-        </div>
-    );
+    return () => observer.disconnect();
+  }, [currentLinks]);
+
+  const activeLink = currentLinks.find((link: any) => link.href === pathname);
+  const activeKey = hovered || activeLink?.href;
+  const activePos = activeKey ? positions[activeKey] : null;
+
+  return (
+    <div ref={containerRef} className="relative flex">
+      {currentLinks.map((link: any) => (
+        <Link
+          key={link.href}
+          prefetch={true}
+          data-nav-item={link.href}
+          href={link.href}
+          onMouseEnter={() => setHovered(link.href)}
+          onMouseLeave={() => setHovered(null)}
+          className={`relative py-3.5 font-medium text-sm px-6 transition-colors ${
+            pathname === link.href
+              ? "text-[#2563EB] dark:text-[#4d86e7] "
+              : "text-gray-700 dark:text-gray-300"
+          }`}
+        >
+          {link.name}
+        </Link>
+      ))}
+
+      {activePos && (
+        <motion.span
+          className="absolute bottom-[-3px] h-[3px] bg-[#2563EB] rounded-full"
+          initial={false}
+          animate={{
+            width: activePos.width - 48,
+            left: activePos.left + 24,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+          }}
+        />
+      )}
+    </div>
+  );
 }
 export default SlidingUnderlineNav;

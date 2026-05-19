@@ -6,8 +6,15 @@ import { Spinner } from "./spinner";
 import { PAGE_SIZE, type RefundRequest } from "@/types/refunds";
 
 const HEADERS = [
-  "#", "Type", "Requester Email", "Lead / Subject",
-  "Lead Email", "Reason / Topic", "Status", "Submitted", "Actions",
+  "#",
+  "Type",
+  "Requester Email",
+  "Lead / Subject",
+  "Lead Email",
+  "Reason / Topic",
+  "Status",
+  "Submitted",
+  "Actions",
 ];
 
 interface RefundsTableProps {
@@ -18,7 +25,13 @@ interface RefundsTableProps {
   onReview: (row: RefundRequest) => void;
 }
 
-export function RefundsTable({ data, loading, page, onPageChange, onReview }: RefundsTableProps) {
+export function RefundsTable({
+  data,
+  loading,
+  page,
+  onPageChange,
+  onReview,
+}: RefundsTableProps) {
   const totalPages = Math.ceil(data.length / PAGE_SIZE) || 1;
   const pagedData = useMemo(
     () => data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
@@ -101,7 +114,11 @@ function Pagination({
         {Math.min(page * PAGE_SIZE, totalCount)} of {totalCount} results
       </p>
       <div className="flex items-center gap-2">
-        <button onClick={() => onPageChange(Math.max(1, page - 1))} disabled={page === 1} className={btnBase}>
+        <button
+          onClick={() => onPageChange(Math.max(1, page - 1))}
+          disabled={page === 1}
+          className={btnBase}
+        >
           ← Prev
         </button>
         {pageNumbers.map((p) => (
@@ -117,7 +134,11 @@ function Pagination({
             {p}
           </button>
         ))}
-        <button onClick={() => onPageChange(Math.min(totalPages, page + 1))} disabled={page === totalPages} className={btnBase}>
+        <button
+          onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+          disabled={page === totalPages}
+          className={btnBase}
+        >
           Next →
         </button>
       </div>

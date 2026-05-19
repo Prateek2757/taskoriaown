@@ -178,11 +178,14 @@ export default function Testimonial() {
           Customer stories
         </div>
 
-        <h2 className="text-3xl font-semibold text-foreground">
-          What customers say about Taskoria
+        <h2 className="text-4xl font-bold text-gray-800 ">
+          What customers say about {" "}
+          <span className="bg-[#2563EB] bg-clip-text text-transparent">
+              Taskoria ...
+            </span>{" "}
         </h2>
 
-        <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+        <p className="text-lg text-gray-600 dark:text-gray-400 mt-2">
           Real hiring experiences from local customers.
         </p>
       </div>

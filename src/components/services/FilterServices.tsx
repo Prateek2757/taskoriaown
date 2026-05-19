@@ -1,12 +1,12 @@
-
-
 interface ServicesProps {
   filterData: string;
   onChangeFilterData: (filter: string) => void;
-  
 }
 
-export default function FilterServices({ filterData, onChangeFilterData }: ServicesProps){
+export default function FilterServices({
+  filterData,
+  onChangeFilterData,
+}: ServicesProps) {
   const filters = [
     "All",
     "Cleaning Services",
@@ -20,7 +20,7 @@ export default function FilterServices({ filterData, onChangeFilterData }: Servi
     "Food & Beverages",
     "Other Services",
   ];
-console.log("activefilter:", filterData)
+  console.log("activefilter:", filterData);
   return (
     <div className="flex gap-2 overflow-x-auto px-2 py-1">
       {filters.map((filter) => (
@@ -31,7 +31,7 @@ console.log("activefilter:", filterData)
             ${
               filterData === filter
                 ? "border-blue-600 bg-[#2563EB] text-white"
-                : "border-slate-300 bg-gray-100 text-slate-600 hover:bg-blue-600 hover:text-white"
+                : "border-slate-300 bg-gray-100 text-slate-600 hover:bg-[#2563EB] hover:text-white"
             }`}
         >
           {filter}
@@ -39,7 +39,4 @@ console.log("activefilter:", filterData)
       ))}
     </div>
   );
-};
-
-
-
+}

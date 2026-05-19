@@ -126,7 +126,7 @@ const Footer = () => {
 
       <div
         className="relative max-w-7xl mx-auto h-full overflow-hidden sm:pt-14 pt-8 
-        dark:bg-[radial-gradient(circle_at_bottom,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
+        dark:bg-[radial-linear(circle_at_bottom,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
         dark:text-white text-gray-600 "
         ref={container}
       >
@@ -161,25 +161,25 @@ const Footer = () => {
                 </p>
                 <a
                   href="mailto:contact@taskoria.com"
-                  className="inline-flex items-center gap-2 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
+                  className="inline-flex items-center gap-2 text-sm text-[#2563EB] hover:text-[#A6B4FA] transition-colors"
                 >
-                  <Mail className="w-5" />{" "}
+                  <Mail className="w-4" />{" "}
                   <span className="underline">contact@taskoria.com</span>
                 </a>
                 {/* <a
                   href="tel:61 474 655 902"
-                  className="inline-flex items-center ml-2 gap-1 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
+                  className="inline-flex items-center ml-2 gap-1 text-sm text-[#2563EB] hover:text-[#A6B4FA] transition-colors"
                 >
                   <Phone className="w-4" />{" "}
                   <span className="">+61 474 655 902</span>
                 </a> */}
                 <a
                   href="tel:1300 531 727"
-                  className="inline-flex items-center ml-2  gap-1 text-sm text-[#3C7DED] hover:text-[#41A6EE] transition-colors"
+                  className="inline-flex items-center ml-2  gap-1 text-sm text-[#2563EB] hover:text-[#A6B4FA] transition-colors"
                 >
                   <Phone className="w-4" />
-                  {"   "} Toll Free
-                  <span className="">1300 531 727</span>
+                  {"   "} Toll Free:
+                  <span className="underline">1300 531 727</span>
                 </a>
 
                 {/* <motion.div
@@ -272,7 +272,7 @@ const Footer = () => {
                     <Link
                       key={loc.href}
                       href={loc.href}
-                      className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                      className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                     >
                       {loc.label}
                     </Link>
@@ -310,7 +310,7 @@ const Footer = () => {
                     <Link
                       key={service.href}
                       href={service.href}
-                      className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                      className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                     >
                       {service.label}
                     </Link>
@@ -346,38 +346,38 @@ const Footer = () => {
                 >
                   <Link
                     href="/how-it-works/customers"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     How it Works
                   </Link>
 
                   <Link
                     href="/services"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Find Services
                   </Link>
                   {/* <Link
                     href="/"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Community
                   </Link> */}
                   <button
                     onClick={() => setOpenModal(true)}
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Post a Job
                   </button>
                   <Link
                     href="/trust-safety"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Trust & Safety
                   </Link>
                   <Link
                     href={session ? "/provider/dashboard" : "/signin"}
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Login
                   </Link>
@@ -415,13 +415,13 @@ const Footer = () => {
                 >
                   {/* <Link
                     href="/"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Join as Provider
                   </Link> */}
                   <Link
                     href="/how-it-works/providers"
-                    className="block text-gray-600 text-sm dark:text-gray-300 hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 text-sm dark:text-gray-300 hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     How it Works
                   </Link>
@@ -433,19 +433,19 @@ const Footer = () => {
                         el.scrollIntoView({ behavior: "smooth" });
                       }
                     }}
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] transition-colors mb-2"
                   >
                     Success Stories
                   </button>
                   {/* <Link
                     href="/"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Resources
                   </Link> */}
                   <Link
                     href="/refund-policy"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Refund Policy
                   </Link>
@@ -458,7 +458,7 @@ const Footer = () => {
                         joinAsProvider();
                       }
                     }}
-                    className="block text-gray-600 text-start dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 text-start dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Join as a professional
                   </button>
@@ -492,31 +492,31 @@ const Footer = () => {
                 >
                   <Link
                     href="/about-us"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     About Us
                   </Link>
                   <Link
                     href="/privacy-policy"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Privacy Policy
                   </Link>
                   <Link
                     href="/careers"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Careers
                   </Link>
                   <Link
                     href="/contact"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Contact
                   </Link>
                   <Link
                     href="/blog"
-                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Blog
                   </Link>
@@ -535,8 +535,8 @@ const Footer = () => {
               ref={ref}
             >
               <defs>
-                <linearGradient
-                  id="taskoriaFooterGradient"
+                <linearlinear
+                  id="taskoriaFooterlinear"
                   x1="0%"
                   y1="0%"
                   x2="100%"
@@ -545,7 +545,7 @@ const Footer = () => {
                   <stop offset="20%" stopColor="#2563EB" />
                   <stop offset="50%" stopColor="#2563EB" />
                   <stop offset="100%" stopColor="#46CBEE" />
-                </linearGradient>
+                </linearlinear>
 
                 <filter
                   id="taskoriaGlow"
@@ -587,7 +587,7 @@ const Footer = () => {
                   fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif"
                   fontSize="68"
                   fontWeight="700"
-                  fill="url(#taskoriaFooterGradient)"
+                  fill="url(#taskoriaFooterlinear)"
                   filter="url(#taskoriaGlow)"
                   letterSpacing="0.05em"
                 >
@@ -603,21 +603,21 @@ const Footer = () => {
               Reserved.{" "}
               <Link
                 href="/privacy-policy"
-                className="hover:text-[#3C7DED] transition-colors"
+                className="hover:text-[#2563EB] hover:underline transition-colors"
               >
                 Privacy Policy
               </Link>
               {" | "}
               <Link
                 href="/terms-and-conditions"
-                className="hover:text-[#3C7DED] transition-colors"
+                className="hover:text-[#2563EB] hover:underline transition-colors"
               >
                 Terms & Conditions
               </Link>
               {" | "}
               <Link
                 href="/cookie-policy"
-                className="hover:text-[#3C7DED] transition-colors"
+                className="hover:text-[#2563EB] hover:underline transition-colors"
               >
                 Cookie Policy
               </Link>
@@ -633,7 +633,7 @@ const Footer = () => {
                 href="https://www.instagram.com/taskoria.au/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 bg-gradient-to-br from-[#FF2847] to-[#FF6B35] hover:scale-110 rounded-full transition-transform shadow-lg"
+                className="p-2 bg-linear-to-br from-[#FF2847] to-[#FF6B35] hover:scale-110 rounded-full transition-transform shadow-lg"
                 aria-label="Instagram"
               >
                 <Instagram className="w-5 h-5 text-white" />
@@ -644,7 +644,7 @@ const Footer = () => {
                 href="https://www.tiktok.com/@taskoria"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 bg-gradient-to-br from-[#000000] to-[#000000] dark:bg-white hover:scale-110 rounded-full transition-transform shadow-lg"
+                className="p-2 bg-linear-to-br from-[#000000] to-[#000000] dark:bg-white hover:scale-110 rounded-full transition-transform shadow-lg"
                 aria-label="Tiktok"
               >
                 <FaTiktok className="w-5 h-5  text-white" />
@@ -654,7 +654,7 @@ const Footer = () => {
                 href="https://x.com/taskoria"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 bg-gradient-to-br from-[#000000] to-[#000000] hover:scale-110 rounded-full transition-transform shadow-lg"
+                className="p-2 bg-linear-to-br from-[#000000] to-[#000000] hover:scale-110 rounded-full transition-transform shadow-lg"
                 aria-label="Tiktok"
               >
                 <FaXTwitter className="w-5 h-5 text-white" />
@@ -665,7 +665,7 @@ const Footer = () => {
                 href="https://www.linkedin.com/company/taskoria-au"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 bg-gradient-to-br from-[#0966C2] to-[#0A66C2] hover:scale-110 rounded-full transition-transform shadow-lg"
+                className="p-2 bg-linear-to-br from-[#0966C2] to-[#0A66C2] hover:scale-110 rounded-full transition-transform shadow-lg"
                 aria-label="LinkedIn"
               >
                 <Linkedin className="w-5 h-5 text-white" />
@@ -676,7 +676,7 @@ const Footer = () => {
                 href="http://facebook.com/profile.php?id=61582506497352"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 bg-gradient-to-br from-[#0966FF] to-[#3C7DED] hover:scale-110 rounded-full transition-transform shadow-lg"
+                className="p-2 bg-linear-to-br from-[#0966FF] to-[#2563EB] hover:scale-110 rounded-full transition-transform shadow-lg"
                 aria-label="Facebook"
               >
                 <Facebook className="w-5 h-5 text-white" />

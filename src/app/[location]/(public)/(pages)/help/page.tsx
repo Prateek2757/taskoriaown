@@ -16,8 +16,8 @@ const CATEGORIES = [
     description: "Discover everything you need to know to start your journey",
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12">
-        <rect x="10" y="10" width="28" height="28" rx="14" stroke="#2563eb" strokeWidth="2" fill="none" />
-        <path d="M18 24h12M24 18v12" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" />
+        <rect x="10" y="10" width="28" height="28" rx="14" stroke="#2563EB" strokeWidth="2" fill="none" />
+        <path d="M18 24h12M24 18v12" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" />
         <circle cx="24" cy="24" r="6" fill="#dbeafe" />
       </svg>
     ),
@@ -28,9 +28,9 @@ const CATEGORIES = [
     description: "How Taskoria works for service professionals",
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12">
-        <path d="M20 28c-6 0-11 3-11 7v1h22v-1c0-4-5-7-11-7z" stroke="#2563eb" strokeWidth="2" fill="none" />
-        <circle cx="20" cy="19" r="7" stroke="#2563eb" strokeWidth="2" fill="#dbeafe" />
-        <path d="M32 14v12M26 20h12" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" />
+        <path d="M20 28c-6 0-11 3-11 7v1h22v-1c0-4-5-7-11-7z" stroke="#2563EB" strokeWidth="2" fill="none" />
+        <circle cx="20" cy="19" r="7" stroke="#2563EB" strokeWidth="2" fill="#dbeafe" />
+        <path d="M32 14v12M26 20h12" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
   },
@@ -40,10 +40,10 @@ const CATEGORIES = [
     description: "Using Taskoria and getting quotes from pros",
     icon: (
       <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12">
-        <circle cx="16" cy="18" r="5" stroke="#2563eb" strokeWidth="2" fill="#dbeafe" />
-        <circle cx="32" cy="18" r="5" stroke="#2563eb" strokeWidth="2" fill="#dbeafe" />
-        <circle cx="24" cy="22" r="6" stroke="#2563eb" strokeWidth="2" fill="#bfdbfe" />
-        <path d="M10 36c0-4 5-7 14-7s14 3 14 7" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" fill="none" />
+        <circle cx="16" cy="18" r="5" stroke="#2563EB" strokeWidth="2" fill="#dbeafe" />
+        <circle cx="32" cy="18" r="5" stroke="#2563EB" strokeWidth="2" fill="#dbeafe" />
+        <circle cx="24" cy="22" r="6" stroke="#2563EB" strokeWidth="2" fill="#bfdbfe" />
+        <path d="M10 36c0-4 5-7 14-7s14 3 14 7" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" fill="none" />
       </svg>
     ),
   },

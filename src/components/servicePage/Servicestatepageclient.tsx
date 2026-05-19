@@ -131,10 +131,10 @@ export default function ServiceStatePageClient({
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-blue-900" />
+          <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-blue-950 to-blue-900" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-black/20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-black/75 via-black/50 to-black/20" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16 py-24">
           <div className="flex flex-col md:flex-row md:items-end gap-10">
@@ -174,7 +174,7 @@ export default function ServiceStatePageClient({
               </div>
             </div>
 
-            <div className="flex gap-3 flex-shrink-0">
+            <div className="flex gap-3 shrink-0">
               {[
                 { value: `${cities.length}`, label: "Cities" },
                 { value: "Free", label: "Quotes" },
@@ -266,14 +266,14 @@ export default function ServiceStatePageClient({
                       />
                     </div>
                   ) : (
-                    <div className="h-28 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-950/30 flex items-center justify-center">
+                    <div className="h-28 bg-linear-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-950/30 flex items-center justify-center">
                       <Building2 className="w-8 h-8 text-blue-300 dark:text-blue-700" />
                     </div>
                   )} */}
 
                   <div className="p-3.5">
                     <div className="flex items-start gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 mt-0.5 flex-shrink-0 transition-colors" />
+                      <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 mt-0.5 shrink-0 transition-colors" />
                       <div>
                         <h3 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 leading-snug">
                           {city.name}
@@ -327,7 +327,7 @@ export default function ServiceStatePageClient({
               },
             ].map((s) => (
               <div key={s.step} className="flex gap-5">
-                <div className="w-11 h-11 rounded-2xl bg-blue-600 text-white font-extrabold text-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-11 h-11 rounded-2xl bg-blue-600 text-white font-extrabold text-lg flex items-center justify-center shrink-0">
                   {s.step}
                 </div>
                 <div>
@@ -354,7 +354,7 @@ export default function ServiceStatePageClient({
                 key={i}
                 className="flex gap-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
               >
-                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center">
+                <div className="shrink-0 w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center">
                   {b.icon}
                 </div>
                 <div>
@@ -399,7 +399,7 @@ export default function ServiceStatePageClient({
                       {faq.question}
                     </span>
                     <ChevronRight
-                      className={`w-4 h-4 text-slate-400 flex-shrink-0 transition-transform duration-200 ${openFaq === i ? "rotate-90" : ""}`}
+                      className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${openFaq === i ? "rotate-90" : ""}`}
                     />
                   </button>
                   {openFaq === i && (
@@ -435,10 +435,10 @@ export default function ServiceStatePageClient({
         )}
       </div>
 
-      <aside className="bg-gradient-to-br from-slate-900 to-blue-900 text-white mt-6">
-        <div className="max-w-7xl mx-auto px-6 md:px-16 py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+      <aside className="bg-linear-to-br from-slate-900 to-blue-900 text-white mt-6">
+        <div className="max-w-7xl mx-auto p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           <div>
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
+            <h2 className="text-3xl  font-bold mb-3">
               Ready to hire {service.name} in {stateName}?
             </h2>
             <p className="text-white/70 text-lg max-w-xl">
@@ -448,7 +448,7 @@ export default function ServiceStatePageClient({
           </div>
           <Button
             onClick={() => setOpenModal(true)}
-            className="inline-flex items-center gap-2 bg-[#2563EB] hover:bg-blue-500 text-white rounded-xl px-10 py-5 text-lg font-bold flex-shrink-0"
+            className="inline-flex items-center gap-2 bg-[#2563EB] hover:bg-blue-500 text-white rounded-xl px-10 py-5 text-lg font-bold shrink-0"
           >
             Get Free Quotes
             <ArrowRight className="w-5 h-5" />

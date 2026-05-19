@@ -234,7 +234,7 @@ export default function Navbar() {
           <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-md">
             <Zap className="w-6 h-6 text-white" />
           </div>
-          <span className="text-2xl font-bold bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] bg-clip-text text-transparent">
+          <span className="text-2xl font-bold bg-gradient-to-r from-[#2563EB]  via-[#A6B4FA] to-[#46CBEE] bg-clip-text text-transparent">
             Taskoria
           </span>
         </Link>
@@ -246,10 +246,11 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-4 py-1 rounded-md font-medium transition-all ${pathname === link.href
+                  className={`px-4 py-1 rounded-md font-medium transition-all ${
+                    pathname === link.href
                       ? "bg-blue-50 text-blue-600 shadow-sm"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
+                  }`}
                 >
                   {link.name}
                 </Link>
@@ -270,8 +271,9 @@ export default function Navbar() {
                         "User"}
                     </span>
                     <ChevronDown
-                      className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isProfileOpen ? "rotate-180" : ""
-                        }`}
+                      className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${
+                        isProfileOpen ? "rotate-180" : ""
+                      }`}
                     />
                   </button>
                   <AnimatePresence>
@@ -327,10 +329,11 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-4 py-2.5 rounded-xl font-medium transition-colors ${pathname === link.href
+                  className={`px-4 py-2.5 rounded-xl font-medium transition-colors ${
+                    pathname === link.href
                       ? "bg-blue-50 text-blue-600"
                       : "text-gray-700 hover:bg-gray-50"
-                    }`}
+                  }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.name}
@@ -416,7 +419,7 @@ export default function Navbar() {
                         handleJoinAsProvider();
                         setIsMenuOpen(false);
                       }}
-                      className="w-full rounded-xl bg-gradient-to-r from-[#3C7DED]  via-[#41A6EE] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700"
+                      className="w-full rounded-xl bg-gradient-to-r from-[#2563EB]  via-[#A6B4FA] to-[#46CBEE] text-white hover:from-blue-700 hover:to-cyan-700"
                     >
                       Join as Provider
                     </Button>

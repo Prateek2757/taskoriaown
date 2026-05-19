@@ -72,7 +72,7 @@ export default function NavMobileDrawer({
                 width={22}
                 className="shrink-0"
               />
-              <span className="text-xl font-bold text-[#3C7DED] truncate">
+              <span className="text-xl font-bold text-[#2563EB] truncate">
                 Taskoria
               </span>
             </Link>
@@ -183,8 +183,7 @@ export default function NavMobileDrawer({
             >
               <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-400 -rotate-90" />
               <span>
-                Switch to{" "}
-                {viewMode === "provider" ? "Customer" : "Provider"}
+                Switch to {viewMode === "provider" ? "Customer" : "Provider"}
               </span>
             </button>
           )}

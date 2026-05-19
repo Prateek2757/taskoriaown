@@ -135,13 +135,13 @@ useEffect(() => {
           max-h-[90vh] overflow-visible flex flex-col
         "
       >
-        <DialogHeader className="border-b bg-gray-50 dark:bg-slate-900 rounded-t-2xl p-4 text-center shrink-0">
+        <DialogHeader className="border-b bg-gray-50 dark:bg-slate-900 rounded-t-2xl p-2 text-center shrink-0">
           <DialogTitle className="text-xl text-center font-semibold">
             {step === 1 ? "Place a new request" : "A few quick questions"}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1  p-4">
+        <div className="flex-1  px-4 py-2">
           <AnimatePresence mode="wait">
             {step === 1 ? (
               <motion.div

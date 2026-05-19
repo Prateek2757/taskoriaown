@@ -1,6 +1,6 @@
 "use client";
 
-import {  Tag } from "lucide-react";
+import { Tag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import { renderContent } from "../renderContent";
@@ -84,9 +84,9 @@ export default function BlogDetails({ post, filteredPosts }: Props) {
         {/* <div >
          <p>{renderContent(post.content)}</p>
       </div> */}
-      <div className="prose dark:prose-invert max-w-none">
-  {renderContent(post.content)}
-</div>
+        <div className="prose dark:prose-invert max-w-none">
+          {renderContent(post.content)}
+        </div>
         <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-200 dark:border-zinc-800">
           {post.tags.map((tag) => (
             <span

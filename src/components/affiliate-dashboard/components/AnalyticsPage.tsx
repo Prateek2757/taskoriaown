@@ -26,9 +26,9 @@ import {
 export function AnalyticsPage() {
   const [dateRange, setDateRange] = useState('30days');
   const [chartType, setChartType] = useState('clicks');
-  
+
   const chartData = generateChartData(dateRange === '7days' ? 7 : dateRange === '30days' ? 30 : 90);
-  
+
   const stats = [
     { label: 'Total Clicks', value: '12,458', change: '+23.5%', icon: MousePointer, color: 'blue' },
     { label: 'Conversions', value: '892', change: '+31.4%', icon: CheckCircle, color: 'green' },
@@ -111,31 +111,31 @@ export function AnalyticsPage() {
                   <XAxis dataKey="date" stroke="#94A3B8" fontSize={12} />
                   <YAxis yAxisId="left" stroke="#94A3B8" fontSize={12} />
                   <YAxis yAxisId="right" orientation="right" stroke="#94A3B8" fontSize={12} />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'white', 
-                      border: 'none', 
-                      borderRadius: '12px', 
-                      boxShadow: '0 4px 24px -4px rgba(0,0,0,0.1)' 
-                    }} 
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'white',
+                      border: 'none',
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 24px -4px rgba(0,0,0,0.1)'
+                    }}
                   />
                   <Legend />
-                  <Line 
+                  <Line
                     yAxisId="left"
-                    type="monotone" 
-                    dataKey="clicks" 
+                    type="monotone"
+                    dataKey="clicks"
                     name="Clicks"
-                    stroke="#2563EB" 
+                    stroke="#2563EB"
                     strokeWidth={2}
                     dot={{ r: 3 }}
                     activeDot={{ r: 5 }}
                   />
-                  <Line 
+                  <Line
                     yAxisId="right"
-                    type="monotone" 
-                    dataKey="conversions" 
+                    type="monotone"
+                    dataKey="conversions"
                     name="Conversions"
-                    stroke="#10B981" 
+                    stroke="#10B981"
                     strokeWidth={2}
                     dot={{ r: 3 }}
                     activeDot={{ r: 5 }}
@@ -158,18 +158,18 @@ export function AnalyticsPage() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
                   <XAxis dataKey="date" stroke="#94A3B8" fontSize={11} />
                   <YAxis stroke="#94A3B8" fontSize={12} />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'white', 
-                      border: 'none', 
-                      borderRadius: '12px', 
-                      boxShadow: '0 4px 24px -4px rgba(0,0,0,0.1)' 
-                    }} 
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'white',
+                      border: 'none',
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 24px -4px rgba(0,0,0,0.1)'
+                    }}
                     formatter={(value: number) => [`$${value}`, 'Earnings']}
                   />
-                  <Bar 
-                    dataKey="earnings" 
-                    fill="url(#earningsGradient)" 
+                  <Bar
+                    dataKey="earnings"
+                    fill="url(#earningsGradient)"
                     radius={[4, 4, 0, 0]}
                   />
                   <defs>
@@ -206,13 +206,13 @@ export function AnalyticsPage() {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'white', 
-                      border: 'none', 
-                      borderRadius: '12px', 
-                      boxShadow: '0 4px 24px -4px rgba(0,0,0,0.1)' 
-                    }} 
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'white',
+                      border: 'none',
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 24px -4px rgba(0,0,0,0.1)'
+                    }}
                     formatter={(value: number) => [`${value}%`, 'Percentage']}
                   />
                   <Legend verticalAlign="bottom" height={36} />
@@ -239,7 +239,7 @@ export function AnalyticsPage() {
                 <div className="w-32 font-medium text-slate-900">{location.suburb}</div>
                 <div className="flex-1 mx-4">
                   <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
-                    <div 
+                    <div
                       className="h-full gradient-primary rounded-full transition-all"
                       style={{ width: `${(location.conversions / geoData[0].conversions) * 100}%` }}
                     />
@@ -274,16 +274,14 @@ export function AnalyticsPage() {
               ].map((step, index, arr) => (
                 <div key={step.label} className="flex items-center">
                   <div className="text-center">
-                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-2 ${
-                      index === 0 ? 'bg-blue-100' :
-                      index === 1 ? 'bg-cyan-100' :
-                      index === 2 ? 'bg-amber-100' : 'bg-green-100'
-                    }`}>
-                      <span className={`text-lg font-bold ${
-                        index === 0 ? 'text-blue-600' :
-                        index === 1 ? 'text-cyan-600' :
-                        index === 2 ? 'text-amber-600' : 'text-green-600'
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-2 ${index === 0 ? 'bg-blue-100' :
+                        index === 1 ? 'bg-cyan-100' :
+                          index === 2 ? 'bg-amber-100' : 'bg-green-100'
                       }`}>
+                      <span className={`text-lg font-bold ${index === 0 ? 'text-blue-600' :
+                          index === 1 ? 'text-cyan-600' :
+                            index === 2 ? 'text-amber-600' : 'text-green-600'
+                        }`}>
                         {step.percentage}
                       </span>
                     </div>

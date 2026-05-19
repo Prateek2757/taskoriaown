@@ -370,7 +370,12 @@ export function ProfileHero({
                     height="24"
                     patternUnits="userSpaceOnUse"
                   >
-                    <circle cx="1.5" cy="1.5" r="1.5" fill="#3b82f6" />
+                    <circle
+                      cx="1.5"
+                      cy="1.5"
+                      r="1.5"
+                      fill="var(--color-brand-accent-light)"
+                    />
                   </pattern>
                 </defs>
                 <rect width="100%" height="100%" fill="url(#hero-dots)" />

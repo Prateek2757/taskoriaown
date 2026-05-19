@@ -23,7 +23,7 @@ const LIGHT = {
   text: "#0f172a",
   muted: "#64748b",
   subtle: "#94a3b8",
-  brand: "#2563eb",
+  brand: "#2563EB",
   brandLight: "#eff6ff",
   brandBorder: "#bfdbfe",
   radiusLg: 18,
@@ -35,7 +35,7 @@ const DARK = {
   raised: "#131c2e",
   surface: "#182032",
   border: "#1e2d45",
-  borderHover: "#3b82f6",
+  borderHover: "var(--color-brand-accent-light)",
   text: "#e8f0fe",
   muted: "#8da4c4",
   subtle: "#4e6887",
@@ -622,7 +622,7 @@ function ServiceDetailsSection({
   const shaded = new Set(["services", "checklist"]);
 
   return (
-    
+
     <ThemeCtx.Provider value={T}>
       <div
         style={{

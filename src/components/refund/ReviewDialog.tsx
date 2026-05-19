@@ -44,7 +44,7 @@ const labelCls =
   "text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-1 block";
 const valueCls = "text-sm text-zinc-800 dark:text-zinc-200";
 const inputCls =
-  "w-full bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#2563EB] dark:focus:ring-[#3B82F6] focus:border-transparent resize-none transition-all";
+  "w-full bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#2563EB] dark:focus:ring-[#A6B4FA] focus:border-transparent resize-none transition-all";
 
 export function ReviewDialog({
   request,
@@ -91,7 +91,7 @@ export function ReviewDialog({
           currentCredits: res.data.currentCredits!,
           userId: res.data.userId!,
         });
-      
+
         // ✅ auto focus
         setTimeout(() => {
           amountRef.current?.focus();
@@ -106,9 +106,9 @@ export function ReviewDialog({
 
   const handleAction = async (status: "approved" | "rejected") => {
     if (status === "approved" && !canApprove) return;
-  
+
     setLoading(status);
-  
+
     const credits =
       isCreditReturn &&
       status === "approved" &&
@@ -116,7 +116,7 @@ export function ReviewDialog({
       isAmountValid
         ? Number(creditAmount)
         : undefined;
-  
+
     await onAction(request.id, status, note, credits);
     setLoading(null);
   };
@@ -149,7 +149,7 @@ export function ReviewDialog({
             </div>
             {/* <button
               onClick={handleEmailOpen}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#2563EB] dark:text-[#3B82F6] bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/40 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors shrink-0"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#2563EB] dark:text-[#A6B4FA] bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/40 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors shrink-0"
             >
               <svg
                 className="w-3.5 h-3.5"
@@ -318,8 +318,6 @@ export function ReviewDialog({
                       Enter a valid credit amount (greater than 0)
                     </p>
                   )}
-
-                
                 </div>
               )}
             </div>
@@ -378,15 +376,16 @@ export function ReviewDialog({
                 Reject
               </button>
               <button
-  onClick={() => handleAction("approved")}
-  disabled={!!loading || !canApprove}
-  className={`flex-1 py-2.5  rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2
-    ${canApprove
-      ? "bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/25"
-      : "bg-zinc-300 dark:bg-zinc-700 text-zinc-500 cursor-not-allowed"
+                onClick={() => handleAction("approved")}
+                disabled={!!loading || !canApprove}
+                className={`flex-1 py-2.5  rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2
+    ${
+      canApprove
+        ? "bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/25"
+        : "bg-zinc-300 dark:bg-zinc-700 text-zinc-500 cursor-not-allowed"
     }
   `}
->
+              >
                 {loading === "approved" ? (
                   <Spinner />
                 ) : (

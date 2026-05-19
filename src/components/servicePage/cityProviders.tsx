@@ -14,7 +14,7 @@ interface Provider {
   nationwide: boolean;
   company_name: string | null;
   logo_url: string | null;
-  company_slug?:string | null;
+  company_slug?: string | null;
   locationname: string | null;
 }
 
@@ -38,7 +38,10 @@ export default function CityProviders({ serviceSlug, citySlug }: Props) {
     return (
       <div className="grid md:grid-cols-3 gap-5">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="animate-pulse bg-gray-100 dark:bg-slate-800 h-48 rounded-xl" />
+          <div
+            key={i}
+            className="animate-pulse bg-gray-100 dark:bg-slate-800 h-48 rounded-xl"
+          />
         ))}
       </div>
     );
@@ -48,10 +51,12 @@ export default function CityProviders({ serviceSlug, citySlug }: Props) {
     return (
       <div className="text-center py-12">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-          Professionals are coming soon to {citySlug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+          Professionals are coming soon to{" "}
+          {citySlug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
         </h2>
         <p className="text-gray-500 max-w-xl mx-auto mb-6">
-          We're expanding quickly and trusted experts will be available in your area very soon.
+          We're expanding quickly and trusted experts will be available in your
+          area very soon.
         </p>
         <Link
           href="/services"
@@ -93,7 +98,8 @@ export default function CityProviders({ serviceSlug, citySlug }: Props) {
                     {p.avg_rating ? Number(p.avg_rating).toFixed(1) : "New"}
                   </span>
                   <span className="text-sm text-gray-400">
-                    ({p.total_reviews} {p.total_reviews === 1 ? "review" : "reviews"})
+                    ({p.total_reviews}{" "}
+                    {p.total_reviews === 1 ? "review" : "reviews"})
                   </span>
                 </div>
               </div>
@@ -118,7 +124,7 @@ export default function CityProviders({ serviceSlug, citySlug }: Props) {
             {/* CTA */}
             <Link
               href={`/providerprofile/${p.company_slug}`}
-              className="flex items-center justify-center gap-2 w-full py-2.5 bg-[#3C7DED] hover:bg-[#2b6ad9] text-white font-semibold rounded-lg text-sm transition-colors"
+              className="flex items-center justify-center gap-2 w-full py-2.5 bg-[#2563EB] hover:bg-[#2b6ad9] text-white font-semibold rounded-lg text-sm transition-colors"
             >
               View Profile
               <ArrowRight className="w-4 h-4" />

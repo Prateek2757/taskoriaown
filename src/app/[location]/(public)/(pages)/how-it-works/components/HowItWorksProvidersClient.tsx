@@ -82,39 +82,38 @@ function Card({ children }: { children: React.ReactNode }) {
   );
 }
 
-
 function ProfileCard() {
   return (
     <Card>
       <div className="h-20 bg-gradient-to-br from-[#2563EB] to-blue-700 relative overflow-hidden flex items-center px-4">
-  {/* Pattern */}
-  <div
-    className="absolute inset-0 opacity-10"
-    style={{
-      backgroundImage:
-        "radial-gradient(circle, white 1px, transparent 1px)",
-      backgroundSize: "18px 18px",
-    }}
-  />
+        {/* Pattern */}
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, white 1px, transparent 1px)",
+            backgroundSize: "18px 18px",
+          }}
+        />
 
-  {/* Content */}
-  <div className="relative flex items-center gap-3">
-    {/* Avatar */}
-    <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-white font-bold text-lg backdrop-blur">
-      JK
-    </div>
+        {/* Content */}
+        <div className="relative flex items-center gap-3">
+          {/* Avatar */}
+          <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-white font-bold text-lg backdrop-blur">
+            JK
+          </div>
 
-    {/* Text */}
-    <div>
-      <h2 className="text-white font-semibold text-sm">
-        Welcome back 👋
-      </h2>
-      <p className="text-blue-100 text-xs">
-        Ready to find your next job?
-      </p>
-    </div>
-  </div>
-</div>
+          {/* Text */}
+          <div>
+            <h2 className="text-white font-semibold text-sm">
+              Welcome back 👋
+            </h2>
+            <p className="text-blue-100 text-xs">
+              Ready to find your next job?
+            </p>
+          </div>
+        </div>
+      </div>
       <div className="px-5 pt-2 pb-6">
         {/* <div className="w-14 h-14 z-50 rounded-full bg-[#2563EB] border-4 border-white dark:border-gray-800 -mt- mb-3 flex items-center justify-center text-white font-bold text-lg shadow-md">
           JK
@@ -122,10 +121,11 @@ function ProfileCard() {
         <p className="font-bold text-gray-900 dark:text-white text-sm">
           Jake K. — Licensed Plumber
         </p>
-        <p className="text-xs text-gray-400 mb-1">Brisbane, QLD · QBCC Lic. ✓</p>
+        <p className="text-xs text-gray-400 mb-1">
+          Brisbane, QLD · QBCC Lic. ✓
+        </p>
         <div className="flex items-center gap-1 text-yellow-400 text-xs mb-3">
-          ★★★★★{" "}
-          <span className="text-gray-400 ml-0.5">4.9 (132 reviews)</span>
+          ★★★★★ <span className="text-gray-400 ml-0.5">4.9 (132 reviews)</span>
         </div>
         <div className="flex flex-wrap gap-1.5 mb-4">
           {["Plumbing", "Gas Fitting", "Hot Water"].map((s) => (
@@ -138,14 +138,21 @@ function ProfileCard() {
           ))}
         </div>
         <div className="grid grid-cols-3 gap-2 text-center mb-4">
-          {[["132", "Reviews"], ["98%", "Hired rate"], ["$185", "Avg job"]].map(
-            ([v, l]) => (
-              <div key={l} className="bg-gray-50 dark:bg-gray-700/50 rounded-xl py-2">
-                <p className="font-bold text-gray-900 dark:text-white text-sm">{v}</p>
-                <p className="text-[10px] text-gray-400">{l}</p>
-              </div>
-            )
-          )}
+          {[
+            ["132", "Reviews"],
+            ["98%", "Hired rate"],
+            ["$185", "Avg job"],
+          ].map(([v, l]) => (
+            <div
+              key={l}
+              className="bg-gray-50 dark:bg-gray-700/50 rounded-xl py-2"
+            >
+              <p className="font-bold text-gray-900 dark:text-white text-sm">
+                {v}
+              </p>
+              <p className="text-[10px] text-gray-400">{l}</p>
+            </div>
+          ))}
         </div>
         <div className="bg-[#2563EB] text-white text-xs font-semibold py-2.5 rounded-xl text-center cursor-pointer">
           View Full Profile
@@ -157,9 +164,27 @@ function ProfileCard() {
 
 function LeadsCard() {
   const leads = [
-    { name: "Blocked drain fix", loc: "Paddington, QLD", time: "2m ago", budget: "$150–$300", dot: "bg-green-400" },
-    { name: "Hot water system", loc: "Chermside, QLD", time: "18m ago", budget: "$400–$700", dot: "bg-[#2563EB]" },
-    { name: "Leaking tap repair", loc: "West End, QLD", time: "1h ago", budget: "$80–$150", dot: "bg-orange-400" },
+    {
+      name: "Blocked drain fix",
+      loc: "Paddington, QLD",
+      time: "2m ago",
+      budget: "$150–$300",
+      dot: "bg-green-400",
+    },
+    {
+      name: "Hot water system",
+      loc: "Chermside, QLD",
+      time: "18m ago",
+      budget: "$400–$700",
+      dot: "bg-[#2563EB]",
+    },
+    {
+      name: "Leaking tap repair",
+      loc: "West End, QLD",
+      time: "1h ago",
+      budget: "$80–$150",
+      dot: "bg-orange-400",
+    },
   ];
   return (
     <Card>
@@ -229,9 +254,7 @@ function EarningsCard() {
             <div
               key={i}
               className={`flex-1 rounded-sm ${
-                i === 11
-                  ? "bg-[#2563EB]"
-                  : "bg-blue-100 dark:bg-blue-900/40"
+                i === 11 ? "bg-[#2563EB]" : "bg-blue-100 dark:bg-blue-900/40"
               }`}
               style={{ height: `${h}%` }}
             />
@@ -273,7 +296,9 @@ function TopProCard() {
             <p className="text-sm font-bold text-gray-900 dark:text-white">
               Top Pro Status
             </p>
-            <p className="text-xs text-gray-400">Top 10% of all QLD professionals</p>
+            <p className="text-xs text-gray-400">
+              Top 10% of all QLD professionals
+            </p>
           </div>
         </div>
         <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">
@@ -282,7 +307,9 @@ function TopProCard() {
         <div className="space-y-3 mb-4">
           {reqs.map((r) => (
             <div key={r.label} className="flex items-center justify-between">
-              <span className="text-xs text-gray-500 dark:text-gray-400">{r.label}</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                {r.label}
+              </span>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-gray-900 dark:text-white">
                   {r.value}
@@ -351,9 +378,9 @@ function FAQ() {
 }
 
 export default function HowItWorksProviders() {
-      const {data:session} = useSession()
-      const {joinAsProvider} =useJoinAsProvider()
-     const router= useRouter()
+  const { data: session } = useSession();
+  const { joinAsProvider } = useJoinAsProvider();
+  const router = useRouter();
 
   return (
     <div className="bg-white dark:bg-gray-900 min-h-screen">
@@ -367,19 +394,19 @@ export default function HowItWorksProviders() {
             Taskoria for Tradies &amp; Pros
           </h1>
           <p className="text-md text-gray-500 dark:text-gray-400 font-light max-w-xl mx-auto mb-8 leading-relaxed">
-            Taskoria connects Brisbane&apos;s best tradies and professionals with
-            thousands of ready-to-hire customers across QLD — no cold calls, no
-            marketing spend, no hassle.
+            Taskoria connects Brisbane&apos;s best tradies and professionals
+            with thousands of ready-to-hire customers across QLD — no cold
+            calls, no marketing spend, no hassle.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
-              onClick={()=> {
-                if(session){
-                    router.push("/provider/dashboard")
-                } else{
-                    joinAsProvider()
+              onClick={() => {
+                if (session) {
+                  router.push("/provider/dashboard");
+                } else {
+                  joinAsProvider();
                 }
-              } }
+              }}
               className="bg-[#2563EB] text-white font-semibold px-8 py-3.5 rounded-full hover:bg-[#1D4ED8] transition-colors shadow-md shadow-blue-200 dark:shadow-blue-900/50"
             >
               Join as a Tradie or Pro — Free
@@ -394,9 +421,16 @@ export default function HowItWorksProviders() {
 
           <div className="mt-10 flex flex-wrap justify-center gap-2">
             {[
-              "Plumbers", "Electricians", "Builders", "Painters",
-              "Landscapers", "Cleaners", "Web Developers", "Photographers",
-              "Pest Controllers", "Pool Technicians",
+              "Plumbers",
+              "Electricians",
+              "Builders",
+              "Painters",
+              "Landscapers",
+              "Cleaners",
+              "Web Developers",
+              "Photographers",
+              "Pest Controllers",
+              "Pool Technicians",
             ].map((trade) => (
               <span
                 key={trade}
@@ -418,12 +452,14 @@ export default function HowItWorksProviders() {
               <p>
                 Your Taskoria profile is your shopfront. Showcase your trade
                 licence, skills, qualifications, and completed job portfolio —
-                everything a Brisbane customer needs to choose you with confidence.
+                everything a Brisbane customer needs to choose you with
+                confidence.
               </p>
               <p>
                 We optimise every profile for local SEO. Customers searching for
-                your trade in your suburb — whether that&apos;s Paddington, Chermside,
-                or the Gold Coast — can find you on Google, at no cost to you.
+                your trade in your suburb — whether that&apos;s Paddington,
+                Chermside, or the Gold Coast — can find you on Google, at no
+                cost to you.
               </p>
               <ul className="mt-3 space-y-2">
                 {[
@@ -452,14 +488,14 @@ export default function HowItWorksProviders() {
           body={
             <>
               <p>
-                Every day, thousands of QLD residents and businesses post jobs on
-                Taskoria. We automatically match their needs to your trade and
-                service area, sending you relevant leads in real time.
+                Every day, thousands of QLD residents and businesses post jobs
+                on Taskoria. We automatically match their needs to your trade
+                and service area, sending you relevant leads in real time.
               </p>
               <p>
-                You receive the customer&apos;s contact details with each lead so you
-                can reach out directly. Send a personalised quote and stand out from
-                other tradies in your area.
+                You receive the customer&apos;s contact details with each lead
+                so you can reach out directly. Send a personalised quote and
+                stand out from other tradies in your area.
               </p>
               <ul className="mt-3 space-y-2">
                 {[
@@ -489,8 +525,9 @@ export default function HowItWorksProviders() {
             <>
               <p>
                 We take the hassle out of marketing your services. Taskoria
-                tradies receive hot, live leads the moment they&apos;re posted — no
-                waiting, no cold outreach, no wasted hours driving around quoting.
+                tradies receive hot, live leads the moment they&apos;re posted —
+                no waiting, no cold outreach, no wasted hours driving around
+                quoting.
               </p>
               <p>
                 Brisbane tradies on Taskoria earn an average of{" "}
@@ -527,14 +564,14 @@ export default function HowItWorksProviders() {
           body={
             <>
               <p>
-                Top Pro is awarded to the best professionals across Queensland. It&apos;s
-                not just a badge — it&apos;s a real edge that gets you more jobs and
-                better-paying customers.
+                Top Pro is awarded to the best professionals across Queensland.
+                It&apos;s not just a badge — it&apos;s a real edge that gets you
+                more jobs and better-paying customers.
               </p>
               <p>
                 Top Pros appear at the top of Brisbane search results, carry a
-                visible verified badge, pay lower platform fees, and get access to a
-                dedicated Australian support line.
+                visible verified badge, pay lower platform fees, and get access
+                to a dedicated Australian support line.
               </p>
               <ul className="mt-3 space-y-2">
                 {[
@@ -580,9 +617,21 @@ export default function HowItWorksProviders() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10 max-w-2xl mx-auto">
               {[
-                { icon: "👤", title: "Create your account in minutes", desc: "Free forever — no credit card needed" },
-                { icon: "📥", title: "Start receiving leads today", desc: "Get matched to Brisbane jobs immediately" },
-                { icon: "💸", title: "No commission or hidden fees", desc: "Flat fee per completed job only" },
+                {
+                  icon: "👤",
+                  title: "Create your account in minutes",
+                  desc: "Free forever — no credit card needed",
+                },
+                {
+                  icon: "📥",
+                  title: "Start receiving leads today",
+                  desc: "Get matched to Brisbane jobs immediately",
+                },
+                {
+                  icon: "💸",
+                  title: "No commission or hidden fees",
+                  desc: "Flat fee per completed job only",
+                },
               ].map((item) => (
                 <div key={item.title} className="text-center">
                   <div className="w-14 h-14 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">

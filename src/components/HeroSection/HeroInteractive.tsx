@@ -2,7 +2,14 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { ArrowRight, Search, MapPin, LocateIcon, Locate } from "lucide-react";
+import {
+  ArrowRight,
+  Search,
+  MapPin,
+  LocateIcon,
+  Locate,
+  ArrowUpRight,
+} from "lucide-react";
 import { Button } from "../../components/ui/button";
 import NewRequestModal from "../leads/RequestModal";
 import CategorySearch from "../category/CategorySearch";
@@ -88,7 +95,7 @@ export default function HeroInteractive() {
             />
           </div>
           <div
-            className="absolute -inset-0.5 rounded-2xl bg-[#3C7DED] blur-md opacity-0
+            className="absolute -inset-0.5 rounded-2xl bg-[var(--color-brand-primary)] blur-md opacity-0
               group-hover:opacity-00 transition duration-500"
             aria-hidden="true"
           />
@@ -126,35 +133,29 @@ export default function HeroInteractive() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button
                 onClick={() => handlePostJob()}
-                className="
-                w-58 h-10
-                border border-gray-200 dark:border-gray-700
-                text-gray-600 dark:text-gray-300 bg-w font-semibold
-                hover:bg-[#1d4fd8]
-                hover:text-white text-base
-                rounded-lg
-                transition-all duration-200
-                flex items-center justify-center gap-2
-              "
+                className=" w-58  text-base  group  py-4.5 bg-transparent border border-blue-500    hover:bg-[#A6B4FA] text-[#2563EB] dark:text-blue-300 font-semibold   transition-all duration-300 shadow-lg shadow-blue-500/20 hover hover:scale-105 hover:shadow-xl hover:shadow-blue-500/30"
                 aria-label="Post a job to find service providers"
               >
                 Get Free Quotes
-                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                <ArrowUpRight
+                  className="w-4 h-4 transition-transform group-hover:translate-x-1 duration-300 group-hover:rotate-45"
+                  aria-hidden="true"
+                />{" "}
               </Button>
 
               {!session && (
                 <Button
                   onClick={() => joinAsProvider()}
                   className="
-               w-58 h-10
+               w-58 text-base py-4.5
                rounded-lg
-               text-base font-semibold
+                font-semibold
                bg-[#2563EB]
                hover:bg-[#1D4FD8]
                text-white
                shadow-lg shadow-blue-500/25
-               hover:shadow-xl hover:shadow-blue-500/40
-           
+               hover:shadow-xl hover:shadow-blue-500/50
+           hover:scale-105
                transition-all duration-300
 norder-none             "
                   aria-label="Register as a service provider"
