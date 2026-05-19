@@ -178,7 +178,7 @@ export default function Testimonial() {
           Customer stories
         </div>
 
-        <h2 className="text-4xl font-bold text-gray-800 ">
+        <h2 className="text-4xl font-bold text-gray-800 dark:text-white ">
           What customers say about {" "}
           <span className="bg-[#2563EB] bg-clip-text text-transparent">
               Taskoria ...
