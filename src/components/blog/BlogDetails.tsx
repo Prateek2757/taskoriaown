@@ -4,7 +4,7 @@ import { Tag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import { renderContent } from "../renderContent";
-import {  BlogCardList } from "./BlogCard";
+import { BlogCardList } from "./BlogCard";
 import Image from "next/image";
 interface Post {
   post_id: number;
@@ -78,9 +78,6 @@ export default function BlogDetails({ post, filteredPosts }: Props) {
             className="rounded-md object-cover"
           />
         </div>
-        {/* <div >
-         <p>{renderContent(post.content)}</p>
-      </div> */}
         <div className="prose dark:prose-invert max-w-none">
           {renderContent(post.content)}
         </div>
@@ -96,14 +93,15 @@ export default function BlogDetails({ post, filteredPosts }: Props) {
           ))}
         </div>
       </article>
+      {filteredPosts?.length > 0 && (
+        <article className="max-w-3xl mx-auto px-6 sm:px-6 lg:px-8 py-4">
+          <h3 className="text-sm  text-gray-400 uppercase dark:text-zinc-50 mb-8 flex items-center gap-3">
+            You might also be interested in:
+          </h3>
 
-      <article className="max-w-3xl mx-auto px-6 sm:px-6 lg:px-8 py-4">
-            <h3 className="text-sm  text-gray-400 uppercase dark:text-zinc-50 mb-8 flex items-center gap-3">
-          You might also be interested in:
-        </h3>
-
-        <BlogCardList  posts={filteredPosts} />
-      </article>
+          <BlogCardList posts={filteredPosts} />
+        </article>
+      )}
     </div>
   );
 }
