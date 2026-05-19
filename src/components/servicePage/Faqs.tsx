@@ -11,7 +11,7 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
   return (
-    <section className="mb-16">
+    <section className="mb-16 pt-3">
       <div className="text-center mb-10">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
           Frequently Asked Questions

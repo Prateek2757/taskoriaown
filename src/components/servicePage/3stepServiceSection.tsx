@@ -93,15 +93,14 @@ export default function StepWiseHowItWorks({
       className="w-full bg-slate-50 dark:bg-slate-900/60 py-6 px-6"
     >
       <div className="max-w-6xl mx-auto">
-        {/* Only show heading label on non-city pages */}
         {!cityName && (
           <div className="mb-5">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-500 dark:text-blue-400 mb-2">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2563EB] dark:text-blue-400 mb-2">
               How it works
             </p>
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
               Hire a {serviceName.toLowerCase()} pro in{" "}
-              <span className="text-blue-600 dark:text-blue-400">
+              <span className="text-[#2563EB] dark:text-blue-400">
                 3 simple steps
               </span>
             </h2>
@@ -117,9 +116,9 @@ export default function StepWiseHowItWorks({
                 transform: visible ? "translateY(0)" : "translateY(16px)",
                 transition: `opacity 0.45s ease ${i * 100}ms, transform 0.45s ease ${i * 100}ms`,
               }}
-              className="group relative bg-white dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700/60 rounded-2xl p-5 flex flex-col gap-5 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-lg hover:shadow-blue-100/60 dark:hover:shadow-blue-950/40 transition-all duration-300"
+              className="group relative bg-white dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700/60 rounded-2xl p-5 flex flex-col gap-5 hover:border-blue-300 dark:hover:border-[#2563EB] hover:shadow-lg hover:shadow-blue-100/60 dark:hover:shadow-blue-950/40 transition-all duration-300"
             >
-              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 text-sm font-bold shrink-0 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 dark:group-hover:bg-blue-500 dark:group-hover:border-blue-500 transition-all duration-300">
+              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 text-[#2563EB] dark:text-blue-400 text-sm font-bold shrink-0 group-hover:bg-[#2563EB] group-hover:text-white group-hover:border-[#2563EB] dark:group-hover:bg-blue-500 dark:group-hover:border-blue-500 transition-all duration-300">
                 {i + 1}
               </div>
 

@@ -132,7 +132,7 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
             <div className="text-left max-w-7xl px-4 mx-auto">
               <h1 className="text-2xl md:text-6xl font-extrabold text-gray-900 dark:text-zinc-50 mb-6 leading-tight">
                 Discover Better Ways to
-                <span className="block mt-2 bg-linear-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
+                <span className="block mt-2 bg-linear-to-r from-blue-600 to-[#2563EB] dark:from-blue-400 dark:to-[#2563EB] bg-clip-text text-transparent">
                   Get Things Done
                 </span>
               </h1>
@@ -211,7 +211,7 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
           featuredPosts.length > 0 && (
             <section className="mb-8 -mt-10">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-8 flex items-center gap-3">
-                <TrendingUp className="text-#2563EB dark:text-blue-400" />
+                <TrendingUp className="text-[#2563EB] dark:text-blue-400" />
                 Featured Articles
               </h2>
               <div className="grid md:grid-cols-6 gap-8">

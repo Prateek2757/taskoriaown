@@ -168,7 +168,6 @@ function Fade({ children, i = 0, style = {} }: any) {
   );
 }
 
-// ─── Layout primitives ────────────────────────────────────────────────────────
 
 function Inner({ children, style = {} }: any) {
   return (
@@ -608,11 +607,7 @@ function ServiceDetailsSection({
   serviceDetails: string;
   onPostJob?: () => void;
 }) {
-  /**
-   * next-themes: `resolvedTheme` is the actual applied theme ("light" | "dark").
-   * It resolves "system" automatically against the OS preference — no manual
-   * matchMedia needed. Falls back to "light" during SSR (before hydration).
-   */
+
   const { resolvedTheme } = useTheme();
   const T = resolvedTheme === "dark" ? DARK : LIGHT;
 
@@ -627,17 +622,13 @@ function ServiceDetailsSection({
   const shaded = new Set(["services", "checklist"]);
 
   return (
-    /**
-     * Provide T via context — every sub-component calls useT() instead of
-     * receiving T as a prop, so nothing in the tree needs to change.
-     */
+    
     <ThemeCtx.Provider value={T}>
       <div
         style={{
           width: "100%",
           background: T.bg,
           fontFamily: "var(--font-sans, system-ui, sans-serif)",
-          // Smooth colour cross-fade when the theme switches
           transition: "background 0.3s ease, color 0.3s ease",
         }}
       >

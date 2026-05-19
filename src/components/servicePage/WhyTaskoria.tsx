@@ -69,12 +69,12 @@ export default function WhyTaskoria({
     <section
       ref={ref}
       aria-label={`Why use Taskoria for ${serviceName}`}
-      className="w-full border-y border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden"
+      className="w-full border-y border-slate-100 dark:border-slate-800  dark:bg-slate-900 overflow-hidden"
     >
-      <div className="h-[3px] w-full bg-gradient-to-r from-blue-500 via-[#2563EB] to-blue-600" />
+      {/* <div className="h-[3px] w-full bg-gradient-to-r from-blue-500 via-[#2563EB] to-blue-600" /> */}
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <p className=" text-[16px] font-bold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500 mb-6 text-center">
+      <div className="max-w-6xl mx-auto px-6 py-4">
+        <p className=" text-[16px] font-bold uppercase tracking-[0.18em] text-slate-500 mb-6 text-center">
           Why customers choose Taskoria for {serviceName.toLowerCase()}
         </p>
 
@@ -104,7 +104,7 @@ export default function WhyTaskoria({
           ))}
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           {[
             "No obligation",
             "Free cancellation",
