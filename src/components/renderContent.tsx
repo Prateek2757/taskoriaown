@@ -14,21 +14,13 @@ export function renderContent(html: string) {
 
       const children = domToReact(element.children as DOMNode[], options);
 
-      if (element.name === "p") {
-        const text = element.children
-          .map((c: any) => c.data ?? "")
-          .join("")
-          .replace(/\u00a0/g, "")
-          .trim();
-
-        if (!text) return <></>;
-
-        return (
-          <p className="text-[#0f1f5c] dark:text-zinc-200 text-base leading-relaxed mb-4">
-            {children}
-          </p>
-        );
-      }
+    if (element.name === "p") {
+  return (
+    <p className="text-[#0f1f5c] dark:text-zinc-200 text-base leading-relaxed mb-4">
+      {children}
+    </p>
+  );
+}
 
       if (element.name === "h1") {
         return (
