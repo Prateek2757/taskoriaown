@@ -1,4 +1,3 @@
-import { Phone } from 'lucide-react';
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
@@ -237,5 +236,5 @@ export const authOptions: NextAuthOptions = {
     maxAge: 2 * 60 * 60,
   },
 
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET!,
 };

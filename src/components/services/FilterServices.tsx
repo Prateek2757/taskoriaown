@@ -22,12 +22,12 @@ export default function FilterServices({
   ];
   console.log("activefilter:", filterData);
   return (
-    <div className="flex gap-2 overflow-x-auto px-2 py-1">
+    <div className="flex gap-2 overflow-x-auto hide-scrollbar  px-2 py-1">
       {filters.map((filter) => (
         <button
           key={filter}
           onClick={() => onChangeFilterData(filter)}
-          className={`whitespace-nowrap rounded-xl border px-3 py-2 text-sm transition
+          className={`whitespace-nowrap rounded-xl border px-3 py-2 text-sm transition 
             ${
               filterData === filter
                 ? "border-blue-600 bg-[#2563EB] text-white"
