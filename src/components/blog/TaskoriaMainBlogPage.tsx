@@ -205,18 +205,30 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
                       });
                     }, 100);
                   }}
-                  className="w-32 h-10 flex items-center justify-center rounded-full  text-white bg-[#2563EB] hover:bg-blue-600 transition-colors"
+                  className="w-32 h-10 flex items-center justify-center rounded-xl  text-white bg-[#2563EB] hover:bg-blue-600 transition-colors"
                 >
                   See More
                   <RiArrowRightSLine size={22} />
                 </button>
               )}
-              {displayPosts.length > 3 && hasLess && (
+              {displayPosts.length > 3 && (hasMore || hasLess) && (
                 <button
-                  onClick={loadLess}
-                  className="w-32 h-10 flex items-center justify-center  rounded-full  text-white bg-[#2563EB] hover:bg-blue-600 transition-colors"
+                  onClick={() => {
+                    if (hasMore) {
+                      loadMore();
+                      setTimeout(() => {
+                        postsRef.current?.scrollIntoView({
+                          behavior: "smooth",
+                          block: "end",
+                        });
+                      }, 100);
+                    } else {
+                      loadLess();
+                    }
+                  }}
+                  className="w-32 h-10 flex items-center justify-center rounded-xl text-white bg-[#2563EB] hover:bg-blue-600 transition-colors"
                 >
-                  See less
+                  {hasMore ? "See More" : "See Less"}
                   <RiArrowRightSLine size={22} />
                 </button>
               )}
