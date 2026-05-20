@@ -1,8 +1,11 @@
-
 import ServicePageWrapper from "@/components/servicePage/ServicePageWrapper";
 import ServiceStatePageClient from "@/components/servicePage/Servicestatepageclient";
 import StructuredData from "@/components/servicePage/StructureData";
-import { getAllCities, getCategoriesFromDB, getCategoryBySlug } from "@/lib/cache";
+import {
+  getAllCities,
+  getCategoriesFromDB,
+  getCategoryBySlug,
+} from "@/lib/cache";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 export const dynamic = "force-static";
@@ -36,9 +39,8 @@ export interface City {
   state_name: string;
   country_name: string;
   subcities: { city_id: number; name: string; slug: string }[];
-  providers?: any[]; 
+  providers?: any[];
 }
-
 
 function toTitleCase(slug: string) {
   return slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
@@ -67,7 +69,6 @@ function buildCanonical(
   return base;
 }
 
-
 // async function getService(serviceSlug: string): Promise<ServiceData | null> {
 //   try {
 //     const res = await fetch(
@@ -80,9 +81,7 @@ function buildCanonical(
 //   }
 // }
 async function getService(serviceSlug: string) {
-
   return await getCategoryBySlug(serviceSlug);
-
 }
 
 // async function getAllCities(): Promise<City[]> {
@@ -97,16 +96,16 @@ async function getService(serviceSlug: string) {
 //   }
 // }
 
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
-  const [serviceSlug, stateSlug = null, citySlug = null , subCitySlug = null] = slug;
-  
+  const [serviceSlug, stateSlug = null, citySlug = null, subCitySlug = null] =
+    slug;
 
   if (!serviceSlug) {
     return {
       title: "Professional Services Near You | Taskoria",
-      description: "Find and book trusted local professionals with Taskoria. Get free quotes, compare prices, and read verified reviews.",
+      description:
+        "Find and book trusted local professionals with Taskoria. Get free quotes, compare prices, and read verified reviews.",
     };
   }
 
@@ -118,11 +117,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const cityName   = citySlug   ? toTitleCase(citySlug)   : null;
-  const stateName  = stateSlug  ? toTitleCase(stateSlug)  : null;
+  const cityName = citySlug ? toTitleCase(citySlug) : null;
+  const stateName = stateSlug ? toTitleCase(stateSlug) : null;
   const isStatePage = stateSlug && !citySlug;
-  const canonicalUrl = buildCanonical(serviceSlug, stateSlug, citySlug,subCitySlug);
-  const imageUrl = service.hero_image ?? `https://www.taskoria.com/og-images/${serviceSlug}.jpg`;
+  const canonicalUrl = buildCanonical(
+    serviceSlug,
+    stateSlug,
+    citySlug,
+    subCitySlug
+  );
+  const imageUrl =
+    service.hero_image ??
+    `https://www.taskoria.com/og-images/${serviceSlug}.jpg`;
 
   const title = cityName
     ? `Hire ${service.name} in ${cityName} | Get Free Quotes`
@@ -177,25 +183,56 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     robots: {
       index: true,
       follow: true,
-      googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large", "max-snippet": -1 },
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
     openGraph: {
-      title, description, type: "website", locale: "en_AU",
-      url: canonicalUrl, siteName: "Taskoria",
-      images: [{ url: imageUrl, width: 1200, height: 630, alt: cityName ? `${service.name} in ${cityName}` : stateName ? `${service.name} in ${stateName}` : `${service.name} Services in Australia` }],
+      title,
+      description,
+      type: "website",
+      locale: "en_AU",
+      url: canonicalUrl,
+      siteName: "Taskoria",
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: cityName
+            ? `${service.name} in ${cityName}`
+            : stateName
+              ? `${service.name} in ${stateName}`
+              : `${service.name} Services in Australia`,
+        },
+      ],
     },
-    twitter: { card: "summary_large_image", title, description, images: [imageUrl], creator: "@taskoria", site: "@taskoria" },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+      creator: "@taskoria",
+      site: "@taskoria",
+    },
     alternates: {
       canonical: canonicalUrl,
-      languages: { "en-AU": canonicalUrl, "x-default": `https://www.taskoria.com/services/${serviceSlug}` },
+      languages: {
+        "en-AU": canonicalUrl,
+        "x-default": `https://www.taskoria.com/services/${serviceSlug}`,
+      },
     },
   };
 }
 
-
 export default async function ServicePage({ params }: Props) {
   const { slug = [] } = await params;
-  const [serviceSlug, stateSlug = null, citySlug = null, subCitySlug = null] = slug;
+  const [serviceSlug, stateSlug = null, citySlug = null, subCitySlug = null] =
+    slug;
 
   if (!serviceSlug || serviceSlug === "undefined") notFound();
 
@@ -204,33 +241,38 @@ export default async function ServicePage({ params }: Props) {
     getAllCities(),
   ]);
 
-  
-  
   if (!service) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800">Service Not Found</h1>
-          <p className="mt-2 text-gray-500">We couldn&apos;t find the service you&apos;re looking for.</p>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Service Not Found
+          </h1>
+          <p className="mt-2 text-gray-500">
+            We couldn&apos;t find the service you&apos;re looking for.
+          </p>
         </div>
       </div>
     );
   }
   if (stateSlug && !citySlug) {
-    const stateName  = toTitleCase(stateSlug);
+    const stateName = toTitleCase(stateSlug);
     const stateCitiesRaw = cities
       .filter((c) => c.state_slug === stateSlug)
       .sort((a, b) => b.popularity - a.popularity);
-      const stateCities = Array.from(
-        new Map(stateCitiesRaw.map((c) => [c.name.toLowerCase(), c])).values()
-      );
+    const stateCities = Array.from(
+      new Map(stateCitiesRaw.map((c) => [c.name.toLowerCase(), c])).values()
+    );
     if (!stateCities.length) notFound();
 
     const otherStates = [
       ...new Map(
         cities
           .filter((c) => c.state_slug !== stateSlug)
-          .map((c) => [c.state_slug, { state_slug: c.state_slug, state_name: c.state_name }])
+          .map((c) => [
+            c.state_slug,
+            { state_slug: c.state_slug, state_name: c.state_name },
+          ])
       ).values(),
     ].sort((a, b) => a.state_name.localeCompare(b.state_name));
 
@@ -256,7 +298,6 @@ export default async function ServicePage({ params }: Props) {
       </>
     );
   }
-
 
   const selectedLocation = citySlug
     ? (cities.find((city) => city.slug === citySlug) ?? null)
@@ -290,10 +331,8 @@ export default async function ServicePage({ params }: Props) {
         stateSlug={stateSlug}
         subCitySlug={subCitySlug}
       />
-      
     </>
   );
-  
 }
 
 export async function generateStaticParams() {
@@ -305,49 +344,47 @@ export async function generateStaticParams() {
 
     const params: { slug: string[] }[] = [];
 
-    const categories = categoriesRaw.filter((c) => !c.parent_category_id);
+    const rankedCategories = categoriesRaw
+      .filter((c) =>  c.slug && c.rank != null) 
+      .sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
 
-  
-    for (const cat of categories) {
-      if (cat.slug) params.push({ slug: [cat.slug] });
-    }
-  
+    const rankedCities = [...cities]
+      .filter((c) => c.popularity > 0 && c.slug && c.state_slug) 
+      .sort((a, b) => b.popularity - a.popularity)
+      .filter((c, i, arr) => arr.findIndex((x) => x.slug === c.slug) === i); 
+
     const uniqueStates = [
       ...new Map(
-        cities
-          .filter((c) => c.state_slug)
-          .map((c) => [c.state_slug, c.state_slug])
+        rankedCities.map((c) => [c.state_slug, c.state_slug])
       ).values(),
     ];
 
-    for (const cat of categories) {
+    for (const cat of rankedCategories) {
+      params.push({ slug: [cat.slug!] });
+    }
+
+    for (const cat of rankedCategories) {
       for (const stateSlug of uniqueStates) {
-        if (cat.slug) params.push({ slug: [cat.slug, stateSlug] });
+        params.push({ slug: [cat.slug!, stateSlug] });
       }
     }
 
- 
-    const topCities = [...cities]
-      .sort((a, b) => b.popularity - a.popularity)
-      .filter(
-        (c, i, arr) =>
-          arr.findIndex((x) => x.slug === c.slug) === i 
-      )
-      .slice(0, 30);
-
-    for (const cat of categories) {
-      for (const city of topCities) {
-        if (cat.slug && city.state_slug && city.slug) {
-          params.push({ slug: [cat.slug, city.state_slug, city.slug] });
-        }
+    for (const cat of rankedCategories) {
+      for (const city of rankedCities) {
+        params.push({ slug: [cat.slug!, city.state_slug, city.slug] });
       }
     }
 
-    // console.log(`Generated ${params.length} static params for service pages`);
+    console.log(`[generateStaticParams]
+      ranked categories : ${rankedCategories.length}  (unranked skipped: ${categoriesRaw.filter(c => !c.parent_category_id).length - rankedCategories.length})
+      ranked cities     : ${rankedCities.length}       (popularity=0 skipped)
+      states            : ${uniqueStates.length}
+      total params      : ${params.length}
+    `);
+
     return params;
   } catch (e) {
     console.error("generateStaticParams failed:", e);
     return [];
   }
 }
-
