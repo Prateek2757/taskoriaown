@@ -5,7 +5,8 @@ import { BlogCard } from "./BlogCard";
 import { MdArrowDropDown } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import { useRouter } from "next/navigation";
-import usePagination from "@/hooks/usePagination";
+import usePagination from "@/hooks/usePaginationblog";
+import { RiArrowRightSLine } from "react-icons/ri";
 
 type Blog = {
   post_id: number;
@@ -49,7 +50,7 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
         (post) =>
           post.title.toLowerCase().includes(query) ||
           post.excerpt.toLowerCase().includes(query) ||
-          post.category.toLowerCase().includes(query)
+          post.category.toLowerCase().includes(query),
       );
     }
 
@@ -67,45 +68,10 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
     paginatedData: PaginatedDisplayPosts,
     loadMore,
     hasMore,
+    hasLess,
+    loadLess,
   } = usePagination(displayPosts, 3);
-
-  //pagination
-  const [allPosts, setAllPosts] = useState([]);
-  // useEffect(() => {
-  //   setAllPosts((prev) => {
-  //     const existingIds = new Set(prev.map((p) => p.post_id));
-
-  //     const newPosts = PaginatedDisplayPosts.filter(
-  //       (p) => !existingIds.has(p.post_id),
-  //     );
-
-  //     return [...prev, ...newPosts];
-  //   });
-  // }, [PaginatedDisplayPosts]);
-
-  const prevPaginatedRef = useRef<Blog[]>([]);
-
-  useEffect(() => {
-    setAllPosts([]);
-    prevPaginatedRef.current = [];
-  }, [selectedCategory, searchQuery]);
-
-  useEffect(() => {
-    const prev = prevPaginatedRef.current;
-
-    if (prev === PaginatedDisplayPosts) return;
-    prevPaginatedRef.current = PaginatedDisplayPosts;
-
-    setAllPosts((existing) => {
-      const existingIds = new Set(existing.map((p) => p.post_id));
-      const newPosts = PaginatedDisplayPosts.filter(
-        (p) => !existingIds.has(p.post_id)
-      );
-      if (newPosts.length === 0) return existing;
-      return [...existing, ...newPosts];
-    });
-  }, [PaginatedDisplayPosts]);
-
+  const postsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -151,10 +117,6 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full rounded-3xl bg-gray-100 border-gray-300 focus:outline-none focus:border-blue-600 text-gray-400 pl-8 py-2.5 text-base"
-                />
-                <FiSearch
-                  size={22}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
                 />
               </div>
             </div>
@@ -222,28 +184,46 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
             </section>
           )}
 
-        {allPosts.length > 0 && (
-          <section className="-mt-6">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-4 flex items-center gap-3">
-              <Sparkles className="text-[#2563EB] dark:text-blue-400" />
-              {selectedCategory === "All Posts"
-                ? "Latest Articles"
-                : selectedCategory}
-            </h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {allPosts.map((post) => (
+        {PaginatedDisplayPosts.length > 0 && (
+          <section>
+            <div className="flex justify-between">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-4 flex items-center gap-3">
+                <Sparkles className="text-[#2563EB] dark:text-blue-400" />
+                {selectedCategory === "All Posts"
+                  ? "Latest Articles"
+                  : selectedCategory}
+              </h2>
+              {displayPosts.length > 3 && (hasMore || hasLess) && (
+                <button
+                  onClick={() => {
+                    if (hasMore) {
+                      loadMore();
+                      setTimeout(() => {
+                        postsRef.current?.scrollIntoView({
+                          behavior: "smooth",
+                          block: "end",
+                        });
+                      }, 100);
+                    } else {
+                      loadLess();
+                    }
+                  }}
+                  className="w-32 h-10 flex items-center justify-center rounded-xl text-white bg-[#2563EB] hover:bg-blue-600 transition-colors"
+                >
+                  {hasMore ? "See More" : "See Less"}
+                  <RiArrowRightSLine size={22} />
+                </button>
+              )}
+            </div>
+
+            <div
+              className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
+              ref={postsRef}
+            >
+              {PaginatedDisplayPosts.map((post) => (
                 <BlogCard key={post.post_id} post={post} />
               ))}
             </div>
-
-            {hasMore && (
-              <button
-                onClick={loadMore}
-                className="ml-auto block  w-24 p-1 rounded-md text-white bg-[#2563EB]  hover:bg-blue-600 hover:transition-colors"
-              >
-                See More
-              </button>
-            )}
           </section>
         )}
       </main>
