@@ -133,7 +133,7 @@ export default function HeroInteractive() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button
                 onClick={() => handlePostJob()}
-                className=" w-58  text-base  group  py-4.5 bg-transparent border border-blue-500    hover:bg-none text-[#2563EB] dark:text-blue-300 font-semibold   transition-all duration-300 shadow-lg shadow-blue-500/20 hover hover:scale-105 hover:shadow-xl hover:shadow-blue-500/30"
+                className=" w-58  text-base  group  py-4.5 bg-transparent  hover:bg-transparent border border-blue-500    hover:bg-none text-[#2563EB] dark:text-blue-300 font-semibold   transition-all duration-300 shadow-lg shadow-blue-500/20 hover hover:scale-105 hover:shadow-xl hover:shadow-blue-500/30"
                 aria-label="Post a job to find service providers"
               >
                 Get Free Quotes
