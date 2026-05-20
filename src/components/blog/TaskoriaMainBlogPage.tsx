@@ -193,24 +193,6 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
                   ? "Latest Articles"
                   : selectedCategory}
               </h2>
-              {displayPosts.length > 3 && hasMore && (
-                <button
-                  onClick={() => {
-                    loadMore();
-
-                    setTimeout(() => {
-                      postsRef.current?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "end",
-                      });
-                    }, 100);
-                  }}
-                  className="w-32 h-10 flex items-center justify-center rounded-xl  text-white bg-[#2563EB] hover:bg-blue-600 transition-colors"
-                >
-                  See More
-                  <RiArrowRightSLine size={22} />
-                </button>
-              )}
               {displayPosts.length > 3 && (hasMore || hasLess) && (
                 <button
                   onClick={() => {
