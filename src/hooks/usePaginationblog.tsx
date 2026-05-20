@@ -1,31 +1,4 @@
-// import { useState, useMemo, useEffect } from "react";
 
-// function usePagination<T>(data: T[], itemsPerPage: number, dependency?: unknown) {
-//   const [currentPage, setCurrentPage] = useState(1);
-
-//   useEffect(() => {
-//     setCurrentPage(1);
-//   }, [dependency]);
-
-//   const totalPages = Math.ceil(data.length / itemsPerPage);
-
-//   const paginatedData = useMemo(() => {
-//     const start = (currentPage - 1) * itemsPerPage;
-//     return data.slice(start, start + itemsPerPage);
-//   }, [data, currentPage, itemsPerPage]);
-  
-//    const loadMore = () => {
-//     if (currentPage < totalPages) {
-//       setCurrentPage((prev) => prev + 1);
-//     }
-//   };
-
-//   const hasMore = currentPage < totalPages;
-//   return { paginatedData, currentPage, setCurrentPage, totalPages ,  loadMore,
-//     hasMore,};
-// }
-
-// export default usePagination;
 import { useState, useMemo, useEffect } from "react";
 
 function usePagination<T>(
@@ -42,18 +15,15 @@ function usePagination<T>(
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   const paginatedData = useMemo(() => {
-    // show all items till current page
     return data.slice(0, currentPage * itemsPerPage);
   }, [data, currentPage, itemsPerPage]);
 
-  // Load More
   const loadMore = () => {
     if (currentPage < totalPages) {
       setCurrentPage((prev) => prev + 1);
     }
   };
 
-  // Load Less
   const loadLess = () => {
     if (currentPage > 1) {
       setCurrentPage((prev) => prev - 1);
