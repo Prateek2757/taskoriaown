@@ -9,7 +9,7 @@ import {
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 export const dynamic = "force-static";
-export const revalidate = 604800;
+export const revalidate = false;
 
 type Props = {
   params: Promise<{ slug?: string[] }>;
