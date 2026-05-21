@@ -8,9 +8,8 @@ import {
 } from "@/lib/cache";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-export const dynamic = "force-static";
-export const revalidate = false;
-
+// export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 type Props = {
   params: Promise<{ slug?: string[] }>;
 };
