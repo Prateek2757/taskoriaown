@@ -7,7 +7,7 @@ export default function BlogNavbar() {
   return (
     <header className="bg-white/95 backdrop-blur-md sticky w-full top-0 z-[9999]  ">
       <div className=" container max-w-7xl mx-auto px-4 py-3 flex justify-between items-center sm:justify-between">
-        <p className="text-base md:text-2xl font-bold text-[#2563EB] sm:md">
+        <p className="text-2xl md:text-2xl font-bold text-[#2563EB] sm:md">
           The Taskoria
           <span className="text-black"> Blog</span>
         </p>
@@ -21,7 +21,7 @@ export default function BlogNavbar() {
             >
               <span className="hidden md:block">{link.name}</span>
 
-              <MdOutlineArrowRightAlt size={26} />
+              <MdOutlineArrowRightAlt size={30} />
             </Link>
           ))}
         </nav>
