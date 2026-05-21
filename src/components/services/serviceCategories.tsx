@@ -52,15 +52,15 @@ const staticServiceImages: Record<string, { url: string; gradient: string }> = {
   },
   Painters: {
     url: "/images/painting.png",
-    gradient: "from-indigo-500/20 to-blue-500/20",
+    gradient: "from-blue-500/20 to-blue-500/20",
   },
   "Handyman & General Repair": {
     url: "/images/handymann.png",
-    gradient: "from-indigo-500/20 to-blue-500/20",
+    gradient: "from-blue-500/20 to-blue-500/20",
   },
   "Carpet Steam Cleaning": {
     url: "/images/carpetsteam.png",
-    gradient: "from-indigo-500/20 to-blue-500/20",
+    gradient: "from-blue-500/20 to-blue-500/20",
   },
 
   "Rubbish Removal": {
@@ -165,7 +165,7 @@ export default function ServiceCategoriesClient({
       <div className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-sky-200/50 blur-3xl dark:bg-sky-700/20" />
 
       <div className="relative mx-auto max-w-7xl space-y-10">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:p-8">
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:p-8">
           <div className="mb-4 flex items-center justify-between gap-4">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
               Find a service or post directly
@@ -175,7 +175,7 @@ export default function ServiceCategoriesClient({
             </p>
           </div>
 
-          <div className="relative">
+          <div className="relative rounded-xl">
             <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <Input
               type="text"
@@ -203,7 +203,7 @@ export default function ServiceCategoriesClient({
                 <button
                   key={category.category_id}
                   onClick={() => handlePostJob(category)}
-                  className="rounded-full border border-slate-300 px-3 py-1.5 text-sm text-slate-700 transition hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-600 dark:text-slate-200 dark:hover:border-blue-400 dark:hover:bg-slate-800"
+                  className="rounded-xl border border-slate-300 px-3 py-1.5 text-sm text-slate-700 transition hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-600 dark:text-slate-200 dark:hover:border-blue-400 dark:hover:bg-slate-800"
                 >
                   Post {category.name}
                 </button>
@@ -274,7 +274,7 @@ export default function ServiceCategoriesClient({
             <div className="flex justify-end">
               <button
                 onClick={() => setShowData((prev) => !prev)}
-                className=" flex text-blue-400 "
+                className=" flex text-[#2563EB] "
               >
                 {showData ? "Show less" : `Show all (${filteredData.length})`}
               </button>

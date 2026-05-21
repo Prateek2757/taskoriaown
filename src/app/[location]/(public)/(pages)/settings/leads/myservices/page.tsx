@@ -1,6 +1,6 @@
 // "use client";
 
-import MyServicesPage from "@/components/Location&ServiceSetting/MyservicesPage"
+import MyServicesPage from "@/components/Location&ServiceSetting/MyservicesPage";
 
 // import { useLeadProfile, Category } from "@/hooks/useLeadProfile";
 // import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -97,7 +97,7 @@ import MyServicesPage from "@/components/Location&ServiceSetting/MyservicesPage"
 //         return;
 //       }
 //       const filtered = categories.filter((c) =>
-//         c.name.toLowerCase().includes(query.toLowerCase()) 
+//         c.name.toLowerCase().includes(query.toLowerCase())
 //       );
 //       setFilteredCategories(filtered);
 //     }, 250),
@@ -158,13 +158,13 @@ import MyServicesPage from "@/components/Location&ServiceSetting/MyservicesPage"
 //       return;
 //     }
 
-//     setLocationError(null); 
-//     setLocationSuccess(null); 
-    
+//     setLocationError(null);
+//     setLocationSuccess(null);
+
 //     try {
 //       await addLocation(data.city_id as any, data.city as any, selectedRadius);
 //       setLocationSuccess(`${data.city} (${selectedRadius}mi radius) added successfully!`);
-      
+
 //       setTimeout(() => {
 //         setLocationDialogOpen(false);
 //         setLocationSuccess(null);
@@ -173,7 +173,7 @@ import MyServicesPage from "@/components/Location&ServiceSetting/MyservicesPage"
 //     } catch (err: any) {
 //       const errorMessage = err.message || "Failed to add location";
 //       setLocationError(errorMessage);
-      
+
 //       setTimeout(() => {
 //         setLocationError(null);
 //       }, 5000);
@@ -196,7 +196,7 @@ import MyServicesPage from "@/components/Location&ServiceSetting/MyservicesPage"
 //   return (
 //     <div className="max-w-6xl mx-auto py-4 px-6 space-y-6">
 //       <style>{scrollbarStyles}</style>
-      
+
 //       <Link href="/provider/dashboard">
 //         <Button
 //           variant="ghost"
@@ -383,7 +383,7 @@ import MyServicesPage from "@/components/Location&ServiceSetting/MyservicesPage"
 //                 onOpenChange={(open) => {
 //                   setLocationDialogOpen(open);
 //                   if (!open) {
-//                     setLocationError(null); 
+//                     setLocationError(null);
 //                     setLocationSuccess(null);
 //                     setSelectedRadius(10); // Reset radius when closing
 //                   }
@@ -440,7 +440,7 @@ import MyServicesPage from "@/components/Location&ServiceSetting/MyservicesPage"
 //                   )}
 
 //                   <div className="space-y-5 flex-1 flex flex-col">
-//                     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 p-5 rounded-xl border border-blue-200 dark:border-gray-700">
+//                     <div className="bg-gradient-to-br from-blue-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 p-5 rounded-xl border border-blue-200 dark:border-gray-700">
 //                       <div className="flex items-center gap-2 mb-4">
 //                         <Radar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
 //                         <label className="text-sm font-semibold text-gray-900 dark:text-gray-100">
@@ -516,9 +516,9 @@ import MyServicesPage from "@/components/Location&ServiceSetting/MyservicesPage"
 //                       className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 px-4 py-2 rounded-full flex items-center gap-2 cursor-pointer hover:bg-red-100 dark:hover:bg-red-700 hover:text-red-700 dark:hover:text-red-200 transition-all text-sm font-medium shadow-sm"
 //                       onClick={() => {
 //                         if (!saving) {
-//                           setPendingRemove({ 
-//                             type: "location", 
-//                             id: loc.city_id 
+//                           setPendingRemove({
+//                             type: "location",
+//                             id: loc.city_id
 //                           });
 //                           setConfirmOpen(true);
 //                         }
@@ -629,11 +629,12 @@ import MyServicesPage from "@/components/Location&ServiceSetting/MyservicesPage"
 //   );
 // }
 
-
 const page = () => {
   return (
-    <div><MyServicesPage/></div>
-  )
-}
+    <div>
+      <MyServicesPage />
+    </div>
+  );
+};
 
-export default page
+export default page;

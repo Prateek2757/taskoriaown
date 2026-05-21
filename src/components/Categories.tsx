@@ -98,7 +98,7 @@ export default function Services() {
             <div className="text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white  md:leading-tight drop-shadow-sm">
               Popular services on Taskoria
               <br />
-              {/* <span className="text-[#3C7DED]">Empowered and Rewarded</span> */}
+              {/* <span className="text-[#2563EB]">Empowered and Rewarded</span> */}
             </div>
           </div>
 

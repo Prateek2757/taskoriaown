@@ -13,7 +13,7 @@ const reviews = [
     service: "Home Cleaning",
     rating: 4,
     body: "My first time using Taskoria and it was smooth from start to finish. The provider was professional and communication was easy. A great overall experience.",
-    img: "/chongmin.png",
+    img: "/chongmin.jpg",
   },
   {
     id: "2",
@@ -22,7 +22,7 @@ const reviews = [
     service: "Electrical Services",
     rating: 5,
     body: "I needed an electrician urgently and found great options quickly. Comparing quotes was simple and the job was completed on time.",
-    img: "/aayushka.png",
+    img: "/aayushka.jpg",
   },
   {
     id: "3",
@@ -31,7 +31,7 @@ const reviews = [
     service: "Graphic Design",
     rating: 5,
     body: "I hired a graphic designer and received highly relevant matches. The work matched my brief perfectly and the process was seamless.",
-    img: "/zaya.png",
+    img: "/zaya.jpg",
   },
   {
     id: "4",
@@ -40,8 +40,8 @@ const reviews = [
     service: "Web Development",
     rating: 5,
     body: "I posted a project for a website redesign and got quality responses within minutes. The developer I chose delivered exactly what I needed on time. Super smooth experience!",
-    img: "/nimesh.png",
-  }
+    img: "/nimesh.jpg",
+  },
 ];
 const firstRow = reviews.slice(0, reviews.length);
 const secondRow = reviews.slice(reviews.length / 2);
@@ -71,7 +71,7 @@ const ReviewCard = ({
     >
       <div className="flex items-center gap-2">
         <Image
-        title="customers review profile picture"
+          title="customers review profile picture"
           className="rounded-lg"
           width={52}
           height={32}
@@ -116,7 +116,7 @@ export default function Testomonail() {
       id="customer-reviews"
     >
       <div className="text-center">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-linear-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-linear-to-r from-blue-50 to-blue-50 dark:from-blue-900 dark:to-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800">
           {/* <QuoteIcon className="w-3.5 h-3.5" /> */}
           Customer stories{" "}
         </div>

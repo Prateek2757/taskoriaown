@@ -28,7 +28,6 @@ export interface BlogPost {
   published_at?: string;
 }
 
-// ── Fetchers ──────────────────────────────────────────────────────────────────
 
 export async function safeFetch<T>(url: string): Promise<T[]> {
   try {
@@ -114,3 +113,21 @@ export function xmlResponse(body: string): Response {
     },
   });
 }
+
+export async function getServiceSitemapCount(): Promise<number> {
+  const [categories, cities] = await Promise.all([
+    fetchCategories(),
+    fetchCities(),
+  ]);
+
+  let total = 0;
+  for (const city of cities) {
+    if (!city.state_slug) continue;
+    total += categories.length;
+    total += (city.subcities?.length ?? 0) * categories.length;
+  }
+
+  return Math.ceil(total / URLS_PER_SITEMAP);
+}
+
+export const URLS_PER_SITEMAP = 5000;

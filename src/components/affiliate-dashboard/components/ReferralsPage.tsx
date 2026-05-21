@@ -137,7 +137,7 @@ function Avatar({
   }
   return (
     <div
-      className={`${dim} rounded-full bg-gradient-to-br from-violet-400 to-indigo-600 flex items-center justify-center text-white font-bold ring-2 ring-white shadow-sm flex-shrink-0`}
+      className={`${dim} rounded-full bg-gradient-to-br from-violet-400 to-blue-600 flex items-center justify-center text-white font-bold ring-2 ring-white shadow-sm flex-shrink-0`}
     >
       {initials}
     </div>
@@ -238,13 +238,11 @@ export function ReferralsPage() {
         </div>
       );
     }
-  
+
     return (
       <div className="flex flex-col items-center justify-center py-24 gap-3 text-center">
         <AlertCircle className="w-12 h-12 text-red-400" />
-        <p className="text-slate-600 font-medium">
-          {userError.message}
-        </p>
+        <p className="text-slate-600 font-medium">{userError.message}</p>
       </div>
     );
   }
@@ -278,7 +276,7 @@ export function ReferralsPage() {
                   <h2 className="text-xl font-bold tracking-tight">
                     {currentUser?.display_name ?? "Your Account"}
                   </h2>
-                  <p className="text-indigo-300/80 text-sm mt-0.5">
+                  <p className="text-blue-300/80 text-sm mt-0.5">
                     {currentUser?.email}
                   </p>
                 </>
@@ -355,8 +353,8 @@ export function ReferralsPage() {
             )}
 
             <div className="flex items-center gap-2">
-              <Share2 className="w-3.5 h-3.5 text-indigo-400/70" />
-              <span className="text-xs text-indigo-400/70">Share:</span>
+              <Share2 className="w-3.5 h-3.5 text-blue-400/70" />
+              <span className="text-xs text-blue-400/70">Share:</span>
               {[
                 {
                   id: "facebook",
@@ -412,10 +410,10 @@ export function ReferralsPage() {
       <div className="grid grid-cols-3 gap-4">
         {[
           {
-            icon: <Users className="w-5 h-5 text-indigo-500" />,
+            icon: <Users className="w-5 h-5 text-blue-500" />,
             label: "Total Referred",
             value: summary?.total,
-            bg: "bg-indigo-50",
+            bg: "bg-blue-50",
           },
           {
             icon: <Gift className="w-5 h-5 text-violet-500" />,
@@ -456,7 +454,7 @@ export function ReferralsPage() {
         <CardHeader className="pb-3">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <CardTitle className="text-base font-semibold flex items-center gap-2 text-slate-800">
-              <Link2 className="w-4 h-4 text-indigo-500" />
+              <Link2 className="w-4 h-4 text-blue-500" />
               Referral History
             </CardTitle>
             <div className="flex items-center gap-3 flex-wrap">
@@ -566,7 +564,7 @@ export function ReferralsPage() {
                               </div>
                             </TableCell>
                             <TableCell>
-                              <span className="font-mono text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg tracking-wider">
+                              <span className="font-mono text-sm font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg tracking-wider">
                                 {r.referral_code_used}
                               </span>
                             </TableCell>
@@ -639,7 +637,7 @@ export function ReferralsPage() {
                     </p>
                     <p className="text-xs text-slate-400 mt-1">
                       Share your code{" "}
-                      <span className="font-mono font-bold text-indigo-500 tracking-wider">
+                      <span className="font-mono font-bold text-blue-500 tracking-wider">
                         {code}
                       </span>{" "}
                       to get started

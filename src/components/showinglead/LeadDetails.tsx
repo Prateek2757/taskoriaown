@@ -19,7 +19,6 @@ import { useConversation } from "@/hooks/useConversation";
 import LocationMap from "../map/map";
 import { createNotification } from "@/lib/notifications";
 import { useSubscription } from "@/hooks/useSubcription";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import ContactActions from "../provider-responses/ContactActions";
 import { ProviderResponse } from "@/types";
@@ -53,6 +52,7 @@ interface Lead {
   answers?: LeadAnswer[];
   responses_count?: number;
   queries?: string;
+  is_free_lead?: boolean;
 }
 
 interface LeadDetailsProps {
@@ -87,6 +87,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   const [isNavigating, setIsNavigating] = useState(false);
   const [isDeducting, setIsDeducting] = useState(false);
 
+  const effectiveCredits = lead.is_free_lead ? 0 : requiredCredits;
+
   const cacheKey = taskId ? `lead_status_${taskId}` : null;
 
   const [leadStatus, setLeadStatus] = useState<{
@@ -101,7 +103,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       const cached = localStorage.getItem(cacheKey);
       if (cached) {
         const parsed = JSON.parse(cached);
-
         return {
           count: parsed.count ?? 0,
           purchased: parsed.purchased ?? false,
@@ -113,7 +114,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   });
 
   const { loading: subscriptionLoading } = useSubscription();
-
   const { balance, deductCredits, fetchBalance } = useCredit(session?.user?.id);
 
   const maxResponses = 5;
@@ -210,85 +210,95 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     isNavigating,
   ]);
 
-  const handlePurchaseSuccess = useCallback(async () => {
-    toast.success("Purchase successful!");
-    if (cacheKey) {
-      const next = { count: leadStatus.count + 1, purchased: true };
-      localStorage.setItem(cacheKey, JSON.stringify(next));
-      setLeadStatus({ ...next, hydrated: true });
-    }
-    await fetchResponses();
+  const handlePurchaseSuccess = useCallback(
+    async (isFree = false) => {
+      toast.success(isFree ? "Free lead claimed!" : "Purchase successful!");
 
-    await createNotification({
-      userId: String(session?.user?.id),
-      title: "Lead Purchased Successfully🎉!",
-      type: "lead_purchased",
-      body: `Congratulations ${session?.user?.name}! You have Purchased Lead For ${lead.category_name}`,
-      action_url: `/provider-responses`,
-    });
-
-    await createNotification({
-      userId: String(userId),
-      title: "Lead Response 🎉",
-      type: "lead_response",
-      body: `Congratulations! Your Posted ${lead.category_name} Lead Got Response By ${session?.user?.name}`,
-      action_url: `/customer/dashboard`,
-    });
-
-    toast.info("Preparing your chat...");
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    const newConvoId = await refetchConversation();
-    if (newConvoId) {
-      toast.success("Chat is ready!");
-    } else {
-      toast.info("Click 'Chat' button to start your conversation");
-    }
-  }, [
-    fetchResponses,
-    refetchConversation,
-    session,
-    userId,
-    lead,
-    cacheKey,
-    leadStatus.count,
-  ]);
-
-  const handleContactClick = useCallback(async () => {
-    if (!requiredCredits || !taskId) return;
-
-    if (balance >= requiredCredits) {
-      setIsDeducting(true);
-      try {
-        const result = await deductCredits(
-          Number(taskId),
-          Number(requiredCredits)
-        );
-        if (!result) throw new Error("Failed to deduct credits");
-
-        if (result.responseId) {
-          try {
-            await axios.post("/api/affiliate/commission/task-trigger", {
-              responseId: result.responseId,
-            });
-          } catch (error) {
-            console.error("Task trigger failed:", error);
-          }
-        }
-        await fetchBalance();
-        await handlePurchaseSuccess();
-      } catch (err) {
-        console.error(err);
-        toast.error("Failed to deduct credits. Please try again.");
-      } finally {
-        setIsDeducting(false);
+      if (cacheKey) {
+        const next = { count: leadStatus.count + 1, purchased: true };
+        localStorage.setItem(cacheKey, JSON.stringify(next));
+        setLeadStatus({ ...next, hydrated: true });
       }
+
+      await fetchResponses();
+
+      await createNotification({
+        userId: String(session?.user?.id),
+        title: isFree
+          ? "Free Lead Claimed 🎉!"
+          : "Lead Purchased Successfully 🎉!",
+        type: "lead_purchased",
+        body: `Congratulations ${session?.user?.name}! You have ${isFree ? "claimed a free" : "purchased a"} Lead For ${lead.category_name}`,
+        action_url: `/provider-responses`,
+      });
+
+      await createNotification({
+        userId: String(userId),
+        title: "Lead Response 🎉",
+        type: "lead_response",
+        body: `Congratulations! Your Posted ${lead.category_name} Lead Got Response By ${session?.user?.name}`,
+        action_url: `/customer/dashboard`,
+      });
+
+      toast.info("Preparing your chat...");
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const newConvoId = await refetchConversation();
+      if (newConvoId) {
+        toast.success("Chat is ready!");
+      } else {
+        toast.info("Click 'Chat' button to start your conversation");
+      }
+    },
+    [
+      fetchResponses,
+      refetchConversation,
+      session,
+      userId,
+      lead,
+      cacheKey,
+      leadStatus.count,
+    ]
+  );
+
+  // ✅ Fixed: clean branching — free / has balance / no balance
+  const handleContactClick = useCallback(async () => {
+    if (!taskId) return;
+
+    // No balance and not free → show modal immediately, no loading state
+    if (effectiveCredits > 0 && balance < effectiveCredits) {
+      setShowCreditModal(true);
       return;
     }
 
-    setShowCreditModal(true);
+    setIsDeducting(true);
+    try {
+      const result = await deductCredits(Number(taskId), effectiveCredits);
+      if (!result) throw new Error("Failed to process lead");
+
+      if (result.responseId) {
+        try {
+          await axios.post("/api/affiliate/commission/task-trigger", {
+            responseId: result.responseId,
+          });
+        } catch (error) {
+          console.error("Task trigger failed:", error);
+        }
+      }
+
+      if (effectiveCredits > 0) {
+        await fetchBalance();
+      }
+
+      await handlePurchaseSuccess(effectiveCredits === 0);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed. Please try again.");
+    } finally {
+      setIsDeducting(false);
+    }
   }, [
     balance,
-    requiredCredits,
+    effectiveCredits,
     taskId,
     deductCredits,
     fetchBalance,
@@ -333,37 +343,27 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   const responseRate = leadStatus.count ?? 0;
   const customerFirstName = (lead.customer_name ?? "Customer").split(" ")[0];
-
   const isChatButtonDisabled =
     !leadStatus.purchased || isNavigating || subscriptionLoading;
-
   const providerResponse = useMemo(
     () => toProviderResponse(lead, session),
     [lead, session]
   );
+
   return (
     <div className="max-w-auto mx-auto">
       <div className="b dark:bg-[#0d1117] bg-gray-50 rounded-2xl shadow- dark:shadow-md borde border-gra-200 dark:border-gray-700 overflow-hidden">
         <div className="p-2">
           <div className="flex items-start gap-3">
             <div className="relative shrink-0">
-              {/* {lead.image ? (
-                <div className="w-14 h-14 rounded-2xl overflow-hidden ring-2 ring-blue-100 dark:ring-blue-900">
-                  <Image
-                    src={lead.image}
-                    width={56}
-                    height={56}
-                    alt="avatar"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ) : ( */}
-              <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-lg font-bold">
+              <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#2563EB] to-blue-600 flex items-center justify-center text-white text-2xl font-bold">
                 {getInitials(lead.customer_name || "N A")}
               </div>
-              {/* )} */}
               {lead.status === "Open" && (
                 <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-900" />
+              )}
+              {lead.status === "Urgent" && (
+                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-red-500 border-2 border-white dark:border-gray-900 animate-pulse" />
               )}
             </div>
 
@@ -375,6 +375,11 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 <span className="text-[11px] font-medium px-2 py-0.5 rounded-full border">
                   {lead.status}
                 </span>
+                {lead.is_free_lead && (
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-700">
+                    FREE
+                  </span>
+                )}
               </div>
               <div className="flex items-center gap-3 mt-1 text-xs text-gray-400 dark:text-gray-500 flex-wrap">
                 <span className="flex items-center gap-1">
@@ -385,7 +390,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                   <Clock className="w-3.5 h-3.5" />
                   {formatTimeAgo(lead.created_at)}
                 </span>
-                <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-full border border-blue-100 dark:border-blue-800">
+                <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-xl border border-blue-100 dark:border-blue-800">
                   {lead.category_name}
                 </span>
               </div>
@@ -411,7 +416,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         <div className="border-t border-gray-100 dark:border-gray-800" />
 
         <div className="p-2">
-          <div className=" bg-blue-50 bg-linear-to-br mx-auo dark:from-gray-800 dark:to-black rounded-xl border border-gray-200 dark:border-gray-700 p-3 mb-6">
+          {/* Contact Details */}
+          <div className="bg-blue-50 bg-linear-to-br mx-auo dark:from-gray-800 dark:to-black rounded-xl border border-gray-200 dark:border-gray-700 p-3 mb-6">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wide mb-4 flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-cyan-600" />
               {leadStatus.purchased
@@ -420,7 +426,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </h3>
 
             {!leadStatus.hydrated && !leadStatus.purchased ? (
-              <div className="space-y-3  animate-pulse">
+              <div className="space-y-3 animate-pulse">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 shrink-0" />
                   <div className="space-y-2 flex-1">
@@ -457,7 +463,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 </div>
               </>
             ) : (
-              <div className="  space-y-3">
+              <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900 flex items-center justify-center shrink-0">
                     <svg
@@ -530,13 +536,16 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                       d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                     />
                   </svg>
-                  Purchase this lead to unlock full contact details & actions
+                  {effectiveCredits === 0
+                    ? "This lead is free — click Contact to unlock details"
+                    : "Purchase this lead to unlock full contact details & actions"}
                 </p>
               </div>
             )}
           </div>
 
-          <div className=" bg-linear-to-br bg-blue-50  dark:from-gray-800 dark:to-black rounded-xl p-3 mb-6">
+          {/* Response Progress */}
+          <div className="bg-linear-to-br bg-blue-50 dark:from-gray-800 dark:to-black rounded-xl p-3 mb-6">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 Response Progress
@@ -557,33 +566,60 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </p>
           </div>
 
+          {/* Credits / Free badge */}
           {!leadStatus.purchased && (
-            <div className=" bg-blue-50 bg-linear-to-br  dark:from-gray-800 dark:to-black rounded-xl border border-orange-200 dark:border-orange-700 p-3 mb-6">
+            <div className="bg-blue-50 bg-linear-to-br dark:from-gray-800 dark:to-black rounded-xl border border-orange-200 dark:border-orange-700 p-3 mb-6">
               <div className="flex items-start gap-2">
-                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-yellow-400 to-orange-500 flex items-center justify-center shrink-0">
+                <div
+                  className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
+                    effectiveCredits === 0
+                      ? "bg-linear-to-br from-green-400 to-emerald-500"
+                      : "bg-linear-to-br from-yellow-400 to-orange-500"
+                  }`}
+                >
                   <Award className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                      {requiredCredits}
-                    </span>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      credits required
-                    </span>
-                  </div>
-                  <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">
-                    🏆 Protected by Premium Credit Pack
-                  </h4>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Full credit refund if you're not hired during your premium
-                    credit pack period
-                  </p>
+                  {effectiveCredits === 0 ? (
+                    <>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-2xl font-bold text-green-600 dark:text-green-400">
+                          FREE
+                        </span>
+                      </div>
+                      <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                        🎉 No one responded in 24h — this lead is on us!
+                      </h4>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">
+                        Claim it now at zero cost and connect with this
+                        customer.
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                          {effectiveCredits}
+                        </span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                          credits required
+                        </span>
+                      </div>
+                      <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                        🏆 Protected by Premium Credit Pack
+                      </h4>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">
+                        Full credit refund if you're not hired during your
+                        premium credit pack period
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
           )}
 
+          {/* Action Button */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             {leadStatus.purchased ? (
               <button
@@ -607,41 +643,53 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               <button
                 onClick={handleContactClick}
                 disabled={isDeducting}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl bg-linear-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed ${
+                  effectiveCredits === 0
+                    ? "bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+                    : "bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+                }`}
               >
                 {isDeducting ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    Contacting...
+                    {effectiveCredits === 0 ? "Claiming..." : "Contacting..."}
                   </>
                 ) : (
                   <>
                     <MessageSquare className="w-5 h-5" />
-                    Contact {customerFirstName}
+                    {effectiveCredits === 0
+                      ? "Claim Free Lead"
+                      : `Contact ${customerFirstName}`}
+                    {effectiveCredits === 0 && (
+                      <span className="ml-1 text-xs font-bold px-2 py-0.5 bg-white/20 rounded-full">
+                        FREE
+                      </span>
+                    )}
                   </>
                 )}
               </button>
             )}
           </div>
 
+          {/* ✅ Pass effectiveCredits so modal shows correct amount */}
           <CreditPurchaseModal
             open={showCreditModal}
             onOpenChange={setShowCreditModal}
-            requiredCredits={requiredCredits}
+            requiredCredits={effectiveCredits}
             contactName={lead.customer_name}
             taskId={taskId}
             userId={userId}
             professionalId={session?.user?.id}
-            onPurchaseSuccess={handlePurchaseSuccess}
+            onPurchaseSuccess={() => handlePurchaseSuccess(false)}
           />
         </div>
       </div>
 
       <div className="bg-white dark:bg-[#0d1117] rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 m-1 p-5 mb-6">
-        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 ">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
           Project Details
         </h2>
-        <p className="text-gray-700 dark:text-gray-300 leading-relaxed ">
+        <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
           {lead.description}
         </p>
 

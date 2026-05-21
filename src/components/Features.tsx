@@ -109,7 +109,7 @@ export default function FeaturesStacking() {
               transparent 0deg,
               transparent 260deg,
               #1e40af 270deg,
-              #3b82f6 290deg,
+              var(--color-brand-accent-light) 290deg,
               #60a5fa 310deg,
               #93c5fd 330deg,
               #dbeafe 345deg,
@@ -140,16 +140,16 @@ export default function FeaturesStacking() {
         <div className=" pb-3  px-4">
           <header className="sm:text-center mx-auto">
             <div
-              className="text-4xl md:text-xl lg:text-5xl text-gray-800 dark:text-white font-extrabold tracking-tight mb-2
+              className=" text-4xl  text-gray-800 dark:text-white font-bold tracking-tight mb-2
                 
                   "
             >
               Why hire through{" "}
               <span className="bg-[#2563EB] bg-clip-text text-transparent">
-                Taskoria
+                Taskoria ...
               </span>{" "}
             </div>
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg  text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
               Designed to make service hiring simpler, clearer, and safer.
             </p>
           </header>
@@ -206,7 +206,7 @@ export default function FeaturesStacking() {
                     aria-label="Taskoria Logo"
                   >
                     <Image
-                    title="taskoria logo features"
+                      title="taskoria logo features"
                       src="/images/taskoria_logo.svg"
                       alt="Taskoria service marketplace logo"
                       height={28}

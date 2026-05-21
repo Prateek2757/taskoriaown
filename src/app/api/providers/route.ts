@@ -115,7 +115,12 @@ export async function GET() {
       ORDER BY up.created_at DESC;
     `);
 
-    return NextResponse.json(rows);
+    return NextResponse.json(rows, {
+      headers: {
+
+        "Cache-Control": "private, s-maxage=60, stale-while-revalidate=300",
+      },
+    });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

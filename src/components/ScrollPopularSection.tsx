@@ -20,7 +20,7 @@ const staticImages = [
   },
   {
     url: "/images/plumbers.webp",
-    accent: "#3b82f6",
+    accent: "var(--color-brand-accent-light)",
   },
   {
     url: "/images/gardening.avif",
@@ -55,7 +55,7 @@ function ScrollPopularSection() {
               style={{ animationDuration: "2s" }}
             />{" "}
           </div>
-          <h2 className=" relative text-xl text-left font-bold lg:text-3xl bg-[#3C7DED] bg-clip-text text-transparent">
+          <h2 className=" relative text-xl text-left font-bold lg:text-3xl bg-[#2563EB] bg-clip-text text-transparent">
             Popular Services
           </h2>
         </div>
@@ -75,7 +75,7 @@ function ScrollPopularSection() {
                   className="relative w-65 shrink-0 rounded-2xl overflow-hidden h-35 cursor-pointer group shadow-sm hover:shadow-lg transition-shadow duration-300 bg-gray-100 dark:bg-gray-800"
                 >
                   <Image
-                  title="popular catgories"
+                    title="popular catgories"
                     fill
                     src={img.url}
                     alt={category.name}

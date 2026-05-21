@@ -2,14 +2,20 @@
 
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { Star, MessageSquare, ShieldCheck, Briefcase, Clock } from "lucide-react";
+import {
+  Star,
+  MessageSquare,
+  ShieldCheck,
+  Briefcase,
+  Clock,
+} from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 type Response = {
   id: number;
-  public_id:string;
-  company_slug:string;
+  public_id: string;
+  company_slug: string;
   display_name: string;
   profile_title: string;
   title: string;
@@ -39,7 +45,13 @@ const AVATAR_GRADIENTS = [
   ["#f43f5e", "#e11d48"],
 ];
 
-function StarRating({ rating = 0, count = 0 }: { rating: number; count: number }) {
+function StarRating({
+  rating = 0,
+  count = 0,
+}: {
+  rating: number;
+  count: number;
+}) {
   return (
     <div className="flex items-center justify-center gap-1.5">
       <div className="flex gap-0.5">
@@ -77,23 +89,28 @@ export function TaskResponseCard({
     .toUpperCase()
     .slice(0, 2);
 
-//   const [from, to] = AVATAR_GRADIENTS[response.id % AVATAR_GRADIENTS.length];
+  //   const [from, to] = AVATAR_GRADIENTS[response.id % AVATAR_GRADIENTS.length];
   const isFeatured = response.is_featured;
   // console.log(response,"responsesssss");
-  
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 16, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ delay: index * 0.08, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      transition={{
+        delay: index * 0.08,
+        duration: 0.35,
+        ease: [0.22, 1, 0.36, 1],
+      }}
       className="group relative w-auto overflow-y-auto overflow-x-auto "
     >
       <div
         className={cn(
           "relative flex flex-col items-center overflow-hidden rounded-2xl  border  text-center transition-all duration-300",
-          "hover:shadow-2xl hover:-translate-y-1","backdrop-blur-sm",
-"group-hover:shadow-blue-400","hover:ring-1 hover:ring-blue-200/50",
+          "hover:shadow-2xl hover:-translate-y-1",
+          "backdrop-blur-sm",
+          "group-hover:shadow-blue-400",
+          "hover:ring-1 hover:ring-blue-200/50",
           isFeatured
             ? "border-blue-300 shadow-lg shadow-blue-100"
             : "border-slate-200 shadow-md shadow-blue-300 hover:border-slate-300"
@@ -106,7 +123,7 @@ export function TaskResponseCard({
               Featured
             </span>
           </div>
-         )} 
+        )}
 
         <div
           className="absolute inset-x-0 top-0 h-1 opacity-80"
@@ -125,8 +142,7 @@ export function TaskResponseCard({
             >
               {response.profile_image_url ? (
                 <Image
-                title={response.display_name}
-
+                  title={response.display_name}
                   src={response.profile_image_url}
                   alt={response.display_name}
                   fill

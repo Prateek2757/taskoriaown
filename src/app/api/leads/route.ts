@@ -66,10 +66,24 @@ export async function POST(req: Request) {
         preferred_date_start || null,
         preferred_date_end || null,
         queries,
-      ],
+      ]
     );
 
     const taskId = taskResult.rows[0].task_id;
+    let status = "Open";
+
+    if (category_answers && typeof category_answers === "object") {
+      const answers = Object.values(category_answers);
+
+      if (answers.includes("Asap")) {
+        status = "Urgent";
+      }
+    }
+
+    await client.query(`UPDATE tasks SET status = $1 WHERE task_id = $2`, [
+      status,
+      taskId,
+    ]);
 
     if (category_answers && typeof category_answers === "object") {
       const insertAnswerQuery = `
@@ -77,21 +91,28 @@ export async function POST(req: Request) {
         VALUES ($1, $2, $3)
       `;
       for (const [questionId, answer] of Object.entries(category_answers)) {
-        let answerToStore =
-          Array.isArray(answer) ? JSON.stringify(answer) : answer ?? null;
+        let answerToStore = Array.isArray(answer)
+          ? JSON.stringify(answer)
+          : (answer ?? null);
 
-        await client.query(insertAnswerQuery, [taskId, questionId, answerToStore]);
+        await client.query(insertAnswerQuery, [
+          taskId,
+          questionId,
+          answerToStore,
+        ]);
       }
     }
 
     const categoryRes = await client.query(
       `SELECT name FROM service_categories WHERE category_id=$1`,
-      [category_id],
+      [category_id]
     );
     const categoryname = categoryRes.rows[0]?.name || "Task";
 
-    // Get admin 
-    const adminRes = await client.query(`SELECT email FROM users WHERE role='admin'`);
+    // Get admin
+    const adminRes = await client.query(
+      `SELECT email FROM users WHERE role='admin'`
+    );
     const adminEmails = adminRes.rows.map((r) => r.email);
 
     const providersRes = await client.query(
@@ -103,7 +124,7 @@ export async function POST(req: Request) {
       WHERE uc.category_id = $1
       AND u.user_id <> $2
       `,
-      [category_id, session.user.id],
+      [category_id, session.user.id]
     );
 
     await client.query("COMMIT");
@@ -177,13 +198,13 @@ export async function GET() {
 
     const { rows: categoryRows } = await client.query(
       `SELECT category_id FROM user_categories WHERE user_id = $1`,
-      [userId],
+      [userId]
     );
 
     if (!categoryRows.length) {
       return NextResponse.json(
         { message: "No categories found for this user." },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
@@ -217,7 +238,16 @@ export async function GET() {
       t.status,
       t.created_at,
       t.queries,
-    
+CASE 
+  WHEN t.created_at < NOW() - INTERVAL '24 hours'
+    AND (
+      SELECT COUNT(*) FROM task_responses tr 
+      WHERE tr.task_id = t.task_id
+      AND tr.credits_spent > 0  -- ✅ ignore free claims
+    ) = 0
+  THEN true
+  ELSE false
+END AS is_free_lead,
       c.name AS category_name,
     
       ci.name AS location_name,
@@ -277,7 +307,7 @@ export async function GET() {
     
     ORDER BY t.created_at DESC;
     `,
-      [categoryIds, userId],
+      [categoryIds, userId]
     );
 
     return NextResponse.json(result.rows);
@@ -285,7 +315,7 @@ export async function GET() {
     console.error("Leads fetch error:", err);
     return NextResponse.json(
       { message: "Failed to fetch leads" },
-      { status: 500 },
+      { status: 500 }
     );
   } finally {
     client.release();

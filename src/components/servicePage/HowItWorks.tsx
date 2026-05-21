@@ -12,8 +12,7 @@ import {
   ShieldCheck,
   Clock,
 } from "lucide-react";
-
-// ─── Theme tokens ─────────────────────────────────────────────────────────────
+import * as cheerio from "cheerio";
 
 const LIGHT = {
   bg: "#ffffff",
@@ -24,7 +23,7 @@ const LIGHT = {
   text: "#0f172a",
   muted: "#64748b",
   subtle: "#94a3b8",
-  brand: "#2563eb",
+  brand: "#2563EB",
   brandLight: "#eff6ff",
   brandBorder: "#bfdbfe",
   radiusLg: 18,
@@ -36,7 +35,7 @@ const DARK = {
   raised: "#131c2e",
   surface: "#182032",
   border: "#1e2d45",
-  borderHover: "#3b82f6",
+  borderHover: "var(--color-brand-accent-light)",
   text: "#e8f0fe",
   muted: "#8da4c4",
   subtle: "#4e6887",
@@ -47,62 +46,85 @@ const DARK = {
   radiusMd: 12,
 };
 
-// ─── Theme context ────────────────────────────────────────────────────────────
-// Avoids prop-drilling T into every sub-component.
+
 
 const ThemeCtx = createContext(LIGHT);
 const useT = () => useContext(ThemeCtx);
 
-// ─── HTML parser ──────────────────────────────────────────────────────────────
+
 
 function parseHTML(html: string) {
-  const body = new DOMParser().parseFromString(html, "text/html").body;
-  const title = body.querySelector("h1")?.textContent?.trim() ?? "";
+  const $ = cheerio.load(html);
+
+  const title = $("h1").first().text().trim();
 
   const intros: string[] = [];
-  const firstH2 = body.querySelector("h2");
-  if (firstH2) {
-    let sib = firstH2.previousElementSibling;
-    while (sib) {
-      if (sib.tagName === "P") intros.unshift(sib.textContent!.trim());
-      sib = sib.previousElementSibling;
-    }
+
+  const firstH2 = $("h2").first();
+
+  if (firstH2.length) {
+    firstH2.prevAll("p").each((_, el) => {
+      intros.unshift($(el).text().trim());
+    });
   }
 
   const sections: any[] = [];
-  body.querySelectorAll("h2").forEach((h2, idx) => {
+
+  $("h2").each((idx, h2) => {
     const section: any = {
       id: `s${idx}`,
-      heading: h2.textContent!.trim(),
+      heading: $(h2).text().trim(),
       paragraphs: [],
       lists: [],
       subsections: [],
     };
-    let cur = h2.nextElementSibling;
+
     let sub: any = null;
-    while (cur && cur.tagName !== "H2") {
-      if (cur.tagName === "H3") {
+
+    let cur = $(h2).next();
+
+    while (cur.length && cur[0].tagName !== "h2") {
+      const tag = cur[0].tagName;
+
+      if (tag === "h3") {
         if (sub) section.subsections.push(sub);
-        sub = { heading: cur.textContent!.trim(), paragraphs: [], items: [] };
-      } else if (cur.tagName === "P") {
-        const t = cur.textContent!.trim();
-        if (t) (sub ? sub.paragraphs : section.paragraphs).push(t);
-      } else if (cur.tagName === "UL" || cur.tagName === "OL") {
-        const items = Array.from(cur.querySelectorAll("li")).map((li) =>
-          li.textContent!.trim()
-        );
+
+        sub = {
+          heading: cur.text().trim(),
+          paragraphs: [],
+          items: [],
+        };
+      }
+
+      else if (tag === "p") {
+        const text = cur.text().trim();
+
+        if (text) {
+          if (sub) sub.paragraphs.push(text);
+          else section.paragraphs.push(text);
+        }
+      }
+
+      else if (tag === "ul" || tag === "ol") {
+        const items = cur
+          .find("li")
+          .map((_, li) => $(li).text().trim())
+          .get();
+
         if (sub) sub.items.push(...items);
         else section.lists.push(...items);
       }
-      cur = cur.nextElementSibling;
+
+      cur = cur.next();
     }
+
     if (sub) section.subsections.push(sub);
+
     sections.push(section);
   });
 
   return { title, intros, sections };
 }
-
 // ─── Classifiers ─────────────────────────────────────────────────────────────
 
 const STEPS_RE = /how.it.works|get.started|steps|process|works/i;
@@ -121,8 +143,6 @@ function classify(s: any) {
   if (s.lists.length > 0) return "checklist";
   return "prose";
 }
-
-// ─── Animation ────────────────────────────────────────────────────────────────
 
 const up = {
   hidden: { opacity: 0, y: 12 },
@@ -148,7 +168,6 @@ function Fade({ children, i = 0, style = {} }: any) {
   );
 }
 
-// ─── Layout primitives ────────────────────────────────────────────────────────
 
 function Inner({ children, style = {} }: any) {
   return (
@@ -209,7 +228,6 @@ function Divider() {
   );
 }
 
-// ─── Service card (accordion) ─────────────────────────────────────────────────
 
 function ServiceCard({ sub, i }: any) {
   const T = useT();
@@ -589,11 +607,7 @@ function ServiceDetailsSection({
   serviceDetails: string;
   onPostJob?: () => void;
 }) {
-  /**
-   * next-themes: `resolvedTheme` is the actual applied theme ("light" | "dark").
-   * It resolves "system" automatically against the OS preference — no manual
-   * matchMedia needed. Falls back to "light" during SSR (before hydration).
-   */
+
   const { resolvedTheme } = useTheme();
   const T = resolvedTheme === "dark" ? DARK : LIGHT;
 
@@ -608,17 +622,13 @@ function ServiceDetailsSection({
   const shaded = new Set(["services", "checklist"]);
 
   return (
-    /**
-     * Provide T via context — every sub-component calls useT() instead of
-     * receiving T as a prop, so nothing in the tree needs to change.
-     */
+
     <ThemeCtx.Provider value={T}>
       <div
         style={{
           width: "100%",
           background: T.bg,
           fontFamily: "var(--font-sans, system-ui, sans-serif)",
-          // Smooth colour cross-fade when the theme switches
           transition: "background 0.3s ease, color 0.3s ease",
         }}
       >

@@ -15,8 +15,9 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { ProviderResponse } from "@/types";
 
-import EmailBuilder, { EmailBuilderHandle } from "../email/components/EmailEditor";
-
+import EmailBuilder, {
+  EmailBuilderHandle,
+} from "../email/components/EmailEditor";
 
 function buildSignature(response: ProviderResponse): string {
   const lines: string[] = [];
@@ -36,7 +37,6 @@ function buildDefaultBody(response: ProviderResponse): string {
   return `Dear ${response.customer_name},\nI found your project on Taskoria and I'd love to get involved.\nI've some thoughts that I'd like to run past you, does today suit you for a chat?\nHope to speak soon,\n\n${buildSignature(response)}`;
 }
 
-
 type EmailForm = { subject: string };
 
 interface EmailComposeModalProps {
@@ -44,7 +44,6 @@ interface EmailComposeModalProps {
   onClose: () => void;
   response: ProviderResponse;
 }
-
 
 export default function EmailComposeModal({
   open,
@@ -115,7 +114,6 @@ export default function EmailComposeModal({
     onClose();
   };
 
-
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent
@@ -143,7 +141,9 @@ export default function EmailComposeModal({
             </div>
 
             <div className="flex items-center gap-3">
-              <Label className="text-xs text-gray-500 w-14 shrink-0">Subject</Label>
+              <Label className="text-xs text-gray-500 w-14 shrink-0">
+                Subject
+              </Label>
               <div className="flex-1 flex flex-col gap-1">
                 <Input
                   {...register("subject", { required: "Subject is required" })}
@@ -151,7 +151,9 @@ export default function EmailComposeModal({
                   placeholder="Subject"
                 />
                 {errors.subject && (
-                  <span className="text-xs text-red-500">{errors.subject.message}</span>
+                  <span className="text-xs text-red-500">
+                    {errors.subject.message}
+                  </span>
                 )}
               </div>
             </div>
@@ -170,7 +172,13 @@ export default function EmailComposeModal({
               The email will be sent from Taskoria on your behalf.
             </p>
             <div className="flex items-center gap-3">
-              <Button type="button" variant="outline" onClick={handleClose} disabled={sending} className="text-sm">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleClose}
+                disabled={sending}
+                className="text-sm"
+              >
                 Cancel
               </Button>
               <Button
@@ -179,11 +187,17 @@ export default function EmailComposeModal({
                 className="text-sm bg-[#2563EB] hover:bg-blue-700 text-white min-w-[90px]"
               >
                 {sending ? (
-                  <><Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />Sending…</>
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
+                    Sending…
+                  </>
                 ) : sent ? (
                   "✓ Sent!"
                 ) : (
-                  <><Send className="w-3.5 h-3.5 mr-2" />Send</>
+                  <>
+                    <Send className="w-3.5 h-3.5 mr-2" />
+                    Send
+                  </>
                 )}
               </Button>
             </div>

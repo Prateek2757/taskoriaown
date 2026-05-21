@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Shield, CheckCircle, FileText, Award, Star, Zap, Lock, BadgeCheck } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
+export const dynamic = "force-static";
 
 export const metadata: Metadata = {
   title: "Provider Verification Badges | Taskoria Trust Levels",

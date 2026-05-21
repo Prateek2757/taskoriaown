@@ -1,4 +1,10 @@
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://www.taskoria.com./refund-policy",
+  },
+};
 export default function RefundPolicy() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6 md:p-12">

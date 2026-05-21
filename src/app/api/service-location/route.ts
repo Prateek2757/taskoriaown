@@ -1,73 +1,72 @@
-import pool from "@/lib/dbConnect";
+import { getAllCities, getCityBySlug, getSubcities } from "@/lib/cache";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const stateSlug = searchParams.get("state");
+  const citySlug = searchParams.get("city");
+
   try {
-    const result = await pool.query(`
-      SELECT
-        c.city_id,
-        c.name,
-        c.slug,
-        c.display_name,
-        c.popularity,
-        c.parent_city_id,
-        c.latitude,
-        c.longitude,
-        c.image_url,
-        s.slug  AS state_slug,
-        s.name  AS state_name,
-        co.name AS country_name
-      FROM cities c
-      LEFT JOIN states  s  ON c.state_id   = s.state_id
-      JOIN  countries co ON c.country_id = co.country_id
-      ORDER BY c.popularity DESC;
-    `);
+    if (citySlug) {
+      const city = await getCityBySlug(citySlug);
+
+      if (!city) return NextResponse.json(null);
+
+      const subcities = await getSubcities(city.city_id);
+
+      return NextResponse.json(
+        {
+          ...city,
+          latitude: city.latitude ? parseFloat(city.latitude) : null,
+          longitude: city.longitude ? parseFloat(city.longitude) : null,
+          subcities,
+        },
+        {
+          headers: {
+            "Cache-Control":
+              "public, s-maxage=86400, stale-while-revalidate=604800",
+          },
+        }
+      );
+    }
+
+    const rows = await getAllCities();
+
+    const filtered = stateSlug
+      ? rows.filter((r) => r.state_slug === stateSlug)
+      : rows;
 
     const map = new Map<number, any>();
     const cities: any[] = [];
 
-    for (const row of result.rows) {
+    for (const row of filtered) {
       if (!row.parent_city_id) {
         const city = {
-          city_id: row.city_id,
-          name: row.name,
-          slug: row.slug,
-          image_url: row.image_url,
-          display_name: row.display_name,
-          popularity: row.popularity,
-          latitude: row.latitude ? parseFloat(row.latitude) : null,
-          longitude: row.longitude ? parseFloat(row.longitude) : null,
-          state_slug: row.state_slug,
-          state_name: row.state_name,
-          country_name: row.country_name,
-          subcities: [] as any[],
+          ...row,
+          subcities: [],
         };
-
         map.set(row.city_id, city);
         cities.push(city);
       }
     }
 
-    for (const row of result.rows) {
+    for (const row of filtered) {
       if (row.parent_city_id && map.has(row.parent_city_id)) {
-        map.get(row.parent_city_id).subcities.push({
-          city_id: row.city_id,
-          name: row.name,
-          slug: row.slug,
-          image_url:row.image_url,
-          display_name: row.display_name,
-          popularity: row.popularity,
-          latitude: row.latitude ? parseFloat(row.latitude) : null,
-          longitude: row.longitude ? parseFloat(row.longitude) : null,
-        });
+        map.get(row.parent_city_id).subcities.push(row);
       }
     }
 
-    return NextResponse.json(cities);
+    return NextResponse.json(cities, {
+      headers: {
+        "Cache-Control":
+          "public, s-maxage=86400, stale-while-revalidate=604800",
+      },
+    });
   } catch (err) {
-    if (err instanceof Error) {
-      return NextResponse.json({ message: err.message }, { status: 500 });
-    }
-    return NextResponse.json({ message: "Unknown error" }, { status: 500 });
+    return NextResponse.json(
+      { message: err instanceof Error ? err.message : "Unknown error" },
+      { status: 500 }
+    );
   }
 }

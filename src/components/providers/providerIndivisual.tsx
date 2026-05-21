@@ -97,7 +97,11 @@ const GRID_COLS: Record<number, string> = {
   6: "grid-cols-6",
 };
 
-export default function ProviderProfileClientt({ provider }: { provider: any }) {
+export default function ProviderProfileClientt({
+  provider,
+}: {
+  provider: any;
+}) {
   if (!provider) {
     return <div className="p-10 text-center">Provider Not Found</div>;
   }
@@ -149,8 +153,7 @@ export default function ProviderProfileClientt({ provider }: { provider: any }) 
   const tabCount = activeFlags.filter(Boolean).length;
   const colClass = GRID_COLS[tabCount] ?? "grid-cols-3";
 
-  const 
-  defaultTab = hasPhotos
+  const defaultTab = hasPhotos
     ? "portfolio"
     : hasServices
       ? "services"
@@ -172,8 +175,8 @@ export default function ProviderProfileClientt({ provider }: { provider: any }) 
       <div className="relative h-64 w-full">
         {provider.image ? (
           <div className="absolute inset-0">
-            <Image 
-            title="provider cover image"
+            <Image
+              title="provider cover image"
               src={provider.image}
               alt={`${provider.name} cover`}
               fill
@@ -199,7 +202,7 @@ export default function ProviderProfileClientt({ provider }: { provider: any }) 
                   {provider.image ? (
                     <div className="w-20 h-20 rounded-full overflow-hidden ring-2 ring-white/60 dark:ring-black/40">
                       <Image
-                      title="Provider Profile Pic "
+                        title="Provider Profile Pic "
                         src={provider.image}
                         alt={provider.name ?? "Provider"}
                         width={96}
@@ -208,7 +211,7 @@ export default function ProviderProfileClientt({ provider }: { provider: any }) 
                       />
                     </div>
                   ) : (
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] grid place-content-center text-white text-lg font-semibold">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] grid place-content-center text-white text-lg font-semibold">
                       {(provider.name ?? "")
                         .split(" ")
                         .map((w: string) => w[0] ?? "")
@@ -344,8 +347,8 @@ export default function ProviderProfileClientt({ provider }: { provider: any }) 
                               <div
                                 className={`relative ${photo.is_featured ? "h-64" : "h-44"}`}
                               >
-                                <Image  
-                                title="Portfolio photo Featured"
+                                <Image
+                                  title="Portfolio photo Featured"
                                   src={photo.photo_url}
                                   alt={photo.title ?? "Portfolio photo"}
                                   fill

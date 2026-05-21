@@ -49,15 +49,12 @@ export default function ServicePageClient({
 
   // console.log(selectedLocation,"slecterd");
   // console.log(initialLocation);
-  
-  
 
-  const cityName: string | undefined =
-    citySlug ?? undefined;
+  const cityName: string | undefined = citySlug ?? undefined;
 
   const subCityName: string | undefined = subCitySlug
-    ? (selectedLocation?.subcities?.find((s: any) => s.slug === subCitySlug)?.name ??
-        subCitySlug)
+    ? (selectedLocation?.subcities?.find((s: any) => s.slug === subCitySlug)
+        ?.name ?? subCitySlug)
     : undefined;
 
   const stateName: string | undefined =
@@ -65,10 +62,9 @@ export default function ServicePageClient({
 
   const activeCityName = subCityName ?? cityName;
   // console.log(service,stateSlug,citySlug,subCitySlug,stateName,cityName,subCityName,"citynames ");
-  
 
   return (
-    <main className="min-h-screen bg-linear-to-b from-white via-indigo-50/30 to-purple-50/20 dark:from-slate-950 dark:via-slate-900/95 dark:to-indigo-950/30">
+    <main className="min-h-screen bg-linear-to-b from-white via-blue-50/30 to-purple-50/20 dark:from-slate-950 dark:via-slate-900/95 dark:to-blue-950/30">
       <NewRequestModal
         open={openModal}
         onClose={() => setOpenModal(false)}
@@ -85,7 +81,6 @@ export default function ServicePageClient({
         />
 
         <section className="max-w-6xl mx-auto px-6 py-3">
-
           {citySlug && (
             <ServiceBreadcrumb
               service={service}
@@ -98,7 +93,10 @@ export default function ServicePageClient({
             />
           )}
           {!citySlug && (
-            <SubHeroService service={service} onPostJob={handleSelectCategory} />
+            <SubHeroService
+              service={service}
+              onPostJob={handleSelectCategory}
+            />
           )}
           {!citySlug && (
             <StepWiseHowItWorks
@@ -134,7 +132,7 @@ export default function ServicePageClient({
             selectedLocation?.subcities?.length > 0 && (
               <section className="mt-14 m-4">
                 <div className="mb-6 flex flex-col gap-2">
-                  <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">
+                  <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white ">
                     Popular areas in {selectedLocation.name}
                   </h2>
                   <p className="text-slate-600 max-w-2xl">
@@ -149,17 +147,17 @@ export default function ServicePageClient({
                     <Link
                       key={sub.city_id}
                       href={`/services/${service.slug}/${stateSlug}/${citySlug}/${sub.slug}`}
-                      className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-indigo-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                      className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-blue-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                     >
-                      <div className="absolute inset-0 bg-linear-to-br from-indigo-50 to-purple-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                      <div className="absolute inset-0 bg-linear-to-br from-blue-50 to-purple-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                       <div className="relative z-10">
-                        <h3 className="text-lg font-semibold text-slate-900 group-hover:text-indigo-700">
+                        <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-700">
                           {sub.name}
                         </h3>
                         <p className="mt-1 text-sm text-slate-500">
                           View local professionals
                         </p>
-                        <div className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-indigo-600 group-hover:text-indigo-700">
+                        <div className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600 group-hover:text-blue-700">
                           Explore
                           <svg
                             className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
@@ -183,7 +181,10 @@ export default function ServicePageClient({
             )}
 
           {!citySlug && (
-            <PopularLocationsSection serviceSlug={service.slug} cities={cities} />
+            <PopularLocationsSection
+              serviceSlug={service.slug}
+              cities={cities}
+            />
           )}
           {!citySlug && <WhyTaskoria serviceName={service.slug} />}
 
@@ -205,33 +206,30 @@ export default function ServicePageClient({
           {!citySlug && service.faqs && service.faqs.length > 0 && (
             <FAQSection faqs={service.faqs} />
           )}
-
-          {/* ── BOTTOM CTA BANNER ── */}
-          <aside className="rounded-3xl bg-linear-to-br from-slate-900 to-indigo-900 text-white p-8 md:p-6">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div>
-                <h2 className="text-3xl font-bold mb-2">
-                  Ready to get {service.name} done
-                  {activeCityName ? ` in ${activeCityName}` : ""}?
-                </h2>
-                <p className="text-lg text-white/80">
-                  Post your job once—receive quotes fast, compare providers, and
-                  book with confidence.
-                </p>
-              </div>
-              <Button
-                onClick={handleSelectCategory}
-                className="inline-flex items-center gap-2 rounded-2xl px-8 py-4 text-lg font-semibold"
-                aria-label={`Get free quotes for ${service.name}`}
-              >
-                Get Free Quotes
-                <ArrowRight className="w-5 h-5" />
-              </Button>
-            </div>
-          </aside>
-      
         </section>
       </article>
+      <aside className="  bg-linear-to-br from-slate-900 via-blue-950 to-blue-900 text-white p-8 ">
+        <div className="flex max-w-7xl mx-auto flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <h2 className="text-3xl font-bold mb-2">
+              Ready to get {service.name} done
+              {activeCityName ? ` in ${activeCityName}` : ""}?
+            </h2>
+            <p className="text-lg text-white/80">
+              Post your job once—receive quotes fast, compare providers, and
+              book with confidence.
+            </p>
+          </div>
+          <Button
+            onClick={handleSelectCategory}
+            className="inline-flex bg-[#2563EB] items-center gap-2 rounded-lg px-8 py-4 text-lg font-semibold"
+            aria-label={`Get free quotes for ${service.name}`}
+          >
+            Get Free Quotes
+            <ArrowRight className="w-5 h-5" />
+          </Button>
+        </div>
+      </aside>
     </main>
   );
 }

@@ -1,5 +1,6 @@
 import { Shield, Lock, Award, Heart } from 'lucide-react';
 import Image from 'next/image';
+export const dynamic = "force-static";
 
 
 import type { Metadata } from "next";
@@ -225,8 +226,8 @@ export default function AboutUs() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
+          </div>
+      </section> 
     </div>
   );
 }

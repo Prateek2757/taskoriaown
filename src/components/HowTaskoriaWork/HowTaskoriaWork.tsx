@@ -77,7 +77,7 @@ export default function HowTaskoriaWorks() {
             id="how-it-works-heading"
             className="text-4xl md:text-5xl flex justify-center font-black"
           >
-            How hiring works on Taskoria
+            How hiring works on Taskoriasdfsdf
             <span className="block opacity-0 md:opacity-100 animate-fade-in">
               ...
             </span>

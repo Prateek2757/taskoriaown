@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { MapPin } from "lucide-react";
 import Image from "next/image";
+export const dynamic = "force-static";
 
 export const metadata: Metadata = {
   title: "Find Services by City | Taskoria",
@@ -26,7 +27,7 @@ interface City {
 export default async function CitiesIndexPage() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`,
-    { next: { revalidate: 3600 } }
+    { next: { revalidate: 84600 } }
   );
   const cities: City[] = res.ok ? await res.json() : [];
 

@@ -1,24 +1,31 @@
 import { NextResponse } from "next/server";
-import pool from "@/lib/dbConnect";
+import { getCategoryBySlug } from "@/lib/cache";
 
-export async function GET(req: Request ,context:{params:Promise<{slug:string}>} ) {
+// Revalidate segment-level cache every hour
+export const revalidate = 3600;
+
+export async function GET(
+  _req: Request,
+  context: { params: Promise<{ slug: string }> }
+) {
   try {
-    const slug = (await context.params).slug
-    
+    const slug = (await context.params).slug;
+
     if (!slug) {
       return NextResponse.json({ message: "Missing slug" }, { status: 400 });
     }
 
-    const result = await pool.query(
-      "SELECT category_id, name,main_category,image_url AS service_image_url, description,faqs,slug,service_detail FROM service_categories WHERE slug = $1",
-      [slug]
-    );
+    const row = await getCategoryBySlug(slug);
 
-    if (result.rows.length === 0) {
+    if (!row) {
       return NextResponse.json(null, { status: 404 });
     }
 
-    return NextResponse.json(result.rows[0]);
+    return NextResponse.json(row, {
+      headers: {
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+      },
+    });
   } catch (err: unknown) {
     if (err instanceof Error) {
       return NextResponse.json({ message: err.message }, { status: 500 });

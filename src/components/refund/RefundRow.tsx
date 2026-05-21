@@ -2,7 +2,11 @@ import { fmtDate } from "./refund-utils";
 import { StatusBadge } from "./StatusBadge";
 import { TypeBadge } from "./TypeBadge";
 
-import { REASON_LABELS, TOPIC_LABELS, type RefundRequest } from "@/types/refunds";
+import {
+  REASON_LABELS,
+  TOPIC_LABELS,
+  type RefundRequest,
+} from "@/types/refunds";
 
 interface RefundRowProps {
   row: RefundRequest;
@@ -36,12 +40,17 @@ export function RefundRow({ row, onReview }: RefundRowProps) {
         {row.email}
       </td>
       <td className="px-3 py-4 max-w-40">
-        <p className="text-sm text-zinc-700 dark:text-zinc-300 truncate">{leadOrSubject}</p>
+        <p className="text-sm text-zinc-700 dark:text-zinc-300 truncate">
+          {leadOrSubject}
+        </p>
       </td>
       <td className="px-3 py-4 max-w-40">
         {row.issue_type === "credit_return" ? (
           row.lead_email ? (
-            <span className="text-xs text-zinc-500 dark:text-zinc-400 truncate block" title={row.lead_email}>
+            <span
+              className="text-xs text-zinc-500 dark:text-zinc-400 truncate block"
+              title={row.lead_email}
+            >
               {row.lead_email}
             </span>
           ) : (
@@ -63,7 +72,7 @@ export function RefundRow({ row, onReview }: RefundRowProps) {
       <td className="px-3 py-4 whitespace-nowrap">
         <button
           onClick={() => onReview(row)}
-          className="px-3 py-1.5 text-xs font-semibold text-[#2563EB] dark:text-[#3B82F6] bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/40 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+          className="px-3 py-1.5 text-xs font-semibold text-[#2563EB] dark:text-[#A6B4FA] bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/40 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
         >
           Review
         </button>

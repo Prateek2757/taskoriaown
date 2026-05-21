@@ -7,7 +7,7 @@ import {
     uniqueStateslugs,
   } from "@/lib/sitemap-helpers";
   
-  export const revalidate = 3600;
+  export const revalidate = 604800;
   
   export async function GET() {
     const [categories, cities] = await Promise.all([

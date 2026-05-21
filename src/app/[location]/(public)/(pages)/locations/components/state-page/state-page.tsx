@@ -37,23 +37,23 @@ interface Props {
 //   "western-australia":         "from-yellow-700 via-amber-700 to-orange-600",
 //   "south-australia":           "from-red-800 via-rose-700 to-red-600",
 //   tasmania:                    "from-emerald-800 via-green-700 to-teal-600",
-//   "australian-capital-territory": "from-indigo-900 via-blue-800 to-indigo-700",
+//   "australian-capital-territory": "from-blue-900 via-blue-800 to-blue-700",
 //   "northern-territory":        "from-orange-700 via-red-700 to-amber-600",
 // };
 
 const Static_State_Image: Record<string, string> = {
-  "new-south-wales": "/nsw-sydney.png",
-  "australian-capital-territory": "/act.png",
-  "norfolk-island": "/norfolkisland.png",
+  "new-south-wales": "/nsw-sydney.jpg",
+  "australian-capital-territory": "/act.jpg",
+  "norfolk-island": "/Norfolk_Island.avif",
   "northern-territory": "/northern-territory.png",
-  queensland: "/queensland.png",
-  "south-australia": "/south-australia.png",
-  tasmania: "/tasmania.png",
-  "western-australia": "/western-australia.png",
-  "victoria":"/victoria.png"
+  queensland: "/queensland.jpg",
+  "south-australia": "/south-australia.jpg",
+  tasmania: "/tasmania.jpg",
+  "western-australia": "/western-australia.jpg",
+  victoria: "/victoria.jpg",
 };
 
-const ACCENT = "#1d4ed8"; 
+const ACCENT = "#1d4ed8";
 
 export default function StatePageClient({
   stateSlug,
@@ -485,7 +485,7 @@ export default function StatePageClient({
       )}
 
       {/* ══════ BOTTOM CTA ═══════════════════════════════════════════════════ */}
-      <aside className="bg-gradient-to-br from-slate-900 to-indigo-900 text-white">
+      <aside className="bg-gradient-to-br from-slate-900 to-blue-900 text-white">
         <div className="max-w-7xl mx-auto px-6 md:px-16 py-16 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           <div>
             <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
@@ -527,7 +527,7 @@ function CityCard({ city, stateSlug }: { city: City; stateSlug: string }) {
           />
         </div>
       ) : (
-        <div className="h-28 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950/30 dark:to-indigo-950/30 flex items-center justify-center">
+        <div className="h-28 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-950/30 flex items-center justify-center">
           <Building2 className="w-8 h-8 text-blue-300 dark:text-blue-700" />
         </div>
       )} */}

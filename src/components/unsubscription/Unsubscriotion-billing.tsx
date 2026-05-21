@@ -101,7 +101,6 @@ export default function UnsubscribePage({
       })
     : null;
 
-
   if (loadingSubscription) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0f0f11]">
@@ -350,7 +349,7 @@ export default function UnsubscribePage({
                   >
                     {selectedReason === reason && (
                       <svg
-                        className="w-2.5 h-2.5 text-[#2536EB]"
+                        className="w-2.5 h-2.5 text-[#2563EB]"
                         fill="currentColor"
                         viewBox="0 0 8 8"
                       >
@@ -404,7 +403,7 @@ export default function UnsubscribePage({
           </div>
         )}
 
-         <div
+        <div
           className={`flex flex-col gap-3 transition-all duration-500 delay-200 transform ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
           {step !== "confirm" ? (
@@ -445,10 +444,10 @@ export default function UnsubscribePage({
                 <button
                   type="button"
                   onClick={handleCancel}
-                  disabled={step === "loading" as Step}
+                  disabled={step === ("loading" as Step)}
                   className="flex-1 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white text-sm font-semibold transition-colors flex items-center justify-center gap-2"
                 >
-                  {step === "loading" as Step ? (
+                  {step === ("loading" as Step) ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                       Canceling...

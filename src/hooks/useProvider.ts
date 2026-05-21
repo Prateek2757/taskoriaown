@@ -1,47 +1,47 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { toast } from "sonner";
-import { fetchProviders } from "@/utils/api";
+import useSWR from "swr";
+import { fetcher } from "@/lib/fetcher";
 
 interface Provider {
-    user_id: number;
-    name: string;
-    public_id?:string;
-    services: string[];
-    company_name?:string;
-    logo_url?:string;
-    company_slug?:string;
-    rating: number;
-    reviews_count: number;
-    image?: string;
-    joineddate?:string;
-    locationname?:string;
-    nationwide?:boolean;
-    hourly_rate: number;
-    badges?: string[];
-    slug?: string;
-  }
+  user_id: number;
+  name: string;
+  public_id?: string;
+  services: string[];
+  company_name?: string;
+  logo_url?: string;
+  company_slug?: string;
+  avg_rating?: number;
+  total_reviews?: number;
+  rating: number;
+  reviews_count: number;
+  image?: string;
+  joineddate?: string;
+  locationname?: string;
+  nationwide?: boolean;
+  hourly_rate: number;
+  badges?: string[];
+  slug?: string;
+  isPro?: boolean;
+}
 
 export const useProviders = (limit?: number) => {
-  const [providers, setProviders] = useState<Provider[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, error, isLoading } = useSWR<Provider[]>(
+    "/api/providers",
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 1000 * 60 * 5,
+    }
+  );
 
-  useEffect(() => {
-    const getProviders = async () => {
-      try {
-        const data = await fetchProviders(limit);
-        setProviders(data);
-        
-        
-      } catch (error: any) {
-        toast.error(error.message || "Failed to load providers.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    getProviders();
-  }, [limit]);
+  const providers =
+    isLoading || !data ? [] : limit ? data.slice(0, limit) : data;
 
-  return { providers, loading };
+  return {
+    providers,
+    loading: isLoading,
+    error: error?.message ?? null,
+  };
 };

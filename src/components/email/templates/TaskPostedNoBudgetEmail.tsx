@@ -76,7 +76,7 @@ export const TaskPostedNoBudgetEmail = ({
 
         <Section style={{ margin: "32px 0", textAlign: "center" }}>
           <Button
-            href="https://taskoria.com/admin/adminbudgetmanager"
+            href="https://www.taskoria.com/admin/adminbudgetmanager"
             style={{
               backgroundColor: "#2563eb",
               color: "#ffffff",
@@ -125,7 +125,7 @@ export const TaskPostedNoBudgetEmail = ({
             </Link>
             {" | "}
             <Link
-              href="https://taskoria.com/terms-and-conditions"
+              href="https://www.taskoria.com/terms-and-conditions"
               style={{ color: "#2563eb", textDecoration: "underline" }}
             >
               Terms of Service

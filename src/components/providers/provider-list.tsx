@@ -5,12 +5,12 @@ import Image from "next/image";
 import { useState } from "react";
 import { Star, Search, ArrowUpRight, Zap, Users } from "lucide-react";
 import { Fraunces, Sora } from "next/font/google";
- const sora = Sora({
+const sora = Sora({
   subsets: ["latin"],
   variable: "--font-sora",
 });
 
- const fraunces = Fraunces({
+const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-fraunces",
 });
@@ -166,7 +166,7 @@ export default function ProvidersGrid({ providers }: { providers: any[] }) {
                         <div className="relative flex gap-3">
                           {p.cover_image ? (
                             <Image
-                            title="Provider List Photo"
+                              title="Provider List Photo"
                               src={p.cover_image}
                               alt={p.company_name}
                               width={56}
@@ -174,7 +174,7 @@ export default function ProvidersGrid({ providers }: { providers: any[] }) {
                               className="h-14 w-14 rounded-xl object-cover border border-border"
                             />
                           ) : (
-                            <div className="h-14 w-14 shrink-0 rounded-xl bg-linear-to-br from-blue-600 via-blue-400 to-[#2536EB] text-white grid place-content-center font-semibold uppercase">
+                            <div className="h-14 w-14 shrink-0 rounded-xl bg-linear-to-br from-blue-600 via-blue-400 to-[#2563EB] text-white grid place-content-center font-semibold uppercase">
                               {p.company_name
                                 ?.split(" ")
                                 .map((w: string) => w[0])

@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useRef } from "react";
 import { motion } from "motion/react";
 import { Sparkles, Users, Shield, ArrowUpRight } from "lucide-react";
@@ -59,11 +58,13 @@ export default function HowTaskoriaWorksInteractive() {
         <div className="flex h-full w-full items-stretch justify-between gap-10">
           <div className="flex flex-row justify-between">
             <Circle
-              className="p-2 shadow-none border-[#41A6EE]"
+              className="p-2 shadow-none border-[#A6B4FA]"
               ref={div1Ref}
               aria-label="Step 1"
             >
-              <span className="dark:text-gray-900 text-[#41A6EE] font-bold text-lg">1</span>
+              <span className="dark:text-gray-900 text-[#A6B4FA] font-bold text-lg">
+                1
+              </span>
             </Circle>
           </div>
           <div className="flex flex-row justify-between">
@@ -72,7 +73,9 @@ export default function HowTaskoriaWorksInteractive() {
               ref={div2Ref}
               aria-label="Step 2"
             >
-              <span className="dark:text-gray-900 text-purple-700 font-bold text-lg">2</span>
+              <span className="dark:text-gray-900 text-purple-700 font-bold text-lg">
+                2
+              </span>
             </Circle>
           </div>
           <div className="flex flex-row justify-between">
@@ -81,7 +84,9 @@ export default function HowTaskoriaWorksInteractive() {
               ref={div3Ref}
               aria-label="Step 3"
             >
-              <span className="dark:text-gray-900 text-green-500 font-bold text-lg">3</span>
+              <span className="dark:text-gray-900 text-green-500 font-bold text-lg">
+                3
+              </span>
             </Circle>
           </div>
         </div>
@@ -91,8 +96,8 @@ export default function HowTaskoriaWorksInteractive() {
           containerRef={containerRef}
           fromRef={div1Ref}
           toRef={div2Ref}
-          gradientStartColor="#41A6EE"
-          gradientStopColor="#41A6EE"
+          gradientStartColor="var(--color-brand-accent-light)"
+          gradientStopColor="var(--color-brand-accent-light)"
         />
         <AnimatedBeam
           duration={6}

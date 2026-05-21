@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Dialog,
@@ -65,14 +65,17 @@ export default function NewRequestModal({
   const [stepTwoKey, setStepTwoKey] = useState(0);
   const [initialized, setInitialized] = useState(false);
 
+  const fetchedRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (!selectedCategoryId) return;
-
-    
-
+  
+    if (fetchedRef.current === selectedCategoryId) return;
+    fetchedRef.current = selectedCategoryId;
+  
     setQuestions([]);
     setQuestionsLoading(true);
-
+  
     axios
       .get(`/api/category-questions/${selectedCategoryId}`)
       .then((res) => setQuestions(res.data))
@@ -107,11 +110,11 @@ useEffect(() => {
   const close = () => {
     onClose();
     setStep(1);
-    setSelectedCategoryId("");
-    setSelectedLocationId("");
-    setSelectedCategoryTitle("");
-    setSelectedLocation(null);
-    setQuestions([]);
+    // setSelectedCategoryId("");
+    // setSelectedLocationId("");
+    // setSelectedCategoryTitle("");
+    // setSelectedLocation(null);
+    // setQuestions([]);
   };
 
   return (
@@ -132,13 +135,13 @@ useEffect(() => {
           max-h-[90vh] overflow-visible flex flex-col
         "
       >
-        <DialogHeader className="border-b bg-gray-50 dark:bg-slate-900 rounded-t-2xl p-4 text-center flex-shrink-0">
+        <DialogHeader className="border-b bg-gray-50 dark:bg-slate-900 rounded-t-2xl p-2 text-center shrink-0">
           <DialogTitle className="text-xl text-center font-semibold">
             {step === 1 ? "Place a new request" : "A few quick questions"}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1  p-4">
+        <div className="flex-1  px-4 py-2">
           <AnimatePresence mode="wait">
             {step === 1 ? (
               <motion.div

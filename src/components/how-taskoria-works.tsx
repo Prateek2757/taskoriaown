@@ -117,21 +117,28 @@ export default function HowTaskoriaWorks() {
         />
 
         <motion.div
-          className="max-w-7xl mx-auto relative"
+          className="max-w-7xl  mx-auto relative"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <h1
+          {/* <h1
             id="how-it-works-heading"
             className="text-4xl md:text-5xl flex justify-center font-black"
           >
-            How hiring works on Taskoria
+            How hiring works on TaskoriaASA
             <span className="block opacity-0 md:opacity-100 animate-fade-in">
               ...
             </span>
-          </h1>
-          <p className="text-lg my-1 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          </h1> */}
+
+          <div className="  text-4xl  text-center text-gray-800 dark:text-white font-bold tracking-tight mb-2 ">
+            How hiring works on{" "}
+            <span className="bg-[#2563EB] bg-clip-text text-transparent">
+              Taskoria ...
+            </span>{" "}
+          </div>
+          <p className=" text-lg  my-1 flex justify-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Post for free, receive responses, and hire with confidence.
           </p>
 
@@ -143,11 +150,11 @@ export default function HowTaskoriaWorks() {
             <div className="flex h-full w-full items-stretch justify-between gap-10">
               <div className="flex flex-row justify-between">
                 <Circle
-                  className="p-2 shadow-none border-[#41A6EE]"
+                  className="p-2 shadow-none  border-[#2563EB]"
                   ref={div1Ref}
                   aria-label="Step 1"
                 >
-                  <span className="dark:text-gray-900 text-[#41A6EE] font-bold text-lg">
+                  <span className="dark:text-gray-900 text-[#2563EB] font-bold text-lg">
                     1
                   </span>
                 </Circle>
@@ -158,7 +165,7 @@ export default function HowTaskoriaWorks() {
                   ref={div2Ref}
                   aria-label="Step 2"
                 >
-                  <span className="dark:text-gray-900 text-purple-700 font-bold text-lg">
+                  <span className="dark:text-gray-900 text-[#A6B4FA] font-bold text-lg">
                     2
                   </span>
                 </Circle>
@@ -181,16 +188,16 @@ export default function HowTaskoriaWorks() {
               containerRef={containerRef}
               fromRef={div1Ref}
               toRef={div2Ref}
-              gradientStartColor="#41A6EE"
-              gradientStopColor="#41A6EE"
+              gradientStartColor="var(--color-brand-accent-light)"
+              gradientStopColor="var(--color-brand-accent-light)"
             />
             <AnimatedBeam
               duration={6}
               containerRef={containerRef}
               fromRef={div2Ref}
               toRef={div3Ref}
-              gradientStartColor="oklch(49.6% 0.265 301.924)"
-              gradientStopColor="oklch(49.6% 0.265 301.924)"
+              gradientStartColor="#2563EB"
+              gradientStopColor="#2563EB"
             />
           </div>
 
@@ -248,9 +255,9 @@ export default function HowTaskoriaWorks() {
             <Link href="/signin" aria-label="Start setting up your account">
               <Button
                 size={"lg"}
-                className="group bg-white dark:bg-transparent border-2 border-blue-500 text-blue-500 dark:text-blue-300 font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30"
+                className="group bg-white py-4.5 dark:bg-transparent border border-blue-500 text-[#2563EB] dark:text-blue-300 font-semibold hover:bg-[#A6B4FA]  hover:scale-105 transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/50"
               >
-                <span className="flex items-center gap-2">
+                <span className="flex text-base items-center gap-2">
                   Post a Job Free
                   <ArrowUpRight
                     className="w-4 h-4 transition-transform group-hover:translate-x-1 duration-300 group-hover:rotate-45"

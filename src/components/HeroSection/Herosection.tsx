@@ -3,11 +3,9 @@ import ScrollPopularSection from "../ScrollPopularSection";
 import HeroInteractive from "./HeroInteractive";
 import SparklesThemed from "./SparklesThemed";
 
-
 export default function HeroSection() {
   return (
     <>
-
       <section
         className="relative flex flex-col text-center 
           dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_30%,rgba(0,0,0,1)_100%)]"
@@ -19,7 +17,7 @@ export default function HeroSection() {
           aria-hidden="true"
         />
         <div
-          className="container md:pt-10 pt-6 max-md:bg-linear-to-r from-[#3C7DED]/25 via-[#41A6EE]/20
+          className="container md:pt-10 pt-6 max-md:bg-linear-to-r from-[#2563EB]/25 via-[#A6B4FA]/20
             to-[#46CBEE]/25 mx-auto md:px-4 relative z-10"
         >
           <div className="flex flex-col items-center gap-4 max-w-auto mx-auto ">
@@ -29,7 +27,7 @@ export default function HeroSection() {
               role="banner"
             >
               <Image
-              title="Aus Flag Home Page"
+                title="Aus Flag Home Page"
                 src="/flag-aus.png"
                 alt="Australian flag"
                 width={18}
@@ -75,8 +73,8 @@ export default function HeroSection() {
                     minSize={0.4}
                     maxSize={1.7}
                   />
-                  <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-indigo-500 to-transparent h-0.5 w-3/4 blur-sm" />
-                  <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
+                  <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-blue-500 to-transparent h-0.5 w-3/4 blur-sm" />
+                  <div className="absolute inset-x-20 top-0 bg-linear-to-r from-transparent via-blue-500 to-transparent h-px w-3/4" />
                   <div className="absolute inset-x-60 top-0 bg-linear-to-r from-transparent via-sky-500 to-transparent h-1.25 w-1/4 blur-sm" />
                   <div className="absolute inset-x-60 top-0 bg-linear-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
                 </span>
@@ -148,9 +146,9 @@ export default function HeroSection() {
             </div>
 
             <div className="w-full px-8 absolute bottom-2 left-1/2 -translate-x-1/2 text-center">
-              <h3 className="text-gray-600 text-lg sm:text-xl lg:text-2xl dark:text-white font-semibold leading-tight mb-2">
+              <p className="text-gray-600 text-lg sm:text-xl lg:text-2xl dark:text-white font-semibold leading-tight mb-2">
                 Need a provider fast?
-              </h3>
+              </p>
               <p className="text-gray-500 text-sm dark:text-gray-400 mb-4">
                 Get free quotes and receive responses from trusted local
                 professionals, with clearer quotes and safer hiring support.

@@ -29,6 +29,7 @@ export interface Lead {
   is_seen?: boolean;
   seen_at?: string;
   queries?: string;
+  is_free_lead?: boolean;
 }
 
 export interface Filters {
@@ -53,6 +54,7 @@ const LeadsPage: React.FC = () => {
   });
   const [showFilters, setShowFilters] = useState(false);
   const [isMobileDetailsOpen, setIsMobileDetailsOpen] = useState(false);
+  const [quickStatus, setQuickStatus] = useState<string>("All");
   const { taskCredits, fetchCreditEstimates } = useCredit();
   const filtersRef = useRef<HTMLDivElement>(null);
 
@@ -125,17 +127,25 @@ const LeadsPage: React.FC = () => {
         lead.customer_name
           ?.toLowerCase()
           .includes(filters.search.toLowerCase());
+
       const matchesBudget =
         !filters.estimated_budget ||
         (lead.estimated_budget ?? 0) >= +filters.estimated_budget;
+
       const matchesCategory =
         !filters.category || lead.category_name === filters.category;
+
       const matchesLocation =
         !filters.location || lead.location_name === filters.location;
-      const matchesStatus = !filters.status || lead.status === filters.status;
+        const matchesStatus =
+        quickStatus === "All" ? true
+        : quickStatus === "Free" ? lead.is_free_lead === true
+        : lead.status === quickStatus;
+
       const matchesRemote =
         filters.isRemoteAllowed === null ||
         lead.is_remote_allowed === filters.isRemoteAllowed;
+
       return (
         matchesSearch &&
         matchesCategory &&
@@ -145,10 +155,17 @@ const LeadsPage: React.FC = () => {
         matchesRemote
       );
     });
-  }, [sortedLeads, filters]);
+  }, [sortedLeads, filters, quickStatus]);
 
-  const handleFilterChange = (newFilters: Partial<Filters>) =>
+  // const urgentCount = rawLeads.filter((l) => l.status === "Urgent").length;
+  // const openCount = rawLeads.filter((l) => l.status === "Open").length;
+
+  const handleFilterChange = (newFilters: Partial<Filters>) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
+    if (newFilters.status !== undefined) {
+      setQuickStatus(newFilters.status || "All");
+    }
+  };
 
   const handleLeadClick = async (lead: Lead) => {
     setSelectedLead(lead);
@@ -196,21 +213,104 @@ const LeadsPage: React.FC = () => {
       >
         <div className="sticky top-13 z-30 mb-4 bg-white dark:bg-[#0d1117] border-b border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 px-2 py-3">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-3 w-full md:w-auto">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 leading-none">
-                  {filteredLeads.length} matching leads
-                </h2>
-                {unseenCount > 0 && (
-                  <span className="px-2 py-1 text-xs font-semibold bg-blue-500 text-white rounded-full animate-pulse">
-                    🔵 {unseenCount} New
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 w-full md:w-auto">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 leading-none">
+                    {filteredLeads.length} matching leads
+                  </h2>
+
+                  {unseenCount > 0 && (
+                    <span className="px-2 py-1 text-xs font-semibold bg-blue-500 text-white rounded-full animate-pulse">
+                      🔵 {unseenCount} New
+                    </span>
+                  )}
+
+                  {/* {urgentCount > 0 && (
+                    <span className="px-2 py-1 text-xs font-semibold bg-red-500 text-white rounded-full">
+                      🔥 {urgentCount} Urgent
+                    </span>
+                  )} */}
+
+                  {/* <span className="px-2 py-1 text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 rounded-full">
+                    🟢 {openCount} Open
+                  </span> */}
+                  {/* {rawLeads.filter((l) => l.is_free_lead).length > 0 && (
+                    <span className="px-2 py-1 text-xs font-semibold bg-green-500 text-white rounded-full">
+                      🎉 {rawLeads.filter((l) => l.is_free_lead).length} Free
+                    </span>
+                  )} */}
+                </div>
+
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {filters.category || "All services"} •{" "}
+                  {filters.location || "All locations"}
+                </p>
+
+                {quickStatus !== "All" && (
+                  <span className="text-xs text-gray-600 dark:text-gray-400">
+                    Filtering by:{" "}
+                    <span className="font-semibold text-red-500">
+                      {quickStatus}
+                    </span>
                   </span>
                 )}
               </div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 sm:mt-0">
-                {filters.category || "All services"} •{" "}
-                {filters.location || "All locations"}
-              </p>
+
+              <div className="flex items-center gap-2 flex-wrap">
+                <button
+                  onClick={() => setQuickStatus("All")}
+                  className={`px-2 py-1 text-sm rounded-full transition ${
+                    quickStatus === "All"
+                      ? "bg-gray-900 text-white dark:bg-white dark:text-black"
+                      : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+                  }`}
+                >
+                  All ({rawLeads.length})
+                </button>
+
+                <button
+                  onClick={() =>
+                    setQuickStatus((prev) =>
+                      prev === "Urgent" ? "All" : "Urgent"
+                    )
+                  }
+                  className={`px-2 py-1 text-sm rounded-full transition ${
+                    quickStatus === "Urgent"
+                      ? "bg-red-500 text-white"
+                      : "bg-red-100 text-red-600 hover:bg-red-200"
+                  }`}
+                >
+                  🔥 Urgent (
+                  {rawLeads.filter((l) => l.status === "Urgent").length})
+                </button>
+
+                <button
+                  onClick={() =>
+                    setQuickStatus((prev) => (prev === "Open" ? "All" : "Open"))
+                  }
+                  className={`px-2 py-1 text-sm rounded-full transition ${
+                    quickStatus === "Open"
+                      ? "bg-green-600 text-white"
+                      : "bg-green-100 text-green-700 hover:bg-green-200"
+                  }`}
+                >
+                  🟢 Open ({rawLeads.filter((l) => l.status === "Open").length})
+                </button>
+
+                <button
+                  onClick={() =>
+                    setQuickStatus((prev) => (prev === "Free" ? "All" : "Free"))
+                  }
+                  className={`px-2 py-1 text-sm rounded-full transition ${
+                    quickStatus === "Free"
+                      ? "bg-emerald-500 text-white"
+                      : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                  }`}
+                >
+                  🎉 Free ({rawLeads.filter((l) => l.is_free_lead).length})
+                </button>
+              </div>
             </div>
 
             <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -249,7 +349,7 @@ const LeadsPage: React.FC = () => {
                           !(typeof val === "boolean" && val === null) &&
                           !(val === "Open")
                       ).length
-                    }2
+                    }
                   </span>
                 )}
               </button>

@@ -28,7 +28,7 @@ export default function QuestionRenderer({ q, control, register }: any) {
       transition={{ duration: 0.45, ease: [0.25, 0.8, 0.25, 1] }}
       className="space-y-2"
     >
-      <Label className="block text-lg font-semibold text-center pb-2 text-gray-900 dark:text-white">
+      <Label className="block text-lg font-semibold text-center pb-1 text-gray-900 dark:text-white">
         {q.question}
         {q.is_required && <span className="text-red-500 ml-1">*</span>}
       </Label>
@@ -73,7 +73,7 @@ export default function QuestionRenderer({ q, control, register }: any) {
       )}
 
       {!isMultiCheckbox && q.field_type === "checkbox" && (
-        <div className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+        <div className="flex items-center gap-3 p-2 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition">
           <Controller
             control={control}
             name={name}
@@ -109,7 +109,7 @@ export default function QuestionRenderer({ q, control, register }: any) {
                         }
                       }}
                       className={cn(
-                        "flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-200 shadow-sm",
+                        "flex items-center gap-3 p-2 border rounded-xl cursor-pointer transition-all duration-200 shadow-sm",
                         "hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800",
                         isChecked
                           ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
@@ -133,7 +133,7 @@ export default function QuestionRenderer({ q, control, register }: any) {
                 })}
 
                 <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                  <div className="flex items-center gap-3 p-2 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition">
                     <Checkbox
                       checked={valueArray.includes("other")}
                       onCheckedChange={(checked) => {
@@ -163,7 +163,7 @@ export default function QuestionRenderer({ q, control, register }: any) {
                       <Textarea
                         {...register(otherFieldName)}
                         placeholder="Please specify..."
-                        className="border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 min-h-[80px]"
+                        className="border-gray-300 dark:border-gray-700 rounded-xl focus:ring-1 focus:ring-blue-500 min-h-[80px]"
                         autoFocus
                       />
                     </motion.div>
@@ -190,7 +190,7 @@ export default function QuestionRenderer({ q, control, register }: any) {
                       setShowOtherTextarea(false);
                     }}
                     className={cn(
-                      "flex items-center gap-3 p-4 border rounded-xl cursor-pointer transition-all duration-200 shadow-sm",
+                      "flex items-center gap-3 p-2 border rounded-xl cursor-pointer transition-all duration-200 shadow-sm",
                       "hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800",
                       field.value === opt
                         ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
@@ -199,14 +199,14 @@ export default function QuestionRenderer({ q, control, register }: any) {
                   >
                     <div
                       className={cn(
-                        "w-5 h-5 rounded-full border flex items-center justify-center transition",
+                        "w-5 h-5 rounded-xl border flex items-center justify-center transition",
                         field.value === opt
                           ? "border-blue-600"
                           : "border-gray-400"
                       )}
                     >
                       {field.value === opt && (
-                        <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
+                        <div className="w-2.5 h-2.5 bg-blue-600 rounded-xl" />
                       )}
                     </div>
                     <span className="text-gray-800 dark:text-gray-100 font-medium">
@@ -222,7 +222,7 @@ export default function QuestionRenderer({ q, control, register }: any) {
                       setShowOtherTextarea(true);
                     }}
                     className={cn(
-                      "flex items-center gap-3 p-4 border rounded-xl cursor-pointer transition-all duration-200 shadow-sm",
+                      "flex items-center gap-3 p-2 border rounded-xl cursor-pointer transition-all duration-200 shadow-sm",
                       "hover:shadow-md hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800",
                       field.value === "other"
                         ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30"
@@ -231,14 +231,14 @@ export default function QuestionRenderer({ q, control, register }: any) {
                   >
                     <div
                       className={cn(
-                        "w-5 h-5 rounded-full border flex items-center justify-center transition",
+                        "w-5 h-5 rounded-xl border flex items-center justify-center transition",
                         field.value === "other"
                           ? "border-blue-600"
                           : "border-gray-400"
                       )}
                     >
                       {field.value === "other" && (
-                        <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />
+                        <div className="w-2.5 h-2.5 bg-blue-600 rounded-xl" />
                       )}
                     </div>
                     <span className="text-gray-800 dark:text-gray-100 font-medium">

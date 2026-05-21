@@ -32,8 +32,7 @@ export default function ProviderProfileClient({ provider }: { provider: any }) {
     <div className="min-h-screen bg-[#f3f2ef] dark:bg-[#070d1a]">
       <div className="max-w-282 mx-auto px-0 sm:px-6 py-6">
         <div className="flex flex-col lg:flex-row gap-5 items-start">
-
-          <div className=" w-full  flex-col gap-3">
+          <div className=" flex w-full  flex-col gap-3">
             <ProfileHero provider={provider} />
             <ProfileTabs
               provider={provider}
@@ -46,7 +45,8 @@ export default function ProviderProfileClient({ provider }: { provider: any }) {
               certifications={certifications}
               languages={languages}
             />
-                          <BookingPanel provider={provider} socialLinks={socialLinks} />
+            
+                          {/* <BookingPanel provider={provider} socialLinks={socialLinks} /> */}
 
           </div>
 

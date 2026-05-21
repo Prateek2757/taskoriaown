@@ -2,8 +2,9 @@
 import { cn } from "@/lib/utils";
 import { Quote, Star, Loader2, AlertCircle } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import NewMarquee from "./ui/new-marquee";
+import { useState } from "react";
+import useSWR from "swr";
+import { fetcher } from "@/lib/fetcher";
 
 interface Review {
   id: string;
@@ -64,7 +65,7 @@ function ReviewCard({ img, name, location, body, rating, time }: Review) {
         />
 
         <div className="flex flex-col flex-1 min-w-0">
-          <figcaption className="text-sm font-semibold truncate dark:text-white">
+          <figcaption className="text-base font-semibold truncate dark:text-white">
             {name}
           </figcaption>
 
@@ -113,36 +114,59 @@ function ReviewCard({ img, name, location, body, rating, time }: Review) {
 }
 
 export default function Testimonial() {
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [meta, setMeta] = useState<Meta | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // const [reviews, setReviews] = useState<Review[]>([]);
+  // const [meta, setMeta] = useState<Meta | null>(null);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchReviews() {
-      try {
-        const res = await fetch("/api/google-reviews");
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+  // useEffect(() => {
+  //   async function fetchReviews() {
+  //     try {
+  //       const res = await fetch("/api/google-reviews");
+  //       if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  //       const data = await res.json();
 
-        const raw: any[] = data?.reviews ?? [];
-        const filtered = raw
-          .filter((r) => r.text && r.text.length > 20)
-          .map(transform);
+  //       const raw: any[] = data?.reviews ?? [];
+  //       const filtered = raw
+  //         .filter((r) => r.text && r.text.length > 20)
+  //         .map(transform);
 
-        setReviews(filtered);
-        if (data.ratings) {
-          setMeta({ rating: data.ratings, total: data.totalRatings });
-        }
-      } catch (err: any) {
-        setError(err.message ?? "Failed to load reviews");
-      } finally {
-        setLoading(false);
-      }
-    }
+  //       setReviews(filtered);
+  //       if (data.ratings) {
+  //         setMeta({ rating: data.ratings, total: data.totalRatings });
+  //       }
+  //     } catch (err: any) {
+  //       setError(err.message ?? "Failed to load reviews");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
 
-    fetchReviews();
-  }, []);
+  //   fetchReviews();
+  // }, []);
+
+  const {
+    data,
+    error,
+    isLoading: loading,
+  } = useSWR("/api/google-reviews", fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    revalidateOnMount: false,
+    revalidateIfStale: false,
+    dedupingInterval: 86_400_000,
+  });
+
+  const raw = data?.reviews ?? [];
+
+  const reviews = raw
+    .filter((r: any) => r.text && r.text.length > 20)
+    .map(transform);
+
+  const meta = {
+    rating: data?.ratings,
+    total: data?.totalRatings,
+  };
 
   return (
     <section
@@ -150,15 +174,18 @@ export default function Testimonial() {
       id="customer-reviews"
     >
       <div className="text-center mb-10">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-blue-50 dark:from-blue-900 dark:to-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800">
           Customer stories
         </div>
 
-        <h2 className="text-3xl font-semibold text-foreground">
-          What customers say about Taskoria
+        <h2 className="text-4xl font-bold text-gray-800 dark:text-white ">
+          What customers say about {" "}
+          <span className="bg-[#2563EB] bg-clip-text text-transparent">
+              Taskoria ...
+            </span>{" "}
         </h2>
 
-        <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+        <p className="text-lg text-gray-600 dark:text-gray-400 mt-2">
           Real hiring experiences from local customers.
         </p>
       </div>
@@ -182,12 +209,10 @@ export default function Testimonial() {
         </p>
       )}
       {!loading && reviews.length > 0 && (
-        <div className="max-w-7xl mx-auto overflow-x-auto md:overflow-hidden">
-          <NewMarquee pauseOnHover speed={35}>
-            {reviews.map((review) => (
-              <ReviewCard key={review.id} {...review} />
-            ))}
-          </NewMarquee>
+        <div className="max-w-7xl flex shrink-0 gap-4 pr-4 mx-auto overflow-x-auto md:overflow-hidden">
+          {reviews.map((review) => (
+            <ReviewCard key={review.id} {...review} />
+          ))}
         </div>
       )}
       {reviews.length > 0 && (

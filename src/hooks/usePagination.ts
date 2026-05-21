@@ -13,8 +13,16 @@ function usePagination<T>(data: T[], itemsPerPage: number, dependency?: unknown)
     const start = (currentPage - 1) * itemsPerPage;
     return data.slice(start, start + itemsPerPage);
   }, [data, currentPage, itemsPerPage]);
+  
+   const loadMore = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
 
-  return { paginatedData, currentPage, setCurrentPage, totalPages };
+  const hasMore = currentPage < totalPages;
+  return { paginatedData, currentPage, setCurrentPage, totalPages ,  loadMore,
+    hasMore,};
 }
 
 export default usePagination;

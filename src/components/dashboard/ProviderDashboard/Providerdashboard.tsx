@@ -79,7 +79,7 @@ export default function ProviderDashboard() {
       <main className="container mx-auto rounded-2xl  lg:px-6 space-y-6 pb-16">
         <div className="flex px-2 flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-[#3C7DED] bg-clip-text">
+            <h1 className="text-3xl font-bold text-[#2563EB] bg-clip-text">
               {greeting}, {user.name?.split(" ")[0] || "User"}!
             </h1>
             <p className="text-sm text-slate-600 dark:text-slate-400">

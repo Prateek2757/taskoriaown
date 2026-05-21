@@ -1,5 +1,6 @@
 "use client";
 import useSWR from "swr";
+import { useEffect } from "react";
 import { toast } from "sonner";
 import { fetcher } from "@/lib/fetcher";
 
@@ -8,14 +9,10 @@ interface Category {
   name: string;
   slug: string;
   keywords: string[] | null;
-  main_category?:string;
-  image_url?:string;
+  main_category?: string;
+  image_url?: string;
 }
 
-// const fetcher = async (url: string) => {
-//   const response = await axios.get(url);
-//   return response.data;
-// };
 
 export const useCategories = (limit?: number) => {
   const { data, error, isLoading } = useSWR<Category[]>(
@@ -24,13 +21,16 @@ export const useCategories = (limit?: number) => {
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      dedupingInterval: 1000 * 60 * 60,
+      dedupingInterval: 1000 * 60 * 60, 
     }
   );
 
-  if (error) {
-    toast.error(error.message || "Failed to load categories.");
-  }
+  
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message || "Failed to load categories.");
+    }
+  }, [error]);
 
   const categories = isLoading
     ? undefined

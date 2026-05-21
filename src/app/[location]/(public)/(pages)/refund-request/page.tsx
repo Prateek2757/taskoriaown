@@ -156,10 +156,10 @@ function CheckBadge() {
 }
 
 const inputCls =
-  "w-full bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#2563EB] dark:focus:ring-[#3B82F6] focus:border-transparent transition-all";
+  "w-full bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-[#2563EB] dark:focus:ring-[#A6B4FA] focus:border-transparent transition-all";
 
 const selectCls =
-  "w-full bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#2563EB] dark:focus:ring-[#3B82F6] focus:border-transparent transition-all appearance-none cursor-pointer";
+  "w-full bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#2563EB] dark:focus:ring-[#A6B4FA] focus:border-transparent transition-all appearance-none cursor-pointer";
 
 function QuillField({
   value,
@@ -176,7 +176,7 @@ function QuillField({
     <div
       className={`rounded-xl overflow-hidden border transition-all
         bg-zinc-50 dark:bg-zinc-800/60
-        focus-within:ring-2 focus-within:ring-[#2563EB] dark:focus-within:ring-[#3B82F6] focus-within:border-transparent
+        focus-within:ring-2 focus-within:ring-[#2563EB] dark:focus-within:ring-[#A6B4FA] focus-within:border-transparent
         ${
           hasError
             ? "border-red-400 dark:border-red-500"
@@ -192,8 +192,6 @@ function QuillField({
     </div>
   );
 }
-
-
 
 export default function RefundRequestPage() {
   const { data: session, status } = useSession();
@@ -273,9 +271,12 @@ export default function RefundRequestPage() {
           lead_email: data.leadEmail || null,
         });
         if (!res.data.success) {
-          setError("root" as never, {
-            message: res.data.message || "Failed to submit.",
-          } as never);
+          setError(
+            "root" as never,
+            {
+              message: res.data.message || "Failed to submit.",
+            } as never
+          );
           return;
         }
       } else {
@@ -287,17 +288,23 @@ export default function RefundRequestPage() {
           description: stripHtml(data.description),
         });
         if (!res.data.success) {
-          setError("root" as never, {
-            message: res.data.message || "Failed to submit.",
-          } as never);
+          setError(
+            "root" as never,
+            {
+              message: res.data.message || "Failed to submit.",
+            } as never
+          );
           return;
         }
       }
       setSuccess(true);
     } catch {
-      setError("root" as never, {
-        message: "Network error. Please try again.",
-      } as never);
+      setError(
+        "root" as never,
+        {
+          message: "Network error. Please try again.",
+        } as never
+      );
     } finally {
       setSubmitting(false);
     }
@@ -311,7 +318,7 @@ export default function RefundRequestPage() {
             <div className="absolute inset-0 bg-[#2563EB]/15 rounded-full animate-ping" />
             <div className="relative w-20 h-20 bg-blue-50 dark:bg-blue-900/20 border-2 border-[#93C5FD] dark:border-[#2563EB]/50 rounded-full flex items-center justify-center">
               <svg
-                className="w-9 h-9 text-[#2563EB] dark:text-[#3B82F6]"
+                className="w-9 h-9 text-[#2563EB] dark:text-[#A6B4FA]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -416,7 +423,7 @@ export default function RefundRequestPage() {
                     className={`relative p-4 rounded-2xl border-2 text-left transition-all duration-200 overflow-hidden
                       ${
                         active
-                          ? "border-[#2563EB] dark:border-[#3B82F6] bg-white dark:bg-zinc-900 shadow-md shadow-blue-500/10"
+                          ? "border-[#2563EB] dark:border-[#A6B4FA] bg-white dark:bg-zinc-900 shadow-md shadow-blue-500/10"
                           : "border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-600 hover:shadow-sm"
                       }`}
                   >
@@ -626,7 +633,7 @@ export default function RefundRequestPage() {
           )}
 
           {issueType && (
-            <div >
+            <div>
               <div className="h-px bg-zinc-200 dark:bg-zinc-800 mb-2" />
               <div className="flex items-center justify-between gap-4 flex-wrap">
                 <p className="text-xs text-zinc-400 dark:text-zinc-500 max-w-xs leading-relaxed">

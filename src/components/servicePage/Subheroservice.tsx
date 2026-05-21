@@ -13,7 +13,7 @@ interface ServiceHeroSectionProps {
   onLocationSelect?: (location: any) => void;
   onPostJob?: () => void;
   presetLocation?: any;
-  cityName?: string; // e.g. "Sydney" or "Liverpool"
+  cityName?: string;
 }
 
 function getBreadcrumbLabel(name: string) {
@@ -29,7 +29,7 @@ function getBreadcrumbLabel(name: string) {
     Tiling: "Tilers",
     Plastering: "Plasterers",
   };
-  return irregulars[name] ?? `${name} Professionals`;
+  return irregulars[name] ?? `${name} Pros`;
 }
 
 function getArticle(name: string) {
@@ -78,9 +78,9 @@ export default function SubHeroService({
         className="w-full bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800/60"
       >
         <div className="max-w-6xl mx-auto py-5 md:py-0  px-0">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-6">
+          <h1 className="text-4xl  font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-6">
             Need to find {article}{" "}
-            <span className="text-[#2563eb] dark:text-[#60a5fa]">
+            <span className="text-[#2563EB] dark:text-[#60a5fa]">
               {proLabel.endsWith("s") ? proLabel.slice(0, -1) : proLabel}
             </span>{" "}
             in {cityName}?
@@ -100,20 +100,22 @@ export default function SubHeroService({
               </p>
             ))}
 
-            {/* "Best of all" highlight */}
             <p className="text-base font-semibold text-slate-700 dark:text-slate-200">
               {cityParagraphs![cityParagraphs!.length - 1]}
             </p>
           </div>
 
-          {/* CTA button */}
           <div className="pt-1">
             <button
               onClick={onPostJob}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#2563eb] hover:bg-[#1d4ed8] active:bg-[#1e40af] text-white font-bold text-base px-7 py-4 shadow-lg shadow-blue-200 dark:shadow-blue-950 hover:shadow-xl hover:shadow-blue-300 dark:hover:shadow-blue-900 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] hover:bg-[#1d4ed8] active:bg-[#1e40af] text-white font-bold text-base px-7 py-3 shadow-lg shadow-blue-200 dark:shadow-blue-950 hover:shadow-xl hover:shadow-blue-300 dark:hover:shadow-blue-900 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
               aria-label={`Find ${article} ${service.name} professional in ${cityName} today`}
             >
-              Find {article} {proLabel.endsWith("s") ? proLabel.slice(0, -1).toLowerCase() : proLabel.toLowerCase()} in {cityName} today!
+              Find {article}{" "}
+              {proLabel.endsWith("s")
+                ? proLabel.slice(0, -1).toLowerCase()
+                : proLabel.toLowerCase()}{" "}
+              in {cityName} today!
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -122,7 +124,6 @@ export default function SubHeroService({
     );
   }
 
-  // ── DEFAULT (NO CITY) LAYOUT ──────────────────────────────────────────────────
   return (
     <section
       aria-label={`Find ${proLabel} on Taskoria`}
@@ -146,17 +147,16 @@ export default function SubHeroService({
         </nav>
 
         <div className="grid lg:grid-cols-2 gap-6 items-start">
-          <div className="flex flex-col gap-3">
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1]">
-              Need help finding{" "}
-              {getArticle(proLabel)}{" "}
+          <div className="flex flex-col gap-4">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[2]">
+              Need help finding {getArticle(proLabel)}{" "}
               <span className="relative inline-block">
-                <span className="relative z-10 text-[#2563eb] dark:text-[#60a5fa]">
+                <span className="relative z-10 text-[#2563EB] dark:text-[#60a5fa]">
                   {proLabel.endsWith("s") ? proLabel : proLabel + "?"}
                 </span>
                 <span
                   aria-hidden
-                  className="absolute -bottom-1 left-0 w-full h-[3px] rounded-full bg-[#2563eb]/20 dark:bg-[#60a5fa]/20"
+                  className="absolute -bottom-1 left-0 w-full h-[3px] rounded-full bg-[#2563EB]/20 dark:bg-[#60a5fa]/20"
                 />
               </span>
               {!proLabel.endsWith("?") && "?"}
@@ -170,15 +170,15 @@ export default function SubHeroService({
               {service.description ?? paragraphs.body}
             </p>
 
-            <p className="inline-flex items-center gap-2 text-base font-semibold text-[#2563eb] dark:text-[#60a5fa]">
-              <span className="w-2 h-2 rounded-full bg-[#2563eb] dark:bg-[#60a5fa] shrink-0" />
+            <p className="inline-flex items-center gap-2 text-base font-semibold text-[#2563EB] dark:text-[#60a5fa]">
+              <span className="w-2 h-2 rounded-full bg-[#2563EB] dark:bg-[#60a5fa] shrink-0" />
               {paragraphs.highlight}
             </p>
 
             <div className="pt-1">
               <button
                 onClick={onPostJob}
-                className="inline-flex items-center gap-2 rounded-xl bg-[#2563eb] hover:bg-[#1d4ed8] active:bg-[#1e40af] text-white font-bold text-base px-7 py-4 shadow-lg shadow-blue-200 dark:shadow-blue-950 hover:shadow-xl hover:shadow-blue-300 dark:hover:shadow-blue-900 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] hover:bg-[#1d4ed8] active:bg-[#1e40af] text-white font-bold text-base px-7 py-3 shadow-lg shadow-blue-200 dark:shadow-blue-950 hover:shadow-xl hover:shadow-blue-300 dark:hover:shadow-blue-900 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                 aria-label={`Find ${getArticle(proLabel)} ${service.name} professional today`}
               >
                 Find {getArticle(proLabel)} {service.name.toLowerCase()} today
@@ -198,7 +198,7 @@ export default function SubHeroService({
                   key={s.label}
                   className="flex flex-col items-center justify-center text-center rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/50 p-2 gap-1"
                 >
-                  <span className="text-2xl font-extrabold text-[#2563eb] dark:text-[#60a5fa] tracking-tight">
+                  <span className="text-2xl font-extrabold text-[#2563EB] dark:text-[#60a5fa] tracking-tight">
                     {s.val}
                   </span>
                   <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
@@ -209,12 +209,15 @@ export default function SubHeroService({
             </div>
             <div className="rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
               {[
-                { n: "1", text: `Describe your ${service.name.toLowerCase()} job` },
+                {
+                  n: "1",
+                  text: `Describe your ${service.name.toLowerCase()} job`,
+                },
                 { n: "2", text: "Receive quotes from local verified pros" },
                 { n: "3", text: "Compare, review & hire with confidence" },
               ].map((step) => (
                 <div key={step.n} className="flex items-center gap-4 px-5 py-4">
-                  <span className="w-7 h-7 rounded-full bg-[#2563eb]/10 dark:bg-[#2563eb]/20 text-[#2563eb] dark:text-[#60a5fa] text-xs font-bold flex items-center justify-center shrink-0">
+                  <span className="w-7 h-7 rounded-full bg-[#2563EB]/10 dark:bg-[#2563EB]/20 text-[#2563EB] dark:text-[#60a5fa] text-xs font-bold flex items-center justify-center shrink-0">
                     {step.n}
                   </span>
                   <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
@@ -226,7 +229,7 @@ export default function SubHeroService({
 
             {presetLocation && (
               <div className="flex items-center gap-2 text-sm text-slate-400 dark:text-slate-500 px-1">
-                <MapPin className="w-4 h-4 shrink-0 text-[#2563eb] dark:text-[#60a5fa]" />
+                <MapPin className="w-4 h-4 shrink-0 text-[#2563EB] dark:text-[#60a5fa]" />
                 Showing results near{" "}
                 <span className="font-semibold text-slate-600 dark:text-slate-300">
                   {presetLocation.name}

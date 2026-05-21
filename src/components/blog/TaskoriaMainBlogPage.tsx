@@ -1,157 +1,232 @@
 "use client";
-import  { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { TrendingUp, Sparkles } from "lucide-react";
 import { BlogCard } from "./BlogCard";
-import { PostDetail } from "./PostDetails";
-import { blogPosts } from "./BlogData";
+import { MdArrowDropDown } from "react-icons/md";
+import { FiSearch } from "react-icons/fi";
+import { useRouter } from "next/navigation";
+import usePagination from "@/hooks/usePaginationblog";
+import { RiArrowRightSLine } from "react-icons/ri";
 
-const categories = ["All Posts", "For Providers", "Future of Work"];
+type Blog = {
+  post_id: number;
+  slug: string;
+  title: string;
+  excerpt: string;
+  author_name: string;
+  author_role: string;
+  category: string;
+  tags: string[];
+  is_featured: boolean;
+  views: number;
+  likes: number;
+  read_time: string;
+  published_at: string;
+  updated_at?: string;
+  image_url: string;
+};
 
-const TaskoriaBlog = () => {
-  const [currentView, setCurrentView] = useState("home");
-  const [selectedPost, setSelectedPost] = useState(null);
+const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
   const [selectedCategory, setSelectedCategory] = useState("All Posts");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  const categories = useMemo(() => {
+    const category = [...new Set(initialPosts.map((p) => p.category))];
+    return ["All Posts", ...category];
+  }, [initialPosts]);
 
   const filteredPosts = useMemo(() => {
-    let posts =
+    let filtered =
       selectedCategory === "All Posts"
-        ? blogPosts
-        : blogPosts.filter((p) => p.category === selectedCategory);
+        ? initialPosts
+        : initialPosts.filter((p) => p.category === selectedCategory);
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      posts = posts.filter(
+      filtered = filtered.filter(
         (post) =>
           post.title.toLowerCase().includes(query) ||
           post.excerpt.toLowerCase().includes(query) ||
-          post.tags.some((tag) => tag.toLowerCase().includes(query))
+          post.category.toLowerCase().includes(query),
       );
     }
-    return posts;
-  }, [selectedCategory, searchQuery]);
 
-  const featuredPosts = blogPosts.filter((p) => p.featured);
-  const regularPosts = filteredPosts.filter((p) => !p.featured);
+    return filtered;
+  }, [initialPosts, selectedCategory, searchQuery]);
 
-  const handleSelectPost = (post) => {
-    setSelectedPost(post);
-    setCurrentView("post");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const featuredPosts = filteredPosts.filter((p) => p.is_featured);
+  const regularPosts = filteredPosts.filter((p) => !p.is_featured);
 
-  const handleBackToHome = () => {
-    setCurrentView("home");
-    setSelectedPost(null);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const displayPosts =
+    searchQuery || selectedCategory !== "All Posts"
+      ? filteredPosts
+      : regularPosts;
+  const {
+    paginatedData: PaginatedDisplayPosts,
+    loadMore,
+    hasMore,
+    hasLess,
+    loadLess,
+  } = usePagination(displayPosts, 3);
+  const postsRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  if (currentView === "post" && selectedPost) {
-    const relatedPosts = blogPosts
-      .filter(
-        (p) => p.id !== selectedPost.id && p.category === selectedPost.category
-      )
-      .slice(0, 3);
-
-    return (
-      <PostDetail
-        post={selectedPost}
-        relatedPosts={relatedPosts}
-        onBack={handleBackToHome}
-        onSelectPost={handleSelectPost}
-      />
-    );
-  }
+  // const handleSelectPost = (post: Blog) => {
+  //   router.push(`/blog/${post.slug}`);
+  // };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-zinc-950 dark:to-zinc-900">
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-blue-950/20 dark:via-zinc-950 dark:to-indigo-950/20 opacity-70"></div>
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-4">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl italic font-extrabold text-gray-900 dark:text-zinc-50 mb-6 leading-tight">
-              Insights & Innovation
-              <span className="block mt-2 italic bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
-                from Taskoria
-              </span>
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-zinc-400 italic mb-8 leading-relaxed">
-              Expert advice, industry insights, and success stories to help you
-              navigate the future of service marketplaces in Australia.
-            </p>
+    <div className="min-h-screen bg-linear-to-b from-gray-50 mb-4 to-white dark:from-zinc-950 dark:to-zinc-900">
+      <section className="relative overflow-hidden mb-6">
+        <div className="absolute inset-0 bg-linear-to-br from-blue-50 via-white to-indigo-50 dark:from-blue-950/20 dark:via-zinc-950 dark:to-indigo-950/20 opacity-70" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-8 md:px-4">
+          <div className="flex justify-between">
+            <div className="text-left max-w-7xl px-4 mx-auto">
+              <h1 className="text-2xl md:text-6xl font-extrabold text-gray-900 dark:text-zinc-50 mb-6 leading-tight">
+                Discover Better Ways to
+                <span className="block mt-2 bg-linear-to-r from-blue-600 to-[#2563EB] dark:from-blue-400 dark:to-[#2563EB] bg-clip-text text-transparent">
+                  Get Things Done
+                </span>
+              </h1>
+              <p className="text-base md:text-lg text-gray-600 dark:text-zinc-400 leading-relaxed">
+                Discover helpful resources, professional insights, and fresh
+                ideas from a platform built to connect Australians with trusted
+                local professionals.
+              </p>
+            </div>
+
+            <div className="flex">
+              <div className="relative w-full sm:w-72 hidden sm:block">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full rounded-3xl bg-gray-100 border-gray-300 focus:outline-none focus:border-blue-600 text-gray-400 pl-8 py-2.5 text-base"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-200 dark:border-zinc-800 p-6 mb-5">
-          <div className="flex items-center gap-2 mb-4">
-            <Sparkles size={20} className="text-blue-600 dark:text-blue-400" />
-            <h3 className="text-lg font-bold text-gray-900 dark:text-zinc-100">
-              Browse Topics
-            </h3>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all ${
-                  selectedCategory === category
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
-                    : "bg-gray-50 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-zinc-700"
-                }`}
-              >
-                {category}
-              </button>
-            ))}
+        <div className="px-8 pb-14 -mt-4 mb-8 rounded-sm w-full">
+          <p className="text-xl sm:text-3xl font-semibold text-[#2563EB] mb-4">
+            Filter
+          </p>
+
+          <div className="relative w-full max-w-xs" ref={dropdownRef}>
+            <div
+              onClick={() => setIsOpen((prev) => !prev)}
+              className="flex items-center justify-between cursor-pointer"
+            >
+              <span className="text-lg text-gray-700 font-medium">
+                {selectedCategory || "All Posts"}
+              </span>
+              <MdArrowDropDown
+                size={26}
+                className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+              />
+            </div>
+
+            <div className="mt-2 h-0.5 bg-gray-300" />
+
+            {isOpen && (
+              <div className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 shadow-lg z-50 rounded-sm overflow-hidden">
+                {categories.map((category, index) => (
+                  <button
+                    key={category}
+                    onClick={() => {
+                      setSelectedCategory(category);
+                      setIsOpen(false);
+                    }}
+                    className={`w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition
+                      ${selectedCategory === category ? "bg-gray-100 font-medium" : ""}
+                      ${index !== 0 ? "border-t border-gray-100" : ""}
+                    `}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {selectedCategory === "All Posts" && searchQuery === "" && (
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-8 flex items-center gap-3">
-              <TrendingUp className="text-blue-600 dark:text-blue-400" />
-              Featured Articles
-            </h2>
-            <div className="grid md:grid-cols-6 gap-8">
-              {featuredPosts.map((post) => (
-                <BlogCard
-                  key={post.id}
-                  post={post}
-                  onClick={() => handleSelectPost(post)}
-                  featured={true}
-                />
+        {selectedCategory === "All Posts" &&
+          searchQuery === "" &&
+          featuredPosts.length > 0 && (
+            <section className="mb-8 -mt-10">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-8 flex items-center gap-3">
+                <TrendingUp className="text-[#2563EB] dark:text-blue-400" />
+                Featured Articles
+              </h2>
+              <div className="grid md:grid-cols-6 gap-8">
+                {featuredPosts.map((post) => (
+                  <BlogCard key={post.post_id} post={post} featured={true} />
+                ))}
+              </div>
+            </section>
+          )}
+
+        {PaginatedDisplayPosts.length > 0 && (
+          <section>
+            <div className="flex justify-between">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-4 flex items-center gap-3">
+                <Sparkles className="text-[#2563EB] dark:text-blue-400" />
+                {selectedCategory === "All Posts"
+                  ? "Latest Articles"
+                  : selectedCategory}
+              </h2>
+              {displayPosts.length > 3 && (hasMore || hasLess) && (
+                <button
+                  onClick={() => {
+                    if (hasMore) {
+                      loadMore();
+                      setTimeout(() => {
+                        postsRef.current?.scrollIntoView({
+                          behavior: "smooth",
+                          block: "end",
+                        });
+                      }, 100);
+                    } else {
+                      loadLess();
+                    }
+                  }}
+                  className="w-32 h-10 flex items-center justify-center rounded-xl text-white bg-[#2563EB] hover:bg-blue-600 transition-colors"
+                >
+                  {hasMore ? "See More" : "See Less"}
+                  <RiArrowRightSLine size={22} />
+                </button>
+              )}
+            </div>
+
+            <div
+              className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
+              ref={postsRef}
+            >
+              {PaginatedDisplayPosts.map((post) => (
+                <BlogCard key={post.post_id} post={post} />
               ))}
             </div>
           </section>
         )}
-
-        <section>
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-zinc-50 mb-8 flex items-center gap-3">
-            <Sparkles className="text-blue-600 dark:text-blue-400" />
-            {selectedCategory === "All Posts"
-              ? "Latest Articles"
-              : selectedCategory}
-          </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {regularPosts.map((post) => (
-              <BlogCard
-                key={post.id}
-                post={post}
-                onClick={() => handleSelectPost(post)}
-              />
-            ))}
-          </div>
-        </section>
       </main>
-
-      <style>{`
-        .bg-clip-text {
-          -webkit-background-clip: text;
-          background-clip: text;
-        }
-      `}</style>
     </div>
   );
 };

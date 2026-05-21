@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     const body: DeductRequestBody = await req.json();
     const { professionalId, taskId, credits } = body;
 
-    if (!professionalId || !credits || credits <= 0) {
+    if (!professionalId || credits === undefined || credits === null ) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     }
 

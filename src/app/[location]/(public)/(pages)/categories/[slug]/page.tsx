@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import Image from "next/image";
 import type { Metadata } from "next";
 
+export const dynamic = "force-static";
 
 
 type Props = {

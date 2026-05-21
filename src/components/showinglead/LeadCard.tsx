@@ -18,6 +18,7 @@ interface Lead {
   status?: string;
   estimated_budget?: number;
   is_seen?: boolean;
+  is_free_lead?: boolean;
 }
 
 interface LeadCardProps {
@@ -81,15 +82,16 @@ const LeadCard: React.FC<LeadCardProps> = ({
       </div>
       <div
         className={`absolute top-0 left-0 h-1 w-full rounded-t-2xl transition-all duration-300 ${
-          isSelected ? "bg-blue-500" : "bg-transparent group-hover:bg-blue-400"
+          isSelected
+            ? "bg-[#2563EB]"
+            : "bg-transparent group-hover:bg-[#2563EB]"
         }`}
       />
 
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-start gap-3">
-        <div className="relative shrink-0">
-
-          {/* {lead.image ? (
+          <div className="relative shrink-0">
+            {/* {lead.image ? (
             <div className="w-14 h-14 rounded-2xl overflow-hidden">
               <Image
                 src={lead.image}
@@ -101,25 +103,27 @@ const LeadCard: React.FC<LeadCardProps> = ({
             </div>
           ) : 
           ( */}
-            <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-linear-to-br from-blue-500 to-blue-600 text-white text-2xl font-semibold">
+            <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-linear-to-br from-[#2563EB] to-blue-600 text-white text-2xl font-semibold">
               {getInitials(lead.customer_name || "N/A")}
-            </div> 
-         {/* )}  */}
-           {lead.status === "Open" && (
-            <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-900" />
-          )}
+            </div>
+            {/* )}  */}
+            {lead.status === "Open" && (
+              <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-900" />
+            )}
+
+            {lead.status === "Urgent" && (
+              <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-red-500 border-2 border-white dark:border-gray-900 animate-pulse" />
+            )}
           </div>
-          
+
           <div className="min-w-0">
             <h3 className="text-gray-900 dark:text-gray-100 text-base font-semibold leading-tight ">
               {lead.customer_name}
             </h3>
             <p className=" flex items-center p-1 gap-1 text-sm text-gray-500 dark:text-gray-400 ">
-            <MapPin className="w-3 h-3" />
+              <MapPin className="w-3 h-3" />
 
-              <span>
-                {lead.postcode ? lead.postcode : lead.location_name}
-              </span>
+              <span>{lead.postcode ? lead.postcode : lead.location_name}</span>
             </p>
           </div>
         </div>
@@ -160,9 +164,18 @@ const LeadCard: React.FC<LeadCardProps> = ({
         </div> */}
 
         <div className="flex items-center mt-2 gap-2">
-          <div className="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 font-medium">
-            <span>🎯</span>
-            <span>{requiredCredits} Credits</span>
+          <div className="flex items-center mt- gap-2">
+            {lead.is_free_lead ? (
+              <div className="flex items-center gap-1 text-sm text-green-600 dark:text-green-400 font-bold">
+                <span>🎉</span>
+                <span>FREE</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 font-medium">
+                <span>🎯</span>
+                <span>{requiredCredits} Credits</span>
+              </div>
+            )}
           </div>
           <div className="w-px h-4 bg-gray-200 dark:bg-gray-600" />
           <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">

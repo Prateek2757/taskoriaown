@@ -87,7 +87,7 @@ const getEmailContent = ({
           taskTitle ?? "Untitled Task"
         } ${taskLocation ? `Location: ${taskLocation}` : ""} Please review it.`,
         buttonText: "Review Task",
-        buttonLink: "https://taskoria.com/admin/adminbudgetmanager",
+        buttonLink: "https://www.taskoria.com/admin/adminbudgetmanager",
       };
     case "verification":
       return {
@@ -300,7 +300,7 @@ const AppEmaill = (props: AppEmailProps) => {
               </Link>{" "}
               |{" "}
               <Link
-                href="https://taskoria.com/terms-and-conditions"
+                href="https://www.taskoria.com/terms-and-conditions"
                 style={{ color: "#2563eb", textDecoration: "underline" }}
               >
                 Terms of Service

@@ -205,7 +205,7 @@ export default function ChatWindow({
       {/* Decorative Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 -left-32 w-64 h-64 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/3 -right-32 w-64 h-64 bg-gradient-to-r from-indigo-400/10 to-pink-400/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/3 -right-32 w-64 h-64 bg-gradient-to-r from-blue-400/10 to-pink-400/10 rounded-full blur-3xl" />
       </div>
 
       <div

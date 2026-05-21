@@ -33,7 +33,7 @@ export default function ReactQuillEditor({
 }: Props) {
   const quillRef = useRef<ReactQuill>(null);
 
- 
+
   useEffect(() => {
     const styleId = "quill-theme-overrides";
     if (document.getElementById(styleId)) return;
@@ -58,10 +58,10 @@ export default function ReactQuillEditor({
       .ql-toolbar.ql-snow .ql-picker-label  { color:  #71717a; }
 
       .ql-toolbar.ql-snow button:hover .ql-stroke,
-      .ql-toolbar.ql-snow button.ql-active .ql-stroke { stroke: #2563eb; }   /* blue-600 */
+      .ql-toolbar.ql-snow button.ql-active .ql-stroke { stroke: #2563EB; }   /* blue-600 */
       .ql-toolbar.ql-snow button:hover .ql-fill,
-      .ql-toolbar.ql-snow button.ql-active .ql-fill   { fill:  #2563eb; }
-      .ql-toolbar.ql-snow .ql-picker-label:hover      { color: #2563eb; }
+      .ql-toolbar.ql-snow button.ql-active .ql-fill   { fill:  #2563EB; }
+      .ql-toolbar.ql-snow .ql-picker-label:hover      { color: #2563EB; }
 
       .ql-editor { min-height: var(--ql-min-height, 160px); padding: 12px 16px; line-height: 1.65; }
       .ql-editor.ql-blank::before { color: #a1a1aa; font-style: normal; left: 16px; right: 16px; } /* zinc-400 */
@@ -87,7 +87,7 @@ export default function ReactQuillEditor({
       .dark .ql-editor.ql-blank::before { color: #52525b; }       /* zinc-600 */
 
       /* Links */
-      .ql-editor a { color: #2563eb; }
+      .ql-editor a { color: #2563EB; }
       .dark .ql-editor a { color: #60a5fa; }
 
       /* Blockquote */

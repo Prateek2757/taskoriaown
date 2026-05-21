@@ -85,7 +85,6 @@ export default function StepTwoQuestionsForm({
     reset();
   }, [questions]);
 
-
   const currentQuestion = questions[currentIndex];
 
   const handleNextQuestion = (e?: React.MouseEvent | React.FormEvent) => {
@@ -289,12 +288,12 @@ export default function StepTwoQuestionsForm({
   if (currentStep === "questions") {
     return (
       <div className="flex flex-col h-full max-h-[calc(90vh-8rem)]">
-        <div className="flex-1 overflow-y-auto px-1">
-          <div className="flex flex-col gap-4">
+        <div className="flex-1 overflow-y-auto p-1">
+          <div className="flex flex-col ">
             <div className="flex items-center gap-3 mb-2">
-              <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
                 <div
-                  className="bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] h-2 rounded-full transition-all duration-300"
+                  className="bg-[#2563EB] h-1.5 rounded-full transition-all duration-300"
                   style={{
                     width: `${((currentIndex + 1) / questions.length) * 100}%`,
                   }}
@@ -323,7 +322,7 @@ export default function StepTwoQuestionsForm({
           </div>
         </div>
 
-        <div className="flex justify-between pt-6 border-t mt-6 border-gray-200 dark:border-gray-700">
+        <div className="flex justify-between pt-2 border-t mt-2 border-gray-200 dark:border-gray-700">
           <Button
             variant="outline"
             type="button"
@@ -336,7 +335,7 @@ export default function StepTwoQuestionsForm({
           <Button
             type="button"
             onClick={(e) => handleNextQuestion(e)}
-            className="rounded-lg px-6 bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105"
+            className="rounded-lg px-6 bg-[#2563EB] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105"
           >
             {currentIndex === questions.length - 1
               ? "Next: Budget & Dates"
@@ -361,7 +360,7 @@ export default function StepTwoQuestionsForm({
             </p>
           </div>
 
-          <div className="bg-linear-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-700 rounded-xl p-3 border border-blue-100 dark:border-gray-600 shadow-sm">
+          <div className="bg-linear-to-br from-blue-50 to-blue-50 dark:from-slate-800 dark:to-slate-700 rounded-xl p-3 border border-blue-100 dark:border-gray-600 shadow-sm">
             <label className="text-gray-900 flex dark:text-white text-base font-semibold mb-3 gap-1">
               <ShieldQuestionIcon className="w-5" /> Do you have a budget in
               mind? <span className="text-red-500">*</span>
@@ -525,7 +524,7 @@ export default function StepTwoQuestionsForm({
             <Textarea
               {...register("queries")}
               placeholder="Share any additional details, questions, or specific requirements..."
-              className="border-gray-300 dark:border-gray-600 px-4 py-3 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700 min-h-[120px] focus:border-blue-500 dark:focus:border-blue-400 transition-all"
+              className="border-gray-300 dark:border-gray-600 px-4 py-3 rounded-lg text-gray-800 dark:text-gray-200 dark:bg-slate-700 min-h-30 focus:border-blue-500 dark:focus:border-blue-400 transition-all"
             />
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
               Optional: Add any special requests or questions you have
@@ -548,8 +547,9 @@ export default function StepTwoQuestionsForm({
           type="submit"
           disabled={loading}
           onClick={handleSubmit(onSubmit)}
-          className={`rounded-lg px-8 bg-linear-to-r from-[#3C7DED] via-[#41A6EE] to-[#46CBEE] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105 ${loading ? "opacity-70 cursor-not-allowed" : ""
-            }`}
+          className={`rounded-lg px-8 bg-[#2563EB] text-white font-semibold shadow-md hover:shadow-xl transition-all hover:scale-105 ${
+            loading ? "opacity-70 cursor-not-allowed" : ""
+          }`}
         >
           {loading ? (
             <span className="flex items-center gap-2">

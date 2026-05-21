@@ -6,7 +6,7 @@ export default function sitemapStatic(): Promise<MetadataRoute.Sitemap> {
 
   const corePages: MetadataRoute.Sitemap = [
     {
-      url: `${baseUrl}/`,
+      url: `${baseUrl}`,
       lastModified: currentDate,
       changeFrequency: "daily",
       priority: 1.0,
