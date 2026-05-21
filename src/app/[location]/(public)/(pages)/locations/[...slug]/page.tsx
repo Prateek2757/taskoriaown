@@ -6,7 +6,7 @@ import CityPageClient from "../components/City-page/citypageclient";
 import { getAllCities, getCategoriesFromDB } from "@/lib/cache";
 export const revalidate = 604800;
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 type Props = {
   params: Promise<{ slug: string[] }>;
 };
