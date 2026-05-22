@@ -509,6 +509,12 @@ const Footer = () => {
                     Careers
                   </Link>
                   <Link
+                    href="/cost-guides"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
+                  >
+                    Cost Guides
+                  </Link>
+                  <Link
                     href="/contact"
                     className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
