@@ -1,15 +1,12 @@
 import ServicePageWrapper from "@/components/servicePage/ServicePageWrapper";
 import ServiceStatePageClient from "@/components/servicePage/Servicestatepageclient";
 import StructuredData from "@/components/servicePage/StructureData";
-import {
-  getAllCities,
-  getCategoriesFromDB,
-  getCategoryBySlug,
-} from "@/lib/cache";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-// export const dynamic = "force-static";
-export const dynamic = "force-dynamic";
+
+export const dynamic = "force-static";
+export const revalidate = 604800;
+
 type Props = {
   params: Promise<{ slug?: string[] }>;
 };
@@ -41,6 +38,8 @@ export interface City {
   providers?: any[];
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL!;
+
 function toTitleCase(slug: string) {
   return slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 }
@@ -52,48 +51,42 @@ function buildCanonical(
   subCitySlug: string | null
 ) {
   const base = `https://www.taskoria.com/services/${serviceSlug}`;
-
-  if (stateSlug && citySlug && subCitySlug) {
+  if (stateSlug && citySlug && subCitySlug)
     return `${base}/${stateSlug}/${citySlug}/${subCitySlug}`;
-  }
-
-  if (stateSlug && citySlug) {
-    return `${base}/${stateSlug}/${citySlug}`;
-  }
-
-  if (stateSlug) {
-    return `${base}/${stateSlug}`;
-  }
-
+  if (stateSlug && citySlug) return `${base}/${stateSlug}/${citySlug}`;
+  if (stateSlug) return `${base}/${stateSlug}`;
   return base;
 }
 
-// async function getService(serviceSlug: string): Promise<ServiceData | null> {
-//   try {
-//     const res = await fetch(
-//       `${process.env.NEXT_PUBLIC_APP_URL}/api/categories/${serviceSlug}`,
-//       { next: { revalidate: 84600 } }
-//     );
-//     return res.ok ? res.json() : null;
-//   } catch {
-//     return null;
-//   }
-// }
-async function getService(serviceSlug: string) {
-  return await getCategoryBySlug(serviceSlug);
+async function getService(serviceSlug: string): Promise<ServiceData | null> {
+  try {
+    const res = await fetch(`${BASE_URL}/api/categories/${serviceSlug}`);
+    return res.ok ? res.json() : null;
+  } catch {
+    return null;
+  }
 }
 
-// async function getAllCities(): Promise<City[]> {
-//   try {
-//     const res = await fetch(
-//       `${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`,
-//       { next: { revalidate: 3600 } }
-//     );
-//     return res.ok ? res.json() : [];
-//   } catch {
-//     return [];
-//   }
-// }
+async function getAllCities(): Promise<City[]> {
+  try {
+    const res = await fetch(`${BASE_URL}/api/service-location`);
+    return res.ok ? res.json() : [];
+  } catch {
+    return [];
+  }
+}
+
+async function getAllCategories(): Promise<
+  { slug: string | null; rank: number | null }[]
+> {
+  try {
+    const res = await fetch(`${BASE_URL}/api/categories`);
+    return res.ok ? res.json() : [];
+  } catch {
+    return [];
+  }
+}
+
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
@@ -228,6 +221,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
 export default async function ServicePage({ params }: Props) {
   const { slug = [] } = await params;
   const [serviceSlug, stateSlug = null, citySlug = null, subCitySlug = null] =
@@ -235,6 +230,8 @@ export default async function ServicePage({ params }: Props) {
 
   if (!serviceSlug || serviceSlug === "undefined") notFound();
 
+  // Both fetches are issued in parallel and each is independently cached at
+  // the CDN/Next.js Data Cache layer via their respective revalidate windows.
   const [service, cities] = await Promise.all([
     getService(serviceSlug),
     getAllCities(),
@@ -254,6 +251,7 @@ export default async function ServicePage({ params }: Props) {
       </div>
     );
   }
+
   if (stateSlug && !citySlug) {
     const stateName = toTitleCase(stateSlug);
     const stateCitiesRaw = cities
@@ -334,23 +332,24 @@ export default async function ServicePage({ params }: Props) {
   );
 }
 
+
 export async function generateStaticParams() {
   try {
     const [cities, categoriesRaw] = await Promise.all([
       getAllCities(),
-      getCategoriesFromDB(),
+      getAllCategories(), // now goes through /api/categories with cache headers
     ]);
 
     const params: { slug: string[] }[] = [];
 
     const rankedCategories = categoriesRaw
-      .filter((c) =>  c.slug && c.rank != null) 
+      .filter((c) => c.slug && c.rank != null)
       .sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
 
     const rankedCities = [...cities]
-      .filter((c) => c.popularity > 0 && c.slug && c.state_slug) 
+      .filter((c) => c.popularity > 0 && c.slug && c.state_slug)
       .sort((a, b) => b.popularity - a.popularity)
-      .filter((c, i, arr) => arr.findIndex((x) => x.slug === c.slug) === i); 
+      .filter((c, i, arr) => arr.findIndex((x) => x.slug === c.slug) === i);
 
     const uniqueStates = [
       ...new Map(
@@ -358,28 +357,24 @@ export async function generateStaticParams() {
       ).values(),
     ];
 
+    // /services/[service]
     for (const cat of rankedCategories) {
       params.push({ slug: [cat.slug!] });
     }
 
+    // /services/[service]/[state]
     for (const cat of rankedCategories) {
       for (const stateSlug of uniqueStates) {
         params.push({ slug: [cat.slug!, stateSlug] });
       }
     }
 
+    // /services/[service]/[state]/[city]
     for (const cat of rankedCategories) {
       for (const city of rankedCities) {
         params.push({ slug: [cat.slug!, city.state_slug, city.slug] });
       }
     }
-
-    console.log(`[generateStaticParams]
-      ranked categories : ${rankedCategories.length}  (unranked skipped: ${categoriesRaw.filter(c => !c.parent_category_id).length - rankedCategories.length})
-      ranked cities     : ${rankedCities.length}       (popularity=0 skipped)
-      states            : ${uniqueStates.length}
-      total params      : ${params.length}
-    `);
 
     return params;
   } catch (e) {

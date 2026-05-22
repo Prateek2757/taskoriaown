@@ -218,8 +218,6 @@ function CategoryRow({
   );
 }
 
-// ── main panel ────────────────────────────────────────────────────────────────
-
 export default function CategoryImageAdmin() {
   const [categories, setCategories] = useState<ServiceCategory[]>([]);
   const [loading, setLoading] = useState(true);

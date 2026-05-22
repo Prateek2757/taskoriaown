@@ -6,7 +6,7 @@ import CityPageClient from "../components/City-page/citypageclient";
 import { getAllCities, getCategoriesFromDB } from "@/lib/cache";
 export const revalidate = 604800;
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 type Props = {
   params: Promise<{ slug: string[] }>;
 };
@@ -363,29 +363,40 @@ export default async function CityOrStatePage({ params }: Props) {
 
 export async function generateStaticParams() {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/service-location`
-    );
-    const cities: City[] = res.ok ? await res.json() : [];
+    const cities = await getAllCities();
 
     const params: { slug: string[] }[] = [];
 
     const statesSeen = new Set<string>();
+
+    // State pages
     for (const c of cities) {
       if (c.state_slug && !statesSeen.has(c.state_slug)) {
         statesSeen.add(c.state_slug);
-        params.push({ slug: [c.state_slug] });
+
+        params.push({
+          slug: [c.state_slug],
+        });
       }
     }
 
     for (const c of cities) {
       if (c.state_slug && c.slug) {
-        params.push({ slug: [c.state_slug, c.slug] });
+        params.push({
+          slug: [c.state_slug, c.slug],
+        });
       }
     }
 
     return params;
-  } catch {
-    return [];
+  } catch (error) {
+    console.error("generateStaticParams error:", error);
+
+   
+    return [
+      {
+        slug: ["fallback"],
+      },
+    ];
   }
 }

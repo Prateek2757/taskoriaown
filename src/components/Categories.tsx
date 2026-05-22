@@ -123,7 +123,7 @@ export default function Services() {
               </div>
             ))}
           </div>
-        ) : categories.length > 0 ? (
+        ) : categories && categories.length > 0 ? (
           <motion.div
             className="flex md:grid sm:hidden lg:grid-cols-4 gap-6 max-md:overflow-x-scroll"
             variants={containerVariants}
@@ -281,7 +281,7 @@ export default function Services() {
           </div>
         )}
 
-        {!loading && categories.length > 0 && (
+        {!loading && categories && categories.length > 0 && (
           <motion.div
             className="mt-6 pb-5 flex justify-center"
             initial={{ opacity: 0, y: 20 }}

@@ -257,13 +257,11 @@ body {
     width: 100%;
   }
   
-  /* Let the editor body fill its container */
   .editor-container_classic-editor .ck-editor__editable {
     min-height: 400px;
     width: 100% !important;
   }
   
-  /* Fix dropdown clipping */
   .ck.ck-dropdown__panel {
     position: fixed !important;
     z-index: 9999 !important;

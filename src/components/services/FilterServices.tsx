@@ -31,7 +31,7 @@ export default function FilterServices({
             ${
               filterData === filter
                 ? "border-blue-600 bg-[#2563EB] text-white"
-                : "border-slate-300 bg-gray-100 text-slate-600 hover:bg-[#2563EB] hover:text-black"
+                : "border-slate-300 bg-gray-100 text-slate-600 hover:bg-[#2563EB] hover:text-white"
             }`}
         >
           {filter}

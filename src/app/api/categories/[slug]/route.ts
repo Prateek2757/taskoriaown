@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCategoryBySlug } from "@/lib/cache";
 
-// Revalidate segment-level cache every hour
-export const revalidate = 3600;
+export const revalidate = 604800;
 
 export async function GET(
   _req: Request,
