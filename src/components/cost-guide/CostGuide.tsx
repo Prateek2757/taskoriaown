@@ -1,16 +1,14 @@
 "use client";
 import FilterServices from "@/components/cost-guide/FilterServices";
 import { useCategories } from "@/hooks/useCategories";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Services from "./Services";
-
 
 export default function CostGuides() {
   const { categories, loading } = useCategories();
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const getId = (text: string) =>
     text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-
   const handleScroll = (filter: string) => {
     setActiveFilter(filter);
 
@@ -20,9 +18,10 @@ export default function CostGuides() {
       section.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
+
   return (
     <div
-      className="relative max-w-7xl mx-auto h-full overflow-hidden sm:pt-14 pt-8
+      className="relative max-w-7xl mx-auto h-full overflow-hidden sm:pt-14 pt-8 px-4
         dark:bg-[radial-gradient(circle_at_bottom,rgba(19,50,102,1)_0%,rgba(22,23,22,1)_30%,rgba(0,0,0,1)_100%)]
         dark:text-white text-gray-600 "
     >
@@ -33,7 +32,7 @@ export default function CostGuides() {
           </h1>
         </div>
         <div className="mt-6">
-          <p className="text-sm text-black mt-2">
+          <p className="text-sm md:text-lg text-black mt-2">
             Not sure what a service should cost? Browse our comprehensive
             pricing guides covering everything from home renovations and
             maintenance to cleaning, gardening, pet care, fitness, and beyond —
@@ -41,7 +40,7 @@ export default function CostGuides() {
           </p>
         </div>
       </div>
-      <div className="flex mt-6">
+      <div className="flex mt-4">
         {/* left */}
         <div className="w-1/4 shrink-0 hidden sm:block ">
           <FilterServices

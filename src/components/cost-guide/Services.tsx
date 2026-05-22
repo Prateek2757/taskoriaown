@@ -20,7 +20,7 @@ interface Props {
 
 export default function Services({ categories, loading, slug }: Props) {
   const filtered = [...new Set(categories.map((cat) => cat.main_category))];
-
+ 
   const getId = (text: string) =>
     text?.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
@@ -48,26 +48,27 @@ export default function Services({ categories, loading, slug }: Props) {
     return <p className="text-sm text-gray-400 mt-8">No services found</p>;
   }
   return (
-    <div className="flex flex-col gap-8 py-4">
+    <div className="flex flex-col grid-cols-2 px-3 gap-8 py-4">
       {filtered.map((filter) => (
         <div key={filter} id={getId(filter ?? "")}>
-          <h2 className="text-base font-semibold text-blue-600 cursor-pointer dark:text-blue-500 mb-4">
+          <h2 className="text-base md:text-lg  text-blue-600 cursor-pointer dark:text-blue-500 mb-4">
             {filter}
           </h2>
-          <ul className="grid grid-cols-3 gap-4">
+          <ul className="grid grid-cols-2 gap-6">
             {categories
               .filter((cat) => cat.main_category === filter)
               .map((cat) => (
                 <li
-                  className=" flex gap-4 text-sm text-black dark:text-gray-300 cursor-pointer"
-                  key={cat.name}
+                  className=" flex gap-4 text-sm md:text-md text-black font-semibold dark:text-gray-300 cursor-pointer"
+                  key={cat.main_category} 
                 >
-                  <Link href={`/cost-guides/${cat.slug}`}>{cat.name}</Link>
+                  <Link href={`/cost-guides/${cat.slug}`}>{cat.name} Cost Guide</Link>
                 </li>
               ))}
           </ul>
         </div>
       ))}
     </div>
+   
   );
 }

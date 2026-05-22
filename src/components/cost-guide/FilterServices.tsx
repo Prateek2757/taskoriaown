@@ -23,12 +23,12 @@ export default function FilterServices({
   ];
 
   return (
-    <div className="grid gap-2 overflow-x-auto px-2 py-4  justify-left    ">
+    <div className="grid gap-2 overflow-x-auto px-2 py-4  justify-left  ">
       {filters.map((filter) => (
         <h1
           key={filter}
           onClick={() => onChangeFilterData(filter)}
-          className={`group whitespace-nowrap flex justify-between gap-2 px-3 py-2 text-sm ${filterData === filter ? "text-blue-500 bg-blue-100 rounded-2xl cursor-pointer " : "text-gray-800 hover:text-blue-500 hover:bg-blue-100 rounded-2xl"} dark:text-white dark:hover:hover:bg-blue-950 text-blue-500  rounded-2xl`}
+          className={`group whitespace-nowrap flex justify-between gap-2 px-3 py-2 text-sm md:text-md ${filterData === filter ? "text-blue-500 bg-blue-100 rounded-2xl cursor-pointer " : "text-gray-800 hover:text-blue-500 hover:bg-blue-100 rounded-2xl"} dark:text-white dark:hover:hover:bg-blue-950 text-blue-500  rounded-2xl`}
         >
           {filter}
           <TbArrowNarrowRight
