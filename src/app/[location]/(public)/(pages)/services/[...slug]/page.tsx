@@ -4,8 +4,8 @@ import StructuredData from "@/components/servicePage/StructureData";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-static";
-export const revalidate = 604800;
+// export const dynamic = "force-static";
+// export const revalidate = 604800;
 
 type Props = {
   params: Promise<{ slug?: string[] }>;
@@ -333,52 +333,52 @@ export default async function ServicePage({ params }: Props) {
 }
 
 
-export async function generateStaticParams() {
-  try {
-    const [cities, categoriesRaw] = await Promise.all([
-      getAllCities(),
-      getAllCategories(), // now goes through /api/categories with cache headers
-    ]);
+// export async function generateStaticParams() {
+//   try {
+//     const [cities, categoriesRaw] = await Promise.all([
+//       getAllCities(),
+//       getAllCategories(), // now goes through /api/categories with cache headers
+//     ]);
 
-    const params: { slug: string[] }[] = [];
+//     const params: { slug: string[] }[] = [];
 
-    const rankedCategories = categoriesRaw
-      .filter((c) => c.slug && c.rank != null)
-      .sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
+//     const rankedCategories = categoriesRaw
+//       .filter((c) => c.slug && c.rank != null)
+//       .sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
 
-    const rankedCities = [...cities]
-      .filter((c) => c.popularity > 0 && c.slug && c.state_slug)
-      .sort((a, b) => b.popularity - a.popularity)
-      .filter((c, i, arr) => arr.findIndex((x) => x.slug === c.slug) === i);
+//     const rankedCities = [...cities]
+//       .filter((c) => c.popularity > 0 && c.slug && c.state_slug)
+//       .sort((a, b) => b.popularity - a.popularity)
+//       .filter((c, i, arr) => arr.findIndex((x) => x.slug === c.slug) === i);
 
-    const uniqueStates = [
-      ...new Map(
-        rankedCities.map((c) => [c.state_slug, c.state_slug])
-      ).values(),
-    ];
+//     const uniqueStates = [
+//       ...new Map(
+//         rankedCities.map((c) => [c.state_slug, c.state_slug])
+//       ).values(),
+//     ];
 
-    // /services/[service]
-    for (const cat of rankedCategories) {
-      params.push({ slug: [cat.slug!] });
-    }
+//     // /services/[service]
+//     for (const cat of rankedCategories) {
+//       params.push({ slug: [cat.slug!] });
+//     }
 
-    // /services/[service]/[state]
-    for (const cat of rankedCategories) {
-      for (const stateSlug of uniqueStates) {
-        params.push({ slug: [cat.slug!, stateSlug] });
-      }
-    }
+//     // /services/[service]/[state]
+//     for (const cat of rankedCategories) {
+//       for (const stateSlug of uniqueStates) {
+//         params.push({ slug: [cat.slug!, stateSlug] });
+//       }
+//     }
 
-    // /services/[service]/[state]/[city]
-    for (const cat of rankedCategories) {
-      for (const city of rankedCities) {
-        params.push({ slug: [cat.slug!, city.state_slug, city.slug] });
-      }
-    }
+//     // /services/[service]/[state]/[city]
+//     for (const cat of rankedCategories) {
+//       for (const city of rankedCities) {
+//         params.push({ slug: [cat.slug!, city.state_slug, city.slug] });
+//       }
+//     }
 
-    return params;
-  } catch (e) {
-    console.error("generateStaticParams failed:", e);
-    return [];
-  }
-}
+//     return params;
+//   } catch (e) {
+//     console.error("generateStaticParams failed:", e);
+//     return [];
+//   }
+// }
