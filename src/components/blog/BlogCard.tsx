@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { TrendingUp } from "lucide-react";
+import usePagination from "@/hooks/usePaginationblog";
 
 type Blog = {
   post_id: number;
@@ -30,7 +31,6 @@ export const BlogCard = ({
       month: "short",
       day: "numeric",
     });
-
   return (
     <Link
       href={`/blog/${post.slug}`}
@@ -55,7 +55,7 @@ export const BlogCard = ({
         <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
 
         <div className="absolute top-4 left-4">
-          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold bg-white/95 dark:bg-zinc-900/95 backdrop-blur-sm text-[#2563EB] dark:text-blue-400 shadow-lg">
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-white/95 dark:bg-zinc-900/95 backdrop-blur-sm text-[#2563EB] dark:text-blue-400 shadow-lg">
             {post.category}
           </span>
         </div>
@@ -72,7 +72,7 @@ export const BlogCard = ({
       </div>
 
       {/* Content */}
-      <div className="p-5">
+      <div className="p-4">
         <p className="text-sm text-gray-500 dark:text-zinc-400 mb-2">
           <span className="font-semibold text-gray-900 dark:text-zinc-100">
             {post.author_name}
@@ -99,11 +99,12 @@ export const BlogCard = ({
 
 export const BlogCardList = ({ posts }: { posts: Blog[] }) => {
   if (!posts || !posts.length) return <p>No related posts found.</p>;
+ const {paginatedData}=usePagination(posts,3);
 
   return (
-    <div className=" max-w-6xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-        {posts.map((post) => (
+    <div className=" max-w-4xl mx-auto ">
+      <div className="grid grid-cols-1 md:grid-cols-3  gap-4   lg:py-1 justify-items-center ">
+        {paginatedData.map((post) => (
           <BlogCard key={post.post_id} post={post} />
         ))}
       </div>
