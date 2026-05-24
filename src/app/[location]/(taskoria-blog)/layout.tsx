@@ -22,7 +22,9 @@ export default function DashboardLayout({
       >
         {" "}
         <BlogNavbar />
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <main>{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );
