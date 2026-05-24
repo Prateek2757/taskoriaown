@@ -3,7 +3,6 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import { TrendingUp, Sparkles } from "lucide-react";
 import { BlogCard } from "./BlogCard";
 import { MdArrowDropDown } from "react-icons/md";
-import { useRouter } from "next/navigation";
 import usePagination from "@/hooks/usePaginationblog";
 import { RiArrowRightSLine } from "react-icons/ri";
 
@@ -30,7 +29,6 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
   const categories = useMemo(() => {
     const category = [...new Set(initialPosts.map((p) => p.category))];
@@ -84,10 +82,6 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // const handleSelectPost = (post: Blog) => {
-  //   router.push(`/blog/${post.slug}`);
-  // };
-
   return (
     <div className="min-h-screen bg-linear-to-b from-gray-50 mb-4 to-white dark:from-zinc-950 dark:to-zinc-900">
       <section className="relative overflow-hidden mb-6">
@@ -115,12 +109,12 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
                   placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-3xl bg-gray-200 border-gray-300 focus:outline-none focus:border-blue-600 text-gray-400 pl-8 py-2.5 text-base"
+                  className="w-full rounded-3xl bg-gray-200 border-gray-300 focus:outline-none focus:border-blue-600 text-gray-400 pl-8 py-2.5 text-base dark:bg-zinc-900"
                 />
               </div>
             </div>
           </div>
-          <div className="relative w-full my-6  sm:w-72 sm:hidden ">
+          <div className="relative w-full my-6  sm:w-72 sm:hidden dark:bg-zinc-900 ">
             <input
               type="text"
               placeholder="Search..."
@@ -155,7 +149,7 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
             <div className="mt-2 h-0.5 bg-gray-300" />
 
             {isOpen && (
-              <div className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 shadow-lg z-50 rounded-sm overflow-hidden">
+              <div className="absolute left-0 top-full mt-2 w-full bg-white shadow-lg z-50 rounded-sm overflow-hidden">
                 {categories.map((category, index) => (
                   <button
                     key={category}
@@ -163,7 +157,7 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
                       setSelectedCategory(category);
                       setIsOpen(false);
                     }}
-                    className={`w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition
+                    className={`w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition  dark:text-white dark:bg-zinc-900 dark:shadow-zinc-950/50 dark:border-zinc-800 dark:hover:bg-gray-800
                       ${selectedCategory === category ? "bg-gray-100 font-medium" : ""}
                       ${index !== 0 ? "border-t border-gray-100" : ""}
                     `}
@@ -225,7 +219,7 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
             </div>
 
             <div
-              className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
+              className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 px-4 sm:px-6 lg:px-8 md:px-8"
               ref={postsRef}
             >
               {PaginatedDisplayPosts.map((post) => (

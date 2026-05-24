@@ -2,6 +2,7 @@ import { Poppins } from "next/font/google";
 import "../../globals.css";
 import AuthProvider from "@/context/AuthProvider";
 import BlogNavbar from "@/components/Blog-Navbar";
+import { ThemeProvider } from "next-themes";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -15,16 +16,18 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html className={`${poppins.variable}`}>
+    <html className={`${poppins.variable}`} suppressHydrationWarning>
       <body
-        className="min-h-screen bg-slate-100 dark:bg-slate-950"
+        className="min-h-screen bg-white dark:bg-slate-950  text-gray-900"
         suppressHydrationWarning
       >
-        {" "}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem> 
         <BlogNavbar />
         <AuthProvider>
           <main>{children}</main>
+          
         </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

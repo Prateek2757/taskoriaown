@@ -44,7 +44,7 @@ export default function BlogDetails({ post, filteredPosts }: Props) {
   const router = useRouter();
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950">
-      <article className="max-w-3xl mx-auto px-6 sm:px-6 lg:px-8 py-4">
+      <article className="max-w-4xl mx-auto px-6 sm:px-6 lg:px-8 py-4">
         <div className="mb-3 flex flex-col">
           <button
             className="group inline-flex items-center gap-2 text-[#2563EB] dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-all hover:gap-3"
@@ -60,7 +60,7 @@ export default function BlogDetails({ post, filteredPosts }: Props) {
         <div className="mt-3 mb-3 self-start inline-flex items-center px-5 py-2 rounded-full bg-linear-to-r from-blue-100 to-blue-100 dark:from-blue-500/20 dark:to-blue-500/20 text-blue-700 dark:text-blue-300 font-semibold text-sm shadow-sm">
           {post.category}
         </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-blue-700 dark:text-zinc-50 leading-tight tracking-tight">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-blue-700  leading-tight tracking-tight dark:text-[#2563EB]">
           {post.title}
 
           <p className="text-sm font-semibold text-gray-500 mt-2">
@@ -81,9 +81,6 @@ export default function BlogDetails({ post, filteredPosts }: Props) {
             className="rounded-md object-cover"
           />
         </div>
-        {/* <div >
-         <p>{renderContent(post.content)}</p>
-      </div> */}
         <div className="prose dark:prose-invert max-w-none">
           {renderContent(post.content)}
         </div>
@@ -100,11 +97,10 @@ export default function BlogDetails({ post, filteredPosts }: Props) {
         </div>
       </article>
       {filteredPosts?.length > 0 && (
-        <article className="max-w-3xl mx-auto px-6 sm:px-6 lg:px-8 py-4">
+        <article className="max-w-4xl mx-auto px-6 sm:px-6 lg:px-10 py-4 justify-items-center">
           <h3 className="text-sm  text-gray-400 uppercase dark:text-zinc-50 mb-8 flex items-center gap-3">
             You might also be interested in:
           </h3>
-
           <BlogCardList posts={filteredPosts} />
         </article>
       )}
