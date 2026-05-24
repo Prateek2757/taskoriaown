@@ -535,7 +535,7 @@ const Footer = () => {
               ref={ref}
             >
               <defs>
-                <linearlinear
+                <linearGradient
                   id="taskoriaFooterlinear"
                   x1="0%"
                   y1="0%"
@@ -545,7 +545,7 @@ const Footer = () => {
                   <stop offset="20%" stopColor="#2563EB" />
                   <stop offset="50%" stopColor="#2563EB" />
                   <stop offset="100%" stopColor="#46CBEE" />
-                </linearlinear>
+                </linearGradient>
 
                 <filter
                   id="taskoriaGlow"
