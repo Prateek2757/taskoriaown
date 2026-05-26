@@ -28,6 +28,7 @@ function getBreadcrumbLabel(name: string) {
     Roofing: "Roofers",
     Tiling: "Tilers",
     Plastering: "Plasterers",
+   "Airbnb / Short-Stay Turnover Cleaning":"Airbnb Turnover"
   };
   return irregulars[name] ?? `${name} Pros`;
 }
@@ -83,7 +84,7 @@ export default function SubHeroService({
             <span className="text-[#2563EB] dark:text-[#60a5fa]">
               {proLabel.endsWith("s") ? proLabel.slice(0, -1) : proLabel}
             </span>{" "}
-            in {cityName}?
+            in {cityName} {" "}  ?
           </h1>
 
           <div className="flex flex-col gap-3 mb-6 max-w-2xl">
@@ -129,7 +130,7 @@ export default function SubHeroService({
       aria-label={`Find ${proLabel} on Taskoria`}
       className="w-full bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800/60"
     >
-      <div className="max-w-6xl mx-auto py-10 md:py-5">
+      <div className="max-w-7xl mx-auto py-10 md:py-5">
         <nav
           aria-label="Breadcrumb"
           className="flex items-center gap-1.5 text-sm text-slate-400 dark:text-slate-500 mb-8"
@@ -148,7 +149,7 @@ export default function SubHeroService({
 
         <div className="grid lg:grid-cols-2 gap-6 items-start">
           <div className="flex flex-col gap-4">
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[2]">
+            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[2]">
               Need help finding {getArticle(proLabel)}{" "}
               <span className="relative inline-block">
                 <span className="relative z-10 text-[#2563EB] dark:text-[#60a5fa]">
@@ -158,11 +159,11 @@ export default function SubHeroService({
                   aria-hidden
                   className="absolute -bottom-1 left-0 w-full h-[3px] rounded-full bg-[#2563EB]/20 dark:bg-[#60a5fa]/20"
                 />
-              </span>
+              </span>{" "}
               {!proLabel.endsWith("?") && "?"}
             </h1>
 
-            <p className="text-lg text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
+            <p className="text-md text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
               {service.short_description ?? paragraphs.lead}
             </p>
 
@@ -171,7 +172,6 @@ export default function SubHeroService({
             </p>
 
             <p className="inline-flex items-center gap-2 text-base font-semibold text-[#2563EB] dark:text-[#60a5fa]">
-              <span className="w-2 h-2 rounded-full bg-[#2563EB] dark:bg-[#60a5fa] shrink-0" />
               {paragraphs.highlight}
             </p>
 
