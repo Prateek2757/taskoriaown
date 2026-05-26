@@ -219,7 +219,7 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
             </div>
 
             <div
-              className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 px-4 sm:px-6 lg:px-8 md:px-8"
+              className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8"
               ref={postsRef}
             >
               {PaginatedDisplayPosts.map((post) => (
