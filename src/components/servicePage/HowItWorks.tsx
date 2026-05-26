@@ -46,12 +46,8 @@ const DARK = {
   radiusMd: 12,
 };
 
-
-
 const ThemeCtx = createContext(LIGHT);
 const useT = () => useContext(ThemeCtx);
-
-
 
 function parseHTML(html: string) {
   const $ = cheerio.load(html);
@@ -94,18 +90,14 @@ function parseHTML(html: string) {
           paragraphs: [],
           items: [],
         };
-      }
-
-      else if (tag === "p") {
+      } else if (tag === "p") {
         const text = cur.text().trim();
 
         if (text) {
           if (sub) sub.paragraphs.push(text);
           else section.paragraphs.push(text);
         }
-      }
-
-      else if (tag === "ul" || tag === "ol") {
+      } else if (tag === "ul" || tag === "ol") {
         const items = cur
           .find("li")
           .map((_, li) => $(li).text().trim())
@@ -168,7 +160,6 @@ function Fade({ children, i = 0, style = {} }: any) {
   );
 }
 
-
 function Inner({ children, style = {} }: any) {
   return (
     <div
@@ -189,12 +180,11 @@ function Eyebrow({ text }: { text: string }) {
   return (
     <p
       style={{
-        fontSize: 11,
-        fontWeight: 700,
-        textTransform: "uppercase",
-        letterSpacing: "0.18em",
-        color: T.brand,
-        marginBottom: 8,
+        fontSize: 36,
+        fontWeight: "700",
+        letterSpacing: -1.8,
+        marginBottom: 24,
+        color: "#2563EB",
       }}
     >
       {text}
@@ -207,8 +197,8 @@ function SecTitle({ children }: any) {
   return (
     <h2
       style={{
-        fontSize: "clamp(22px, 2.8vw, 28px)",
-        fontWeight: 800,
+        fontSize: "24px",
+        fontWeight: 700,
         lineHeight: 1.3,
         color: T.text,
         margin: "0 0 6px",
@@ -223,162 +213,248 @@ function Divider() {
   const T = useT();
   return (
     <Inner>
-      <div style={{ height: "0.5px", background: T.border }} />
+      <div style={{ height: "0.4px", background: T.border }} />
     </Inner>
   );
 }
 
+// function ServiceCard({ sub, i }: any) {
+//   const T = useT();
+//   const [open, setOpen] = useState(false);
+//   const hasMore = sub.paragraphs.length > 1 || sub.items.length > 0;
+//   const preview = sub.paragraphs[0] ?? "";
 
+//   return (
+//     <Fade i={i}>
+//       <div
+//         style={{
+//           border: `0.5px solid ${open ? T.brand : T.border}`,
+//           borderRadius: T.radiusLg,
+//           background: T.surface,
+//           overflow: "hidden",
+//           transition: "border-color 0.2s",
+//         }}
+//       >
+//         <button
+//           onClick={() => hasMore && setOpen((o) => !o)}
+//           style={{
+//             width: "100%",
+//             textAlign: "left",
+//             padding: "14px 16px",
+//             background: "none",
+//             border: "none",
+//             cursor: hasMore ? "pointer" : "default",
+//             display: "flex",
+//             alignItems: "flex-start",
+//             gap: 11,
+//           }}
+//         >
+//           <span
+//         slate-800
+//           />
+//           <div style={{ flex: 1, minWidth: 0 }}>
+//             <div
+//               style={{
+//                 fontSize: 16,
+//                 fontWeight: 600,
+//                 color: T.text,
+//                 lineHeight: 1.35,
+//                 marginBottom: preview ? 4 : 0,
+//               }}
+//             >
+//               {sub.heading}
+//             </div>
+//             {preview && (
+//               <div style={{ fontSize: 15, color: T.muted, lineHeight: 1.6 }}>
+//                 {preview}
+//               </div>
+//             )}
+//           </div>
+//           {hasMore && (
+//             <ChevronDown
+//               size={15}
+//               style={{
+//                 color: T.muted,
+//                 flexShrink: 0,
+//                 marginTop: 2,
+//                 transition: "transform 0.22s",
+//                 transform: open ? "rotate(180deg)" : "none",
+//               }}
+//             />
+//           )}
+//         </button>
+
+//         <AnimatePresence initial={false}>
+//           {open && hasMore && (
+//             <motion.div
+//               initial={{ height: 0, opacity: 0 }}
+//               animate={{ height: "auto", opacity: 1 }}
+//               exit={{ height: 0, opacity: 0 }}
+//               transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+//               style={{ overflow: "hidden" }}
+//             >
+//               <div
+//                 style={{
+//                   padding: "12px 16px 14px 34px",
+//                   borderTop: `0.5px solid ${T.border}`,
+//                   background: T.raised,
+//                 }}
+//               >
+//                 {sub.paragraphs.slice(1).map((p: string, pi: number) => (
+//                   <p
+//                     key={pi}
+//                     style={{
+//                       fontSize: 14,
+//                       color: T.muted,
+//                       lineHeight: 1.65,
+//                       margin: "0 0 8px",
+//                     }}
+//                   >
+//                     {p}
+//                   </p>
+//                 ))}
+//                 {sub.items.length > 0 && (
+//                   <ul
+//                     style={{
+//                       display: "flex",
+//                       flexDirection: "column",
+//                       gap: 6,
+//                       listStyle: "none",
+//                       padding: 0,
+//                       margin: 0,
+//                     }}
+//                   >
+//                     {sub.items.map((item: string, ii: number) => (
+//                       <li
+//                         key={ii}
+//                         style={{
+//                           display: "flex",
+//                           alignItems: "flex-start",
+//                           gap: 7,
+//                           fontSize: 13,
+//                           color: T.muted,
+//                         }}
+//                       >
+//                         <CheckCircle2
+//                           size={13}
+//                           style={{
+//                             color: T.brand,
+//                             flexShrink: 0,
+//                             marginTop: 2,
+//                             opacity: 0.7,
+//                           }}
+//                         />
+//                         {item}
+//                       </li>
+//                     ))}
+//                   </ul>
+//                 )}
+//               </div>
+//             </motion.div>
+//           )}
+//         </AnimatePresence>
+//       </div>
+//     </Fade>
+//   );
+// }
+
+// ─── Sections ─────────────────────────────────────────────────────────────────
 function ServiceCard({ sub, i }: any) {
   const T = useT();
-  const [open, setOpen] = useState(false);
-  const hasMore = sub.paragraphs.length > 1 || sub.items.length > 0;
-  const preview = sub.paragraphs[0] ?? "";
 
   return (
     <Fade i={i}>
       <div
         style={{
-          border: `0.5px solid ${open ? T.brand : T.border}`,
-          borderRadius: T.radiusLg,
-          background: T.surface,
-          overflow: "hidden",
-          transition: "border-color 0.2s",
+          padding: "10px",
+          // border: `0.5px solid ${T.border}`,
+          // borderRadius: T.radiusLg,
+          background: T.raised,
+          // marginBottom: 20,
         }}
       >
-        <button
-          onClick={() => hasMore && setOpen((o) => !o)}
+        <h3
           style={{
-            width: "100%",
-            textAlign: "left",
-            padding: "14px 16px",
-            background: "none",
-            border: "none",
-            cursor: hasMore ? "pointer" : "default",
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 11,
+            fontSize: 20,
+            fontWeight: 600,
+            color: T.text,
+            lineHeight: 1.4,
+            marginBottom: 14,
+            color: "#2563EB",
           }}
         >
-          <span
-            style={{
-              width: 9,
-              height: 9,
-              borderRadius: "50%",
-              background: T.brand,
-              flexShrink: 0,
-              marginTop: 5,
-              opacity: 0.6,
-            }}
-          />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div
+          {sub.heading}
+        </h3>
+
+        {/* Paragraphs */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            // gap: 6,
+            marginBottom: sub.items.length > 0 ? 18 : 0,
+          }}
+        >
+          {sub.paragraphs.map((p: string, pi: number) => (
+            <p
+              key={pi}
               style={{
                 fontSize: 16,
-                fontWeight: 600,
-                color: T.text,
-                lineHeight: 1.35,
-                marginBottom: preview ? 4 : 0,
-              }}
-            >
-              {sub.heading}
-            </div>
-            {preview && (
-              <div style={{ fontSize: 15, color: T.muted, lineHeight: 1.6 }}>
-                {preview}
-              </div>
-            )}
-          </div>
-          {hasMore && (
-            <ChevronDown
-              size={15}
-              style={{
                 color: T.muted,
-                flexShrink: 0,
-                marginTop: 2,
-                transition: "transform 0.22s",
-                transform: open ? "rotate(180deg)" : "none",
+                lineHeight: 1.7,
+                margin: "3px 0 0",
               }}
-            />
-          )}
-        </button>
-
-        <AnimatePresence initial={false}>
-          {open && hasMore && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              style={{ overflow: "hidden" }}
             >
-              <div
-                style={{
-                  padding: "12px 16px 14px 34px",
-                  borderTop: `0.5px solid ${T.border}`,
-                  background: T.raised,
-                }}
-              >
-                {sub.paragraphs.slice(1).map((p: string, pi: number) => (
-                  <p
-                    key={pi}
-                    style={{
-                      fontSize: 14,
-                      color: T.muted,
-                      lineHeight: 1.65,
-                      margin: "0 0 8px",
-                    }}
-                  >
-                    {p}
-                  </p>
-                ))}
-                {sub.items.length > 0 && (
-                  <ul
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 6,
-                      listStyle: "none",
-                      padding: 0,
-                      margin: 0,
-                    }}
-                  >
-                    {sub.items.map((item: string, ii: number) => (
-                      <li
-                        key={ii}
-                        style={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: 7,
-                          fontSize: 13,
-                          color: T.muted,
-                        }}
-                      >
-                        <CheckCircle2
-                          size={13}
-                          style={{
-                            color: T.brand,
-                            flexShrink: 0,
-                            marginTop: 2,
-                            opacity: 0.7,
-                          }}
-                        />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              {p}
+            </p>
+          ))}
+        </div>
+
+        {/* Items */}
+        {sub.items.length > 0 && (
+          <div>
+            <p
+              style={{
+                fontSize: 16,
+                color: T.muted,
+                lineHeight: 1.7,
+                margin: "3px 0 0",
+              }}
+            >
+              Popular add-ons
+            </p>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+                gap: 10,
+              }}
+            >
+              {sub.items.map((item: string, ii: number) => (
+                <div
+                  key={ii}
+                  style={{
+                    fontSize: 16,
+                    color: T.muted,
+                    lineHeight: 1.7,
+                    margin: "3px 0 0",
+                    background: T.bg,
+                    border: `0.5px solid ${T.border}`,
+                    borderRadius: T.radiusMd,
+                    padding: "10px 12px",
+                  }}
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </Fade>
   );
 }
-
-// ─── Sections ─────────────────────────────────────────────────────────────────
-
 function ServicesSection({ section }: any) {
   const T = useT();
   return (
@@ -395,7 +471,7 @@ function ServicesSection({ section }: any) {
                   fontSize: 18,
                   color: T.muted,
                   lineHeight: 1.7,
-                  margin: "4px 0 0",
+                  margin: "3px 0 0",
                 }}
               >
                 {p}
@@ -406,10 +482,11 @@ function ServicesSection({ section }: any) {
 
         <div
           style={{
-            display: "grid",
+            display: "flex",
+            flexDirection: "column",
             gridTemplateColumns:
               "repeat(auto-fill, minmax(min(100%, 280px), 1fr))",
-            gap: 10,
+            gap: 8,
           }}
         >
           {section.subsections.map((sub: any, i: number) => (
@@ -494,10 +571,11 @@ function FeatureCard({ sub, i }: any) {
           <p
             key={pi}
             style={{
-              fontSize: 15,
+              fontSize: 16,
+              fontWeight: 600,
+
+              margin: "0 0 6px",
               color: T.muted,
-              lineHeight: 1.65,
-              margin: "0 0 4px",
             }}
           >
             {p}
@@ -599,7 +677,6 @@ function SectionRouter({ section }: any) {
   }
 }
 
-
 function ServiceDetailsSection({
   serviceDetails,
   onPostJob,
@@ -607,13 +684,12 @@ function ServiceDetailsSection({
   serviceDetails: string;
   onPostJob?: () => void;
 }) {
-
   const { resolvedTheme } = useTheme();
   const T = resolvedTheme === "dark" ? DARK : LIGHT;
 
   const { title, intros, sections } = useMemo(
     () => parseHTML(serviceDetails),
-    [serviceDetails]
+    [serviceDetails],
   );
 
   if (!sections.length && !title) return null;
@@ -622,7 +698,6 @@ function ServiceDetailsSection({
   const shaded = new Set(["services", "checklist"]);
 
   return (
-
     <ThemeCtx.Provider value={T}>
       <div
         style={{
