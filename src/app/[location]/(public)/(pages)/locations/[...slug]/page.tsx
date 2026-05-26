@@ -339,9 +339,9 @@ export default async function CityOrStatePage({ params }: Props) {
 
   return (
     <>
-      <h1 className="sr-only">
+      {/* <h1 className="sr-only">
         Services in {city.display_name ?? city.name}, {city.state_name}
-      </h1>
+      </h1> */}
 
       <Script
         id="city-jsonld"

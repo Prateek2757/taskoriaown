@@ -87,7 +87,10 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
   const [isNavigating, setIsNavigating] = useState(false);
   const [isDeducting, setIsDeducting] = useState(false);
 
-  const effectiveCredits = lead.is_free_lead ? 0 : requiredCredits;
+  const { loading: subscriptionLoading , hasActiveSubcription } = useSubscription();
+
+
+  const effectiveCredits =  hasActiveSubcription && lead.is_free_lead ? 0 : requiredCredits;
 
   const cacheKey = taskId ? `lead_status_${taskId}` : null;
 
@@ -113,7 +116,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     return { count: 0, purchased: false, hydrated: false };
   });
 
-  const { loading: subscriptionLoading } = useSubscription();
   const { balance, deductCredits, fetchBalance } = useCredit(session?.user?.id);
 
   const maxResponses = 5;
@@ -193,10 +195,10 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       return;
     }
 
-    if (convoError) {
-      toast.error(convoError);
-      return;
-    }
+    // if (convoError) {
+    //   toast.error(convoError);
+    //   return;
+    // }
 
     if (conversationId) {
       setIsNavigating(true);
@@ -260,11 +262,9 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     ]
   );
 
-  // ✅ Fixed: clean branching — free / has balance / no balance
   const handleContactClick = useCallback(async () => {
     if (!taskId) return;
 
-    // No balance and not free → show modal immediately, no loading state
     if (effectiveCredits > 0 && balance < effectiveCredits) {
       setShowCreditModal(true);
       return;
@@ -356,7 +356,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         <div className="p-2">
           <div className="flex items-start gap-3">
             <div className="relative shrink-0">
-              <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#2563EB] to-blue-600 flex items-center justify-center text-white text-2xl font-bold">
+              <div className="w-11 h-11 rounded-2xl bg-linear-to-br from-[#2563EB] to-blue-600 flex items-center justify-center text-white text-2xl font-bold">
                 {getInitials(lead.customer_name || "N A")}
               </div>
               {lead.status === "Open" && (
@@ -416,8 +416,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         <div className="border-t border-gray-100 dark:border-gray-800" />
 
         <div className="p-2">
-          {/* Contact Details */}
-          <div className="bg-blue-50 bg-linear-to-br mx-auo dark:from-gray-800 dark:to-black rounded-xl border border-gray-200 dark:border-gray-700 p-3 mb-6">
+          <div className="bg-blue-50 bg-linear-to-br mx-auo dark:from-gray-800 dark:to-black rounded-xl border border-gray-200 dark:border-gray-700 p-3 mb-3">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wide mb-4 flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-cyan-600" />
               {leadStatus.purchased
@@ -463,7 +462,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                 </div>
               </>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900 flex items-center justify-center shrink-0">
                     <svg
@@ -544,8 +543,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             )}
           </div>
 
-          {/* Response Progress */}
-          <div className="bg-linear-to-br bg-blue-50 dark:from-gray-800 dark:to-black rounded-xl p-3 mb-6">
+          <div className="bg-linear-to-br bg-blue-50 dark:from-gray-800 dark:to-black rounded-xl p-3 mb-3">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 Response Progress
@@ -566,9 +564,8 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </p>
           </div>
 
-          {/* Credits / Free badge */}
           {!leadStatus.purchased && (
-            <div className="bg-blue-50 bg-linear-to-br dark:from-gray-800 dark:to-black rounded-xl border border-orange-200 dark:border-orange-700 p-3 mb-6">
+            <div className="bg-blue-50 bg-linear-to-br dark:from-gray-800 dark:to-black rounded-xl border border-orange-200 dark:border-orange-700 p-3 mb-3">
               <div className="flex items-start gap-2">
                 <div
                   className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
@@ -577,7 +574,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                       : "bg-linear-to-br from-yellow-400 to-orange-500"
                   }`}
                 >
-                  <Award className="w-6 h-6 text-white" />
+                  <Award className="w-4 h-4 text-white" />
                 </div>
                 <div className="flex-1">
                   {effectiveCredits === 0 ? (
@@ -619,8 +616,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             </div>
           )}
 
-          {/* Action Button */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <div className="flex flex-col sm:flex-row gap-3 mb-3">
             {leadStatus.purchased ? (
               <button
                 onClick={handleGoToChat}
@@ -641,37 +637,51 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               </button>
             ) : (
               <button
-                onClick={handleContactClick}
-                disabled={isDeducting}
-                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed ${
-                  effectiveCredits === 0
-                    ? "bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
-                    : "bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
-                }`}
-              >
-                {isDeducting ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    {effectiveCredits === 0 ? "Claiming..." : "Contacting..."}
-                  </>
-                ) : (
-                  <>
-                    <MessageSquare className="w-5 h-5" />
-                    {effectiveCredits === 0
-                      ? "Claim Free Lead"
-                      : `Contact ${customerFirstName}`}
-                    {effectiveCredits === 0 && (
-                      <span className="ml-1 text-xs font-bold px-2 py-0.5 bg-white/20 rounded-full">
-                        FREE
-                      </span>
-                    )}
-                  </>
-                )}
-              </button>
+              onClick={
+                lead.is_free_lead && !hasActiveSubcription
+                  ? () => router.push("/setting/billing/taskoria_pro")
+                  : handleContactClick
+              }
+              disabled={isDeducting || subscriptionLoading}
+              className={`flex-1 flex items-center justify-center gap-2 px-6 py-2 font-semibold rounded-xl text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed ${
+                lead.is_free_lead && !hasActiveSubcription
+                  ? "bg-linear-to-r from-indigo-900 to-blue-900 hover:from-indigo-800 hover:to-blue-700"
+                  : effectiveCredits === 0
+                  ? "bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+                  : "bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+              }`}
+            >
+              {isDeducting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  {effectiveCredits === 0 ? "Claiming..." : "Contacting..."}
+                </>
+              ) : lead.is_free_lead && !hasActiveSubcription ? (
+                <>
+                  <Award className="w-4 h-4" />
+                  Subscribe to Claim Free Lead
+                  <span className="ml-1 text-xs font-bold px-2 py-0.5 bg-white/20 rounded-full">
+                    FREE
+                  </span>
+                </>
+              ) : effectiveCredits === 0 ? (
+                <>
+                  <MessageSquare className="w-4 h-4" />
+                  Claim Free Lead
+                  <span className="ml-1 text-xs font-bold px-2 py-0.5 bg-white/20 rounded-full">
+                    FREE
+                  </span>
+                </>
+              ) : (
+                <>
+                  <MessageSquare className="w-4 h-4" />
+                  Contact {customerFirstName}
+                </>
+              )}
+            </button>
             )}
           </div>
 
-          {/* ✅ Pass effectiveCredits so modal shows correct amount */}
           <CreditPurchaseModal
             open={showCreditModal}
             onOpenChange={setShowCreditModal}
@@ -685,7 +695,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
         </div>
       </div>
 
-      <div className="bg-white dark:bg-[#0d1117] rounded-2xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 m-1 p-5 mb-6">
+      <div className="bg-white dark:bg-[#0d1117] rounded-xl shadow-sm dark:shadow-md border border-gray-200 dark:border-gray-700 m-1 p-3 mb-3">
         <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
           Project Details
         </h2>
@@ -702,7 +712,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               {lead.answers.map((ans, idx) => (
                 <div
                   key={ans.question_id || idx}
-                  className="bg-gray-50 dark:bg-blue-900/10 border border-gray-200 dark:border-gray-700 rounded-xl p-3"
+                  className="bg-gray-50 dark:bg-blue-900/10 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-1.5"
                 >
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                     {ans.question || "—"}
@@ -718,7 +728,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">
                     Additional Queries
                   </h3>
-                  <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+                  <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-xl p-2">
                     <div className="flex items-start gap-3">
                       <HelpCircle
                         size={18}

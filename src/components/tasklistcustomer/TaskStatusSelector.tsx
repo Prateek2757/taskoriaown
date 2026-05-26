@@ -26,20 +26,21 @@ export function TaskStatusSelector({
       return "text-gray-700";
       case "Open":
         return "text-emerald-700";
+        case "Urgent":
+          return "text-red-700";
       case "In Progress":
         return "text-amber-700";
       case "Closed":
         return "text-slate-700";
       default:
-
-        return "text-gray-700";
+     return "text-gray-700";
     }
   };
 
   return (
     <Select value={value} onValueChange={onChange} disabled={disabled}>
       <SelectTrigger
-        className={cn("w-[180px] font-medium", getStatusColor(value))}
+        className={cn("w-45 font-medium", getStatusColor(value))}
       >
         <SelectValue placeholder="Select status" />
       </SelectTrigger>
@@ -49,7 +50,11 @@ export function TaskStatusSelector({
       <span>⬤</span> All Status
     </span>
   </SelectItem>
-
+  <SelectItem value="Urgent" className="text-red-700">
+    <span className="flex items-center gap-2">
+      <span>○</span> Urgent
+    </span>
+  </SelectItem>
   <SelectItem value="Open" className="text-emerald-700">
     <span className="flex items-center gap-2">
       <span>●</span> Open Quoting
@@ -67,6 +72,7 @@ export function TaskStatusSelector({
       <span>○</span> Closed
     </span>
   </SelectItem>
+  
 </SelectContent>
     </Select>
   );

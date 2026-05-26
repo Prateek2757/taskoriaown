@@ -17,9 +17,7 @@ import {
   type ViewMode,
 } from "./types";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Cookie helper — called client-side only to persist viewMode for the server
-// ─────────────────────────────────────────────────────────────────────────────
+
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
 function setCookieViewMode(value: ViewMode) {
@@ -45,9 +43,7 @@ export function useNavState({
 }: UseNavStateOptions) {
   const { joinAsProvider } = useJoinAsProvider();
 
-  // ── Session ─────────────────────────────────────────────────────────────────
-  // Pass initialSession so the hook starts "authenticated" immediately —
-  // status will be "authenticated" from the very first render, not "loading".
+
   const { data: session, status } = useSession();
 
   // Use live session when available, fall back to server-provided initial
@@ -121,7 +117,7 @@ export function useNavState({
       localStorage.removeItem("viewMode");
       clearCookieViewMode();
     }
-    setViewMode("customer");
+    setViewMode("provider");
     router.push("/signin");
   }, [closeAll, router]);
 

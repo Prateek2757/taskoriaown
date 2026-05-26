@@ -137,10 +137,12 @@ const LeadsPage: React.FC = () => {
 
       const matchesLocation =
         !filters.location || lead.location_name === filters.location;
-        const matchesStatus =
-        quickStatus === "All" ? true
-        : quickStatus === "Free" ? lead.is_free_lead === true
-        : lead.status === quickStatus;
+      const matchesStatus =
+        quickStatus === "All"
+          ? true
+          : quickStatus === "Free"
+            ? lead.is_free_lead === true
+            : lead.status === quickStatus;
 
       const matchesRemote =
         filters.isRemoteAllowed === null ||
@@ -211,9 +213,9 @@ const LeadsPage: React.FC = () => {
           isMobileDetailsOpen ? "hidden md:flex" : "flex"
         }`}
       >
-        <div className="sticky top-13 z-30 mb-4 bg-white dark:bg-[#0d1117] border-b border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="sticky top-13 z-30 mb-1 bg-white dark:bg-[#0d1117] border-b border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 px-2 py-3">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 w-full md:w-auto">
+            <div className="flex flex-col sm:flex-ro sm:items-cener sm:justify-between gap-3 w-full md:w-auto">
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2 flex-wrap">
                   <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 leading-none">
@@ -242,25 +244,49 @@ const LeadsPage: React.FC = () => {
                   )} */}
                 </div>
 
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                {/* <p className="text-sm text-gray-500 dark:text-gray-400">
                   {filters.category || "All services"} •{" "}
                   {filters.location || "All locations"}
-                </p>
+                </p> */}
 
-                {quickStatus !== "All" && (
-                  <span className="text-xs text-gray-600 dark:text-gray-400">
-                    Filtering by:{" "}
-                    <span className="font-semibold text-red-500">
-                      {quickStatus}
-                    </span>
-                  </span>
+                {(quickStatus !== "All" ||
+                  filters.category ||
+                  filters.location) && (
+                  <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    {quickStatus !== "All" && (
+                      <span>
+                        Status:{" "}
+                        <span className="font-semibold text-green-500">
+                          {quickStatus}
+                        </span>
+                      </span>
+                    )}
+
+                    {filters.category && (
+                      <span>
+                        Category:{" "}
+                        <span className="font-semibold text-blue-500">
+                          {filters.category}
+                        </span>
+                      </span>
+                    )}
+
+                    {filters.location && (
+                      <span>
+                        Location:{" "}
+                        <span className="font-semibold text-blue-600">
+                          {filters.location}
+                        </span>
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
 
               <div className="flex items-center gap-2 flex-wrap">
                 <button
                   onClick={() => setQuickStatus("All")}
-                  className={`px-2 py-1 text-sm rounded-full transition ${
+                  className={`px-2 py-1 text-xs rounded-full transition ${
                     quickStatus === "All"
                       ? "bg-gray-900 text-white dark:bg-white dark:text-black"
                       : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
@@ -275,7 +301,7 @@ const LeadsPage: React.FC = () => {
                       prev === "Urgent" ? "All" : "Urgent"
                     )
                   }
-                  className={`px-2 py-1 text-sm rounded-full transition ${
+                  className={`px-2 py-1 text-xs rounded-full transition ${
                     quickStatus === "Urgent"
                       ? "bg-red-500 text-white"
                       : "bg-red-100 text-red-600 hover:bg-red-200"
@@ -289,7 +315,7 @@ const LeadsPage: React.FC = () => {
                   onClick={() =>
                     setQuickStatus((prev) => (prev === "Open" ? "All" : "Open"))
                   }
-                  className={`px-2 py-1 text-sm rounded-full transition ${
+                  className={`px-2 py-1 text-xs rounded-full transition ${
                     quickStatus === "Open"
                       ? "bg-green-600 text-white"
                       : "bg-green-100 text-green-700 hover:bg-green-200"
@@ -302,7 +328,7 @@ const LeadsPage: React.FC = () => {
                   onClick={() =>
                     setQuickStatus((prev) => (prev === "Free" ? "All" : "Free"))
                   }
-                  className={`px-2 py-1 text-sm rounded-full transition ${
+                  className={`px-2 py-1 text-xs rounded-full transition ${
                     quickStatus === "Free"
                       ? "bg-emerald-500 text-white"
                       : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"

@@ -104,7 +104,7 @@ function CategoryRow({
   return (
     <tr className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
       {/* image cell */}
-      <td className="py-3 px-4 w-20">
+      {/* <td className="py-3 px-4 w-20">
         <div
           className="w-14 h-14 rounded-lg border border-gray-200 overflow-hidden bg-gray-50 flex items-center justify-center cursor-pointer"
           onDrop={handleDrop}
@@ -122,7 +122,7 @@ function CategoryRow({
             <span className="text-gray-300 text-xl select-none">+</span>
           )}
         </div>
-      </td>
+      </td> */}
 
       {/* name / slug */}
       <td className="py-3 px-4">
@@ -153,22 +153,22 @@ function CategoryRow({
       </td>
 
       {/* URL preview */}
-      <td className="py-3 px-4 max-w-xs hidden lg:table-cell">
+      {/* <td className="py-3 px-4 max-w-xs hidden lg:table-cell">
         {preview ? (
           <a
             href={preview}
             target="_blank"
             rel="noreferrer"
-            className="text-xs text-blue-500 hover:underline truncate block max-w-[200px]"
+            className="text-xs text-blue-500 hover:underline truncate block max-w-50"
           >
             {preview}
           </a>
         ) : (
           <span className="text-xs text-gray-300">—</span>
         )}
-      </td>
+      </td> */}
 
-      <td className="py-3 px-4">
+      {/* <td className="py-3 px-4">
         <button
           disabled={state === "uploading" || state === "saving"}
           onClick={() => inputRef.current?.click()}
@@ -200,7 +200,7 @@ function CategoryRow({
         {error && (
           <p className="text-xs text-red-500 mt-1 max-w-[160px]">{error}</p>
         )}
-      </td>
+      </td> */}
       <ImageUpload
   value={category.image_url ?? undefined}
   folder="service-categories"
@@ -346,9 +346,9 @@ export default function CategoryImageAdmin() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-gray-50 border-b border-gray-100">
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
+                    {/* <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
                       Image
-                    </th>
+                    </th> */}
                     <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
                       Name
                     </th>
@@ -358,9 +358,9 @@ export default function CategoryImageAdmin() {
                     <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
                       Status
                     </th>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wide hidden lg:table-cell">
+                    {/* <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wide hidden lg:table-cell">
                       URL
-                    </th>
+                    </th> */}
                     <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">
                       Action
                     </th>

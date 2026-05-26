@@ -75,5 +75,6 @@ export function useSubscription() {
   return {
     ...subscriptionStatus,
     refetch: checkSubscription,
+    hasActiveSubcription:subscriptionStatus.hasActiveSubscription
   };
 }

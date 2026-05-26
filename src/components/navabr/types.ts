@@ -24,8 +24,7 @@ export const NAV_LINKS: Record<"public" | "customer" | "provider", NavLink[]> =
     provider: [
       { name: "Home", href: "/", icon: Home },
       { name: "Leads", href: "/provider/leads", icon: Search },
-      { name: "Inbox", href: "/messages/null", icon: MessageSquare },
-      {
+      { name: "Inbox", href: "/messages/null", icon: MessageSquare },      {
         name: "My Responses",
         href: "/provider-responses",
         icon: MessageSquare,

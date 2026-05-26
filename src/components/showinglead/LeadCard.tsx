@@ -80,13 +80,13 @@ const LeadCard: React.FC<LeadCardProps> = ({
           ""
         )}
       </div>
-      <div
+      {/* <div
         className={`absolute top-0 left-0 h-1 w-full rounded-t-2xl transition-all duration-300 ${
           isSelected
             ? "bg-[#2563EB]"
             : "bg-transparent group-hover:bg-[#2563EB]"
         }`}
-      />
+      /> */}
 
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-start gap-3">
@@ -103,7 +103,7 @@ const LeadCard: React.FC<LeadCardProps> = ({
             </div>
           ) : 
           ( */}
-            <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-linear-to-br from-[#2563EB] to-blue-600 text-white text-2xl font-semibold">
+            <div className="w-11 h-11 flex items-center justify-center rounded-2xl bg-linear-to-br from-[#2563EB] to-blue-600 text-white text-2xl font-semibold">
               {getInitials(lead.customer_name || "N/A")}
             </div>
             {/* )}  */}

@@ -157,7 +157,7 @@ export default function ServiceCategoriesClient({
 
     return data;
   }, [hasSearchQuery, filteredCategories, secondaryCategories, filterData]);
-  const { paginatedData } = usePagination(filteredData, 9, filterData);
+  const { paginatedData } = usePagination(filteredData, 200, filterData);//for now showing all service we have paginated logic of neccessary
   const displayData = showData ? filteredData : paginatedData;
   return (
     <section className="relative overflow-hidden bg-linear-to-b from-slate-50 via-white to-sky-50 px-4 py-12 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
@@ -203,7 +203,7 @@ export default function ServiceCategoriesClient({
                 <button
                   key={category.category_id}
                   onClick={() => handlePostJob(category)}
-                  className="rounded-xl border border-slate-300 px-3 py-1.5 text-sm text-slate-700 transition hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-600 dark:text-slate-200 dark:hover:border-blue-400 dark:hover:bg-slate-800"
+                  className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm text-slate-700 transition hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-600 dark:text-slate-200 dark:hover:border-blue-400 dark:hover:bg-slate-800"
                 >
                   Post {category.name}
                 </button>
@@ -271,14 +271,14 @@ export default function ServiceCategoriesClient({
               </Button> */}
             </div>
 
-            <div className="flex justify-end">
+            {/* <div className="flex justify-end">
               <button
                 onClick={() => setShowData((prev) => !prev)}
                 className=" flex text-[#2563EB] "
               >
                 {showData ? "Show less" : `Show all (${filteredData.length})`}
               </button>
-            </div>
+            </div> */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {displayData.map((category, index) => (
                 <article
@@ -332,7 +332,7 @@ export default function ServiceCategoriesClient({
           </section>
         ) : null}
 
-        {secondaryCategories.length > 0 ? (
+        {/* {secondaryCategories.length > 0 ? (
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:p-8">
             <div className="mb-5 flex items-center justify-between gap-3">
               <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
@@ -365,7 +365,7 @@ export default function ServiceCategoriesClient({
               ))}
             </div>
           </section>
-        ) : null}
+        ) : null} */}
 
         {/* <section className="grid gap-4 md:grid-cols-3">
           <InfoCard

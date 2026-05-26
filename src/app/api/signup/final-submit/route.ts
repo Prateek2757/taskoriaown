@@ -141,6 +141,16 @@ export async function POST(req: NextRequest) {
 
     await client.query("COMMIT");
 
+await client.query(
+  `
+  INSERT INTO scheduled_emails (user_id, type, send_after) VALUES
+    ($1, 'nudge',  NOW() + INTERVAL '1 day'),
+    ($1, 'month',  NOW() + INTERVAL '30 days')
+  ON CONFLICT (user_id, type) DO NOTHING  -- safe to re-run
+  `,
+  [user_idd]
+);
+
     const { rows } = await client.query(
       `
       SELECT u.user_id, u.email, u.phone,

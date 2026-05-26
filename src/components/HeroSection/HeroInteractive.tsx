@@ -169,7 +169,7 @@ norder-none             "
 
         <div className="flex items-center justify-center gap-2 pb-2 sm:mt-4 text-sm text-gray-500 dark:text-gray-400">
           <MapPin className="w-4.5 h-4.5" />
-          <span>Serving 50+ cities across Australia</span>
+          <span>Serving  across Australia</span>
         </div>
       </div>
 

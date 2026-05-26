@@ -15,14 +15,6 @@ module.exports = {
           "20%,50%": { opacity: "0" },
         },
       },
-      colors: {
-        secondary: {
-          DEFAULT: "#F3F4F6",
-        },
-        accent: {
-          DEFAULT: "#F59E0B",
-        },
-      },
       fontFamily: {
         poppins: ["var(--font-poppins)"],
       },

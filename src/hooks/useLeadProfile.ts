@@ -56,7 +56,6 @@ export function useLeadProfile() {
     isLoading,
     mutate,
   } = useSWR<Profile>("/api/user_profiles", fetcher);
-// console.log(profile,"data ");
 
   const { data: categories = [], mutate: mutateCategories } = useSWR<
     Category[]
@@ -101,7 +100,7 @@ export function useLeadProfile() {
         false
       );
       
-      await axios.post("/api/user_categories", { category_id });
+      await axios.postuser_categories("/api/", { category_id });
       notifyAll();
     } catch (err) {
       mutate(profile, false);

@@ -132,6 +132,7 @@ export async function PUT(req: Request) {
     `,
     [display_name, location_id, is_nationwide, profile_image_url, userId]
   );
+  
 
   const { rows } = await pool.query(
     `

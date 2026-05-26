@@ -11,6 +11,7 @@ import Image from "next/image";
 import TasksList from "@/components/tasklistcustomer/TasksList";
 import { Skeleton } from "@/components/ui/skeleton";
 import PageSkeleton from "@/components/skeleton/PageSkeleton";
+import { useRouter } from "next/navigation";
 
 interface LeadAnswer {
   question_id?: string | number;
@@ -33,7 +34,7 @@ interface Task {
 export default function CustomerDashboard() {
   const [openModal, setOpenModal] = useState(false);
   const { tasks: TaskFromHook, loading } = useTasks();
-
+const router = useRouter();
   const tasks = TaskFromHook ?? [];
 
   const serviceCategories = [
@@ -41,21 +42,25 @@ export default function CustomerDashboard() {
       title: "Accounting & Tax",
       image:
         "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop",
+      href: "/services/accounting-taxation",
     },
     {
       title: "Business Services",
       image:
         "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop",
+      href: "/services/business",
     },
     {
       title: "Marketing & Design",
       image:
         "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=400&h=300&fit=crop",
+        href:"/services/marketing"
     },
     {
-      title: "Administrative",
+      title: "Electricians",
       image:
-        "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=400&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1555963966-b7ae5404b6ed?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        href:"/services/electricians"
     },
   ];
 
@@ -101,7 +106,7 @@ export default function CustomerDashboard() {
               <CardContent className="py-16 text-center space-y-6 max-w-2xl mx-auto">
                 <h2 className="text-2xl font-bold text-foreground">
                   Find services for your business on{" "}
-                  <span className="text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text">
+                  <span className="text-transparent bg-[#2563EB] bg-clip-text">
                     Taskoria
                   </span>
                 </h2>
@@ -119,7 +124,7 @@ export default function CustomerDashboard() {
 
                 <Button
                   onClick={() => setOpenModal(true)}
-                  className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-medium shadow-md hover:shadow-lg transition-all rounded-xl mt-4"
+                  className="bg-[#2563EB] hover:from-blue-700 hover:to-cyan-700 text-white font-medium shadow-md hover:shadow-lg transition-all rounded-xl mt-4"
                 >
                   Get Started
                 </Button>
@@ -141,31 +146,28 @@ export default function CustomerDashboard() {
             <h2 className="text-2xl font-bold tracking-tight text-foreground">
               You may also need
             </h2>
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
               <Button
                 variant="outline"
                 size="icon"
-                className="h-10 w-10 rounded-full border-2 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-600 hover:text-white transition-all"
+                className="h-10 w-10 rounded-full border-2 hover:bg-linear-to-r hover:from-blue-600 hover:to-cyan-600 hover:text-white transition-all"
               >
                 <ChevronLeft className="h-5 w-5" />
               </Button>
               <Button
                 variant="outline"
                 size="icon"
-                className="h-10 w-10 rounded-full border-2 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-600 hover:text-white transition-all"
+                className="h-10 w-10 rounded-full border-2 hover:bg-linear-to-r hover:from-blue-600 hover:to-cyan-600 hover:text-white transition-all"
               >
                 <ChevronRight className="h-5 w-5" />
               </Button>
-            </div>
+            </div> */}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {serviceCategories.map((category, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+              <button className="" onClick={()=> router.push(`${category.href}`) }
+              
               >
                 <Card className="group cursor-pointer overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/70 shadow-sm hover:shadow-lg transition-all">
                   <div className="relative h-48 overflow-hidden">
@@ -184,7 +186,7 @@ export default function CustomerDashboard() {
                     </div>
                   </div>
                 </Card>
-              </motion.div>
+              </button>
             ))}
           </div>
         </section>

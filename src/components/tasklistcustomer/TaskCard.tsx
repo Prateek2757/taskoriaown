@@ -25,11 +25,11 @@ type LeadAnswer = {
 };
 
 type Response = {
-  id:number;
-  response_id:string;
-  message_id:string;
-  public_id:string;
-  company_slug?:string;
+  id: number;
+  response_id: string;
+  message_id: string;
+  public_id: string;
+  company_slug?: string;
   display_name: string;
   profile_title: string;
   title: string;
@@ -53,7 +53,7 @@ type Task = {
   answers?: LeadAnswer[];
   budget_min?: number | null;
   budget_max?: number | null;
-  queries?:string;
+  queries?: string;
   response_count?: number;
 };
 
@@ -86,21 +86,31 @@ export function TaskCard({
     switch (status) {
       case "Open":
         return {
-          color: "bg-emerald-500/10 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-900",
+          color:
+            "bg-emerald-500/10 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-900",
           dot: "bg-emerald-500",
           label: "Open Quoting",
         };
       case "In Progress":
         return {
-          color: "bg-amber-500/10 text-amber-700 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-900",
+          color:
+            "bg-amber-500/10 text-amber-700 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-900",
           dot: "bg-amber-500",
           label: "In Progress",
         };
       case "Closed":
         return {
-          color: "bg-slate-500/10 text-slate-600 border-slate-200 dark:bg-slate-500/10 dark:text-slate-400 dark:border-slate-700",
+          color:
+            "bg-slate-500/10 text-slate-600 border-slate-200 dark:bg-slate-500/10 dark:text-slate-400 dark:border-slate-700",
           dot: "bg-slate-400",
           label: "Closed",
+        };
+      case "Urgent":
+        return {
+          color:
+            "bg-red-500/10 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-900",
+          dot: "bg-red-500",
+          label: "Urgent",
         };
       default:
         return {
@@ -121,9 +131,9 @@ export function TaskCard({
   };
 
   return (
-    <Card className="overflow-hidden border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-950">
-      <CardContent className="p-0">
-        <div className="p-5 sm:p-6">
+    <Card className="overflow-hidden py-0 border border-slate-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-950">
+      <CardContent className="">
+        <div className="py-3">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex-1 min-w-0 space-y-1.5">
               <div className="flex flex-wrap items-center gap-2">
@@ -133,7 +143,9 @@ export function TaskCard({
                     statusConfig.color
                   )}
                 >
-                  <span className={cn("h-1.5 w-1.5 rounded-full", statusConfig.dot)} />
+                  <span
+                    className={cn("h-1.5 w-1.5 rounded-full", statusConfig.dot)}
+                  />
                   {statusConfig.label}
                 </span>
               </div>
@@ -161,7 +173,8 @@ export function TaskCard({
                 </span>
                 {task.budget_min && task.budget_max && (
                   <span className="text-slate-400">
-                    (${task.budget_min.toLocaleString()} – ${task.budget_max.toLocaleString()})
+                    (${task.budget_min.toLocaleString()} – $
+                    {task.budget_max.toLocaleString()})
                   </span>
                 )}
                 <span className="text-slate-300 dark:text-slate-700">·</span>
@@ -202,33 +215,34 @@ export function TaskCard({
                 {task.answers
                   .slice(0, answersExpanded ? undefined : 2)
                   .map((qa, idx) => {
-                    const key = qa.answers_id != null ? String(qa.answers_id) : `qa-${idx}`;
+                    const key =
+                      qa.answers_id != null
+                        ? String(qa.answers_id)
+                        : `qa-${idx}`;
                     return (
                       <div key={key} className="space-y-0.5">
                         <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
                           Q: {qa.question}
                         </p>
                         <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed">
-                          {formatAnswerValue(qa.answer) }
+                          {formatAnswerValue(qa.answer)}
                         </p>
                       </div>
                     );
                   })}
 
-{task.queries && (
-  <div className="mt-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-4 space-y-2">
-    
-    <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">
-      <HelpCircle className="h-3.5 w-3.5" />
-      Additional Details
-    </div>
+                {task.queries && (
+                  <div className="mt-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-4 space-y-2">
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">
+                      <HelpCircle className="h-3.5 w-3.5" />
+                      Additional Details
+                    </div>
 
-    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-      {task.queries}
-    </p>
-
-  </div>
-)}
+                    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                      {task.queries}
+                    </p>
+                  </div>
+                )}
               </div>
               {task.answers.length > 2 && (
                 <button
@@ -283,7 +297,8 @@ export function TaskCard({
                   </h4>
                   {responses.length > 0 && (
                     <span className="text-xs text-slate-400 dark:text-slate-500">
-                      {responses.length} {responses.length === 1 ? "reply" : "replies"}
+                      {responses.length}{" "}
+                      {responses.length === 1 ? "reply" : "replies"}
                     </span>
                   )}
                 </div>
@@ -302,7 +317,8 @@ export function TaskCard({
                       No Responses Yet
                     </p>
                     <p className="text-xs text-slate-400 dark:text-slate-500 max-w-xs">
-                      Professionals will respond to your task here once they submit their proposals.
+                      Professionals will respond to your task here once they
+                      submit their proposals.
                     </p>
                   </div>
                 ) : (

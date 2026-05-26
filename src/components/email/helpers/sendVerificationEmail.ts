@@ -1,6 +1,7 @@
 import { resend } from "@/lib/resend";
-import { EmailType } from "../type";
+import { CompleteProfileEmailProps, EmailType } from "../type";
 import AppEmail from "../MainEmail";
+import { CompleteProfileEmail } from "../templates/ProfileCompletion/ProfileCompletion";
 
 const EMAIL_CONFIG = {
   from: "Taskoria <noreply@taskoria.com>",
@@ -16,8 +17,10 @@ const subjectMap: Record<EmailType, string> = {
   verification: "Verify your email address",
   "password-reset-code": "Reset Your Password",
   "provider-estimate": "💰 You received a new estimate",
+  "complete-profile": "Your Taskoria profile is incomplete 👤", // ← new
 };
 
+// ── Standard email props (existing types) ─────────────────
 interface SendEmailProps {
   email: string;
   type: EmailType;
@@ -29,26 +32,28 @@ interface SendEmailProps {
   unit?: string;
   messageFromProvider?: string;
   company?: string;
-  professional_name?:string;
-  professional_company_name?:string;
-  professional_phone?:string;
+  professional_name?: string;
+  professional_company_name?: string;
+  professional_phone?: string;
 }
 
-export async function sendEmail({
-  email,
-  type,
-  username,
-  verifyCode,
-  taskTitle,
-  taskLocation,
-  price,
-  unit,
-  messageFromProvider,
-  company,
-  professional_name,
-  professional_company_name,
-  professional_phone
-}: SendEmailProps) {
+// ── Profile-completion email props (new) ──────────────────
+interface SendProfileReminderProps
+  extends Pick<CompleteProfileEmailProps, "completionPercent" | "profileFlags"> {
+  email: string;
+  username?: string;
+  company?: string;
+  profileUrl?: string;
+}
+
+export async function sendEmail(props: SendEmailProps): Promise<{ success: boolean; id?: string; error?: unknown }>;
+export async function sendEmail(props: SendProfileReminderProps & { type: "complete-profile" }): Promise<{ success: boolean; id?: string; error?: unknown }>;
+
+export async function sendEmail(
+  props: (SendEmailProps | (SendProfileReminderProps & { type: "complete-profile" }))
+) {
+  const { email } = props;
+
   if (!email) {
     console.error("Email address is required");
     return { success: false, error: "Email address is required" };
@@ -60,36 +65,37 @@ export async function sendEmail({
     return { success: false, error: "Invalid email format" };
   }
 
-  const emailProps:SendEmailProps = {
-    type,
-    email,
-    username,
-    verifyCode,
-    taskTitle,
-    taskLocation,
-    price,
-    unit,
-    messageFromProvider,
-    company,
-    professional_name,
-    professional_company_name,
-    professional_phone
-  };
+  let reactTemplate: React.ReactElement;
+
+  if (props.type === "complete-profile") {
+    const { username, company, completionPercent, profileFlags, profileUrl } =
+      props as SendProfileReminderProps & { type: "complete-profile" };
+
+    reactTemplate = CompleteProfileEmail({
+      username,
+      company,
+      completionPercent,
+      profileFlags,
+      profileUrl,
+    });
+  } else {
+    reactTemplate = AppEmail(props as SendEmailProps);
+  }
 
   try {
     const { data, error } = await resend.emails.send({
       from: EMAIL_CONFIG.from,
       to: email,
-      subject: subjectMap[type],
-      react: AppEmail(emailProps),
+      subject: subjectMap[props.type],
+      react: reactTemplate,
       replyTo: EMAIL_CONFIG.replyTo,
       headers: {
-        "X-Entity-Ref-ID": `${type}-${Date.now()}`,
+        "X-Entity-Ref-ID": `${props.type}-${Date.now()}`,
       },
       tags: [
         {
           name: "category",
-          value: type,
+          value: props.type,
         },
       ],
     });

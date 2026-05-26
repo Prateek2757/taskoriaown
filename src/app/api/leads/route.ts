@@ -2,16 +2,8 @@ import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
-import { sendEmail } from "@/components/email/helpers/sendVerificationEmail";
 import { createNotification } from "@/lib/notifications";
-
-async function sendEmailsWithRateLimit(emails: any[], ratePerSec: number = 1) {
-  const delay = 1000 / ratePerSec;
-  for (const emailData of emails) {
-    await sendEmail(emailData).catch(console.error);
-    await new Promise((res) => setTimeout(res, delay));
-  }
-}
+import { sendEmailQueue } from "@/lib/sendEmailQueue";
 
 export async function POST(req: Request) {
   const client = await pool.connect();
@@ -74,7 +66,6 @@ export async function POST(req: Request) {
 
     if (category_answers && typeof category_answers === "object") {
       const answers = Object.values(category_answers);
-
       if (answers.includes("Asap")) {
         status = "Urgent";
       }
@@ -91,7 +82,7 @@ export async function POST(req: Request) {
         VALUES ($1, $2, $3)
       `;
       for (const [questionId, answer] of Object.entries(category_answers)) {
-        let answerToStore = Array.isArray(answer)
+        const answerToStore = Array.isArray(answer)
           ? JSON.stringify(answer)
           : (answer ?? null);
 
@@ -109,11 +100,10 @@ export async function POST(req: Request) {
     );
     const categoryname = categoryRes.rows[0]?.name || "Task";
 
-    // Get admin
     const adminRes = await client.query(
       `SELECT email FROM users WHERE role='admin'`
     );
-    const adminEmails = adminRes.rows.map((r) => r.email);
+    const adminEmails: string[] = adminRes.rows.map((r) => r.email);
 
     const providersRes = await client.query(
       `
@@ -128,11 +118,6 @@ export async function POST(req: Request) {
     );
 
     await client.query("COMMIT");
-
-    const response = NextResponse.json({
-      success: true,
-      task: taskResult.rows[0],
-    });
 
     const emailQueue: any[] = [];
 
@@ -165,6 +150,7 @@ export async function POST(req: Request) {
         });
       });
     }
+
     emailQueue.push({
       email,
       username: name,
@@ -172,9 +158,13 @@ export async function POST(req: Request) {
       taskTitle: categoryname,
     });
 
-    sendEmailsWithRateLimit(emailQueue, 1).catch(console.error);
+    // Fire and forget — response already sent
+    sendEmailQueue(emailQueue, { ratePerSec: 1 }).catch(console.error);
 
-    return response;
+    return NextResponse.json({
+      success: true,
+      task: taskResult.rows[0],
+    });
   } catch (err: any) {
     await client.query("ROLLBACK");
     console.error("Task creation error:", err);
@@ -238,16 +228,16 @@ export async function GET() {
       t.status,
       t.created_at,
       t.queries,
-CASE 
-  WHEN t.created_at < NOW() - INTERVAL '24 hours'
-    AND (
-      SELECT COUNT(*) FROM task_responses tr 
-      WHERE tr.task_id = t.task_id
-      AND tr.credits_spent > 0  -- ✅ ignore free claims
-    ) = 0
-  THEN true
-  ELSE false
-END AS is_free_lead,
+      CASE 
+        WHEN t.created_at < NOW() - INTERVAL '24 hours'
+          AND (
+            SELECT COUNT(*) FROM task_responses tr 
+            WHERE tr.task_id = t.task_id
+            AND tr.credits_spent > 0
+          ) = 0
+        THEN true
+        ELSE false
+      END AS is_free_lead,
       c.name AS category_name,
     
       ci.name AS location_name,

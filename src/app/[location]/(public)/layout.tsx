@@ -120,7 +120,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#8A2BE2",
+  themeColor: "#2563EB",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -167,7 +167,7 @@ export default function RootLayout({
           <NotificationHandler />
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >

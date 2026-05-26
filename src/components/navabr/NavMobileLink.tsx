@@ -23,9 +23,9 @@ const NavMobileLink = memo(function NavMobileLink({
       href={href}
       prefetch
       onClick={onClick}
-      className={`flex items-center gap-3 px-4 py-3 rounded-full font-medium transition-colors ${
+      className={`flex items-center gap-3 px-4 py-2 rounded-xl font-medium transition-colors ${
         isActive
-          ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md"
+          ? "bg-[#2563EB] text-white shadow-md"
           : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
       }`}
     >

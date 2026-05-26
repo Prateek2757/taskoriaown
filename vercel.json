@@ -1,0 +1,12 @@
+{
+    "crons": [
+      {
+        "path": "/api/cron/scheduled-emails?type=nudge",
+        "schedule": "0 9 * * *"
+      },
+      {
+        "path": "/api/cron/scheduled-emails?type=month",
+        "schedule": "0 9 1 * *"
+      }
+    ]
+}

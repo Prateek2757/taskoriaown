@@ -526,6 +526,12 @@ const Footer = () => {
                   >
                     Blog
                   </Link>
+                  <Link
+                    href="/settings/billing/taskoria_pro"
+                    className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
+                  >
+                    Pricing & Plans
+                  </Link>
                 </div>
               </div>
             </div>

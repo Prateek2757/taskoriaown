@@ -87,7 +87,7 @@ export function ProfileCard({
         <CardContent className="pt-6 pb-0 text-center relative">
           {/* {isPro && (
             <>
-              <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-amber-500/5 to-yellow-600/5 pointer-events-none" />
+              <div className="absolute inset-0 bg-linear-to-br from-yellow-500/5 via-amber-500/5 to-yellow-600/5 pointer-events-none" />
               <div className="absolute top-0 right-0 w-full h-32 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
             </>
@@ -101,7 +101,7 @@ export function ProfileCard({
                     className="absolute -inset-4 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-500"
                     style={{
                       background:
-                        "conic-gradient(from 0deg, #eab308, #f59e0b, #d97706, #ca8a04, #eab308)",
+                        "conic-linear(from 0deg, #eab308, #f59e0b, #d97706, #ca8a04, #eab308)",
                       animation: "spin 5s linear infinite",
                       filter: "blur(16px)",
                     }}
@@ -126,8 +126,8 @@ export function ProfileCard({
                   <div
                     className={`w-28 h-28 rounded-full flex items-center justify-center shadow-2xl relative z-10 ${
                       isPro
-                        ? "bg-gradient-to-br from-yellow-500 via-amber-500 to-yellow-600"
-                        : "bg-gradient-to-br from-blue-600 to-cyan-500"
+                        ? "bg-linear-to-br from-yellow-500 via-amber-500 to-yellow-600"
+                        : "bg-linear-to-br from-blue-600 to-cyan-500"
                     }`}
                   >
                     <User className="w-14 h-14 text-white drop-shadow-lg" />
@@ -140,7 +140,7 @@ export function ProfileCard({
                   className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full shadow-2xl backdrop-blur-sm border border-yellow-500/30 hover:scale-110 transition-transform duration-300 z-20"
                   style={{
                     background:
-                      "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #eab308 100%)",
+                      "linear-linear(135deg, #fbbf24 0%, #f59e0b 50%, #eab308 100%)",
                     color: "#000",
                     boxShadow:
                       "0 8px 20px rgba(234, 179, 8, 0.4), inset 0 1px 2px rgba(255,255,255,0.3)",
@@ -155,7 +155,7 @@ export function ProfileCard({
                     <path d="M12 2l3 7h7l-5.5 4.1L18 21l-6-4-6 4 1.5-7.9L2 9h7z" />
                   </svg>
                   <span>Plus</span>
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent to-white/20 pointer-events-none" />
+                  <div className="absolute inset-0 rounded-full bg-linear-to-t from-transparent to-white/20 pointer-events-none" />
                 </div>
               )}
             </div>
@@ -163,7 +163,7 @@ export function ProfileCard({
             <h2
               className={`text-xl font-semibold mb-1 ${
                 isPro
-                  ? "bg-gradient-to-r from-yellow-600 via-amber-400 to-yellow-400 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(234,179,8,0.3)]"
+                  ? "bg-linear-to-r from-yellow-600 via-amber-400 to-yellow-400 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(234,179,8,0.3)]"
                   : "dark:text-white"
               }`}
             >
@@ -185,7 +185,7 @@ export function ProfileCard({
               </p>
 
               {profile?.is_email_verified ? (
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 px-3 py-1.5 shadow-lg">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-linear-to-r from-green-500 to-emerald-500 px-3 py-1.5 shadow-lg">
                   <ShieldCheck className="h-3.5 w-3.5 text-white" />
                   <span className="text-xs font-semibold text-white">
                     Email Verified
@@ -193,7 +193,7 @@ export function ProfileCard({
                 </div>
               ) : (
                 <div className="mx-auto max-w-sm">
-                  <div className="rounded-xl bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 p-2 border border-red-200 dark:border-red-800/50 shadow-sm">
+                  <div className="rounded-xl bg-linear-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 p-2 border border-red-200 dark:border-red-800/50 shadow-sm">
                     <div className="flex items-start gap-2.5 mb-3">
                       <div className="p-1 rounded-lg bg-red-100 dark:bg-red-900/40">
                         <ShieldAlert className="h-4 w-4 text-red-600 dark:text-red-400 flex-shrink-0" />
@@ -207,7 +207,7 @@ export function ProfileCard({
                     <Button
                       onClick={() => setShowVerificationDialog(true)}
                       size="sm"
-                      className="w-full text-xs font-semibold bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white shadow-md hover:shadow-lg transition-all"
+                      className="w-full text-xs font-semibold bg-linear-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white shadow-md hover:shadow-lg transition-all"
                     >
                       <Mail className="h-3.5 w-3.5 mr-1.5" />
                       Verify Email Now
@@ -264,7 +264,7 @@ export function ProfileCard({
               </div>
               <div className="relative">
                 {isPro && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-full blur-md" />
+                  <div className="absolute inset-0 bg-linear-to-r from-yellow-500/20 to-amber-500/20 rounded-full blur-md" />
                 )}
                 <Progress
                   value={profile.profile_completion}
@@ -273,7 +273,7 @@ export function ProfileCard({
                     isPro
                       ? {
                           background:
-                            "linear-gradient(to right, rgba(234, 179, 8, 0.2), rgba(245, 158, 11, 0.2))",
+                            "linear-linear(to right, rgba(234, 179, 8, 0.2), rgba(245, 158, 11, 0.2))",
                         }
                       : {}
                   }
@@ -282,7 +282,7 @@ export function ProfileCard({
             </div>
 
             {isPro && (
-              <div className="mx-3 mb-4 p-2 rounded-xl bg-gradient-to-r from-yellow-500/10 via-amber-500/10 to-yellow-500/10 border border-yellow-500/20 backdrop-blur-sm">
+              <div className="mx-3 mb-4 p-2 rounded-xl bg-linear-to-r from-yellow-500/10 via-amber-500/10 to-yellow-500/10 border border-yellow-500/20 backdrop-blur-sm">
                 <div className="flex items-center justify-center gap-2 text-xs text-yellow-500/90 font-medium">
                   <svg
                     className="w-4 h-4"
@@ -298,7 +298,7 @@ export function ProfileCard({
           </div>
 
           {profile.referral_code && (
-            <div className="mx-0  py-5 border-t border-gray-100 dark:border-white/8 bg-gradient-to-br from-slate-50/80 via-blue-50/30 to-transparent dark:from-blue-950/20 dark:via-slate-900/10 dark:to-transparent">
+            <div className="mx-0  py-5 border-t border-gray-100 dark:border-white/8 bg-linear-to-br from-slate-50/80 via-blue-50/30 to-transparent dark:from-blue-950/20 dark:via-slate-900/10 dark:to-transparent">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/40">

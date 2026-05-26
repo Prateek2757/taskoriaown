@@ -125,7 +125,7 @@ export default function NavMobileDrawer({
               isActive={
                 link.href === "/"
                   ? pathname === "/"
-                  : pathname.startsWith(link.href)
+                  : pathname.startsWith(link.href) || (link.href.startsWith("/messages") && pathname.startsWith("/messages"))
               }
               onClick={onClose}
             />
@@ -218,7 +218,7 @@ export default function NavMobileDrawer({
               </Link>
               <Button
                 onClick={onJoinAsProvider}
-                className="w-full bg-[#2563EB] text-white hover:opacity-90 font-medium"
+                className="w-full bg-[#2563EB] rounded-xl text-white hover:opacity-90 font-medium"
               >
                 Join as Provider
               </Button>

@@ -6,7 +6,8 @@ export type EmailType =
   | "verification"
   | "provider-email-compose"
   | "password-reset-code"
-  | "provider-estimate";
+  | "provider-estimate"
+  | "complete-profile"; // ← new
 
 export interface BaseEmailProps {
   company?: string;
@@ -43,7 +44,23 @@ export interface ProviderEstimateEmailProps extends BaseEmailProps {
   price?: string;
   unit?: string;
   messageFromProvider?: string;
-  professional_name?:string;
-  professional_company_name?:string;
-  professional_phone?:string;
+  professional_name?: string;
+  professional_company_name?: string;
+  professional_phone?: string;
+}
+
+// ── Profile completion ────────────────────────────────────
+export interface ProfileFlags {
+  hasAboutAndBio: boolean;      // display_name set + company.about >= 30 chars → +25%
+  hasServices: boolean;         // user_profile_services exists                 → +20%
+  hasPhotos: boolean;           // user_profile_photos exists                   → +25%
+  hasSocialLinks: boolean;      // user_social_links with is_visible = true     → +10%
+  hasAccreditations: boolean;   // user_accreditations exists                   → +10%
+  hasFaqs: boolean;             // user_faqs with is_visible = true             → +10%
+}
+
+export interface CompleteProfileEmailProps extends BaseEmailProps {
+  completionPercent: number;
+  profileFlags: ProfileFlags;
+  profileUrl?: string;
 }
