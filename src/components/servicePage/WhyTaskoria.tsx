@@ -93,7 +93,7 @@ export default function WhyTaskoria({
                 {item.icon}
               </span>
 
-              <p className="text-[13px font-bold text-slate-800 dark:text-slate-100 leading-tight justify-center">
+              <p className="text-[13px font-bold text-slate-800 group-hover:text-blue-600 dark:text-slate-100 leading-tight justify-center">
                 {item.label}
               </p>
 

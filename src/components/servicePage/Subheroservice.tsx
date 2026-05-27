@@ -28,7 +28,7 @@ function getBreadcrumbLabel(name: string) {
     Roofing: "Roofers",
     Tiling: "Tilers",
     Plastering: "Plasterers",
-   "Airbnb / Short-Stay Turnover Cleaning":"Airbnb Turnover"
+    "Airbnb / Short-Stay Turnover Cleaning": "Airbnb Turnover",
   };
   return irregulars[name] ?? `${name} Pros`;
 }
@@ -84,7 +84,7 @@ export default function SubHeroService({
             <span className="text-[#2563EB] dark:text-[#60a5fa]">
               {proLabel.endsWith("s") ? proLabel.slice(0, -1) : proLabel}
             </span>{" "}
-            in {cityName} {" "}  ?
+            in {cityName} ?
           </h1>
 
           <div className="flex flex-col gap-3 mb-6 max-w-2xl">
@@ -142,9 +142,7 @@ export default function SubHeroService({
             Services
           </Link>
           <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-          <span className="font-semibold text-slate-700 dark:text-slate-200">
-            {service.name}
-          </span>
+          <span className="font-semibold text-[#2563EB] ">{service.name}</span>
         </nav>
 
         <div className="grid lg:grid-cols-2 gap-6 items-start">
