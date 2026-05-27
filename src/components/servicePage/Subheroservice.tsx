@@ -142,7 +142,7 @@ export default function SubHeroService({
             Services
           </Link>
           <ChevronRight className="w-3.5 h-3.5 shrink-0" />
-          <span className="font-semibold text-slate-700 dark:text-slate-200">
+          <span className="font-semibold text-[#2563EB] dark:text-slate-200">
             {service.name}
           </span>
         </nav>

@@ -27,8 +27,8 @@ export default function ServiceHeroSection({
   console.log("services:", service);
   console.log(service.service_image_url);
   return (
-    <section className="relative">
-      <section className="relative overflow-hidden min-h-[700px] bg-slate-950">
+    <section className="relative max-w-6xl mx-auto ">
+      <section className="relative overflow-hidden min-h-[700px] bg-slate-950 rounded-2xl">
         {/* Background image */}
         <Image
           src={service.service_image_url}
@@ -37,7 +37,7 @@ export default function ServiceHeroSection({
           priority
           className="absolute inset-0 object-cover"
         />
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-black/30" />
 
         {/* <nav className="flex items-center gap-2 text-xs text-white/50 mb-7 flex-wrap">
         <Link href="/" className="hover:text-white/80 transition-colors">
@@ -57,7 +57,7 @@ export default function ServiceHeroSection({
         <ChevronRight className="w-3 h-3 flex-shrink-0" />
         <span className="text-white/80 font-medium">{stateName}</span>
       </nav> */}
-        <div className="relative z-10 max-w-6xl mx-auto px-6 py-10 md:py-10">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 py-12 ">
           {/* <nav className="flex items-center gap-2 text-xs text-white/50 mb-7 flex-wrap">
             <Link  href="/" className="hover:text-white/80 transition-colors">Home</Link>
             <ChevronRight className="w-3 h-3 flex-shrink-0" />
@@ -67,17 +67,17 @@ export default function ServiceHeroSection({
               {service.name}
             </Link>
           </nav> */}
-          <div className="text-center mb-6">
-            <h1 className="text-4xl md:text-5xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-6">
-              <span className="bg-[#2563EB] bg-clip-text text-transparent drop-shadow-lg">
+          <div className="text-left mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-8">
+              <span className="text-white/80 bg-clip-text  drop-shadow-lg">
                 {title}
               </span>
-              <span className="block mt-3 text-2xl md:text-2xl font-medium text-white/90">
+              <span className="block text-2xl md:text-2xl font-medium text-white/90">
                 Made Simple & Fast
               </span>
             </h1>
 
-            <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-white/80 leading-relaxed">
+            <p className=" text-sm md:text-base max-w-3xl text-white/80 leading-relaxed text-left">
               {description}
             </p>
 
@@ -100,7 +100,7 @@ export default function ServiceHeroSection({
             )}
           </div>
 
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-xl mb-4">
             <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg rounded-3xl shadow-2xl p-4 md:p-3 border border-white/20 dark:border-slate-700/50">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 bg-linear-to-br from-blue-600 to-blue-500 dark:from-blue-500 dark:to-blue-400 rounded-xl flex items-center justify-center shadow-lg">
@@ -126,3 +126,4 @@ export default function ServiceHeroSection({
     </section>
   );
 }
+//bg-white/95
