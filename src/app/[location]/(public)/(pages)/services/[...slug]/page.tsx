@@ -221,8 +221,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-
 export default async function ServicePage({ params }: Props) {
   const { slug = [] } = await params;
   const [serviceSlug, stateSlug = null, citySlug = null, subCitySlug = null] =
@@ -230,8 +228,7 @@ export default async function ServicePage({ params }: Props) {
 
   if (!serviceSlug || serviceSlug === "undefined") notFound();
 
-  // Both fetches are issued in parallel and each is independently cached at
-  // the CDN/Next.js Data Cache layer via their respective revalidate windows.
+
   const [service, cities] = await Promise.all([
     getService(serviceSlug),
     getAllCities(),

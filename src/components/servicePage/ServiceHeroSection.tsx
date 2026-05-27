@@ -30,7 +30,7 @@ export default function ServiceHeroSection({
   console.log(service.service_image_url);
   return (
     <section className="relative max-w-6xl mx-auto py-3 ">
-      <section className="relative overflow-hidden min-h-[700px] bg-slate-950 rounded-2xl">
+      <section className="relative overflow-hidden max-h-175 bg-slate-950 rounded-2xl">
         <Image
           src={service.service_image_url}
           alt={service.name}
@@ -69,7 +69,7 @@ export default function ServiceHeroSection({
             </Link>
           </nav> */}
           <div className="text-left mb-4">
-            <h1 className="text-3xl md:text-5xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-8">
+            <h1 className="text-3xl md:text-5xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4">
               <span className="text-white bg-clip-text  drop-shadow-lg">
                 {title}
               </span>

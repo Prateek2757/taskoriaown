@@ -1,4 +1,3 @@
-
 import {
   Body,
   Button,
@@ -49,7 +48,7 @@ export const ProviderEmailCompose = ({
   company = "Taskoria",
   username,
   messageFromProvider = "",
-  replyUrl = "https://www.taskoria.com/messages/null",
+  replyUrl = "https://www.taskoria.com/messages",
 }: ProviderEmailComposeProps) => {
   const isHtml =
     messageFromProvider.trimStart().startsWith("<!DOCTYPE") ||
@@ -66,7 +65,10 @@ export const ProviderEmailCompose = ({
       <Preview>
         A professional sent you a message on {company} — tap to reply.
       </Preview>
+
       <Body style={body}>
+
+     
         <Section style={{ backgroundColor: "#eef0f3" }}>
           <Row>
             <Column style={outerWrapperCol}>
@@ -82,7 +84,6 @@ export const ProviderEmailCompose = ({
                 borderLeft: "1px solid #d4d8de",
               }}>
 
-            
                 <Section style={heroSection}>
                   <Row>
                     <Column style={heroCol}>
@@ -103,8 +104,6 @@ export const ProviderEmailCompose = ({
                     </Column>
                   </Row>
                 </Section>
-
-            
                 <Section>
                   <Row>
                     <Column style={bodyCol}>
@@ -117,33 +116,46 @@ export const ProviderEmailCompose = ({
                         ! A professional has sent you a message regarding your
                         project. Log in to reply and keep the conversation going.
                       </Text>
+
                       <Row>
                         <Column style={msgWrap}>
 
                           <Text style={msgTag}>💬 Message</Text>
 
                           {isHtml ? (
-                            <div
-                              style={msgTextStyle}
-                              dangerouslySetInnerHTML={{ __html: messageFromProvider }}
-                            />
+                           
+                            <div style={msgHtmlWrap}>
+                              <style>{`
+                                .msg-html p  { margin: 0 0 10px 0 !important; }
+                                .msg-html p:last-child { margin-bottom: 0 !important; }
+                                .msg-html ul, .msg-html ol { margin: 0 0 10px 0 !important; padding-left: 20px !important; }
+                              `}</style>
+                              <div
+                                className="msg-html"
+                                style={msgTextStyle}
+                                dangerouslySetInnerHTML={{ __html: messageFromProvider }}
+                              />
+                            </div>
                           ) : (
-                            <Text style={msgTextStyle}>
-                              {messageFromProvider.split("\n").map((line, i) => (
-                                <span key={i}>
-                                  {line}
-                                  <br />
-                                </span>
-                              ))}
-                            </Text>
+                        
+                            <>
+                              {messageFromProvider.split("\n").map((line, i) =>
+                                line.trim() === "" ? (
+                                  <Text key={i} style={msgLineGap}>&nbsp;</Text>
+                                ) : (
+                                  <Text key={i} style={msgLine}>{line}</Text>
+                                )
+                              )}
+                            </>
                           )}
 
                         </Column>
                       </Row>
 
-                  
+                    
                       <Text style={spacer}>&nbsp;</Text>
 
+                   
                       <Row>
                         <Column style={ctaCol}>
                           <Button href={replyUrl} style={ctaButton}>
@@ -169,6 +181,7 @@ export const ProviderEmailCompose = ({
                   </Row>
                 </Section>
 
+            
                 <Section style={footerSection}>
                   <Row>
                     <Column style={footerCol}>
@@ -213,6 +226,7 @@ export const ProviderEmailCompose = ({
 const PRIMARY        = "#2563EB";
 const PRIMARY_LIGHT  = "#eff6ff";
 const PRIMARY_BORDER = "#bfdbfe";
+
 
 const msgWrap: CSSProperties = {
   backgroundColor: PRIMARY_LIGHT,
@@ -261,4 +275,25 @@ const ctaSub: CSSProperties = {
   fontSize: "12px",
   color: "#9aa0aa",
   margin: "10px 0 0",
+};
+
+const msgLine: CSSProperties = {
+  fontSize: "15px",
+  lineHeight: "1.6",
+  color: "#1a2236",
+  margin: 0,
+};
+
+const msgLineGap: CSSProperties = {
+  margin: 0,
+  padding: 0,
+  lineHeight: "10px",
+  fontSize: "1px",
+  color: "transparent",
+};
+
+const msgHtmlWrap: CSSProperties = {
+  fontSize: "15px",
+  lineHeight: "1.6",
+  color: "#1a2236",
 };

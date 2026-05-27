@@ -65,25 +65,21 @@ export default function EmailComposeModal({
     defaultValues: { subject: "Project Discussion" },
   });
 
-  // ── Send ──────────────────────────────────────────────────────────────────
 
   const handleSend = async (formData: EmailForm) => {
     try {
       setSending(true);
 
-      // 1. Ask Unlayer to render the current editor state into HTML
       const messageFromProvider = await emailBuilderRef.current?.exportHtml();
 
       if (!messageFromProvider) {
         throw new Error("Could not export email content. Please try again.");
       }
 
-      // 2. POST to your existing API route
-      //    The API receives `messageFromProvider` which is now full HTML from Unlayer
       const res = await axios.post("/api/provider-compose-email", {
         email: response.customer_email,
         subject: formData.subject,
-        messageFromProvider, // ← full Unlayer HTML
+        messageFromProvider, 
       });
 
       if (!res.data.success) throw new Error(res.data.error);
@@ -101,7 +97,6 @@ export default function EmailComposeModal({
     }
   };
 
-  // ── Reset ─────────────────────────────────────────────────────────────────
 
   const resetState = () => {
     reset({ subject: "Project Discussion" });

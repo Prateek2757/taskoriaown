@@ -114,12 +114,10 @@ export const VerificationEmail = ({
   );
 };
 
-// ── Brand tokens ──────────────────────────────────────────
 const PRIMARY        = "#2563EB";
 const PRIMARY_LIGHT  = "#eff6ff";
 const PRIMARY_BORDER = "#bfdbfe";
 
-// ── Styles ────────────────────────────────────────────────
 const body: React.CSSProperties = {
   backgroundColor: "#eef0f3",
   fontFamily: "'DM Sans', Arial, sans-serif",
@@ -215,7 +213,6 @@ const expiryText: React.CSSProperties = {
   margin: "10px 0 0",
 };
 
-// Warning
 const warningBox: React.CSSProperties = {
   backgroundColor: "#fffbeb",
   border: "0.5px solid #fde68a",
