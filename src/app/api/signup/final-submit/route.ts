@@ -144,7 +144,7 @@ export async function POST(req: NextRequest) {
 await client.query(
   `
   INSERT INTO scheduled_emails (user_id, type, send_after) VALUES
-    ($1, 'nudge',  NOW() + INTERVAL '1 day'),
+    ($1, 'nudge',  NOW() + INTERVAL '12 hour'),
     ($1, 'month',  NOW() + INTERVAL '30 days')
   ON CONFLICT (user_id, type) DO NOTHING  -- safe to re-run
   `,

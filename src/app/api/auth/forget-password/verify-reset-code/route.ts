@@ -1,70 +1,67 @@
+// app/api/auth/forget-password/verify-reset-code/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
-import bcrypt from "bcryptjs";
 
 export async function POST(req: NextRequest) {
   const client = await pool.connect();
 
   try {
-    const { email, code, newPassword } = await req.json();
+    const { email, code } = await req.json();
 
-    if (!email || !code || !newPassword) {
+    const normalizedEmail = String(email || "").trim().toLowerCase();
+    const otp = String(code || "").trim();
+
+    if (!normalizedEmail || !otp) {
       return NextResponse.json(
-        { success: false, message: "Email, code, and password are required" },
+        { success: false, message: "Email and OTP are required" },
         { status: 400 }
       );
     }
 
-    if (newPassword.length < 8) {
+    if (!/^\d{6}$/.test(otp)) {
       return NextResponse.json(
-        { success: false, message: "Password must be at least 8 characters" },
+        { success: false, message: "Invalid OTP format" },
         { status: 400 }
       );
     }
 
     const userQuery = await client.query(
-      `SELECT * FROM users 
-       WHERE LOWER(email) = LOWER($1) 
-       AND reset_password_code = $2 
-       AND reset_password_expire > NOW()`,
-      [email.trim(), code.trim()]
+      `
+      SELECT user_id
+      FROM users
+      WHERE LOWER(email) = LOWER($1)
+        AND reset_password_code = $2
+        AND reset_password_expire > NOW()
+      LIMIT 1
+      `,
+      [normalizedEmail, otp]
     );
 
     if (userQuery.rows.length === 0) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Invalid or expired code",
-        },
+        { success: false, message: "Invalid or expired OTP" },
         { status: 400 }
       );
     }
 
-    const user = userQuery.rows[0];
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
     await client.query(
-      `UPDATE users 
-       SET password_hash = $1,
-           reset_password_code = NULL,
-           reset_password_expire = NULL,
-           updated_at = NOW()
-       WHERE user_id = $2`,
-      [hashedPassword, user.user_id]
+      `
+      UPDATE users
+      SET reset_password_verified = true,
+          updated_at = NOW()
+      WHERE user_id = $1
+      `,
+      [userQuery.rows[0].user_id]
     );
 
     return NextResponse.json(
-      {
-        success: true,
-        message: "Password reset successful",
-      },
+      { success: true, message: "OTP verified successfully" },
       { status: 200 }
     );
   } catch (error) {
     console.error("VERIFY RESET CODE ERROR:", error);
     return NextResponse.json(
-      { success: false, message: "Failed to reset password" },
+      { success: false, message: "Failed to verify OTP" },
       { status: 500 }
     );
   } finally {

@@ -1,19 +1,30 @@
 import {
   Body,
   Button,
+  Column,
   Container,
   Head,
   Heading,
+  Hr,
   Html,
   Img,
   Link,
+  Preview,
+  Row,
   Section,
   Text,
 } from "@react-email/components";
 import { ProviderEstimateEmailProps } from "../type";
+import {
+  body, container, divider, eyebrow,
+  footer, footerLink, footerText, hero,
+  heroHeading, heroSub, intro,
+  sigName, signOff, sigRole,
+} from "../helpers/shared-style";
 
 export const ProviderEstimateEmail = ({
   company = "Taskoria",
+  username,
   taskTitle,
   price,
   unit,
@@ -27,222 +38,315 @@ export const ProviderEstimateEmail = ({
     professional_company_name.trim().toLowerCase() !==
       professional_name?.trim().toLowerCase();
 
+  const hasPro = professional_name || showCompany || professional_phone;
+
   return (
-    <Html>
+    <Html lang="en">
       <Head>
-        <title>You received a new estimate</title>
+        <title>You received a new estimate — {company}</title>
       </Head>
 
-      <Body
-        style={{
-          backgroundColor: "#f3f4f6",
-          fontFamily: "Arial, sans-serif",
-          margin: 0,
-          padding: "16px",
-        }}
-      >
-        <Container
-          style={{
-            maxWidth: "600px",
-            margin: "32px auto",
-            backgroundColor: "#ffffff",
-            borderRadius: "10px",
-            padding: "32px",
-            boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
-          }}
-        >
-          <Section style={{ textAlign: "center" }}>
+      <Preview>
+        A professional submitted a quote for &quot;{taskTitle ?? "your task"}&quot; — review it now.
+      </Preview>
+
+      <Body style={body}>
+        <Container style={container}>
+
+          {/* ── Hero ── */}
+          <Section style={hero}>
             <Img
               src="https://www.taskoria.com/images/taskoria_logo.svg"
-              alt={`${company} Logo`}
-              width="48"
-              height="48"
-              style={{ margin: "0 auto 24px" }}
+              alt={`${company} logo`}
+              width="44"
+              height="44"
+              style={{ display: "block", margin: "0 auto 18px" }}
             />
+            <Text style={eyebrow}>New estimate received</Text>
+            <Heading style={heroHeading}>
+              You&apos;ve got a quote for your task.
+            </Heading>
+            <Text style={heroSub}>
+              A professional submitted a price for &quot;
+              {taskTitle ?? "your task"}&quot;.
+            </Text>
           </Section>
 
-          <Heading
-            style={{
-              marginBottom: "12px",
-              fontSize: "24px",
-              fontWeight: "700",
-              color: "#111827",
-            }}
-          >
-            💰 You received a new estimate
-          </Heading>
+          <Section style={outerPad}>
 
-          <Text
-            style={{
-              marginBottom: "24px",
-              fontSize: "16px",
-              lineHeight: "1.6",
-              color: "#374151",
-            }}
-          >
-            A service professional has submitted a quote for your task:
-            <b> "{taskTitle ?? "your task"}"</b>.
-          </Text>
-
-          <Section
-            style={{
-              margin: "24px 0",
-              backgroundColor: "#f9fafb",
-              padding: "22px",
-              borderRadius: "8px",
-              border: "1px solid #e5e7eb",
-            }}
-          >
-            <Text
-              style={{
-                fontSize: "13px",
-                color: "#6b7280",
-                margin: "0 0 6px 0",
-              }}
-            >
-              ESTIMATED PRICE
+            <Text style={intro}>
+              Hi{" "}
+              <strong style={{ color: "#1a2236" }}>
+                {username ?? "there"}
+              </strong>
+              ! A service professional has submitted an estimate for your task.
+              Review the details below and reply if you&apos;d like to proceed.
             </Text>
 
-            <Text
-              style={{
-                fontSize: "30px",
-                fontWeight: "700",
-                color: "#2563eb",
-                margin: "6px 0",
-              }}
-            >
-              A$ {price} {unit}
-            </Text>
-
-            {messageFromProvider && (
-              <Text
-                style={{
-                  fontSize: "14px",
-                  color: "#374151",
-                  marginTop: "14px",
-                  lineHeight: "1.5",
-                }}
-              >
-                <b>Additional Details:</b> {messageFromProvider}
+            <Section style={priceBox}>
+              <Text style={priceLabel}>Estimated price</Text>
+              <Text style={priceValue}>
+                A$ {price ?? "—"}
               </Text>
-            )}
-          </Section>
+              {unit && <Text style={priceUnit}>{unit}</Text>}
 
-          {(professional_name || showCompany || professional_phone) && (
-            <Section
-              style={{
-                marginTop: "30px",
-                paddingTop: "20px",
-                borderTop: "1px solid #e5e7eb",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "700",
-                  color: "#111827",
-                  marginBottom: "12px",
-                }}
-              >
-                Service Professional
-              </Text>
-
-              {professional_name && (
-                <Text
-                  style={{
-                    fontSize: "14px",
-                    color: "#374151",
-                    margin: "4px 0",
-                  }}
-                >
-                  <b>Name:</b> {professional_name}
-                </Text>
-              )}
-
-              {showCompany && (
-                <Text
-                  style={{
-                    fontSize: "14px",
-                    color: "#374151",
-                    margin: "4px 0",
-                  }}
-                >
-                  <b>Company:</b> {professional_company_name}
-                </Text>
-              )}
-
-              {professional_phone && (
-                <Text
-                  style={{
-                    fontSize: "14px",
-                    color: "#374151",
-                    margin: "4px 0",
-                  }}
-                >
-                  <b>Phone:</b>{" "}
-                  <Link
-                    href={`tel:${professional_phone}`}
-                    style={{
-                      color: "#2563eb",
-                      textDecoration: "none",
-                    }}
-                  >
-                    {professional_phone}
-                  </Link>
-                </Text>
+              {messageFromProvider && (
+                <>
+                  <Text style={msgLabel}>Additional details</Text>
+                  <Section style={msgBubble}>
+                    <Text style={msgText}>{messageFromProvider}</Text>
+                  </Section>
+                </>
               )}
             </Section>
-          )}
 
-          <Section
-            style={{
-              marginTop: "36px",
-              borderTop: "1px solid #e5e7eb",
-              paddingTop: "20px",
-            }}
-          >
-            <Text
-              style={{
-                textAlign: "center",
-                fontSize: "12px",
-                color: "#6b7280",
-                margin: "6px 0",
-              }}
-            >
+            {/* Spacer */}
+            <Text style={spacer} />
+
+            {/* Professional info */}
+            {hasPro && (
+              <Section style={proBox}>
+                <Text style={proSectionLabel}>Service professional</Text>
+
+                {professional_name && (
+                  <Row style={proRow}>
+                    <Column style={proKeyCol}>
+                      <Text style={proKey}>Name</Text>
+                    </Column>
+                    <Column>
+                      <Text style={proVal}>{professional_name}</Text>
+                    </Column>
+                  </Row>
+                )}
+
+                {showCompany && (
+                  <Row style={proRow}>
+                    <Column style={proKeyCol}>
+                      <Text style={proKey}>Company</Text>
+                    </Column>
+                    <Column>
+                      <Text style={proVal}>{professional_company_name}</Text>
+                    </Column>
+                  </Row>
+                )}
+
+                {professional_phone && (
+                  <Row style={proRow}>
+                    <Column style={proKeyCol}>
+                      <Text style={proKey}>Phone</Text>
+                    </Column>
+                    <Column>
+                      <Text style={proVal}>
+                        <Link
+                          href={`tel:${professional_phone}`}
+                          style={phoneLink}
+                        >
+                          {professional_phone}
+                        </Link>
+                      </Text>
+                    </Column>
+                  </Row>
+                )}
+              </Section>
+            )}
+
+            {/* Spacer */}
+            <Text style={spacer} />
+
+            {/* CTA */}
+            {/* <Section style={ctaSection}>
+              <Button
+                href="https://www.taskoria.com/tasks"
+                style={ctaButton}
+              >
+                View full estimate →
+              </Button>
+              <Text style={ctaSub}>
+                Log in to accept, decline, or ask a question
+              </Text>
+            </Section> */}
+
+            <Hr style={divider} />
+
+            <Text style={signOff}>
+              If you have any questions, just reply to this email — we&apos;re
+              always happy to help.
+            </Text>
+            <Text style={signOff}>Warm regards,</Text>
+            <Text style={sigName}>The {company} Team</Text>
+            <Text style={sigRole}>contact@taskoria.com</Text>
+
+          </Section>
+
+          {/* ── Footer ── */}
+          <Section style={footer}>
+            <Text style={footerText}>
               © {new Date().getFullYear()} {company}. All rights reserved.
             </Text>
-
-            <Text
-              style={{
-                textAlign: "center",
-                fontSize: "12px",
-                color: "#6b7280",
-                margin: "6px 0",
-              }}
-            >
-              <Link
-                href="https://www.taskoria.com/privacy-policy"
-                style={{
-                  color: "#2563eb",
-                  textDecoration: "underline",
-                }}
-              >
+            <Text style={footerText}>
+              <Link href="https://www.taskoria.com/privacy-policy" style={footerLink}>
                 Privacy Policy
               </Link>
-              {" | "}
-              <Link
-                href="https://www.taskoria.com/terms-and-conditions"
-                style={{
-                  color: "#2563eb",
-                  textDecoration: "underline",
-                }}
-              >
+              {" · "}
+              <Link href="https://www.taskoria.com/terms-and-conditions" style={footerLink}>
                 Terms of Service
+              </Link>
+              {" · "}
+              <Link href="https://www.taskoria.com/unsubscribe" style={footerLink}>
+                Unsubscribe
               </Link>
             </Text>
           </Section>
+
         </Container>
       </Body>
     </Html>
   );
+};
+
+// ── Brand tokens ──────────────────────────────────────────
+const PRIMARY        = "#2563EB";
+const PRIMARY_LIGHT  = "#eff6ff";
+const PRIMARY_BORDER = "#bfdbfe";
+
+// ── Styles ────────────────────────────────────────────────
+const outerPad: React.CSSProperties = {
+  padding: "32px 40px 28px",
+};
+
+// Price box — border-left accent for Outlook compatibility
+const priceBox: React.CSSProperties = {
+  backgroundColor: PRIMARY_LIGHT,
+  borderLeft: `4px solid ${PRIMARY}`,
+  borderTop: `1px solid ${PRIMARY_BORDER}`,
+  borderRight: `1px solid ${PRIMARY_BORDER}`,
+  borderBottom: `1px solid ${PRIMARY_BORDER}`,
+  borderRadius: "0 10px 10px 0",
+  padding: "22px 24px",
+};
+
+const priceLabel: React.CSSProperties = {
+  fontSize: "11px",
+  fontWeight: "bold",
+  letterSpacing: "1.5px",
+  textTransform: "uppercase",
+  color: "#6b7585",
+  margin: "0 0 8px",
+};
+
+const priceValue: React.CSSProperties = {
+  fontSize: "38px",
+  fontWeight: "bold",
+  color: PRIMARY,
+  margin: "0 0 4px",
+  lineHeight: "1.1",
+};
+
+const priceUnit: React.CSSProperties = {
+  fontSize: "13px",
+  color: "#6b7585",
+  margin: "0 0 16px",
+};
+
+const msgLabel: React.CSSProperties = {
+  fontSize: "12px",
+  fontWeight: "bold",
+  color: "#1a2236",
+  margin: "0 0 6px",
+};
+
+// msgBubble padding lives on Section <td>
+const msgBubble: React.CSSProperties = {
+  backgroundColor: "#ffffff",
+  borderTop: `1px solid ${PRIMARY_BORDER}`,
+  borderLeft: `1px solid ${PRIMARY_BORDER}`,
+  borderRight: `1px solid ${PRIMARY_BORDER}`,
+  borderBottom: `1px solid ${PRIMARY_BORDER}`,
+  borderRadius: "6px",
+  padding: "10px 14px",
+};
+
+const msgText: React.CSSProperties = {
+  fontSize: "13px",
+  color: "#3d4654",
+  lineHeight: "1.7",
+  margin: 0,
+};
+
+// Professional info box
+const proBox: React.CSSProperties = {
+  backgroundColor: "#f7f9fc",
+  borderTop: "1px solid #e2e6ed",
+  borderLeft: "1px solid #e2e6ed",
+  borderRight: "1px solid #e2e6ed",
+  borderBottom: "1px solid #e2e6ed",
+  borderRadius: "10px",
+  padding: "18px 20px",
+};
+
+const proSectionLabel: React.CSSProperties = {
+  fontSize: "11px",
+  fontWeight: "bold",
+  letterSpacing: "1.5px",
+  textTransform: "uppercase",
+  color: "#9aa0aa",
+  margin: "0 0 12px",
+};
+
+const proRow: React.CSSProperties = {
+  marginBottom: "8px",
+};
+
+const proKeyCol: React.CSSProperties = {
+  width: "72px",
+  verticalAlign: "top",
+};
+
+const proKey: React.CSSProperties = {
+  fontSize: "12px",
+  fontWeight: "bold",
+  color: "#1a2236",
+  margin: 0,
+};
+
+const proVal: React.CSSProperties = {
+  fontSize: "13px",
+  color: "#3d4654",
+  margin: 0,
+};
+
+const phoneLink: React.CSSProperties = {
+  color: PRIMARY,
+  textDecoration: "none",
+};
+
+// Spacer — reliable vertical gap for all clients
+const spacer: React.CSSProperties = {
+  margin: 0,
+  padding: 0,
+  lineHeight: "20px",
+  fontSize: "1px",
+};
+
+const ctaSection: React.CSSProperties = {
+  textAlign: "center",
+  padding: "4px 0 0",
+};
+
+const ctaButton: React.CSSProperties = {
+  backgroundColor: PRIMARY,
+  color: "#ffffff",
+  padding: "13px 36px",
+  fontSize: "15px",
+  fontWeight: "bold",
+  borderRadius: "6px",
+  textDecoration: "none",
+  display: "inline-block",
+  msoPaddingAlt: "13px 36px",
+};
+
+const ctaSub: React.CSSProperties = {
+  fontSize: "12px",
+  color: "#9aa0aa",
+  margin: "10px 0 0",
 };

@@ -1,183 +1,264 @@
+
 import {
   Body,
+  Button,
+  Column,
   Container,
   Head,
+  Heading,
+  Hr,
   Html,
+  Img,
+  Link,
   Preview,
+  Row,
   Section,
   Text,
-  Heading,
-  Link,
-  Img,
 } from "@react-email/components";
+import type { CSSProperties } from "react";
+
+import {
+  body,
+  bodyCol,
+  ctaButton,
+  divider,
+  eyebrow,
+  footerCol,
+  footerLink,
+  footerSection,
+  footerText,
+  heroCol,
+  heroHeading,
+  heroSection,
+  heroSub,
+  intro,
+  outerWrapperCol,
+  sigName,
+  signOff,
+  sigRole,
+} from "../helpers/shared-style";
 
 interface ProviderEmailComposeProps {
   messageFromProvider?: string;
   company?: string;
+  username?: string;
+  replyUrl?: string;
 }
 
 export const ProviderEmailCompose = ({
   company = "Taskoria",
+  username,
   messageFromProvider = "",
+  replyUrl = "https://www.taskoria.com/messages/null",
 }: ProviderEmailComposeProps) => {
   const isHtml =
     messageFromProvider.trimStart().startsWith("<!DOCTYPE") ||
-    messageFromProvider.trimStart().startsWith("<html") ||
-    messageFromProvider.trimStart().startsWith("<p") ||
+    messageFromProvider.trimStart().startsWith("<html")     ||
+    messageFromProvider.trimStart().startsWith("<p")        ||
     messageFromProvider.trimStart().startsWith("<div");
 
-  const formattedMessage = isHtml
-    ? null
-    : messageFromProvider
-        .split("\n")
-        .map((line, i) => <span key={i}>{line}</span>);
-
   return (
-    <Html>
-      <Head />
-      <Preview>New message from a provider on {company}</Preview>
+    <Html lang="en">
+      <Head>
+        <title>New message from a professional — {company}</title>
+      </Head>
 
-      <Body
-        style={{
-          backgroundColor: "#f3f4f6",
-          fontFamily: "Arial, sans-serif",
-          margin: 0,
-          padding: "16px",
-        }}
-      >
-        <Container
-          style={{
-            maxWidth: "600px",
-            margin: "32px auto",
-            backgroundColor: "#ffffff",
-            borderRadius: "10px",
-            padding: "32px",
-            boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
-          }}
-        >
-          <Section style={{ textAlign: "center", paddingBottom: "8px" }}>
-            <Img
-              src="https://www.taskoria.com/images/taskoria_logo.svg"
-              alt={`${company} Logo`}
-              width="48"
-              height="48"
-              style={{ display: "block", margin: "0 auto" }}
-            />
-          </Section>
+      <Preview>
+        A professional sent you a message on {company} — tap to reply.
+      </Preview>
+      <Body style={body}>
+        <Section style={{ backgroundColor: "#eef0f3" }}>
+          <Row>
+            <Column style={outerWrapperCol}>
 
-          <Section style={{ textAlign: "center", paddingBottom: "24px" }}>
-            <Text
-              style={{
-                fontSize: "24px",
-                fontWeight: "700",
-                color: "#111827",
-                lineHeight: "1.3",
-                margin: 0,
-              }}
-            >
-              {company}
-            </Text>
-          </Section>
+              <Container style={{
+                maxWidth: "560px",
+                margin: "0 auto",
+                backgroundColor: "#ffffff",
+                borderRadius: "12px",
+                borderTop: "1px solid #d4d8de",
+                borderRight: "1px solid #d4d8de",
+                borderBottom: "1px solid #d4d8de",
+                borderLeft: "1px solid #d4d8de",
+              }}>
 
-          <Section style={{ paddingBottom: "20px" }}>
-            <Heading
-              style={{
-                margin: "10 20px 8px 0",
-                padding: " 0 15px",
-                fontSize: "24px",
-                fontWeight: "700",
-                color: "#111827",
-              }}
-            >
-              You received a new message
-            </Heading>
-            <Text
-              style={{
-                margin: "0 0 20px 0",
-                fontSize: "15px",
-                padding: " 0 15px",
-                color: "#6b7280",
-                lineHeight: "1.5",
-              }}
-            >
-              A provider has sent you a message regarding your project.
-            </Text>
-          </Section>
+            
+                <Section style={heroSection}>
+                  <Row>
+                    <Column style={heroCol}>
+                      <Img
+                        src="https://www.taskoria.com/images/taskoria_logo.svg"
+                        alt={`${company} logo`}
+                        width="44"
+                        height="44"
+                        style={{ display: "block", margin: "0 auto 18px" }}
+                      />
+                      <Text style={eyebrow}>New message</Text>
+                      <Heading as="h1" style={heroHeading}>
+                        You received a message from a professional.
+                      </Heading>
+                      <Text style={heroSub}>
+                        They&apos;re interested in your project on {company}.
+                      </Text>
+                    </Column>
+                  </Row>
+                </Section>
 
-          <Section
-            style={{
-              margin: "24px 0",
-              backgroundColor: "#f9fafb",
-              padding: "22px",
-              borderRadius: "8px",
-              border: "1px solid #e5e7eb",
-            }}
-          >
-            {isHtml ? (
-              <div
-                style={{
-                  fontSize: "15px",
-                  lineHeight: "1.6",
-                  color: "#111827",
-                  padding: "auto",
-                  margin: "auto",
-                }}
-                dangerouslySetInnerHTML={{ __html: messageFromProvider }}
-              />
-            ) : (
-              <Text
-                style={{
-                  fontSize: "15px",
-                  lineHeight: "1.6",
-                  color: "#111827",
-                }}
-              >
-                {formattedMessage}
-              </Text>
-            )}
-          </Section>
+            
+                <Section>
+                  <Row>
+                    <Column style={bodyCol}>
 
-          {/* Footer */}
-          <Section
-            style={{
-              textAlign: "center",
-            }}
-          >
-            <Text
-              style={{
-                fontSize: "12px",
-                color: "#6b7280",
-                lineHeight: "1.4",
-                margin: "8px 0",
-              }}
-            >
-              © {new Date().getFullYear()} {company}. All rights reserved.
-            </Text>
-            <Text
-              style={{
-                fontSize: "12px",
-                color: "#6b7280",
-                lineHeight: "1.4",
-                margin: "4px 0",
-              }}
-            >
-              <Link
-                href="https://www.taskoria.com/privacy-policy"
-                style={{ color: "#2563eb", textDecoration: "underline" }}
-              >
-                Privacy Policy
-              </Link>{" "}
-              |{" "}
-              <Link
-                href="https://www.taskoria.com/terms-and-conditions"
-                style={{ color: "#2563eb", textDecoration: "underline" }}
-              >
-                Terms of Service
-              </Link>
-            </Text>
-          </Section>
-        </Container>
+                      <Text style={intro}>
+                        Hi{" "}
+                        <strong style={{ color: "#1a2236" }}>
+                          {username ?? "there"}
+                        </strong>
+                        ! A professional has sent you a message regarding your
+                        project. Log in to reply and keep the conversation going.
+                      </Text>
+                      <Row>
+                        <Column style={msgWrap}>
+
+                          <Text style={msgTag}>💬 Message</Text>
+
+                          {isHtml ? (
+                            <div
+                              style={msgTextStyle}
+                              dangerouslySetInnerHTML={{ __html: messageFromProvider }}
+                            />
+                          ) : (
+                            <Text style={msgTextStyle}>
+                              {messageFromProvider.split("\n").map((line, i) => (
+                                <span key={i}>
+                                  {line}
+                                  <br />
+                                </span>
+                              ))}
+                            </Text>
+                          )}
+
+                        </Column>
+                      </Row>
+
+                  
+                      <Text style={spacer}>&nbsp;</Text>
+
+                      <Row>
+                        <Column style={ctaCol}>
+                          <Button href={replyUrl} style={ctaButton}>
+                            Reply to this message →
+                          </Button>
+                          <Text style={ctaSub}>
+                            Log in to view the full conversation
+                          </Text>
+                        </Column>
+                      </Row>
+
+                      <Hr style={divider} />
+
+                      <Text style={signOff}>
+                        If you have any questions, just reply to this email —
+                        we&apos;re always happy to help.
+                      </Text>
+                      <Text style={signOff}>Warm regards,</Text>
+                      <Text style={sigName}>The {company} Team</Text>
+                      <Text style={sigRole}>contact@taskoria.com</Text>
+
+                    </Column>
+                  </Row>
+                </Section>
+
+                <Section style={footerSection}>
+                  <Row>
+                    <Column style={footerCol}>
+                      <Text style={footerText}>
+                        © {new Date().getFullYear()} {company}. All rights reserved.
+                      </Text>
+                      <Text style={footerText}>
+                        <Link
+                          href="https://www.taskoria.com/privacy-policy"
+                          style={footerLink}
+                        >
+                          Privacy Policy
+                        </Link>
+                        {" · "}
+                        <Link
+                          href="https://www.taskoria.com/terms-and-conditions"
+                          style={footerLink}
+                        >
+                          Terms of Service
+                        </Link>
+                        {" · "}
+                        <Link
+                          href="https://www.taskoria.com/unsubscribe"
+                          style={footerLink}
+                        >
+                          Unsubscribe
+                        </Link>
+                      </Text>
+                    </Column>
+                  </Row>
+                </Section>
+
+              </Container>
+            </Column>
+          </Row>
+        </Section>
       </Body>
     </Html>
   );
+};
+
+const PRIMARY        = "#2563EB";
+const PRIMARY_LIGHT  = "#eff6ff";
+const PRIMARY_BORDER = "#bfdbfe";
+
+const msgWrap: CSSProperties = {
+  backgroundColor: PRIMARY_LIGHT,
+  borderLeft: `4px solid ${PRIMARY}`,
+  borderTop: `1px solid ${PRIMARY_BORDER}`,
+  borderRight: `1px solid ${PRIMARY_BORDER}`,
+  borderBottom: `1px solid ${PRIMARY_BORDER}`,
+  borderRadius: "0 8px 8px 0",
+  padding: "20px 22px",
+};
+
+const msgTag: CSSProperties = {
+  display: "inline-block",
+  backgroundColor: PRIMARY,
+  color: "#ffffff",
+  fontSize: "11px",
+  fontWeight: "bold",
+  letterSpacing: "1px",
+  textTransform: "uppercase",
+  padding: "3px 10px",
+  borderRadius: "99px",
+  margin: "0 0 14px",
+};
+
+const msgTextStyle: CSSProperties = {
+  fontSize: "15px",
+  lineHeight: "1.6",
+  color: "#1a2236",
+  margin: 0,
+};
+
+const spacer: CSSProperties = {
+  margin: 0,
+  padding: 0,
+  lineHeight: "24px",
+  fontSize: "1px",
+  color: "transparent",
+};
+
+const ctaCol: CSSProperties = {
+  textAlign: "center",
+  paddingTop: "4px",
+};
+
+const ctaSub: CSSProperties = {
+  fontSize: "12px",
+  color: "#9aa0aa",
+  margin: "10px 0 0",
 };

@@ -34,7 +34,7 @@ function buildSignature(response: ProviderResponse): string {
 }
 
 function buildDefaultBody(response: ProviderResponse): string {
-  return `Dear ${response.customer_name},\nI found your project on Taskoria and I'd love to get involved.\nI've some thoughts that I'd like to run past you, does today suit you for a chat?\nHope to speak soon,\n\n${buildSignature(response)}`;
+  return `Dear ${response.customer_name},\nI found your project on Taskoria and I'd love to get involved.\nI've some thoughts that I'd like to run past you. \nDoes today suit you for a chat?\nHope to speak soon,\n\n${buildSignature(response)}`;
 }
 
 type EmailForm = { subject: string };

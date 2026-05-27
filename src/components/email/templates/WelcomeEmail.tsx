@@ -54,7 +54,6 @@ export const WelcomeEmail = ({
 
     <Body style={body}>
       <Container style={container}>
-
         <Section style={hero}>
           <Img
             src="https://www.taskoria.com/images/taskoria_logo.svg"
@@ -108,30 +107,35 @@ export const WelcomeEmail = ({
           <Text style={sigRole}>contact@taskoria.com</Text>
         </Section>
 
-\        <Section style={footer}>
+        <Section style={footer}>
           <Text style={footerText}>
             © {new Date().getFullYear()} {company}. All rights reserved.
           </Text>
           <Text style={footerText}>
-            <Link href="https://www.taskoria.com/privacy-policy" style={footerLink}>
+            <Link
+              href="https://www.taskoria.com/privacy-policy"
+              style={footerLink}
+            >
               Privacy Policy
             </Link>
             {" · "}
-            <Link href="https://www.taskoria.com/terms-and-conditions" style={footerLink}>
+            <Link
+              href="https://www.taskoria.com/terms-and-conditions"
+              style={footerLink}
+            >
               Terms of Service
             </Link>
-          
           </Text>
         </Section>
-
       </Container>
     </Body>
   </Html>
 );
 
-const PRIMARY        = "#2563EB";
-const PRIMARY_DARK   = "#1d4ed8";   4
-const PRIMARY_LIGHT  = "#eff6ff";  
+const PRIMARY = "#2563EB";
+const PRIMARY_DARK = "#1d4ed8";
+4;
+const PRIMARY_LIGHT = "#eff6ff";
 const PRIMARY_BORDER = "#bfdbfe";
 
 const body: React.CSSProperties = {
@@ -195,7 +199,7 @@ const featureCol: React.CSSProperties = {
 };
 
 const featureCard: React.CSSProperties = {
-  backgroundColor: PRIMARY_LIGHT,        // was #f7f9fc
+  backgroundColor: PRIMARY_LIGHT, // was #f7f9fc
   border: `1px solid ${PRIMARY_BORDER}`, // was #e2e6ed
   borderRadius: "8px",
   padding: "14px 16px",
@@ -209,13 +213,13 @@ const featureIcon: React.CSSProperties = {
 const featureTitle: React.CSSProperties = {
   fontSize: "13px",
   fontWeight: "600",
-  color: "#1e3a8a",   // blue-900 — dark text on light blue bg
+  color: "#1e3a8a", // blue-900 — dark text on light blue bg
   margin: "0 0 4px",
 };
 
 const featureDesc: React.CSSProperties = {
   fontSize: "12px",
-  color: "#3b5bb5",   // blue-700 — muted, but on-brand
+  color: "#3b5bb5", // blue-700 — muted, but on-brand
   lineHeight: "1.5",
   margin: 0,
 };
@@ -226,7 +230,7 @@ const ctaSection: React.CSSProperties = {
 };
 
 const ctaButton: React.CSSProperties = {
-  backgroundColor: PRIMARY,             // was #1a56db
+  backgroundColor: PRIMARY, // was #1a56db
   color: "#ffffff",
   padding: "13px 36px",
   fontSize: "15px",
@@ -268,14 +272,14 @@ const sigRole: React.CSSProperties = {
 };
 
 const footer: React.CSSProperties = {
-  backgroundColor: PRIMARY_LIGHT,        // was #f7f9fc
+  backgroundColor: PRIMARY_LIGHT, // was #f7f9fc
   borderTop: `1px solid ${PRIMARY_BORDER}`,
   padding: "18px 40px",
   textAlign: "center",
 };
 
 const footerLink: React.CSSProperties = {
-  color: PRIMARY,           
+  color: PRIMARY,
   textDecoration: "none",
 };
 

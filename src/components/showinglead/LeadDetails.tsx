@@ -621,7 +621,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               <button
                 onClick={handleGoToChat}
                 disabled={isChatButtonDisabled}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl bg-linear-to-r from-blue-500 to-[#2563EB] text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-2 font-semibold rounded-xl bg-linear-to-r from-blue-500 to-[#2563EB] text-white hover:from-blue-600 hover:to-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isNavigating || convoLoading ? (
                   <>
@@ -639,7 +639,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
               <button
               onClick={
                 lead.is_free_lead && !hasActiveSubcription
-                  ? () => router.push("/setting/billing/taskoria_pro")
+                  ? () => router.push("/settings/billing/taskoria_pro")
                   : handleContactClick
               }
               disabled={isDeducting || subscriptionLoading}
