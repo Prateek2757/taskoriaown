@@ -3,6 +3,8 @@
 import { MapPin, Users } from "lucide-react";
 import LocationSearch from "@/components/Location/locationsearch";
 import Image from "next/image";
+import { ServicesBadges } from "./ServicesBagdes";
+import { TrustBadges } from "../TrustBadges";
 
 interface HeroSectionProps {
   service: any;
@@ -27,9 +29,8 @@ export default function ServiceHeroSection({
   console.log("services:", service);
   console.log(service.service_image_url);
   return (
-    <section className="relative max-w-6xl mx-auto ">
+    <section className="relative max-w-6xl mx-auto py-3 ">
       <section className="relative overflow-hidden min-h-[700px] bg-slate-950 rounded-2xl">
-        {/* Background image */}
         <Image
           src={service.service_image_url}
           alt={service.name}
@@ -37,7 +38,7 @@ export default function ServiceHeroSection({
           priority
           className="absolute inset-0 object-cover"
         />
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-linear-to-r  from-black/40 to-transparent" />
 
         {/* <nav className="flex items-center gap-2 text-xs text-white/50 mb-7 flex-wrap">
         <Link href="/" className="hover:text-white/80 transition-colors">
@@ -68,11 +69,11 @@ export default function ServiceHeroSection({
             </Link>
           </nav> */}
           <div className="text-left mb-4">
-            <h1 className="text-4xl md:text-5xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-8">
-              <span className="text-white/80 bg-clip-text  drop-shadow-lg">
+            <h1 className="text-3xl md:text-5xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-8">
+              <span className="text-white bg-clip-text  drop-shadow-lg">
                 {title}
               </span>
-              <span className="block text-2xl md:text-2xl font-medium text-white/90">
+              <span className="block text-xl md:text-2xl font-medium text-white mt-3">
                 Made Simple & Fast
               </span>
             </h1>
@@ -107,7 +108,7 @@ export default function ServiceHeroSection({
                   <MapPin className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900 dark:text-white text-xl">
+                  <h3 className="font-bold text-[#2563EB] dark:text-white text-xl">
                     Get Started Now
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -120,6 +121,9 @@ export default function ServiceHeroSection({
                 presetLocation={presetLocation}
               />
             </div>
+          </div>
+          <div className="absolute bottom-0 right-0 hidden md:block">
+            <ServicesBadges />
           </div>
         </div>
       </section>
