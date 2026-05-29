@@ -12,7 +12,7 @@ interface ServicesSectionProps {
   profile: any;
   categories: Category[];
   saving: boolean;
-  addCategory: (categoryId: number, categoryName: string) => void;
+  addCategory: (categoryId: number, categoryName: string) => Promise<void>;
   onRemove: (categoryId: number) => void;
 }
 

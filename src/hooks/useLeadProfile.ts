@@ -100,7 +100,7 @@ export function useLeadProfile() {
         false
       );
       
-      await axios.postuser_categories("/api/", { category_id });
+      await axios.post("/api/user_categories", { category_id });
       notifyAll();
     } catch (err) {
       mutate(profile, false);

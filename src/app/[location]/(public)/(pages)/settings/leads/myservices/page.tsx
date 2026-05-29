@@ -629,7 +629,7 @@ import MyServicesPage from "@/components/Location&ServiceSetting/MyservicesPage"
 //   );
 // }
 
-const page = () => {
+const ServicePage = () => {
   return (
     <div>
       <MyServicesPage />
@@ -637,4 +637,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default ServicePage;

@@ -13,13 +13,14 @@ import { Button } from "@/components/ui/button";
 import { Search, Check } from "lucide-react";
 import { Category } from "@/hooks/useLeadProfile";
 import debounce from "lodash.debounce";
+import { toast } from "sonner";
 
 interface AddServicesDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   categories: Category[];
   profile: any;
-  addCategory: (categoryId: number, categoryName: string) => void;
+  addCategory: (categoryId: number, categoryName: string) => Promise<void>;
 }
 
 export default function AddServicesDialog({
@@ -32,6 +33,7 @@ export default function AddServicesDialog({
   const [catSearch, setCatSearch] = useState("");
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
 
   const handleCategorySearch = useCallback(
     debounce((query: string) => {
@@ -75,19 +77,47 @@ export default function AddServicesDialog({
     }
   };
 
-  const handleAddSelectedCategories = () => {
-    selectedCategories.forEach((categoryId) => {
-      const category = categories.find((c) => c.category_id === categoryId);
-      if (
-        category &&
-        !profile?.categories.some((c: any) => c.category_id === categoryId)
-      ) {
-        addCategory(category.category_id, category.name as any);
-      }
-    });
-    setSelectedCategories([]);
-    onOpenChange(false);
-    setCatSearch("");
+  const handleAddSelectedCategories = async () => {
+    const categoriesToAdd = selectedCategories.reduce<Category[]>(
+      (selected, categoryId) => {
+        const category = categories.find((c) => c.category_id === categoryId);
+        const isAlreadyAdded = profile?.categories.some(
+          (c: any) => c.category_id === categoryId
+        );
+
+        if (category && !isAlreadyAdded) {
+          selected.push(category);
+        }
+
+        return selected;
+      },
+      []
+    );
+
+    if (categoriesToAdd.length === 0) return;
+
+    setIsAdding(true);
+
+    try {
+      await Promise.all(
+        categoriesToAdd.map((category) =>
+          addCategory(
+            category.category_id,
+            category.name ?? category.category_name
+          )
+        )
+      );
+
+      setSelectedCategories([]);
+      onOpenChange(false);
+      setCatSearch("");
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "Failed to add selected services"
+      );
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -170,9 +200,10 @@ export default function AddServicesDialog({
               </div>
               <Button
                 onClick={handleAddSelectedCategories}
+                disabled={isAdding}
                 className="bg-cyan-600 hover:bg-cyan-700"
               >
-                Add Selected
+                {isAdding ? "Adding..." : "Add Selected"}
               </Button>
             </div>
           )}

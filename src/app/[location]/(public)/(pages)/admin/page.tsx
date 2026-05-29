@@ -13,6 +13,7 @@ import {
   DollarSign,
   AlertTriangle,
   BookOpen,
+  LayoutGrid,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -145,6 +146,18 @@ const SECTIONS = [
   actions: ["Write new post", "Manage drafts", "Edit published posts"],
   badgeKey: "draftPosts" as const,
   badgeLabel: "unpublished drafts",
+},
+{
+  label: "Service Categories",
+  href: "/admin/service-categories",
+  icon: LayoutGrid,
+  accent: "from-blue-500 to-blue-700",
+  ring: "ring-blue-500/20",
+  shadow: "shadow-blue-500/10",
+  desc: "Add, edit, and delete service categories. Organise the taxonomy used across provider listings.",
+  actions: ["Add new category", "Edit existing", "Delete unused"],
+  badgeKey: null,
+  badgeLabel: null,
 },
 ] as const;
 

@@ -26,8 +26,7 @@ export default function ServiceHeroSection({
     : service.name;
 
   const description = cityData?.description || service.description;
-  console.log("services:", service);
-  console.log(service.service_image_url);
+
   return (
     <section className="relative max-w-6xl mx-auto py-3 ">
       <section className="relative overflow-hidden max-h-175 bg-slate-950 rounded-2xl">
