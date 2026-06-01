@@ -170,25 +170,25 @@ export default function AboutUs() {
       
 
     
-      <section className="bg-gradient-to-br from-slate-900 to-slate-800 text-white py-24 mb-16">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="bg-gradient-to-br from-slate-900 to-slate-800 text-white py-8 mb-16">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">What We Stand For</h2>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto">
+            <h2 className="text-4xl md:text-4xl font-bold mb-4">What We Stand For</h2>
+            <p className="text-lg text-slate-300 max-w-3xl mx-auto">
               These aren't just values on a wall. They're the principles that guide every decision we make and every feature we build.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-4 gap-8">
             {values.map((value, index) => {
               const Icon = value.icon;
               return (
-                <div key={index} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition-colors">
-                  <div className="w-14 h-14 bg-blue-500/20 rounded-xl flex items-center justify-center mb-6">
+                <div key={index} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-3 hover:bg-white/10 transition-colors">
+                  <div className="w-8 h-8 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
                     <Icon className="w-7 h-7 text-blue-400" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-4">{value.title}</h3>
-                  <p className="text-slate-300 text-lg leading-relaxed">{value.description}</p>
+                  <h3 className="text-md font-bold mb-2">{value.title}</h3>
+                  <p className="text-slate-300 text-sm ">{value.description}</p>
                 </div>
               );
             })}
