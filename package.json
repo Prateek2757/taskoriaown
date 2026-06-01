@@ -58,7 +58,7 @@
     "cobe": "^0.6.5",
     "date-fns": "^4.1.0",
     "date-picker-np": "^1.0.37",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.6.1",
     "dotted-map": "^2.2.3",
     "emoji-picker-react": "^4.17.1",
     "html-react-parser": "^6.1.0",
