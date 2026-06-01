@@ -7,6 +7,9 @@ export const dynamic = "force-static";
 export const metadata = {
   title: "Help Center | Taskoria",
   description: "Find answers to your questions about using Taskoria.",
+  alternates: {
+    canonical: "https://www.taskoria.com/help",
+  },
 };
 
 const CATEGORIES = [

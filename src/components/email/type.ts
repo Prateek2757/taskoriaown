@@ -4,10 +4,11 @@ export type EmailType =
   | "task-posted-no-budget"
   | "provider-new-task"
   | "verification"
+  | "verify-reminder"
   | "provider-email-compose"
   | "password-reset-code"
   | "provider-estimate"
-  | "complete-profile"; // ← new
+  | "complete-profile"; 
 
 export interface BaseEmailProps {
   company?: string;
@@ -49,9 +50,8 @@ export interface ProviderEstimateEmailProps extends BaseEmailProps {
   professional_phone?: string;
 }
 
-// ── Profile completion ────────────────────────────────────
 export interface ProfileFlags {
-  hasAboutAndBio: boolean;      // display_name set + company.about >= 30 chars → +25%
+  hasAboutAndBio: boolean;     
   hasServices: boolean;         // user_profile_services exists                 → +20%
   hasPhotos: boolean;           // user_profile_photos exists                   → +25%
   hasSocialLinks: boolean;      // user_social_links with is_visible = true     → +10%

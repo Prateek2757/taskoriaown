@@ -6,6 +6,9 @@ import HelpSearch from "./HelpSearch";
 export const metadata = {
   title: "Help Center | Taskoria",
   description: "Find answers to your questions about using Taskoria.",
+  alternates: {
+    canonical: "https://www.taskoria.com/help-center",
+  },
 };
 
 const CATEGORIES = [

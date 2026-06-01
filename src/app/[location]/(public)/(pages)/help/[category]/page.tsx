@@ -21,14 +21,21 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const {category} = await params;
-  const label = CATEGORY_LABELS[category as Category];
+  const cat = category as Category;
+  const label = CATEGORY_LABELS[cat];
 
   if (!category) return {};
-  return { title: `${category} | Taskoria Help Center` };
+  return {
+    title: `${label ?? category} | Taskoria Help Center`,
+    alternates: {
+      canonical: `https://www.taskoria.com/help/${category}`,
+    },
+  };
 }
 
 export  default async function CategoryPage({ params }: Props) {
-  const {category : cat} = await params;
+  const {category : categoryParam} = await params;
+  const cat = categoryParam as Category;
   const groups = CATEGORY_GROUPS[cat];
   if (!groups) notFound();
 

@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
           OR se.last_sent_at <= NOW() - INTERVAL '30 days'
         END
       )
-    `,
+    `,  
     [type]
   );
 

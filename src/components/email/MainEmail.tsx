@@ -6,6 +6,7 @@ import { ProviderEstimateEmail } from "./templates/ProviderEstimateEmail";
 import { VerificationEmail } from "./templates/VerificationEmail";
 import { PasswordResetEmail } from "./templates/PasswordResetEmail";
 import { ProviderEmailCompose } from "./templates/ProviderEmailCompose";
+import { VerifyReminderEmail } from "./templates/VerifyReminderEmail";
 export type { EmailType } from "./type";
 
 interface AppEmailProps {
@@ -73,6 +74,14 @@ const AppEmail = (props: AppEmailProps) => {
       );
       case "provider-email-compose":
       return(<ProviderEmailCompose {...props} />)
+      case "verify-reminder":
+  return (
+    <VerifyReminderEmail
+      username={props.username}
+      company={props.company}
+      // no verifyCode — app handles that on open ✓
+    />
+  );
   }
 }
 

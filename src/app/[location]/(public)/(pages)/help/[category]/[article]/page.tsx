@@ -23,11 +23,16 @@ export function generateStaticParams() {
 }
 
 export async function  generateMetadata({ params }: Props):Promise<Metadata> {
-  const {article:articleprop} = await params
+  const { category, article:articleprop} = await params
   const article = ARTICLES[articleprop];
 
   if (!article) return {};
-  return { title: `${article.title} | Taskoria Help Center` };
+  return {
+    title: `${article.title} | Taskoria Help Center`,
+    alternates: {
+      canonical: `https://www.taskoria.com/help/${category}/${articleprop}`,
+    },
+  };
 }
 
 export default async function ArticlePage({ params }: Props) {
@@ -66,7 +71,6 @@ export default async function ArticlePage({ params }: Props) {
         </nav>
 
         <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-8">
-          {/* Sidebar */}
           <aside>
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
               Categories

@@ -4,6 +4,9 @@ export const metadata: Metadata = {
   title: "Security Policy | Taskoria",
   description:
     "Taskoria's security policy, responsible disclosure program, and commitment to protecting our users.",
+  alternates: {
+    canonical: "https://www.taskoria.com/security-policy",
+  },
 };
 
 const LAST_UPDATED = new Date().toLocaleDateString("en-AU", {

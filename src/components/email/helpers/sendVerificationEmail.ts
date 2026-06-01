@@ -4,7 +4,7 @@ import AppEmail from "../MainEmail";
 import { CompleteProfileEmail } from "../templates/ProfileCompletion/ProfileCompletion";
 
 const EMAIL_CONFIG = {
-  from: "Taskoria <noreply@taskoria.com>",
+  from: "Taskoria Team <taskoriateam@taskoria.com>",
   replyTo: "contact@taskoria.com",
 };
 
@@ -16,11 +16,11 @@ const subjectMap: Record<EmailType, string> = {
   "provider-email-compose": "You received a message from a professional",
   verification: "Verify your email address",
   "password-reset-code": "Reset Your Password",
+  "verify-reminder":"Verify your email addressl",
   "provider-estimate": "💰 You received a new estimate",
-  "complete-profile": "Your Taskoria profile is incomplete 👤", // ← new
+  "complete-profile": "Your Taskoria profile is incomplete 👤", 
 };
 
-// ── Standard email props (existing types) ─────────────────
 interface SendEmailProps {
   email: string;
   type: EmailType;
@@ -37,7 +37,6 @@ interface SendEmailProps {
   professional_phone?: string;
 }
 
-// ── Profile-completion email props (new) ──────────────────
 interface SendProfileReminderProps
   extends Pick<CompleteProfileEmailProps, "completionPercent" | "profileFlags"> {
   email: string;

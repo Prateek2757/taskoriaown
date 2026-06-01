@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: "https://www.taskoria.com./refund-policy",
+    canonical: "https://www.taskoria.com/refund-policy",
   },
 };
 export default function RefundPolicy() {

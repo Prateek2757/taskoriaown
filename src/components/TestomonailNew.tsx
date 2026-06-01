@@ -150,11 +150,11 @@ export default function Testimonial() {
     error,
     isLoading: loading,
   } = useSWR("/api/google-reviews", fetcher, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    revalidateOnMount: false,
-    revalidateIfStale: false,
-    dedupingInterval: 86_400_000,
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    revalidateOnMount: true,
+    revalidateIfStale: true,
+    dedupingInterval: 3_600_000,
   });
 
   const raw = data?.reviews ?? [];

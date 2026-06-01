@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   alternates: {
-    canonical: "https://www.taskoria.com./careers",
+    canonical: "https://www.taskoria.com/careers",
   }
 };
 

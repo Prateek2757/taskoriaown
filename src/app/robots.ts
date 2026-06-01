@@ -6,7 +6,6 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
-   
         userAgent: '*',
         allow: '/',
         disallow: [
@@ -16,26 +15,7 @@ export default function robots(): MetadataRoute.Robots {
           '/500',
         ],
       },
-      {
-        userAgent: 'Googlebot',
-        allow: '/',
-        disallow: [
-          '/*?*',
-          '/*?*utm_*',
-          '/*?callbackUrl=*',
-        ],
-        crawlDelay: 0,
-      },
-      {
-        userAgent: 'Bingbot',
-        allow: '/',
-        disallow: [
-          '/*?*',
-          '/*?*utm_*',
-          '/*?callbackUrl=*',
-        ],
-        crawlDelay: 0,
-      },
+    
     ],
     sitemap: [`${baseUrl}/sitemap.xml`],
   }

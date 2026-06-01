@@ -34,10 +34,10 @@ import { BASE_URL, getServiceSitemapCount, xmlResponse } from "@/lib/sitemap-hel
 export const revalidate =  604800;
 
 const STATIC_SITEMAPS = [
-  "sitemap_static.xml",
-  "sitemap_categories.xml",
-  "sitemap_cities.xml",
-  "sitemap_blog.xml"
+  "sitemaps/static.xml",
+  "sitemaps/categories.xml",
+  "sitemaps/cities.xml",
+  "sitemaps/blog.xml"
 ];
 
 

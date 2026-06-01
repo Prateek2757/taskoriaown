@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import TaskoriaBlog from "@/components/blog/TaskoriaMainBlogPage";
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL!;
+const BASE_URL = "https://www.taskoria.com";
 
 export const metadata: Metadata = {
   title: "Blog — Taskoria | Productivity Tips & Task Management Guides",

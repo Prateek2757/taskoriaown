@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Explore the Taskoria Blog for expert tips, service guides, and insights on hiring professionals, growing your business, and getting tasks done efficiently.",
   alternates: {
-    canonical: "https://www.taskoria.com/blog",
+    canonical: "https://www.taskoria.com/bloggs",
   },
   keywords: [
     "Taskoria blog",

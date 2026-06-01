@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "Provider Verification Badges | Taskoria Trust Levels",
   description:
     "Learn what each Taskoria verification badge represents and the thorough checks behind them. Find trustworthy service providers across Australia.",
+  alternates: {
+    canonical: "https://www.taskoria.com/verification-badges",
+  },
   openGraph: {
     title: "Provider Verification Badges | Taskoria Trust Levels",
     description:
