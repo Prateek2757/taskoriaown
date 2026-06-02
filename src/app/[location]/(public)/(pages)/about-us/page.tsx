@@ -95,11 +95,17 @@ export default function AboutUs() {
   ];
 
   const timeline = [
+        {
+      year: "2016",
+      title: "Founded",
+      description:
+        "Taskoria was established with the goal of creating a more transparent and trustworthy way for Australians to connect with local service professionals.",
+    },
     {
       year: "2022",
       title: "The Beginning",
       description:
-        "Founded with a vision to make finding trusted service providers safe and simple for every Australian household.",
+        "The platform officially launched, connecting customers with local service providers and laying the foundation for a growing community across Australia.",
     },
     {
       year: "2025",
@@ -113,37 +119,17 @@ export default function AboutUs() {
       description:
         "Reached every major city across Australia, connecting communities with verified local professionals.",
     },
-    // {
-    //   year: '2025',
-    //   title: 'Leading Innovation',
-    //   description: 'Australia\'s most trusted service marketplace with advanced payment protection and AI-powered matching.'
-    // }
   ];
 
   return (
-    <div className=" bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 transition-colors">
-      <section className="flex justify-between relative h-screen  items-center  text-center md:text-left overflow-hidden">
-        {/* <div className="absolute inset-0 z-0">
-          <Image
-          title='providers'
-            src="/images/providers.jpeg"
-            alt="Providers Background"
-            fill
-            className="object-cover object-center"
-            priority
-            sizes="(max-width: 640px) 100vw,
-            (max-width: 1024px) 50vw,
-            33vw"
-          />
-          <div className="absolute inset-0 bg-black/40 dark:bg-black/60"></div>
-        </div> */}
-
-        <div className=" relative max-w-2xl mx-auto px-6 md:px-12 text-black dark:text-white z-10">
-          <div className="flex items-center gap-2 mb-6 justify-center md:justify-start">
+    <div className=" from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 transition-colors">
+      <section className="max-w-7xl mx-auto flex justify-between relative  py-16 items-center text-center md:text-left overflow-hidden px-6">
+        <div className="relative text-black dark:text-white z-10 max-w-2xl">
+          <div className="flex items-center gap-2 mb-6 md:justify-start justify-center">
             <div
               className="flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-xl
-                border border-white/30
-                shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
+          border border-white/30
+          shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
             >
               <Shield className="w-4 h-4" color="#2563EB" />
               <span className="text-sm font-medium text-[#2563EB]">
@@ -152,34 +138,36 @@ export default function AboutUs() {
             </div>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
             Building Trust in
             <br />
             <span className="text-[#2563EB]">Every Connection</span>
           </h1>
 
-          <p className="text-xl md:text-xl text-slate-700 dark:text-blue-200 max-w-3xl leading-relaxed">
+          <p className="text-xl text-slate-700 dark:text-blue-200 max-w-3xl leading-relaxed">
             We're on a mission to make finding trusted service providers safe,
             simple, and secure for every Australian. Because when it comes to
             your home and family, trust isn't optional.
           </p>
         </div>
-        <div className="flex">
+
+        <div className="shrink-0 hidden md:flex items-center">
           <Image
             title="team"
             src="/images/team.svg"
             alt="team image"
-            width={580}
-            height={580}
+            width={480}
+            height={480}
+            className="w-[320px] lg:w-[480px] h-auto"
           />
         </div>
       </section>
 
-      <section className="max-w-8xl mx-auto px-6 mb-32">
-        <h2 className="text-4xl md:text-5xl font-bold text-[#2563EB] dark:text-white m-6 text-center">
+      <section className="max-w-7xl mx-auto px-6 mb-24">
+        <h2 className="text-4xl md:text-4xl font-bold text-[#2563EB] dark:text-white m-6 text-center">
           Our Story
         </h2>
-        <div className="space-y-6 text-lg text-slate-700 dark:text-slate-300 leading-relaxed max-w-6xl mx-auto">
+        <div className="space-y-6 text-lg text-slate-700 dark:text-slate-300 leading-relaxed max-w-7xl mx-auto">
           <p>
             Taskoria was born from a simple frustration: finding someone
             trustworthy to help with home tasks shouldn't feel like a gamble.
@@ -201,14 +189,14 @@ export default function AboutUs() {
           </p>
         </div>
       </section>
-      {/* bg-gradient-to-br from-slate-900 to-slate-800 */}
-      <section className=" text-[#2563EB] py-8 mb-16">
+
+      <section className=" text-[#2563EB] py-8 mb-24">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-4xl font-bold mb-4">
+            <h2 className="text-4xl md:text-4xl font-bold mb-4 dark:text-slate-300">
               What We Stand For
             </h2>
-            <p className="text-lg text-slate-700 max-w-3xl mx-auto">
+            <p className="text-lg text-slate-700 max-w-3xl mx-auto dark:text-slate-300">
               These aren't just values on a wall. They're the principles that
               guide every decision we make and every feature we build.
             </p>
@@ -225,8 +213,8 @@ export default function AboutUs() {
                   <div className="w-8 h-8 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
                     <Icon className="w-7 h-7 text-blue-400" />
                   </div>
-                  <h3 className="text-md font-bold mb-2">{value.title}</h3>
-                  <p className="text-slate-700 text-sm ">{value.description}</p>
+                  <h3 className="text-md font-bold mb-2 dark:text-slate-300">{value.title}</h3>
+                  <p className="text-slate-700 text-sm dark:text-slate-300 ">{value.description}</p>
                 </div>
               );
             })}
@@ -236,10 +224,10 @@ export default function AboutUs() {
 
       <section className="max-w-7xl mx-auto px-6 pb-15  ">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6">
+          <h2 className="text-4xl md:text-4xl font-bold text-[#2563EB] dark:text-white mb-6">
             Our Journey
           </h2>
-          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+          <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
             From a small startup to Australia's most trusted service marketplace
           </p>
         </div>
@@ -254,13 +242,13 @@ export default function AboutUs() {
                 className={`relative flex items-center ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
               >
                 <div
-                  className={`flex-1 ${index % 2 === 0 ? "md:pr-16 md:text-right" : "md:pl-16"}`}
+                  className={`flex-1 ${index % 2 === 0 ? "md:pr-12 md:text-right" : "md:pl-14"}`}
                 >
-                  <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-shadow">
-                    <div className="text-blue-600 font-bold text-lg mb-2">
+                  <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-shadow">
+                    <div className="text-blue-600 font-bold text-md mb-2">
                       {item.year}
                     </div>
-                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">
                       {item.title}
                     </h3>
                     <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -269,7 +257,7 @@ export default function AboutUs() {
                   </div>
                 </div>
 
-                <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 w-16 h-16 bg-blue-600 rounded-full items-center justify-center shadow-lg border-4 border-white z-10">
+                <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 w-10 h-10 bg-blue-600 rounded-full items-center justify-center shadow-lg border-4 border-white z-10">
                   <div className="w-3 h-3 bg-white rounded-full"></div>
                 </div>
 
