@@ -153,7 +153,6 @@ export default function AboutUs() {
 
         <div className="shrink-0 hidden md:flex items-center">
           <Image
-            title="team"
             src="/images/team.svg"
             alt="team image"
             width={480}
