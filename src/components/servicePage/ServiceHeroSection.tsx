@@ -29,7 +29,7 @@ export default function ServiceHeroSection({
 
   return (
     <section className="relative max-w-6xl mx-auto py-3 ">
-      <section className="relative overflow-hidden max-h-175 bg-slate-950 rounded-2xl">
+      <section className="relative overflow-hiden max-h-175 bg-slate-950 rounded-2xl">
         <Image
           src={service.service_image_url}
           alt={service.name}
@@ -115,10 +115,13 @@ export default function ServiceHeroSection({
                   </p>
                 </div>
               </div>
+              <div className="z-50">
               <LocationSearch
                 onSelect={onLocationSelect}
                 presetLocation={presetLocation}
               />
+              </div>
+             
             </div>
           </div>
           <div className="absolute bottom-0 right-0 hidden md:block">

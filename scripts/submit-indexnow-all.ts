@@ -1,7 +1,7 @@
 import { submitToIndexNow } from "@/lib/indexnowbing";
 import "dotenv/config";
 
-const SITE_URL = process.env.NEXT_PUBLIC_APP_URL;
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 if (!SITE_URL) {
   throw new Error("Missing NEXT_PUBLIC_SITE_URL");

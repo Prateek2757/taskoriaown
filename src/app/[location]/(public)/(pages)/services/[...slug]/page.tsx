@@ -44,6 +44,18 @@ function toTitleCase(slug: string) {
   return slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 }
 
+function getLocationLabel(location?: { name?: string; slug?: string } | null) {
+  if (location?.name) return location.name;
+  if (location?.slug) return toTitleCase(location.slug);
+  return null;
+}
+
+function trimDescription(description: string, maxLength = 155) {
+  if (description.length <= maxLength) return description;
+  const trimmed = description.slice(0, maxLength - 1).trimEnd();
+  return `${trimmed.replace(/[,.!?;:]$/, "")}.`;
+}
+
 function buildCanonical(
   serviceSlug: string,
   stateSlug: string | null,
@@ -87,7 +99,6 @@ async function getAllCategories(): Promise<
   }
 }
 
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
   const [serviceSlug, stateSlug = null, citySlug = null, subCitySlug = null] =
@@ -109,9 +120,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const cityName = citySlug ? toTitleCase(citySlug) : null;
-  const stateName = stateSlug ? toTitleCase(stateSlug) : null;
+  const cities =
+    stateSlug || citySlug || subCitySlug ? await getAllCities() : [];
+  const selectedCity = citySlug
+    ? (cities.find(
+        (city) =>
+          city.slug === citySlug &&
+          (!stateSlug || city.state_slug === stateSlug)
+      ) ??
+      cities.find((city) => city.slug === citySlug) ??
+      null)
+    : null;
+  const selectedSubCity =
+    subCitySlug && selectedCity
+      ? (selectedCity.subcities?.find(
+          (subcity) => subcity.slug === subCitySlug
+        ) ?? null)
+      : null;
+  const cityName =
+    getLocationLabel(selectedCity) ?? (citySlug ? toTitleCase(citySlug) : null);
+  const subCityName =
+    getLocationLabel(selectedSubCity) ??
+    (subCitySlug ? toTitleCase(subCitySlug) : null);
+  const stateName =
+    selectedCity?.state_name ?? (stateSlug ? toTitleCase(stateSlug) : null);
   const isStatePage = stateSlug && !citySlug;
+  const serviceName = service.name.trim();
+  const serviceNameLower = serviceName.toLowerCase();
   const canonicalUrl = buildCanonical(
     serviceSlug,
     stateSlug,
@@ -122,51 +157,63 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     service.hero_image ??
     `https://www.taskoria.com/og-images/${serviceSlug}.jpg`;
 
-  const title = cityName
-    ? `Hire ${service.name} in ${cityName} | Get Free Quotes`
-    : isStatePage
-      ? `Find ${service.name} in ${stateName} | Trusted Professionals | Taskoria`
-      : `Find trusted ${service.name} near you | Free quotes`;
+  const title =
+    subCityName && cityName && stateName
+      ? `${serviceName} in ${subCityName}, ${cityName} ${stateName} | Taskoria`
+      : cityName && stateName
+        ? `${serviceName} in ${cityName}, ${stateName} | Free Quotes | Taskoria`
+        : cityName
+          ? `${serviceName} in ${cityName} | Free Quotes | Taskoria`
+          : isStatePage && stateName
+            ? `${serviceName} in ${stateName} | Trusted Local Pros | Taskoria`
+            : `${serviceName} Services in Australia | Free Quotes | Taskoria`;
 
-  const description = cityName
-    ? `Looking for reliable ${service.name.toLowerCase()} in ${cityName}? Compare verified professionals, read real reviews and get free quotes fast on Taskoria.`
-    : isStatePage
-      ? `Find trusted ${service.name.toLowerCase()} professionals across ${stateName}. Compare verified providers, read real reviews and get instant free quotes on Taskoria.`
-      : service.description
-        ? `${service.description.slice(0, 130).trimEnd()}. Get free quotes from verified professionals across Australia – only on Taskoria.`
-        : `Hire trusted ${service.name.toLowerCase()} professionals across Australia. Compare verified providers, read reviews and get instant free quotes on Taskoria.`;
+  const description = trimDescription(
+    subCityName && cityName && stateName
+      ? `Find trusted ${serviceNameLower} professionals in ${subCityName}, ${cityName}, ${stateName}. Compare verified providers, read reviews and request free quotes on Taskoria.`
+      : cityName && stateName
+        ? `Find trusted ${serviceNameLower} professionals in ${cityName}, ${stateName}. Compare local providers, read verified reviews and request free quotes on Taskoria.`
+        : cityName
+          ? `Find trusted ${serviceNameLower} professionals in ${cityName}. Compare local providers, read verified reviews and request free quotes on Taskoria.`
+          : isStatePage && stateName
+            ? `Find trusted ${serviceNameLower} professionals across ${stateName}. Compare verified providers by city, read reviews and request free quotes on Taskoria.`
+            : service.description
+              ? `${service.description.trim()} Get free quotes from verified ${serviceNameLower} professionals across Australia on Taskoria.`
+              : `Hire trusted ${serviceNameLower} professionals across Australia. Compare verified providers, read reviews and request free quotes on Taskoria.`
+  );
 
   const keywords = cityName
     ? [
-        `${service.name.toLowerCase()} ${cityName}`,
-        `${service.name.toLowerCase()} in ${cityName}`,
-        `${cityName} ${service.name.toLowerCase()} services`,
-        `hire ${service.name.toLowerCase()} ${cityName}`,
-        `best ${service.name.toLowerCase()} ${cityName}`,
-        `${service.name.toLowerCase()} near me`,
-        `${service.name.toLowerCase()} quotes ${cityName}`,
-        ...(stateName ? [`${service.name.toLowerCase()} ${stateName}`] : []),
+        `${serviceNameLower} ${cityName}`,
+        `${serviceNameLower} in ${cityName}`,
+        `${cityName} ${serviceNameLower} services`,
+        `hire ${serviceNameLower} ${cityName}`,
+        `best ${serviceNameLower} ${cityName}`,
+        `${serviceNameLower} near me`,
+        `${serviceNameLower} quotes ${cityName}`,
+        ...(stateName ? [`${serviceNameLower} ${stateName}`] : []),
+        ...(subCityName ? [`${serviceNameLower} ${subCityName}`] : []),
       ].join(", ")
     : isStatePage
       ? [
-          `${service.name.toLowerCase()} ${stateName}`,
-          `${service.name.toLowerCase()} in ${stateName}`,
-          `${stateName} ${service.name.toLowerCase()} services`,
-          `hire ${service.name.toLowerCase()} ${stateName}`,
-          `best ${service.name.toLowerCase()} ${stateName}`,
-          `${service.name.toLowerCase()} near me`,
+          `${serviceNameLower} ${stateName}`,
+          `${serviceNameLower} in ${stateName}`,
+          `${stateName} ${serviceNameLower} services`,
+          `hire ${serviceNameLower} ${stateName}`,
+          `best ${serviceNameLower} ${stateName}`,
+          `${serviceNameLower} near me`,
         ].join(", ")
       : [
-          `${service.name.toLowerCase()} australia`,
-          `${service.name.toLowerCase()} services australia`,
-          `hire ${service.name.toLowerCase()} australia`,
-          `${service.name.toLowerCase()} near me`,
-          `${service.name.toLowerCase()} quotes`,
-          `professional ${service.name.toLowerCase()}`,
+          `${serviceNameLower} australia`,
+          `${serviceNameLower} services australia`,
+          `hire ${serviceNameLower} australia`,
+          `${serviceNameLower} near me`,
+          `${serviceNameLower} quotes`,
+          `professional ${serviceNameLower}`,
         ].join(", ");
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords,
     authors: [{ name: "Taskoria", url: "https://www.taskoria.com" }],
@@ -228,7 +275,6 @@ export default async function ServicePage({ params }: Props) {
 
   if (!serviceSlug || serviceSlug === "undefined") notFound();
 
-
   const [service, cities] = await Promise.all([
     getService(serviceSlug),
     getAllCities(),
@@ -280,6 +326,8 @@ export default async function ServicePage({ params }: Props) {
           city={null}
           citySlug={null}
           stateSlug={stateSlug}
+          subCitySlug={null}
+          showFaqPage={Boolean(service.faqs?.length)}
           providers={[]}
         />
         <ServiceStatePageClient
@@ -315,6 +363,8 @@ export default async function ServicePage({ params }: Props) {
         city={selectedLocation}
         citySlug={citySlug}
         stateSlug={stateSlug}
+        subCitySlug={subCitySlug}
+        showFaqPage={!citySlug && Boolean(service.faqs?.length)}
         providers={selectedLocation?.providers || []}
       />
       <ServicePageWrapper
@@ -328,7 +378,6 @@ export default async function ServicePage({ params }: Props) {
     </>
   );
 }
-
 
 // export async function generateStaticParams() {
 //   try {

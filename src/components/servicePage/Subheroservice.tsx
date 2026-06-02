@@ -150,7 +150,7 @@ export default function SubHeroService({
             <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1]">
               Need help finding {getArticle(proLabel)}{" "}
               <span className="relative inline-block">
-                <span className="relative z-10 text-[#2563EB] dark:text-[#60a5fa]">
+                <span className="relative text-[#2563EB] dark:text-[#60a5fa]">
                   {proLabel.endsWith("s") ? proLabel : proLabel + ""}
                 </span>
                 <span

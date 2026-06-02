@@ -16,7 +16,7 @@ const TestomonailNew = lazy(() => import("@/components/TestomonailNew"));
 
 export const metadata: Metadata = {
   title:
-    "Connect with Local Experts to Get Anything Done & Earn Money | Taskoria",
+    "Connect with Local Experts & Earn Money Easily | Taskoria",
   description:
     "Find trusted, verified local professionals across Australia. Get free quotes, compare services, and hire with confidence on Taskoria — fast, easy, and reliable.",
 

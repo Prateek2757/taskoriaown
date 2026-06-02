@@ -230,7 +230,7 @@ export default function LocationSearch({
   const isSelected = !!presetLocation && !presetLocation._resolving;
 
   return (
-    <div className="relative w-full" ref={containerRef}>
+    <div className="relative  w-full" ref={containerRef}>
       <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2">
         {loading ? (
           <Loader2 className="h-4 w-4 animate-spin text-gray-400 dark:text-gray-500" />
@@ -281,7 +281,7 @@ export default function LocationSearch({
           id={listboxId}
           role="listbox"
           aria-label="Location suggestions"
-          className="absolute top-full left-0 z-50 mt-1 max-h-64 w-full overflow-y-auto
+          className="absolute top-full left-0 z-[9999] mt-1 max-h-64 w-full overflow-y-auto
             rounded-xl border border-gray-200 bg-white
             dark:border-gray-700 dark:bg-gray-900
             shadow-lg shadow-black/10 dark:shadow-black/40"
