@@ -3,6 +3,7 @@ import Image from "next/image";
 export const dynamic = "force-static";
 
 import type { Metadata } from "next";
+import { OurStory } from "./OurStory";
 
 export const metadata: Metadata = {
   title: "About us | Taskoria",
@@ -95,7 +96,7 @@ export default function AboutUs() {
   ];
 
   const timeline = [
-        {
+    {
       year: "2016",
       title: "Founded",
       description:
@@ -123,7 +124,7 @@ export default function AboutUs() {
 
   return (
     <div className=" from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 transition-colors">
-      <section className="max-w-7xl mx-auto flex justify-between relative  py-16 items-center text-center md:text-left overflow-hidden px-6">
+      <section className="max-w-7xl mx-auto flex justify-between relative py-24 mb-8 items-center text-center md:text-left overflow-hidden px-6">
         <div className="relative text-black dark:text-white z-10 max-w-2xl">
           <div className="flex items-center gap-2 mb-6 md:justify-start justify-center">
             <div
@@ -138,7 +139,7 @@ export default function AboutUs() {
             </div>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
             Building Trust in
             <br />
             <span className="text-[#2563EB]">Every Connection</span>
@@ -161,34 +162,22 @@ export default function AboutUs() {
           />
         </div>
       </section>
+      <section className=" relative  mx-auto w-full bg-white overflow-hidden mb-8">
+        <div className="absolute top-0 left-0 right-0 h-[55%] bg-[#2563EB] " />
 
-      <section className="max-w-7xl mx-auto px-6 mb-24">
-        <h2 className="text-4xl md:text-4xl font-bold text-[#2563EB] dark:text-white m-6 text-center">
-          Our Story
-        </h2>
-        <div className="space-y-6 text-lg text-slate-700 dark:text-slate-300 leading-relaxed max-w-7xl mx-auto">
-          <p>
-            Taskoria was born from a simple frustration: finding someone
-            trustworthy to help with home tasks shouldn't feel like a gamble.
-            Too many Australians had stories of unreliable tradespeople, unclear
-            pricing, or worse—safety concerns inviting strangers into their
-            homes.
-          </p>
-          <p>
-            We knew there had to be a better way. A marketplace where every
-            provider is thoroughly verified, every payment is protected, and
-            every customer feels secure. Not just another platform, but a
-            community built on genuine trust.
-          </p>
-          <p>
-            Today, we're proud to be Australia's most secure service
-            marketplace, connecting hundreds of thousands of homeowners with
-            verified professionals who treat every job with the care it
-            deserves.
-          </p>
+        <div className="  relative max-w-6xl mx-auto px-6 py-20 min-h-[620px] flex items-end">
+          <OurStory />
+          <div className="absolute right-6 top-1/2 -translate-y-1/2 z-20 hidden sm:block">
+            <Image
+              src="/images/teamwork.jpeg"
+              alt="teamwork"
+              width={520}
+              height={520}
+              className="w-[420px] lg:w-[520px] h-[420px] lg:h-[520px] rounded-full object-cover"
+            />
+          </div>
         </div>
       </section>
-
       <section className=" text-[#2563EB] py-8 mb-24">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
@@ -212,8 +201,12 @@ export default function AboutUs() {
                   <div className="w-8 h-8 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
                     <Icon className="w-7 h-7 text-blue-400" />
                   </div>
-                  <h3 className="text-md font-bold mb-2 dark:text-slate-300">{value.title}</h3>
-                  <p className="text-slate-700 text-sm dark:text-slate-300 ">{value.description}</p>
+                  <h3 className="text-md font-bold mb-2 dark:text-slate-300">
+                    {value.title}
+                  </h3>
+                  <p className="text-slate-700 text-sm dark:text-slate-300 ">
+                    {value.description}
+                  </p>
                 </div>
               );
             })}
@@ -250,7 +243,7 @@ export default function AboutUs() {
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">
                       {item.title}
                     </h3>
-                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                    <p className="text-slate-600 dark:text-slate-300 text-justify">
                       {item.description}
                     </p>
                   </div>
