@@ -72,17 +72,16 @@ const AppEmail = (props: AppEmailProps) => {
           verifyCode={props.verifyCode!}
         />
       );
-      case "provider-email-compose":
-      return(<ProviderEmailCompose {...props} />)
-      case "verify-reminder":
-  return (
-    <VerifyReminderEmail
-      username={props.username}
-      company={props.company}
-      // no verifyCode — app handles that on open ✓
-    />
-  );
+    case "provider-email-compose":
+      return <ProviderEmailCompose {...props} />;
+    case "verify-reminder":
+      return (
+        <VerifyReminderEmail
+          username={props.username}
+          company={props.company}
+        />
+      );
   }
-}
+};
 
 export default AppEmail;

@@ -203,12 +203,12 @@ export async function POST(request: Request) {
         },
       ];
 
-      console.log("💳 Creating ONE-TIME credit purchase checkout:", {
-        professionalId,
-        packageId,
-        credits,
-        amount: amountInCents / 100,
-      });
+      // console.log("💳 Creating ONE-TIME credit purchase checkout:", {
+      //   professionalId,
+      //   packageId,
+      //   credits,
+      //   amount: amountInCents / 100,
+      // });
     } else {
       // PRO SUBSCRIPTION - Recurring subscription
       const pkgRes = await pool.query(
@@ -284,7 +284,7 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log("✅ Checkout session created:", session.id);
+    // console.log("✅ Checkout session created:", session.id);
 
     return NextResponse.json({ url: session.url });
   } catch (error: any) {

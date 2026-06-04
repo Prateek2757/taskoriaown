@@ -256,7 +256,7 @@ export default function AboutUs() {
                 <div
                   className={`flex-1 ${index % 2 === 0 ? "md:pr-16 md:text-right" : "md:pl-16"}`}
                 >
-                  <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-shadow">
+                  <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-lg border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-shadow">
                     <div className="text-blue-600 font-bold text-lg mb-2">
                       {item.year}
                     </div>
@@ -269,7 +269,7 @@ export default function AboutUs() {
                   </div>
                 </div>
 
-                <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 w-16 h-16 bg-blue-600 rounded-full items-center justify-center shadow-lg border-4 border-white z-10">
+                <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 w-12 h-12 bg-blue-600 rounded-full items-center justify-center shadow-lg border-4 border-white z-10">
                   <div className="w-3 h-3 bg-white rounded-full"></div>
                 </div>
 

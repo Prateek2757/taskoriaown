@@ -30,6 +30,8 @@ export interface Lead {
   seen_at?: string;
   queries?: string;
   is_free_lead?: boolean;
+  responses_count?: number;
+  purchased_by_current_user?: boolean;
 }
 
 export interface Filters {
@@ -43,7 +45,7 @@ export interface Filters {
 
 const LeadsPage: React.FC = () => {
   const { leads: rawLeads, error, isLoading, markAsSeen } = useLeads(); // 👈
-  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [selectedLeadId, setSelectedLeadId] = useState<number | null>(null);
   const [filters, setFilters] = useState<Filters>({
     search: "",
     category: "",
@@ -57,14 +59,26 @@ const LeadsPage: React.FC = () => {
   const [quickStatus, setQuickStatus] = useState<string>("All");
   const { taskCredits, fetchCreditEstimates } = useCredit();
   const filtersRef = useRef<HTMLDivElement>(null);
+  const initialOrderRef = useRef<number[]>([]);
+  const [creditEstimatesReady, setCreditEstimatesReady] = useState(false);
 
-  // Set first lead as selected + fetch credits once leads load
   useEffect(() => {
-    if (rawLeads.length > 0 && !selectedLead) {
-      setSelectedLead(rawLeads[0]);
-      fetchCreditEstimates();
+    if (rawLeads.length === 0) {
+      setCreditEstimatesReady(true);
+      return;
     }
-  }, [rawLeads]);
+
+    let cancelled = false;
+    setCreditEstimatesReady(false);
+
+    fetchCreditEstimates().finally(() => {
+      if (!cancelled) setCreditEstimatesReady(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [fetchCreditEstimates, rawLeads.length]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -81,43 +95,47 @@ const LeadsPage: React.FC = () => {
 
   const unseenCount = rawLeads.filter((l) => !l.is_seen).length;
 
-  const [initialOrder, setInitialOrder] = useState<number[]>([]);
-
-  useEffect(() => {
-    if (rawLeads.length > 0 && initialOrder.length === 0) {
-      const sorted = [...rawLeads].sort((a, b) => {
-        if (!a.is_seen && b.is_seen) return -1;
-        if (a.is_seen && !b.is_seen) return 1;
-        if (!a.is_seen && !b.is_seen)
-          return (
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-          );
-        if (a.is_seen && b.is_seen) {
-          const aT = a.seen_at
-            ? new Date(a.seen_at).getTime()
-            : new Date(a.created_at).getTime();
-          const bT = b.seen_at
-            ? new Date(b.seen_at).getTime()
-            : new Date(b.created_at).getTime();
-          return bT - aT;
-        }
-        return 0;
-      });
-      setInitialOrder(sorted.map((l) => l.task_id!));
-    }
-  }, [rawLeads, initialOrder.length]);
-
-  const sortedLeads = useMemo(() => {
-    if (initialOrder.length === 0) return rawLeads;
-    return [...rawLeads].sort((a, b) => {
-      const iA = initialOrder.indexOf(a.task_id!);
-      const iB = initialOrder.indexOf(b.task_id!);
-      if (iA !== -1 && iB !== -1) return iA - iB;
-      if (iA === -1) return -1;
-      if (iB === -1) return 1;
+  if (rawLeads.length > 0 && initialOrderRef.current.length === 0) {
+    const sorted = [...rawLeads].sort((a, b) => {
+      if (!a.is_seen && b.is_seen) return -1;
+      if (a.is_seen && !b.is_seen) return 1;
+      if (!a.is_seen && !b.is_seen)
+        return (
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+      if (a.is_seen && b.is_seen) {
+        const aT = a.seen_at
+          ? new Date(a.seen_at).getTime()
+          : new Date(a.created_at).getTime();
+        const bT = b.seen_at
+          ? new Date(b.seen_at).getTime()
+          : new Date(b.created_at).getTime();
+        return bT - aT;
+      }
       return 0;
     });
-  }, [rawLeads, initialOrder]);
+    initialOrderRef.current = sorted
+      .map((l) => l.task_id)
+      .filter((taskId): taskId is number => typeof taskId === "number");
+  }
+
+  const sortedLeads = useMemo(() => {
+    const initialOrder = initialOrderRef.current;
+    if (initialOrder.length === 0) return rawLeads;
+
+    const orderIndex = new Map(initialOrder.map((taskId, index) => [taskId, index]));
+
+    return [...rawLeads].sort((a, b) => {
+      const iA =
+        typeof a.task_id === "number" ? orderIndex.get(a.task_id) : undefined;
+      const iB =
+        typeof b.task_id === "number" ? orderIndex.get(b.task_id) : undefined;
+      if (iA !== undefined && iB !== undefined) return iA - iB;
+      if (iA === undefined) return -1;
+      if (iB === undefined) return 1;
+      return 0;
+    });
+  }, [rawLeads]);
 
   const filteredLeads = useMemo(() => {
     return sortedLeads.filter((lead) => {
@@ -159,6 +177,16 @@ const LeadsPage: React.FC = () => {
     });
   }, [sortedLeads, filters, quickStatus]);
 
+  const selectedLead = useMemo(() => {
+    if (filteredLeads.length === 0) return null;
+
+    const selectedFromList = selectedLeadId
+      ? filteredLeads.find((lead) => lead.task_id === selectedLeadId)
+      : null;
+
+    return selectedFromList || filteredLeads[0];
+  }, [filteredLeads, selectedLeadId]);
+
   // const urgentCount = rawLeads.filter((l) => l.status === "Urgent").length;
   // const openCount = rawLeads.filter((l) => l.status === "Open").length;
 
@@ -170,23 +198,14 @@ const LeadsPage: React.FC = () => {
   };
 
   const handleLeadClick = async (lead: Lead) => {
-    setSelectedLead(lead);
+    setSelectedLeadId(lead.task_id ?? null);
     if (window.innerWidth < 768) setIsMobileDetailsOpen(true);
     if (!lead.is_seen) {
       await markAsSeen(lead.task_id!);
-      setSelectedLead((prev) =>
-        prev?.task_id === lead.task_id
-          ? ({
-              ...prev,
-              is_seen: true,
-              seen_at: new Date().toISOString(),
-            } as Lead)
-          : prev
-      );
     }
   };
 
-  if (isLoading) return <LeadSkeleton />;
+  if (isLoading || !creditEstimatesReady) return <LeadSkeleton />;
 
   if (error)
     return (

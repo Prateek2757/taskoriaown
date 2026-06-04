@@ -164,7 +164,7 @@ export default function MessageList({
                 className="object-cover w-full h-full transition-transform group-hover:scale-105"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
+              <div className="w-full h-full bg-[#2563EB] text-xl flex items-center justify-center text-white font-semibold">
                 {getInitials(otherName)}
               </div>
             )}
@@ -232,7 +232,7 @@ export default function MessageList({
                                     className="object-cover w-full h-full transition-transform group-hover:scale-105"
                                   />
                                 ) : (
-                                  <div className="w-full h-full bg-gradient-to-br from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
+                                  <div className="w-full h-full bg-[#2563EB] flex items-center justify-center text-white font-semibold">
                                     {getInitials(otherName)}
                                   </div>
                                 )}
@@ -298,7 +298,7 @@ export default function MessageList({
                   exit={{ opacity: 0 }}
                   className="flex items-end gap-2"
                 >
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#2563EB] to-[#A6B4FA] text-white flex items-center justify-center text-xs font-semibold shadow">
+                  <div className="w-6 h-6 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-xs font-semibold shadow">
                     {getInitials(otherName)}
                   </div>
 

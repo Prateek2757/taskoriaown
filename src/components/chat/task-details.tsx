@@ -215,7 +215,7 @@ export default function TaskDetailsPanel({
                 </div>
               ) : task ? (
                 <>
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-50 dark:from-blue-900/10 dark:to-blue-900/10 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+                  <div className="bg-linear-to-br  dark:from-gray-800/50 dark:to-gray-800/50 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
                     <div className="flex items-start justify-between mb-3">
                       <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-base">
                         {task.title}

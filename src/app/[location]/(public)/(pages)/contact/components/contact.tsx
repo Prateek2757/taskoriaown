@@ -99,7 +99,7 @@ export default function ContactSupport() {
                     href="mailto:contactus@taskoria.com"
                     className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm inline-flex items-center gap-1.5 group/link truncate"
                   >
-                    <span className="truncate">contactus@taskoria.com</span>
+                    <span className="truncate">contact@taskoria.com</span>
                     <Send className="w-3.5 h-3.5 shrink-0 group-hover/link:translate-x-0.5 transition-transform" />
                   </a>
                   <div className="mt-2.5 flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
@@ -126,12 +126,13 @@ export default function ContactSupport() {
                     href="tel:1300531727"
                     className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-bold text-lg"
                   >
-                    1300 531 727
+                   1300 531 727
                   </a>
 
-                  <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                    Toll-free (Australia)
-                  </div>
+                  {/* <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                    Call (Australia)
+                  </div> */}
+                  <br/>
 
                   <a
                     href="tel:+61474655902"

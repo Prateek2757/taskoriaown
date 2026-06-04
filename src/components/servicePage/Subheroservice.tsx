@@ -147,7 +147,7 @@ export default function SubHeroService({
 
         <div className="grid lg:grid-cols-2 gap-6 items-start">
           <div className="flex flex-col gap-4">
-            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1]">
+            <h1 className="text-3xl font-extrabold  text-slate-900 dark:text-white leading-[1.2]">
               Need help finding {getArticle(proLabel)}{" "}
               <span className="relative inline-block">
                 <span className="relative text-[#2563EB] dark:text-[#60a5fa]">

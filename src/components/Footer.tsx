@@ -178,7 +178,7 @@ const Footer = () => {
                   className="inline-flex items-center ml-2  gap-1 text-sm text-[#2563EB] hover:text-[#A6B4FA] transition-colors"
                 >
                   <Phone className="w-4" />
-                  {"   "} Toll Free:
+                  {"   "} Call:
                   <span className="underline">1300 531 727</span>
                 </a>
 
@@ -463,7 +463,7 @@ const Footer = () => {
                     Join as a professional
                   </button>
                   <Link
-                    href="/settings/billing/taskoria_pro"
+                    href="/pricing"
                     className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"
                   >
                     Pricing & Plans
@@ -514,12 +514,12 @@ const Footer = () => {
                   >
                     Careers
                   </Link>
-                  <Link
+                  {/* <Link
                     href="/cost-guides"
                     className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#3C7DED] dark:hover:text-[#41A6EE] transition-colors mb-2"
                   >
                     Cost Guides
-                  </Link>
+                  </Link> */}
                   <Link
                     href="/contact"
                     className="block text-gray-600 dark:text-gray-300 text-sm hover:text-[#2563EB] dark:hover:text-[#A6B4FA] transition-colors mb-2"

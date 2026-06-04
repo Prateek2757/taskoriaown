@@ -158,7 +158,6 @@ export async function POST(req: Request) {
       taskTitle: categoryname,
     });
 
-    // Fire and forget — response already sent
     sendEmailQueue(emailQueue, { ratePerSec: 1 }).catch(console.error);
 
     return NextResponse.json({
@@ -216,8 +215,7 @@ export async function GET() {
         AND t.estimated_budget > 0
         AND COALESCE(uts.seen, false) = false
     )
-    
-    SELECT 
+      SELECT 
       t.task_id,
       t.title,
       t.description,
@@ -229,7 +227,7 @@ export async function GET() {
       t.created_at,
       t.queries,
       CASE 
-        WHEN t.created_at < NOW() - INTERVAL '24 hours'
+        WHEN t.created_at < NOW() - INTERVAL '48 hours'
           AND (
             SELECT COUNT(*) FROM task_responses tr 
             WHERE tr.task_id = t.task_id
@@ -253,6 +251,19 @@ export async function GET() {
       up.profile_image_url AS image,
     
       COALESCE(uts.seen, false) AS is_seen,
+
+      (
+        SELECT COUNT(*)
+        FROM task_responses tr
+        WHERE tr.task_id = t.task_id
+      )::int AS responses_count,
+
+      EXISTS (
+        SELECT 1
+        FROM task_responses tr
+        WHERE tr.task_id = t.task_id
+        AND tr.professional_id = $2
+      ) AS purchased_by_current_user,
     
       (SELECT new_leads_count FROM new_leads) AS new_leads_count,
     

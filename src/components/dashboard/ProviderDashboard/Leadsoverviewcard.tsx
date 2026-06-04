@@ -55,7 +55,7 @@ export function LeadsOverviewCard({
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-900 px-6 py-3 border-t border-gray-200 dark:border-gray-800">
+      {/* <div className="bg-white dark:bg-gray-900 px-6 py-3 border-t border-gray-200 dark:border-gray-800">
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
@@ -66,11 +66,11 @@ export function LeadsOverviewCard({
               this week
             </span>
           </div>
-          {/* <div className="text-gray-500 dark:text-gray-400">
+          <div className="text-gray-500 dark:text-gray-400">
             <span className="text-green-600 dark:text-green-400 font-semibold">+12%</span> vs last month
-          </div> */}
+          </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -246,7 +246,7 @@ interface TrustBadgesProps {
 }
 
 export function TrustBadges({
-  label = "Trusted by customers worldwide",
+  label = "Trusted by Australians nationwide",
   className = "",
 }: TrustBadgesProps) {
   const { data: googleData, error: fetchError } = useSWR<ReviewData>(

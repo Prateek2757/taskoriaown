@@ -32,7 +32,8 @@ export default function TaskoriaProPage() {
 
   const handleActivate = async (pkg: ProfessionalPackage) => {
     if (!session?.user?.id) {
-      toast.error("Please login to continue");
+      toast.error("Please Login or Signup to continue");
+      router.push("/signin")
       return;
     }
 

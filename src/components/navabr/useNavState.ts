@@ -20,6 +20,10 @@ import {
 
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
+function isViewMode(value: unknown): value is ViewMode {
+  return value === "customer" || value === "provider";
+}
+
 function setCookieViewMode(value: ViewMode) {
   document.cookie = `taskoria_viewMode=${value}; path=/; max-age=${ONE_YEAR}; SameSite=Lax`;
 }
@@ -48,6 +52,8 @@ export function useNavState({
 
   // Use live session when available, fall back to server-provided initial
   const activeSession = session ?? initialSession;
+  const activeRole = activeSession?.user?.role;
+  const hasActiveSession = !!activeSession;
   const isLoggedIn = status === "authenticated" || (status === "loading" && initialSession !== null);
   const isPro =
     activeSession?.user?.status === "active" ||
@@ -59,33 +65,56 @@ export function useNavState({
   // ── viewMode ─────────────────────────────────────────────────────────────────
   // Initialised from the server-read cookie — matches SSR output exactly.
   // No hasMounted guard needed: server & client agree from byte one.
-  const [viewMode, setViewMode] = useState<ViewMode>(initialViewMode);
+  const [viewMode, setViewMode] = useState<ViewMode>(
+    isViewMode(initialViewMode) ? initialViewMode : "customer"
+  );
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-  // ── Sync viewMode when session first resolves (e.g. first login ever) ───────
+  // ── Sync viewMode when session resolves or storage/cookie disagree ──────────
   useEffect(() => {
     if (status !== "authenticated" || !session) return;
-    const stored = localStorage.getItem("viewMode") as ViewMode | null;
-    if (!stored) {
-      const def: ViewMode =
-        session.user.role === "provider" ? "provider" : "customer";
-      localStorage.setItem("viewMode", def);
-      setCookieViewMode(def);
-      setViewMode(def);
+    const stored = localStorage.getItem("viewMode");
+    const canUseProviderView = session.user.role === "provider";
+    const defaultView: ViewMode = canUseProviderView ? "provider" : "customer";
+    const nextView: ViewMode =
+      isViewMode(stored) && (stored === "customer" || canUseProviderView)
+        ? stored
+        : defaultView;
+
+    if (stored !== nextView) {
+      localStorage.setItem("viewMode", nextView);
     }
+    setCookieViewMode(nextView);
+    setViewMode(nextView);
   }, [status, session]);
 
   // ── Cross-tab / cross-component viewMode sync ────────────────────────────────
   useEffect(() => {
     const update = () => {
-      const stored = localStorage.getItem("viewMode") as ViewMode | null;
-      if (stored) setViewMode(stored);
+      const stored = localStorage.getItem("viewMode");
+      if (!isViewMode(stored)) return;
+      const isKnownNonProvider = hasActiveSession && activeRole !== "provider";
+      const nextView =
+        stored === "provider" && isKnownNonProvider
+          ? "customer"
+          : stored;
+      if (stored !== nextView) {
+        localStorage.setItem("viewMode", nextView);
+      }
+      setCookieViewMode(nextView);
+      setViewMode(nextView);
     };
+
+    update();
     window.addEventListener("viewModeChanged", update);
-    return () => window.removeEventListener("viewModeChanged", update);
-  }, []);
+    window.addEventListener("storage", update);
+    return () => {
+      window.removeEventListener("viewModeChanged", update);
+      window.removeEventListener("storage", update);
+    };
+  }, [activeRole, hasActiveSession]);
 
   // ── Close menus on route change ──────────────────────────────────────────────
   useEffect(() => {

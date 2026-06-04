@@ -14,8 +14,10 @@ import { cn } from "@/lib/utils";
 
 type Response = {
   id: number;
+  message_id?: string | number;
+  response_id?: string | number;
   public_id: string;
-  company_slug: string;
+  company_slug?: string;
   display_name: string;
   profile_title: string;
   title: string;
@@ -33,7 +35,7 @@ type Response = {
 interface TaskResponseCardProps {
   response: Response;
   index: number;
-  onMessageClick: (responseId: number) => void;
+  onMessageClick: (responseId: string | number) => void;
   onViewProfile?: (responseId: string) => void;
 }
 
@@ -82,6 +84,7 @@ export function TaskResponseCard({
   onMessageClick,
   onViewProfile,
 }: TaskResponseCardProps) {
+  const companySlug = response.company_slug;
   const initials = response.display_name
     .split(" ")
     .map((n) => n[0])
@@ -200,7 +203,7 @@ export function TaskResponseCard({
           </div>
 
           <button
-            onClick={() => onMessageClick(response.id)}
+            onClick={() => onMessageClick(response.message_id ?? response.id)}
             className={cn(
               "w-full rounded-xl p-2.5 text-[13px] font-bold text-white shadow-sm transition-all duration-200",
               "active:scale-[0.98] hover:brightness-40",
@@ -215,9 +218,9 @@ export function TaskResponseCard({
             </span>
           </button>
 
-          {onViewProfile && (
+          {onViewProfile && companySlug && (
             <button
-              onClick={() => onViewProfile(response.company_slug)}
+              onClick={() => onViewProfile(companySlug)}
               className="mt-2 text-[11px] font-medium text-slate-400 underline-offset-2 hover:text-blue-600 hover:underline transition-colors"
             >
               View Profile

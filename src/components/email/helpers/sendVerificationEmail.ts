@@ -16,7 +16,7 @@ const subjectMap: Record<EmailType, string> = {
   "provider-email-compose": "You received a message from a professional",
   verification: "Verify your email address",
   "password-reset-code": "Reset Your Password",
-  "verify-reminder":"Verify your email addressl",
+  "verify-reminder":"Verify your email address",
   "provider-estimate": "💰 You received a new estimate",
   "complete-profile": "Your Taskoria profile is incomplete 👤", 
 };

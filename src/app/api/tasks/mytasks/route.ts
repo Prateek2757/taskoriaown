@@ -25,7 +25,8 @@ export async function GET() {
   t.created_at,
   t.estimated_budget,
   t.queries,
-  COUNT(DISTINCT r.response_id) AS response_count,
+  c.image_url AS service_image,
+  COUNT(DISTINCT r.response_id)::int AS response_count,
   json_agg(
     json_build_object(
       'question_id', ta.category_question_id,
@@ -48,7 +49,8 @@ GROUP BY
   t.description,
   t.status,
   t.created_at,
-  t.estimated_budget
+  t.estimated_budget,
+  c.image_url
 ORDER BY t.created_at DESC;
     `;
 

@@ -61,10 +61,10 @@ const ConversationItem = memo(function ConversationItem({
       onClick={() => onSelect(c)}
       className={`cursor-pointer px-5 py-4 border-b transition-all border-gray-100 dark:border-gray-800 group flex justify-between items-center ${
         isActive
-          ? "bg-[#f4f1ff] dark:bg-[#1a1535] border-l-4 border-l-[#6C63FF]"
+          ? "bg-blue-50 dark:bg-gray-800/50  border-l-4 border-l-[#2563Eb]"
           : hasUnread
-            ? "bg-[#f0f5ff] dark:bg-[#1c163a] hover:bg-[#f9f8ff] dark:hover:bg-black/30"
-            : "hover:bg-[#f9f8ff] dark:hover:bg-black/30"
+            ? "bg-[#f0f5ff] dark:bg-[#161b3a] hover:bg-[#f9f8ff] dark:hover:bg-black/30"
+            : "hover:bg-blue-50 dark:hover:bg-[#18273f]"
       }`}
     >
       <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -79,7 +79,7 @@ const ConversationItem = memo(function ConversationItem({
               className="object-cover w-full h-full transition-transform group-hover:scale-105"
             />
           ) : (
-            <div className="w-full h-full bg-linear-to-br from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] flex items-center justify-center text-white font-semibold">
+            <div className="w-full h-full bg-[#2563EB] text-xl flex items-center justify-center text-white font-semibold">
               {firstLetter}
             </div>
           )}
@@ -87,7 +87,7 @@ const ConversationItem = memo(function ConversationItem({
 
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-center w-full gap-2">
-            <div className="font-bold text-gray-800 dark:text-gray-200 truncate text-base group-hover:text-[#6C63FF] transition-colors flex-1 min-w-0">
+            <div className="font-bold   truncate text-base hover:text-[#2563EB] transition-colors flex-1 min-w-0">
               {otherName}
             </div>
             {c.last_message_at && (

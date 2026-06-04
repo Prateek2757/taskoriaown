@@ -417,8 +417,7 @@ export default function HowItWorksCustomers() {
         <section className="text-center px-6 py-10">
           <div className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 text-[#2563EB] dark:text-blue-400 text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] dark:bg-blue-400" />
-            Brisbane &amp; South East Queensland
-          </div>
+            Across Australia          </div>
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight tracking-tight mb-5 max-w-3xl mx-auto">
             Taskoria for Customers
           </h1>
@@ -430,7 +429,7 @@ export default function HowItWorksCustomers() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
               onClick={() => setOpenModal(true)}
-              className="bg-[#2563EB] text-white font-semibold px-8 py-3.5 rounded-full hover:bg-[#1D4ED8] transition-colors shadow-md shadow-blue-200 dark:shadow-blue-900/50"
+              className="bg-[#2563EB] text-white font-semibold px-4 py-3 rounded-xl hover:bg-[#1D4ED8] transition-colors shadow-md shadow-blue-200 dark:shadow-blue-900/50"
             >
               Post a Task — It&apos;s Free
             </button>

@@ -12,6 +12,7 @@ export type Task = {
   task_id: number;
   title: string;
   description: string;
+  service_image: string;
   status: string;
   created_at: string;
   estimated_budget:number;
@@ -20,6 +21,7 @@ export type Task = {
   answers?:Lead_answers[];
   queries?:string;
   response_count?:number;
+
 };
 
 export function useTasks() {
@@ -32,7 +34,11 @@ export function useTasks() {
     try {
       const res = await axios.get("/api/tasks/mytasks");
       const json = await res.data;
-      setTasks(json.tasks || []);
+      const normalizedTasks = (json.tasks || []).map((task: Task) => ({
+        ...task,
+        response_count: Number(task.response_count ?? 0),
+      }));
+      setTasks(normalizedTasks);
     } catch (err: any) {
       setError(err.message || "Failed to load tasks");
       setTasks([]);

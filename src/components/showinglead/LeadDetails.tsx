@@ -53,6 +53,7 @@ interface Lead {
   responses_count?: number;
   queries?: string;
   is_free_lead?: boolean;
+  purchased_by_current_user?: boolean;
 }
 
 interface LeadDetailsProps {
@@ -61,6 +62,12 @@ interface LeadDetailsProps {
   taskId?: number | string;
   userId?: string | number;
 }
+
+type LeadStatus = {
+  count: number;
+  purchased: boolean;
+  hydrated: boolean;
+};
 
 function toProviderResponse(lead: Lead, session: any): ProviderResponse {
   return {
@@ -94,11 +101,15 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
 
   const cacheKey = taskId ? `lead_status_${taskId}` : null;
 
-  const [leadStatus, setLeadStatus] = useState<{
-    count: number;
-    purchased: boolean;
-    hydrated: boolean;
-  }>(() => {
+  const initialLeadStatus = useMemo<LeadStatus>(() => {
+    if (typeof lead.responses_count === "number") {
+      return {
+        count: lead.responses_count,
+        purchased: Boolean(lead.purchased_by_current_user),
+        hydrated: true,
+      };
+    }
+
     if (typeof window === "undefined" || !cacheKey) {
       return { count: 0, purchased: false, hydrated: false };
     }
@@ -114,7 +125,33 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       }
     } catch {}
     return { count: 0, purchased: false, hydrated: false };
-  });
+  }, [cacheKey, lead.purchased_by_current_user, lead.responses_count]);
+
+  const [leadStatusByTask, setLeadStatusByTask] = useState<
+    Record<string, LeadStatus>
+  >({});
+
+  const leadStatus = cacheKey
+    ? leadStatusByTask[cacheKey] ?? initialLeadStatus
+    : initialLeadStatus;
+
+  const setCurrentLeadStatus = useCallback(
+    (updater: LeadStatus | ((prev: LeadStatus) => LeadStatus)) => {
+      if (!cacheKey) return;
+
+      setLeadStatusByTask((prevByTask) => {
+        const prev = prevByTask[cacheKey] ?? initialLeadStatus;
+        const next =
+          typeof updater === "function" ? updater(prev) : updater;
+
+        return {
+          ...prevByTask,
+          [cacheKey]: next,
+        };
+      });
+    },
+    [cacheKey, initialLeadStatus]
+  );
 
   const { balance, deductCredits, fetchBalance } = useCredit(session?.user?.id);
 
@@ -136,7 +173,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
     if (!taskId || !cacheKey) return;
     try {
       const { data } = await axios.get(`/api/admin/task-responses/${taskId}`);
-      setLeadStatus((prev) => {
+      setCurrentLeadStatus((prev) => {
         if (
           prev.purchased === data.purchased &&
           prev.count === data.count &&
@@ -152,13 +189,15 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       });
     } catch (err) {
       console.error("Error fetching responses:", err);
-      setLeadStatus((prev) => ({ ...prev, hydrated: true }));
+      setCurrentLeadStatus((prev) => ({ ...prev, hydrated: true }));
     }
-  }, [taskId, cacheKey]);
+  }, [taskId, cacheKey, setCurrentLeadStatus]);
 
   useEffect(() => {
-    fetchResponses();
-  }, [fetchResponses]);
+    if (!leadStatus.hydrated) {
+      fetchResponses();
+    }
+  }, [fetchResponses, leadStatus.hydrated]);
 
   const shouldFetchConversation = leadStatus.purchased && !!taskId && !!userId;
 
@@ -219,7 +258,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       if (cacheKey) {
         const next = { count: leadStatus.count + 1, purchased: true };
         localStorage.setItem(cacheKey, JSON.stringify(next));
-        setLeadStatus({ ...next, hydrated: true });
+        setCurrentLeadStatus({ ...next, hydrated: true });
       }
 
       await fetchResponses();
@@ -258,6 +297,7 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       userId,
       lead,
       cacheKey,
+      setCurrentLeadStatus,
       leadStatus.count,
     ]
   );
@@ -682,16 +722,18 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
             )}
           </div>
 
-          <CreditPurchaseModal
-            open={showCreditModal}
-            onOpenChange={setShowCreditModal}
-            requiredCredits={effectiveCredits}
-            contactName={lead.customer_name}
-            taskId={taskId}
-            userId={userId}
-            professionalId={session?.user?.id}
-            onPurchaseSuccess={() => handlePurchaseSuccess(false)}
-          />
+          {showCreditModal && (
+            <CreditPurchaseModal
+              open={showCreditModal}
+              onOpenChange={setShowCreditModal}
+              requiredCredits={effectiveCredits}
+              contactName={lead.customer_name}
+              taskId={taskId}
+              userId={userId}
+              professionalId={session?.user?.id}
+              onPurchaseSuccess={() => handlePurchaseSuccess(false)}
+            />
+          )}
         </div>
       </div>
 

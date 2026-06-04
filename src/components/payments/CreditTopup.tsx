@@ -93,6 +93,7 @@ function CreditPurchase({
   }, [mode, open, fetchPackages, fetchBalance]);
 
   const fetchResponses = useCallback(async () => {
+    if (mode === "modal" && !open) return;
     if (!taskId) return;
     setLoadingResponses(true);
     try {
@@ -104,7 +105,7 @@ function CreditPurchase({
     } finally {
       setLoadingResponses(false);
     }
-  }, [taskId]);
+  }, [mode, open, taskId]);
 
   useEffect(() => {
     fetchResponses();

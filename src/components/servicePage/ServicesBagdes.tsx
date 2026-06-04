@@ -60,7 +60,7 @@ export function ServicesBadges() {
   ];
 
   return (
-<div className="inline-flex items-center divide-x divide-white/20 rounded-2xl   bg-white/15 px-2 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.12)] backdrop-blur-2xl">      {badges.map((badge, idx) => (
+<div className="inline-flex items-center divide-x divide-white/20 rounded-2xl z-10   bg-white/15 px-2 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.12)] backdrop-blur-2xl">      {badges.map((badge, idx) => (
         <div key={idx} className="flex items-center gap-2.5 px-4">
           <div className="shrink-0 ">{badge.icon}</div>
 
