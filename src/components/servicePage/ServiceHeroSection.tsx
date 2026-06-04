@@ -132,4 +132,3 @@ export default function ServiceHeroSection({
     </section>
   );
 }
-//bg-white/95

@@ -5,6 +5,8 @@ import { TrendingUp, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { FaArrowRightLong } from "react-icons/fa6";
+
 import { useState, useEffect, useRef, useCallback } from "react";
 
 interface PopularLocationsSectionProps {
@@ -29,6 +31,7 @@ interface City {
   image?: string;
   providers?: CityProvider[];
   activeProviders?: number;
+  description?: string;
 }
 
 const popularCityImages = [
@@ -43,40 +46,31 @@ const popularCities: City[] = [
     name: "Sydney",
     image:
       "https://images.unsplash.com/photo-1523059623039-a9ed027e7fad?w=800&h=600&fit=crop",
-    // activeProviders: 248,
-    // providers: [
-    //   { name: "Elite Home Services", rating: 4.9, logo: "🏆", completedJobs: 156 },
-    //   { name: "Pro Solutions Co", rating: 4.8, logo: "⚡", completedJobs: 203 },
-    //   { name: "Premium Care", rating: 5.0, logo: "✨", completedJobs: 189 }
-    // ]
+    description:
+      "Find trusted Local Providers in Sydney and Surrounding areas.",
   },
   {
     name: "Melbourne",
     image:
       "https://images.unsplash.com/photo-1609036394821-b63e8168dc64?q=80&w=1548&auto=format&fit=crop",
-    // activeProviders: 192,
-    // providers: [
-    //   { name: "Expert Hands", rating: 4.9, logo: "🎯", completedJobs: 178 },
-    //   { name: "Quality First", rating: 4.7, logo: "💼", completedJobs: 145 },
-    //   { name: "Master Services", rating: 5.0, logo: "🌟", completedJobs: 201 }
-    // ]
+        description:
+      "Find trusted Local Providers in Melbourne and Surrounding areas.",
   },
   {
     name: "Adelaide",
     image:
       "https://images.unsplash.com/photo-1702252212983-db7e428cc3cf?q=80&w=1880&auto=format&fit=crop",
-    // activeProviders: 156,
-    // providers: [
-    //   { name: "Top Tier Pros", rating: 4.8, logo: "🔥", completedJobs: 134 },
-    //   { name: "Swift Solutions", rating: 4.9, logo: "⚙️", completedJobs: 167 },
-    //   { name: "Premier Group", rating: 4.7, logo: "💎", completedJobs: 142 }
-    // ]
+        description:
+      "Find trusted Local Providers in Adelaide and Surrounding areas.",
   },
   {
     name: "Perth",
     image:
       "https://images.unsplash.com/photo-1574471101497-d958f6e3ebd4?q=80&w=1548&auto=format&fit=crop",
+        description:
+      "Find trusted Local Providers in Perth and Surrounding areas.",
   },
+   
 ];
 
 export default function PopularLocationsSection({
@@ -108,7 +102,7 @@ export default function PopularLocationsSection({
       });
       setCurrentIndex(index);
     },
-    [displayCities.length]
+    [displayCities.length],
   );
 
   const handlePrevious = () => {
@@ -178,7 +172,7 @@ export default function PopularLocationsSection({
       <div className="relative group">
         <button
           onClick={handlePrevious}
-          className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-xl flex items-center justify-center opacity-100 hover:bg-gray-50 dark:hover:bg-slate-700 -translate-x-1/2 border border-gray-200 dark:border-slate-600"
+          className="absolute -left-2 top-1/2 -translate-y-12 z-10 w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-xl flex items-center justify-center opacity-100 hover:bg-gray-50 dark:hover:bg-slate-700 -translate-x-1/2 border border-gray-200 dark:border-slate-600"
           aria-label="Previous"
         >
           <ChevronLeft className="w-6 h-6 text-gray-700 dark:text-gray-300" />
@@ -186,7 +180,7 @@ export default function PopularLocationsSection({
 
         <button
           onClick={handleNext}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-xl flex items-center justify-center opacity-100 transition-opacity hover:bg-gray-50 dark:hover:bg-slate-700 translate-x-1/2 border border-gray-200 dark:border-slate-600"
+          className="absolute right-0 top-1/2 -translate-y-12 z-10 w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-xl flex items-center justify-center opacity-100 transition-opacity hover:bg-gray-50 dark:hover:bg-slate-700 translate-x-1/2 border border-gray-200 dark:border-slate-600"
           aria-label="Next"
         >
           <ChevronRight className="w-6 h-6 text-gray-700 dark:text-gray-300" />
@@ -212,7 +206,6 @@ export default function PopularLocationsSection({
             {displayCities.map((city, index) => {
               const citySlug = city.name.toLowerCase().replace(/\s+/g, "-");
               const isCurrentCity = currentCity === citySlug;
-
               return (
                 <div
                   key={city.display_name}
@@ -231,15 +224,16 @@ export default function PopularLocationsSection({
                         : "border-gray-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-700"
                     } hover:-translate-y-2`}
                   >
-                    <div className="relative h-52 overflow-hidden">
+                    <div className="relative h-64 overflow-hidden">
                       <Image
                         title="Location Image"
                         fill
-                        src={
-                          popularCities[index % popularCities.length]?.image ||
-                          "/default-image.jpg"
-                        }
-                        alt={city.name}
+                        // src={
+                        //   popularCities[index % popularCities.length]?.image ||
+                        //   "/default-image.jpg"
+                        // }
+                        src={city.image_url || "/location.jpg"}
+                        alt={city.name }
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         sizes="(max-width: 640px) 100vw,
                         (max-width: 1024px) 50vw,
@@ -251,18 +245,21 @@ export default function PopularLocationsSection({
                           Current
                         </div>
                       )}
-                      <div className="absolute bottom-4 left-4 right-4">
+                      <div className="absolute bottom-4 left-4 right-4 pr-12">
                         <h3 className="text-2xl font-bold text-white mb-1">
                           {city.name}
                         </h3>
-                        {/* <div className="flex items-center gap-2 text-white/90 text-sm">
-                          <TrendingUp className="w-4 h-4" />
-                          <span>{popularCities[index % popularCities.length]?.activeProviders || 150}+ Active Providers</span>
-                        </div> */}
+                        <p className="text-slate-200  text-xs">
+                          Find trusted Local Providers in {city.name} and Surrounding areas.
+                        </p>
+
+                        <div className="h-8 w-8 rounded-full bg-[#2563EB] absolute  bottom-0 -translate-y-2  right-2">
+                         <FaArrowRightLong  className="absolute bottom-0 -translate-y-2 right-2" color="white"/>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="p-2">
+                    <div className="">
                       {/* <div className="space-y-3 mb-5"> 
                         {popularCities[index % popularCities.length]?.providers?.slice(0, 3).map((provider, i) => (
                           <div key={i} className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700/50 transition">
@@ -283,8 +280,7 @@ export default function PopularLocationsSection({
                           </div>
                         ))}
                       </div> */}
-
-                      <Button
+                      {/* <Button
                         onClick={(e) => {
                           e.preventDefault();
                           router.push(
@@ -294,7 +290,7 @@ export default function PopularLocationsSection({
                         className="w-full py-3 bg-[#2563EB] text-white font-semibold rounded-lg hover:shadow-lg transition-all"
                       >
                         Search {city.name}
-                      </Button>
+                      </Button> */}
                     </div>
                   </Link>
                 </div>
