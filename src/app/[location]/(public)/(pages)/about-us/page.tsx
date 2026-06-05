@@ -158,14 +158,14 @@ export default function AboutUs() {
             alt="team image"
             width={480}
             height={480}
-            className="w-[320px] lg:w-[480px] h-auto"
+            className="w-[320px] lg:w-120 h-auto"
           />
         </div>
       </section>
       <section className=" relative  mx-auto w-full bg-white overflow-hidden mb-8">
         <div className="absolute top-0 left-0 right-0 h-[55%] bg-[#2563EB] " />
 
-        <div className="  relative max-w-6xl mx-auto px-6 py-20 min-h-[620px] flex items-end">
+        <div className="  relative max-w-6xl mx-auto px-6 py-20 min-h-155 flex items-end">
           <OurStory />
           <div className="absolute right-6 top-1/2 -translate-y-1/2 z-20 hidden sm:block">
             <Image
@@ -173,7 +173,7 @@ export default function AboutUs() {
               alt="teamwork"
               width={520}
               height={520}
-              className="w-[420px] lg:w-[520px] h-[420px] lg:h-[520px] rounded-full object-cover"
+              className="w-105 lg:w-130 h-105 lg:h-130 rounded-full object-cover"
             />
           </div>
         </div>
@@ -225,7 +225,7 @@ export default function AboutUs() {
         </div>
 
         <div className="relative">
-          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-200 via-blue-400 to-blue-600 hidden md:block"></div>
+          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-linear-to-b from-blue-200 via-blue-400 to-blue-600 hidden md:block"></div>
 
           <div className="space-y-10">
             {timeline.map((item, index) => (

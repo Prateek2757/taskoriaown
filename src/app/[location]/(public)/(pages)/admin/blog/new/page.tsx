@@ -134,8 +134,8 @@ function Toggle({
       style={{
         background: checked ? "#f97316" : "#2563EB",
       }}
-      className={`relative shrink-0 w-10 h-[2px]  rounded-full transition-all duration-200
-        focus-visible:outline focus-visible:outline-2  focus-visible:outline-offset-2
+      className={`relative shrink-0 w-10 h-0.5  rounded-full transition-all duration-200
+        focus-visible:outline   focus-visible:outline-offset-2
         focus-visible:outline-orange-500
         ${checked ? "" : "bg-zinc-900 dark:bg-zinc-700"}`}
     >
@@ -435,7 +435,7 @@ export default function NewBlogPostPage() {
             </div>
           </Card>
 
-          <Card className="!p-0 overflow-visible">
+          <Card className="p-0! overflow-visible">
             <div className="px-4 pt-4">
               <SectionLabel>Content</SectionLabel>
             </div>
@@ -567,7 +567,7 @@ export default function NewBlogPostPage() {
                 <button
                   type="button"
                   onClick={addTag}
-                  className="h-[38px] px-3 shrink-0 rounded-lg text-sm font-medium
+                  className="h-9.5 px-3 shrink-0 rounded-lg text-sm font-medium
                     bg-zinc-100 dark:bg-zinc-700
                     hover:bg-zinc-200 dark:hover:bg-zinc-600
                     text-zinc-700 dark:text-zinc-300 transition-colors"

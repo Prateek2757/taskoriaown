@@ -130,7 +130,7 @@ const Cross = () => <span className="block w-5 h-0.5 bg-muted-foreground/30 mx-a
 const VerificationBadgesPage = () => {
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative py-2 overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <section className="relative py-2 overflow-hidden bg-linear-to-br from-primary/5 via-background to-secondary/5">
         <div className="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full bg-amber-200/20 dark:bg-amber-800/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-yellow-200/20 dark:bg-yellow-800/10 blur-3xl" />
         <div className="flex items-center justify-center sm:justify-start px-6 py-2">
@@ -158,7 +158,7 @@ const VerificationBadgesPage = () => {
               Australian Provider Verification
             </div>
             <h1 className="text-4xl font-bold text-foreground leading-tight">
-              Understanding <span className="bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">Taskoria Verification Badges</span>
+              Understanding <span className="bg-linear-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">Taskoria Verification Badges</span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-xl mx-auto">
               Every badge represents a verified step in building trust — not just a self-declaration. Learn what we check and why it matters.
@@ -177,9 +177,9 @@ const VerificationBadgesPage = () => {
                 className={`border-2 ${badge.borderColor} py-0 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300`}
               >
                 <CardContent className="p-0">
-                  <div className={`bg-gradient-to-br ${badge.bgGradient}`}>
+                  <div className={`bg-linear-to-br ${badge.bgGradient}`}>
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-8 pb-6">
-                      <div className={`${badge.badgeBg} ring-2 ${badge.ringColor} w-20 h-20 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm`}>
+                      <div className={`${badge.badgeBg} ring-2 ${badge.ringColor} w-20 h-20 rounded-2xl flex items-center justify-center shrink-0 shadow-sm`}>
                         {badge.icon}
                       </div>
                       <div className="flex-1">
@@ -193,7 +193,7 @@ const VerificationBadgesPage = () => {
                       </div>
                     </div>
 
-                    <div className="px-8 pb-8 grid md:grid-cols-2 gap-8">
+                    <div className="px-8 pb-3 grid md:grid-cols-2 gap-8">
                       <div>
                         <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">
                           Verification Requirements
@@ -201,7 +201,7 @@ const VerificationBadgesPage = () => {
                         <div className="space-y-4">
                           {badge.requirements.map((req, j) => (
                             <div key={j} className="flex items-start gap-3">
-                              <div className="mt-0.5 flex-shrink-0">{req.icon}</div>
+                              <div className="mt-0.5 shrink-0">{req.icon}</div>
                               <div>
                                 <p className="text-sm font-semibold text-foreground">{req.title}</p>
                                 <p className="text-sm text-muted-foreground leading-relaxed">{req.detail}</p>
@@ -225,7 +225,7 @@ const VerificationBadgesPage = () => {
                           <ul className="space-y-2">
                             {badge.trustPoints.map((pt, k) => (
                               <li key={k} className="flex items-center gap-2 text-sm text-foreground">
-                                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                                <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />
                                 {pt}
                               </li>
                             ))}

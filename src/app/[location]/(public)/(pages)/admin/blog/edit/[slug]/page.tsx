@@ -681,7 +681,6 @@ export default function EditBlogPostPage() {
             ))}
           </Card>
 
-          {/* Post URL */}
           <Card>
             <SectionLabel>Post URL</SectionLabel>
             <p className="text-xs text-zinc-400 dark:text-zinc-500 leading-relaxed break-all">
@@ -692,7 +691,6 @@ export default function EditBlogPostPage() {
             </p>
           </Card>
 
-          {/* Danger zone */}
           <Card>
             <SectionLabel>Danger zone</SectionLabel>
             <p className="text-xs text-zinc-400 dark:text-zinc-500 mb-3">

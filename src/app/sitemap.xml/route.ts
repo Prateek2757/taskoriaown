@@ -29,22 +29,25 @@
 //   return xmlResponse(xml);
 // }
 
-import { BASE_URL, getServiceSitemapCount, xmlResponse } from "@/lib/sitemap-helpers";
+import {
+  BASE_URL,
+  getServiceSitemapCount,
+  xmlResponse,
+} from "@/lib/sitemap-helpers";
 
-export const revalidate =  604800;
+export const revalidate = 604800;
 
 const STATIC_SITEMAPS = [
   "sitemaps/static.xml",
   "sitemaps/categories.xml",
   "sitemaps/cities.xml",
-  "sitemaps/blog.xml"
+  "sitemaps/blog.xml",
 ];
-
 
 export async function GET() {
   const now = new Date().toISOString();
 
-  const serviceCount = await getServiceSitemapCount(); 
+  const serviceCount = await getServiceSitemapCount();
 
   const serviceSitemaps = Array.from(
     { length: serviceCount },
