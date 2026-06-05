@@ -8,8 +8,8 @@ interface ServiceBreadcrumbProps {
   stateSlug: string | null;
   citySlug: string | null;
   subCitySlug: string | null;
-  stateName?: string;   // resolved display name, e.g. "New South Wales"
-  cityName?: string;    // resolved display name, e.g. "Sydney"
+  stateName?: string; // resolved display name, e.g. "New South Wales"
+  cityName?: string; // resolved display name, e.g. "Sydney"
   subCityName?: string; // resolved display name, e.g. "Parramatta"
 }
 
@@ -30,8 +30,9 @@ export default function ServiceBreadcrumb({
   subCityName,
 }: ServiceBreadcrumbProps) {
   const stateLabel = stateName ?? (stateSlug ? slugToLabel(stateSlug) : null);
-  const cityLabel =  citySlug ? slugToLabel(citySlug) : null;
-  const subCityLabel = subCityName ?? (subCitySlug ? slugToLabel(subCitySlug) : null);
+  const cityLabel = citySlug ? slugToLabel(citySlug) : null;
+  const subCityLabel =
+    subCityName ?? (subCitySlug ? slugToLabel(subCitySlug) : null);
 
   type Crumb =
     | { label: string; href: string; current?: false }
@@ -70,8 +71,15 @@ export default function ServiceBreadcrumb({
   if (subCityLabel) {
     crumbs.push({ label: subCityLabel, current: true });
   }
-  console.log(stateSlug,citySlug,subCitySlug,stateName,cityName,subCityName,"citynames ");
-
+  console.log(
+    stateSlug,
+    citySlug,
+    subCitySlug,
+    stateName,
+    cityName,
+    subCityName,
+    "citynames ",
+  );
 
   return (
     <nav
@@ -80,7 +88,9 @@ export default function ServiceBreadcrumb({
     >
       {crumbs.map((crumb, i) => (
         <span key={i} className="flex items-center gap-1">
-          {i > 0 && <ChevronRight className="w-3.5 h-3.5 shrink-0 text-slate-300 dark:text-slate-600" />}
+          {i > 0 && (
+            <ChevronRight className="w-3.5 h-3.5 shrink-0 text-slate-300 dark:text-slate-600" />
+          )}
 
           {"current" in crumb && crumb.current ? (
             <span
