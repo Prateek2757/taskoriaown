@@ -74,11 +74,11 @@ export default function WhyTaskoria({
       {/* <div className="h-[3px] w-full bg-gradient-to-r from-blue-500 via-[#2563EB] to-blue-600" /> */}
 
       <div className="max-w-8xl mx-auto px-6 py-4">
-        <p className=" text-[16px] font-bold uppercase tracking-[0.18em] text-[#2563EB] mb-6 text-center">
+        <p className=" text-xl font-bold uppercase tracking-[0.18em] text-[#2563EB]  text-center">
           Why customers choose Taskoria for {serviceName.toLowerCase()}
         </p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px bg-slate-100 dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px bg-slate-100 dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm mt-12 mb-6">
           {items.map((item, i) => (
             <div
               key={i}
@@ -93,7 +93,7 @@ export default function WhyTaskoria({
                 {item.icon}
               </span>
 
-              <p className="text-[13px font-bold text-slate-800 group-hover:text-blue-600 dark:text-slate-100 leading-tight justify-center">
+              <p className=" font-bold text-slate-800 group-hover:text-blue-600 dark:text-slate-100 leading-tight justify-center">
                 {item.label}
               </p>
 

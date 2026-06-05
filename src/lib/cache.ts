@@ -1,4 +1,3 @@
-
 import { unstable_cache } from "next/cache";
 import pool from "@/lib/dbConnect";
 import { City } from "@/app/[location]/(public)/(pages)/services/[...slug]/page";
@@ -28,7 +27,7 @@ export const getCategoriesFromDB = unstable_cache(
   {
     revalidate: 604800,
     tags: ["categories"],
-  }
+  },
 );
 
 export const getCategoryBySlug = unstable_cache(
@@ -45,15 +44,15 @@ export const getCategoryBySlug = unstable_cache(
         service_detail
       FROM service_categories
       WHERE slug = $1`,
-      [slug]
+      [slug],
     );
     return result.rows[0] ?? null;
   },
   ["category-by-slug"],
   {
-    revalidate: 604800, 
+    revalidate: 604800,
     tags: ["categories"],
-  }
+  },
 );
 
 export const getCategoryQuestionsFromDB = unstable_cache(
@@ -69,15 +68,15 @@ export const getCategoryQuestionsFromDB = unstable_cache(
       FROM category_questions
       WHERE category_id = $1
       ORDER BY sort_order ASC;`,
-      [categoryId]
+      [categoryId],
     );
     return result.rows;
   },
   ["category-questions"],
   {
-    revalidate: 604800, 
+    revalidate: 604800,
     tags: ["category-questions"],
-  }
+  },
 );
 
 export const getServiceProvidersFromDB = unstable_cache(
@@ -99,7 +98,7 @@ export const getServiceProvidersFromDB = unstable_cache(
         json_agg(DISTINCT sc.slug)
           FILTER (WHERE sc.slug IS NOT NULL) AS slugs,
         c.name AS locationname,
-        c.slug AS cityslug
+        c.slug AS cityslug,
       FROM user_profiles up
       JOIN professional_subscriptions ps
         ON ps.user_id = up.user_id
@@ -118,18 +117,16 @@ export const getServiceProvidersFromDB = unstable_cache(
         up.profile_image_url, up.is_nationwide, up.created_at,
         u.public_id, cp.company_name, cp.logo_url, c.name, c.slug
       ORDER BY up.created_at DESC;`,
-      [serviceSlug, citySlug]
+      [serviceSlug, citySlug],
     );
     return rows;
   },
   ["service-providers"],
   {
-    revalidate: 900, 
+    revalidate: 900,
     tags: ["service-providers"],
-  }
+  },
 );
-
-
 
 export const getAllCities = unstable_cache(
   async (): Promise<City[]> => {
@@ -140,7 +137,8 @@ export const getAllCities = unstable_cache(
         c.latitude, c.longitude, c.image_url,
         s.slug  AS state_slug,
         s.name  AS state_name,
-        co.name AS country_name
+        co.name AS country_name,
+        c.description as city_description
       FROM cities c
       LEFT JOIN states   s  ON c.state_id   = s.state_id
       JOIN      countries co ON c.country_id = co.country_id
@@ -153,18 +151,19 @@ export const getAllCities = unstable_cache(
     for (const row of result.rows) {
       if (!row.parent_city_id) {
         const city: City = {
-          city_id:      row.city_id,
-          name:         row.name,
-          slug:         row.slug,
+          city_id: row.city_id,
+          name: row.name,
+          slug: row.slug,
           display_name: row.display_name,
-          popularity:   row.popularity,
-          latitude:     row.latitude  ? parseFloat(row.latitude)  : undefined,
-          longitude:    row.longitude ? parseFloat(row.longitude) : undefined,
-          image_url:    row.image_url,
-          state_slug:   row.state_slug,
-          state_name:   row.state_name,
+          popularity: row.popularity,
+          latitude: row.latitude ? parseFloat(row.latitude) : undefined,
+          longitude: row.longitude ? parseFloat(row.longitude) : undefined,
+          image_url: row.image_url,
+          state_slug: row.state_slug,
+          state_name: row.state_name,
           country_name: row.country_name,
-          subcities:    [],
+          city_description: row.city_description,
+          subcities: [],
         };
         map.set(row.city_id, city);
         cities.push(city);
@@ -174,12 +173,12 @@ export const getAllCities = unstable_cache(
     for (const row of result.rows) {
       if (row.parent_city_id && map.has(row.parent_city_id)) {
         map.get(row.parent_city_id)!.subcities.push({
-          city_id:      row.city_id,
-          name:         row.name,
-          slug:         row.slug,
+          city_id: row.city_id,
+          name: row.name,
+          slug: row.slug,
           display_name: row.display_name,
-          popularity:   row.popularity,
-          image_url:    row.image_url,
+          popularity: row.popularity,
+          image_url: row.image_url,
         });
       }
     }
@@ -188,11 +187,10 @@ export const getAllCities = unstable_cache(
   },
   ["all-cities"],
   {
-    revalidate: 86400, 
+    revalidate: 86400,
     tags: ["cities"],
-  }
+  },
 );
-
 
 export const getCityBySlug = unstable_cache(
   async (slug: string) => {
@@ -200,18 +198,18 @@ export const getCityBySlug = unstable_cache(
       `
       SELECT
         c.city_id, c.name, c.slug, c.display_name,
-        c.popularity, c.latitude, c.longitude, c.image_url,
+        c.popularity, c.latitude, ,c.longitude, c.image_url,
         c.parent_city_id,
         s.slug AS state_slug,
         s.name AS state_name,
-        co.name AS country_name
+        co.name AS country_name,
       FROM cities c
       LEFT JOIN states s ON c.state_id = s.state_id
       JOIN countries co ON c.country_id = co.country_id
       WHERE c.slug = $1
       LIMIT 1
     `,
-      [slug]
+      [slug],
     );
 
     return result.rows[0] || null;
@@ -219,7 +217,7 @@ export const getCityBySlug = unstable_cache(
   ["city-by-slug"],
   {
     revalidate: 86400,
-  }
+  },
 );
 
 export const getSubcities = unstable_cache(
@@ -232,7 +230,7 @@ export const getSubcities = unstable_cache(
       WHERE parent_city_id = $1
       ORDER BY popularity DESC
     `,
-      [cityId]
+      [cityId],
     );
 
     return result.rows;
@@ -240,7 +238,7 @@ export const getSubcities = unstable_cache(
   ["subcities"],
   {
     revalidate: 86400,
-  }
+  },
 );
 
 export const getAllBlogPosts = unstable_cache(
@@ -265,8 +263,7 @@ export const getAllBlogPosts = unstable_cache(
         views, likes, read_time, published_at
        FROM blog_posts
        WHERE ${conditions.join(" AND ")}
-       ORDER BY published_at DESC`
-    ,
+       ORDER BY published_at DESC`,
     );
 
     return result.rows;
@@ -275,7 +272,7 @@ export const getAllBlogPosts = unstable_cache(
   {
     revalidate: 300,
     tags: ["blog-posts"],
-  }
+  },
 );
 
 export const getBlogPostBySlug = unstable_cache(
@@ -284,7 +281,7 @@ export const getBlogPostBySlug = unstable_cache(
       `SELECT * FROM blog_posts
        WHERE slug = $1 AND is_published = true
        LIMIT 1`,
-      [slug]
+      [slug],
     );
     return result.rows[0] ?? null;
   },
@@ -292,5 +289,5 @@ export const getBlogPostBySlug = unstable_cache(
   {
     revalidate: 300,
     tags: ["blog-posts"],
-  }
-); 
+  },
+);

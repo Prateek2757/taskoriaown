@@ -13,7 +13,7 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
   return (
     <section className="mb-16 pt-3">
       <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-3">
           Frequently Asked Questions
         </h2>
         <p className="text-lg text-gray-500 dark:text-gray-400">

@@ -124,9 +124,9 @@ export default function ServiceHeroSection({
              
             </div>
           </div>
-          <div className="absolute bottom-0 right-0 hidden md:block">
+          {/* <div className="absolute bottom-0 right-0 hidden md:block">
             <ServicesBadges />
-          </div>
+          </div> */}
         </div>
       </section>
     </section>

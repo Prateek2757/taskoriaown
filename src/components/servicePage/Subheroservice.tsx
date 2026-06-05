@@ -128,7 +128,7 @@ export default function SubHeroService({
   return (
     <section
       aria-label={`Find ${proLabel} on Taskoria`}
-      className="w-full bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800/60"
+      className="w-full  bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800/60"
     >
       <div className="max-w-7xl mx-auto py-10 md:py-5">
         <nav
@@ -145,8 +145,8 @@ export default function SubHeroService({
           <span className="font-semibold text-[#2563EB] ">{service.name}</span>
         </nav>
 
-        <div className="grid lg:grid-cols-2 gap-6 items-start">
-          <div className="flex flex-col gap-4">
+        <div className="grid  gap-6 items-start w-3/4">
+          <div className="flex flex-col gap-4 justify-center">
             <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1]">
               Need help finding {getArticle(proLabel)}{" "}
               <span className="relative inline-block">
@@ -173,7 +173,7 @@ export default function SubHeroService({
               {paragraphs.highlight}
             </p>
 
-            <div className="pt-1">
+            <div className="pt-1 ">
               <button
                 onClick={onPostJob}
                 className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] hover:bg-[#1d4ed8] active:bg-[#1e40af] text-white font-bold text-base px-7 py-3 shadow-lg shadow-blue-200 dark:shadow-blue-950 hover:shadow-xl hover:shadow-blue-300 dark:hover:shadow-blue-900 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
@@ -184,7 +184,7 @@ export default function SubHeroService({
               </button>
             </div>
           </div>
-
+{/* 
           <div className="hidden lg:flex flex-col gap-4">
             <div className="grid grid-cols-3 gap-3">
               {[
@@ -234,7 +234,7 @@ export default function SubHeroService({
                 </span>
               </div>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
