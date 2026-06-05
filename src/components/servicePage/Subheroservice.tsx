@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, ChevronRight, MapPin } from "lucide-react";
+import LocalProsFeature from "./LocalProFeature";
 
 interface ServiceHeroSectionProps {
   service: {
@@ -128,7 +129,7 @@ export default function SubHeroService({
   return (
     <section
       aria-label={`Find ${proLabel} on Taskoria`}
-      className="w-full  bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800/60"
+      className="w-full relative bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800/60"
     >
       <div className="max-w-7xl mx-auto py-10 md:py-5">
         <nav
@@ -184,7 +185,11 @@ export default function SubHeroService({
               </button>
             </div>
           </div>
-{/* 
+          {/* <div className="absolute right-0">
+ <LocalProsFeature />
+          </div> */}
+
+          {/* 
           <div className="hidden lg:flex flex-col gap-4">
             <div className="grid grid-cols-3 gap-3">
               {[

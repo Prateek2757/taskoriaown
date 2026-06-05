@@ -28,16 +28,16 @@ export default function ServiceHeroSection({
   const description = cityData?.description || service.description;
 
   return (
-    <section className="relative max-w-6xl mx-auto py-3 ">
-      <section className="relative overflow-hiden max-h-175 bg-slate-950 rounded-2xl">
+    <section className="relative max-w-6xl mx-auto py-6  ">
+      <section className="relative overflow-hidden max-h-175 bg-slate-950  rounded-2xl ">
         <Image
           src={service.service_image_url}
           alt={service.name}
           fill
           priority
-          className="absolute inset-0 object-cover"
+          className="absolute inset-0 object-cover  "
         />
-        <div className="absolute inset-0 bg-linear-to-r  from-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r  from-black/40 to-transparent  " />
 
         {/* <nav className="flex items-center gap-2 text-xs text-white/50 mb-7 flex-wrap">
         <Link href="/" className="hover:text-white/80 transition-colors">
@@ -57,7 +57,7 @@ export default function ServiceHeroSection({
         <ChevronRight className="w-3 h-3 flex-shrink-0" />
         <span className="text-white/80 font-medium">{stateName}</span>
       </nav> */}
-        <div className="relative z-10 max-w-6xl mx-auto px-6 py-12 ">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 py-12  ">
           {/* <nav className="flex items-center gap-2 text-xs text-white/50 mb-7 flex-wrap">
             <Link  href="/" className="hover:text-white/80 transition-colors">Home</Link>
             <ChevronRight className="w-3 h-3 flex-shrink-0" />
