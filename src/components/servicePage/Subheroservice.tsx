@@ -131,7 +131,7 @@ export default function SubHeroService({
       aria-label={`Find ${proLabel} on Taskoria`}
       className="w-full relative bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800/60"
     >
-      <div className="max-w-7xl mx-auto py-10 md:py-5">
+      <div className="max-w-6xl mx-auto py-10 md:py-5">
         <nav
           aria-label="Breadcrumb"
           className="flex items-center gap-1.5 text-sm text-slate-400 dark:text-slate-500 mb-8"
@@ -184,13 +184,8 @@ export default function SubHeroService({
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
-          </div>
-          {/* <div className="absolute right-0">
- <LocalProsFeature />
-          </div> */}
-
-          {/* 
-          <div className="hidden lg:flex flex-col gap-4">
+          </div>             
+          {/* <div className="hidden lg:flex flex-col gap-3 absolute -right-3 -mt-5 ">
             <div className="grid grid-cols-3 gap-3">
               {[
                 { val: "480+", label: "Verified pros" },
@@ -201,7 +196,7 @@ export default function SubHeroService({
                   key={s.label}
                   className="flex flex-col items-center justify-center text-center rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700/50 p-2 gap-1"
                 >
-                  <span className="text-2xl font-extrabold text-[#2563EB] dark:text-[#60a5fa] tracking-tight">
+                  <span className="text-xl font-semibold text-[#2563EB] dark:text-[#60a5fa] tracking-tight">
                     {s.val}
                   </span>
                   <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
@@ -239,7 +234,7 @@ export default function SubHeroService({
                 </span>
               </div>
             )}
-          </div> */}
+          </div>  */}
         </div>
       </div>
     </section>
