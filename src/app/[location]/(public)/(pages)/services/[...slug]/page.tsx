@@ -34,6 +34,7 @@ export interface City {
   state_slug: string;
   state_name: string;
   country_name: string;
+  city_description:string;
   subcities: { city_id: number; name: string; slug: string }[];
   providers?: any[];
 }

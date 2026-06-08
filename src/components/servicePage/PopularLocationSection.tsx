@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { TrendingUp, Star, ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -156,7 +155,7 @@ export default function PopularLocationsSection({
   };
 
   return (
-    <div className="mb-10 mt-6   relative">
+    <div className="mb-10 mt-6 max-w-7xl mx-auto relative ">
       <div className="text-center mb-12">
         <span className="inline-block px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-semibold rounded-full text-sm mb-4">
           POPULAR LOCATIONS
@@ -169,7 +168,7 @@ export default function PopularLocationsSection({
         </p>
       </div>
 
-      <div className="relative group">
+      <div className="relative group -mx-14  px-12">
         <button
           onClick={handlePrevious}
           className="absolute -left-2 top-1/2 -translate-y-12 z-10 w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-xl flex items-center justify-center opacity-100 hover:bg-gray-50 dark:hover:bg-slate-700 -translate-x-1/2 border border-gray-200 dark:border-slate-600"
@@ -200,7 +199,7 @@ export default function PopularLocationsSection({
           }}
         >
           <div
-            className="flex gap-6 px-1 pb-2"
+            className="flex gap-6 pb-2 mx-4 "
             style={{ width: "max-content" }}
           >
             {displayCities.map((city, index) => {
@@ -218,20 +217,16 @@ export default function PopularLocationsSection({
                 >
                   <Link
                     href={`/services/${serviceSlug}/${city.state_slug}/${city.slug}`}
-                    className={`block h-full bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border ${
+                    className={`block h-full bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all  border ${
                       isCurrentCity
                         ? "border-blue-500 ring-2 ring-blue-300 dark:ring-blue-700"
                         : "border-gray-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-700"
-                    } hover:-translate-y-2`}
+                    } hover:translate-y-1`}
                   >
                     <div className="relative h-64 overflow-hidden">
                       <Image
                         title="Location Image"
                         fill
-                        // src={
-                        //   popularCities[index % popularCities.length]?.image ||
-                        //   "/default-image.jpg"
-                        // }
                         src={city.image_url || "/location.jpg"}
                         alt={city.name }
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -250,7 +245,7 @@ export default function PopularLocationsSection({
                           {city.name}
                         </h3>
                         <p className="text-slate-200  text-xs">
-                          Find trusted Local Providers in {city.name} and Surrounding areas.
+                          {city.city_description}
                         </p>
 
                         <div className="h-8 w-8 rounded-full bg-[#2563EB] absolute  bottom-0 -translate-y-2  right-2">

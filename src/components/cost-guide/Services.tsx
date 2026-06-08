@@ -62,7 +62,8 @@ export default function Services({ categories, loading, slug }: Props) {
                   className=" flex gap-4 text-sm md:text-md text-black font-semibold dark:text-gray-300 cursor-pointer"
                   key={cat.main_category} 
                 >
-                  <Link href={`/cost-guides/${cat.slug}`}>{cat.name} Cost Guide</Link>
+                  {cat.name} Cost Guide
+                  {/* <Link href={`/cost-guides/${cat.slug}`}>{cat.name} Cost Guide</Link> */}
                 </li>
               ))}
           </ul>
