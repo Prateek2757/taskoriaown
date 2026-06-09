@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import TaskoriaBlog from "@/components/blog/TaskoriaMainBlogPage";
+import { normalizeBlogPostCategory } from "@/components/blog/blogTaxonomy";
 
 const BASE_URL = "https://www.taskoria.com";
 
@@ -68,7 +69,7 @@ export default async function BlogPage() {
   });
 
   const data = await res.json();
-  const posts = data.posts ?? [];
+  const posts = (data.posts ?? []).map(normalizeBlogPostCategory);
 
   return (
     <>

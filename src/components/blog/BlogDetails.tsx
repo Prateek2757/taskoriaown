@@ -1,11 +1,11 @@
 "use client";
-
 import { Tag } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { IoIosArrowBack } from "react-icons/io";
 import { renderContent } from "../renderContent";
-import { BlogCardList } from "./BlogCard";
 import Image from "next/image";
+import { BlogCardList } from "./BlogCard";
+
 interface Post {
   post_id: number;
   slug: string;
@@ -41,21 +41,22 @@ const formatDate = (dateString: string) => {
 };
 
 export default function BlogDetails({ post, filteredPosts }: Props) {
-  const router = useRouter();
+  const content = post.content ?? "";
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950">
       <article className="max-w-4xl mx-auto px-6 sm:px-6 lg:px-8 py-4">
         <div className="mb-3 flex flex-col">
-          <button
+          <Link
+            href="/blog"
             className="group inline-flex items-center gap-2 text-[#2563EB] dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-all hover:gap-3"
-            onClick={() => router.push("./")}
           >
             <IoIosArrowBack
               size={32}
               className="group-hover:-translate-x-1 transition-transform duration-300"
             />
             <span className="text-left">Back</span>
-          </button>
+          </Link>
         </div>
         <div className="mt-3 mb-3 self-start inline-flex items-center px-5 py-2 rounded-full bg-linear-to-r from-blue-100 to-blue-100 dark:from-blue-500/20 dark:to-blue-500/20 text-blue-700 dark:text-blue-300 font-semibold text-sm shadow-sm">
           {post.category}
@@ -75,14 +76,16 @@ export default function BlogDetails({ post, filteredPosts }: Props) {
         <div className="flex flex-wrap items-center gap-6 pb-8 border-b border-gray-200 dark:border-zinc-800 mt-4 mb-3">
           <Image
             src={post.image_url}
-            alt={post.author_name}
+            alt={post.title}
             width={800}
             height={500}
+            priority
+            sizes="(max-width: 896px) 100vw, 896px"
             className="rounded-md object-cover"
           />
         </div>
         <div className="prose dark:prose-invert max-w-none">
-          {renderContent(post.content)}
+          {renderContent(content)}
         </div>
         <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-200 dark:border-zinc-800">
           {post.tags.map((tag) => (
@@ -102,6 +105,25 @@ export default function BlogDetails({ post, filteredPosts }: Props) {
             You might also be interested in:
           </h3>
           <BlogCardList posts={filteredPosts} />
+          {/* <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
+            {filteredPosts.slice(0, 3).map((relatedPost) => (
+              <Link
+                key={relatedPost.post_id}
+                href={`/blog/${relatedPost.slug}`}
+                className="group border border-gray-200 bg-white p-4 transition-colors hover:border-blue-300 dark:border-zinc-800 dark:bg-zinc-900"
+              >
+                <p className="mb-2 text-xs font-semibold uppercase text-[#2563EB]">
+                  {relatedPost.category}
+                </p>
+                <h4 className="line-clamp-2 text-sm font-bold text-gray-900 group-hover:text-blue-700 dark:text-zinc-50">
+                  {relatedPost.title}
+                </h4>
+                <p className="mt-2 line-clamp-2 text-sm text-gray-600 dark:text-zinc-300">
+                  {relatedPost.excerpt}
+                </p>
+              </Link>
+            ))}
+          </div> */}
         </article>
       )}
     </div>

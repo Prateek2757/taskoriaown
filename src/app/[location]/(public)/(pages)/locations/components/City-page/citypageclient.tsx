@@ -221,6 +221,30 @@ export default function CityPageClient({
       </div> */}
 
       <div className="max-w-7xl mx-auto px-6 md:px-16">
+        <section className="pt-12 pb-4 border-b border-slate-100 dark:border-slate-800">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
+            Find local professionals in {cityName}
+          </h2>
+          <div className="grid gap-5 md:grid-cols-3 text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p>
+              Taskoria helps customers in {cityName} compare local providers
+              across {categoryTree.length} service categories, including
+              household jobs, trade work, events, business services, and
+              personal support.
+            </p>
+            <p>
+              Start by choosing the service that matches your job, then share
+              enough detail for providers to quote accurately: location,
+              timing, access, scope, and any materials or preferences.
+            </p>
+            <p>
+              You can also browse nearby cities and other {city.state_name}
+              locations when your job is flexible or you want to compare
+              availability across a wider service area.
+            </p>
+          </div>
+        </section>
+
         <section className="pt-14 pb-2">
           <SectionHeader
             title={`Popular services in ${cityName}`}

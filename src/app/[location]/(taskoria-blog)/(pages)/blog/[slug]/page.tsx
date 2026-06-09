@@ -1,13 +1,19 @@
 import BlogDetails from "@/components/blog/BlogDetails";
-import { getAllBlogPosts, getBlogPostBySlug } from "@/lib/cache";
+import {
+  getBlogPostBySlug,
+  getBlogPostSlugs,
+  getRelatedBlogPosts,
+} from "@/lib/cache";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 type Props = {
   params: Promise<{
+    location: string;
     slug: string;
   }>;
 };
+
 interface Post {
   post_id: number;
   slug: string;
@@ -28,14 +34,21 @@ interface Post {
   image_url: string;
 }
 
-function toTitleCase(slug: string) {
-  return slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
-}
 function buildCanonical(slug: string) {
   return `https://www.taskoria.com/blog/${slug}`;
 }
 
+export const revalidate = 300;
+export const dynamicParams = true;
 
+export async function generateStaticParams() {
+  const posts = await getBlogPostSlugs();
+
+  return posts.map((post) => ({
+    location: "en",
+    slug: post.slug,
+  }));
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -45,24 +58,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.title,
     description: post.excerpt,
-    keywords:post.tags,
+    keywords: post.tags,
     alternates: {
       canonical: buildCanonical(slug),
     },
     openGraph: {
       title: post.title,
       description: post.excerpt,
+      type: "article",
+      publishedTime: post.published_at,
+      modifiedTime: post.updated_at,
+      images: [post.image_url],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
       images: [post.image_url],
     },
   };
 }
+
 export default async function Page({ params }: Props) {
   const { slug } = await params;
   const post: Post | null = await getBlogPostBySlug(slug);
 
   if (!post) notFound();
-  const allPosts = await getAllBlogPosts();
- const filteredPosts = allPosts.filter((p) => p.category === post.category && p.slug !== post.slug);
+
+  const filteredPosts = await getRelatedBlogPosts(post.category, post.slug, 3);
+
   return (
     <>
       <BlogDetails post={post} filteredPosts={filteredPosts} />

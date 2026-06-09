@@ -80,13 +80,13 @@ export default function SubHeroService({
         className="w-full bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800/60"
       >
         <div className="max-w-6xl mx-auto py-5 md:py-0  px-0">
-          <h1 className="text-4xl  font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-6">
+          <h2 className="text-4xl  font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-6">
             Need to find {article}{" "}
             <span className="text-[#2563EB] dark:text-[#60a5fa]">
               {proLabel.endsWith("s") ? proLabel.slice(0, -1) : proLabel}
             </span>{" "}
             in {cityName} ?
-          </h1>
+          </h2>
 
           <div className="flex flex-col gap-3 mb-6 max-w-2xl">
             {cityParagraphs!.slice(0, -1).map((p, i) => (
@@ -148,7 +148,7 @@ export default function SubHeroService({
 
         <div className="grid  gap-6 items-start w-3/4">
           <div className="flex flex-col gap-4 justify-center">
-            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1]">
+            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1]">
               Need help finding {getArticle(proLabel)}{" "}
               <span className="relative inline-block">
                 <span className="relative text-[#2563EB] dark:text-[#60a5fa]">
@@ -160,7 +160,7 @@ export default function SubHeroService({
                 />
               </span>{" "}
               {!proLabel.endsWith("?") && "?"}
-            </h1>
+            </h2>
 
             <p className="text-md text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
               {service.short_description ?? paragraphs.lead}

@@ -51,6 +51,7 @@ const Static_State_Image: Record<string, string> = {
 };
 
 const INITIAL_CITY_LIMIT = 40;
+const POPULAR_CATEGORY_LIMIT = 8;
 
 export default function StatePageClient({
   stateSlug,
@@ -118,7 +119,7 @@ export default function StatePageClient({
   const letters = useMemo(() => Object.keys(alphaGroups).sort(), [alphaGroups]);
 
   const popularCategories = useMemo(
-    () => categoryTree.slice(0, 10),
+    () => categoryTree.slice(0, POPULAR_CATEGORY_LIMIT),
     [categoryTree]
   );
 
@@ -195,10 +196,10 @@ export default function StatePageClient({
           <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700" />
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/10" />
+        <div className="absolute inset-0 bg-slate-950/70" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 md:py-16 flex flex-col md:flex-row md:items-center gap-10">
-          <div className="flex-1">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 md:py-14">
+          <div className="max-w-3xl">
             <nav className="flex items-center gap-2 text-xs text-white/60 mb-6">
               <Link href="/" className="hover:text-white transition-colors">
                 Home
@@ -214,15 +215,13 @@ export default function StatePageClient({
               <span className="text-white font-medium">{stateName}</span>
             </nav>
 
-            <h1 className="text-4xl md:text-5xl lg:text-[3.2rem] font-extrabold text-white leading-[1.1] tracking-tight mb-5">
-              Discover what you can
-              <br />
-              get done in <span className="text-blue-400">{stateName}</span>
+            <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-[1.08] tracking-tight mb-5">
+              Local services in {stateName}
             </h1>
 
-            <p className="text-white/75 text-base md:text-lg max-w-md mb-8 leading-relaxed">
-              Find trusted professionals across {cities.length} cities in{" "}
-              {stateName} — from home cleaning to graphic design.
+            <p className="text-white/78 text-base md:text-lg max-w-2xl mb-7 leading-relaxed">
+              Browse {cities.length} cities and compare trusted professionals
+              for home, business, event, and personal jobs across {stateName}.
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -242,23 +241,22 @@ export default function StatePageClient({
                 Browse all services
               </Link>
             </div>
-          </div>
-
-          <div className="flex-shrink-0 grid grid-cols-2 gap-3 w-full md:w-auto md:min-w-[260px]">
-            {heroStats.map((stat) => (
-              <div
-                key={stat.label}
-                className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl px-5 py-4"
-              >
-                <div className="flex items-center gap-1.5 text-white/65 text-xs mb-1">
-                  {stat.icon}
-                  {stat.label}
+            <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl">
+              {heroStats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="border border-white/15 bg-white/10 px-4 py-3"
+                >
+                  <div className="flex items-center gap-1.5 text-white/65 text-xs mb-1">
+                    {stat.icon}
+                    {stat.label}
+                  </div>
+                  <p className="text-xl font-extrabold text-white">
+                    {stat.value}
+                  </p>
                 </div>
-                <p className="text-2xl font-extrabold text-white">
-                  {stat.value}
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -276,11 +274,35 @@ export default function StatePageClient({
       </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-16">
+        <section className="py-10 border-b border-slate-100 dark:border-slate-800">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight mb-4">
+            Local services across {stateName}
+          </h2>
+          <div className="grid gap-5 md:grid-cols-3 text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p>
+              Browse {cities.length} {stateName} locations and compare service
+              categories that customers commonly request, from home maintenance
+              and cleaning to business, events, and personal support.
+            </p>
+            <p>
+              Each city page narrows the directory to local professionals and
+              nearby areas, so customers can start with the place where the job
+              needs to happen instead of searching through a generic national
+              list.
+            </p>
+            <p>
+              Choose a category to post your task, describe the timing and
+              details, then review quotes from providers who can service your
+              part of {stateName}.
+            </p>
+          </div>
+        </section>
+
         {/* CITIES */}
-        <section className="pt-14 pb-6">
+        <section className="pt-12 pb-6">
           <div className="flex items-end justify-between mb-7 flex-wrap gap-4">
             <div>
-              <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
                 Cities in {stateName}
               </h2>
               <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
@@ -345,44 +367,27 @@ export default function StatePageClient({
         </section>
 
         {/* POPULAR SERVICES */}
-        <section className="pt-10 pb-6 [content-visibility:auto] [contain-intrinsic-size:600px]">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-2">
+        <section className="pt-10 pb-6 [content-visibility:auto] [contain-intrinsic-size:360px]">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight mb-2">
             Popular services in {stateName}
           </h2>
           <p className="text-slate-500 dark:text-slate-400 text-sm mb-7">
             Most requested categories across {stateName}
           </p>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {popularCategories.map((cat) => (
               <Link
                 key={cat.category_id}
                 href={`/services/${cat.slug}/${stateSlug}`}
-                className="group relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-300 dark:hover:border-blue-700 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                className="group flex items-center gap-3 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 transition-colors hover:border-blue-300 dark:hover:border-blue-700"
               >
-                <div className="relative h-28 overflow-hidden">
-                  {cat.image_url ? (
-                    <Image
-                      src={cat.image_url}
-                      alt={cat.name}
-                      fill
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-blue-50 dark:bg-blue-950/30">
-                      <span className="w-11 h-11 rounded-xl bg-blue-600 text-white text-lg font-extrabold flex items-center justify-center">
-                        {cat.name.charAt(0)}
-                      </span>
-                    </div>
-                  )}
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center bg-blue-50 text-sm font-bold text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
+                  {cat.name.charAt(0)}
                 </div>
-
-                <div className="p-3">
-                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 leading-snug">
-                    {cat.name}
-                  </h3>
-                </div>
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 leading-snug">
+                  {cat.name}
+                </h3>
               </Link>
             ))}
           </div>
@@ -390,7 +395,7 @@ export default function StatePageClient({
 
         {/* ALL CATEGORIES */}
         <section className="pt-12 pb-20 [content-visibility:auto] [contain-intrinsic-size:1200px]">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-8">
             Browse all categories in {stateName}
           </h2>
 
@@ -540,10 +545,10 @@ export default function StatePageClient({
       )}
 
       {/* BOTTOM CTA */}
-      <aside className="bg-gradient-to-br from-slate-900 to-blue-900 text-white">
+      <aside className="bg-slate-950 text-white">
         <div className="max-w-7xl mx-auto px-6 md:px-16 py-16 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           <div>
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">
               Ready to get something done in {stateName}?
             </h2>
             <p className="text-white/70 text-lg max-w-xl">
@@ -577,7 +582,7 @@ const CityCard = memo(function CityCard({
   return (
     <Link
       href={`/locations/${stateSlug}/${city.slug}`}
-      className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-300 dark:hover:border-blue-700 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+      className="group relative overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-300 dark:hover:border-blue-700 transition-colors"
     >
       <div className="p-3.5">
         <div className="flex items-start gap-1.5">

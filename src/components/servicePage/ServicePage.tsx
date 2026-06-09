@@ -2,18 +2,33 @@
 
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
-import NewRequestModal from "@/components/leads/RequestModal";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import ServiceHeroSection from "@/components/servicePage/ServiceHeroSection";
 import PopularLocationsSection from "@/components/servicePage/PopularLocationSection";
 import FAQSection from "@/components/servicePage/Faqs";
-import CityProviders from "@/components/servicePage/cityProviders";
 import Howitwork from "@/components/servicePage/HowItWorks";
 import Link from "next/link";
 import SubHeroService from "./Subheroservice";
 import WhyTaskoria from "./WhyTaskoria";
 import StepWiseHowItWorks from "./3stepServiceSection";
 import ServiceBreadcrumb from "./Servicebreadcrumb";
+
+const NewRequestModal = dynamic(
+  () => import("@/components/leads/RequestModal"),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
+
+const CityProviders = dynamic(
+  () => import("@/components/servicePage/cityProviders"),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
 
 interface ServicePageClientProps {
   service: any;
@@ -61,26 +76,30 @@ export default function ServicePageClient({
     selectedLocation?.state_name ?? undefined;
 
   const activeCityName = subCityName ?? cityName;
+  const locationLabel = activeCityName ?? stateName;
   // console.log(service,stateSlug,citySlug,subCitySlug,stateName,cityName,subCityName,"citynames ");
 
   return (
-    <main className="min-h-screen bg-linear-to-b from-white via-blue-50/30 to-purple-50/20 dark:from-slate-950 dark:via-slate-900/95 dark:to-blue-950/30">
-      <NewRequestModal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        presetCategory={selectedCategory}
-        presetLocation={selectedLocation}
-        initialStep={selectedLocation ? 2 : 1}
-      />
+    <main className="min-h-screen bg-white dark:bg-slate-950">
+      {openModal && (
+        <NewRequestModal
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          presetCategory={selectedCategory}
+          presetLocation={selectedLocation}
+          initialStep={selectedLocation ? 2 : 1}
+        />
+      )}
 
       <article itemScope itemType="https://schema.org/Service">
         <ServiceHeroSection
           service={service}
           onLocationSelect={handleLocationSet}
           presetLocation={selectedLocation}
+          locationName={activeCityName}
         />
 
-        <section className="max-w-6xl mx-auto px-6 py-3">
+        <section className="max-w-6xl mx-auto px-5 md:px-6 py-3">
           {citySlug && (
             <ServiceBreadcrumb
               service={service}
@@ -130,9 +149,9 @@ export default function ServicePageClient({
           {citySlug &&
             !subCitySlug &&
             selectedLocation?.subcities?.length > 0 && (
-              <section className="mt-14 m-4">
+              <section className="mt-12">
                 <div className="mb-6 flex flex-col gap-2">
-                  <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white ">
+                  <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white ">
                     Popular areas in {selectedLocation.name}
                   </h2>
                   <p className="text-slate-600 max-w-2xl">
@@ -142,16 +161,15 @@ export default function ServicePageClient({
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                   {selectedLocation.subcities.map((sub: any) => (
                     <Link
                       key={sub.city_id}
                       href={`/services/${service.slug}/${stateSlug}/${citySlug}/${sub.slug}`}
-                      className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-blue-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                      className="group relative overflow-hidden border border-slate-200 bg-white p-4 transition-colors hover:border-blue-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-slate-800 dark:bg-slate-900"
                     >
-                      <div className="absolute inset-0 bg-linear-to-br from-blue-50 to-purple-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                       <div className="relative z-10">
-                        <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-700">
+                        <h3 className="text-sm font-semibold text-slate-900 group-hover:text-blue-700 dark:text-white">
                           {sub.name}
                         </h3>
                         <p className="mt-1 text-sm text-slate-500">
@@ -189,11 +207,38 @@ export default function ServicePageClient({
           {!citySlug && <WhyTaskoria serviceName={service.slug} />}
 
           {service.about && (
-            <section className="bg-white rounded-3xl p-10 shadow-lg mb-20">
+            <section className="border border-slate-100 bg-white p-6 md:p-8 dark:border-slate-800 dark:bg-slate-900 mb-14">
               <div
                 className="prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: service.about }}
               />
+            </section>
+          )}
+
+          {locationLabel && (
+            <section className="bg-white dark:bg-slate-900 p-6 md:p-8 border border-slate-100 dark:border-slate-800 mb-14">
+              <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-4">
+                Local {service.name} help in {locationLabel}
+              </h2>
+              <div className="grid gap-5 md:grid-cols-3 text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                <p>
+                  Taskoria matches your {service.name.toLowerCase()} request
+                  with professionals who serve {locationLabel}
+                  {stateName && activeCityName ? ` and nearby ${stateName} areas` : ""}.
+                  Share the job details once, then compare responses before you
+                  decide who to contact.
+                </p>
+                <p>
+                  Use the city and suburb pages to narrow your search, check
+                  provider availability, and request quotes that reflect the
+                  work, access, timing, and materials involved in your project.
+                </p>
+                <p>
+                  The process is free for customers: post your task, review
+                  local providers, ask follow-up questions, and book when you
+                  are comfortable with the scope and price.
+                </p>
+              </div>
             </section>
           )}
 
@@ -203,15 +248,15 @@ export default function ServicePageClient({
               onpostjob={handleSelectCategory}
             />
           )}
-          {!citySlug && service.faqs && service.faqs.length > 0 && (
+          {service.faqs && service.faqs.length > 0 && (
             <FAQSection faqs={service.faqs} />
           )}
         </section>
       </article>
-      <aside className="  bg-linear-to-br from-slate-900 via-blue-950 to-blue-900 text-white p-8 ">
+      <aside className="bg-slate-950 text-white p-8">
         <div className="flex max-w-7xl mx-auto flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
-            <h2 className="text-3xl font-bold mb-2">
+            <h2 className="text-2xl md:text-3xl font-bold mb-2">
               Ready to get {service.name} done
               {activeCityName ? ` in ${activeCityName}` : ""}?
             </h2>

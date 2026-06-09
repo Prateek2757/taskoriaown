@@ -254,7 +254,10 @@ export const getAllBlogPosts = unstable_cache(
       conditions.push("is_featured = true");
     }
 
-    values.push(limit, offset);
+    values.push(limit);
+    const limitParam = values.length;
+    values.push(offset);
+    const offsetParam = values.length;
 
     const result = await pool.query(
       `SELECT
@@ -263,12 +266,32 @@ export const getAllBlogPosts = unstable_cache(
         views, likes, read_time, published_at
        FROM blog_posts
        WHERE ${conditions.join(" AND ")}
-       ORDER BY published_at DESC`,
+       ORDER BY published_at DESC
+       LIMIT $${limitParam} OFFSET $${offsetParam}`,
+      values,
     );
 
     return result.rows;
   },
   ["all-blog-posts"],
+  {
+    revalidate: 300,
+    tags: ["blog-posts"],
+  },
+);
+
+export const getBlogPostSlugs = unstable_cache(
+  async () => {
+    const result = await pool.query(
+      `SELECT slug
+       FROM blog_posts
+       WHERE is_published = true
+       ORDER BY published_at DESC`,
+    );
+
+    return result.rows as { slug: string }[];
+  },
+  ["blog-post-slugs"],
   {
     revalidate: 300,
     tags: ["blog-posts"],
@@ -286,6 +309,31 @@ export const getBlogPostBySlug = unstable_cache(
     return result.rows[0] ?? null;
   },
   ["blog-post-by-slug"],
+  {
+    revalidate: 300,
+    tags: ["blog-posts"],
+  },
+);
+
+export const getRelatedBlogPosts = unstable_cache(
+  async (category: string, currentSlug: string, limit = 3) => {
+    const result = await pool.query(
+      `SELECT
+        post_id, slug, title, excerpt, author_name, author_role,
+        author_image, image_url, category, tags, is_featured, is_published,
+        views, likes, read_time, published_at, updated_at
+       FROM blog_posts
+       WHERE is_published = true
+         AND category = $1
+         AND slug <> $2
+       ORDER BY published_at DESC
+       LIMIT $3`,
+      [category, currentSlug, limit],
+    );
+
+    return result.rows;
+  },
+  ["related-blog-posts"],
   {
     revalidate: 300,
     tags: ["blog-posts"],

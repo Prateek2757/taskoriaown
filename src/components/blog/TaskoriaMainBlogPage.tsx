@@ -5,6 +5,7 @@ import { BlogCard } from "./BlogCard";
 import { MdArrowDropDown } from "react-icons/md";
 import usePagination from "@/hooks/usePaginationblog";
 import { RiArrowRightSLine } from "react-icons/ri";
+import { normalizeBlogPostCategory } from "./blogTaxonomy";
 
 type Blog = {
   post_id: number;
@@ -25,21 +26,25 @@ type Blog = {
 };
 
 const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
+  const normalizedPosts = useMemo(
+    () => initialPosts.map(normalizeBlogPostCategory),
+    [initialPosts]
+  );
   const [selectedCategory, setSelectedCategory] = useState("All Posts");
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const categories = useMemo(() => {
-    const category = [...new Set(initialPosts.map((p) => p.category))];
+    const category = [...new Set(normalizedPosts.map((p) => p.category))];
     return ["All Posts", ...category];
-  }, [initialPosts]);
+  }, [normalizedPosts]);
 
   const filteredPosts = useMemo(() => {
     let filtered =
       selectedCategory === "All Posts"
-        ? initialPosts
-        : initialPosts.filter((p) => p.category === selectedCategory);
+        ? normalizedPosts
+        : normalizedPosts.filter((p) => p.category === selectedCategory);
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
@@ -52,7 +57,7 @@ const TaskoriaBlog = ({ initialPosts }: { initialPosts: Blog[] }) => {
     }
 
     return filtered;
-  }, [initialPosts, selectedCategory, searchQuery]);
+  }, [normalizedPosts, selectedCategory, searchQuery]);
 
   const featuredPosts = filteredPosts.filter((p) => p.is_featured);
   const regularPosts = filteredPosts.filter((p) => !p.is_featured);

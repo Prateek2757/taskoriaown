@@ -28,23 +28,66 @@ export default function CategorySelectionContent() {
   const [isNavigating, setIsNavigating] = useState(false);
   const searchparams = useSearchParams();
   const ref = searchparams.get("ref");
+  const userIdFromUrl =
+    searchparams.get("user_id") ?? searchparams.get("userr_id");
+
   useEffect(() => {
-    const fetchCategories = async () => {
+    const syncCreateUrl = (publicId: string) => {
+      if (userIdFromUrl) return;
+
+      const url = new URL(window.location.href);
+      url.searchParams.set("user_id", publicId);
+      router.replace(url.pathname + url.search);
+    };
+
+    const ensureDraftUser = async () => {
+      if (userIdFromUrl) {
+        localStorage.setItem("draftProviderPublicId", userIdFromUrl);
+        setDraftId(userIdFromUrl);
+        return;
+      }
+
+      const savedDraft = localStorage.getItem("draftProviderPublicId");
+      if (savedDraft) {
+        setDraftId(savedDraft);
+        syncCreateUrl(savedDraft);
+        return;
+      }
+
+      const res = await fetch("/api/signup/draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: "provider" }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data?.user?.public_id) {
+        throw new Error(data?.message || "Failed to create draft user");
+      }
+
+      localStorage.setItem("draftProviderId", String(data.user.user_id));
+      localStorage.setItem("draftProviderPublicId", String(data.user.public_id));
+      setDraftId(String(data.user.public_id));
+      syncCreateUrl(String(data.user.public_id));
+    };
+
+    const loadCreatePage = async () => {
       try {
-        const { data } = await axios.get("/api/signup/category-selection");
+        const [{ data }] = await Promise.all([
+          axios.get("/api/signup/category-selection"),
+          ensureDraftUser(),
+        ]);
         setCategories(data);
+      } catch (error) {
+        console.error("Create page setup failed:", error);
+        alert("Could not start provider signup. Please try again.");
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchCategories();
-
-    const savedDraft = localStorage.getItem("draftProviderPublicId");
-    // console.log("Draft ID from localStorage:", savedDraft);
-
-    if (savedDraft) setDraftId(String(savedDraft));
-  }, []);
+    loadCreatePage();
+  }, [router, userIdFromUrl]);
 
   useEffect(() => {
     if (searchQuery.trim() === "") {

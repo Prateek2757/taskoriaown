@@ -254,8 +254,6 @@ export default async function CityOrStatePage({ params }: Props) {
 
     return (
       <>
-        <h1 className="sr-only">Services in {stateName}</h1>
-
         <Script
           id="state-jsonld"
           type="application/ld+json"
@@ -339,10 +337,6 @@ export default async function CityOrStatePage({ params }: Props) {
 
   return (
     <>
-      {/* <h1 className="sr-only">
-        Services in {city.display_name ?? city.name}, {city.state_name}
-      </h1> */}
-
       <Script
         id="city-jsonld"
         type="application/ld+json"

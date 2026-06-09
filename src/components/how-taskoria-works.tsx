@@ -73,7 +73,7 @@ export default function HowTaskoriaWorks() {
       position: index + 1,
       name: step.title,
       text: step.description,
-      url: `https://yourwebsite.com#step-${step.id}`,
+      url: `https://www.taskoria.com/#step-${step.id}`,
     })),
   };
 

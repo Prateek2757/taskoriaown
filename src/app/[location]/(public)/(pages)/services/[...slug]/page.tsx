@@ -319,9 +319,6 @@ export default async function ServicePage({ params }: Props) {
 
     return (
       <>
-        <h1 className="sr-only">
-          Find {service.name} in {stateName}
-        </h1>
         <StructuredData
           service={service}
           city={null}
@@ -354,18 +351,13 @@ export default async function ServicePage({ params }: Props) {
 
   return (
     <>
-      <h1 className="sr-only">
-        {citySlug
-          ? `Hire ${service.name} in ${toTitleCase(citySlug)}`
-          : `Find trusted ${service.name} near you`}
-      </h1>
       <StructuredData
         service={service}
         city={selectedLocation}
         citySlug={citySlug}
         stateSlug={stateSlug}
         subCitySlug={subCitySlug}
-        showFaqPage={!citySlug && Boolean(service.faqs?.length)}
+        showFaqPage={Boolean(service.faqs?.length)}
         providers={selectedLocation?.providers || []}
       />
       <ServicePageWrapper

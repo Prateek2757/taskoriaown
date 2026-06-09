@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useDeferredValue } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import dynamic from "next/dynamic";
 import {
   ArrowRight,
   MapPin,
@@ -12,8 +14,15 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import NewRequestModal from "@/components/leads/RequestModal";
 import ServiceBreadcrumb from "./Servicebreadcrumb";
+
+const NewRequestModal = dynamic(
+  () => import("@/components/leads/RequestModal"),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
 
 interface City {
   city_id: number;
@@ -50,6 +59,8 @@ interface Props {
   otherStates: OtherState[];
 }
 
+const INITIAL_CITY_LIMIT = 40;
+
 const BENEFITS = [
   {
     icon: <CheckCircle2 className="w-5 h-5 text-blue-600" />,
@@ -83,15 +94,22 @@ export default function ServiceStatePageClient({
   const [openModal, setOpenModal] = useState(false);
   const [citySearch, setCitySearch] = useState("");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [showAllCities, setShowAllCities] = useState(false);
+  const deferredCitySearch = useDeferredValue(citySearch);
 
   const filteredCities = useMemo(() => {
-    const q = citySearch.trim().toLowerCase();
+    const q = deferredCitySearch.trim().toLowerCase();
     return q
       ? cities.filter((c) =>
           (c.display_name ?? c.name).toLowerCase().includes(q)
         )
       : cities;
-  }, [cities, citySearch]);
+  }, [cities, deferredCitySearch]);
+
+  const visibleCities = useMemo(() => {
+    if (showAllCities || deferredCitySearch.trim()) return filteredCities;
+    return filteredCities.slice(0, INITIAL_CITY_LIMIT);
+  }, [filteredCities, showAllCities, deferredCitySearch]);
 
   const serviceSlug = service.slug ?? "";
 
@@ -116,35 +134,39 @@ export default function ServiceStatePageClient({
           }}
         />
       )} */}
-      <NewRequestModal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        presetCategory={service}
-        initialStep={1}
-      />
+      {openModal && (
+        <NewRequestModal
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          presetCategory={service}
+          initialStep={1}
+        />
+      )}
 
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden bg-slate-950">
         {service.hero_image ? (
-          <img
+          <Image
             src={service.hero_image}
             alt={service.name}
+            fill
+            priority
+            sizes="100vw"
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
         ) : (
-          <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-blue-950 to-blue-900" />
+          <div className="absolute inset-0 bg-slate-950" />
         )}
-        <div className="absolute inset-0 bg-linear-to-r from-black/75 via-black/50 to-black/20" />
-        <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-slate-950/72" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16 py-24">
-          <div className="flex flex-col md:flex-row md:items-end gap-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-14 md:px-16 md:py-16">
+          <div className="flex flex-col md:flex-row md:items-end gap-8">
             <div className="flex-1 max-w-2xl">
-              <div className="inline-flex items-center gap-1.5 bg-blue-600/20 border border-blue-400/30 text-blue-300 rounded-full px-3 py-1 text-xs font-semibold mb-5">
+              <div className="inline-flex items-center rounded-full gap-1.5 bg-white/10 border border-white/15 text-white/80 px-3 py-1.5 text-xs font-semibold mb-5">
                 <MapPin className="w-3 h-3" />
                 {stateName}, Australia
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-[3rem] font-extrabold text-white leading-[1.1] tracking-tight mb-5">
+              <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-[1.08] tracking-tight mb-5">
                 Find trusted{" "}
                 <span className="text-blue-400">{service.name}</span>
                 <br />
@@ -160,21 +182,21 @@ export default function ServiceStatePageClient({
               <div className="flex flex-wrap gap-3">
                 <Button
                   onClick={() => setOpenModal(true)}
-                  className="inline-flex items-center gap-2 bg-[#2563EB] hover:bg-blue-500 text-white rounded-xl px-8 py-6 text-sm font-semibold shadow-xl shadow-blue-600/30 transition-colors"
+                  className="inline-flex items-center rounded-xl gap-2 bg-[#2563EB] hover:bg-blue-500 text-white px-8 py-6 text-sm font-semibold shadow-none transition-colors"
                 >
                   Get Free Quotes in {stateName}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
                 <Link
                   href={`/services/${serviceSlug}`}
-                  className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white border border-white/25 rounded-xl px-6 py-3.5 text-sm font-medium transition-colors"
+                  className="inline-flex items-center rounded-xl gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3.5 text-sm font-medium transition-colors"
                 >
                   View all locations
                 </Link>
               </div>
             </div>
 
-            <div className="flex gap-3 shrink-0">
+            <div className="grid grid-cols-3 gap-3 shrink-0 w-full md:w-auto">
               {[
                 { value: `${cities.length}`, label: "Cities" },
                 { value: "Free", label: "Quotes" },
@@ -182,7 +204,7 @@ export default function ServiceStatePageClient({
               ].map((s) => (
                 <div
                   key={s.label}
-                  className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl px-5 py-4 text-center"
+                  className="bg-white/10 border border-white/15 px-5 py-4 text-center"
                 >
                   <p className="text-2xl font-extrabold text-white">
                     {s.value}
@@ -215,7 +237,7 @@ export default function ServiceStatePageClient({
       </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-16">
-        <section className=" py-3 ">
+        <section className="py-6">
           {stateSlug && (
             <ServiceBreadcrumb
               service={service}
@@ -229,7 +251,7 @@ export default function ServiceStatePageClient({
           )}
           <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
             <div>
-              <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
                 {service.name} near you in {stateName}
               </h2>
               <p className="text-slate-500 dark:text-slate-400 text-sm mt-1.5">
@@ -242,7 +264,10 @@ export default function ServiceStatePageClient({
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
               <input
                 value={citySearch}
-                onChange={(e) => setCitySearch(e.target.value)}
+                onChange={(e) => {
+                  setCitySearch(e.target.value);
+                  setShowAllCities(false);
+                }}
                 placeholder={`Search ${stateName} cities…`}
                 className="pl-8 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-56"
               />
@@ -250,43 +275,46 @@ export default function ServiceStatePageClient({
           </div>
 
           {filteredCities.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {filteredCities.map((city) => (
-                <Link
-                  key={city.city_id}
-                  href={`/services/${serviceSlug}/${stateSlug}/${city.slug}`}
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-300 dark:hover:border-blue-700 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-                >
-                  {/* {city.image_url ? (
-                    <div className="h-28 overflow-hidden">
-                      <img
-                        src={city.image_url}
-                        alt={city.display_name ?? city.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
-                  ) : (
-                    <div className="h-28 bg-linear-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-950/30 flex items-center justify-center">
-                      <Building2 className="w-8 h-8 text-blue-300 dark:text-blue-700" />
-                    </div>
-                  )} */}
-
-                  <div className="p-3.5">
-                    <div className="flex items-start gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 mt-0.5 shrink-0 transition-colors" />
-                      <div>
-                        <h3 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 leading-snug">
-                          {city.name}
-                        </h3>
-                        <p className="text-[11px] text-slate-400 mt-0.5">
-                          {service.name} providers
-                        </p>
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5  gap-3">
+                {visibleCities.map((city) => (
+                  <Link
+                    key={city.city_id}
+                    href={`/services/${serviceSlug}/${stateSlug}/${city.slug}`}
+                    className="group relative overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-300 dark:hover:border-blue-700 transition-colors rounded-xl"
+                  >
+                    <div className="p-3.5">
+                      <div className="flex items-start gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 mt-0.5 shrink-0 transition-colors" />
+                        <div>
+                          <h3 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 leading-snug">
+                            {city.name}
+                          </h3>
+                          <p className="text-[11px] text-slate-400 mt-0.5">
+                            {service.name} providers
+                          </p>
+                        </div>
                       </div>
                     </div>
+                  </Link>
+                ))}
+              </div>
+
+              {!showAllCities &&
+                !deferredCitySearch.trim() &&
+                filteredCities.length > INITIAL_CITY_LIMIT && (
+                  <div className="mt-8 text-center">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setShowAllCities(true)}
+                      className="px-6"
+                    >
+                      Show all {filteredCities.length} cities
+                    </Button>
                   </div>
-                </Link>
-              ))}
-            </div>
+                )}
+            </>
           ) : (
             <div className="text-center py-16 text-slate-400">
               <Building2 className="w-8 h-8 mx-auto mb-2 opacity-40" />
@@ -303,12 +331,11 @@ export default function ServiceStatePageClient({
           )}
         </section>
 
-        {/* ══════ HOW IT WORKS ══════════════════════════════════════════════ */}
-        <section className="py-14 border-t border-slate-100 dark:border-slate-800">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-10 tracking-tight">
+        <section className="py-12 border-t border-slate-100 dark:border-slate-800">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-8 tracking-tight">
             How it works
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3  gap-8">
             {[
               {
                 step: "1",
@@ -326,8 +353,8 @@ export default function ServiceStatePageClient({
                 desc: "Compare profiles, read reviews, and book the right person — all on Taskoria.",
               },
             ].map((s) => (
-              <div key={s.step} className="flex gap-5">
-                <div className="w-11 h-11 rounded-2xl bg-blue-600 text-white font-extrabold text-lg flex items-center justify-center shrink-0">
+              <div key={s.step} className="flex gap-5 ">
+                <div className="w-10 h-10 bg-blue-600 text-white font-extrabold text-lg flex items-center justify-center rounded-full shrink-0">
                   {s.step}
                 </div>
                 <div>
@@ -344,17 +371,17 @@ export default function ServiceStatePageClient({
         </section>
 
         {/* ══════ WHY TASKORIA ═════════════════════════════════════════════ */}
-        <section className="py-14 border-t border-slate-100 dark:border-slate-800">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-10 tracking-tight">
+        <section className="py-12 border-t border-slate-100 dark:border-slate-800">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-8 tracking-tight">
             Why choose Taskoria in {stateName}?
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {BENEFITS.map((b, i) => (
               <div
                 key={i}
-                className="flex gap-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
+                className="flex gap-4 p-5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl"
               >
-                <div className="shrink-0 w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center">
+                <div className="shrink-0 w-10 h-10 bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center">
                   {b.icon}
                 </div>
                 <div>
@@ -373,11 +400,11 @@ export default function ServiceStatePageClient({
         {/* ══════ ABOUT SECTION (from DB) ══════════════════════════════════ */}
         {service.about && (
           <section className="py-14 border-t border-slate-100 dark:border-slate-800">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-8 tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-8 tracking-tight">
               About {service.name} in {stateName}
             </h2>
             <div
-              className="prose prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-900 rounded-3xl p-10 shadow-sm border border-slate-100 dark:border-slate-800"
+              className="prose prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-900 p-6 md:p-8 border border-slate-100 dark:border-slate-800"
               dangerouslySetInnerHTML={{ __html: service.about }}
             />
           </section>
@@ -385,12 +412,12 @@ export default function ServiceStatePageClient({
 
         {service.faqs && service.faqs.length > 0 && (
           <section className="py-14 border-t border-slate-100 dark:border-slate-800">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-8 tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-8 tracking-tight">
               Frequently asked questions
             </h2>
-            <div className="divide-y divide-slate-200 dark:divide-slate-800 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+            <div className="divide-y divide-slate-200 dark:divide-slate-800 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
               {service.faqs.map((faq, i) => (
-                <div key={i} className="bg-white dark:bg-slate-900">
+                <div key={i} className="bg-white dark:bg-slate-900 ">
                   <button
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}
                     className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
@@ -416,7 +443,7 @@ export default function ServiceStatePageClient({
         {/* ══════ OTHER STATES ═════════════════════════════════════════════ */}
         {otherStates.length > 0 && (
           <section className="py-12 border-t border-slate-100 dark:border-slate-800">
-            <h2 className="text-lg font-extrabold text-slate-900 dark:text-white mb-5">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-5">
               {service.name} in other states
             </h2>
             <div className="flex flex-wrap gap-2.5">
@@ -424,7 +451,7 @@ export default function ServiceStatePageClient({
                 <Link
                   key={s.state_slug}
                   href={`/services/${serviceSlug}/${s.state_slug}`}
-                  className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-blue-950/40 text-slate-700 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 border border-transparent hover:border-blue-200 dark:hover:border-blue-800 rounded-full px-4 py-2 text-sm font-medium transition-colors"
+                  className="inline-flex items-center rounded-xl gap-1.5 bg-slate-100 hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-blue-950/40 text-slate-700 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 border border-transparent hover:border-blue-200 dark:hover:border-blue-800 px-4 py-2 text-sm font-medium transition-colors"
                 >
                   <MapPin className="w-3 h-3 opacity-50" />
                   {s.state_name}
@@ -435,10 +462,10 @@ export default function ServiceStatePageClient({
         )}
       </div>
 
-      <aside className="bg-linear-to-br from-slate-900 to-blue-900 text-white mt-6">
+      <aside className="bg-slate-950 text-white mt-6">
         <div className="max-w-7xl mx-auto p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           <div>
-            <h2 className="text-3xl  font-bold mb-3">
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">
               Ready to hire {service.name} in {stateName}?
             </h2>
             <p className="text-white/70 text-lg max-w-xl">
@@ -448,7 +475,7 @@ export default function ServiceStatePageClient({
           </div>
           <Button
             onClick={() => setOpenModal(true)}
-            className="inline-flex items-center gap-2 bg-[#2563EB] hover:bg-blue-500 text-white rounded-xl px-10 py-5 text-lg font-bold shrink-0"
+            className="inline-flex items-center rounded-xl gap-2 bg-[#2563EB] hover:bg-blue-500 text-white px-10 py-5 text-lg font-bold shrink-0"
           >
             Get Free Quotes
             <ArrowRight className="w-5 h-5" />
