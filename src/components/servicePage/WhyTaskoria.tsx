@@ -87,7 +87,7 @@ export default function WhyTaskoria({
                 transform: visible ? "translateY(0)" : "translateY(10px)",
                 transition: `opacity 0.4s ease ${i * 60}ms, transform 0.4s ease ${i * 60}ms`,
               }}
-              className="group flex flex-col items-center gap-2 bg-white dark:bg-slate-900 px-4 py-5 hover:bg-blue-50/60 dark:hover:bg-blue-950/40 transition-colors duration-200 cursor-default"
+              className="group flex flex-col items-center gap-2 bg-white dark:bg-slate-900 px-4 py-5 hover:bg-blue-50/60 dark:hover:bg-blue-950/40 transition-colors duration-200 cursor-default text-center"
             >
               <span className="text-slate-800 dark:text-blue-400 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors duration-200">
                 {item.icon}

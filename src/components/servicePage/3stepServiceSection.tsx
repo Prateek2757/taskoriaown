@@ -171,7 +171,7 @@ export default function StepWiseHowItWorks({
                     {String(i + 1).padStart(2, "0")}
                   </span>
 
-                  <div className="w-48 h-48  flex items-center justify-center overflow-hidden">
+                  <div className="w-48 h-42  flex items-center justify-center overflow-hidden">
                     <Image
                       src={images[i]}
                       alt={step.title}

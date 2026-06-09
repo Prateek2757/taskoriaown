@@ -5,7 +5,7 @@ import { TrendingUp, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FaArrowRightLong } from "react-icons/fa6";
-
+import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 interface PopularLocationsSectionProps {
@@ -52,24 +52,22 @@ const popularCities: City[] = [
     name: "Melbourne",
     image:
       "https://images.unsplash.com/photo-1609036394821-b63e8168dc64?q=80&w=1548&auto=format&fit=crop",
-        description:
+    description:
       "Find trusted Local Providers in Melbourne and Surrounding areas.",
   },
   {
     name: "Adelaide",
     image:
       "https://images.unsplash.com/photo-1702252212983-db7e428cc3cf?q=80&w=1880&auto=format&fit=crop",
-        description:
+    description:
       "Find trusted Local Providers in Adelaide and Surrounding areas.",
   },
   {
     name: "Perth",
     image:
       "https://images.unsplash.com/photo-1574471101497-d958f6e3ebd4?q=80&w=1548&auto=format&fit=crop",
-        description:
-      "Find trusted Local Providers in Perth and Surrounding areas.",
+    description: "Find trusted Local Providers in Perth and Surrounding areas.",
   },
-   
 ];
 
 export default function PopularLocationsSection({
@@ -228,7 +226,7 @@ export default function PopularLocationsSection({
                         title="Location Image"
                         fill
                         src={city.image_url || "/location.jpg"}
-                        alt={city.name }
+                        alt={city.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         sizes="(max-width: 640px) 100vw,
                         (max-width: 1024px) 50vw,
@@ -249,7 +247,10 @@ export default function PopularLocationsSection({
                         </p>
 
                         <div className="h-8 w-8 rounded-full bg-[#2563EB] absolute  bottom-0 -translate-y-2  right-2">
-                         <FaArrowRightLong  className="absolute bottom-0 -translate-y-2 right-2" color="white"/>
+                          <FaArrowRightLong
+                            className="absolute bottom-0 -translate-y-2 right-2"
+                            color="white"
+                          />
                         </div>
                       </div>
                     </div>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, ChevronRight, MapPin } from "lucide-react";
-import LocalProsFeature from "./LocalProFeature";
+import { IoMdCheckmarkCircle } from "react-icons/io";
 
 interface ServiceHeroSectionProps {
   service: {
@@ -146,9 +146,9 @@ export default function SubHeroService({
           <span className="font-semibold text-[#2563EB] ">{service.name}</span>
         </nav>
 
-        <div className="grid  gap-6 items-start w-3/4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start ">
           <div className="flex flex-col gap-4 justify-center">
-            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1]">
+            <h1 className="text-3xl font-extrabold  text-slate-900 dark:text-white ">
               Need help finding {getArticle(proLabel)}{" "}
               <span className="relative inline-block">
                 <span className="relative text-[#2563EB] dark:text-[#60a5fa]">
@@ -184,7 +184,30 @@ export default function SubHeroService({
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
-          </div>             
+          </div>
+          <div
+            className="pl-4 bg-white shadow-sm hidden lg:flex flex-col gap-4 justify-center min-w-0  -mt-5 rounded-xl p-4"
+            style={{ borderLeft: "4px solid #2563EB" }}
+          >
+            <div>
+              <p className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white leading-[1] mb-4">
+                Get Matched with Trusted Local Pros
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-4">
+              {[
+                "Licensed & Verified Professionals",
+                "Competitive Free Quotes",
+                "Quick Response",
+                "No Obligation to hire",
+              ].map((val) => (
+                <div key={val} className="flex gap-2 items-center">
+                  <IoMdCheckmarkCircle color="#2563EB" size={20} />
+                  <p className="text-sm text-slate-700">{val}</p>
+                </div>
+              ))}
+            </div>
+          </div>
           {/* <div className="hidden lg:flex flex-col gap-3 absolute -right-3 -mt-5 ">
             <div className="grid grid-cols-3 gap-3">
               {[
