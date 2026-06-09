@@ -6,7 +6,7 @@ type CreateNotificationParams = {
   body: string
   role?:string
   channel?: 'inapp' | 'email' | 'push'
-  type?: 'post' | 'comment' | 'request' | 'file' | 'system'|'message' | 'lead_purchased' | 'lead_response' | 'task_posted'
+  type?: 'post' | 'comment' | 'request' | 'file' | 'system'|'message' | 'lead_purchased' | 'lead_response' | 'task_posted' | 'contact_submission'
   user_name?: string
   action_url?: string
   user_avatar?: string
@@ -55,4 +55,3 @@ export async function createNotification({
   }
   return notification
 }
-

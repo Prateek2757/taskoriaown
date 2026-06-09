@@ -14,6 +14,7 @@ import {
   AlertTriangle,
   BookOpen,
   LayoutGrid,
+  Mail,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -156,6 +157,18 @@ const SECTIONS = [
   shadow: "shadow-blue-500/10",
   desc: "Add, edit, and delete service categories. Organise the taxonomy used across provider listings.",
   actions: ["Add new category", "Edit existing", "Delete unused"],
+  badgeKey: null,
+  badgeLabel: null,
+},
+{
+  label: "Contact Messages",
+  href: "/admin/contact-submissions",
+  icon: Mail,
+  accent: "from-sky-500 to-sky-700",
+  ring: "ring-sky-500/20",
+  shadow: "shadow-sky-500/10",
+  desc: "Review contact form submissions, reply to customers, and track each support message status.",
+  actions: ["View new messages", "Reply by email", "Mark resolved"],
   badgeKey: null,
   badgeLabel: null,
 },

@@ -7,6 +7,7 @@ import { VerificationEmail } from "./templates/VerificationEmail";
 import { PasswordResetEmail } from "./templates/PasswordResetEmail";
 import { ProviderEmailCompose } from "./templates/ProviderEmailCompose";
 import { VerifyReminderEmail } from "./templates/VerifyReminderEmail";
+import { ContactSubmissionAdminEmail } from "./templates/ContactSubmissionAdminEmail";
 export type { EmailType } from "./type";
 
 interface AppEmailProps {
@@ -23,6 +24,12 @@ interface AppEmailProps {
   professional_name?: string;
   professional_company_name?: string;
   professional_phone?: string;
+  contactName?: string;
+  contactEmail?: string;
+  contactSubject?: string;
+  contactMessage?: string;
+  contactSubmissionId?: string | number;
+  contactAdminUrl?: string;
 }
 
 const AppEmail = (props: AppEmailProps) => {
@@ -79,6 +86,18 @@ const AppEmail = (props: AppEmailProps) => {
         <VerifyReminderEmail
           username={props.username}
           company={props.company}
+        />
+      );
+    case "contact-submission-admin":
+      return (
+        <ContactSubmissionAdminEmail
+          company={props.company}
+          contactName={props.contactName!}
+          contactEmail={props.contactEmail!}
+          contactSubject={props.contactSubject!}
+          contactMessage={props.contactMessage!}
+          contactSubmissionId={props.contactSubmissionId}
+          contactAdminUrl={props.contactAdminUrl}
         />
       );
   }

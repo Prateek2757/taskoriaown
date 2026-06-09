@@ -8,7 +8,8 @@ export type EmailType =
   | "provider-email-compose"
   | "password-reset-code"
   | "provider-estimate"
-  | "complete-profile"; 
+  | "complete-profile"
+  | "contact-submission-admin"; 
 
 export interface BaseEmailProps {
   company?: string;
@@ -48,6 +49,15 @@ export interface ProviderEstimateEmailProps extends BaseEmailProps {
   professional_name?: string;
   professional_company_name?: string;
   professional_phone?: string;
+}
+
+export interface ContactSubmissionAdminEmailProps extends BaseEmailProps {
+  contactName: string;
+  contactEmail: string;
+  contactSubject: string;
+  contactMessage: string;
+  contactSubmissionId?: string | number;
+  contactAdminUrl?: string;
 }
 
 export interface ProfileFlags {

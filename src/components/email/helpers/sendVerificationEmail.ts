@@ -19,6 +19,7 @@ const subjectMap: Record<EmailType, string> = {
   "verify-reminder":"Verify your email address",
   "provider-estimate": "💰 You received a new estimate",
   "complete-profile": "Your Taskoria profile is incomplete 👤", 
+  "contact-submission-admin": "New Taskoria contact message",
 };
 
 interface SendEmailProps {
@@ -35,6 +36,13 @@ interface SendEmailProps {
   professional_name?: string;
   professional_company_name?: string;
   professional_phone?: string;
+  contactName?: string;
+  contactEmail?: string;
+  contactSubject?: string;
+  contactMessage?: string;
+  contactSubmissionId?: string | number;
+  contactAdminUrl?: string;
+  replyTo?: string;
 }
 
 interface SendProfileReminderProps
@@ -64,7 +72,7 @@ export async function sendEmail(
     return { success: false, error: "Invalid email format" };
   }
 
-  let reactTemplate: React.ReactElement;
+  let reactTemplate: React.ReactNode;
 
   if (props.type === "complete-profile") {
     const { username, company, completionPercent, profileFlags, profileUrl } =
@@ -87,7 +95,7 @@ export async function sendEmail(
       to: email,
       subject: subjectMap[props.type],
       react: reactTemplate,
-      replyTo: EMAIL_CONFIG.replyTo,
+      replyTo: "replyTo" in props && props.replyTo ? props.replyTo : EMAIL_CONFIG.replyTo,
       headers: {
         "X-Entity-Ref-ID": `${props.type}-${Date.now()}`,
       },

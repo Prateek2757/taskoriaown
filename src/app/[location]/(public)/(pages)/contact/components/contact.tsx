@@ -1,50 +1,66 @@
 "use client";
-import React, { useState } from "react";
-import {
-  Mail,
-  Phone,
-  MessageCircle,
-  Clock,
-  HelpCircle,
-  Send,
-  CheckCircle,
-  Locate,
-  MapPin,
-} from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Mail, Phone, Clock, Send, CheckCircle, MapPin } from "lucide-react";
+import axios from "axios";
 export const dynamic = "force-static";
 
+type ContactFormValues = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  privacy: boolean;
+};
+
 export default function ContactSupport() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
   const [submitted, setSubmitted] = useState(false);
-  const [focused, setFocused] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: "", email: "", subject: "", message: "" });
-    }, 3000);
-  };
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormValues>({
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+      privacy: false,
+    },
+  });
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+  const messageLength = watch("message")?.length ?? 0;
+
+  const onSubmit = async (values: ContactFormValues) => {
+    setSubmitError("");
+
+    const res = await axios.post("/api/contact", {
+      name: values.name,
+      email: values.email,
+      subject: values.subject,
+      message: values.message,
     });
+
+    const data = await res.data;
+
+    if (!data?.success) {
+      setSubmitError(
+        data?.message || "Unable to send your message. Please try again."
+      );
+      return;
+    }
+
+    setSubmitted(true);
+    reset();
+    setTimeout(() => setSubmitted(false), 3000);
   };
 
   const inputBase = `
-    w-full px-4 py-3 rounded-xl border transition-all duration-200 outline-none text-sm
+    w-full px-4 py-2  rounded-xl border transition-all duration-200 outline-none text-sm
     bg-white dark:bg-gray-800
     border-gray-200 dark:border-gray-700
     text-gray-900 dark:text-gray-100
@@ -124,15 +140,15 @@ export default function ContactSupport() {
                   </p>
                   <a
                     href="tel:1300531727"
-                    className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-bold text-lg"
+                    className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-bold  text-lg"
                   >
-                   1300 531 727
+                    1300 531 727
                   </a>
 
                   {/* <div className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                     Call (Australia)
                   </div> */}
-                  <br/>
+                  <br />
 
                   <a
                     href="tel:+61474655902"
@@ -143,10 +159,10 @@ export default function ContactSupport() {
                   <div className="mt-2.5 space-y-1">
                     <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-600">
                       <Clock className="w-3.5 h-3.5 shrink-0" />
-                      Mon–Fri: 9:00 AM – 6:00 PM
+                      Mon-Fri: 9:00 AM - 6:00 PM
                     </div>
                     <div className="text-xs text-gray-500 dark:text-gray-600 ml-5">
-                      Sat: 10:00 AM – 4:00 PM
+                      Sat: 10:00 AM - 4:00 PM
                     </div>
                   </div>
                 </div>
@@ -214,7 +230,7 @@ export default function ContactSupport() {
                     </p>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     <div className="grid sm:grid-cols-2 gap-5">
                       <div>
                         <label
@@ -226,15 +242,21 @@ export default function ContactSupport() {
                         <input
                           type="text"
                           id="name"
-                          name="name"
-                          required
-                          value={formData.name}
-                          onChange={handleChange}
-                          onFocus={() => setFocused("name")}
-                          onBlur={() => setFocused(null)}
+                          {...register("name", {
+                            required: "Full name is required",
+                            minLength: {
+                              value: 2,
+                              message: "Name must be at least 2 characters",
+                            },
+                          })}
                           className={inputBase}
                           placeholder="Full Name"
                         />
+                        {errors.name && (
+                          <p className="mt-1 text-xs text-red-500">
+                            {errors.name.message}
+                          </p>
+                        )}
                       </div>
 
                       <div>
@@ -247,15 +269,21 @@ export default function ContactSupport() {
                         <input
                           type="email"
                           id="email"
-                          name="email"
-                          required
-                          value={formData.email}
-                          onChange={handleChange}
-                          onFocus={() => setFocused("email")}
-                          onBlur={() => setFocused(null)}
+                          {...register("email", {
+                            required: "Email address is required",
+                            pattern: {
+                              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                              message: "Enter a valid email address",
+                            },
+                          })}
                           className={inputBase}
                           placeholder="email@example.com"
                         />
+                        {errors.email && (
+                          <p className="mt-1 text-xs text-red-500">
+                            {errors.email.message}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -268,12 +296,9 @@ export default function ContactSupport() {
                       </label>
                       <select
                         id="subject"
-                        name="subject"
-                        required
-                        value={formData.subject}
-                        onChange={handleChange}
-                        onFocus={() => setFocused("subject")}
-                        onBlur={() => setFocused(null)}
+                        {...register("subject", {
+                          required: "Please select a topic",
+                        })}
                         className={`${inputBase} cursor-pointer appearance-none`}
                       >
                         <option value="" disabled>
@@ -287,6 +312,11 @@ export default function ContactSupport() {
                         <option value="feedback">Feedback & Suggestions</option>
                         <option value="other">Other</option>
                       </select>
+                      {errors.subject && (
+                        <p className="mt-1 text-xs text-red-500">
+                          {errors.subject.message}
+                        </p>
+                      )}
                     </div>
 
                     <div>
@@ -298,29 +328,41 @@ export default function ContactSupport() {
                           Message <span className="text-red-400">*</span>
                         </label>
                         <span className="text-xs text-gray-400 dark:text-gray-600">
-                          {formData.message.length} chars
+                          {messageLength} chars
                         </span>
                       </div>
                       <textarea
                         id="message"
-                        name="message"
-                        required
-                        value={formData.message}
-                        onChange={handleChange}
-                        onFocus={() => setFocused("message")}
-                        onBlur={() => setFocused(null)}
+                        {...register("message", {
+                          required: "Message is required",
+                          minLength: {
+                            value: 10,
+                            message: "Message must be at least 10 characters",
+                          },
+                          maxLength: {
+                            value: 5000,
+                            message: "Message must be 5000 characters or less",
+                          },
+                        })}
                         rows={5}
                         className={`${inputBase} resize-none`}
                         placeholder="Please describe your issue or question in detail..."
                       />
+                      {errors.message && (
+                        <p className="mt-1 text-xs text-red-500">
+                          {errors.message.message}
+                        </p>
+                      )}
                     </div>
 
-                    {/* Privacy Checkbox */}
                     <div className="flex items-start gap-3 pt-1">
                       <input
                         type="checkbox"
                         id="privacy"
-                        required
+                        {...register("privacy", {
+                          required:
+                            "Please accept the privacy policy and terms",
+                        })}
                         className="mt-0.5 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500/20 dark:bg-gray-800 cursor-pointer"
                       />
                       <label
@@ -329,35 +371,45 @@ export default function ContactSupport() {
                       >
                         I agree to the{" "}
                         <a
-                          href="#"
+                          href="/privacy-policy"
                           className="text-blue-600 dark:text-blue-400 hover:underline"
                         >
                           privacy policy
                         </a>{" "}
                         and{" "}
                         <a
-                          href="#"
+                          href="/terms-and-conditions"
                           className="text-blue-600 dark:text-blue-400 hover:underline"
                         >
                           terms of service
                         </a>
                       </label>
                     </div>
+                    {errors.privacy && (
+                      <p className="-mt-3 text-xs text-red-500">
+                        {errors.privacy.message}
+                      </p>
+                    )}
 
-                    {/* Submit */}
+                    {submitError && (
+                      <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-300">
+                        {submitError}
+                      </div>
+                    )}
+
                     <button
                       type="submit"
-                      className="w-full bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 dark:from-blue-500 dark:to-blue-500 dark:hover:from-blue-600 dark:hover:to-blue-600 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 active:scale-[0.98] shadow-md shadow-blue-500/20 dark:shadow-blue-500/10 inline-flex items-center justify-center gap-2"
+                      disabled={isSubmitting}
+                      className="w-full bg-linear-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 dark:from-blue-500 dark:to-blue-500 dark:hover:from-blue-600 dark:hover:to-blue-600 text-white font-semibold py-2.5 rounded-xl transition-all duration-200 active:scale-[0.98] shadow-md shadow-blue-500/20 dark:shadow-blue-500/10 inline-flex items-center justify-center gap-2"
                     >
                       <Send className="w-4 h-4" />
-                      Send Message
+                      {isSubmitting ? "Sending..." : "Send Message"}
                     </button>
                   </form>
                 </>
               )}
             </div>
 
-            {/* Tips Box */}
             <div className="mt-5 bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
               <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-3 flex items-center gap-2">
                 <span>💡</span> Before contacting support
@@ -382,9 +434,7 @@ export default function ContactSupport() {
           </div>
         </div>
 
-        {/* Bottom CTA Banner */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 rounded-2xl p-8 text-center">
-          {/* Decorative */}
+        <div className="relative overflow-hidden bg-linear-to-br from-slate-900 via-blue-950 to-blue-900 rounded-2xl p-8 text-center">
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute -top-20 left-1/4 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl" />
             <div className="absolute -bottom-20 right-1/4 w-64 h-64 bg-purple-600/10 rounded-full blur-3xl" />
@@ -400,14 +450,14 @@ export default function ContactSupport() {
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <a
-                href="tel:+61474655902"
+                href="tel:1300531727"
                 className="bg-white text-gray-900 hover:bg-gray-100 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 inline-flex items-center gap-2 active:scale-95"
               >
                 <Phone className="w-4 h-4" />
                 Call Now
               </a>
               <a
-                href="mailto:contactus@taskoria.com"
+                href="mailto:contact@taskoria.com"
                 className="bg-transparent border border-gray-600 hover:border-gray-400 text-white hover:bg-white/5 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 inline-flex items-center gap-2 active:scale-95"
               >
                 <Mail className="w-4 h-4" />

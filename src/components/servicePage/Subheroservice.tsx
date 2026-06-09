@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, ChevronRight, MapPin } from "lucide-react";
-import LocalProsFeature from "./LocalProFeature";
+// import LocalProsFeature from "./LocalProFeature";
 
 interface ServiceHeroSectionProps {
   service: {

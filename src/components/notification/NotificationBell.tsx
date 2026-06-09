@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-type NotificationType = "post" | "comment" | "request" | "file" | "system" | "lead_purchased" | "lead_response" | "task_posted" | "message";
+type NotificationType = "post" | "comment" | "request" | "file" | "system" | "lead_purchased" | "lead_response" | "task_posted" | "message" | "contact_submission";
 
 type Notification = {
   notification_id: number;
@@ -24,7 +24,7 @@ type Notification = {
 };
 
 const Inbox_Types:NotificationType[] =["message"]
-const General_Types:NotificationType[] =["lead_purchased" ,"lead_response" , "task_posted" ]
+const General_Types:NotificationType[] =["lead_purchased" ,"lead_response" , "task_posted", "contact_submission" ]
 
 let globalChannelRef: any = null;
 let globalUserId: number | null = null;

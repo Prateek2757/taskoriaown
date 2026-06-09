@@ -1,24 +1,65 @@
+import type { Metadata } from "next";
 import TrustSafety from "@/components/Trust&safety/trust-safety";
+
 export const dynamic = "force-static";
 
-export const metadata = {
-  title: "Trust & Safety | Taskoria",
+const BASE_URL = "https://www.taskoria.com";
+
+export const metadata: Metadata = {
+  title: "Trust & Safety — Verified Providers & Secure Payments",
   description:
-    "Taskoria ensures safe hiring with verified providers, secure payments, and dispute protection.",
+    "Learn how Taskoria protects customers with verified local service providers, secure payments, dispute support, and safer hiring across Australia.",
+
+  keywords: [
+    "Taskoria trust and safety",
+    "verified service providers Australia",
+    "secure payments for local services",
+    "safe hiring platform Australia",
+    "trusted local professionals",
+    "Taskoria provider verification",
+    "local services dispute protection",
+    "home services safety Australia",
+  ],
+
   alternates: {
-    canonical: "https://www.taskoria.com/trust-safety",
+    canonical: `${BASE_URL}/trust-safety`,
   },
+
   openGraph: {
-    title: "Trust & Safety | Taskoria",
+    title: "Trust & Safety — Verified Providers & Secure Payments",
     description:
-      "Verified providers, secure payments, and protection for every job.",
-    url: "https://www.taskoria.com/trust-safety",
+      "See how Taskoria helps Australians hire local service providers safely with verification, secure payments, and dispute support.",
+    url: `${BASE_URL}/trust-safety`,
+    siteName: "Taskoria",
+    type: "website",
+    images: [
+      {
+        url: `${BASE_URL}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "Taskoria trust and safety for verified local services",
+      },
+    ],
   },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Trust & Safety — Verified Providers & Secure Payments",
+    description:
+      "Taskoria helps make local service hiring safer with verified providers, secure payments, and dispute support.",
+    images: [`${BASE_URL}/og-image.png`],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
+
   other: {
     "article:author": "Taskoria Trust & Safety Team",
-    "article:modified_time": new Date().toISOString(),
   },
 };
+
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -28,7 +69,7 @@ const faqSchema = {
       name: "How does Taskoria verify service providers?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Every provider undergoes identity verification, ABN validation via the Australian Business Register, and licence checks relevant to their trade category before being listed on Taskoria.",
+        text: "Taskoria verifies service providers through identity checks, business information review, and category-relevant requirements before they can offer services on the platform.",
       },
     },
     {
@@ -36,7 +77,7 @@ const faqSchema = {
       name: "Are payments on Taskoria secure?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Payments are held in escrow and only released to the provider upon job completion, in line with ACCC consumer protection guidelines for online service transactions.",
+        text: "Taskoria supports safer payments by helping customers and providers manage job payments through a more secure and transparent process.",
       },
     },
     {
@@ -44,7 +85,7 @@ const faqSchema = {
       name: "What happens if there is a dispute?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Taskoria provides a structured dispute resolution process. Unresolved disputes can be escalated to your state Fair Trading office or the ACCC.",
+        text: "Taskoria provides support for job-related issues and helps customers and providers resolve disputes through a structured review process.",
       },
     },
   ],
@@ -53,7 +94,7 @@ const faqSchema = {
 export default function Page() {
   return (
     <>
-      <TrustSafety />;
+      <TrustSafety />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

@@ -6,28 +6,30 @@ import type { Metadata } from "next";
 import { OurStory } from "./OurStory";
 
 export const metadata: Metadata = {
-  title: "About us | Taskoria",
+  title: "About Taskoria — Trusted Local Services Marketplace",
   description:
-    "Taskoria is on a mission to make hiring local professionals simple, transparent, and reliable through technology and community trust.",
+    "Learn about Taskoria, Australia’s trusted local services marketplace connecting customers with verified professionals for safe, simple, and reliable home services.",
+
   keywords: [
-    "Taskoria",
     "About Taskoria",
+    "trusted local services marketplace",
     "Australian service marketplace",
     "verified service providers Australia",
-    "secure home services",
     "trusted local professionals",
-    "payment protection marketplace",
     "home services Australia",
+    "secure home services",
+    "payment protection marketplace",
   ],
+
   authors: [{ name: "Taskoria Team" }],
   creator: "Taskoria",
   publisher: "Taskoria",
   metadataBase: new URL("https://www.taskoria.com"),
 
   openGraph: {
-    title: "About Taskoria | Building a Trusted Local Services Marketplace",
+    title: "About Taskoria — Trusted Local Services Marketplace",
     description:
-      "Taskoria is on a mission to make hiring local professionals simple, transparent, and reliable through technology and community trust",
+      "Learn how Taskoria connects Australians with verified local professionals through a safer, simpler, and more reliable services marketplace.",
     url: "https://www.taskoria.com/about-us",
     siteName: "Taskoria",
     images: [
@@ -35,20 +37,19 @@ export const metadata: Metadata = {
         url: "/images/providers.jpeg",
         width: 1200,
         height: 630,
-        alt: "Taskoria verified service providers",
+        alt: "Taskoria trusted local service providers in Australia",
       },
     ],
     type: "website",
   },
 
-  // twitter: {
-  //   card: "summary_large_image",
-  //   title: "About Taskoria – Trusted & Verified Services",
-  //   description:
-  //     "Discover how Taskoria makes finding trusted service providers safe, simple, and secure across Australia.",
-  //   images: ["/images/providers.jpeg"],
-  //   creator: "@taskoria",
-  // },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Taskoria — Trusted Local Services Marketplace",
+    description:
+      "Discover how Taskoria helps Australians hire verified local professionals safely and easily.",
+    images: ["/images/providers.jpeg"],
+  },
 
   robots: {
     index: true,
@@ -59,7 +60,6 @@ export const metadata: Metadata = {
     canonical: "https://www.taskoria.com/about-us",
   },
 };
-
 export default function AboutUs() {
   const stats = [
     { value: "500+", label: "Verified Providers" },

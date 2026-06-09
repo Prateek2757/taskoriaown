@@ -4,6 +4,7 @@ import { MapPin, Users } from "lucide-react";
 import LocationSearch from "@/components/Location/locationsearch";
 import Image from "next/image";
 import { ServicesBadges } from "./ServicesBagdes";
+import { TrustBadges } from "../TrustBadges";
 
 interface HeroSectionProps {
   service: any;
@@ -27,16 +28,16 @@ export default function ServiceHeroSection({
   const description = cityData?.description || service.description;
 
   return (
-    <section className="relative max-w-6xl mx-auto py-3 ">
-      <section className="relative overflow-hiden max-h-175 bg-slate-950 rounded-2xl">
+    <section className="relative max-w-6xl mx-auto py-6  ">
+      <section className="relative overflow-hidden max-h-175 bg-slate-950  rounded-2xl ">
         <Image
           src={service.service_image_url}
           alt={service.name}
           fill
           priority
-          className="absolute inset-0 object-cover"
+          className="absolute inset-0 object-cover  "
         />
-        <div className="absolute inset-0 bg-linear-to-r  from-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r  from-black/40 to-transparent  " />
 
         {/* <nav className="flex items-center gap-2 text-xs text-white/50 mb-7 flex-wrap">
         <Link href="/" className="hover:text-white/80 transition-colors">
@@ -99,7 +100,7 @@ export default function ServiceHeroSection({
             )}
           </div>
 
-          <div className="relative z-10 max-w-xl mb-4">
+          <div className="max-w-xl mb-4">
             <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg rounded-3xl shadow-2xl p-4 md:p-3 border border-white/20 dark:border-slate-700/50">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 bg-linear-to-br from-blue-600 to-blue-500 dark:from-blue-500 dark:to-blue-400 rounded-xl flex items-center justify-center shadow-lg">
@@ -114,15 +115,16 @@ export default function ServiceHeroSection({
                   </p>
                 </div>
               </div>
-              <div className="relative  overflow-visible">
-                <LocationSearch
-                  onSelect={onLocationSelect}
-                  presetLocation={presetLocation}
-                />
+              <div className="z-50">
+              <LocationSearch
+                onSelect={onLocationSelect}
+                presetLocation={presetLocation}
+              />
               </div>
+             
             </div>
           </div>
-          <div className="absolute bottom-0 right-0 hidden md:block">
+          {/* <div className="absolute bottom-0 right-0 hidden md:block">
             <ServicesBadges />
           </div> */}
         </div>

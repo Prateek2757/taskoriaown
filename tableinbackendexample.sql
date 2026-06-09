@@ -294,6 +294,28 @@ CREATE TABLE payouts (
 );
 
 -----------------------------
+-- Contact Submissions
+-----------------------------
+CREATE TABLE contact_submissions (
+  contact_submission_id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  name text NOT NULL,
+  email text NOT NULL,
+  subject text NOT NULL,
+  message text NOT NULL,
+  status text NOT NULL DEFAULT 'new'
+    CHECK (status IN ('new', 'in_progress', 'resolved', 'archived')),
+  admin_note text NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX ix_contact_submissions_status_createdat
+  ON contact_submissions(status, created_at DESC);
+
+CREATE INDEX ix_contact_submissions_email_createdat
+  ON contact_submissions(email, created_at DESC);
+
+-----------------------------
 -- Notifications
 -----------------------------
 CREATE TABLE notifications (
