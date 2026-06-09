@@ -186,7 +186,7 @@ export default function SubHeroService({
             </div>
           </div>
           <div
-            className="pl-4 bg-white shadow-sm hidden lg:flex flex-col gap-4 justify-center min-w-0  -mt-5 rounded-xl p-4"
+            className="pl-4 bg-white shadow-sm hidden lg:flex flex-col gap-4 justify-center min-w-0  -mt-5 rounded-xl p-4 dark:bg-slate-950"
             style={{ borderLeft: "4px solid #2563EB" }}
           >
             <div>
@@ -203,7 +203,7 @@ export default function SubHeroService({
               ].map((val) => (
                 <div key={val} className="flex gap-2 items-center">
                   <IoMdCheckmarkCircle color="#2563EB" size={20} />
-                  <p className="text-sm text-slate-700">{val}</p>
+                  <p className="text-sm text-slate-700 dark:text-gray-300">{val}</p>
                 </div>
               ))}
             </div>
