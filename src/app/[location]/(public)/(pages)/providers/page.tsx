@@ -1,5 +1,5 @@
 import ProvidersGrid from "@/components/providers/provider-list";
-import { fetchProviders } from "@/utils/api";
+import { fetchCategories, fetchProviders } from "@/utils/api";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -24,7 +24,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ProvidersPage() {
-  const providers = await fetchProviders();
+  const [providers, categories] = await Promise.all([
+    fetchProviders(),
+    fetchCategories(),
+  ]);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -58,7 +61,7 @@ export default async function ProvidersPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Suspense fallback={null}>
-        <ProvidersGrid providers={providers} />
+        <ProvidersGrid providers={providers} categories={categories} />
       </Suspense>
     </>
   );

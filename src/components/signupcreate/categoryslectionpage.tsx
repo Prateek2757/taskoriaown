@@ -128,7 +128,7 @@ export default function CategorySelectionContent() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-white via-cyan-50/40 to-gray-50 dark:from-black dark:via-gray-900 dark:to-gray-800 transition-colors">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-linear-to-br from-white via-cyan-50/40 to-gray-50 dark:from-black dark:via-gray-900 dark:to-gray-800 transition-colors">
       <Card className="max-w-2xl w-full shadow-2xl border border-gray-200/40 dark:border-gray-700/40 rounded-3xl backdrop-blur-xl bg-white/80 dark:bg-black/40 transition-colors">
         <CardContent className="p-8">
           <div className="text-center mb-6">
