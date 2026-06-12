@@ -185,6 +185,7 @@ function Eyebrow({ text }: { text: string }) {
         letterSpacing: -1.8,
         marginBottom: 24,
         color: "#2563EB",
+        textAlign: "center",
       }}
     >
       {text}
@@ -202,6 +203,7 @@ function SecTitle({ children }: any) {
         lineHeight: 1.3,
         color: T.text,
         margin: "0 0 6px",
+        textAlign: "center",
       }}
     >
       {children}
@@ -472,6 +474,8 @@ function ServicesSection({ section }: any) {
                   color: T.muted,
                   lineHeight: 1.7,
                   margin: "3px 0 0",
+                  textAlign: "center",
+                  justifyContent: "center",
                 }}
               >
                 {p}
