@@ -12,6 +12,7 @@ import NotificationHandler from "@/components/NotificationHandler";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import SupportChatbot from "@/components/supportChatbox";
 import Script from "next/script";
+import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 
 export const BASE_URL = "https://www.taskoria.com";
 export const SITE_NAME = "Taskoria";
@@ -190,6 +191,7 @@ export default function RootLayout({
           >
             <Analytics />
             <UserProvider>
+              <BreadcrumbJsonLd />
               <NavbarServer />
               <main>{children}</main>
               <SpeedInsights />

@@ -2,10 +2,17 @@ import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
+
+function requireAdmin(session: any) {
+  return session?.user?.adminrole === "admin";
+}
+
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-    const userId = session?.user.id;
+    if (!requireAdmin(session)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
 
     const { rows } = await pool.query(`
       WITH active_sub AS (

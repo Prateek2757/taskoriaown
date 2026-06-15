@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useMemo } from "react";
 import Link from "next/link";
 import {
   Users,
@@ -15,6 +15,7 @@ import {
   BookOpen,
   LayoutGrid,
   Mail,
+  ClipboardList,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -37,19 +38,19 @@ function useHubStats(): HubStats {
   const { commissions } = useCommissions("pending");
   const { affiliates } = useAffiliateAdmin();
 
-  const [stats, setStats] = useState<HubStats>({
-    pendingPayouts: 0,
-    pendingCommissions: 0,
-    totalAffiliates: 0,
-    approvedBalance: 0,
-    totalPaidOut: 0,
-    loading: true,
-  });
+  return useMemo(() => {
+    if (!payouts || !commissions || !affiliates) {
+      return {
+        pendingPayouts: 0,
+        pendingCommissions: 0,
+        totalAffiliates: 0,
+        approvedBalance: 0,
+        totalPaidOut: 0,
+        loading: true,
+      };
+    }
 
-  useEffect(() => {
-    if (!payouts || !commissions || !affiliates) return;
-
-    setStats({
+    return {
       pendingPayouts: payouts.length,
       pendingCommissions: commissions.length,
       totalAffiliates: affiliates.length,
@@ -62,10 +63,8 @@ function useHubStats(): HubStats {
         0
       ),
       loading: false,
-    });
+    };
   }, [payouts, commissions, affiliates]);
-
-  return stats;
 }
 
 function fmt(n: number) {
@@ -111,6 +110,18 @@ const SECTIONS = [
     ],
     badgeKey: "pendingCommissions" as const,
     badgeLabel: "awaiting review",
+  },
+  {
+    label: "All Tasks",
+    href: "/admin/tasks",
+    icon: ClipboardList,
+    accent: "from-cyan-500 to-blue-700",
+    ring: "ring-cyan-500/20",
+    shadow: "shadow-cyan-500/10",
+    desc: "View every customer task with status, budget, location, response count, contact details, and submitted answers.",
+    actions: ["Search tasks", "Filter statuses", "Review full details"],
+    badgeKey: null,
+    badgeLabel: null,
   },
   {
     label: "Budget Manager",

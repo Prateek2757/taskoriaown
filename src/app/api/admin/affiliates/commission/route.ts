@@ -1,4 +1,3 @@
-// app/api/admin/affiliates/commissions/route.ts
 import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
@@ -78,7 +77,6 @@ export async function GET(req: Request) {
   }
 }
 
-// ─── PATCH: approve or reject a commission ────────────────────────────────────
 export async function PATCH(req: Request) {
   const client = await pool.connect();
   try {
@@ -87,7 +85,6 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     const { commissionId, action, adminNote } = await req.json();
-    // action: 'approved' | 'rejected'
 
     if (!commissionId || !["approved", "rejected"].includes(action))
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });

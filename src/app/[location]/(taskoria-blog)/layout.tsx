@@ -3,6 +3,7 @@ import "../../globals.css";
 import AuthProvider from "@/context/AuthProvider";
 import BlogNavbar from "@/components/Blog-Navbar";
 import { ThemeProvider } from "next-themes";
+import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -21,12 +22,12 @@ export default function DashboardLayout({
         className="min-h-screen bg-white dark:bg-slate-950  text-gray-900"
         suppressHydrationWarning
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem> 
-        <BlogNavbar />
-        <AuthProvider>
-          <main>{children}</main>
-          
-        </AuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <BreadcrumbJsonLd />
+          <BlogNavbar />
+          <AuthProvider>
+            <main>{children}</main>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

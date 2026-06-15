@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NewRequestModal from "@/components/leads/RequestModal";
+import CityProviders from "@/components/servicePage/cityProviders";
 import {
   CategoryWithSubs,
   City,
@@ -244,6 +245,13 @@ export default function CityPageClient({
             </p>
           </div>
         </section>
+
+        <CityProviders
+          stateSlug={stateSlug}
+          citySlug={city.slug}
+          locationName={cityName}
+          className="border-b border-slate-100 dark:border-slate-800"
+        />
 
         <section className="pt-14 pb-2">
           <SectionHeader

@@ -1,10 +1,48 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import ProvidersGrid from "@/components/providers/provider-list";
-import { fetchCategories, fetchProviders } from "@/utils/api";
+import { fetchCategories } from "@/utils/api";
+import { getServerSession } from "next-auth";
+import { headers } from "next/headers";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
+async function requireAdmin() {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/signin?callbackUrl=/providers");
+  }
+
+  if (session.user?.adminrole !== "admin") {
+    redirect("/provider/dashboard");
+  }
+}
+
+async function fetchAdminProviders() {
+  const requestHeaders = await headers();
+  const cookie = requestHeaders.get("cookie") ?? "";
+  const host = requestHeaders.get("host");
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? "http";
+  const baseURL = host
+    ? `${protocol}://${host}`
+    : process.env.NEXT_PUBLIC_APP_URL || "https://www.taskoria.com";
+
+  const res = await fetch(`${baseURL}/api/providers`, {
+    headers: {
+      cookie,
+    },
+    cache: "no-store",
+  });
+
+  if (!res.ok) throw new Error("Failed to fetch providers");
+
+  return res.json();
+}
+
 export async function generateMetadata(): Promise<Metadata> {
-  const providers = await fetchProviders();
+  await requireAdmin();
+  const providers = await fetchAdminProviders();
   const count = providers.length;
 
   return {
@@ -24,8 +62,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ProvidersPage() {
+  await requireAdmin();
+
   const [providers, categories] = await Promise.all([
-    fetchProviders(),
+    fetchAdminProviders(),
     fetchCategories(),
   ]);
 

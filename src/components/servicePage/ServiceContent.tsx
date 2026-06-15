@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { normalizeServiceHtml } from "./normalizeServiceHtml";
 
 export default function ServiceContent({ html }: { html: string }) {
   return (
@@ -26,7 +27,7 @@ export default function ServiceContent({ html }: { html: string }) {
             prose-strong:text-gray-900
             dark:prose-invert
           "
-          dangerouslySetInnerHTML={{ __html: html }}
+          dangerouslySetInnerHTML={{ __html: normalizeServiceHtml(html) }}
         />
 
       </div>

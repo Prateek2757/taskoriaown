@@ -195,8 +195,8 @@ export default function AdminBudgetManager() {
         </p>
       </div>
 
-      <div className="mb-6 flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 relative">
+      <div className="mb-6 flex col sm:row gap-4">
+        <div className="1 relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           <Input
             placeholder="Search by title, customer, or category..."
@@ -261,7 +261,7 @@ export default function AdminBudgetManager() {
 
       {filteredTasks.length === 0 ? (
         <Card>
-          <CardContent className="flex flex-col items-center justify-center py-6">
+          <CardContent className="flex col items-center justify-center py-6">
             <DollarSign className="w-16 h-16 text-gray-300 mb-4" />
             <p className="text-gray-600 dark:text-gray-400 text-center">
               {searchTerm || filterCategory !== "all"
@@ -278,8 +278,8 @@ export default function AdminBudgetManager() {
               className="hover:shadow-lg transition-shadow"
             >
               <CardContent className="px-6 ">
-                <div className="flex flex-col lg:flex-row gap-6">
-                  <div className="flex-1">
+                <div className="flex col lg:row gap-6">
+                  <div className="1">
                     <div className="flex items-start justify-between mb-4">
                       <div>
                         {/* <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
@@ -293,7 +293,7 @@ export default function AdminBudgetManager() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                        <User className="w-4 h-4 flex-shrink-0" />
+                        <User className="w-4 h-4 shrink-0" />
                         <div>
                           <p className="font-medium text-gray-900 dark:text-white">
                             {task.customer_name}
@@ -306,12 +306,12 @@ export default function AdminBudgetManager() {
                       </div>
 
                       <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                        <MapPin className="w-4 h-4 flex-shrink-0" />
+                        <MapPin className="w-4 h-4 shrink-0" />
                         <span>{task.location_name}</span>
                       </div>
 
                       <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                        <Calendar className="w-4 h-4 flex-shrink-0" />
+                        <Calendar className="w-4 h-4 shrink-0" />
                         <span className="text-sm">
                           {formatAnswerValue(task.preferred_date_start)} -{" "}
                           {formatAnswerValue(task.preferred_date_end)}
@@ -346,7 +346,7 @@ export default function AdminBudgetManager() {
                   </div>
 
                   <div className="lg:w-80 border-t lg:border-t-0 lg:border-l pt-6 lg:pt-0 lg:pl-6">
-                    <div className="bg-gradient-to-br from-blue-50 to-blue-50 dark:from-slate-800 dark:to-slate-700 p-4 rounded-lg">
+                    <div className="bg-linear-to-br from-blue-50 to-blue-50 dark:from-slate-800 dark:to-slate-700 p-4 rounded-lg">
                       <Label className="text-sm font-semibold mb-3 block">
                         Set Estimated Budget
                       </Label>
@@ -373,7 +373,7 @@ export default function AdminBudgetManager() {
                           processing === task.task_id ||
                           !budgetValues[task.task_id]
                         }
-                        className="w-full bg-gradient-to-r from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] text-white font-semibold"
+                        className="w-full bg-linear-to-r from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] text-white font-semibold"
                       >
                         {processing === task.task_id ? (
                           <>
@@ -538,7 +538,7 @@ export default function AdminBudgetManager() {
                 </Label>
 
                 <div className="flex gap-3">
-                  <div className="relative flex-1">
+                  <div className="relative 1">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 font-medium text-gray-500">
                       A$
                     </span>
@@ -560,7 +560,7 @@ export default function AdminBudgetManager() {
                       processing === selectedTask.task_id ||
                       !budgetValues[selectedTask.task_id]
                     }
-                    className="bg-gradient-to-r from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] text-white font-semibold px-6"
+                    className="bg-linear-to-r from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] text-white font-semibold px-6"
                   >
                     {processing === selectedTask.task_id ? (
                       <>

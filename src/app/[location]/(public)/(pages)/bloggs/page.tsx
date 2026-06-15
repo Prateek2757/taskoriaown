@@ -2,9 +2,9 @@ import TaskoriaBlog from "@/components/blog/TaskoriaMainBlogPage";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Expert Guides & Insights | Taskoria Blog",
+  title: "Local Services Tips & Hiring Guides | Taskoria Blog",
   description:
-    "Explore the Taskoria Blog for expert tips, service guides, and insights on hiring professionals, growing your business, and getting tasks done efficiently.",
+    "Explore Taskoria hiring guides, local service tips, provider comparisons, and practical advice for booking trusted professionals across Australia.",
   alternates: {
     canonical: "https://www.taskoria.com/bloggs",
   },
@@ -12,15 +12,15 @@ export const metadata: Metadata = {
     "Taskoria blog",
     "hire professionals",
     "service marketplace",
-    "business tips",
-    "freelance services",
+    "local services tips",
+    "Australian home services",
     "home services guide",
   ],
   openGraph: {
-    title: "Taskoria Blog",
+    title: "Local Services Tips & Hiring Guides | Taskoria Blog",
     description:
-      "Expert tips, service guides, and insights to help you hire smarter and grow faster.",
-    url: "https://www.taskoria.com/blog",
+      "Hiring guides, local service tips, and provider comparisons for Australians booking trusted professionals.",
+    url: "https://www.taskoria.com/bloggs",
     siteName: "Taskoria",
     images: [
       {
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Taskoria Blog",
+    title: "Local Services Tips & Hiring Guides | Taskoria Blog",
     description:
-      "Expert tips and insights for hiring and growing your business.",
+      "Hiring guides, local service tips, and provider comparisons for Australians.",
     images: ["https://www.taskoria.com/og-image.png"],
   },
 };

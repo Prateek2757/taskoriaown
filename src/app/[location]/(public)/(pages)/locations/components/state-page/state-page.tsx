@@ -24,6 +24,14 @@ const NewRequestModal = dynamic(
   }
 );
 
+const CityProviders = dynamic(
+  () => import("@/components/servicePage/cityProviders"),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
+
 interface OtherState {
   state_slug: string;
   state_name: string;
@@ -193,7 +201,7 @@ export default function StatePageClient({
             className="object-cover"
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700" />
+          <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-800 to-slate-700" />
         )}
 
         <div className="absolute inset-0 bg-slate-950/70" />
@@ -227,7 +235,7 @@ export default function StatePageClient({
             <div className="flex flex-wrap gap-3">
               <Button
                 onClick={() => setOpenModal(true)}
-                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full px-7 py-6 text-sm font-semibold shadow-lg shadow-blue-600/30"
+                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-7 py-6 text-sm font-semibold shadow-lg shadow-blue-600/30"
               >
                 Post a task in {stateName}
                 <ArrowRight className="w-4 h-4" />
@@ -235,17 +243,17 @@ export default function StatePageClient({
 
               <Link
                 href="/services"
-                className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white border border-white/25 rounded-full px-6 py-3 text-sm font-medium transition-colors"
+                className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white border border-white/25 rounded-xl px-6 py-3 text-sm font-medium transition-colors"
               >
                 <Grid3X3 className="w-4 h-4" />
                 Browse all services
               </Link>
             </div>
-            <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl">
+            <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
               {heroStats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="border border-white/15 bg-white/10 px-4 py-3"
+                  className="border rounded-xl border-white/15 bg-white/10 px-4 py-1.5"
                 >
                   <div className="flex items-center gap-1.5 text-white/65 text-xs mb-1">
                     {stat.icon}
@@ -261,7 +269,6 @@ export default function StatePageClient({
         </div>
       </section>
 
-      {/* TRUST BAR */}
       <div className="bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-6 md:px-16 py-3 flex flex-wrap gap-x-10 gap-y-1.5 items-center text-sm">
           {trustStats.map((stat) => (
@@ -298,7 +305,12 @@ export default function StatePageClient({
           </div>
         </section>
 
-        {/* CITIES */}
+        <CityProviders
+          stateSlug={stateSlug}
+          locationName={stateName}
+          className="border-b border-slate-100 dark:border-slate-800"
+        />
+
         <section className="pt-12 pb-6">
           <div className="flex items-end justify-between mb-7 flex-wrap gap-4">
             <div>
@@ -310,7 +322,7 @@ export default function StatePageClient({
               </p>
             </div>
 
-            <div className="relative">
+            <div className="relative ">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
               <input
                 value={citySearch}
@@ -366,7 +378,6 @@ export default function StatePageClient({
           )}
         </section>
 
-        {/* POPULAR SERVICES */}
         <section className="pt-10 pb-6 [content-visibility:auto] [contain-intrinsic-size:360px]">
           <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight mb-2">
             Popular services in {stateName}
@@ -393,14 +404,13 @@ export default function StatePageClient({
           </div>
         </section>
 
-        {/* ALL CATEGORIES */}
         <section className="pt-12 pb-20 [content-visibility:auto] [contain-intrinsic-size:1200px]">
           <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-8">
             Browse all categories in {stateName}
           </h2>
 
           <div className="flex gap-10 items-start">
-            <aside className="hidden lg:flex flex-col w-52 flex-shrink-0 sticky top-6 gap-5">
+            <aside className="hidden lg:flex flex-col w-52 shrink-0 sticky top-6 gap-5">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                 <input
@@ -520,7 +530,6 @@ export default function StatePageClient({
         </section>
       </div>
 
-      {/* OTHER STATES */}
       {otherStates.length > 0 && (
         <section className="bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800 [content-visibility:auto] [contain-intrinsic-size:400px]">
           <div className="max-w-7xl mx-auto px-6 md:px-16 py-12">
@@ -559,7 +568,7 @@ export default function StatePageClient({
 
           <Button
             onClick={() => setOpenModal(true)}
-            className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-400 text-white rounded-2xl px-10 py-5 text-lg font-bold flex-shrink-0"
+            className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-400 text-white rounded-2xl px-10 py-5 text-lg font-bold shrink-0"
           >
             Post a task for free
             <ArrowRight className="w-5 h-5" />
@@ -582,11 +591,11 @@ const CityCard = memo(function CityCard({
   return (
     <Link
       href={`/locations/${stateSlug}/${city.slug}`}
-      className="group relative overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-300 dark:hover:border-blue-700 transition-colors"
+      className="group relative overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-300 dark:hover:border-blue-700 transition-colors rounded-xl "
     >
       <div className="p-3.5">
         <div className="flex items-start gap-1.5">
-          <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 mt-0.5 flex-shrink-0 transition-colors" />
+          <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 mt-0.5 shrink-0 transition-colors" />
 
           <div>
             <h3 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 leading-snug">

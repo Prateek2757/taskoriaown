@@ -15,9 +15,18 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ServiceBreadcrumb from "./Servicebreadcrumb";
+import { normalizeServiceHtml } from "./normalizeServiceHtml";
 
 const NewRequestModal = dynamic(
   () => import("@/components/leads/RequestModal"),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
+
+const CityProviders = dynamic(
+  () => import("@/components/servicePage/cityProviders"),
   {
     ssr: false,
     loading: () => null,
@@ -331,6 +340,14 @@ export default function ServiceStatePageClient({
           )}
         </section>
 
+        <CityProviders
+          serviceSlug={serviceSlug}
+          serviceName={service.name}
+          stateSlug={stateSlug}
+          locationName={stateName}
+          className="border-t border-slate-100 dark:border-slate-800"
+        />
+
         <section className="py-12 border-t border-slate-100 dark:border-slate-800">
           <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-8 tracking-tight">
             How it works
@@ -405,7 +422,9 @@ export default function ServiceStatePageClient({
             </h2>
             <div
               className="prose prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-900 p-6 md:p-8 border border-slate-100 dark:border-slate-800"
-              dangerouslySetInnerHTML={{ __html: service.about }}
+              dangerouslySetInnerHTML={{
+                __html: normalizeServiceHtml(service.about),
+              }}
             />
           </section>
         )}

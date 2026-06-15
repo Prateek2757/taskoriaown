@@ -262,7 +262,7 @@ export default function ProvidersGrid({
         </div>
 
         <div
-          className={`${sora.variable} ${fraunces.variable} font-body relative mx-auto max-w-6xl px-6 py-10`}
+          className={`${sora.variable} ${fraunces.variable} font-body relative mx-auto max-w-6xl p-5`}
         >
           <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-widest text-blue-600 dark:text-blue-400">
             <Zap className="h-3 w-3" />
@@ -510,7 +510,7 @@ export default function ProvidersGrid({
                   className="card-enter"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <div className="group relative flex h-full h-auto flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                  <div className="group relative flex  h-auto flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
                     <div className="relative flex h-full flex-col gap-2 p-4">
                       <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
                         <div className="relative">
@@ -551,10 +551,10 @@ export default function ProvidersGrid({
                         </span>
                       </div>
 
-                      <div className="min-h-[56px] rounded-xl border border-border bg-muted/40 px-3 py-">
+                      <div className="min-h-14 rounded-xl border border-border bg-muted/40 px-3 py-">
                         {displayedService ? (
                           <div className="flex h-full flex-col justify-center gap-1">
-                            <div className="flex min-w-0 items-center gap-2">
+                            <div className="flex min-w-0 items-center  py-1 gap-2">
                               <Tag
                                 className={`h-3.5 w-3.5 shrink-0 ${
                                   isDisplayedServiceMatched

@@ -13,6 +13,7 @@ import SubHeroService from "./Subheroservice";
 import WhyTaskoria from "./WhyTaskoria";
 import StepWiseHowItWorks from "./3stepServiceSection";
 import ServiceBreadcrumb from "./Servicebreadcrumb";
+import { normalizeServiceHtml } from "./normalizeServiceHtml";
 
 const NewRequestModal = dynamic(
   () => import("@/components/leads/RequestModal"),
@@ -124,6 +125,10 @@ export default function ServicePageClient({
             />
           )}
 
+          {!citySlug && !stateSlug && (
+            <CityProviders serviceSlug={service.slug} serviceName={service.name} />
+          )}
+
           {citySlug && (
             <>
               <SubHeroService
@@ -141,7 +146,10 @@ export default function ServicePageClient({
 
               <CityProviders
                 serviceSlug={service.slug}
+                serviceName={service.name}
+                stateSlug={stateSlug}
                 citySlug={subCitySlug ?? citySlug}
+                locationName={activeCityName}
               />
             </>
           )}
@@ -210,7 +218,9 @@ export default function ServicePageClient({
             <section className="border border-slate-100 bg-white p-6 md:p-8 dark:border-slate-800 dark:bg-slate-900 mb-14">
               <div
                 className="prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: service.about }}
+                dangerouslySetInnerHTML={{
+                  __html: normalizeServiceHtml(service.about),
+                }}
               />
             </section>
           )}

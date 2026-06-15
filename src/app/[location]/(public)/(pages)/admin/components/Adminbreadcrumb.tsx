@@ -9,6 +9,7 @@ const LABEL_MAP: Record<string, string> = {
   adminaffiliatespage: "Affiliates",
   admincommissionstab: "Commissions",
   adminbudgetmanager: "Budget Manager",
+  tasks: "All Tasks",
   refunds: "Refunds",
 };
 
