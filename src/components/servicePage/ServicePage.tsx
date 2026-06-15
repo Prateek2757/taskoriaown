@@ -277,7 +277,7 @@ export default function ServicePageClient({
           </div>
           <Button
             onClick={handleSelectCategory}
-            className="inline-flex bg-[#2563EB] items-center gap-2 rounded-lg px-8 py-4 text-lg font-semibold"
+            className="inline-flex bg-[#2563EB] items-center gap-2 rounded-lg -8 py-4 text-xs text-lg font-semibold"
             aria-label={`Get free quotes for ${service.name}`}
           >
             Get Free Quotes

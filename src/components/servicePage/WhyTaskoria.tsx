@@ -9,6 +9,7 @@ import {
   Wallet,
   Users2,
 } from "lucide-react";
+import { BsFileEarmarkPostFill } from "react-icons/bs";
 
 interface SubHeroSectionProps {
   serviceName: string;
@@ -21,32 +22,32 @@ interface SubHeroSectionProps {
 
 const DEFAULT_HIGHLIGHTS = (serviceName: string) => [
   {
-    icon: <CheckCircle2 className="w-6 h-6" />,
+    icon: <BsFileEarmarkPostFill className="w-8 h-8" />,
     label: "Free to post",
     value: `Get ${serviceName.toLowerCase()} quotes at zero cost`,
   },
   {
-    icon: <Users2 className="w-6 h-6" />,
+    icon: <Users2 className="w-8 h-8" />,
     label: "Multiple quotes",
     value: "Compare up to 5 verified professionals",
   },
   {
-    icon: <Clock3 className="w-6 h-6" />,
+    icon: <Clock3 className="w-8 h-8" />,
     label: "Fast responses",
     value: "Pros reply within a few hours",
   },
   {
-    icon: <ShieldCheck className="w-6 h-6" />,
+    icon: <ShieldCheck className="w-8 h-8" />,
     label: "Vetted & insured",
     value: "Every pro is checked before joining",
   },
   {
-    icon: <Star className="w-6 h-6" />,
+    icon: <Star className="w-8 h-8" />,
     label: "Honest reviews",
     value: "Real ratings from real customers",
   },
   {
-    icon: <Wallet className="w-6 h-6" />,
+    icon: <Wallet className="w-8 h-8" />,
     label: "No surprise fees",
     value: "Transparent pricing, always",
   },
@@ -73,12 +74,14 @@ export default function WhyTaskoria({
     >
       {/* <div className="h-[3px] w-full bg-gradient-to-r from-blue-500 via-[#2563EB] to-blue-600" /> */}
 
-      <div className="max-w-8xl mx-auto px-6 py-4">
-        <p className=" text-xl font-bold uppercase tracking-[0.18em] text-[#2563EB]  text-center">
+      <div className="max-w-8xl mx-auto px-6 py-5">
+        <p className="text-3xl  font-bold text-[#2563EB] mb-2 text-center">
           Why customers choose Taskoria for {serviceName.toLowerCase()}
         </p>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-px bg-slate-100 dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm mt-12 mb-6">
+        <p className="text-xl text-slate-600 dark:text-white mb-2 text-center">
+          we keep it simple to connect with {serviceName.toLowerCase()}
+        </p>
+        <div className="mt-12 mb-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 border border-border rounded-xl overflow-hidden">
           {items.map((item, i) => (
             <div
               key={i}
@@ -87,24 +90,26 @@ export default function WhyTaskoria({
                 transform: visible ? "translateY(0)" : "translateY(10px)",
                 transition: `opacity 0.4s ease ${i * 60}ms, transform 0.4s ease ${i * 60}ms`,
               }}
-              className="group flex flex-col items-center gap-2 bg-white dark:bg-slate-900 px-4 py-5 hover:bg-blue-50/60 dark:hover:bg-blue-950/40 transition-colors duration-200 cursor-default"
+              className="group flex flex-col items-center text-center gap-3 px-4 py-6 bg-white dark:bg-slate-900 border-r border-b border-slate-100 dark:border-slate-800 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-colors duration-150 cursor-default"
             >
-              <span className="text-slate-800 dark:text-blue-400 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors duration-200">
-                {item.icon}
-              </span>
+              <div className="w-11 h-11 flex items-center justify-center  bg-blue-50 dark:bg-blue-950/50 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 transition-colors duration-150 shrink-0 rounded-lg">
+                <span className="flex text-blue-600 dark:text-blue-400 group-hover:opacity-80 transition-opacity">
+                  {item.icon}
+                </span>
+              </div>
 
-              <p className=" font-bold text-slate-800 group-hover:text-blue-600 dark:text-slate-100 leading-tight justify-center">
+              <p className="m-0 text-[14px] font-semibold text-slate-800 dark:text-slate-100 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-150">
                 {item.label}
               </p>
 
-              {/* <p className="text-[12px] text-slate-500 dark:text-slate-400 leading-snug">
+              <p className="m-0 text-[13px] text-slate-500 dark:text-slate-400 leading-snug">
                 {item.value}
-              </p> */}
+              </p>
             </div>
           ))}
         </div>
-{/* 
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+
+        {/* <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           {[
             "No obligation",
             "Free cancellation",

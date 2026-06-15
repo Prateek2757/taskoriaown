@@ -258,7 +258,7 @@ function ExpandableDescription({
   }, [text, expanded]);
 
   return (
-    <div className="mx-4">
+    <div className="sm:mx-4">
       <p
         ref={textRef}
         title={title}
@@ -378,13 +378,13 @@ export default function CityProviders({
   }
 
   return (
-    <section className={`py-12 ${className}`}>
-      <div className="mb-7 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+    <section className={`py-8 md:py-12 ${className}`}>
+      <div className="mb-5 flex flex-col gap-3 md:mb-7 md:flex-row md:items-end md:justify-between">
         <div>
           {/* <p className="text-xs font-semibold uppercase tracking-widest text-blue-600 dark:text-blue-400">
             Recently joined professionals
           </p> */}
-          <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-white md:text-3xl">
+          <h2 className="mt-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white md:text-3xl">
             {heading}
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">
@@ -403,7 +403,7 @@ export default function CityProviders({
         </Link>
       </div>
 
-      <div className="grid gap-3 lg:grid-cols-1">
+      <div className="grid gap-3">
         {providers.map((provider) => {
           const serviceSummary = getDisplayedService(provider, serviceSlug);
           const serviceArea = getServiceArea(provider);
@@ -429,24 +429,24 @@ export default function CityProviders({
               key={provider.user_id}
               className="group flex flex-col rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:border-blue-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-700"
             >
-              <div className="grid grid-cols-[64px_minmax(0,1fr)_auto] gap-2">
+              <div className="grid grid-cols-[56px_minmax(0,1fr)] gap-2 sm:grid-cols-[64px_minmax(0,1fr)_auto]">
                 <div>
                   {provider.logo_url || provider.image ? (
                     <img
                       src={provider.logo_url || provider.image || ""}
                       alt={providerName}
-                      className="h-16 w-20 rounded-2xl   object-contain  dark:border-slate-700"
+                      className="h-14 w-14 rounded-xl object-contain dark:border-slate-700 sm:h-16 sm:w-16"
                     />
                   ) : (
-                    <div className="grid h-14 w-14 place-items-center rounded-lg bg-blue-700 text-lg font-bold text-white">
+                    <div className="grid h-14 w-14 place-items-center rounded-lg bg-blue-700 text-lg font-bold text-white sm:h-16 sm:w-16">
                       {getInitials(provider)}
                     </div>
                   )}
                 </div>
 
-                <div className="min-w-0 ">
+                <div className="min-w-0">
                   <div className="flex min-w-0 items-start gap-2">
-                    <h3 className="line-clamp-2  text-base font-bold leading-5 text-slate-950 dark:text-white">
+                    <h3 className="line-clamp-2 text-base font-bold leading-5 text-slate-950 dark:text-white">
                       {providerName}
                     </h3>
                     {(provider.is_pro || provider.is_email_verified) && (
@@ -454,8 +454,8 @@ export default function CityProviders({
                     )}
                   </div>
 
-                  <div className="mt-2 inline-flex  flex-col mx-auto max-w-auto gap-1.5 text-xs text-slate-600 dark:text-slate-300">
-                    <span className="  inline-flex  items-center gap-1.5 rounded-md   py-0.5 font-medium text-slate-700 dark:text-slate-200">
+                  <div className="mt-2 flex min-w-0 flex-col gap-1.5 text-xs text-slate-600 dark:text-slate-300 sm:flex-row sm:flex-wrap sm:items-center">
+                    <span className="inline-flex items-center gap-1.5 rounded-md py-0.5 font-medium text-slate-700 dark:text-slate-200">
                       <MonitorCheck className="h-3.5 w-3.5 text-green-600" />
                       {trustLabel}
                     </span>
@@ -464,7 +464,7 @@ export default function CityProviders({
                       <span className="inline-flex min-w-0 items-center gap-1.5">
                         <MapPin className="h-3.5 w-3.5 shrink-0 text-red-500 dark:text-slate-300" />
                         <span
-                          className="max-w-[280px] truncate"
+                          className="max-w-full truncate sm:max-w-[280px]"
                           title={serviceArea.title}
                         >
                           {serviceArea.isNationwide ? "" : "Serves "}
@@ -477,7 +477,7 @@ export default function CityProviders({
 
                 <Link
                   href={getProfileHref(provider)}
-                  className="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-3 text-xs font-semibold text-white transition hover:bg-blue-700"
+                  className="col-span-2 mt-2 inline-flex h-9 w-full shrink-0 items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-3 text-xs font-semibold text-white transition hover:bg-blue-700 sm:col-span-1 sm:mt-0 sm:w-auto"
                 >
                   View profile
                   <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -487,7 +487,7 @@ export default function CityProviders({
               <div className="mt-3 flex flex-1 flex-col">
                 <ExpandableDescription text={serviceCopy} title={serviceTitle} />
 
-                <div className="mt-3 gap-2 mx-4  inline-flex text-sm font-medium text-slate-700 dark:text-slate-300 sm:grid-cols-2">
+                <div className="mt-3 grid gap-2 text-sm font-medium text-slate-700 dark:text-slate-300 sm:mx-4 sm:grid-cols-2 lg:flex lg:flex-wrap">
                   {serviceSummary.label && (
                     <div className="flex min-w-0 items-center gap-2 rounded-md bg-slate-50 px-2.5 py-1.5 dark:bg-slate-800/70">
                       <Tag className="h-4 w-4 shrink-0 text-blue-600" />
@@ -503,7 +503,7 @@ export default function CityProviders({
                   </div>
 
                   {accreditationTitle && (
-                    <div className=" flex min-w-0 items-center gap-2 rounded-md bg-slate-50 px-2.5 py-1.5 dark:bg-slate-800/70 sm:col-span-2">
+                    <div className="flex min-w-0 items-center gap-2 rounded-md bg-slate-50 px-2.5 py-1.5 dark:bg-slate-800/70 sm:col-span-2">
                       <Landmark className="h-4 w-4 shrink-0 text-blue-600" />
                       <span className="truncate" title={accreditationTitle}>
                         {accreditationTitle}

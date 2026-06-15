@@ -3,8 +3,6 @@
 import { MapPin, Users } from "lucide-react";
 import LocationSearch from "@/components/Location/locationsearch";
 import Image from "next/image";
-import { ServicesBadges } from "./ServicesBagdes";
-import { TrustBadges } from "../TrustBadges";
 
 interface HeroSectionProps {
   service: any;
@@ -120,17 +118,13 @@ export default function ServiceHeroSection({
                 </div>
               </div>
               <div className="z-50">
-              <LocationSearch
-                onSelect={onLocationSelect}
-                presetLocation={presetLocation}
-              />
+                <LocationSearch
+                  onSelect={onLocationSelect}
+                  presetLocation={presetLocation}
+                />
               </div>
-             
             </div>
           </div>
-          {/* <div className="absolute bottom-0 right-0 hidden md:block">
-            <ServicesBadges />
-          </div> */}
         </div>
       </section>
     </section>

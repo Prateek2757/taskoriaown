@@ -5,7 +5,7 @@ import { TrendingUp, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FaArrowRightLong } from "react-icons/fa6";
-
+import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 interface PopularLocationsSectionProps {
@@ -52,24 +52,22 @@ const popularCities: City[] = [
     name: "Melbourne",
     image:
       "https://images.unsplash.com/photo-1609036394821-b63e8168dc64?q=80&w=1548&auto=format&fit=crop",
-        description:
+    description:
       "Find trusted Local Providers in Melbourne and Surrounding areas.",
   },
   {
     name: "Adelaide",
     image:
       "https://images.unsplash.com/photo-1702252212983-db7e428cc3cf?q=80&w=1880&auto=format&fit=crop",
-        description:
+    description:
       "Find trusted Local Providers in Adelaide and Surrounding areas.",
   },
   {
     name: "Perth",
     image:
       "https://images.unsplash.com/photo-1574471101497-d958f6e3ebd4?q=80&w=1548&auto=format&fit=crop",
-        description:
-      "Find trusted Local Providers in Perth and Surrounding areas.",
+    description: "Find trusted Local Providers in Perth and Surrounding areas.",
   },
-   
 ];
 
 export default function PopularLocationsSection({
@@ -160,7 +158,7 @@ export default function PopularLocationsSection({
         <span className="inline-block px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-semibold rounded-full text-sm mb-4">
           POPULAR LOCATIONS
         </span>
-        <h2 className="text-4xl  font-bold text-gray-900 dark:text-white mb-2">
+        <h2 className="text-4xl  font-bold text-[#2563EB] mb-2">
           Find Providers Near You
         </h2>
         <p className="text-xl text-gray-600 dark:text-gray-400">
@@ -168,10 +166,10 @@ export default function PopularLocationsSection({
         </p>
       </div>
 
-      <div className="relative group -mx-14  px-12">
+      <div className="relative group lg:-mx-14  lg:px-12">
         <button
           onClick={handlePrevious}
-          className="absolute -left-2 top-1/2 -translate-y-12 z-10 w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-xl flex items-center justify-center opacity-100 hover:bg-gray-50 dark:hover:bg-slate-700 -translate-x-1/2 border border-gray-200 dark:border-slate-600"
+          className="absolute -left-2 top-1/2  max-lg:hidden -translate-y-12 z-10 w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-xl flex items-center justify-center opacity-100 hover:bg-gray-50 dark:hover:bg-slate-700 -translate-x-1/2 border border-gray-200 dark:border-slate-600"
           aria-label="Previous"
         >
           <ChevronLeft className="w-6 h-6 text-gray-700 dark:text-gray-300" />
@@ -179,7 +177,7 @@ export default function PopularLocationsSection({
 
         <button
           onClick={handleNext}
-          className="absolute right-0 top-1/2 -translate-y-12 z-10 w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-xl flex items-center justify-center opacity-100 transition-opacity hover:bg-gray-50 dark:hover:bg-slate-700 translate-x-1/2 border border-gray-200 dark:border-slate-600"
+          className="absolute max-lg:hidden right-0 top-1/2 -translate-y-12 z-10 w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-xl flex items-center justify-center opacity-100 transition-opacity hover:bg-gray-50 dark:hover:bg-slate-700 translate-x-1/2 border border-gray-200 dark:border-slate-600"
           aria-label="Next"
         >
           <ChevronRight className="w-6 h-6 text-gray-700 dark:text-gray-300" />
@@ -228,7 +226,7 @@ export default function PopularLocationsSection({
                         title="Location Image"
                         fill
                         src={city.image_url || "/location.jpg"}
-                        alt={city.name }
+                        alt={city.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         sizes="(max-width: 640px) 100vw,
                         (max-width: 1024px) 50vw,
@@ -249,7 +247,10 @@ export default function PopularLocationsSection({
                         </p>
 
                         <div className="h-8 w-8 rounded-full bg-[#2563EB] absolute  bottom-0 -translate-y-2  right-2">
-                         <FaArrowRightLong  className="absolute bottom-0 -translate-y-2 right-2" color="white"/>
+                          <FaArrowRightLong
+                            className="absolute bottom-0 -translate-y-2 right-2"
+                            color="white"
+                          />
                         </div>
                       </div>
                     </div>
