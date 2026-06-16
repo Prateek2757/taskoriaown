@@ -36,11 +36,44 @@ import {
 import LocationSearch from "@/components/Location/locationsearch";
 import { toast } from "sonner";
 
+export const isValidABN = (abn: string): boolean => {
+  const cleaned = abn.replace(/\s/g, "");
+
+  if (!/^\d{11}$/.test(cleaned)) {
+    return false;
+  }
+
+  const weights = [10, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+
+  const digits = cleaned.split("").map(Number);
+
+  digits[0] -= 1;
+
+  const total = digits.reduce(
+    (sum, digit, index) => sum + digit * weights[index],
+    0
+  );
+
+  return total % 89 === 0;
+};
+
 const onboardingSchema = z.object({
   is_nationwide: z.boolean(),
   distance: z.string().optional(),
   city_id: z.string().optional(),
   companyName: z.string().optional(),
+  abn: z
+    .string()
+    .optional()
+    .refine(
+      (value) => {
+        if (!value || value.trim() === "") return true;
+        return isValidABN(value);
+      },
+      {
+        message: "Please enter a valid ABN",
+      }
+    ),
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
   phone: z
@@ -100,6 +133,7 @@ function OnboardingContent() {
       name: "",
       email: "",
       companyName: "",
+      abn: "",
       phone: "",
       password: "",
       distance: "10",
@@ -183,7 +217,7 @@ function OnboardingContent() {
     "flex items-center border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 shadow-sm focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition bg-white dark:bg-gray-800/50";
 
   const buttonSelected =
-    "bg-gradient-to-r from-[#2563EB] to-cyan-600 text-white shadow-lg ring-2 ring-blue-300";
+    "bg-[#2563EB] text-white shadow-lg ring-2 ring-blue-300";
 
   const buttonUnselected =
     "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600";
@@ -203,7 +237,7 @@ function OnboardingContent() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800 p-4">
+    <div className="relative min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800 p-4">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-200/40 dark:bg-blue-900/20 rounded-full blur-3xl" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-cyan-200/40 dark:bg-cyan-900/20 rounded-full blur-3xl" />
@@ -281,7 +315,7 @@ function OnboardingContent() {
                           whileTap={{ scale: 0.98 }}
                           className={`relative border-2 rounded-2xl p-6 cursor-pointer shadow-sm transition-all duration-300 ${
                             field.value
-                              ? "border-blue-600 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-700"
+                              ? "border-blue-600 bg-linear-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-700"
                               : "border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500"
                           }`}
                           onClick={() => setValue("is_nationwide", true)}
@@ -311,7 +345,7 @@ function OnboardingContent() {
                           whileTap={{ scale: 0.98 }}
                           className={`relative border-2 rounded-2xl p-6 cursor-pointer shadow-sm transition-all duration-300 ${
                             !field.value
-                              ? "border-cyan-600 bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-gray-800 dark:to-gray-700"
+                              ? "border-cyan-600 bg-linear-to-br from-cyan-50 to-cyan-100 dark:from-gray-800 dark:to-gray-700"
                               : "border-gray-200 dark:border-gray-600 hover:border-cyan-300 dark:hover:border-cyan-500"
                           }`}
                           onClick={() => setValue("is_nationwide", false)}
@@ -343,7 +377,7 @@ function OnboardingContent() {
                                   <FormItem>
                                     <FormControl>
                                       <div className={inputWrapperClasses}>
-                                        <Milestone className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
+                                        <Milestone className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 shrink-0" />
                                         <select
                                           {...field}
                                           className={`${inputClasses} `}
@@ -446,7 +480,7 @@ function OnboardingContent() {
                           </FormLabel>
                           <FormControl>
                             <div className={inputWrapperClasses}>
-                              <User className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
+                              <User className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 shrink-0" />
                               <input
                                 {...field}
                                 placeholder="Full Name"
@@ -459,6 +493,10 @@ function OnboardingContent() {
                       )}
                     />
 
+
+
+
+
                     <FormField
                       control={control}
                       name="email"
@@ -470,7 +508,7 @@ function OnboardingContent() {
                           </FormLabel>
                           <FormControl>
                             <div className={inputWrapperClasses}>
-                              <Mail className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
+                              <Mail className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 shrink-0" />
                               <input
                                 {...field}
                                 type="email"
@@ -485,32 +523,68 @@ function OnboardingContent() {
                     />
                   </div>
 
-                  <FormField
-                    control={control}
-                    name="companyName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="dark:text-gray-200">
-                          Company Name
-                        </FormLabel>
-                        <FormControl>
-                          <div className={inputWrapperClasses}>
-                            <Building2 className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
-                            <input
-                              {...field}
-                              placeholder="Your Company Name"
-                              className={inputClasses}
-                            />
-                          </div>
-                        </FormControl>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
-                          If you aren't a business, leave blank.
-                        </p>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <FormField
+                      control={control}
+                      name="companyName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="dark:text-gray-200">
+                            Business Name
+                          </FormLabel>
+                          <FormControl>
+                            <div className={inputWrapperClasses}>
+                              <Building2 className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 shrink-0" />
+                              <input
+                                {...field}
+                                placeholder="Your Business Name"
+                                className={inputClasses}
+                              />
+                            </div>
+                          </FormControl>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
+                            If you aren't a business, leave blank.
+                          </p>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
+                    <FormField
+                      control={control}
+                      name="abn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="dark:text-gray-200">
+                            Business ABN
+                          </FormLabel>
+                          <FormControl>
+                            <div className={inputWrapperClasses}>
+                              <Building2 className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 shrink-0" />
+                              <input
+                                {...field}
+                                placeholder="Your Business ABN Number"
+                                className={inputClasses}
+                              />
+                            </div>
+                          </FormControl>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
+                            * Don’t know your ABN?{" "}
+                            <a
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              href="https://abr.business.gov.au/"
+                              className="text-[#2563EB] underline"
+                            >
+                              {" "}
+                              Search It here
+                            </a>{" "}
+                          </p>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <div className="grid gap-6 sm:grid-cols-2">
                     <FormField
                       control={control}
@@ -523,7 +597,7 @@ function OnboardingContent() {
                           </FormLabel>
                           <FormControl>
                             <div className={inputWrapperClasses}>
-                              <span className="text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0">
+                              <span className="text-gray-400 dark:text-gray-500 mr-2 shrink-0">
                                 📞
                               </span>
                               <input
@@ -568,7 +642,7 @@ function OnboardingContent() {
                           </FormLabel>
                           <FormControl>
                             <div className={`${inputWrapperClasses} relative`}>
-                              <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
+                              <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 shrink-0" />
                               <input
                                 {...field}
                                 type={showPassword ? "text" : "password"}
@@ -611,7 +685,7 @@ function OnboardingContent() {
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                               onClick={() => setValue("hasWebsite", "yes")}
-                              className={`px-8 py-2 rounded-full font-semibold transition-all shadow-sm ${
+                              className={`px-4 py-2 rounded-xl font-semibold transition-all shadow-sm ${
                                 field.value === "yes"
                                   ? buttonSelected
                                   : buttonUnselected
@@ -627,7 +701,7 @@ function OnboardingContent() {
                                 setValue("hasWebsite", "no");
                                 setValue("websiteUrl", "");
                               }}
-                              className={`px-8 py-2 rounded-full font-semibold transition-all shadow-sm ${
+                              className={`px-4 py-2 rounded-xl font-semibold transition-all shadow-sm ${
                                 field.value === "no"
                                   ? "bg-gray-600 text-white shadow-lg ring-2 ring-gray-400"
                                   : buttonUnselected
@@ -661,7 +735,7 @@ function OnboardingContent() {
                               </FormLabel>
                               <FormControl>
                                 <div className={inputWrapperClasses}>
-                                  <Globe className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 flex-shrink-0" />
+                                  <Globe className="w-5 h-5 text-gray-400 dark:text-gray-500 mr-2 shrink-0" />
                                   <input
                                     {...field}
                                     placeholder="https://example.com"
@@ -717,9 +791,9 @@ function OnboardingContent() {
                         </FormLabel>
                         <FormControl>
                           <div
-                            className={`flex items-center  border-1 shadow-sm rounded-xl px-3 py-2  transition-all duration-200 bg-white dark:bg-gray-800/50 ${referralWrapperBorder[referralStatus]}`}
+                            className={`flex items-center  border shadow-sm rounded-xl px-3 py-2  transition-all duration-200 bg-white dark:bg-gray-800/50 ${referralWrapperBorder[referralStatus]}`}
                           >
-                            <div className="mr-2 flex-shrink-0 transition-all duration-300">
+                            <div className="mr-2 shrink-0 transition-all duration-300">
                               {referralStatusIcon[referralStatus]}
                             </div>
                             <input
@@ -747,7 +821,7 @@ function OnboardingContent() {
                                     validateReferralCode(field.value || "")
                                   }
                                   disabled={referralStatus === "validating"}
-                                  className="ml-2 flex-shrink-0 text-xs font-semibold px-3 py-1 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                                  className="ml-2 shrink-0 text-xs font-semibold px-3 py-1 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
                                 >
                                   {referralStatus === "validating"
                                     ? "Checking..."
@@ -823,7 +897,7 @@ export default function OnboardingPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-cyan-50 dark:from-gray-900 dark:to-gray-800">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400 mx-auto mb-4"></div>
             <p className="text-gray-600 dark:text-gray-300">Loading...</p>

@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
       email,
       phone,
       companyName,
+      abn,
       websiteUrl,
       companySize,
       password,
@@ -99,8 +100,8 @@ export async function POST(req: NextRequest) {
 
     await client.query(
       `
-      INSERT INTO company (user_id, company_name, contact_name, contact_email, contact_phone, website, company_size)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO company (user_id, company_name, contact_name, contact_email, contact_phone, website, company_size,business_abn)
+      VALUES ($1, $2, $3, $4, $5, $6, $7,$8)
       ON CONFLICT (user_id) DO NOTHING
       `,
       [
@@ -111,6 +112,7 @@ export async function POST(req: NextRequest) {
         phone || null,
         websiteUrl || null,
         companySize || null,
+        abn ||null,
       ]
     );
 
