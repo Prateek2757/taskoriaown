@@ -531,7 +531,7 @@ export default function HowItWorksProviders() {
               </p>
               <p>
                 Based on Taskoria platform data (reporting period and sample
-                size to be published), provider earnings vary significantly by{" "}
+                size to be published), provider earnings vary significantly by {" "}
                 <strong className="text-gray-800 dark:text-white font-semibold">
                   service category, location, demand, pricing, and provider
                   activity
