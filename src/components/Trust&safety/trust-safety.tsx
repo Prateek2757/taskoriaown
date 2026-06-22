@@ -90,8 +90,7 @@ const TrustSafety = () => {
               Trust & Safety at Taskoria
             </h1>
             <p className="text-xl text-muted-foreground">
-              Australia's most secure service marketplace. Every provider
-              verified, every payment protected, every job guaranteed.
+         Australia's trusted service marketplace. Verified providers, secure payments, and support every step of the way.
             </p>
           </div>
         </div>

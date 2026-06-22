@@ -73,13 +73,13 @@ export default function AboutUs() {
       icon: Shield,
       title: "Trust First",
       description:
-        "Every provider undergoes rigorous verification including background checks, qualification validation, and identity authentication.",
+        "We use verification measures that may include identity checks and qualification reviews to help build trust between customers and providers",
     },
     {
       icon: Lock,
       title: "Payment Protection",
       description:
-        "Your money stays secure until the job is done right. Our escrow system ensures both parties are protected.",
+        "Payment protection features may be available for eligible services, helping provide added security for both customers and providers.",
     },
     {
       icon: Award,
