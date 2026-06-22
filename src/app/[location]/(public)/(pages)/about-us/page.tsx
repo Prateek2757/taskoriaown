@@ -167,7 +167,7 @@ export default function AboutUs() {
 
         <div className="  relative max-w-6xl mx-auto px-6 py-20 min-h-155 flex items-end">
           <OurStory />
-          <div className="absolute right-6 top-1/2 -translate-y-1/2 z-20 hidden sm:block">
+          <div className="absolute right-6 top-1/2 -translate-y-1/2 z-20 hidden md:block">
             <Image
               src="/images/teamwork.jpeg"
               alt="teamwork"
