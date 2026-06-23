@@ -97,7 +97,7 @@
     "stripe": "^20.3.0",
     "swr": "^2.3.6",
     "tailwind-merge": "^3.2.0",
-    "tar": "^7.5.7",
+    "tar": "^7.5.16",
     "zod": "^3.25.28"
   },
   "devDependencies": {
