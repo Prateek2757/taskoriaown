@@ -27,30 +27,18 @@ import { useRouter } from "next/navigation";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import { join } from "path";
 import { TrustBadges } from "./TrustBadges";
+import {
+  getPriorityCityLinks,
+  getPriorityServiceLinks,
+} from "@/lib/internal-links";
 
 const services = [
-  { href: "/services/house-cleaning", label: "Cleaner" },
-  { href: "/services/removalists", label: "Removalist" },
-  { href: "/services/accounting-taxation", label: "Tax Accountant" },
-  { href: "/services/plumbers", label: "Plumber" },
-  { href: "/services/building-and-construction", label: "Builder" },
-  { href: "/services/photographers", label: "Photographer" },
-
+  ...getPriorityServiceLinks(undefined, 6),
   { href: "/services", label: "More Services" },
-
-  // { href: "/services/photographers", label: "Photographer" },
-  // { href: "/services/carpet-steam-cleaning", label: "Carpet Cleaning" },
-  // { href: "/services/garden-maintenance-weeding", label: "Gardening" },
-  // { href: "/services/painters", label: "Painter" },
 ];
 
 const locations = [
-  { href: "/locations/queensland/brisbane", label: "Brisbane" },
-  { href: "/locations/new-south-wales/sydney", label: "Sydney" },
-  { href: "/locations/victoria/melbourne", label: "Melbourne" },
-  { href: "/locations/western-australia/perth", label: "Perth" },
-  { href: "/locations/south-australia/adelaide", label: "Adelaide" },
-  { href: "/locations/new-south-wales/newcastle", label: "New Castle" },
+  ...getPriorityCityLinks(undefined, 6),
   { href: "/locations", label: "More Locations" },
 ];
 

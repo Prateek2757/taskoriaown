@@ -1,6 +1,14 @@
 // "use client";
 
+import type { Metadata } from "next";
 import ProviderResponsesPage from "@/components/provider-responses/ProviderResponsesPage"
+
+export const metadata: Metadata = {
+  title: { absolute: "Provider Responses | Taskoria" },
+  description:
+    "Review your Taskoria provider responses, lead activity, customer details, and credits spent.",
+  robots: { index: false, follow: false },
+};
 
 // import { useEffect, useState } from "react";
 // import { useSession } from "next-auth/react";

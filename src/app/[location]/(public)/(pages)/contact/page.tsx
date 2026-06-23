@@ -6,7 +6,7 @@ export const dynamic = "force-static";
 const BASE_URL = "https://www.taskoria.com";
 
 export const metadata: Metadata = {
-  title: "Contact Taskoria — Customer Support & Service Help",
+  title: { absolute: "Contact Taskoria — Customer Support & Service Help" },
   description:
     "Contact Taskoria for customer support, provider help, service enquiries, account assistance, payment questions, and local services support across Australia.",
 

@@ -18,6 +18,12 @@ import {
   CategoryWithSubs,
   City,
 } from "@/app/[location]/(public)/(pages)/locations/[...slug]/page";
+import { getCityLabel } from "@/lib/location-labels";
+import InternalLinkModule from "@/components/InternalLinkModule";
+import {
+  getPriorityCityLinks,
+  getRankedCityServiceLinks,
+} from "@/lib/internal-links";
 
 interface Props {
   city: City;
@@ -68,6 +74,20 @@ export default function CityPageClient({
 
   const cityName = city.name;
   const bgImage = Static_State_Image[stateSlug];
+  const modalLocation = {
+    city_id: city.city_id,
+    display_name: city.display_name ?? undefined,
+    city: cityName,
+  };
+  const priorityServiceLinks = getRankedCityServiceLinks(
+    stateSlug,
+    city.slug,
+    categoryTree,
+    8
+  );
+  const priorityCityLinks = getPriorityCityLinks(undefined, 8).filter(
+    (link) => link.href !== `/locations/${stateSlug}/${city.slug}`
+  );
 
   const popularCategories = useMemo(
     () => categoryTree.slice(0, 5),
@@ -113,7 +133,7 @@ export default function CityPageClient({
       <NewRequestModal
         open={openModal}
         onClose={() => setOpenModal(false)}
-        presetLocation={city}
+        presetLocation={modalLocation}
         initialStep={1}
       />
 
@@ -140,7 +160,7 @@ export default function CityPageClient({
         )} */}
         {/* <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/50 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent" /> */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/40 to-transparent" />
         <div className="relative z-10 h-full flex flex-col md:py-20 py-10 justify-center px-6 md:px-16 max-w-7xl mx-auto">
           <nav className="flex items-center gap-2 text-xs text-white/55 mb-6">
             <Link href="/" className="hover:text-white/90 transition-colors">
@@ -179,14 +199,14 @@ export default function CityPageClient({
             <Button
               variant="default"
               onClick={() => setOpenModal(true)}
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full px-7 py-6 text-sm font-semibold shadow-lg shadow-blue-600/30 transition-colors"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-7 py-6 text-sm font-semibold shadow-lg shadow-blue-600/30 transition-colors"
             >
               Post a task in {cityName}
               <ArrowRight className="w-4 h-4" />
             </Button>
             <Link
               href="/services"
-              className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white border border-white/25 rounded-full px-6 py-2 text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white border border-white/25 rounded-xl px-6 py-2 text-sm font-medium transition-colors"
             >
               <Grid3X3 className="w-4 h-4" />
               Browse all services
@@ -223,7 +243,7 @@ export default function CityPageClient({
 
       <div className="max-w-7xl mx-auto px-6 md:px-16">
         <section className="pt-12 pb-4 border-b border-slate-100 dark:border-slate-800">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
+          <h2 className="text-2xl  font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
             Find local professionals in {cityName}
           </h2>
           <div className="grid gap-5 md:grid-cols-3 text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -252,6 +272,22 @@ export default function CityPageClient({
           locationName={cityName}
           className="border-b border-slate-100 dark:border-slate-800"
         />
+{/* 
+        <InternalLinkModule
+          eyebrow="Popular local pages"
+          title={`Priority services and cities for ${cityName}`}
+          description={`Use these controlled links to find common services in ${cityName} or compare other priority city pages.`}
+          groups={[
+            {
+              title: `Priority services in ${cityName}`,
+              links: priorityServiceLinks,
+            },
+            {
+              title: "Priority city pages",
+              links: priorityCityLinks,
+            },
+          ]}
+        /> */}
 
         <section className="pt-14 pb-2">
           <SectionHeader
@@ -322,9 +358,9 @@ export default function CityPageClient({
                 <Link
                   key={sc.city_id}
                   href={`/locations/${stateSlug}/${sc.slug}`}
-                  className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-blue-950/40 text-slate-700 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 rounded-full px-4 py-2 text-sm font-medium transition-colors border border-transparent hover:border-blue-200 dark:hover:border-blue-800"
+                  className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-blue-950/40 text-slate-700 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 rounded-xl px-4 py-2 text-sm font-medium transition-colors border border-transparent hover:border-blue-200 dark:hover:border-blue-800"
                 >
-                  <MapPin className="w-3 h-3 opacity-50" />
+                  <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400 " />
                   {sc.name}
                 </Link>
               ))}
@@ -333,7 +369,7 @@ export default function CityPageClient({
         )}
 
         <section className="pt-14 pb-20">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-10">
+          <h2 className="text-2xl  font-extrabold text-slate-900 dark:text-white mb-10">
             Browse all categories
           </h2>
 
@@ -405,12 +441,12 @@ export default function CityPageClient({
                   ref={(el) => {
                     categoryRefs.current[letter] = el;
                   }}
-                  className="scroll-mt-6 space-y-10"
+                  className="scroll-mt-6 space-y-5"
                 >
                   {alphabetGroups[letter].map((cat) => (
                     <div key={cat.category_id}>
-                      <div className="flex items-center gap-3 mb-5 border-b-2 border-slate-100 dark:border-slate-800 pb-3">
-                        <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">
+                      <div className="flex items-center gap-2 mb-5 border-b-2 border-slate-100 dark:border-slate-800 pb-1">
+                        <h3 className="text-base font-semibold text-slate-900 dark:text-white">
                           {cat.name}
                         </h3>
                         {/* {cat.subcategories.length > 0 && (
@@ -485,7 +521,7 @@ export default function CityPageClient({
           </div>
           <Button
             onClick={() => setOpenModal(true)}
-            className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-400 text-white rounded-2xl px-10 py-5 text-lg font-bold flex-shrink-0"
+            className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-400 text-white rounded-2xl px-10 py-5 text-lg font-bold shrink-0"
           >
             Post a task for free
             <ArrowRight className="w-5 h-5" />
@@ -509,7 +545,7 @@ function SectionHeader({
     <div>
       <div className="flex items-center gap-2 mb-1">
         {icon}
-        <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+        <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           {title}
         </h2>
       </div>
@@ -553,7 +589,7 @@ function CategoryCard({
             style={{ background: `${accent}14` }}
           >
             <span
-              className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-xl font-extrabold"
+              className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-2xl font-extrabold"
               style={{ background: accent }}
             >
               {cat.name[0]}
@@ -589,6 +625,8 @@ function CategoryCard({
 }
 
 function NearbyCity({ city, stateSlug }: { city: City; stateSlug: string }) {
+  const cityName = getCityLabel(city);
+
   return (
     <Link
       href={`/locations/${stateSlug}/${city.slug}`}
@@ -604,9 +642,9 @@ function NearbyCity({ city, stateSlug }: { city: City; stateSlug: string }) {
         </div>
       )} */}
       <div className="px-3 py-2.5 flex items-center gap-1.5">
-        <MapPin className="w-3 h-3 text-slate-400 group-hover:text-blue-500 flex-shrink-0 transition-colors" />
+        <MapPin className="w-4 h-4  text-blue-600 dark:text-blue-400 group-hover:text-blue-500 shrink-0 transition-colors" />
         <span className="text-sm font-medium text-slate-800 dark:text-slate-200 group-hover:text-blue-700 dark:group-hover:text-blue-400 truncate">
-          {city.name}
+          {cityName}
         </span>
       </div>
     </Link>

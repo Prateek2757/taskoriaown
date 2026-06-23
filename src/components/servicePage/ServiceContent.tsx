@@ -15,11 +15,12 @@ export default function ServiceContent({ html }: { html: string }) {
           transition={{ duration: 0.5 }}
           className="
             prose
-            prose-lg
             max-w-none
             prose-headings:font-bold
-            prose-h2:text-3xl
-            prose-h3:text-xl
+            prose-h2:text-2xl
+            md:prose-h2:text-3xl
+            prose-h3:text-lg
+            md:prose-h3:text-xl
             prose-h2:mt-12
             prose-h3:mt-8
             prose-p:text-gray-600

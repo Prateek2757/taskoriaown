@@ -1,18 +1,12 @@
-"use client"
-import  { CreditPurchasePage } from "@/components/payments/CreditTopup";
-import { useSession } from "next-auth/react";
+import type { Metadata } from "next";
+import PageClient from "./page-client";
 
-export default function CreditsPage() {
+export const metadata: Metadata = {
+  title: `My Credits | Taskoria Billing`,
+  description: `Buy and manage Taskoria provider credits used to respond to customer leads.`,
+  robots: { index: false, follow: false },
+};
 
-const {data:session} = useSession()
-
-  return (
-    <div className="px-6 min-h-screen">
-      <CreditPurchasePage
-      professionalId={session?.user.id}  
-      onPurchaseSuccess={() => {
-      }}
-    />
-    </div>
-  );
+export default function Page() {
+  return <PageClient />;
 }

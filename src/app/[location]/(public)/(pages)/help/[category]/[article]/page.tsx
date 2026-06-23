@@ -29,6 +29,7 @@ export async function  generateMetadata({ params }: Props):Promise<Metadata> {
   if (!article) return {};
   return {
     title: `${article.title} | Taskoria Help Center`,
+    description: `Read Taskoria support guidance about ${article.title.toLowerCase()} for customers and service professionals.`,
     alternates: {
       canonical: `https://www.taskoria.com/help/${category}/${articleprop}`,
     },

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import "./globals.css";
 import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
 // import { useEffect, useState } from "react";
 import {
   Home,
@@ -13,6 +14,16 @@ import {
   Compass,
   MessageCircle,
 } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Page Not Found | Taskoria",
+  description:
+    "The Taskoria page you are looking for could not be found. Return home to find local professionals or manage your account.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function NotFound() {
   // const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -35,7 +46,7 @@ export default function NotFound() {
   const quickLinks = [
     { icon: Home, label: "Home", href: "/" },
     { icon: Search, label: "Find Services", href: "/services" },
-    { icon: Map, label: "How It Works", href: "/#how-it-works" },
+    { icon: Map, label: "How It Works", href: "/how-it-works/providers" },
     { icon: MessageCircle, label: "Contact", href: "/contact" },
   ];
 
@@ -261,7 +272,7 @@ export default function NotFound() {
             className="animate-wave"
           />
           <defs>
-            <linearlinear
+            <linearGradient
               id="wave-linear"
               x1="0%"
               y1="0%"
@@ -271,7 +282,7 @@ export default function NotFound() {
               <stop offset="0%" stopColor="rgba(60, 125, 237, 0.1)" />
               <stop offset="50%" stopColor="rgba(99, 102, 241, 0.1)" />
               <stop offset="100%" stopColor="rgba(139, 92, 246, 0.1)" />
-            </linearlinear>
+            </linearGradient>
           </defs>
         </svg>
       </div>

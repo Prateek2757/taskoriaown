@@ -11,12 +11,12 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
   return (
-    <section className="mb-16 pt-3">
+    <section className="mb-16  pt-3">
       <div className="text-center mb-10">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-3">
           Frequently Asked Questions
         </h2>
-        <p className="text-lg text-gray-500 dark:text-gray-400">
+        <p className="text-sm md:text-base text-gray-500 dark:text-gray-400">
           Got questions? We've got answers.
         </p>
       </div>

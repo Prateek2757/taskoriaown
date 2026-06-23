@@ -3,6 +3,11 @@ import { lazy, Suspense } from "react";
 import HeroSection from "@/components/HeroSection/Herosection";
 import Script from "next/script";
 import { BASE_URL, LOGO, OG_IMAGE, SITE_NAME, TWITTER_HANDLE } from "./layout";
+import InternalLinkModule from "@/components/InternalLinkModule";
+import {
+  getPriorityCityLinks,
+  getPriorityServiceLinks,
+} from "@/lib/internal-links";
 
 const HowTaskoriaWorks = lazy(() => import("@/components/how-taskoria-works"));
 // const Categories = lazy(() => import("@/components/Categories"));
@@ -15,8 +20,9 @@ const CTA = lazy(() => import("@/components/CTA"));
 const TestomonailNew = lazy(() => import("@/components/TestomonailNew"));
 
 export const metadata: Metadata = {
-  title:
-    "Connect with Local Experts & Earn Money Easily | Taskoria",
+  title: {
+    absolute: "Connect with Local Experts & Earn Money Easily | Taskoria",
+  },
   description:
     "Find trusted, verified local professionals across Australia. Get free quotes, compare services, and hire with confidence on Taskoria — fast, easy, and reliable.",
 
@@ -257,6 +263,9 @@ const structuredData = {
 };
 
 export default function HomePage() {
+  const serviceLinks = getPriorityServiceLinks(undefined, 8);
+  const cityLinks = getPriorityCityLinks(undefined, 8);
+
   return (
     <>
 
@@ -267,10 +276,6 @@ export default function HomePage() {
       />
 
     
-      <h1 className="sr-only">
-        Hire Verified Local Professionals Across Australia
-      </h1>
-
       <main className="" role="main">
         <section aria-label="Hero — find and hire local professionals">
           <HeroSection />
@@ -281,6 +286,16 @@ export default function HomePage() {
             <PopularServicesSection />
           </section>
         </Suspense>
+
+        {/* <InternalLinkModule
+          title="Popular services and cities"
+          description="Start with Taskoria's priority service and city pages, then narrow your search by service area."
+          groups={[
+            { title: "Priority services", links: serviceLinks },
+            { title: "Priority cities", links: cityLinks },
+          ]}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        /> */}
 
         <Suspense fallback={<div className="min-h-12.5" />}>
           <section aria-label="How Taskoria works — step by step">

@@ -22,7 +22,7 @@ const NavAvatar = memo(function NavAvatar({
   return (
     <div className="relative flex-shrink-0">
       <div
-        className={`${dim} rounded-full flex items-center justify-center
+        className={`${dim} relative rounded-full flex items-center justify-center
           bg-gradient-to-br from-blue-100 to-cyan-100
           dark:from-blue-900 dark:to-cyan-900 overflow-hidden
           ${isPro ? "ring-2 ring-yellow-400" : ""}`}

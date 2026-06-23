@@ -70,6 +70,7 @@ export default function ProfileSettings() {
         company_logo_url: payload.companyLogoUrl,
         about: payload.description,
         company_size: payload.company_size,
+        business_abn:payload.business_abn,
         years_in_business: payload.years_in_business,
         contact_email: payload.contact_email,
         contact_phone: payload.contact_phone,

@@ -3,7 +3,7 @@ import Script from "next/script";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Careers at Taskoria | Build the Future of Local Services",
+  title: { absolute: "Careers at Taskoria | Build the Future of Local Services" },
   description:
     "Explore career opportunities at Taskoria. Join our team and help shape the future of AI-powered service marketplaces.",
   keywords: [

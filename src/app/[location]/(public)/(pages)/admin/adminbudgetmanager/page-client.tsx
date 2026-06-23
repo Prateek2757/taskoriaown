@@ -1,0 +1,585 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Loader2,
+  DollarSign,
+  Calendar,
+  MapPin,
+  User,
+  CheckCircle,
+  Search,
+  Filter,
+  Eye,
+  Mail,
+  Phone,
+  CalendarRange,
+  Clock,
+  MessageSquare,
+  HelpCircle,
+  Wallet,
+  Send,
+  FileQuestionIcon,
+  LucideMessageCircleQuestion,
+  Forward,
+} from "lucide-react";
+import { Label } from "@/components/ui/label";
+import PageSkeleton from "@/components/skeleton/PageSkeleton";
+import { AdminBreadcrumb } from "../components/Adminbreadcrumb";
+import { useTasksWithoutBudget } from "@/hooks/Admin/useTasksWithoutBudget";
+import { updateTaskBudget } from "@/services/admin-tasks";
+
+interface Task {
+  task_id: number;
+  title: string;
+  category_name: string;
+  customer_name: string;
+  customer_email: string;
+  phone: string;
+  location_name: string;
+  queries: string;
+  preferred_date_start: string;
+  preferred_date_end: string;
+  created_at: string;
+  estimated_budget: number | null;
+  answers: Array<{
+    question: string;
+    answer: string;
+  }>;
+}
+
+export default function AdminBudgetManager() {
+  const item_per_page = 5;
+
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [tasks, setTasks] = useState<Task[]>([]);
+  // const [loading, setLoading] = useState(true);
+  const [processing, setProcessing] = useState<number | null>(null);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [budgetValues, setBudgetValues] = useState<{ [key: number]: string }>(
+    {}
+  );
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+
+  const { tasks, loading, refresh } = useTasksWithoutBudget();
+
+  const handleBudgetChange = (taskId: number, value: string) => {
+    const cleanValue = value.replace(/[^0-9]/g, "");
+    setBudgetValues((prev) => ({
+      ...prev,
+      [taskId]: cleanValue,
+    }));
+  };
+
+  const handleSetBudget = async (taskId: number) => {
+    const budgetAmount = budgetValues[taskId];
+
+    if (!budgetAmount || Number(budgetAmount) <= 0) {
+      toast.error("Please enter a valid budget amount");
+      return;
+    }
+
+    setProcessing(taskId);
+    try {
+      const response = await updateTaskBudget(taskId, Number(budgetAmount));
+
+      if (response.success) {
+        toast.success(
+          "Budget set successfully! Task is now visible to professionals."
+        );
+
+        setBudgetValues((prev) => {
+          const newValues = { ...prev };
+          delete newValues[taskId];
+          return newValues;
+        });
+
+        setSelectedTask(null);
+        setShowDetailsModal(false);
+
+        refresh();
+      }
+    } catch (error) {
+      console.error("Error setting budget:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to set budget");
+    } finally {
+      setProcessing(null);
+    }
+  };
+
+  const openDetailsModal = (task: Task) => {
+    setSelectedTask(task);
+    setShowDetailsModal(true);
+  };
+
+  const filteredTasks = tasks.filter((task: Task) => {
+    const matchesSearch =
+      task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.category_name.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesCategory =
+      filterCategory === "all" || task.category_name === filterCategory;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  const totalPages = Math.ceil(filteredTasks.length / item_per_page);
+
+  const paginatedTasks = filteredTasks.slice(
+    (currentPage - 1) * item_per_page,
+    currentPage * item_per_page
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterCategory]);
+
+  const categories = ["all", ...new Set(tasks.map((t) => t.category_name))];
+
+  // const formatAnswerValue = (dateString: string) => {
+  //   return new Date(dateString).toLocaleDateString("en-AU", {
+  //     day: "2-digit",
+  //     month: "short",
+  //     year: "numeric",
+  //   });
+  // };
+
+  const formatAnswerValue = (value?: string) => {
+    if (!value) return "Not answered yet";
+
+    const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/;
+
+    if (isoDateRegex.test(value)) {
+      return value.split("T")[0]; // YYYY-MM-DD
+    }
+
+    return value;
+  };
+
+  if (loading) {
+    return (
+      <>
+        <PageSkeleton />
+      </>
+    );
+  }
+
+  return (
+    <div className="container space-y-6 mx-auto p-6 max-w-7xl">
+      <AdminBreadcrumb />
+      <div className="">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          Tasks Without Budget
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          Review and set estimated budgets for customer requests
+        </p>
+      </div>
+
+      <div className="mb-6 flex col sm:row gap-4">
+        <div className="1 relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <Input
+            placeholder="Search by title, customer, or category..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+
+        <div className="sm:w-64 relative">
+          <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <select
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+          >
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat === "all" ? "All Categories" : cat}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <Card className="py-2">
+          <CardContent className="">
+            <div className="text-center">
+              <p className="text-3xl font-bold text-blue-600">{tasks.length}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Total Pending
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="py-2">
+          <CardContent className="">
+            <div className="text-center">
+              <p className="text-3xl font-bold text-green-600">
+                {filteredTasks.length}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Filtered Results
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="py-2">
+          <CardContent className="">
+            <div className="text-center">
+              <p className="text-3xl font-bold text-purple-600">
+                {categories.length - 1}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Categories
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {filteredTasks.length === 0 ? (
+        <Card>
+          <CardContent className="flex col items-center justify-center py-6">
+            <DollarSign className="w-16 h-16 text-gray-300 mb-4" />
+            <p className="text-gray-600 dark:text-gray-400 text-center">
+              {searchTerm || filterCategory !== "all"
+                ? "No tasks match your filters"
+                : "No tasks without budget found"}
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid grid-cols-1 gap-4">
+          {paginatedTasks.map((task: Task) => (
+            <Card
+              key={task.task_id}
+              className="hover:shadow-lg transition-shadow"
+            >
+              <CardContent className="px-6 ">
+                <div className="flex col lg:row gap-6">
+                  <div className="1">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        {/* <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                          {task.title}
+                        </h3> */}
+                        <Badge className="bg-blue-100 text-md text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                          {task.category_name}
+                        </Badge>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                        <User className="w-4 h-4 shrink-0" />
+                        <div>
+                          <p className="font-medium text-gray-900 dark:text-white">
+                            {task.customer_name}
+                          </p>
+                          <p className="text-sm">{task.customer_email}</p>
+                          {task.phone && (
+                            <p className="text-sm">{task.phone}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                        <MapPin className="w-4 h-4 shrink-0" />
+                        <span>{task.location_name}</span>
+                      </div>
+
+                      <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                        <Calendar className="w-4 h-4 shrink-0" />
+                        <span className="text-sm">
+                          {formatAnswerValue(task.preferred_date_start)} -{" "}
+                          {formatAnswerValue(task.preferred_date_end)}
+                        </span>
+                      </div>
+
+                      <div className="text-gray-600 dark:text-gray-400 text-sm">
+                        Posted: {formatAnswerValue(task.created_at)}
+                      </div>
+                    </div>
+
+                    {task.queries && (
+                      <div className="mb-4">
+                        <Label className="text-sm font-semibold mb-1 block">
+                          Customer Queries:
+                        </Label>
+                        <p className="text-gray-700 dark:text-gray-300 text-sm bg-gray-50 dark:bg-slate-800 p-3 rounded-lg line-clamp-3">
+                          {task.queries}
+                        </p>
+                      </div>
+                    )}
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => openDetailsModal(task)}
+                      className="mt-2"
+                    >
+                      <Eye className="w-4 h-4 " />
+                      View Full Details
+                    </Button>
+                  </div>
+
+                  <div className="lg:w-80 border-t lg:border-t-0 lg:border-l pt-6 lg:pt-0 lg:pl-6">
+                    <div className="bg-linear-to-br from-blue-50 to-blue-50 dark:from-slate-800 dark:to-slate-700 p-4 rounded-lg">
+                      <Label className="text-sm font-semibold mb-3 block">
+                        Set Estimated Budget
+                      </Label>
+
+                      <div className="relative mb-3">
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
+                          A$
+                        </span>
+                        <Input
+                          type="text"
+                          placeholder="Enter amount"
+                          value={budgetValues[task.task_id] || ""}
+                          onChange={(e) =>
+                            handleBudgetChange(task.task_id, e.target.value)
+                          }
+                          className="pl-10"
+                          disabled={processing === task.task_id}
+                        />
+                      </div>
+
+                      <Button
+                        onClick={() => handleSetBudget(task.task_id)}
+                        disabled={
+                          processing === task.task_id ||
+                          !budgetValues[task.task_id]
+                        }
+                        className="w-full bg-linear-to-r from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] text-white font-semibold"
+                      >
+                        {processing === task.task_id ? (
+                          <>
+                            <Loader2 className="animate-spin w-4 h-4 " />
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircle className="w-4 h-4 " />
+                            Set Budget & Publish
+                          </>
+                        )}
+                      </Button>
+
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-3 text-center">
+                        This will make the task visible to professionals
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between mt-6">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Page {currentPage} of {totalPages}
+              </p>
+
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((p) => p - 1)}
+                >
+                  Previous
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage((p) => p + 1)}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      <Dialog open={showDetailsModal} onOpenChange={setShowDetailsModal}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold flex items-center gap-2">
+              <Eye className="w-5 h-5 text-blue-600" />
+              {selectedTask?.title}
+            </DialogTitle>
+          </DialogHeader>
+
+          {selectedTask && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 gap-5">
+                <div className="space-y-1">
+                  <Label className="flex items-center gap-2 text-sm font-semibold">
+                    <User className="w-4 h-4 text-gray-500" />
+                    Customer
+                  </Label>
+                  <p className="font-medium">{selectedTask.customer_name}</p>
+
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <Mail className="w-4 h-4" />
+                    {selectedTask.customer_email}
+                  </div>
+
+                  {selectedTask.phone && (
+                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                      <Phone className="w-4 h-4" />
+                      {selectedTask.phone}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-1">
+                  <Label className="flex items-center gap-2 text-sm font-semibold">
+                    <MapPin className="w-4 h-4 text-gray-500" />
+                    Location
+                  </Label>
+                  <p className="font-medium">{selectedTask.location_name}</p>
+                </div>
+
+                <div>
+                  <Label className="flex items-center gap-2 text-sm font-semibold">
+                    <CalendarRange className="w-4 h-4 text-gray-500" />
+                    Preferred Dates
+                  </Label>
+                  <p>
+                    {formatAnswerValue(selectedTask.preferred_date_start)} –{" "}
+                    {formatAnswerValue(selectedTask.preferred_date_end)}
+                  </p>
+                </div>
+
+                <div>
+                  <Label className="flex items-center gap-2 text-sm font-semibold">
+                    <Clock className="w-4 h-4 text-gray-500" />
+                    Posted Date
+                  </Label>
+                  <p>{formatAnswerValue(selectedTask.created_at)}</p>
+                </div>
+              </div>
+
+              {selectedTask.queries && (
+                <div>
+                  <Label className="flex items-center gap-2 text-sm font-semibold mb-2">
+                    <MessageSquare className="w-4 h-4 text-blue-500" />
+                    Customer Query
+                  </Label>
+                  <div className="bg-gray-50 dark:bg-slate-800 p-4 rounded-lg text-sm whitespace-pre-wrap">
+                    {selectedTask.queries}
+                  </div>
+                </div>
+              )}
+
+              {selectedTask.answers?.length > 0 && (
+                <div>
+                  <Label className="flex items-center gap-2 text-sm font-semibold mb-3">
+                    <HelpCircle className="w-4 h-4 text-purple-500" />
+                    Question Answers
+                  </Label>
+
+                  <div className="space-y-3 max-h-64 overflow-y-auto">
+                    {selectedTask.answers.map((qa, index) => (
+                      <div
+                        key={index}
+                        className="bg-gray-50 dark:bg-slate-800 p-2 rounded-lg"
+                      >
+                        <p className=" flex font-medium gap-1 mb-1">
+                          {" "}
+                          <LucideMessageCircleQuestion
+                            className=""
+                            width={20}
+                          />
+                          <span>{qa.question}</span>{" "}
+                        </p>
+                        <p className="text-sm flex gap-1 text-gray-700 dark:text-gray-300">
+                          <Forward width={20} />
+                          <span>{formatAnswerValue(qa.answer)}</span>
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="border-t pt-6">
+                <Label className="flex items-center gap-2 text-sm font-semibold mb-3">
+                  <Wallet className="w-4 h-4 text-green-600" />
+                  Set Estimated Budget
+                </Label>
+
+                <div className="flex gap-3">
+                  <div className="relative 1">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 font-medium text-gray-500">
+                      A$
+                    </span>
+                    <Input
+                      type="text"
+                      placeholder="Enter budget amount"
+                      value={budgetValues[selectedTask.task_id] || ""}
+                      onChange={(e) =>
+                        handleBudgetChange(selectedTask.task_id, e.target.value)
+                      }
+                      className="pl-10"
+                      disabled={processing === selectedTask.task_id}
+                    />
+                  </div>
+
+                  <Button
+                    onClick={() => handleSetBudget(selectedTask.task_id)}
+                    disabled={
+                      processing === selectedTask.task_id ||
+                      !budgetValues[selectedTask.task_id]
+                    }
+                    className="bg-linear-to-r from-[#2563EB] via-[#A6B4FA] to-[#46CBEE] text-white font-semibold px-6"
+                  >
+                    {processing === selectedTask.task_id ? (
+                      <>
+                        <Loader2 className="w-4 h-4  animate-spin" />
+                        Processing
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4 " />
+                        Set & Publish
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                  Once published, this task becomes visible to relevant
+                  professionals.
+                </p>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

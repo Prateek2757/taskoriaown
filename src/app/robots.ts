@@ -1,22 +1,26 @@
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from "next";
+import { BASE_URL } from "@/lib/sitemap-helpers";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://www.taskoria.com'
-
   return {
     rules: [
       {
-        userAgent: '*',
-        allow: '/',
+        userAgent: "*",
+        allow: "/",
         disallow: [
-          '/*?*utm_*',       
-          '/*?callbackUrl=*', 
-          '/404',            
-          '/500',
+          "/*?*utm_*",
+          "/*?*callbackUrl=*",
+          "/*?*ref=*",
+          "/*?*user_id=*",
+          "/*?*cn=*",
+          "/*?*q=*",
+          "/*?*gclid=*",
+          "/*?*fbclid=*",
+          "/404",
+          "/500",
         ],
       },
-    
     ],
-    sitemap: [`${baseUrl}/sitemap.xml`],
-  }
+    sitemap: [`${BASE_URL}/sitemap.xml`],
+  };
 }

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import CostGuides from "@/components/cost-guide/CostGuide";
 
 export const metadata: Metadata = {
-  title: "Cost Guides | Taskoria",
+  title: { absolute: "Cost Guides | Taskoria" },
   description:
     "Browse Taskoria cost guides to compare common service prices and plan your next job with confidence.",
   alternates: {

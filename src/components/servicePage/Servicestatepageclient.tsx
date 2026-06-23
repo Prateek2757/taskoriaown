@@ -69,6 +69,12 @@ interface Props {
 }
 
 const INITIAL_CITY_LIMIT = 40;
+const LOCAL_SERVICE_POINTS = [
+  "Residential jobs",
+  "Business jobs",
+  "One-off projects",
+  "Recurring work",
+];
 
 const BENEFITS = [
   {
@@ -84,7 +90,7 @@ const BENEFITS = [
   {
     icon: <MapPin className="w-5 h-5 text-blue-600" />,
     title: "Local to you",
-    desc: `Providers are based in ${""} and know the area well.`,
+    desc: "Providers are based nearby and know the area well.",
   },
   {
     icon: <ArrowRight className="w-5 h-5 text-blue-600" />,
@@ -121,6 +127,20 @@ export default function ServiceStatePageClient({
   }, [filteredCities, showAllCities, deferredCitySearch]);
 
   const serviceSlug = service.slug ?? "";
+  const serviceNameLower = service.name.toLowerCase();
+  const topCityNames = cities
+    .slice(0, 6)
+    .map((city) => city.name)
+    .filter(Boolean);
+  const topCitiesText =
+    topCityNames.length > 1
+      ? `${topCityNames.slice(0, -1).join(", ")} and ${topCityNames.at(-1)}`
+      : topCityNames[0] ?? stateName;
+  const serviceDescription =
+    service.description?.trim() &&
+    !/across Australia/i.test(service.description.trim())
+      ? service.description.trim()
+      : `Find trusted ${serviceNameLower} professionals across ${stateName}. Compare local providers, request free quotes and choose the right pro for your job.`;
 
   return (
     <main className="min-h-screen bg-white dark:bg-slate-950">
@@ -183,9 +203,7 @@ export default function ServiceStatePageClient({
               </h1>
 
               <p className="text-white/70 text-base md:text-lg leading-relaxed mb-8 max-w-lg">
-                {service.description
-                  ? service.description.slice(0, 150)
-                  : `Compare verified ${service.name.toLowerCase()} professionals across ${stateName}. Get free quotes, read real reviews and book with confidence.`}
+                {serviceDescription}
               </p>
 
               <div className="flex flex-wrap gap-3">
@@ -209,7 +227,7 @@ export default function ServiceStatePageClient({
               {[
                 { value: `${cities.length}`, label: "Cities" },
                 { value: "Free", label: "Quotes" },
-                { value: "97%", label: "Satisfaction" },
+                { value: "Local", label: "Providers" },
               ].map((s) => (
                 <div
                   key={s.label}
@@ -235,7 +253,7 @@ export default function ServiceStatePageClient({
             },
             { value: "Verified", label: "providers only" },
             { value: "Free quotes", label: "always" },
-            { value: "< 2 hrs", label: "average response" },
+            { value: "Local pages", label: "by city" },
           ].map((s) => (
             <div key={s.label} className="flex items-center gap-2">
               <span className="font-bold">{s.value}</span>
@@ -249,13 +267,11 @@ export default function ServiceStatePageClient({
         <section className="py-6">
           {stateSlug && (
             <ServiceBreadcrumb
-              service={service}
+              service={{ name: service.name, slug: serviceSlug }}
               stateSlug={stateSlug}
-              //   citySlug={citySlug}
-              //   subCitySlug={subCitySlug}
-              //   stateName={stateName}
-              //   cityName={cityName}
-              //   subCityName={subCityName}
+              citySlug={null}
+              subCitySlug={null}
+              stateName={stateName}
             />
           )}
           <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
@@ -340,6 +356,83 @@ export default function ServiceStatePageClient({
           )}
         </section>
 
+        <section className="py-12 border-t border-slate-100 dark:border-slate-800">
+          <div className="max-w-4xl">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight">
+              Compare {service.name} in {stateName}
+            </h2>
+            <div className="space-y-4 text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p>
+                Taskoria helps you find {serviceNameLower} in {stateName}{" "}
+                without calling around one by one. Tell us what you need, then
+                compare quotes, profiles and reviews from available local
+                providers.
+              </p>
+              <p>
+                You can browse {serviceNameLower} providers across{" "}
+                {topCitiesText}, or choose your city below to view a more
+                specific local page.
+              </p>
+            </div>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {LOCAL_SERVICE_POINTS.map((point) => (
+                <div
+                  key={point}
+                  className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4"
+                >
+                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
+                    {point}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">
+                    Request {serviceNameLower} quotes in {stateName} for{" "}
+                    {point.toLowerCase()}.
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-12 border-t border-slate-100 dark:border-slate-800">
+          <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight">
+                What to include in your {service.name} request
+              </h2>
+              <div className="space-y-4 text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p>
+                  Add the property type, preferred timing, access details and
+                  any important requirements so {stateName} providers can quote
+                  accurately.
+                </p>
+                <p>
+                  For larger jobs, include photos or measurements where helpful.
+                  Clear details make it easier to compare prices, availability
+                  and the scope each professional has included.
+                </p>
+              </div>
+            </div>
+            <div className="border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-6">
+              <h3 className="font-semibold text-slate-900 dark:text-white">
+                Popular {service.name.toLowerCase()} searches in {stateName}
+              </h3>
+              <ul className="mt-4 space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                <li>{service.name} near me in {stateName}</li>
+                <li>
+                  Best {service.name.toLowerCase()} providers in {stateName}
+                </li>
+                <li>
+                  Affordable {service.name.toLowerCase()} quotes in {stateName}
+                </li>
+                <li>
+                  Local {service.name.toLowerCase()} professionals in{" "}
+                  {topCitiesText}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
         <CityProviders
           serviceSlug={serviceSlug}
           serviceName={service.name}
@@ -406,7 +499,9 @@ export default function ServiceStatePageClient({
                     {b.title}
                   </h3>
                   <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                    {b.desc.replace("in .", `in ${stateName}.`)}
+                    {b.title === "Local to you"
+                      ? `Providers are based in ${stateName} and know the area well.`
+                      : b.desc}
                   </p>
                 </div>
               </div>
@@ -414,14 +509,13 @@ export default function ServiceStatePageClient({
           </div>
         </section>
 
-        {/* ══════ ABOUT SECTION (from DB) ══════════════════════════════════ */}
         {service.about && (
           <section className="py-14 border-t border-slate-100 dark:border-slate-800">
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-8 tracking-tight">
               About {service.name} in {stateName}
             </h2>
             <div
-              className="prose prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-900 p-6 md:p-8 border border-slate-100 dark:border-slate-800"
+              className="prose dark:prose-invert max-w-none bg-white dark:bg-slate-900 p-6 md:p-8 border border-slate-100 dark:border-slate-800 prose-h2:text-2xl md:prose-h2:text-3xl prose-h3:text-lg md:prose-h3:text-xl"
               dangerouslySetInnerHTML={{
                 __html: normalizeServiceHtml(service.about),
               }}

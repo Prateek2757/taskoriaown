@@ -129,7 +129,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
 
   if (!provider) {
     return {
-      title: "Provider Not Found — Taskoria",
+      title: { absolute: "Provider Not Found — Taskoria" },
       robots: { index: false, follow: false },
     };
   }
@@ -147,7 +147,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
   `Hire ${provider.name} on Taskoria for ${primaryService} services. View ratings, reviews, availability, and service areas.`;
 
   return {
-    title,
+    title: { absolute: title },
     description,
 
     robots: complete

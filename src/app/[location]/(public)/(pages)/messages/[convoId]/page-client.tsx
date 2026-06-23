@@ -1,0 +1,335 @@
+"use client";
+
+import { useEffect, useState, useCallback, useRef, use, useMemo } from "react";
+import { useSession } from "next-auth/react";
+import { motion, AnimatePresence } from "motion/react";
+import { MessageCircle, ArrowLeft } from "lucide-react";
+import ChatSidebar from "@/components/chat/ChatSidebar";
+import ChatWindow from "@/components/chat/chatWindow";
+import { Button } from "@/components/ui/button";
+import { supabaseBrowser } from "@/lib/supabase-server";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
+interface Participant {
+  user_id: string;
+  name: string;
+  profile_image?: string;
+}
+
+interface Conversation {
+  id: string;
+  task_id: string;
+  task_title: string;
+  participants: Participant[];
+  last_message?: string;
+  last_message_sender?: string;
+  unread_count?: number;
+  last_message_at?: string;
+}
+
+function softNavigate(path: string) {
+  window.history.replaceState(null, "", path);
+}
+
+export default function ChatPageInline({
+  params,
+}: {
+  params: Promise<{ convoId: string }>;
+}) {
+  const paramsWrapped = use(params);
+  const routeConvoId = paramsWrapped?.convoId || null;
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [endpoint, setEndpoint] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const hasFetched = useRef(false);
+  const didInitialSelect = useRef(false);
+  const sidebarChannelsRef = useRef<any[]>([]);
+  const activeConvoIdRef = useRef<string | null>(null);
+  const conversationsRef = useRef<Conversation[]>([]);
+
+  const routeConvoIdRef = useRef<string | null>(routeConvoId);
+  useEffect(() => { routeConvoIdRef.current = routeConvoId; }, [routeConvoId]);
+
+  useEffect(() => { activeConvoIdRef.current = activeConversationId; }, [activeConversationId]);
+  useEffect(() => { conversationsRef.current = conversations; }, [conversations]);
+
+  const activeConversation = useMemo(
+    () => conversations.find((c) => c.id === activeConversationId) ?? null,
+    [conversations, activeConversationId]
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 640px)");
+    const check = () => setIsMobile(mq.matches);
+    check();
+    mq.addEventListener("change", check);
+    return () => mq.removeEventListener("change", check);
+  }, []);
+
+  useEffect(() => {
+    const storedView = localStorage.getItem("viewMode");
+    if (storedView === "customer" || storedView === "provider") {
+      setEndpoint(
+        storedView === "customer"
+          ? "/api/messages/customerconversation"
+          : "/api/messages/myconversations"
+      );
+    }
+  }, []);
+
+  const fetchConversations = useCallback(async (ep: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(ep, { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to fetch conversations");
+      const data = await res.json();
+      const convos: Conversation[] = data.conversations || [];
+      hasFetched.current = true;
+
+      if (convos.length > 0 && !didInitialSelect.current) {
+        const rid = routeConvoIdRef.current;
+        const target = rid ? convos.find((c) => String(c.id) === String(rid)) : null;
+        const selected = target ?? convos[0];
+
+        setActiveConversationId(selected.id);
+
+        if (!target) {
+          softNavigate(`/messages/${selected.id}`);
+        }
+        didInitialSelect.current = true;
+      }
+
+      setConversations(convos);
+    } catch (err: any) {
+      setError(err?.message || "Failed to load conversations");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const prevEndpointRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!endpoint) return;
+    if (prevEndpointRef.current === endpoint && hasFetched.current) return;
+    prevEndpointRef.current = endpoint;
+    hasFetched.current = false;
+    didInitialSelect.current = false;
+    fetchConversations(endpoint);
+  }, [endpoint, fetchConversations]);
+
+
+  const stableConversationIdsKey = useMemo(
+    () =>
+      conversations
+        .map((c) => c.id)
+        .slice()
+        .sort()
+        .join(","),
+    [conversations]
+  );
+
+  useEffect(() => {
+    if (!stableConversationIdsKey || !session?.user?.id) return;
+
+    sidebarChannelsRef.current.forEach((ch) => supabaseBrowser.removeChannel(ch));
+    sidebarChannelsRef.current = [];
+
+    const sessionUserId = session.user.id;
+    let active = true;
+
+    conversationsRef.current.forEach((convo) => {
+      const channel = supabaseBrowser.channel(`sidebar:${convo.id}`, {
+        config: { broadcast: { self: true, ack: true } },
+      });
+
+      channel.on("broadcast", { event: "message" }, (payload) => {
+        if (!active) return;
+        const msg = payload.payload?.message;
+        if (!msg?.id) return;
+
+        const isMyMessage = String(msg.user_id) === String(sessionUserId);
+        const isActiveConvo = activeConvoIdRef.current === msg.conversation_id;
+        const senderName = isMyMessage
+          ? "You"
+          : convo.participants.find((p) => String(p.user_id) === String(msg.user_id))?.name ??
+            "Unknown";
+
+        setConversations((prev) => {
+          let changed = false;
+          const updated = prev.map((c) => {
+            if (c.id !== msg.conversation_id) return c;
+            changed = true;
+            return {
+              ...c,
+              last_message: msg.content,
+              last_message_sender: senderName,
+              last_message_at: msg.created_at,
+              unread_count:
+                isMyMessage || isActiveConvo ? 0 : (c.unread_count || 0) + 1,
+            };
+          });
+
+          if (!changed) return prev; 
+
+          return [...updated].sort((a, b) => {
+            const tA = a.last_message_at ? new Date(a.last_message_at).getTime() : 0;
+            const tB = b.last_message_at ? new Date(b.last_message_at).getTime() : 0;
+            return tB - tA;
+          });
+        });
+      });
+
+      channel.subscribe();
+      sidebarChannelsRef.current.push(channel);
+    });
+
+    return () => {
+      active = false;
+      sidebarChannelsRef.current.forEach((ch) => supabaseBrowser.removeChannel(ch));
+      sidebarChannelsRef.current = [];
+    };
+  }, [stableConversationIdsKey, session?.user?.id]);
+
+  const handleSelectConversation = useCallback((conversation: Conversation) => {
+    if (activeConvoIdRef.current === conversation.id) return; // already active
+
+    setActiveConversationId(conversation.id);
+    setConversations((prev) =>
+      prev.map((c) => (c.id === conversation.id ? { ...c, unread_count: 0 } : c))
+    );
+
+    softNavigate(`/messages/${conversation.id}`);
+
+    axios
+      .get(`/api/messages/conversation-read/${conversation.id}`)
+      .catch((err) => console.error("Failed to mark as read:", err));
+
+    if (window.matchMedia("(max-width: 640px)").matches) {
+      setSidebarOpen(false);
+    }
+  }, []);
+
+  const other = activeConversation?.participants?.[0] ?? null;
+  const otherName = other?.name;
+  const otherId = other?.user_id;
+  const otherProfileImage = other?.profile_image;
+  const conversationTitle = activeConversation?.task_title || "Conversation";
+
+  if (!session?.user) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-linear-to-br from-gray-100 via-white to-gray-50 dark:from-[#0a0a0f] dark:via-[#0f1117] dark:to-[#11131a]" />
+    );
+  }
+
+  return (
+    <div className="relative flex h-screen overflow-hidden bg-linear-to-br from-gray-50 via-white to-gray-100 dark:from-[#050507] dark:via-[#0b0c10] dark:to-[#11131a] text-gray-800 dark:text-gray-200">
+      <AnimatePresence>
+        {(sidebarOpen || !isMobile) && (
+          <motion.div
+            key="sidebar"
+            initial={{ x: -280, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -280, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="absolute sm:relative w-full sm:w-80 h-full z-10 bg-white dark:bg-[#0f1015] border-r border-gray-200 dark:border-[#1d1f27] shadow-md dark:shadow-lg"
+          >
+            <ChatSidebar
+              conversations={conversations}
+              activeConversationId={activeConversationId}
+              onSelectConversation={handleSelectConversation}
+              sessionUserId={session.user.id}
+              sessionUserName={session.user.name}
+              sidebarOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="flex-1 flex flex-col relative overflow-hidden">
+        {activeConversation && isMobile && (
+          <div className="sm:hidden p-3 flex items-center gap-3 bg-white/80 dark:bg-[#12131a]/80 border-b border-gray-200 dark:border-[#1d1f27] backdrop-blur-md shadow-sm">
+            <Button
+              onClick={() => setSidebarOpen(true)}
+              variant="outline"
+              className="text-black dark:text-[#78aaff] border-none flex items-center gap-1"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span className="text-sm font-medium">Back</span>
+            </Button>
+            <div className="flex-1 text-center font-semibold truncate dark:text-gray-200">
+              {conversationTitle}
+            </div>
+          </div>
+        )}
+
+        <AnimatePresence mode="wait">
+          {loading ? (
+            <motion.div
+              key="loading"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center justify-center flex-1 text-gray-500 dark:text-gray-400"
+            >
+              <div className="animate-spin border-4 border-[#6C63FF]/20 border-t-[#6C63FF] rounded-full w-10 h-10 mb-3" />
+              <p>Loading conversations...</p>
+            </motion.div>
+          ) : error ? (
+            <motion.div
+              key="error"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center justify-center flex-1 text-red-500 dark:text-red-400"
+            >
+              <p className="text-lg font-medium">{error}</p>
+            </motion.div>
+          ) : activeConversation ? (
+            <motion.div
+              key={activeConversation.id}
+              initial={{ opacity: 0, x: 18 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="flex-1 overflow-hidden flex bg-white dark:bg-[#0e0f14]"
+            >
+              <ChatWindow
+                otherName={otherName}
+                otherProfileImage={otherProfileImage}
+                OtherUserId={String(otherId)}
+                conversationTitle={conversationTitle}
+                conversationId={activeConversation.id}
+                me={{ id: session.user.id }}
+                taskId={Number(activeConversation.task_id)}
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center justify-center flex-1 text-gray-500 dark:text-gray-400"
+            >
+              <MessageCircle className="w-12 h-12 mb-4 text-[#6C63FF] dark:text-[#7da2ff]" />
+              <p className="text-lg font-medium">Select a conversation</p>
+              <p className="text-sm mt-1">Start chatting with your clients</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}

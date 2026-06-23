@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Zap, Menu as MenuIcon, X, User, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { signOut, useSession } from "next-auth/react";
+import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 
 type ViewMode = "customer" | "provider" | null;
 
@@ -14,6 +15,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session, status } = useSession();
+  const { joinAsProvider } = useJoinAsProvider();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -67,31 +69,7 @@ export default function Navbar() {
     }
   }, [session]);
 
-  const handleJoinAsProvider = async () => {
-    try {
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("draftProviderId");
-      }
-
-      const res = await fetch("/api/signup/draft", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ role: "provider" }),
-      });
-
-      const data = await res.json();
-      console.log(data?.user?.public_id);
-
-      if (data?.user?.user_id || data?.user?.public_id) {
-        localStorage.setItem("draftProviderId", data.user.user_id);
-        localStorage.setItem("draftProviderPublicId", data.user.public_id);
-        router.push(`/create?userr_id=${data.user.public_id}`);
-      }
-    } catch (error) {
-      console.error("Error creating draft provider:", error);
-      alert("Something went wrong. Please try again.");
-    }
-  };
+  const handleJoinAsProvider = () => joinAsProvider();
 
   const handleLogout = async () => {
     setIsProfileOpen(false);

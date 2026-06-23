@@ -5,8 +5,9 @@ import HelpSearch from "../help-center/HelpSearch";
 export const dynamic = "force-static";
 
 export const metadata = {
-  title: "Help Center | Taskoria",
-  description: "Find answers to your questions about using Taskoria.",
+  title: { absolute: "Taskoria Help Center | Customer & Provider Support" },
+  description:
+    "Find Taskoria help articles for customers and providers, including account setup, quotes, leads, payments, refunds, reviews, and safety.",
   alternates: {
     canonical: "https://www.taskoria.com/help",
   },

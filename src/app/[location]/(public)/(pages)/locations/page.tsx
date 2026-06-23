@@ -11,12 +11,14 @@ import {
   Sparkles,
   Timer,
 } from "lucide-react";
+import { getCityDedupKey, getCityLabel } from "@/lib/location-labels";
+import { filterSeoLocations } from "@/lib/seo-locations";
 
 export const dynamic = "force-static";
 export const revalidate = 84600;
 
 export const metadata: Metadata = {
-  title: "Find Services by City | Taskoria",
+  title: { absolute: "Find Services by City | Taskoria" },
   description:
     "Browse local service professionals across Australia. Select your city to find trusted providers near you.",
   alternates: { canonical: "https://www.taskoria.com/locations" },
@@ -32,7 +34,15 @@ interface City {
   state_slug: string;
   state_name: string;
   country_name: string;
-  subcities: { city_id: number; name: string; slug: string }[];
+  subcities: {
+    city_id: number;
+    name: string;
+    slug: string;
+    display_name?: string | null;
+    popularity?: number;
+    image_url?: string | null;
+    state_slug?: string | null;
+  }[];
 }
 
 interface StateGroup {
@@ -59,7 +69,9 @@ async function getCities(): Promise<City[]> {
       return [];
     }
 
-    return res.json();
+    const cities = await res.json();
+
+    return filterSeoLocations(cities);
   } catch {
     return [];
   }
@@ -102,7 +114,7 @@ function groupCitiesByState(cities: City[]): StateGroup[] {
         return a.name.localeCompare(b.name);
       })
       .forEach((city) => {
-        const key = city.slug || city.name.toLowerCase();
+        const key = getCityDedupKey(city);
 
         if (!uniqueCities.has(key)) {
           uniqueCities.set(key, city);
@@ -339,42 +351,34 @@ function HeroStat({
   label: string;
 }) {
   return (
-    <div className="rounded-2xl border gap-2 inline-flex border-white/15 bg-white/10 backdrop-blur-md px-2 py-2">
-      <div className="flex items-center gap-2 text-blue-200 mb-2">{icon}</div>
-      <p className="text-2xl font-extrabold text-white">{value}</p>
-      <p className="text-sm py-2 text-white/65">{label}</p>
+    <div className="rounded-xl  items-center border gap-2 inline-flex border-white/15 bg-white/10 backdrop-blur-md px-2 py-2">
+      <div className="flex  gap-2 text-blue-200 ">{icon}</div>
+      <p className="text-md font-extrabold text-white">{value}</p>
+      <p className="text-sm  text-white/65">{label}</p>
     </div>
   );
 }
 
 function CityCard({ city, stateSlug }: { city: City; stateSlug: string }) {
-  const cityName = city.display_name ?? city.name;
+  const cityName = getCityLabel(city);
 
   return (
-    <Link
-      href={`/locations/${stateSlug}/${city.slug}`}
-      className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3.5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg"
-    >
-      <div className="flex items-start gap-2.5">
-        <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-400 group-hover:bg-blue-50 dark:group-hover:bg-blue-950/40 group-hover:text-blue-600 transition-colors">
-          <MapPin className="w-4 h-4" />
-        </div>
+<Link
+  href={`/locations/${stateSlug}/${city.slug}`}
+  className="group flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-2 transition-colors hover:border-blue-500 hover:bg-slate-50 dark:hover:bg-slate-800"
+>
+  <MapPin className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
 
-        <div className="min-w-0">
-          <h3 className="text-sm font-bold leading-snug text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
-            {cityName}
-          </h3>
+  <span className="truncate text-sm font-medium text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+    {cityName}
+  </span>
 
-          {city.subcities?.length > 0 ? (
-            <p className="text-xs text-slate-400 mt-1">
-              {city.subcities.length} areas
-            </p>
-          ) : (
-            <p className="text-xs text-slate-400 mt-1">View professionals</p>
-          )}
-        </div>
-      </div>
-    </Link>
+  {/* {city.subcities?.length > 0 && (
+    <span className="ml-auto text-xs text-slate-500 dark:text-slate-400">
+      {city.subcities.length}
+    </span>
+  )} */}
+</Link>
   );
 }
 

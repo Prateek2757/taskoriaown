@@ -1,36 +1,12 @@
-"use client";
+import type { Metadata } from "next";
+import PageClient from "./page-client";
 
-import ProviderDashboard from "@/components/dashboard/ProviderDashboard/Providerdashboard";
+export const metadata: Metadata = {
+  title: `Provider Dashboard | Taskoria`,
+  description: `Manage your Taskoria provider profile, leads, reviews, and performance from one dashboard.`,
+  robots: { index: false, follow: false },
+};
 
-export default function DashboardPage() {
-  return (
-    <div
-      className="
-      min-h-screen 
-      bg-gray-50 
-      dark:bg-[#0d1117] 
-      transition-colors duration-300
-    "
-    >
-      <div className="container overflow-hidden mx-auto py-6">
-        {/* <Link href="/" className="inline-flex mb-4">
-          <Button
-            variant="ghost"
-            className="
-              flex items-center gap-2 
-              text-gray-700 
-              dark:text-gray-300 
-              dark:hover:bg-gray-800 
-              transition-colors
-            "
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Button>
-        </Link> */}
-
-        <ProviderDashboard />
-      </div>
-    </div>
-  );
+export default function Page() {
+  return <PageClient />;
 }

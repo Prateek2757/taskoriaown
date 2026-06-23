@@ -70,16 +70,16 @@ export default function ServiceHeroSection({
             </Link>
           </nav> */}
           <div className="text-left mb-4">
-            <h1 className="text-3xl md:text-5xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.1] mb-4">
               <span className="text-white bg-clip-text  drop-shadow-lg">
                 {title}
               </span>
-              <span className="block text-xl md:text-2xl font-medium text-white mt-3">
+              <span className="block text-lg md:text-xl font-medium text-white mt-3">
                 Made Simple & Fast
               </span>
             </h1>
 
-            <p className=" text-sm md:text-base max-w-3xl text-white/80 leading-relaxed text-left">
+            <p className="text-base md:text-lg max-w-3xl text-white/80 leading-relaxed text-left">
               {description}
             </p>
 

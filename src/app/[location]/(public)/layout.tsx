@@ -10,12 +10,16 @@ import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import NotificationHandler from "@/components/NotificationHandler";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import SupportChatbot from "@/components/supportChatbox";
+import TaskoriaAgent from "@/components/TaskoriaAgent";
 import Script from "next/script";
 import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
+import WhatsAppSupportButton from "@/components/supportChatbox";
+import ChatbotWidget from "@/components/ChatbotWidget";
 
 export const BASE_URL = "https://www.taskoria.com";
 export const SITE_NAME = "Taskoria";
+export const LEGAL_NAME = "Taskoria Pty Ltd";
+export const ABN = "37 658 760 831";
 export const TWITTER_HANDLE = "@taskoria";
 export const OG_IMAGE = `${BASE_URL}/og-image.png`;
 export const LOGO = `${BASE_URL}/images/taskoria_logo.svg`;
@@ -132,6 +136,53 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const GA_ID = process.env.NEXT_PUBLIC_GOOGLEANALYTICS_MEASUREMENT_ID;
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${BASE_URL}/#organization`,
+        name: SITE_NAME,
+        legalName: LEGAL_NAME,
+        url: BASE_URL,
+        logo: {
+          "@type": "ImageObject",
+          url: LOGO,
+        },
+        taxID: `ABN ${ABN}`,
+        contactPoint: [
+          {
+            "@type": "ContactPoint",
+            telephone: "+61 1300 531 727",
+            contactType: "customer support",
+            email: "contact@taskoria.com",
+            areaServed: "AU",
+            availableLanguage: ["en"],
+          },
+        ],
+        sameAs: [
+          "https://www.instagram.com/taskoria.au/",
+          "https://www.tiktok.com/@taskoria",
+          "https://x.com/taskoria",
+          "https://www.linkedin.com/company/taskoria-au",
+          "https://www.trustpilot.com/review/taskoria.com",
+        ],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${BASE_URL}/#website`,
+        name: SITE_NAME,
+        url: BASE_URL,
+        publisher: { "@id": `${BASE_URL}/#organization` },
+        inLanguage: "en-AU",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${BASE_URL}/services?q={search_term_string}`,
+          "query-input": "required name=search_term_string",
+        },
+      },
+    ],
+  };
 
   return (
     <html
@@ -142,6 +193,10 @@ export default function RootLayout({
     >
       <AuthProvider>
         <head>
+          <link
+            rel="stylesheet"
+            href="https://www.gstatic.com/chat-messenger/sdk/prod/v1.16/themes/chat-messenger-default.css"
+          />
           <Script id="clarity" strategy="afterInteractive">
             {`
 
@@ -183,6 +238,12 @@ export default function RootLayout({
           />
 
           <NotificationHandler />
+          <Script
+            id="organization-jsonld"
+            type="application/ld+json"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          />
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
@@ -197,7 +258,9 @@ export default function RootLayout({
               <SpeedInsights />
               <Toaster position="top-right" richColors expand closeButton />
               <Footer />
-              <SupportChatbot />
+              <ChatbotWidget/>
+              {/* <WhatsAppSupportButton/> */}
+              {/* <TaskoriaAgent /> */}
             </UserProvider>
           </ThemeProvider>
         </body>

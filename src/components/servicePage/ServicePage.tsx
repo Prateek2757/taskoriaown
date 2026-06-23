@@ -14,6 +14,11 @@ import WhyTaskoria from "./WhyTaskoria";
 import StepWiseHowItWorks from "./3stepServiceSection";
 import ServiceBreadcrumb from "./Servicebreadcrumb";
 import { normalizeServiceHtml } from "./normalizeServiceHtml";
+import InternalLinkModule from "@/components/InternalLinkModule";
+import {
+  getRankedCityServiceLinks,
+  getRankedServiceLinks,
+} from "@/lib/internal-links";
 
 const NewRequestModal = dynamic(
   () => import("@/components/leads/RequestModal"),
@@ -31,9 +36,45 @@ const CityProviders = dynamic(
   }
 );
 
+function toTitleCase(value: string) {
+  return value
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function getReadableLocationName(location: any, fallback?: string | null) {
+  return (
+    location?.name ??
+    location?.display_name ??
+    (fallback ? toTitleCase(fallback) : undefined)
+  );
+}
+
+function getServiceDescription(
+  service: any,
+  serviceName: string,
+  location?: string
+) {
+  const rawDescription = String(service.description ?? "").trim();
+
+  if (rawDescription && !/across Australia/i.test(rawDescription)) {
+    return rawDescription;
+  }
+
+  return location
+    ? `Find trusted ${serviceName.toLowerCase()} professionals in ${location}. Compare local providers, request free quotes and choose the right pro for your job.`
+    : `Find trusted ${serviceName.toLowerCase()} professionals across Australia. Compare providers, request free quotes and choose the right pro for your job.`;
+}
+
 interface ServicePageClientProps {
   service: any;
   cities: any[];
+  rankedCategories?: {
+    slug: string | null;
+    name: string | null;
+    rank: number | null;
+    image_url?: string | null;
+  }[];
   initialLocation: any;
   citySlug: string | null;
   stateSlug: string | null;
@@ -43,6 +84,7 @@ interface ServicePageClientProps {
 export default function ServicePageClient({
   service,
   cities,
+  rankedCategories,
   initialLocation,
   citySlug,
   stateSlug,
@@ -66,11 +108,16 @@ export default function ServicePageClient({
   // console.log(selectedLocation,"slecterd");
   // console.log(initialLocation);
 
-  const cityName: string | undefined = citySlug ?? undefined;
+  const cityName: string | undefined = getReadableLocationName(
+    selectedLocation,
+    citySlug
+  );
 
   const subCityName: string | undefined = subCitySlug
-    ? (selectedLocation?.subcities?.find((s: any) => s.slug === subCitySlug)
-        ?.name ?? subCitySlug)
+    ? getReadableLocationName(
+        selectedLocation?.subcities?.find((s: any) => s.slug === subCitySlug),
+        subCitySlug
+      )
     : undefined;
 
   const stateName: string | undefined =
@@ -78,6 +125,21 @@ export default function ServicePageClient({
 
   const activeCityName = subCityName ?? cityName;
   const locationLabel = activeCityName ?? stateName;
+  const serviceNameLower = service.name.toLowerCase();
+  const heroDescription = getServiceDescription(
+    service,
+    service.name,
+    locationLabel
+  );
+  const relatedServiceLinks = citySlug
+    ? getRankedCityServiceLinks(
+        stateSlug ?? selectedLocation?.state_slug,
+        subCitySlug ?? citySlug,
+        rankedCategories,
+        8,
+        service.slug
+      )
+    : getRankedServiceLinks(rankedCategories, 8, service.slug);
   // console.log(service,stateSlug,citySlug,subCitySlug,stateName,cityName,subCityName,"citynames ");
 
   return (
@@ -94,7 +156,7 @@ export default function ServicePageClient({
 
       <article itemScope itemType="https://schema.org/Service">
         <ServiceHeroSection
-          service={service}
+          service={{ ...service, description: heroDescription }}
           onLocationSelect={handleLocationSet}
           presetLocation={selectedLocation}
           locationName={activeCityName}
@@ -162,7 +224,7 @@ export default function ServicePageClient({
                   <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white ">
                     Popular areas in {selectedLocation.name}
                   </h2>
-                  <p className="text-slate-600 max-w-2xl">
+                  <p className="text-sm md:text-base text-slate-600 max-w-2xl">
                     Find trusted {service.name.toLowerCase()} professionals in
                     nearby areas. Choose your suburb to see local providers and
                     prices.
@@ -212,12 +274,36 @@ export default function ServicePageClient({
               cities={cities}
             />
           )}
+
+          <InternalLinkModule
+            eyebrow="Related pages"
+            title={
+              locationLabel
+                ? `Explore services in ${locationLabel}`
+                : "Related services"
+            }
+            description={
+              locationLabel
+                ? `Find other priority services available near ${locationLabel}.`
+                : "Browse other popular service categories on Taskoria."
+            }
+            groups={[
+              {
+                title: locationLabel
+                  ? `Related services in ${locationLabel}`
+                  : "Related priority services",
+                links: relatedServiceLinks,
+                variant: "service-cards",
+              },
+            ]}
+          />
+
           {!citySlug && <WhyTaskoria serviceName={service.slug} />}
 
           {service.about && (
             <section className="border border-slate-100 bg-white p-6 md:p-8 dark:border-slate-800 dark:bg-slate-900 mb-14">
               <div
-                className="prose prose-lg max-w-none"
+                className="prose max-w-none prose-h2:text-2xl md:prose-h2:text-3xl prose-h3:text-lg md:prose-h3:text-xl"
                 dangerouslySetInnerHTML={{
                   __html: normalizeServiceHtml(service.about),
                 }}
@@ -228,26 +314,49 @@ export default function ServicePageClient({
           {locationLabel && (
             <section className="bg-white dark:bg-slate-900 p-6 md:p-8 border border-slate-100 dark:border-slate-800 mb-14">
               <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-4">
-                Local {service.name} help in {locationLabel}
+                Compare {service.name} in {locationLabel}
               </h2>
-              <div className="grid gap-5 md:grid-cols-3 text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+              <div className="space-y-5 text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
                 <p>
-                  Taskoria matches your {service.name.toLowerCase()} request
-                  with professionals who serve {locationLabel}
-                  {stateName && activeCityName ? ` and nearby ${stateName} areas` : ""}.
-                  Share the job details once, then compare responses before you
-                  decide who to contact.
+                  Taskoria helps customers find {serviceNameLower} in{" "}
+                  {locationLabel}
+                  {stateName && activeCityName
+                    ? ` and nearby ${stateName}.`
+                    : "."}{" "}
+                  Share the job once and compare responses from professionals who
+                  can handle the work in your area.
                 </p>
-                <p>
-                  Use the city and suburb pages to narrow your search, check
-                  provider availability, and request quotes that reflect the
-                  work, access, timing, and materials involved in your project.
-                </p>
-                <p>
-                  The process is free for customers: post your task, review
-                  local providers, ask follow-up questions, and book when you
-                  are comfortable with the scope and price.
-                </p>
+                <div className="grid gap-5 md:grid-cols-3">
+                  <div>
+                    <h3 className="font-semibold text-slate-900 dark:text-white">
+                      Local availability
+                    </h3>
+                    <p className="mt-2">
+                      Check which {serviceNameLower} providers service{" "}
+                      {locationLabel}, compare profiles and see who is available
+                      for your timing.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-slate-900 dark:text-white">
+                      Clear quotes
+                    </h3>
+                    <p className="mt-2">
+                      Request quotes that reflect the job size, access, timing,
+                      materials and any special requirements before you book.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-slate-900 dark:text-white">
+                      Free to compare
+                    </h3>
+                    <p className="mt-2">
+                      Post your task for free, ask follow-up questions and
+                      choose the {serviceNameLower} professional that fits your
+                      job.
+                    </p>
+                  </div>
+                </div>
               </div>
             </section>
           )}
@@ -270,14 +379,14 @@ export default function ServicePageClient({
               Ready to get {service.name} done
               {activeCityName ? ` in ${activeCityName}` : ""}?
             </h2>
-            <p className="text-lg text-white/80">
+            <p className="text-base md:text-lg text-white/80">
               Post your job once—receive quotes fast, compare providers, and
               book with confidence.
             </p>
           </div>
           <Button
             onClick={handleSelectCategory}
-            className="inline-flex bg-[#2563EB] items-center gap-2 rounded-lg -8 py-4 text-xs text-lg font-semibold"
+            className="inline-flex bg-[#2563EB] items-center gap-2 rounded-lg px-8 py-4 text-sm md:text-base font-semibold"
             aria-label={`Get free quotes for ${service.name}`}
           >
             Get Free Quotes

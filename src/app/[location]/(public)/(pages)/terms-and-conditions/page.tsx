@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Taskoria",
+  title: { absolute: "Terms & Conditions | Taskoria Marketplace Rules" },
   description:
     "Review Taskoria’s Terms and Conditions governing the use of our platform and services.",
   keywords: [
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   publisher: "Taskoria Pty Ltd",
   metadataBase: new URL("https://www.taskoria.com"),
   openGraph: {
-    title: "Terms & Conditions | Taskoria",
+    title: "Terms & Conditions | Taskoria Marketplace Rules",
     description:
       "Review Taskoria’s Terms and Conditions governing the use of our platform and services.",
     url: "https://www.taskoria.com/terms-and-conditions",

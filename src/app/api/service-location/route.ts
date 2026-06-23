@@ -1,4 +1,5 @@
 import { getAllCities, getCityBySlug, getSubcities } from "@/lib/cache";
+import { filterSeoLocations, isSeoLocation } from "@/lib/seo-locations";
 import { NextResponse } from "next/server";
 
 
@@ -11,16 +12,22 @@ export async function GET(request: Request) {
     if (citySlug) {
       const city = await getCityBySlug(citySlug);
 
-      if (!city) return NextResponse.json(null);
+      if (!city || !isSeoLocation(city)) return NextResponse.json(null);
 
       const subcities = await getSubcities(city.city_id);
+      const seoSubcities = filterSeoLocations(
+        subcities.map((subcity) => ({
+          ...subcity,
+          state_slug: subcity.state_slug ?? city.state_slug,
+        }))
+      );
 
       return NextResponse.json(
         {
           ...city,
           latitude: city.latitude ? parseFloat(city.latitude) : null,
           longitude: city.longitude ? parseFloat(city.longitude) : null,
-          subcities,
+          subcities: seoSubcities,
         },
         {
           headers: {
@@ -36,26 +43,7 @@ export async function GET(request: Request) {
     const filtered = stateSlug
       ? rows.filter((r) => r.state_slug === stateSlug)
       : rows;
-
-    const map = new Map<number, any>();
-    const cities: any[] = [];
-
-    for (const row of filtered) {
-      if (!row.parent_city_id) {
-        const city = {
-          ...row,
-          subcities: [],
-        };
-        map.set(row.city_id, city);
-        cities.push(city);
-      }
-    }
-
-    for (const row of filtered) {
-      if (row.parent_city_id && map.has(row.parent_city_id)) {
-        map.get(row.parent_city_id).subcities.push(row);
-      }
-    }
+    const cities = filterSeoLocations(filtered);
 
     return NextResponse.json(cities, {
       headers: {

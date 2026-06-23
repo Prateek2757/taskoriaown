@@ -1,9 +1,14 @@
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Script from "next/script";
 import StatePageClient from "../components/state-page/state-page";
 import CityPageClient from "../components/City-page/citypageclient";
 import { getAllCities, getCategoriesFromDB } from "@/lib/cache";
+import { getCityDedupKey, getCityLabel } from "@/lib/location-labels";
+import {
+  filterSeoLocations,
+  findSeoRedirectLocation,
+} from "@/lib/seo-locations";
 // export const revalidate = 604800;
 
 // export const dynamic = "force-static";
@@ -41,6 +46,15 @@ export interface CategoryWithSubs {
   slug: string;
   description?: string;
   image_url?: string;
+  rank?: number | null;
+  subcategories: {
+    category_id: number;
+    name: string;
+    slug: string;
+    description?: string;
+    image_url?: string;
+    rank?: number | null;
+  }[];
 }
 
 function distanceKm(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -87,18 +101,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [stateSlug, citySlug] = slug;
   const isStatePage = !citySlug;
 
-  const cities = await getAllCities();
+  const cities = filterSeoLocations((await getAllCities()) as unknown as City[]);
 
   if (isStatePage) {
     const stateCities = cities.filter((c) => c.state_slug === stateSlug);
     if (!stateCities.length)
       return {
-        title: "State Not Found | Taskoria",
+        title: { absolute: "State Not Found | Taskoria" },
         robots: { index: false, follow: false },
       };
 
     const stateName = stateCities[0].state_name;
-    const title = `Services in ${stateName} | Find Local Professionals | Taskoria`;
+    const title = `Services in ${stateName} | Find Local Professionals`;
     const description = `Find trusted local service providers across ${stateName}. Browse all cities and categories — get free quotes from verified professionals on Taskoria.`;
     const canonicalUrl = `https://www.taskoria.com/locations/${stateSlug}`;
 
@@ -140,18 +154,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   );
   if (!city)
     return {
-      title: "City Not Found | Taskoria",
+      title: { absolute: "City Not Found | Taskoria" },
       robots: { index: false, follow: false },
     };
 
-  const cityName = city.display_name ?? city.name;
+  const cityName = getCityLabel(city);
   const title = `Services in ${cityName} | Find Local Professionals | Taskoria`;
   const description = `Discover trusted local service providers in ${cityName}, ${city.state_name}. From cleaning to removals, find and compare professionals for any task — get free quotes on Taskoria.`;
   const canonicalUrl = `https://www.taskoria.com/locations/${stateSlug}/${citySlug}`;
   const imageUrl = city.image_url ?? `https://www.taskoria.com/${citySlug}.jpg`;
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords: [
       `services in ${cityName}`,
@@ -208,10 +222,12 @@ export default async function CityOrStatePage({ params }: Props) {
   const [stateSlug, citySlug] = slug;
   const isStatePage = !citySlug;
 
-  const [allCities, categoryTree] = await Promise.all([
+  const [rawCitiesResult, categoryTree] = await Promise.all([
     getAllCities(),
     getCategories(),
   ]);
+  const rawCities = rawCitiesResult as unknown as City[];
+  const allCities = filterSeoLocations(rawCities);
   //  const {categories,loading}= useCategories()
 
   if (isStatePage) {
@@ -220,7 +236,7 @@ export default async function CityOrStatePage({ params }: Props) {
       .sort((a, b) => b.popularity - a.popularity);
 
     const stateCities = Array.from(
-      new Map(stateCitiesRaw.map((c) => [c.name.toLowerCase(), c])).values()
+      new Map(stateCitiesRaw.map((c) => [getCityDedupKey(c), c])).values()
     );
 
     if (!stateCities.length) notFound();
@@ -277,7 +293,18 @@ export default async function CityOrStatePage({ params }: Props) {
     (c) => c.slug === citySlug && c.state_slug === stateSlug
   );
 
-  if (!city) notFound();
+  if (!city) {
+    const redirectCity = findSeoRedirectLocation(rawCities, stateSlug, citySlug);
+
+    if (redirectCity?.slug) {
+      redirect(`/locations/${stateSlug}/${redirectCity.slug}`);
+    }
+
+    const hasStatePage = allCities.some((c) => c.state_slug === stateSlug);
+    if (hasStatePage) redirect(`/locations/${stateSlug}`);
+
+    redirect("/locations");
+  }
 
   type CityWithDist = City & { _dist: number };
   const seen = new Set<string>();
@@ -311,13 +338,13 @@ export default async function CityOrStatePage({ params }: Props) {
     .sort((a, b) => b.popularity - a.popularity);
 
   const sameStateCities: City[] = Array.from(
-    new Map(sameStateRaw.map((c) => [c.name.toLowerCase(), c])).values()
+    new Map(sameStateRaw.map((c) => [getCityDedupKey(c), c])).values()
   ).slice(0, 12);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: `Services in ${city.display_name ?? city.name}`,
+    name: `Services in ${getCityLabel(city)}`,
     description: `Find local service professionals in ${city.name}, ${city.state_name}`,
     url: `https://www.taskoria.com/locations/${stateSlug}/${citySlug}`,
     ...(city.latitude && city.longitude

@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const { rows } = await client.query(
-      `SELECT user_id, company_name,logo_url, contact_name, contact_email, website, contact_phone, about, company_size, years_in_business
+      `SELECT user_id, company_name,logo_url, contact_name, contact_email, website, contact_phone, about, company_size, years_in_business,business_abn
        FROM company
        WHERE user_id = $1`,
       [userId]
@@ -56,8 +56,12 @@ export async function PUT(req: NextRequest) {
       website,
       company_size,
       years_in_business,
+      business_abn,
       about,
     } = body;
+
+    console.log(business_abn,"abn");
+    
 
     if (!company_name || !contact_name || !contact_email) {
       return NextResponse.json(
@@ -80,10 +84,11 @@ export async function PUT(req: NextRequest) {
            website = $5,
            company_size = $6,
            years_in_business = $7,
-           about = $8,
-           logo_url = $9,
+           business_abn = $8,
+           about = $9,
+           logo_url = $10,
            updated_at = NOW()
-       WHERE user_id = $10`,
+       WHERE user_id = $11`,
       [
         company_name,
         contact_name,
@@ -92,6 +97,7 @@ export async function PUT(req: NextRequest) {
         website?.trim() || null,
         company_size?.trim() || null,
         yearsInBusinessInt,
+        business_abn || null, 
         about?.trim() || null,
         company_logo_url,
         userId,
@@ -106,7 +112,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const { rows } = await client.query(
-      `SELECT user_id, company_name,logo_url, contact_name, contact_email, contact_phone, website, company_size, years_in_business, about
+      `SELECT user_id, company_name,logo_url, contact_name, contact_email, contact_phone, website, company_size, years_in_business, about,business_abn
        FROM company
        WHERE user_id = $1`,
       [userId]

@@ -1,12 +1,11 @@
 "use client";
 
+import { isValidABN } from "@/features/onboarding/schema";
 import { uploadToSupabase } from "@/lib/uploadFileToSupabase";
 import Image from "next/image";
 import React, { useEffect, useRef, useCallback } from "react";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-
-// ─── Types ───────────────────────────────────────────────────────────────────
 
 type Props = {
   data?: {
@@ -21,6 +20,7 @@ type Props = {
     contact_email?: string;
     contact_phone?: string;
     website?: string;
+    business_abn?: string;
     about?: string;
   };
   onSave?: (payload: any) => Promise<void>;
@@ -38,6 +38,8 @@ interface FormValues {
   // Stored as a DataTransfer-safe FileList so RHF can track dirtiness,
   // but we also keep a separate preview URL via a ref/state pair.
   avatarFile: FileList | null;
+  businessAbn?: string;
+
   companyLogoFile: FileList | null;
 }
 
@@ -58,8 +60,8 @@ function revokeIfBlob(url: string | null) {
 interface ImageUploaderProps {
   label: string;
   ariaLabel: string;
-  preview: string;         // current preview URL (remote or blob)
-  hasNewFile: boolean;     // shows the green "staged" badge
+  preview: string; // current preview URL (remote or blob)
+  hasNewFile: boolean; // shows the green "staged" badge
   onFileChange: (file: File) => void;
 }
 
@@ -79,14 +81,12 @@ function ImageUploader({
 
       if (file.size > MAX_FILE_BYTES) {
         toast.error(`${label} must be under 5 MB.`);
-        // Reset the native input so the same file can be re-selected after
-        // the user picks a valid one without the browser blocking the onChange.
+
         if (inputRef.current) inputRef.current.value = "";
         return;
       }
 
       onFileChange(file);
-      // Don't reset the input value here — we need it for RHF's FileList tracking.
     },
     [label, onFileChange]
   );
@@ -110,7 +110,11 @@ function ImageUploader({
 
         {hasNewFile && (
           <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 dark:bg-green-400 rounded-full flex items-center justify-center border-2 border-white dark:border-gray-900">
-            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <svg
+              className="w-3 h-3 text-white"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
               <path
                 fillRule="evenodd"
                 d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -138,37 +142,39 @@ function ImageUploader({
   );
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
   return (
     <p className="mt-1 flex items-center gap-1 text-xs text-red-600 dark:text-red-400">
-      <svg className="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+      <svg
+        className="w-3.5 h-3.5 flex-shrink-0"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          fillRule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+          clipRule="evenodd"
+        />
       </svg>
       {message}
     </p>
   );
 }
 
-/** Returns extra Tailwind classes to highlight an input/select/textarea in error state. */
 function errCls(hasError: boolean) {
   return hasError
     ? "border-red-400 dark:border-red-500 focus:ring-red-400 dark:focus:ring-red-500 focus:border-red-400 dark:focus:border-red-500"
     : "border-gray-300 dark:border-gray-600 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400";
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-
 export default function AboutSection({ companydata, data, onSave }: Props) {
-  // Track preview URLs separately from RHF so we can revoke blob: URLs cleanly.
-  // These are NOT part of the form values — they're display-only.
   const avatarPreviewRef = useRef<string>(data?.profile_image_url ?? "");
   const logoPreviewRef = useRef<string>(companydata?.logo_url ?? "");
 
-  // Force re-renders when preview URLs change (useRef alone won't trigger them).
-  const [avatarPreview, setAvatarPreview] = React.useState(avatarPreviewRef.current);
+  const [avatarPreview, setAvatarPreview] = React.useState(
+    avatarPreviewRef.current
+  );
   const [logoPreview, setLogoPreview] = React.useState(logoPreviewRef.current);
 
   const [saving, setSaving] = React.useState(false);
@@ -202,7 +208,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
   const avatarFileList = watch("avatarFile");
   const logoFileList = watch("companyLogoFile");
 
-  // Sync preview + defaults when parent props change (e.g. after first load).
   useEffect(() => {
     const nextDefaults: FormValues = {
       name: data?.display_name ?? "",
@@ -213,12 +218,12 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
       companySize: companydata?.company_size ?? "",
       yearsInBusiness: companydata?.years_in_business ?? "",
       description: companydata?.about ?? "",
+      businessAbn:companydata?.business_abn ?? "",
       avatarFile: null,
       companyLogoFile: null,
     };
     reset(nextDefaults);
 
-    // Revoke any blob we were showing, then switch to the new remote URL.
     revokeIfBlob(avatarPreviewRef.current);
     revokeIfBlob(logoPreviewRef.current);
     avatarPreviewRef.current = data?.profile_image_url ?? "";
@@ -227,7 +232,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
     setLogoPreview(logoPreviewRef.current);
   }, [data, companydata, reset]);
 
-  // Clean up blob URLs on unmount.
   useEffect(() => {
     return () => {
       revokeIfBlob(avatarPreviewRef.current);
@@ -235,17 +239,13 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
     };
   }, []);
 
-  // ── Handlers ──────────────────────────────────────────────────────────────
-
   const handleAvatarFile = useCallback(
     (file: File) => {
-      // Revoke the previous blob preview (if any) before creating a new one.
       revokeIfBlob(avatarPreviewRef.current);
       const blobUrl = URL.createObjectURL(file);
       avatarPreviewRef.current = blobUrl;
       setAvatarPreview(blobUrl);
 
-      // Push the file into a synthetic FileList so RHF marks the field dirty.
       const dt = new DataTransfer();
       dt.items.add(file);
       setValue("avatarFile", dt.files, { shouldDirty: true });
@@ -268,7 +268,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
   );
 
   const handleCancel = useCallback(() => {
-    // Revoke staged blobs, revert previews to the last saved remote URLs.
     revokeIfBlob(avatarPreviewRef.current);
     revokeIfBlob(logoPreviewRef.current);
 
@@ -279,7 +278,7 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
     setAvatarPreview(savedAvatar);
     setLogoPreview(savedLogo);
 
-    reset(); // restores all RHF fields to defaultValues, clears dirty state
+    reset();
     setStatusMsg("Changes canceled");
     setTimeout(() => setStatusMsg(null), 2000);
   }, [data, companydata, reset]);
@@ -289,18 +288,15 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
     setStatusMsg(null);
 
     try {
-      // ── Upload avatar if a new file was staged ──
       let finalAvatarUrl = data?.profile_image_url ?? "";
       const avatarFile = values.avatarFile?.[0];
       if (avatarFile) {
         finalAvatarUrl = await uploadToSupabase(avatarFile, "profilepicture");
-        // Revoke the blob and point the preview to the now-persisted remote URL.
         revokeIfBlob(avatarPreviewRef.current);
         avatarPreviewRef.current = finalAvatarUrl;
         setAvatarPreview(finalAvatarUrl);
       }
 
-      // ── Upload company logo if a new file was staged ──
       let finalLogoUrl = companydata?.logo_url ?? "";
       const logoFile = values.companyLogoFile?.[0];
       if (logoFile) {
@@ -318,6 +314,7 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
         contact_email: values.contactEmail,
         contact_phone: values.contactPhone,
         company_size: values.companySize,
+        business_abn:values.businessAbn,
         years_in_business: values.yearsInBusiness,
         website: values.website,
         description: values.description,
@@ -325,7 +322,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
 
       await onSave?.(payload);
 
-      // Reset the form to the new saved state so isDirty becomes false.
       reset({
         ...values,
         avatarFile: null,
@@ -346,26 +342,22 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
     }
   };
 
-  // ── Derived UI state ───────────────────────────────────────────────────────
-
   const descriptionLength = description?.length ?? 0;
   const isDescriptionValid = descriptionLength >= 30 || descriptionLength === 0;
   const hasNewAvatar = !!avatarFileList?.[0];
   const hasNewLogo = !!logoFileList?.[0];
 
-  // ── Render ─────────────────────────────────────────────────────────────────
-
   return (
     <div className="max-w-2xl mx-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm dark:shadow-gray-900/50 p-8 space-y-10 transition-colors duration-200">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        {/* ── Personal name & avatar ── */}
         <section className="space-y-4">
           <div>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
               Personal name &amp; logo
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              This is the first thing customers will see when searching for a professional.
+              This is the first thing customers will see when searching for a
+              professional.
               <br />
               As a sole-trader, you can just enter your name.
             </p>
@@ -389,8 +381,14 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
                 placeholder="Your name"
                 {...register("name", {
                   required: "Personal name is required.",
-                  minLength: { value: 2, message: "Name must be at least 2 characters." },
-                  maxLength: { value: 80, message: "Name must be under 80 characters." },
+                  minLength: {
+                    value: 2,
+                    message: "Name must be at least 2 characters.",
+                  },
+                  maxLength: {
+                    value: 80,
+                    message: "Name must be under 80 characters.",
+                  },
                 })}
                 className={`w-full rounded-md border bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 text-sm transition-colors duration-200 ${errCls(!!errors.name)}`}
               />
@@ -399,14 +397,14 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
           </div>
         </section>
 
-        {/* ── Company name & logo ── */}
         <section className="space-y-4 mt-10">
           <div>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
               Company name &amp; logo
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              This is the first thing customers will see when searching for a professional.
+              This is the first thing customers will see when searching for a
+              professional.
             </p>
           </div>
 
@@ -427,7 +425,10 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
                 type="text"
                 placeholder="Your company name"
                 {...register("companyName", {
-                  maxLength: { value: 100, message: "Company name must be under 100 characters." },
+                  maxLength: {
+                    value: 100,
+                    message: "Company name must be under 100 characters.",
+                  },
                 })}
                 className={`w-full rounded-md border bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 text-sm transition-colors duration-200 ${errCls(!!errors.companyName)}`}
               />
@@ -436,7 +437,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
           </div>
         </section>
 
-        {/* ── Contact info ── */}
         <section className="space-y-4 mt-10">
           <div>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
@@ -494,7 +494,8 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
                 {...register("website", {
                   pattern: {
                     value: /^https?:\/\/.+\..+/,
-                    message: "Enter a valid URL starting with http:// or https://",
+                    message:
+                      "Enter a valid URL starting with http:// or https://",
                   },
                 })}
                 className={`w-full rounded-md border bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 transition-colors duration-200 ${errCls(!!errors.website)}`}
@@ -504,7 +505,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
           </div>
         </section>
 
-        {/* ── About the company ── */}
         <section className="space-y-4 mt-10">
           <div>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
@@ -551,6 +551,44 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
                 <FieldError message={errors.yearsInBusiness?.message} />
               </div>
             </div>
+            <div className="flex flex-col w-full sm:w-1/2">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Business Abn
+              </label>
+              <input
+                type="text"
+                placeholder="eg: 53 930 548 027"
+                {...register("businessAbn", {
+                  validate: (value) => {
+                    if (!value?.trim()) return true;
+                  
+                    return isValidABN(value) || "Please enter a valid ABN.";
+                  }
+                }
+              )}
+                className={`w-full rounded-md border bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 text-sm focus:outline-none focus:ring-2 transition-colors duration-200 ${errCls(
+                  !!errors.businessAbn
+                )}`}
+              />
+
+              {errors.businessAbn && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.businessAbn.message}
+                </p>
+              )}
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
+                Don&apos;t know your ABN?{" "}
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://abr.business.gov.au/"
+                  className="text-[#2563EB] underline"
+                >
+                  Search it here
+                </a>
+              </p>
+              <FieldError message={errors.yearsInBusiness?.message} />
+            </div>
 
             <div className="flex flex-col">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -562,7 +600,11 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
                 {...register("description", {
                   validate: (val) => {
                     const companyName = getValues("companyName").trim();
-                    if (companyName && val.trim().length > 0 && val.trim().length < 50) {
+                    if (
+                      companyName &&
+                      val.trim().length > 0 &&
+                      val.trim().length < 50
+                    ) {
                       return "Company description must be at least 50 characters.";
                     }
                     if (companyName && val.trim().length === 0) {
@@ -594,7 +636,6 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
           </div>
         </section>
 
-        {/* ── Action Buttons ── */}
         <div className="flex items-center justify-between pt-6 mt-6 border-t border-gray-200 dark:border-gray-700">
           <button
             type="button"
@@ -614,8 +655,13 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
                     : "text-gray-600 dark:text-gray-400"
                 }`}
               >
-                {(statusMsg.includes("Saved") || statusMsg.includes("success")) && (
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                {(statusMsg.includes("Saved") ||
+                  statusMsg.includes("success")) && (
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
                     <path
                       fillRule="evenodd"
                       d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"

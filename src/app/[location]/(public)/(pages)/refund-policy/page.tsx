@@ -1,6 +1,9 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
+  title: { absolute: "Refund Policy | Taskoria Payments & Credit Returns" },
+  description:
+    "Read Taskoria's refund policy for customer payments, provider fees, subscriptions, credit returns, eligibility, and review timelines.",
   alternates: {
     canonical: "https://www.taskoria.com/refund-policy",
   },

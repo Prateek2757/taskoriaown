@@ -117,7 +117,6 @@ function parseHTML(html: string) {
 
   return { title, intros, sections };
 }
-// ─── Classifiers ─────────────────────────────────────────────────────────────
 
 const STEPS_RE = /how.it.works|get.started|steps|process|works/i;
 const SERVICE_RE =
@@ -215,7 +214,7 @@ function Divider() {
   const T = useT();
   return (
     <Inner>
-      <div style={{ height: "0.4px", background: T.border }} />
+      {/* <div style={{ height: "0.4px", background: T.border }} /> */}
     </Inner>
   );
 }

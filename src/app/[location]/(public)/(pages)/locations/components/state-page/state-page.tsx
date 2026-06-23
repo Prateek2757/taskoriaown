@@ -14,7 +14,9 @@ import {
   Map,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import InternalLinkModule from "@/components/InternalLinkModule";
 import { CategoryWithSubs, City } from "../../[...slug]/page";
+import { getCityLabel } from "@/lib/location-labels";
 
 const NewRequestModal = dynamic(
   () => import("@/components/leads/RequestModal"),
@@ -87,9 +89,7 @@ export default function StatePageClient({
 
     if (!q) return cities;
 
-    return cities.filter((city) =>
-      (city.display_name ?? city.name).toLowerCase().includes(q)
-    );
+    return cities.filter((city) => getCityLabel(city).toLowerCase().includes(q));
   }, [cities, deferredCitySearch]);
 
   const visibleCities = useMemo(() => {
@@ -131,31 +131,36 @@ export default function StatePageClient({
     [categoryTree]
   );
 
-  const heroStats = useMemo(
-    () => [
-      {
-        label: "Cities",
-        value: cities.length,
-        icon: <Building2 className="w-4 h-4" />,
-      },
-      {
-        label: "Services",
-        value: `${categoryTree.length}+`,
-        icon: <Grid3X3 className="w-4 h-4" />,
-      },
-      {
-        label: "Professionals",
-        value: "50+",
-        icon: <MapPin className="w-4 h-4" />,
-      },
-      {
-        label: "Tasks done",
-        value: "500+",
-        icon: <Map className="w-4 h-4" />,
-      },
-    ],
-    [cities.length, categoryTree.length]
+  const popularServiceLinks = useMemo(
+    () =>
+      popularCategories.map((cat) => ({
+        href: `/services/${cat.slug}/${stateSlug}`,
+        label: cat.name,
+        imageUrl: cat.image_url ?? null,
+      })),
+    [popularCategories, stateSlug]
   );
+
+  // const heroStats = useMemo(
+  //   () => [
+  //     {
+  //       label: "Cities",
+  //       value: cities.length,
+  //       icon: <Building2 className="w-4 h-4" />,
+  //     },
+  //     {
+  //       label: "Services",
+  //       value: `${categoryTree.length}+`,
+  //       icon: <Grid3X3 className="w-4 h-4" />,
+  //     },
+  //     {
+  //       label: "Professionals",
+  //       value: "50+",
+  //       icon: <MapPin className="w-4 h-4" />,
+  //     }
+  //   ],
+  //   [cities.length, categoryTree.length]
+  // );
 
   const trustStats = useMemo(
     () => [
@@ -249,7 +254,7 @@ export default function StatePageClient({
                 Browse all services
               </Link>
             </div>
-            <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
+            {/* <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
               {heroStats.map((stat) => (
                 <div
                   key={stat.label}
@@ -264,7 +269,7 @@ export default function StatePageClient({
                   </p>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -282,7 +287,7 @@ export default function StatePageClient({
 
       <div className="max-w-7xl mx-auto px-6 md:px-16">
         <section className="py-10 border-b border-slate-100 dark:border-slate-800">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight mb-4">
+          <h2 className="text-2xl  font-bold text-slate-900 dark:text-white tracking-tight mb-4">
             Local services across {stateName}
           </h2>
           <div className="grid gap-5 md:grid-cols-3 text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -314,7 +319,7 @@ export default function StatePageClient({
         <section className="pt-12 pb-6">
           <div className="flex items-end justify-between mb-7 flex-wrap gap-4">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+              <h2 className="text-2xl  font-bold text-slate-900 dark:text-white tracking-tight">
                 Cities in {stateName}
               </h2>
               <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
@@ -378,34 +383,22 @@ export default function StatePageClient({
           )}
         </section>
 
-        <section className="pt-10 pb-6 [content-visibility:auto] [contain-intrinsic-size:360px]">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight mb-2">
-            Popular services in {stateName}
-          </h2>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mb-7">
-            Most requested categories across {stateName}
-          </p>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {popularCategories.map((cat) => (
-              <Link
-                key={cat.category_id}
-                href={`/services/${cat.slug}/${stateSlug}`}
-                className="group flex items-center gap-3 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 transition-colors hover:border-blue-300 dark:hover:border-blue-700"
-              >
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center bg-blue-50 text-sm font-bold text-blue-700 dark:bg-blue-950/40 dark:text-blue-300">
-                  {cat.name.charAt(0)}
-                </div>
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 leading-snug">
-                  {cat.name}
-                </h3>
-              </Link>
-            ))}
-          </div>
-        </section>
+        <InternalLinkModule
+          eyebrow="Popular local pages"
+          title={`Popular services in ${stateName}`}
+          description={`Most requested categories across ${stateName}`}
+          className="pt-10 pb-6 [content-visibility:auto] [contain-intrinsic-size:360px]"
+          groups={[
+            {
+              title: `Popular services in ${stateName}`,
+              links: popularServiceLinks,
+              variant: "service-cards",
+            },
+          ]}
+        />
 
         <section className="pt-12 pb-20 [content-visibility:auto] [contain-intrinsic-size:1200px]">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-8">
+          <h2 className="text-2xl  font-bold text-slate-900 dark:text-white mb-8">
             Browse all categories in {stateName}
           </h2>
 
@@ -486,7 +479,7 @@ export default function StatePageClient({
                   {alphaGroups[letter].map((cat) => (
                     <div key={cat.category_id}>
                       <div className="flex items-center gap-3 mb-5 border-b-2 border-slate-100 dark:border-slate-800 pb-3">
-                        <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">
+                        <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                           {cat.name}
                         </h3>
 
@@ -533,7 +526,7 @@ export default function StatePageClient({
       {otherStates.length > 0 && (
         <section className="bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800 [content-visibility:auto] [contain-intrinsic-size:400px]">
           <div className="max-w-7xl mx-auto px-6 md:px-16 py-12">
-            <h2 className="text-xl font-extrabold text-slate-900 dark:text-white mb-5">
+            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-5">
               Explore other states
             </h2>
 
@@ -557,7 +550,7 @@ export default function StatePageClient({
       <aside className="bg-slate-950 text-white">
         <div className="max-w-7xl mx-auto px-6 md:px-16 py-16 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold mb-3">
+            <h2 className="text-2xl  font-bold mb-3">
               Ready to get something done in {stateName}?
             </h2>
             <p className="text-white/70 text-lg max-w-xl">
@@ -586,27 +579,23 @@ const CityCard = memo(function CityCard({
   city: City;
   stateSlug: string;
 }) {
-  const cityName = city.display_name ?? city.name;
+  const cityName = getCityLabel(city);
 
   return (
     <Link
       href={`/locations/${stateSlug}/${city.slug}`}
-      className="group relative overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-300 dark:hover:border-blue-700 transition-colors rounded-xl "
+      className="group flex items-center gap-2 rounded-xl border px-3 py-1.5 transition-colors hover:border-blue-500 hover:bg-slate-50 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700"
     >
-      <div className="p-3.5">
-        <div className="flex items-start gap-1.5">
-          <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 mt-0.5 shrink-0 transition-colors" />
+          <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400 group-hover:text-blue-500 mt-0.5 shrink-0 transition-colors" />
 
           <div>
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 leading-snug">
-              {cityName}
-            </h3>
+          <span className="block truncate text-sm font-medium text-slate-900 dark:text-slate-100">
+          {cityName}
+            </span>
 
-            <p className="text-[11px] text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-400 mt-0.5">
               View professionals
             </p>
-          </div>
-        </div>
       </div>
     </Link>
   );

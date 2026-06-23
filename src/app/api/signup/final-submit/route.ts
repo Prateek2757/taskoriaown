@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 import bcrypt from "bcryptjs";
 import { sendEmail } from "@/components/email/helpers/sendVerificationEmail";
+import { isValidABN } from "@/features/onboarding/schema";
+import { lookupAbnRegistration } from "@/lib/abn-lookup";
 
 export async function POST(req: NextRequest) {
   const client = await pool.connect();
@@ -32,6 +34,27 @@ export async function POST(req: NextRequest) {
     }
 
     const normalizationemail = await email.trim().toLowerCase();
+    const normalizedAbn =
+      typeof abn === "string" ? abn.replace(/\s/g, "") : "";
+
+    if (normalizedAbn) {
+      if (!isValidABN(normalizedAbn)) {
+        return NextResponse.json(
+          { message: "Please enter a valid ABN" },
+          { status: 400 }
+        );
+      }
+
+      const abnRegistration = await lookupAbnRegistration(normalizedAbn);
+
+      if (abnRegistration.message || !abnRegistration.isActive) {
+        return NextResponse.json(
+          { message: "ABN must be active on the Australian Business Register." },
+          { status: 400 }
+        );
+      }
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await client.query("BEGIN");
@@ -112,7 +135,7 @@ export async function POST(req: NextRequest) {
         phone || null,
         websiteUrl || null,
         companySize || null,
-        abn ||null,
+        normalizedAbn || null,
       ]
     );
 

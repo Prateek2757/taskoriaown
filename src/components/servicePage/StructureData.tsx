@@ -108,14 +108,29 @@ export default function StructuredData({
       "@type": "Organization",
       "@id": organizationId,
       name: "Taskoria",
+      legalName: "Taskoria Pty Ltd",
       url: baseUrl,
+      taxID: "ABN 37 658 760 831",
       logo: {
         "@type": "ImageObject",
         url: `${baseUrl}/images/taskoria_logo.svg`,
       },
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          telephone: "+61 1300 531 727",
+          contactType: "customer support",
+          email: "contact@taskoria.com",
+          areaServed: "AU",
+          availableLanguage: ["en"],
+        },
+      ],
       sameAs: [
-        "https://www.facebook.com/taskoria",
-        "https://twitter.com/taskoria",
+        "https://www.instagram.com/taskoria.au/",
+        "https://www.tiktok.com/@taskoria",
+        "https://x.com/taskoria",
+        "https://www.linkedin.com/company/taskoria-au",
+        "https://www.trustpilot.com/review/taskoria.com",
       ],
     },
     {
@@ -153,6 +168,7 @@ export default function StructuredData({
       image: imageUrl,
       provider: { "@id": organizationId },
       mainEntityOfPage: pageUrl,
+      category: service.name,
       areaServed:
         serviceAreaName === "Australia"
           ? {
@@ -181,16 +197,20 @@ export default function StructuredData({
               geoRadius: "50000",
             }
           : undefined,
-      aggregateRating:
-        providers.length > 0
-          ? {
-              "@type": "AggregateRating",
-              ratingValue: "4.8",
-              reviewCount: Math.max(providers.length * 3, 50),
-              bestRating: "5",
-              worstRating: "1",
-            }
-          : undefined,
+      offers: {
+        "@type": "AggregateOffer",
+        priceCurrency: "AUD",
+        availability: "https://schema.org/InStock",
+        offerCount: providers.length || undefined,
+        description: "Request free quotes from verified Taskoria professionals.",
+      },
+      additionalProperty: [
+        {
+          "@type": "PropertyValue",
+          name: "providerCount",
+          value: providers.length,
+        },
+      ],
     }),
   ];
 

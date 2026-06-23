@@ -111,21 +111,25 @@ export default function Explore() {
     moreServices.find((s) => s.label === currentMenu)?.icon;
 
   return (
-    <div ref={containerRef}>
-      <div className="flex justify-between mx-4">
-        <button
-          className="text-md semi-bold hover:underline"
-          onClick={() => setShowMenu(!showMenu)}
-        >
-          Explore
-        </button>
-        <button onClick={() => setShowMenu(!showMenu)}>
+    <div ref={containerRef} className="relative z-[70]">
+      <button
+        type="button"
+        className="mx-3 flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-gray-200 dark:hover:bg-gray-800"
+        onClick={() => setShowMenu((open) => !open)}
+        aria-haspopup="menu"
+        aria-expanded={showMenu}
+        aria-controls="explore-services-menu"
+      >
+          <span>Explore</span>
           {showMenu ? <IoCaretUp size={16} /> : <IoCaretDown size={16} />}
-        </button>
-      </div>
+      </button>
 
       {showMenu && (
-        <div className="absolute left-12 top-full -mt-1 w-[320px] bg-white border border-gray-200 shadow-lg rounded-xl z-50 overflow-hidden dark:bg-slate-950 text-white">
+        <div
+          id="explore-services-menu"
+          role="menu"
+          className="absolute left-0 top-full mt-2 w-[min(320px,calc(100vw-24px))] bg-white border border-gray-200 shadow-xl rounded-xl z-[100] overflow-hidden dark:bg-slate-950 text-white"
+        >
           <AnimatePresence mode="popLayout" initial={false}>
             {menuStack.length === 0 ? (
               <motion.div
@@ -136,9 +140,9 @@ export default function Explore() {
                 transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
               >
                 <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-                  <h1 className="text-sm font-semibold text-black dark:text-white">
+                  <h2 className="text-sm font-semibold text-black dark:text-white">
                     Services
-                  </h1>
+                  </h2>
                   <span className="text-sm font-medium text-blue-600 cursor-pointer underline">
                     <Link href="/services" prefetch>See all</Link>
                   </span>
@@ -166,9 +170,9 @@ export default function Explore() {
                   ))}
 
                   <div className="px-4 pt-2 pb-2 flex items-center justify-between">
-                    <h1 className="text-sm font-semibold text-black dark:text-gray-200">
+                    <h2 className="text-sm font-semibold text-black dark:text-gray-200">
                       Popular Services
-                    </h1>
+                    </h2>
                     <span className="text-sm font-medium text-blue-600 cursor-pointer underline">
                       <Link href="/services">See all</Link>
                     </span>

@@ -70,15 +70,15 @@ export default function WhyTaskoria({
     <section
       ref={ref}
       aria-label={`Why use Taskoria for ${serviceName}`}
-      className="w-full border-y border-slate-100 dark:border-slate-800  dark:bg-slate-900 overflow-hidden"
+      className="w-full border-t border-slate-100 dark:border-slate-800  dark:bg-slate-900 overflow-hidden"
     >
       {/* <div className="h-[3px] w-full bg-gradient-to-r from-blue-500 via-[#2563EB] to-blue-600" /> */}
 
       <div className="max-w-8xl mx-auto px-6 py-5">
-        <p className="text-3xl  font-bold text-[#2563EB] mb-2 text-center">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[#2563EB] mb-2 text-center">
           Why customers choose Taskoria for {serviceName.toLowerCase()}
-        </p>
-        <p className="text-xl text-slate-600 dark:text-white mb-2 text-center">
+        </h2>
+        <p className="text-sm md:text-base text-slate-600 dark:text-white mb-2 text-center">
           we keep it simple to connect with {serviceName.toLowerCase()}
         </p>
         <div className="mt-12 mb-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 border border-border rounded-xl overflow-hidden">
@@ -90,7 +90,7 @@ export default function WhyTaskoria({
                 transform: visible ? "translateY(0)" : "translateY(10px)",
                 transition: `opacity 0.4s ease ${i * 60}ms, transform 0.4s ease ${i * 60}ms`,
               }}
-              className="group flex flex-col items-center text-center gap-3 px-4 py-6 bg-white dark:bg-slate-900 border-r border-b border-slate-100 dark:border-slate-800 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-colors duration-150 cursor-default"
+              className="group flex flex-col items-center text-center gap-3 px-4 py-6 bg-white dark:bg-slate-900 border-r  border-slate-100 dark:border-slate-800 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-colors duration-150 cursor-default"
             >
               <div className="w-11 h-11 flex items-center justify-center  bg-blue-50 dark:bg-blue-950/50 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 transition-colors duration-150 shrink-0 rounded-lg">
                 <span className="flex text-blue-600 dark:text-blue-400 group-hover:opacity-80 transition-opacity">

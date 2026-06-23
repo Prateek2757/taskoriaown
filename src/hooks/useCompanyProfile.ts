@@ -12,6 +12,7 @@ export type Company = {
   contact_phone?: string;
   about?: string;
   website?: string;
+  business_abn?:string;
   company_size?: string;
   years_in_business?: number;
 };

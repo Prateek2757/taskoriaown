@@ -5,7 +5,7 @@ import { normalizeBlogPostCategory } from "@/components/blog/blogTaxonomy";
 const BASE_URL = "https://www.taskoria.com";
 
 export const metadata: Metadata = {
-  title: "Local Services Tips & Hiring Guides — Taskoria Blog",
+  title: { absolute: "Local Services Tips & Hiring Guides — Taskoria Blog" },
   description:
     "Read practical guides on hiring local service professionals, comparing quotes, planning home projects, and getting everyday tasks done with Taskoria.",
   alternates: { canonical: `${BASE_URL}/blog` },

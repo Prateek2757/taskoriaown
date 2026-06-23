@@ -46,7 +46,7 @@ export default function ModernNavbar({
   return (
     <>
       <header
-        className="sticky top-0 z-50
+        className="sticky top-0 z-[1000]
           backdrop-blur-xl bg-white/70 dark:bg-gray-900/70
           border-b border-white/40 dark:border-white/10 
           shadow-sm transition-colors w-full"

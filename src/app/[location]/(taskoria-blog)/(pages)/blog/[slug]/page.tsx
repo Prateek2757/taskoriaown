@@ -6,6 +6,7 @@ import {
 } from "@/lib/cache";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 
 type Props = {
   params: Promise<{
@@ -86,9 +87,41 @@ export default async function Page({ params }: Props) {
   if (!post) notFound();
 
   const filteredPosts = await getRelatedBlogPosts(post.category, post.slug, 3);
+  const canonicalUrl = buildCanonical(post.slug);
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "@id": `${canonicalUrl}#article`,
+    headline: post.title,
+    description: post.excerpt,
+    image: post.image_url ? [post.image_url] : undefined,
+    datePublished: post.published_at,
+    dateModified: post.updated_at ?? post.published_at,
+    author: {
+      "@type": "Person",
+      name: post.author_name || "Taskoria",
+    },
+    publisher: {
+      "@type": "Organization",
+      "@id": "https://www.taskoria.com/#organization",
+      name: "Taskoria",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.taskoria.com/images/taskoria_logo.svg",
+      },
+    },
+    mainEntityOfPage: canonicalUrl,
+    inLanguage: "en-AU",
+  };
 
   return (
     <>
+      <Script
+        id="article-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <BlogDetails post={post} filteredPosts={filteredPosts} />
     </>
   );

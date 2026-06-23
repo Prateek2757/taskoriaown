@@ -149,6 +149,7 @@ export default function HeroSection() {
               alt="Australian flag"
               width={18}
               height={5}
+              style={{ height: "auto" }}
               fetchPriority="high"
             />{" "}
             <span>

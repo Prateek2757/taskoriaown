@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Taskoria",
+  title: { absolute: "Privacy Policy | Taskoria" },
   description:
     "Read Taskoria's Privacy Policy to understand how we collect, use, store, and protect your personal information in accordance with the Australian Privacy Act 1988.",
   keywords: [
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   publisher: "Taskoria Pty Ltd",
   metadataBase: new URL("https://www.taskoria.com"),
   openGraph: {
-    title: "Privacy Policy | Taskoria ",
+    title: "Privacy Policy | Taskoria",
     description:
       "Read Taskoria’s Privacy Policy to understand how we collect, use, and protect your personal information.",
     url: "https://www.taskoria.com/privacy-policy",

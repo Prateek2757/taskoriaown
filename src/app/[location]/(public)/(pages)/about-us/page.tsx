@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { OurStory } from "./OurStory";
 
 export const metadata: Metadata = {
-  title: "About Taskoria — Trusted Local Services Marketplace",
+  title: { absolute: "About Taskoria — Trusted Local Services Marketplace" },
   description:
     "Learn about Taskoria, Australia’s trusted local services marketplace connecting customers with verified professionals for safe, simple, and reliable home services.",
 

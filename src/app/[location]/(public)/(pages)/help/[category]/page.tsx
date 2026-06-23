@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!category) return {};
   return {
     title: `${label ?? category} | Taskoria Help Center`,
+    description: `Browse Taskoria help articles for ${label ?? category}, including setup, account questions, platform rules, and support guidance.`,
     alternates: {
       canonical: `https://www.taskoria.com/help/${category}`,
     },

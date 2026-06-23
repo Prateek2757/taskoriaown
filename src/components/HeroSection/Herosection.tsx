@@ -32,6 +32,7 @@ export default function HeroSection() {
                 alt="Australian flag"
                 width={18}
                 height={5}
+                style={{ height: "auto" }}
                 fetchPriority="high"
                 sizes="(max-width: 640px) 100vw,
                 (max-width: 1024px) 50vw,
@@ -43,7 +44,7 @@ export default function HeroSection() {
               </span>
             </div>
 
-            <div
+            <h1
               className="text-4xl md:text-6xl leading-tight mt-2 md:mt-0 md:mb-8"
               style={{
                 fontFamily: "'Bricolage Grotesque', sans-serif",
@@ -88,7 +89,7 @@ export default function HeroSection() {
               >
                 all in one place.
               </span>
-            </div>
+            </h1>
           </div>
           <div className="flex flex-col items-center gap-2 max-w-auto mx-auto px-4 pb-2">
             <HeroInteractive />

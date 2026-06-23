@@ -2,7 +2,11 @@ import ServicePageWrapper from "@/components/servicePage/ServicePageWrapper";
 import ServiceStatePageClient from "@/components/servicePage/Servicestatepageclient";
 import StructuredData from "@/components/servicePage/StructureData";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import {
+  filterSeoLocations,
+  findSeoRedirectLocation,
+} from "@/lib/seo-locations";
 
 // export const dynamic = "force-static";
 // export const revalidate = 604800;
@@ -34,8 +38,16 @@ export interface City {
   state_slug: string;
   state_name: string;
   country_name: string;
-  city_description:string;
-  subcities: { city_id: number; name: string; slug: string }[];
+  city_description: string;
+  subcities: {
+    city_id: number;
+    name: string;
+    slug: string;
+    display_name?: string | null;
+    popularity?: number;
+    image_url?: string | null;
+    state_slug?: string | null;
+  }[];
   providers?: any[];
 }
 
@@ -71,6 +83,19 @@ function buildCanonical(
   return base;
 }
 
+function buildServicePath(
+  serviceSlug: string,
+  stateSlug?: string | null,
+  citySlug?: string | null,
+  subCitySlug?: string | null
+) {
+  const segments = ["/services", serviceSlug, stateSlug, citySlug, subCitySlug]
+    .filter(Boolean)
+    .map(String);
+
+  return segments.join("/");
+}
+
 async function getService(serviceSlug: string): Promise<ServiceData | null> {
   try {
     const res = await fetch(`${BASE_URL}/api/categories/${serviceSlug}`);
@@ -90,10 +115,15 @@ async function getAllCities(): Promise<City[]> {
 }
 
 async function getAllCategories(): Promise<
-  { slug: string | null; rank: number | null }[]
+  {
+    slug: string | null;
+    name: string | null;
+    rank: number | null;
+    image_url?: string | null;
+  }[]
 > {
   try {
-    const res = await fetch(`${BASE_URL}/api/categories`);
+    const res = await fetch(`${BASE_URL}/api/signup/category-selection`);
     return res.ok ? res.json() : [];
   } catch {
     return [];
@@ -107,7 +137,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!serviceSlug) {
     return {
-      title: "Professional Services Near You | Taskoria",
+      title: { absolute: "Professional Services Near You | Taskoria" },
       description:
         "Find and book trusted local professionals with Taskoria. Get free quotes, compare prices, and read verified reviews.",
     };
@@ -116,21 +146,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = await getService(serviceSlug);
   if (!service) {
     return {
-      title: "Service Not Found | Taskoria",
+      title: { absolute: "Service Not Found | Taskoria" },
       robots: { index: false, follow: false },
     };
   }
 
-  const cities =
+  const rawCities =
     stateSlug || citySlug || subCitySlug ? await getAllCities() : [];
+  const cities = filterSeoLocations(rawCities);
   const selectedCity = citySlug
     ? (cities.find(
         (city) =>
           city.slug === citySlug &&
           (!stateSlug || city.state_slug === stateSlug)
-      ) ??
-      cities.find((city) => city.slug === citySlug) ??
-      null)
+      ) ?? null)
     : null;
   const selectedSubCity =
     subCitySlug && selectedCity
@@ -138,6 +167,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           (subcity) => subcity.slug === subCitySlug
         ) ?? null)
       : null;
+  const hasSelectedState = stateSlug
+    ? cities.some((city) => city.state_slug === stateSlug)
+    : true;
+
+  if (
+    (stateSlug && !hasSelectedState) ||
+    (citySlug && !selectedCity) ||
+    (subCitySlug && !selectedSubCity)
+  ) {
+    const redirectCity =
+      stateSlug && citySlug
+        ? findSeoRedirectLocation(rawCities, stateSlug, citySlug)
+        : null;
+    const redirectUrl = redirectCity?.slug
+      ? buildCanonical(serviceSlug, stateSlug, redirectCity.slug, null)
+      : serviceSlug && stateSlug && hasSelectedState
+        ? buildCanonical(serviceSlug, stateSlug, null, null)
+        : `https://www.taskoria.com/services/${serviceSlug}`;
+
+    return {
+      title: { absolute: `${service.name} | Taskoria` },
+      robots: { index: false, follow: true },
+      alternates: { canonical: redirectUrl },
+    };
+  }
   const cityName =
     getLocationLabel(selectedCity) ?? (citySlug ? toTitleCase(citySlug) : null);
   const subCityName =
@@ -276,10 +330,12 @@ export default async function ServicePage({ params }: Props) {
 
   if (!serviceSlug || serviceSlug === "undefined") notFound();
 
-  const [service, cities] = await Promise.all([
+  const [service, rawCities, categories] = await Promise.all([
     getService(serviceSlug),
     getAllCities(),
+    getAllCategories(),
   ]);
+  const cities = filterSeoLocations(rawCities);
 
   if (!service) {
     return (
@@ -297,7 +353,6 @@ export default async function ServicePage({ params }: Props) {
   }
 
   if (stateSlug && !citySlug) {
-    const stateName = toTitleCase(stateSlug);
     const stateCitiesRaw = cities
       .filter((c) => c.state_slug === stateSlug)
       .sort((a, b) => b.popularity - a.popularity);
@@ -305,6 +360,7 @@ export default async function ServicePage({ params }: Props) {
       new Map(stateCitiesRaw.map((c) => [c.name.toLowerCase(), c])).values()
     );
     if (!stateCities.length) notFound();
+    const stateName = stateCities[0]?.state_name ?? toTitleCase(stateSlug);
 
     const otherStates = [
       ...new Map(
@@ -340,7 +396,11 @@ export default async function ServicePage({ params }: Props) {
   }
 
   const selectedLocation = citySlug
-    ? (cities.find((city) => city.slug === citySlug) ?? null)
+    ? (cities.find(
+        (city) =>
+          city.slug === citySlug &&
+          (!stateSlug || city.state_slug === stateSlug)
+      ) ?? null)
     : null;
 
   const selectedSubCity = subCitySlug
@@ -348,6 +408,30 @@ export default async function ServicePage({ params }: Props) {
     : null;
 
   const activeLocation = selectedSubCity ?? selectedLocation;
+
+  if (citySlug && !selectedLocation) {
+    if (stateSlug) {
+      const redirectCity = findSeoRedirectLocation(
+        rawCities,
+        stateSlug,
+        citySlug
+      );
+
+      if (redirectCity?.slug) {
+        redirect(buildServicePath(serviceSlug, stateSlug, redirectCity.slug));
+      }
+    }
+
+    if (stateSlug && cities.some((city) => city.state_slug === stateSlug)) {
+      redirect(`/services/${serviceSlug}/${stateSlug}`);
+    }
+
+    redirect(`/services/${serviceSlug}`);
+  }
+
+  if (subCitySlug && !selectedSubCity) {
+    redirect(`/services/${serviceSlug}/${stateSlug}/${citySlug}`);
+  }
 
   return (
     <>
@@ -363,6 +447,7 @@ export default async function ServicePage({ params }: Props) {
       <ServicePageWrapper
         service={service}
         cities={cities}
+        rankedCategories={categories}
         initialLocation={activeLocation}
         citySlug={citySlug}
         stateSlug={stateSlug}

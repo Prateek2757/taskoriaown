@@ -78,10 +78,10 @@ export default function SubHeroService({
     return (
       <section
         aria-label={`Find ${proLabel} in ${cityName} on Taskoria`}
-        className="w-full bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800/60"
+        className="w-full bg-white py-2 dark:bg-slate-950 "
       >
         <div className="max-w-6xl mx-auto py-5 md:py-0  px-0">
-          <h2 className="text-4xl  font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight mb-5">
             Need to find {article}{" "}
             <span className="text-[#2563EB] dark:text-[#60a5fa]">
               {proLabel.endsWith("s") ? proLabel.slice(0, -1) : proLabel}
@@ -95,7 +95,7 @@ export default function SubHeroService({
                 key={i}
                 className={
                   i === 0
-                    ? "text-lg font-medium text-slate-700 dark:text-slate-300 leading-relaxed"
+                    ? "text-base font-medium text-slate-700 dark:text-slate-300 leading-relaxed"
                     : "text-base text-slate-500 dark:text-slate-400 leading-relaxed"
                 }
               >
@@ -149,7 +149,7 @@ export default function SubHeroService({
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start ">
           <div className="flex flex-col gap-4 justify-center">
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1]">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
               Need help finding {getArticle(proLabel)}{" "}
               <span className="relative inline-block">
                 <span className="relative text-[#2563EB] dark:text-[#60a5fa]">
@@ -163,7 +163,7 @@ export default function SubHeroService({
               {!proLabel.endsWith("?") && "?"}
             </h2>
 
-            <p className="text-md text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
+            <p className="text-base text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
               {service.short_description ?? paragraphs.lead}
             </p>
 
@@ -191,7 +191,7 @@ export default function SubHeroService({
             style={{ borderLeft: "4px solid #2563EB" }}
           >
             <div>
-              <p className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white leading-[1] mb-4">
+              <p className="text-lg font-semibold tracking-tight text-slate-900 dark:text-white leading-tight mb-4">
                 Get Matched with Trusted Local Pros
               </p>
             </div>

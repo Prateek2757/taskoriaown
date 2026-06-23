@@ -6,7 +6,7 @@ export const dynamic = "force-static";
 
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | Taskoria ",
+  title: { absolute: "Cookie Policy | Taskoria Tracking & Preferences" },
   description:
     "Learn how Taskoria uses cookies and similar technologies to improve your experience on our platform.",
   keywords: [
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     locale: "en_AU",
     images: [
       {
-        url: "https://www.taskoria.com/og-image.jpg",
+        url: "https://www.taskoria.com/og-image.png",
         width: 1200,
         height: 630,
         alt: "Taskoria Cookie Policy",

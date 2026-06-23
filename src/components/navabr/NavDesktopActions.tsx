@@ -81,7 +81,7 @@ export default function NavDesktopActions({
             prefetch
             className="inline-flex items-center justify-center h-10 px-4 rounded-md text-sm font-medium
               text-gray-700 dark:text-gray-300 hover:scale-105 transition-all duration-300 
-              hover:bg-accent hover:text-accent-foreground "
+              hover:bg-blue-100 hover:text-blue-500 "
           >
             Sign In
           </Link>

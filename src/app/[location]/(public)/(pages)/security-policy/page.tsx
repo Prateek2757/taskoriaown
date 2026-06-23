@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Security Policy | Taskoria",
+  title: { absolute: "Security Policy | Taskoria" },
   description:
     "Taskoria's security policy, responsible disclosure program, and commitment to protecting our users.",
   alternates: {

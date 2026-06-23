@@ -1,6 +1,14 @@
 // "use client";
 
+import type { Metadata } from "next";
 import MyServicesPage from "@/components/Location&ServiceSetting/MyservicesPage";
+
+export const metadata: Metadata = {
+  title: { absolute: "My Services & Locations | Taskoria Settings" },
+  description:
+    "Manage the services, categories, locations, and travel radius for your Taskoria provider profile.",
+  robots: { index: false, follow: false },
+};
 
 // import { useLeadProfile, Category } from "@/hooks/useLeadProfile";
 // import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
