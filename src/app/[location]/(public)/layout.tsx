@@ -258,8 +258,8 @@ export default function RootLayout({
               <SpeedInsights />
               <Toaster position="top-right" richColors expand closeButton />
               <Footer />
-              <ChatbotWidget/>
-              {/* <WhatsAppSupportButton/> */}
+              {/* <ChatbotWidget/> */}
+              <WhatsAppSupportButton/>
               {/* <TaskoriaAgent /> */}
             </UserProvider>
           </ThemeProvider>
