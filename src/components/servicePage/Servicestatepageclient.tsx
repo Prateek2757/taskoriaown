@@ -1,21 +1,20 @@
 "use client";
 
-import { useState, useMemo, useDeferredValue } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import {
   ArrowRight,
   MapPin,
-  Search,
   ChevronRight,
-  Building2,
   Star,
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ServiceBreadcrumb from "./Servicebreadcrumb";
 import { normalizeServiceHtml } from "./normalizeServiceHtml";
+import LocationAlphabetDirectory from "@/components/Location/LocationAlphabetDirectory";
 
 const NewRequestModal = dynamic(
   () => import("@/components/leads/RequestModal"),
@@ -68,7 +67,6 @@ interface Props {
   otherStates: OtherState[];
 }
 
-const INITIAL_CITY_LIMIT = 40;
 const LOCAL_SERVICE_POINTS = [
   "Residential jobs",
   "Business jobs",
@@ -107,24 +105,7 @@ export default function ServiceStatePageClient({
   otherStates,
 }: Props) {
   const [openModal, setOpenModal] = useState(false);
-  const [citySearch, setCitySearch] = useState("");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [showAllCities, setShowAllCities] = useState(false);
-  const deferredCitySearch = useDeferredValue(citySearch);
-
-  const filteredCities = useMemo(() => {
-    const q = deferredCitySearch.trim().toLowerCase();
-    return q
-      ? cities.filter((c) =>
-          (c.display_name ?? c.name).toLowerCase().includes(q)
-        )
-      : cities;
-  }, [cities, deferredCitySearch]);
-
-  const visibleCities = useMemo(() => {
-    if (showAllCities || deferredCitySearch.trim()) return filteredCities;
-    return filteredCities.slice(0, INITIAL_CITY_LIMIT);
-  }, [filteredCities, showAllCities, deferredCitySearch]);
 
   const serviceSlug = service.slug ?? "";
   const serviceNameLower = service.name.toLowerCase();
@@ -264,7 +245,7 @@ export default function ServiceStatePageClient({
       </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-16">
-        <section className="py-6">
+        <section className="py-8 md:py-12">
           {stateSlug && (
             <ServiceBreadcrumb
               service={{ name: service.name, slug: serviceSlug }}
@@ -274,86 +255,17 @@ export default function ServiceStatePageClient({
               stateName={stateName}
             />
           )}
-          <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
-                {service.name} near you in {stateName}
-              </h2>
-              <p className="text-slate-500 dark:text-slate-400 text-sm mt-1.5">
-                Choose your city to find local {service.name.toLowerCase()}{" "}
-                professionals and prices
-              </p>
-            </div>
-
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-              <input
-                value={citySearch}
-                onChange={(e) => {
-                  setCitySearch(e.target.value);
-                  setShowAllCities(false);
-                }}
-                placeholder={`Search ${stateName} cities…`}
-                className="pl-8 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-56"
-              />
-            </div>
-          </div>
-
-          {filteredCities.length > 0 ? (
-            <>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5  gap-3">
-                {visibleCities.map((city) => (
-                  <Link
-                    key={city.city_id}
-                    href={`/services/${serviceSlug}/${stateSlug}/${city.slug}`}
-                    className="group relative overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-300 dark:hover:border-blue-700 transition-colors rounded-xl"
-                  >
-                    <div className="p-3.5">
-                      <div className="flex items-start gap-1.5">
-                        <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 mt-0.5 shrink-0 transition-colors" />
-                        <div>
-                          <h3 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 leading-snug">
-                            {city.name}
-                          </h3>
-                          <p className="text-[11px] text-slate-400 mt-0.5">
-                            {service.name} providers
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-
-              {!showAllCities &&
-                !deferredCitySearch.trim() &&
-                filteredCities.length > INITIAL_CITY_LIMIT && (
-                  <div className="mt-8 text-center">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setShowAllCities(true)}
-                      className="px-6"
-                    >
-                      Show all {filteredCities.length} cities
-                    </Button>
-                  </div>
-                )}
-            </>
-          ) : (
-            <div className="text-center py-16 text-slate-400">
-              <Building2 className="w-8 h-8 mx-auto mb-2 opacity-40" />
-              <p className="text-slate-600 dark:text-slate-400">
-                No cities match "{citySearch}"
-              </p>
-              <button
-                onClick={() => setCitySearch("")}
-                className="mt-2 text-blue-600 text-sm hover:underline"
-              >
-                Clear search
-              </button>
-            </div>
-          )}
+          <LocationAlphabetDirectory
+            locations={cities}
+            title={`${service.name} by suburb in ${stateName}`}
+            eyebrow="Suburbs"
+            description="Choose a suburb to find nearby providers."
+            overviewHref={`/services/${serviceSlug}`}
+            overviewLabel="View category overview"
+            buildHref={(city) =>
+              `/services/${serviceSlug}/${stateSlug}/${city.slug}`
+            }
+          />
         </section>
 
         <section className="py-12 border-t border-slate-100 dark:border-slate-800">

@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "locations:optimize": "node scripts/optimize-australia-locations.mjs"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^11.1.0",

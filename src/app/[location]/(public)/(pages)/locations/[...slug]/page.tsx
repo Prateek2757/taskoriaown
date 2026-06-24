@@ -28,6 +28,9 @@ export interface City {
   state_slug: string;
   state_name: string;
   country_name: string;
+  postcode?: string | null;
+  source?: string | null;
+  updated_at?: string;
   subcities: SubCity[];
 }
 

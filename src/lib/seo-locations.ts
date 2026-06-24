@@ -9,6 +9,7 @@ export type SeoLocationLike = {
   state_name?: string | null;
   parent_city_id?: number | null;
   postcode?: string | number | null;
+  source?: string | null;
   subcities?: SeoLocationLike[] | null;
 };
 
@@ -83,6 +84,10 @@ export function isSeoLocation(location: SeoLocationLike) {
   if (isStandalonePostcode(location.name) || isStandalonePostcode(location.slug)) {
     return false;
   }
+  // Imported GeoNames rows are already normalized localities. The stricter
+  // rules below exist for legacy Google/address rows and would incorrectly
+  // remove valid places such as Airport West or Station Creek.
+  if (location.source === "geonames") return true;
   if (
     location.postcode &&
     (normalize(location.name) === normalize(location.postcode) ||

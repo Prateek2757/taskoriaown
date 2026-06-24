@@ -6,7 +6,8 @@ import { Input } from "../ui/input";
 import axios from "axios";
 
 type Location = {
-  place_id: string;
+  place_id?: string;
+  australia_location_id?: number;
   city_id?: number;
   display_name: string;
   city?: string;
@@ -24,12 +25,6 @@ type Props = {
   onLoadingChange?: (isLoading: boolean) => void;
   presetLocation?: Location | null;
 };
-
-function newSessionToken() {
-  return typeof crypto !== "undefined"
-    ? crypto.randomUUID()
-    : String(Date.now());
-}
 
 function stripCountry(name: string) {
   return name.replace(/,?\s*Australia$/i, "").trim();
@@ -49,8 +44,6 @@ export default function LocationSearch({
   presetLocation,
 }: Props) {
   const listboxId = useId();
-  const sessionToken = useRef(newSessionToken());
-
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Location[]>([]);
   const [loading, setLoading] = useState(false);
@@ -114,17 +107,11 @@ export default function LocationSearch({
 
       setLoadingState(true);
       try {
-        const res = await axios.post(
-          "/api/googlemap/autocomplete",
-          { input, session: sessionToken.current },
-          { signal: abortRef.current.signal }
-        );
-
-        const suggestions: any[] = res.data.suggestions ?? [];
-        const mapped: Location[] = suggestions.map((s) => ({
-          place_id: s.placePrediction.placeId,
-          display_name: s.placePrediction.text.text,
-        }));
+        const res = await axios.get<Location[]>("/api/signup/location", {
+          params: { q: input, limit: 30 },
+          signal: abortRef.current.signal,
+        });
+        const mapped = res.data;
 
         cache.current[cacheKey] = mapped;
         setResults(mapped);
@@ -140,19 +127,6 @@ export default function LocationSearch({
     [setLoadingState]
   );
 
-  const fetchPlaceDetails = async (
-    placeId: string
-  ): Promise<Location | null> => {
-    try {
-      const res = await axios.get("/api/googlemap/place-details", {
-        params: { place_id: placeId, session: sessionToken.current },
-      });
-      return res.data as Location;
-    } catch {
-      return null;
-    }
-  };
-
   const handleSelect = async (loc: Location) => {
     const displayClean = stripCountry(loc.display_name);
     setQuery(displayClean);
@@ -160,22 +134,19 @@ export default function LocationSearch({
     setShowDropdown(false);
     setActiveIndex(-1);
   
-    sessionToken.current = newSessionToken();
-  
-    onSelect?.({ ...loc, display_name: loc.display_name, _resolving: false });
+    onSelect?.({ ...loc, _resolving: true });
   
     setLoadingState(true);
     try {
-      const details = await fetchPlaceDetails(loc.place_id);
-      if (!details) return;
-  
-      const cityRes = await axios.post("/api/signup/location", details);
+      const cityRes = await axios.post("/api/signup/location", {
+        australia_location_id: loc.australia_location_id ?? loc.place_id,
+      });
       const city_id = cityRes.data.city_id;
   
       onSelect?.({
-        ...details,
+        ...loc,
         city_id,
-        display_name: loc.display_name,
+        city: cityRes.data.city ?? loc.city,
         _resolving: false,
       });
     } catch (err) {
@@ -294,7 +265,7 @@ export default function LocationSearch({
                 const isActive = i === activeIndex;
                 return (
                   <li
-                    key={r.place_id}
+                    key={r.australia_location_id ?? r.place_id ?? r.display_name}
                     id={`loc-option-${i}`}
                     role="option"
                     aria-selected={isActive}

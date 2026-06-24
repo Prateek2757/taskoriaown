@@ -9,7 +9,6 @@ export type Category = {
   category_name: string;
   name?: string;
 };
-export type City = { city_id: number; name: string };
 export type UserLocation = {
   id: number;
   city_id: number;
@@ -61,10 +60,6 @@ export function useLeadProfile() {
     Category[]
   >("/api/signup/category-selection", fetcher);
 
-  const { data: cities = [], mutate: mutateCities } = useSWR<City[]>(
-    "/api/signup/location",
-    fetcher
-  );
   const { data: userLocations = [], mutate: mutateLocations } = useSWR<
     UserLocation[]
   >("/api/user_locations", fetcher);
@@ -262,7 +257,6 @@ export function useLeadProfile() {
   return {
     profile,
     categories,
-    cities,
     userLocations,
     loading: isLoading,
     error,

@@ -1,22 +1,20 @@
 "use client";
 
-import { useState, useMemo, useRef, useDeferredValue, memo } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import {
   ArrowRight,
   MapPin,
-  Search,
   Grid3X3,
   ChevronRight,
-  Building2,
   Map,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import InternalLinkModule from "@/components/InternalLinkModule";
 import { CategoryWithSubs, City } from "../../[...slug]/page";
-import { getCityLabel } from "@/lib/location-labels";
+import LocationAlphabetDirectory from "@/components/Location/LocationAlphabetDirectory";
 
 const NewRequestModal = dynamic(
   () => import("@/components/leads/RequestModal"),
@@ -49,6 +47,14 @@ interface Props {
 }
 
 const Static_State_Image: Record<string, string> = {
+  nsw: "/nsw-sydney.jpg",
+  act: "/act.jpg",
+  nt: "/northern-territory.png",
+  qld: "/queensland.jpg",
+  sa: "/south-australia.jpg",
+  tas: "/tasmania.jpg",
+  wa: "/western-australia.jpg",
+  vic: "/victoria.jpg",
   "new-south-wales": "/nsw-sydney.jpg",
   "australian-capital-territory": "/act.jpg",
   "norfolk-island": "/Norfolk_Island.avif",
@@ -60,7 +66,6 @@ const Static_State_Image: Record<string, string> = {
   victoria: "/victoria.jpg",
 };
 
-const INITIAL_CITY_LIMIT = 40;
 const POPULAR_CATEGORY_LIMIT = 8;
 
 export default function StatePageClient({
@@ -72,59 +77,7 @@ export default function StatePageClient({
   otherStates,
 }: Props) {
   const [openModal, setOpenModal] = useState(false);
-  const [citySearch, setCitySearch] = useState("");
-  const [catSearch, setCatSearch] = useState("");
-  const [activeLetter, setActiveLetter] = useState<string | null>(null);
-  const [showAllCities, setShowAllCities] = useState(false);
-
-  const catRefs = useRef<Record<string, HTMLElement | null>>({});
-
-  const deferredCitySearch = useDeferredValue(citySearch);
-  const deferredCatSearch = useDeferredValue(catSearch);
-
   const bgImage = Static_State_Image[stateSlug];
-
-  const filteredCities = useMemo(() => {
-    const q = deferredCitySearch.trim().toLowerCase();
-
-    if (!q) return cities;
-
-    return cities.filter((city) => getCityLabel(city).toLowerCase().includes(q));
-  }, [cities, deferredCitySearch]);
-
-  const visibleCities = useMemo(() => {
-    if (showAllCities || deferredCitySearch.trim()) {
-      return filteredCities;
-    }
-
-    return filteredCities.slice(0, INITIAL_CITY_LIMIT);
-  }, [filteredCities, showAllCities, deferredCitySearch]);
-
-  const filteredCats = useMemo(() => {
-    const q = deferredCatSearch.trim().toLowerCase();
-
-    if (!q) return categoryTree;
-
-    return categoryTree.filter((cat) => cat.name.toLowerCase().includes(q));
-  }, [categoryTree, deferredCatSearch]);
-
-  const alphaGroups = useMemo(() => {
-    const map: Record<string, CategoryWithSubs[]> = {};
-
-    for (const cat of filteredCats) {
-      const firstLetter = cat.name.charAt(0).toUpperCase();
-
-      if (!map[firstLetter]) {
-        map[firstLetter] = [];
-      }
-
-      map[firstLetter].push(cat);
-    }
-
-    return map;
-  }, [filteredCats]);
-
-  const letters = useMemo(() => Object.keys(alphaGroups).sort(), [alphaGroups]);
 
   const popularCategories = useMemo(
     () => categoryTree.slice(0, POPULAR_CATEGORY_LIMIT),
@@ -174,15 +127,6 @@ export default function StatePageClient({
     ],
     [cities.length, stateName]
   );
-
-  const scrollToLetter = (letter: string) => {
-    setActiveLetter(letter);
-
-    catRefs.current[letter]?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
 
   return (
     <main className="min-h-screen bg-white dark:bg-slate-950">
@@ -317,70 +261,15 @@ export default function StatePageClient({
         />
 
         <section className="pt-12 pb-6">
-          <div className="flex items-end justify-between mb-7 flex-wrap gap-4">
-            <div>
-              <h2 className="text-2xl  font-bold text-slate-900 dark:text-white tracking-tight">
-                Cities in {stateName}
-              </h2>
-              <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-                {cities.length} cities — choose yours to see local professionals
-              </p>
-            </div>
-
-            <div className="relative ">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-              <input
-                value={citySearch}
-                onChange={(e) => {
-                  setCitySearch(e.target.value);
-                  setShowAllCities(false);
-                }}
-                placeholder={`Search ${stateName} cities…`}
-                className="pl-8 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-60"
-              />
-            </div>
-          </div>
-
-          {filteredCities.length > 0 ? (
-            <>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {visibleCities.map((city) => (
-                  <CityCard
-                    key={city.city_id}
-                    city={city}
-                    stateSlug={stateSlug}
-                  />
-                ))}
-              </div>
-
-              {!showAllCities &&
-                !deferredCitySearch.trim() &&
-                filteredCities.length > INITIAL_CITY_LIMIT && (
-                  <div className="mt-8 text-center">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setShowAllCities(true)}
-                      className="rounded-full px-6"
-                    >
-                      Show all {filteredCities.length} cities
-                    </Button>
-                  </div>
-                )}
-            </>
-          ) : (
-            <div className="text-center py-16 text-slate-400">
-              <Building2 className="w-8 h-8 mx-auto mb-2 opacity-40" />
-              <p>No cities match "{citySearch}"</p>
-              <button
-                type="button"
-                onClick={() => setCitySearch("")}
-                className="mt-2 text-blue-600 text-sm hover:underline"
-              >
-                Clear search
-              </button>
-            </div>
-          )}
+          <LocationAlphabetDirectory
+            locations={cities}
+            title={`Browse locations in ${stateName}`}
+            eyebrow="Cities and suburbs"
+            description="Choose your location to see local professionals and services."
+            overviewHref="/locations"
+            overviewLabel="All Australian locations"
+            buildHref={(city) => `/locations/${stateSlug}/${city.slug}`}
+          />
         </section>
 
         <InternalLinkModule
@@ -397,130 +286,7 @@ export default function StatePageClient({
           ]}
         />
 
-        <section className="pt-12 pb-20 [content-visibility:auto] [contain-intrinsic-size:1200px]">
-          <h2 className="text-2xl  font-bold text-slate-900 dark:text-white mb-8">
-            Browse all categories in {stateName}
-          </h2>
-
-          <div className="flex gap-10 items-start">
-            <aside className="hidden lg:flex flex-col w-52 shrink-0 sticky top-6 gap-5">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-                <input
-                  value={catSearch}
-                  onChange={(e) => setCatSearch(e.target.value)}
-                  placeholder="Search categories…"
-                  className="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4">
-                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-3">
-                  Jump to
-                </p>
-
-                <div className="flex flex-wrap gap-0.5">
-                  {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((letter) => {
-                    const hasLetter = letters.includes(letter);
-
-                    return (
-                      <button
-                        key={letter}
-                        type="button"
-                        onClick={() => hasLetter && scrollToLetter(letter)}
-                        className={`w-7 h-7 rounded-md text-xs font-semibold transition-colors ${
-                          !hasLetter
-                            ? "text-slate-300 dark:text-slate-700 cursor-default"
-                            : activeLetter === letter
-                              ? "bg-blue-600 text-white"
-                              : "text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 cursor-pointer"
-                        }`}
-                      >
-                        {letter}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <nav className="space-y-0.5 max-h-72 overflow-y-auto">
-                {filteredCats.map((cat) => (
-                  <button
-                    key={cat.category_id}
-                    type="button"
-                    onClick={() => scrollToLetter(cat.name.charAt(0).toUpperCase())}
-                    className="block w-full text-left px-2 py-1.5 rounded-md text-sm text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-colors"
-                  >
-                    {cat.name}
-                  </button>
-                ))}
-              </nav>
-            </aside>
-
-            <div className="flex-1 min-w-0 space-y-12">
-              <div className="relative lg:hidden">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-                <input
-                  value={catSearch}
-                  onChange={(e) => setCatSearch(e.target.value)}
-                  placeholder="Search categories…"
-                  className="w-full pl-8 pr-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              {letters.map((letter) => (
-                <div
-                  key={letter}
-                  ref={(el) => {
-                    catRefs.current[letter] = el;
-                  }}
-                  className="scroll-mt-6 space-y-10"
-                >
-                  {alphaGroups[letter].map((cat) => (
-                    <div key={cat.category_id}>
-                      <div className="flex items-center gap-3 mb-5 border-b-2 border-slate-100 dark:border-slate-800 pb-3">
-                        <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                          {cat.name}
-                        </h3>
-
-                        <Link
-                          href={`/services/${cat.slug}/${stateSlug}`}
-                          className="ml-auto inline-flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium"
-                        >
-                          All in {stateName}
-                          <ChevronRight className="w-3 h-3" />
-                        </Link>
-                      </div>
-
-                      <Link
-                        href={`/services/${cat.slug}/${stateSlug}`}
-                        className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
-                      >
-                        Find {cat.name} professionals in {stateName} →
-                      </Link>
-                    </div>
-                  ))}
-                </div>
-              ))}
-
-              {filteredCats.length === 0 && (
-                <div className="text-center py-20 text-slate-400">
-                  <Search className="w-8 h-8 mx-auto mb-3 opacity-40" />
-                  <p className="text-slate-600 dark:text-slate-400 font-medium">
-                    No categories match "{catSearch}"
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => setCatSearch("")}
-                    className="mt-2 text-blue-600 text-sm hover:underline"
-                  >
-                    Clear search
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
+        {/* Category directory temporarily hidden while the location directory is primary. */}
       </div>
 
       {otherStates.length > 0 && (
@@ -571,32 +337,3 @@ export default function StatePageClient({
     </main>
   );
 }
-
-const CityCard = memo(function CityCard({
-  city,
-  stateSlug,
-}: {
-  city: City;
-  stateSlug: string;
-}) {
-  const cityName = getCityLabel(city);
-
-  return (
-    <Link
-      href={`/locations/${stateSlug}/${city.slug}`}
-      className="group flex items-center gap-2 rounded-xl border px-3 py-1.5 transition-colors hover:border-blue-500 hover:bg-slate-50 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700"
-    >
-          <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400 group-hover:text-blue-500 mt-0.5 shrink-0 transition-colors" />
-
-          <div>
-          <span className="block truncate text-sm font-medium text-slate-900 dark:text-slate-100">
-          {cityName}
-            </span>
-
-            <p className="text-xs text-slate-400 mt-0.5">
-              View professionals
-            </p>
-      </div>
-    </Link>
-  );
-});

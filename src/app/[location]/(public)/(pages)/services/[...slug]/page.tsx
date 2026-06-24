@@ -7,6 +7,7 @@ import {
   filterSeoLocations,
   findSeoRedirectLocation,
 } from "@/lib/seo-locations";
+import { getAllCities as getAllCitiesFromDB } from "@/lib/cache";
 
 // export const dynamic = "force-static";
 // export const revalidate = 604800;
@@ -39,6 +40,9 @@ export interface City {
   state_name: string;
   country_name: string;
   city_description: string;
+  postcode?: string | null;
+  source?: string | null;
+  updated_at?: string;
   subcities: {
     city_id: number;
     name: string;
@@ -107,8 +111,7 @@ async function getService(serviceSlug: string): Promise<ServiceData | null> {
 
 async function getAllCities(): Promise<City[]> {
   try {
-    const res = await fetch(`${BASE_URL}/api/service-location`);
-    return res.ok ? res.json() : [];
+    return (await getAllCitiesFromDB()) as unknown as City[];
   } catch {
     return [];
   }
@@ -446,7 +449,7 @@ export default async function ServicePage({ params }: Props) {
       />
       <ServicePageWrapper
         service={service}
-        cities={cities}
+        cities={citySlug ? [] : cities.slice(0, 40)}
         rankedCategories={categories}
         initialLocation={activeLocation}
         citySlug={citySlug}

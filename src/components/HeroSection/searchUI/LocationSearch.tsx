@@ -7,7 +7,8 @@ import { IoLocationOutline } from "react-icons/io5";
 import axios from "axios";
 
 type Location = {
-  place_id: string;
+  place_id?: string;
+  australia_location_id?: number;
   city_id?: number;
   display_name: string;
   city?: string;
@@ -31,10 +32,6 @@ export default function LocationSearch({
   onLoadingChange,
   presetLocation,
 }: Props) {
-  const sessionToken = useRef(
-    typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())
-  );
-
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Location[]>([]);
   const [loading, setLoading] = useState(false);
@@ -82,17 +79,10 @@ export default function LocationSearch({
 
     setLoading(true);
     try {
-      const res = await axios.post("/api/googlemap/autocomplete", {
-        input,
-        session: sessionToken.current,
+      const res = await axios.get<Location[]>("/api/signup/location", {
+        params: { q: input, limit: 30 },
       });
-
-      const suggestions = res.data.suggestions || [];
-
-      const mapped = suggestions.map((s: any) => ({
-        place_id: s.placePrediction.placeId,
-        display_name: s.placePrediction.text.text,
-      }));
+      const mapped = res.data;
 
       cache.current[input] = mapped;
       setResults(mapped);
@@ -102,33 +92,6 @@ export default function LocationSearch({
       setResults([]);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchPlaceDetails = async (
-    placeId: string
-  ): Promise<Location | null> => {
-    try {
-      const res = await axios.get("/api/googlemap/place-details", {
-        params: { place_id: placeId, session: sessionToken.current },
-      });
-
-      const data = res.data;
-
-      return {
-        place_id: data.place_id,
-        display_name: data.display_name,
-        city: data.city,
-        suburb: data.suburb,
-        state: data.state,
-        postcode: data.postcode,
-        country: data.country,
-        lat: data.lat,
-        lng: data.lng,
-      };
-    } catch (err) {
-      console.error("Place details error:", err);
-      return null;
     }
   };
 
@@ -142,16 +105,15 @@ export default function LocationSearch({
 
     setLoading(true);
     try {
-      const details = await fetchPlaceDetails(loc.place_id);
-      if (!details) return;
-
-      const reslocation = await axios.post("/api/signup/location", details);
+      const reslocation = await axios.post("/api/signup/location", {
+        australia_location_id: loc.australia_location_id ?? loc.place_id,
+      });
       const city_id = reslocation.data.city_id;
 
       onSelect?.({
-        ...details,
+        ...loc,
         city_id,
-        display_name: loc.display_name,
+        city: reslocation.data.city ?? loc.city,
         _resolving: false,
       });
     } catch (err) {
@@ -235,7 +197,7 @@ export default function LocationSearch({
         <ul className="absolute top-full left-0 z-50 mt-1 max-h-64 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
           {results.map((r, i) => (
             <li
-              key={r.place_id}
+              key={r.australia_location_id ?? r.place_id ?? r.display_name}
               onClick={() => handleSelect(r)}
               onMouseEnter={() => setActiveIndex(i)}
               className={`cursor-pointer p-3 text-sm font-semibold transition ${
