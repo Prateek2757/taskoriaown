@@ -73,13 +73,13 @@ export default function AboutUs() {
       icon: Shield,
       title: "Trust First",
       description:
-        "Every provider undergoes rigorous verification including background checks, qualification validation, and identity authentication.",
+        "We use verification measures that may include identity checks and qualification reviews to help build trust between customers and providers",
     },
     {
       icon: Lock,
       title: "Payment Protection",
       description:
-        "Your money stays secure until the job is done right. Our escrow system ensures both parties are protected.",
+        "Payment protection features may be available for eligible services, helping provide added security for both customers and providers.",
     },
     {
       icon: Award,
@@ -167,7 +167,7 @@ export default function AboutUs() {
 
         <div className="  relative max-w-6xl mx-auto px-6 py-20 min-h-155 flex items-end">
           <OurStory />
-          <div className="absolute right-6 top-1/2 -translate-y-1/2 z-20 hidden sm:block">
+          <div className="absolute right-6 top-1/2 -translate-y-1/2 z-20 hidden md:block">
             <Image
               src="/images/teamwork.jpeg"
               alt="teamwork"

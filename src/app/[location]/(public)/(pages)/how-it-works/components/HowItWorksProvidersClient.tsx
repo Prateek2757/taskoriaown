@@ -388,7 +388,8 @@ export default function HowItWorksProviders() {
         <section className="text-center px-6 py-10 md:py-10">
           <div className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 text-[#2563EB] dark:text-blue-400 text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-[#2563EB] dark:bg-blue-400" />
-            Across Australia          </div>
+            Across Australia{" "}
+          </div>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight tracking-tight mb-5 max-w-3xl mx-auto">
             Taskoria for Tradies &amp; Pros
           </h1>
@@ -529,12 +530,14 @@ export default function HowItWorksProviders() {
                 quoting.
               </p>
               <p>
-                Brisbane tradies on Taskoria earn an average of{" "}
+                Based on Taskoria platform data (reporting period and sample
+                size to be published), provider earnings vary significantly by {" "}
                 <strong className="text-gray-800 dark:text-white font-semibold">
-                  $4,200 AUD per month
+                  service category, location, demand, pricing, and provider
+                  activity
                 </strong>
-                . Full-time pros with strong ratings consistently earn
-                $6,000–$10,000+ once established.
+                . Typical earnings ranges and supporting methodology will be
+                published once sufficient verified data is available.
               </p>
               <ul className="mt-3 space-y-2">
                 {[

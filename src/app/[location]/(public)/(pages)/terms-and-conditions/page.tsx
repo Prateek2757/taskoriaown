@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { IoLocationSharp } from "react-icons/io5";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
@@ -65,7 +66,6 @@ export const metadata: Metadata = {
 };
 
 export default function TermsAndConditionsPage() {
-
   return (
     <>
       <script
@@ -102,7 +102,7 @@ export default function TermsAndConditionsPage() {
               Terms & Conditions
             </h1>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Last Updated: { new Date().getFullYear()}
+              Last Updated: {new Date().getFullYear()}
             </p>
           </header>
 
@@ -111,8 +111,7 @@ export default function TermsAndConditionsPage() {
             <p>
               These Terms & Conditions ("Terms") govern your access to and use
               of the website, mobile applications, APIs, and related services
-              operated by{" "}
-              <strong>Taskoria Pty Ltd (ABN 37 658 760 831)</strong>{" "}
+              operated by <strong>Taskoria Pty Ltd (ABN 37 658 760 831)</strong>{" "}
               ("Taskoria", "we", "our", or "us").
             </p>
             <p>
@@ -372,9 +371,7 @@ export default function TermsAndConditionsPage() {
             <h2 className="text-2xl font-semibold">13. Disclaimers</h2>
             <p>To the maximum extent permitted by law:</p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>
-                The Platform is provided "as is" and "as available"
-              </li>
+              <li>The Platform is provided "as is" and "as available"</li>
               <li>Taskoria makes no warranties regarding:</li>
               <ul className="list-circle pl-6 space-y-1">
                 <li>Service quality</li>
@@ -464,6 +461,15 @@ export default function TermsAndConditionsPage() {
               >
                 https://www.taskoria.com
               </a>
+              <p className="flex gap-2">
+                {" "}
+                <IoLocationSharp color="#2563EB" size={20} />
+                Location:
+                <span className="text-blue-600">
+                  {" "}
+                  Level 34, 1 Eagle Street, Brisbane QLD{" "}
+                </span>
+              </p>
             </p>
           </section>
 
@@ -478,8 +484,9 @@ export default function TermsAndConditionsPage() {
 
           <footer className="mt-12 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
             <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-              These Terms & Conditions are effective as of {new Date().getFullYear()}. For
-              questions or concerns, please contact us at{" "}
+              These Terms & Conditions are effective as of{" "}
+              {new Date().getFullYear()}. For questions or concerns, please
+              contact us at{" "}
               <a
                 href="mailto:support@taskoria.com"
                 className="text-blue-600 dark:text-blue-400 underline hover:text-blue-700 dark:hover:text-blue-300"

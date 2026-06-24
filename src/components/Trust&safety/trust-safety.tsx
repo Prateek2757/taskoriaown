@@ -52,27 +52,27 @@ const TrustSafety = () => {
 
   const safetyFeatures = [
     {
-      title: "Secure Escrow Payments",
+      title: "Payment Support",
       description:
-        "Your payment is held securely until the job is completed to your satisfaction. Providers only get paid when you approve the work.",
+        "Taskoria provides payment and communication tools designed to help customers and providers manage jobs with greater confidence. Available payment features may vary by service and platform offering.",
       icon: <Lock className="w-6 h-6 text-blue-600" />,
     },
     {
-      title: "Dispute Resolution",
+      title: "Issue Resolution Support",
       description:
         "If issues arise, our Australian-based support team mediates fairly. We aim to resolve disputes within 48 hours with transparent communication.",
       icon: <Users className="w-6 h-6 text-green-600" />,
     },
     {
-      title: "Taskoria Guarantee",
+      title: "Customer Commitment",
       description:
-        "If a verified provider doesn't show up or complete the job as agreed, we'll help find a replacement or provide a full refund.",
+        "We're committed to helping customers and providers work through job-related concerns and find fair outcomes where possible, subject to our policies and terms.",
       icon: <Shield className="w-6 h-6 text-purple-600" />,
     },
     {
-      title: "24/7 Support",
+      title: "Customer Support",
       description:
-        "Australian-based customer support available around the clock for urgent issues, safety concerns, or payment disputes.",
+        "Our support team is available during published support hours to assist with account, platform, and job-related enquiries.",
       icon: <Phone className="w-6 h-6 text-orange-600" />,
     },
   ];
@@ -90,8 +90,7 @@ const TrustSafety = () => {
               Trust & Safety at Taskoria
             </h1>
             <p className="text-xl text-muted-foreground">
-              Australia's most secure service marketplace. Every provider
-              verified, every payment protected, every job guaranteed.
+         Australia's trusted service marketplace. Verified providers, secure payments, and support every step of the way.
             </p>
           </div>
         </div>
