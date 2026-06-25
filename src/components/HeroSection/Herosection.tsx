@@ -31,8 +31,8 @@ export default function HeroSection() {
                 src="/flag-aus.png"
                 alt="Australian flag"
                 width={18}
-                height={5}
-                style={{ height: "auto" }}
+                height={18}
+                className="h-4 w-4 rounded-full object-cover"
                 fetchPriority="high"
                 sizes="(max-width: 640px) 100vw,
                 (max-width: 1024px) 50vw,

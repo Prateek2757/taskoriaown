@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
@@ -106,6 +106,7 @@ export default function ServiceStatePageClient({
 }: Props) {
   const [openModal, setOpenModal] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [isReady, setIsReady] = useState(false);
 
   const serviceSlug = service.slug ?? "";
   const serviceNameLower = service.name.toLowerCase();
@@ -123,8 +124,17 @@ export default function ServiceStatePageClient({
       ? service.description.trim()
       : `Find trusted ${serviceNameLower} professionals across ${stateName}. Compare local providers, request free quotes and choose the right pro for your job.`;
 
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setIsReady(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   return (
-    <main className="min-h-screen bg-white dark:bg-slate-950">
+    <main
+      className={`service-hydrate-enter min-h-screen bg-white dark:bg-slate-950 ${
+        isReady ? "service-hydrate-ready" : ""
+      }`}
+    >
       {/* {(service.faqs ?? []).length > 0 && (
         <script
           type="application/ld+json"
@@ -153,7 +163,7 @@ export default function ServiceStatePageClient({
         />
       )}
 
-      <section className="relative overflow-hidden bg-slate-950">
+      <section className="service-enter relative overflow-hidden bg-slate-950">
         {service.hero_image ? (
           <Image
             src={service.hero_image}
@@ -161,7 +171,8 @@ export default function ServiceStatePageClient({
             fill
             priority
             sizes="100vw"
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            quality={75}
+            className="service-hero-media absolute inset-0 w-full h-full object-cover object-center"
           />
         ) : (
           <div className="absolute inset-0 bg-slate-950" />
@@ -170,7 +181,7 @@ export default function ServiceStatePageClient({
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 py-14 md:px-16 md:py-16">
           <div className="flex flex-col md:flex-row md:items-end gap-8">
-            <div className="flex-1 max-w-2xl">
+            <div className="service-enter service-exnter-delay-1 flex-1 max-w-2xl">
               <div className="inline-flex items-center rounded-full gap-1.5 bg-white/10 border border-white/15 text-white/80 px-3 py-1.5 text-xs font-semibold mb-5">
                 <MapPin className="w-3 h-3" />
                 {stateName}, Australia
@@ -204,7 +215,7 @@ export default function ServiceStatePageClient({
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-3 shrink-0 w-full md:w-auto">
+            <div className="service-enter service-enter-delay-2 grid grid-cols-3 gap-3 shrink-0 w-full md:w-auto">
               {[
                 { value: `${cities.length}`, label: "Cities" },
                 { value: "Free", label: "Quotes" },
@@ -244,7 +255,7 @@ export default function ServiceStatePageClient({
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-16">
+      <div className="service-content-visibility max-w-7xl mx-auto px-6 md:px-16">
         <section className="py-8 md:py-12">
           {stateSlug && (
             <ServiceBreadcrumb

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronRight, Home } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 interface ServiceBreadcrumbProps {
   service: { name: string; slug: string };
@@ -71,15 +71,6 @@ export default function ServiceBreadcrumb({
   if (subCityLabel) {
     crumbs.push({ label: subCityLabel, current: true });
   }
-  console.log(
-    stateSlug,
-    citySlug,
-    subCitySlug,
-    stateName,
-    cityName,
-    subCityName,
-    "citynames ",
-  );
 
   return (
     <nav

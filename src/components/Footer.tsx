@@ -129,8 +129,9 @@ const Footer = () => {
                   title="footer logo"
                   src="/images/taskoria_logo.svg"
                   alt="Taskoria - Trusted Local Services Marketplace in Australia"
-                  width={25}
-                  height={35}
+                  width={36}
+                  height={32}
+                  className="h-8 w-auto"
                 />
                 <span className="ml- text-3xl font-bold bg-[#2563EB] bg-clip-text text-transparent">
                   Taskoria

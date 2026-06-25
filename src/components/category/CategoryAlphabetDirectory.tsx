@@ -1,8 +1,15 @@
 "use client";
 
-import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Link from "next/link";
-import { ChevronRight, Search } from "lucide-react";
+import { ArrowUpRight, ChevronRight, Search } from "lucide-react";
 import AlphabetJumpFilter from "@/components/ui/alphabet-jump-filter";
 
 export type DirectoryCategory = {
@@ -28,9 +35,9 @@ export default function CategoryAlphabetDirectory<T extends DirectoryCategory>({
   className = "pt-14 pb-20",
 }: Props<T>) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeLetter, setActiveLetter] = useState<string | null>(null);
   const deferredSearch = useDeferredValue(searchQuery);
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const contentRef = useRef<HTMLDivElement | null>(null);
   const frameRef = useRef<number | null>(null);
 
   const filteredCategories = useMemo(() => {
@@ -67,13 +74,24 @@ export default function CategoryAlphabetDirectory<T extends DirectoryCategory>({
     [groups]
   );
 
+  const [activeLetter, setActiveLetter] = useState<string | null>(
+    () => availableLetters[0] ?? null
+  );
+  const displayActiveLetter =
+    activeLetter && availableLetters.includes(activeLetter)
+      ? activeLetter
+      : (availableLetters[0] ?? null);
+
   const updateActiveLetter = useCallback(() => {
     if (!availableLetters.length) {
       setActiveLetter(null);
       return;
     }
 
-    const activationLine = 180;
+    const content = contentRef.current;
+    if (!content) return;
+
+    const activationLine = content.getBoundingClientRect().top + 24;
     let current = availableLetters[0];
     let hasSectionAboveLine = false;
     let closestBelowDistance = Number.POSITIVE_INFINITY;
@@ -86,7 +104,10 @@ export default function CategoryAlphabetDirectory<T extends DirectoryCategory>({
       if (top <= activationLine) {
         current = letter;
         hasSectionAboveLine = true;
-      } else if (!hasSectionAboveLine && top - activationLine < closestBelowDistance) {
+      } else if (
+        !hasSectionAboveLine &&
+        top - activationLine < closestBelowDistance
+      ) {
         closestBelowDistance = top - activationLine;
         current = letter;
       }
@@ -95,31 +116,40 @@ export default function CategoryAlphabetDirectory<T extends DirectoryCategory>({
     setActiveLetter((previous) => (previous === current ? previous : current));
   }, [availableLetters]);
 
-  useEffect(() => {
-    const onScroll = () => {
-      if (frameRef.current !== null) return;
-      frameRef.current = window.requestAnimationFrame(() => {
-        frameRef.current = null;
-        updateActiveLetter();
-      });
-    };
+  const scheduleActiveLetterUpdate = useCallback(() => {
+    if (frameRef.current !== null) return;
+    frameRef.current = window.requestAnimationFrame(() => {
+      frameRef.current = null;
+      updateActiveLetter();
+    });
+  }, [updateActiveLetter]);
 
-    updateActiveLetter();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+  useEffect(() => {
+    window.addEventListener("resize", scheduleActiveLetterUpdate);
+    scheduleActiveLetterUpdate();
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (frameRef.current !== null) window.cancelAnimationFrame(frameRef.current);
+      window.removeEventListener("resize", scheduleActiveLetterUpdate);
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
     };
-  }, [updateActiveLetter]);
+  }, [scheduleActiveLetterUpdate]);
 
   const scrollToLetter = (letter: string) => {
     setActiveLetter(letter);
-    sectionRefs.current[letter]?.scrollIntoView({
+    const content = contentRef.current;
+    const section = sectionRefs.current[letter];
+    if (!content || !section) return;
+
+    content.scrollTo({
+      top:
+        content.scrollTop +
+        section.getBoundingClientRect().top -
+        content.getBoundingClientRect().top -
+        24,
       behavior: "smooth",
-      block: "start",
     });
   };
 
@@ -136,111 +166,126 @@ export default function CategoryAlphabetDirectory<T extends DirectoryCategory>({
   );
 
   return (
-    <section className={className}>
-      <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <div className="border-b border-slate-100 px-5 py-7 dark:border-slate-800 sm:px-8 lg:px-10">
-          <p className="text-xs font-extrabold uppercase tracking-[0.28em] text-blue-500 dark:text-blue-400">
+    <section className={`h-[calc(100dvh-1rem)] overflow-hidden ${className}`}>
+      <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div className="border-b border-slate-100 p-4 dark:border-slate-800 sm:px-8 lg:px-10">
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#2563EB] dark:text-blue-400">
             Service directory
           </p>
-          <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white md:text-3xl">
+          <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white">
             {title}
           </h2>
           <p className="mt-1 text-sm font-medium text-slate-500 dark:text-slate-400">
-            {categories.length.toLocaleString("en-AU")} categories available in {locationLabel}.
+            {categories.length.toLocaleString("en-AU")} categories available in{" "}
+            {locationLabel}.
           </p>
         </div>
 
-        <div className="flex items-start gap-10 p-5 sm:p-8 lg:p-10">
-          <aside className="sticky top-24 hidden w-52 shrink-0 flex-col gap-5 lg:flex">
-          {searchInput}
-          <AlphabetJumpFilter
-            availableLetters={availableLetters}
-            activeLetter={activeLetter}
-            onSelect={scrollToLetter}
-            ariaLabel={`Jump to service categories in ${locationLabel}`}
-          />
-
-          <nav aria-label="Category shortcuts" className="max-h-72 space-y-0.5 overflow-y-auto pr-1">
-            {filteredCategories.map((category) => (
-              <button
-                key={category.category_id}
-                type="button"
-                onClick={() => scrollToLetter(category.name.charAt(0).toUpperCase())}
-                className="block w-full rounded-md px-2 py-1.5 text-left text-sm text-slate-600 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-slate-400 dark:hover:bg-blue-950/20 dark:hover:text-blue-400"
-              >
-                {category.name}
-              </button>
-            ))}
-          </nav>
-          </aside>
-
-          <div className="min-w-0 flex-1 space-y-10">
-          <div className="space-y-3 lg:hidden">
+        <div className="flex min-h-0 flex-1 items-stretch gap-7 overflow-hidden p-5 sm:p-7">
+          <aside className="hidden w-60 shrink-0 flex-col gap-4 overflow-y-auto lg:flex">
             {searchInput}
             <AlphabetJumpFilter
               availableLetters={availableLetters}
-              activeLetter={activeLetter}
+              activeLetter={displayActiveLetter}
               onSelect={scrollToLetter}
               ariaLabel={`Jump to service categories in ${locationLabel}`}
-              variant="horizontal"
             />
-          </div>
 
-          {availableLetters.map((letter) => (
-            <div
-              key={letter}
-              ref={(element) => {
-                sectionRefs.current[letter] = element;
-              }}
-              data-directory-letter={letter}
-              className="scroll-mt-28"
+            <nav
+              aria-label="Category shortcuts"
+              className="max-h-72 space-y-0.5 overflow-y-auto pr-1"
             >
-              <div className="mb-4 flex items-center gap-3 border-b border-slate-200 pb-3 dark:border-slate-800">
-                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-sm font-extrabold text-white">
-                  {letter}
-                </span>
-                <p className="text-sm font-medium text-slate-400">
-                  {groups.get(letter)?.length ?? 0} categories
-                </p>
-              </div>
+              {filteredCategories.map((category) => (
+                <button
+                  key={category.category_id}
+                  type="button"
+                  onClick={() =>
+                    scrollToLetter(category.name.charAt(0).toUpperCase())
+                  }
+                  className="block w-full rounded-md px-2 py-1.5 text-left text-sm text-slate-600 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-slate-400 dark:hover:bg-blue-950/20 dark:hover:text-blue-400"
+                >
+                  {category.name}
+                </button>
+              ))}
+            </nav>
+          </aside>
 
-              <div className="space-y-2">
-                {groups.get(letter)?.map((category) => (
-                  <div
-                    key={category.category_id}
-                    className="group flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 transition-colors hover:border-blue-100 hover:bg-blue-50/60 dark:hover:border-blue-900 dark:hover:bg-blue-950/20"
-                  >
-                    <h3 className="min-w-0 flex-1 truncate text-base font-semibold text-slate-900 dark:text-white">
-                      {category.name}
-                    </h3>
+          <div
+            ref={contentRef}
+            onScroll={scheduleActiveLetterUpdate}
+            className="min-w-0 flex-1 space-y-7 overflow-y-auto pr-1"
+          >
+            <div className="sticky top-0 z-10 space-y-3 bg-white pb-3 dark:bg-slate-900 lg:hidden">
+              {searchInput}
+              <AlphabetJumpFilter
+                availableLetters={availableLetters}
+                activeLetter={displayActiveLetter}
+                onSelect={scrollToLetter}
+                ariaLabel={`Jump to service categories in ${locationLabel}`}
+                variant="horizontal"
+              />
+            </div>
+
+            {availableLetters.map((letter) => (
+              <div
+                key={letter}
+                ref={(element) => {
+                  sectionRefs.current[letter] = element;
+                }}
+                data-directory-letter={letter}
+                className="scroll-mt-28"
+              >
+                <div className="mb-2.5 flex items-center gap-2.5 border-b border-slate-200 pb-3 dark:border-slate-800">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-xs font-extrabold text-white">
+                    {letter}
+                  </span>
+                  <p className="text-sm font-medium text-slate-400">
+                    {groups.get(letter)?.length ?? 0} categories
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  {groups.get(letter)?.map((category) => (
                     <Link
                       href={buildHref(category)}
-                      className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-blue-600 hover:underline dark:text-blue-400"
+                      key={category.category_id}
+                      className="group flex items-center   justify-start hover:underline px-3 py-0.5 text-[#2563EB]  dark:text-blue-400 hover:text-blue-800"
                     >
-                      All in {locationLabel}
-                      <ChevronRight className="h-3.5 w-3.5" />
+                      <span className="min-w-0  truncate text-sm font-semibold ">
+                        {category.name}
+                      </span>
+                      <ArrowUpRight
+                        className="w-4 h-4 transition-transform group-hover:translate-x-1 opacity-0 duration-300 group-hover:rotate-45 group-hover:opacity-100"
+                        aria-hidden="true"
+                      />
+                      {/* <Link
+                        href={buildHref(category)}
+                        className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-blue-600 hover:underline dark:text-blue-400"
+                      >
+                        All in {locationLabel}
+                        <ChevronRight className="h-3.5 w-3.5" />
+                      </Link> */}
                     </Link>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
 
-          {filteredCategories.length === 0 && (
-            <div className="rounded-2xl bg-slate-50 py-16 text-center text-slate-400 dark:bg-slate-900">
-              <Search className="mx-auto mb-3 h-8 w-8 opacity-40" />
-              <p className="font-medium text-slate-600 dark:text-slate-400">
-                No categories found for "{searchQuery}"
-              </p>
-              <button
-                type="button"
-                onClick={() => setSearchQuery("")}
-                className="mt-3 text-sm font-semibold text-blue-600 hover:underline dark:text-blue-400"
-              >
-                Clear search
-              </button>
-            </div>
-          )}
+            {filteredCategories.length === 0 && (
+              <div className="rounded-2xl bg-slate-50 py-16 text-center text-slate-400 dark:bg-slate-900">
+                <Search className="mx-auto mb-3 h-8 w-8 opacity-40" />
+                <p className="font-medium text-slate-600 dark:text-slate-400">
+                  {`No categories found for "${searchQuery}"`}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="mt-3 text-sm font-semibold text-blue-600 hover:underline dark:text-blue-400"
+                >
+                  Clear search
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

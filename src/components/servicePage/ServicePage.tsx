@@ -1,20 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import ServiceHeroSection from "@/components/servicePage/ServiceHeroSection";
-import PopularLocationsSection from "@/components/servicePage/PopularLocationSection";
-import FAQSection from "@/components/servicePage/Faqs";
-import Howitwork from "@/components/servicePage/HowItWorks";
 import Link from "next/link";
 import SubHeroService from "./Subheroservice";
-import WhyTaskoria from "./WhyTaskoria";
-import StepWiseHowItWorks from "./3stepServiceSection";
 import ServiceBreadcrumb from "./Servicebreadcrumb";
 import { normalizeServiceHtml } from "./normalizeServiceHtml";
-import InternalLinkModule from "@/components/InternalLinkModule";
 import {
   getRankedCityServiceLinks,
   getRankedServiceLinks,
@@ -32,6 +26,45 @@ const CityProviders = dynamic(
   () => import("@/components/servicePage/cityProviders"),
   {
     ssr: false,
+    loading: () => null,
+  }
+);
+
+const PopularLocationsSection = dynamic(
+  () => import("@/components/servicePage/PopularLocationSection"),
+  {
+    loading: () => null,
+  }
+);
+
+const FAQSection = dynamic(() => import("@/components/servicePage/Faqs"), {
+  loading: () => null,
+});
+
+const Howitwork = dynamic(
+  () => import("@/components/servicePage/HowItWorks"),
+  {
+    loading: () => null,
+  }
+);
+
+const WhyTaskoria = dynamic(
+  () => import("@/components/servicePage/WhyTaskoria"),
+  {
+    loading: () => null,
+  }
+);
+
+const StepWiseHowItWorks = dynamic(
+  () => import("@/components/servicePage/3stepServiceSection"),
+  {
+    loading: () => null,
+  }
+);
+
+const InternalLinkModule = dynamic(
+  () => import("@/components/InternalLinkModule"),
+  {
     loading: () => null,
   }
 );
@@ -92,21 +125,15 @@ export default function ServicePageClient({
 }: ServicePageClientProps) {
   const [openModal, setOpenModal] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(initialLocation);
-  const [selectedCategory, setSelectedCategory] = useState(service);
 
   const handleSelectCategory = () => {
-    setSelectedCategory(service);
     setOpenModal(true);
   };
 
   const handleLocationSet = (location: any) => {
     setSelectedLocation(location);
-    setSelectedCategory(service);
     setOpenModal(true);
   };
-
-  // console.log(selectedLocation,"slecterd");
-  // console.log(initialLocation);
 
   const cityName: string | undefined = getReadableLocationName(
     selectedLocation,
@@ -131,24 +158,33 @@ export default function ServicePageClient({
     service.name,
     locationLabel
   );
-  const relatedServiceLinks = citySlug
-    ? getRankedCityServiceLinks(
-        stateSlug ?? selectedLocation?.state_slug,
-        subCitySlug ?? citySlug,
-        rankedCategories,
-        8,
-        service.slug
-      )
-    : getRankedServiceLinks(rankedCategories, 8, service.slug);
-  // console.log(service,stateSlug,citySlug,subCitySlug,stateName,cityName,subCityName,"citynames ");
-
+  const relatedServiceLinks = useMemo(
+    () =>
+      citySlug
+        ? getRankedCityServiceLinks(
+            stateSlug ?? selectedLocation?.state_slug,
+            subCitySlug ?? citySlug,
+            rankedCategories,
+            8,
+            service.slug
+          )
+        : getRankedServiceLinks(rankedCategories, 8, service.slug),
+    [
+      citySlug,
+      rankedCategories,
+      selectedLocation?.state_slug,
+      service.slug,
+      stateSlug,
+      subCitySlug,
+    ]
+  );
   return (
     <main className="min-h-screen bg-white dark:bg-slate-950">
       {openModal && (
         <NewRequestModal
           open={openModal}
           onClose={() => setOpenModal(false)}
-          presetCategory={selectedCategory}
+          presetCategory={service}
           presetLocation={selectedLocation}
           initialStep={selectedLocation ? 2 : 1}
         />
@@ -162,7 +198,7 @@ export default function ServicePageClient({
           locationName={activeCityName}
         />
 
-        <section className="max-w-6xl mx-auto px-5 md:px-6 py-3">
+        <section className="service-content-visibility max-w-6xl mx-auto px-5 md:px-6 py-3">
           {citySlug && (
             <ServiceBreadcrumb
               service={service}

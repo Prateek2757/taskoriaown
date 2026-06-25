@@ -24,6 +24,7 @@ import {
   getRankedCityServiceLinks,
 } from "@/lib/internal-links";
 import LocationAlphabetDirectory from "@/components/Location/LocationAlphabetDirectory";
+import Image from "next/image";
 
 interface Props {
   city: City;
@@ -55,7 +56,7 @@ const Static_State_Image: Record<string, string> = {
   qld: "/queensland.jpg",
   sa: "/south-australia.jpg",
   tas: "/tasmania.jpg",
-  wa: "/western-australia.jpg",
+  wa: "/western-australia.webp",
   vic: "/victoria.jpg",
   "new-south-wales": "/nsw-sydney.jpg",
   "australian-capital-territory": "/act.jpg",
@@ -64,7 +65,7 @@ const Static_State_Image: Record<string, string> = {
   queensland: "/queensland.jpg",
   "south-australia": "/south-australia.jpg",
   tasmania: "/tasmania.jpg",
-  "western-australia": "/western-australia.jpg",
+  "western-australia": "/western-australia.webp",
   victoria: "/victoria.jpg",
 };
 
@@ -334,7 +335,7 @@ export default function CityPageClient({
           </section>
         )}
 
-        {sameStateCities.length > 0 && (
+        {/* {sameStateCities.length > 0 && (
           <section className="pt-10 pb-2">
             <SectionHeader
               title={`Other cities in ${city.state_name}`}
@@ -353,7 +354,7 @@ export default function CityPageClient({
               ))}
             </div>
           </section>
-        )}
+        )} */}
 
         {/* Category directory is temporarily hidden; use the location directory. */}
         <section className="pt-14 pb-20">
@@ -439,50 +440,48 @@ function CategoryCard({
       href={`/services/${cat.slug}/${stateSlug}/${citySlug}`}
       className="group relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-300 dark:hover:border-blue-700 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
     >
-      <div className="relative h-32 overflow-hidden">
-        {cat.image_url ? (
-          <img
-            src={cat.image_url}
-            alt={cat.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div
-            className="w-full h-full flex items-center justify-center"
-            style={{ background: `${accent}14` }}
-          >
-            <span
-              className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-2xl font-extrabold"
-              style={{ background: accent }}
-            >
-              {cat.name[0]}
-            </span>
-          </div>
-        )}
+    <div className="relative h-32 overflow-hidden">
+  {cat.image_url ? (
+    <>
+      <Image
+        height={500}
+        width={500}
+        src={cat.image_url}
+        alt={cat.name}
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
 
-        {rank && (
-          <div className="absolute top-2 left-2 w-6 h-6 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center justify-center shadow-sm">
-            {rank}
-          </div>
-        )}
+      {/* Dim Overlay */}
+      <div className="absolute inset-0 bg-black/40" />
 
-        {showTrend && (
-          <div className="absolute top-2 right-2 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/80 dark:text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full">
-            trending
-          </div>
-        )}
-      </div>
-
-      <div className="p-3">
-        <h3 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 leading-snug">
+      <div className="absolute bottom-3 left-2 z-10">
+        <h3 className="text-white font-semibold text-sm leading-tight">
           {cat.name}
         </h3>
+
         {cat.subcategories.length > 0 && (
-          <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+          <p className="text-xs text-white/80">
             {cat.subcategories.length} services
           </p>
         )}
       </div>
+    </>
+  ) : (
+    <div
+      className="w-full h-full flex items-center justify-center"
+      style={{ background: `${accent}14` }}
+    >
+      <span
+        className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-2xl font-extrabold"
+        style={{ background: accent }}
+      >
+        {cat.name[0]}
+      </span>
+    </div>
+  )}
+
+</div>
+   
     </Link>
   );
 }

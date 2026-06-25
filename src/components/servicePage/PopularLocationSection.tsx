@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import Image from "next/image";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef } from "react";
 
 interface PopularLocationsSectionProps {
   cities: City[];
@@ -41,7 +41,7 @@ export default function PopularLocationsSection({
   currentCity,
 }: PopularLocationsSectionProps) {
   const validCities = cities.filter((city) => city.slug && city.state_slug);
-  const displayCities = validCities.slice(0, 30);
+  const displayCities = validCities.slice(0, 22);
   const additionalCities = validCities.slice(30, 40);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -49,24 +49,21 @@ export default function PopularLocationsSection({
 
   const totalPages = Math.ceil(displayCities.length / 3);
 
-  const scrollToIndex = useCallback(
-    (index: number) => {
-      if (!scrollContainerRef.current) return;
+  const scrollToIndex = (index: number) => {
+    if (!scrollContainerRef.current) return;
 
-      const container = scrollContainerRef.current;
-      if (!displayCities.length) return;
+    const container = scrollContainerRef.current;
+    if (!displayCities.length) return;
 
-      const cardWidth = container.scrollWidth / displayCities.length;
-      const scrollPosition = index * cardWidth * 3;
+    const cardWidth = container.scrollWidth / displayCities.length;
+    const scrollPosition = index * cardWidth * 3;
 
-      container.scrollTo({
-        left: scrollPosition,
-        behavior: "smooth",
-      });
-      setCurrentIndex(index);
-    },
-    [displayCities.length]
-  );
+    container.scrollTo({
+      left: scrollPosition,
+      behavior: "smooth",
+    });
+    setCurrentIndex(index);
+  };
 
   const handlePrevious = () => {
     if (totalPages <= 1) return;
@@ -251,33 +248,30 @@ export default function PopularLocationsSection({
           </div>
 
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
-            {additionalCities.map((city, index) => {
+            {additionalCities.map((city) => {
               const isCurrentCity = currentCity === city.slug;
-              const imageUrl = city.image_url || "/location.jpg";
 
               return (
-                <>
-                  <Link
-                    key={`${city.state_slug}-${city.slug}-more-link`}
-                    href={`/services/${serviceSlug}/${city.state_slug}/${city.slug}`}
-                    className={`group flex items-center gap-2 rounded-xl border px-3 py-1.5 transition-colors hover:border-blue-500 hover:bg-slate-50 dark:hover:bg-slate-800 ${
-                      isCurrentCity
-                        ? "border-blue-500 bg-blue-50 dark:bg-blue-950/20"
-                        : "border-slate-200 dark:border-slate-700"
-                    }`}
-                  >
-                    <MapPin className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
+                <Link
+                  key={`${city.state_slug}-${city.slug}-more-link`}
+                  href={`/services/${serviceSlug}/${city.state_slug}/${city.slug}`}
+                  className={`group flex items-center gap-2 rounded-xl border px-3 py-1.5 transition-colors hover:border-blue-500 hover:bg-slate-50 dark:hover:bg-slate-800 ${
+                    isCurrentCity
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-950/20"
+                      : "border-slate-200 dark:border-slate-700"
+                  }`}
+                >
+                  <MapPin className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
 
-                    <div className="min-w-0">
-                      <span className="block truncate text-sm font-medium text-slate-900 dark:text-slate-100">
-                        {city.name}
-                      </span>
-                      <span className="block truncate text-xs text-slate-500 dark:text-slate-400">
-                        {city.state_name}
-                      </span>
-                    </div>
-                  </Link>
-                </>
+                  <div className="min-w-0">
+                    <span className="block truncate text-sm font-medium text-slate-900 dark:text-slate-100">
+                      {city.name}
+                    </span>
+                    <span className="block truncate text-xs text-slate-500 dark:text-slate-400">
+                      {city.state_name}
+                    </span>
+                  </div>
+                </Link>
               );
             })}
           </div>

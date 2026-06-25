@@ -7,7 +7,15 @@ import {
   filterSeoLocations,
   findSeoRedirectLocation,
 } from "@/lib/seo-locations";
-import { getAllCities as getAllCitiesFromDB } from "@/lib/cache";
+import {
+  getAllCities as getAllCitiesFromDB,
+  getCategoriesFromDB,
+  getCategoryBySlug,
+  getPopularSeoCitiesFromDB,
+  getSeoCitiesByStateFromDB,
+  getSeoCityBySlugFromDB,
+  getSeoStatesFromDB,
+} from "@/lib/cache";
 
 // export const dynamic = "force-static";
 // export const revalidate = 604800;
@@ -21,6 +29,8 @@ interface ServiceData {
   name: string;
   description?: string;
   hero_image?: string;
+  service_image_url?: string;
+  image_url?: string;
   about?: string;
   service_detail?: string;
   slug?: string;
@@ -55,7 +65,17 @@ export interface City {
   providers?: any[];
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL!;
+type CategoryData = {
+  slug: string | null;
+  name: string | null;
+  rank: number | null;
+  image_url?: string | null;
+};
+
+type StateData = {
+  state_slug: string;
+  state_name: string;
+};
 
 function toTitleCase(slug: string) {
   return slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
@@ -102,8 +122,17 @@ function buildServicePath(
 
 async function getService(serviceSlug: string): Promise<ServiceData | null> {
   try {
-    const res = await fetch(`${BASE_URL}/api/categories/${serviceSlug}`);
-    return res.ok ? res.json() : null;
+    const service = (await getCategoryBySlug(serviceSlug)) as ServiceData | null;
+    if (!service) return null;
+
+    return {
+      ...service,
+      hero_image:
+        service.hero_image ??
+        service.service_image_url ??
+        service.image_url ??
+        undefined,
+    };
   } catch {
     return null;
   }
@@ -112,6 +141,52 @@ async function getService(serviceSlug: string): Promise<ServiceData | null> {
 async function getAllCities(): Promise<City[]> {
   try {
     return (await getAllCitiesFromDB()) as unknown as City[];
+  } catch {
+    return [];
+  }
+}
+
+async function getPopularCities(limit = 40): Promise<City[]> {
+  try {
+    const cities = (await getPopularSeoCitiesFromDB(limit * 2)) as City[];
+    return filterSeoLocations(cities).slice(0, limit);
+  } catch {
+    return [];
+  }
+}
+
+async function getStateCities(stateSlug: string): Promise<City[]> {
+  try {
+    return filterSeoLocations(
+      (await getSeoCitiesByStateFromDB(stateSlug)) as City[]
+    );
+  } catch {
+    return [];
+  }
+}
+
+async function getSelectedCity(
+  stateSlug: string | null,
+  citySlug: string
+): Promise<City | null> {
+  try {
+    const city = (await getSeoCityBySlugFromDB(
+      stateSlug,
+      citySlug
+    )) as City | null;
+    return city ? (filterSeoLocations([city])[0] ?? null) : null;
+  } catch {
+    return null;
+  }
+}
+
+async function getAllStates(): Promise<StateData[]> {
+  try {
+    const states = (await getSeoStatesFromDB()) as StateData[];
+    return states.map((state) => ({
+      state_slug: state.state_slug,
+      state_name: state.state_name ?? toTitleCase(state.state_slug),
+    }));
   } catch {
     return [];
   }
@@ -126,11 +201,47 @@ async function getAllCategories(): Promise<
   }[]
 > {
   try {
-    const res = await fetch(`${BASE_URL}/api/signup/category-selection`);
-    return res.ok ? res.json() : [];
+    const categories = (await getCategoriesFromDB()) as CategoryData[];
+    return categories
+      .filter((category) => category.slug && category.rank != null)
+      .sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999))
+      .map(({ slug, name, rank, image_url }) => ({
+        slug,
+        name,
+        rank,
+        image_url,
+      }));
   } catch {
     return [];
   }
+}
+
+function toPopularCity(city: City) {
+  return {
+    city_id: city.city_id,
+    name: city.name,
+    slug: city.slug,
+    display_name: city.display_name,
+    popularity: city.popularity,
+    image_url: city.image_url,
+    state_slug: city.state_slug,
+    state_name: city.state_name,
+    city_description: city.city_description,
+  };
+}
+
+function toDirectoryCity(city: City) {
+  return {
+    city_id: city.city_id,
+    name: city.name,
+    slug: city.slug,
+    display_name: city.display_name,
+    popularity: city.popularity,
+    image_url: city.image_url,
+    state_slug: city.state_slug,
+    state_name: city.state_name,
+    postcode: city.postcode,
+  };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -154,15 +265,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const rawCities =
-    stateSlug || citySlug || subCitySlug ? await getAllCities() : [];
-  const cities = filterSeoLocations(rawCities);
   const selectedCity = citySlug
-    ? (cities.find(
-        (city) =>
-          city.slug === citySlug &&
-          (!stateSlug || city.state_slug === stateSlug)
-      ) ?? null)
+    ? await getSelectedCity(stateSlug, citySlug)
     : null;
   const selectedSubCity =
     subCitySlug && selectedCity
@@ -170,8 +274,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           (subcity) => subcity.slug === subCitySlug
         ) ?? null)
       : null;
+  const stateCities =
+    stateSlug && (!citySlug || !selectedCity)
+      ? await getStateCities(stateSlug)
+      : [];
   const hasSelectedState = stateSlug
-    ? cities.some((city) => city.state_slug === stateSlug)
+    ? Boolean(selectedCity) || stateCities.length > 0
     : true;
 
   if (
@@ -179,13 +287,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     (citySlug && !selectedCity) ||
     (subCitySlug && !selectedSubCity)
   ) {
-    const redirectCity =
-      stateSlug && citySlug
-        ? findSeoRedirectLocation(rawCities, stateSlug, citySlug)
-        : null;
-    const redirectUrl = redirectCity?.slug
-      ? buildCanonical(serviceSlug, stateSlug, redirectCity.slug, null)
-      : serviceSlug && stateSlug && hasSelectedState
+    const redirectUrl =
+      selectedCity && stateSlug
+        ? buildCanonical(serviceSlug, stateSlug, selectedCity.slug, null)
+        : serviceSlug && stateSlug && hasSelectedState
         ? buildCanonical(serviceSlug, stateSlug, null, null)
         : `https://www.taskoria.com/services/${serviceSlug}`;
 
@@ -201,7 +306,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     getLocationLabel(selectedSubCity) ??
     (subCitySlug ? toTitleCase(subCitySlug) : null);
   const stateName =
-    selectedCity?.state_name ?? (stateSlug ? toTitleCase(stateSlug) : null);
+    selectedCity?.state_name ??
+    stateCities[0]?.state_name ??
+    (stateSlug ? toTitleCase(stateSlug) : null);
   const isStatePage = stateSlug && !citySlug;
   const serviceName = service.name.trim();
   const serviceNameLower = serviceName.toLowerCase();
@@ -333,12 +440,24 @@ export default async function ServicePage({ params }: Props) {
 
   if (!serviceSlug || serviceSlug === "undefined") notFound();
 
-  const [service, rawCities, categories] = await Promise.all([
-    getService(serviceSlug),
-    getAllCities(),
-    getAllCategories(),
-  ]);
-  const cities = filterSeoLocations(rawCities);
+  const statePageDataPromise: Promise<[City[], StateData[]] | null> =
+    stateSlug && !citySlug
+      ? Promise.all([getStateCities(stateSlug), getAllStates()])
+      : Promise.resolve(null);
+  const selectedLocationPromise: Promise<City | null> = citySlug
+    ? getSelectedCity(stateSlug, citySlug)
+    : Promise.resolve(null);
+  const popularCitiesPromise: Promise<City[]> =
+    !stateSlug && !citySlug ? getPopularCities(40) : Promise.resolve([]);
+
+  const [service, categories, statePageData, selectedLocation, popularCities] =
+    await Promise.all([
+      getService(serviceSlug),
+      getAllCategories(),
+      statePageDataPromise,
+      selectedLocationPromise,
+      popularCitiesPromise,
+    ]);
 
   if (!service) {
     return (
@@ -356,25 +475,16 @@ export default async function ServicePage({ params }: Props) {
   }
 
   if (stateSlug && !citySlug) {
-    const stateCitiesRaw = cities
-      .filter((c) => c.state_slug === stateSlug)
-      .sort((a, b) => b.popularity - a.popularity);
+    const [stateCitiesRaw, states] = statePageData ?? [[], []];
     const stateCities = Array.from(
       new Map(stateCitiesRaw.map((c) => [c.name.toLowerCase(), c])).values()
-    );
+    ).map(toDirectoryCity);
     if (!stateCities.length) notFound();
     const stateName = stateCities[0]?.state_name ?? toTitleCase(stateSlug);
 
-    const otherStates = [
-      ...new Map(
-        cities
-          .filter((c) => c.state_slug !== stateSlug)
-          .map((c) => [
-            c.state_slug,
-            { state_slug: c.state_slug, state_name: c.state_name },
-          ])
-      ).values(),
-    ].sort((a, b) => a.state_name.localeCompare(b.state_name));
+    const otherStates = states
+      .filter((state) => state.state_slug !== stateSlug)
+      .sort((a, b) => a.state_name.localeCompare(b.state_name));
 
     return (
       <>
@@ -398,22 +508,25 @@ export default async function ServicePage({ params }: Props) {
     );
   }
 
-  const selectedLocation = citySlug
-    ? (cities.find(
-        (city) =>
-          city.slug === citySlug &&
-          (!stateSlug || city.state_slug === stateSlug)
-      ) ?? null)
-    : null;
-
   const selectedSubCity = subCitySlug
     ? (selectedLocation?.subcities?.find((s) => s.slug === subCitySlug) ?? null)
     : null;
 
-  const activeLocation = selectedSubCity ?? selectedLocation;
+  const activeLocation = selectedSubCity
+    ? {
+        ...selectedSubCity,
+        state_slug: selectedSubCity.state_slug ?? selectedLocation?.state_slug,
+        state_name: selectedLocation?.state_name,
+        country_name: selectedLocation?.country_name,
+      }
+    : selectedLocation;
 
   if (citySlug && !selectedLocation) {
     if (stateSlug) {
+      const [rawCities, stateCities] = await Promise.all([
+        getAllCities(),
+        getStateCities(stateSlug),
+      ]);
       const redirectCity = findSeoRedirectLocation(
         rawCities,
         stateSlug,
@@ -423,10 +536,10 @@ export default async function ServicePage({ params }: Props) {
       if (redirectCity?.slug) {
         redirect(buildServicePath(serviceSlug, stateSlug, redirectCity.slug));
       }
-    }
 
-    if (stateSlug && cities.some((city) => city.state_slug === stateSlug)) {
-      redirect(`/services/${serviceSlug}/${stateSlug}`);
+      if (stateCities.length) {
+        redirect(`/services/${serviceSlug}/${stateSlug}`);
+      }
     }
 
     redirect(`/services/${serviceSlug}`);
@@ -449,7 +562,7 @@ export default async function ServicePage({ params }: Props) {
       />
       <ServicePageWrapper
         service={service}
-        cities={citySlug ? [] : cities.slice(0, 40)}
+        cities={citySlug ? [] : popularCities.map(toPopularCity)}
         rankedCategories={categories}
         initialLocation={activeLocation}
         citySlug={citySlug}
@@ -464,13 +577,13 @@ export default async function ServicePage({ params }: Props) {
 //   try {
 //     const [cities, categoriesRaw] = await Promise.all([
 //       getAllCities(),
-//       getAllCategories(), // now goes through /api/categories with cache headers
+//       getAllCategories(),
 //     ]);
 
 //     const params: { slug: string[] }[] = [];
 
 //     const rankedCategories = categoriesRaw
-//       .filter((c) => c.slug && c.rank != null)
+//       .filter((c) => c.slug && Number(c.rank) > 0)
 //       .sort((a, b) => (a.rank ?? 999) - (b.rank ?? 999));
 
 //     const rankedCities = [...cities]

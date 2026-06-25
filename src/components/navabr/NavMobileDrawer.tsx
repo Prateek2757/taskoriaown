@@ -68,9 +68,9 @@ export default function NavMobileDrawer({
               <Image
                 src="/images/taskoria_logo.svg"
                 alt="Taskoria"
-                height={32}
-                width={22}
-                className="shrink-0"
+                width={30}
+                height={26}
+                className="h-7 w-auto shrink-0"
               />
               <span className="text-xl font-bold text-[#2563EB] truncate">
                 Taskoria

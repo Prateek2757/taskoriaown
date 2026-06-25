@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, useCallback, useId } from "react";
 import { Loader2, MapPin, X, Navigation } from "lucide-react";
 import { Input } from "../ui/input";
-import axios from "axios";
 
 type Location = {
   place_id?: string;
@@ -38,13 +37,19 @@ function formatResultLabel(raw: string) {
   return { primary, secondary };
 }
 
+function isAbortError(error: unknown) {
+  return error instanceof Error && error.name === "AbortError";
+}
+
 export default function LocationSearch({
   onSelect,
   onLoadingChange,
   presetLocation,
 }: Props) {
   const listboxId = useId();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(() =>
+    presetLocation?.display_name ? stripCountry(presetLocation.display_name) : ""
+  );
   const [results, setResults] = useState<Location[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -63,12 +68,6 @@ export default function LocationSearch({
     },
     [onLoadingChange]
   );
-
-  useEffect(() => {
-    if (presetLocation?.display_name) {
-      setQuery(stripCountry(presetLocation.display_name));
-    }
-  }, [presetLocation?.display_name]);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -103,25 +102,31 @@ export default function LocationSearch({
       }
 
       abortRef.current?.abort();
-      abortRef.current = new AbortController();
+      const controller = new AbortController();
+      abortRef.current = controller;
 
       setLoadingState(true);
       try {
-        const res = await axios.get<Location[]>("/api/signup/location", {
-          params: { q: input, limit: 30 },
-          signal: abortRef.current.signal,
+        const params = new URLSearchParams({ q: input, limit: "30" });
+        const res = await fetch(`/api/signup/location?${params.toString()}`, {
+          signal: controller.signal,
         });
-        const mapped = res.data;
+
+        if (!res.ok) throw new Error("Location autocomplete failed");
+
+        const mapped = (await res.json()) as Location[];
 
         cache.current[cacheKey] = mapped;
         setResults(mapped);
         setShowDropdown(true);
-      } catch (err: any) {
-        if (axios.isCancel(err) || err?.code === "ERR_CANCELED") return;
+      } catch (err: unknown) {
+        if (isAbortError(err)) return;
         console.error("Autocomplete error:", err);
         setResults([]);
       } finally {
-        setLoadingState(false);
+        if (abortRef.current === controller) {
+          setLoadingState(false);
+        }
       }
     },
     [setLoadingState]
@@ -138,15 +143,23 @@ export default function LocationSearch({
   
     setLoadingState(true);
     try {
-      const cityRes = await axios.post("/api/signup/location", {
-        australia_location_id: loc.australia_location_id ?? loc.place_id,
+      const res = await fetch("/api/signup/location", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          australia_location_id: loc.australia_location_id ?? loc.place_id,
+        }),
       });
-      const city_id = cityRes.data.city_id;
+
+      if (!res.ok) throw new Error("Location enrichment failed");
+
+      const cityData = await res.json();
+      const city_id = cityData.city_id;
   
       onSelect?.({
         ...loc,
         city_id,
-        city: cityRes.data.city ?? loc.city,
+        city: cityData.city ?? loc.city,
         _resolving: false,
       });
     } catch (err) {
@@ -294,10 +307,10 @@ export default function LocationSearch({
                           className={`block truncate text-xs ${
                             isActive
                               ? "text-blue-100"
-                              : "text-gray-400 dark:text-gray-500"
+                              : "text-gray-500 dark:text-gray-400"
                           }`}
                         >
-                          {secondary}
+                          {secondary} {r.postcode}
                         </span>
                       )}
                     </span>

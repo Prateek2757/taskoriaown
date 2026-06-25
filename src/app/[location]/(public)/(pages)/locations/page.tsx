@@ -13,8 +13,7 @@ import {
 } from "lucide-react";
 import { getCityDedupKey, getCityLabel } from "@/lib/location-labels";
 import { filterSeoLocations } from "@/lib/seo-locations";
-import { getAllCities } from "@/lib/cache";
-import LocationAlphabetDirectory from "@/components/Location/LocationAlphabetDirectory";
+import { getSeoLocationIndexFromDB } from "@/lib/cache";
 
 export const revalidate = 84600;
 
@@ -45,11 +44,13 @@ interface City {
     image_url?: string | null;
     state_slug?: string | null;
   }[];
+  city_count?: number;
 }
 
 interface StateGroup {
   stateName: string;
   stateSlug: string;
+  cityCount: number;
   cities: City[];
 }
 
@@ -57,7 +58,11 @@ const FEATURED_CITY_LIMIT = 20;
 
 async function getCities(): Promise<City[]> {
   try {
-    return filterSeoLocations((await getAllCities()) as unknown as City[]);
+    return filterSeoLocations(
+      (await getSeoLocationIndexFromDB(
+        FEATURED_CITY_LIMIT * 2
+      )) as unknown as City[]
+    );
   } catch {
     return [];
   }
@@ -75,11 +80,16 @@ function groupCitiesByState(cities: City[]): StateGroup[] {
       byState.set(city.state_slug, {
         stateName: city.state_name,
         stateSlug: city.state_slug,
+        cityCount: city.city_count ?? 0,
         cities: [],
       });
     }
 
-    byState.get(city.state_slug)?.cities.push(city);
+    const state = byState.get(city.state_slug);
+    if (state) {
+      state.cityCount = Math.max(state.cityCount, city.city_count ?? 0);
+      state.cities.push(city);
+    }
   }
 
   const states = Array.from(byState.values()).sort((a, b) =>
@@ -107,7 +117,11 @@ function groupCitiesByState(cities: City[]): StateGroup[] {
         }
       });
 
-    state.cities = Array.from(uniqueCities.values());
+    state.cities = Array.from(uniqueCities.values()).slice(
+      0,
+      FEATURED_CITY_LIMIT
+    );
+    state.cityCount = Math.max(state.cityCount, state.cities.length);
   }
 
   return states;
@@ -116,11 +130,8 @@ function groupCitiesByState(cities: City[]): StateGroup[] {
 export default async function CitiesIndexPage() {
   const cities = await getCities();
   const states = groupCitiesByState(cities);
-  const availableLetters = new Set(
-    cities.map((city) => getCityLabel(city).charAt(0).toUpperCase())
-  );
 
-  const totalCities = states.reduce((sum, state) => sum + state.cities.length, 0);
+  const totalCities = states.reduce((sum, state) => sum + state.cityCount, 0);
 
   return (
     <main className="min-h-screen bg-white dark:bg-slate-950">
@@ -186,7 +197,7 @@ export default async function CitiesIndexPage() {
 
       {/* QUICK STATE NAV */}
       {states.length > 0 && (
-        <section className="sticky top-0 z-20 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl">
+        <section className=" top-0 z-20 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl">
           <div className="max-w-7xl mx-auto px-6 md:px-16 py-4">
             <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
               <span className="hidden sm:inline-flex text-xs font-bold uppercase tracking-widest text-slate-400 shrink-0">
@@ -201,7 +212,7 @@ export default async function CitiesIndexPage() {
                 >
                   {state.stateName}
                   <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[11px] text-slate-500">
-                    {state.cities.length}
+                    {state.cityCount}
                   </span>
                 </a>
               ))}
@@ -238,8 +249,8 @@ export default async function CitiesIndexPage() {
         {states.length > 0 ? (
           <div className="space-y-14">
             {states.map((state) => {
-              const visibleCities = state.cities.slice(0, FEATURED_CITY_LIMIT);
-              const hasMore = state.cities.length > FEATURED_CITY_LIMIT;
+              const visibleCities = state.cities;
+              const hasMore = state.cityCount > visibleCities.length;
 
               return (
                 <section
@@ -259,7 +270,7 @@ export default async function CitiesIndexPage() {
                             {state.stateName}
                           </h3>
                           <p className="text-sm text-slate-500 dark:text-slate-400">
-                            {state.cities.length} cities available
+                            {state.cityCount} cities available
                           </p>
                         </div>
                       </div>
@@ -290,7 +301,7 @@ export default async function CitiesIndexPage() {
                         href={`/locations/${state.stateSlug}`}
                         className="inline-flex items-center gap-2 rounded-full border border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/30 px-5 py-2.5 text-sm font-bold text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-950/50 transition-colors"
                       >
-                        Show {state.cities.length - FEATURED_CITY_LIMIT} more
+                        Show {state.cityCount - visibleCities.length} more
                         cities in {state.stateName}
                         <ArrowRight className="w-4 h-4" />
                       </Link>
@@ -395,7 +406,7 @@ export default async function CitiesIndexPage() {
           </div>
         </section> */}
 
-        <section id="alphabetical-locations" className="scroll-mt-28 mt-16">
+        {/* <section id="alphabetical-locations" className="scroll-mt-28 mt-16">
           <LocationAlphabetDirectory
             locations={[]}
             dataUrl="/api/location-directory"
@@ -406,7 +417,7 @@ export default async function CitiesIndexPage() {
             availableLetters={Array.from(availableLetters)}
             basePath="/locations"
           />
-        </section>
+        </section> */}
       </div>
 
       {/* CTA */}

@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import Link from "next/link";
-import { Building2, ChevronRight, Search } from "lucide-react";
+import { ArrowUpRight, Building2, ChevronRight, Search } from "lucide-react";
 import AlphabetJumpFilter from "@/components/ui/alphabet-jump-filter";
 
 export type DirectoryLocation = {
@@ -65,6 +65,7 @@ export default function LocationAlphabetDirectory<T extends DirectoryLocation>({
   const [searchQuery, setSearchQuery] = useState("");
   const deferredSearch = useDeferredValue(searchQuery);
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const contentRef = useRef<HTMLDivElement | null>(null);
   const frameRef = useRef<number | null>(null);
 
   const availableLetters = useMemo(
@@ -156,7 +157,10 @@ export default function LocationAlphabetDirectory<T extends DirectoryLocation>({
   const updateActiveLetter = useCallback(() => {
     if (serverLetterMode || !renderedLetters.length) return;
 
-    const activationLine = 180;
+    const content = contentRef.current;
+    if (!content) return;
+
+    const activationLine = content.getBoundingClientRect().top + 24;
     let current = renderedLetters[0];
     let foundAbove = false;
     let closestBelow = Number.POSITIVE_INFINITY;
@@ -190,10 +194,11 @@ export default function LocationAlphabetDirectory<T extends DirectoryLocation>({
     };
 
     updateActiveLetter();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    const content = contentRef.current;
+    content?.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      content?.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
     };
@@ -218,9 +223,17 @@ export default function LocationAlphabetDirectory<T extends DirectoryLocation>({
     setActiveLetter(letter);
     setSearchQuery("");
     if (!serverLetterMode) {
-      sectionRefs.current[letter]?.scrollIntoView({
+      const content = contentRef.current;
+      const section = sectionRefs.current[letter];
+      if (!content || !section) return;
+
+      content.scrollTo({
+        top:
+          content.scrollTop +
+          section.getBoundingClientRect().top -
+          content.getBoundingClientRect().top -
+          24,
         behavior: "smooth",
-        block: "start",
       });
     }
   };
@@ -248,10 +261,10 @@ export default function LocationAlphabetDirectory<T extends DirectoryLocation>({
   );
 
   return (
-    <div className={`overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 ${className ?? ""}`}>
-      <div className="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 dark:border-slate-800 sm:px-7 lg:flex-row lg:items-center lg:justify-between">
+    <div className={`flex h-[calc(100dvh-1rem)] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 ${className ?? ""}`}>
+      <div className="flex flex-col gap-4 border-b border-slate-100 p-4 dark:border-slate-800 sm:px-7 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-blue-500 dark:text-blue-400">
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#2563EB] dark:text-blue-400">
             {eyebrow}
           </p>
           <h2 className="mt-1 text-xl font-extrabold tracking-tight text-slate-950 dark:text-white md:text-2xl">
@@ -268,8 +281,8 @@ export default function LocationAlphabetDirectory<T extends DirectoryLocation>({
         )}
       </div>
 
-      <div className="flex items-start gap-7 p-5 sm:p-7">
-        <aside className="sticky top-24 hidden w-52 shrink-0 flex-col gap-4 lg:flex">
+      <div className="flex min-h-0 flex-1 items-stretch gap-7 p-5 sm:p-7">
+        <aside className="hidden w-60 shrink-0 flex-col gap-4 overflow-y-auto lg:flex">
           {searchInput}
           <AlphabetJumpFilter
             availableLetters={availableLetters}
@@ -280,8 +293,11 @@ export default function LocationAlphabetDirectory<T extends DirectoryLocation>({
           />
         </aside>
 
-        <div className="min-w-0 flex-1 space-y-7">
-          <div className="space-y-3 lg:hidden">
+        <div
+          ref={contentRef}
+          className="min-w-0 flex-1 space-y-7 overflow-y-auto pr-1"
+        >
+          <div className="sticky top-0 z-10 space-y-3 bg-white pb-3 dark:bg-slate-900 lg:hidden">
             {searchInput}
             <AlphabetJumpFilter
               availableLetters={availableLetters}
@@ -314,7 +330,7 @@ export default function LocationAlphabetDirectory<T extends DirectoryLocation>({
               className="scroll-mt-28"
             >
               <div className="mb-2.5 flex items-center gap-2.5 border-b border-slate-200 pb-2 dark:border-slate-800">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-xs font-extrabold text-white">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2563eb] text-xs font-extrabold text-white">
                   {letter}
                 </span>
                 <span className="text-xs font-medium text-slate-400">
@@ -322,15 +338,19 @@ export default function LocationAlphabetDirectory<T extends DirectoryLocation>({
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 gap-x-7 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-x-10 sm:grid-cols-2 xl:grid-cols-4">
                 {groups.get(letter)?.map((location) => (
                   <Link
                     key={location.city_id}
                     href={resolveLocationHref(location)}
-                    className="group flex min-w-0 items-center justify-between rounded-md px-2 py-2 text-sm font-semibold text-sky-600 transition hover:bg-sky-50 hover:text-sky-800 dark:text-sky-400 dark:hover:bg-sky-950/30"
+                    className="group flex min-w-0 items-center hover:underline justify-sart  px-2 py-2 text-sm font-semibold text-[#2563EB] transition hover:bg-blur-50 hover:text-blue-800 dark:text-blue-400 dark:hover:bg-sky-950/30"
                   >
                     <span className="truncate">{location.name}</span>
-                    <ChevronRight className="h-3.5 w-3.5 shrink-0 opacity-0 transition group-hover:opacity-100" />
+                    <ArrowUpRight
+                  className="w-4 h-4 transition-transform group-hover:translate-x-1 opacity-0 duration-300 group-hover:rotate-45 group-hover:opacity-100"
+                  aria-hidden="true"
+                />
+                    {/* <ArrowUpRight className="h-3.5 w-3.5 shrink-0 opacity-0 transition group-hover:opacity-100" /> */}
                   </Link>
                 ))}
               </div>

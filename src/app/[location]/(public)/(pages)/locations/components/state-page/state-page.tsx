@@ -4,13 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import {
-  ArrowRight,
-  MapPin,
-  Grid3X3,
-  ChevronRight,
-  Map,
-} from "lucide-react";
+import { ArrowRight, MapPin, Grid3X3, ChevronRight, Map } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import InternalLinkModule from "@/components/InternalLinkModule";
 import { CategoryWithSubs, City } from "../../[...slug]/page";
@@ -42,6 +36,7 @@ interface Props {
   stateName: string;
   countryName: string;
   cities: City[];
+  cityCount?: number;
   categoryTree: CategoryWithSubs[];
   otherStates: OtherState[];
 }
@@ -53,7 +48,7 @@ const Static_State_Image: Record<string, string> = {
   qld: "/queensland.jpg",
   sa: "/south-australia.jpg",
   tas: "/tasmania.jpg",
-  wa: "/western-australia.jpg",
+  wa: "/western-australia.webp",
   vic: "/victoria.jpg",
   "new-south-wales": "/nsw-sydney.jpg",
   "australian-capital-territory": "/act.jpg",
@@ -73,11 +68,13 @@ export default function StatePageClient({
   stateName,
   countryName,
   cities,
+  cityCount,
   categoryTree,
   otherStates,
 }: Props) {
   const [openModal, setOpenModal] = useState(false);
   const bgImage = Static_State_Image[stateSlug];
+  const locationCount = cityCount ?? cities.length;
 
   const popularCategories = useMemo(
     () => categoryTree.slice(0, POPULAR_CATEGORY_LIMIT),
@@ -118,14 +115,14 @@ export default function StatePageClient({
   const trustStats = useMemo(
     () => [
       {
-        value: cities.length.toString(),
+        value: locationCount.toString(),
         label: `cities in ${stateName}`,
       },
       { value: "Verified", label: "professionals only" },
       { value: "Free", label: "quotes always" },
       { value: "< 2 hrs", label: "average response time" },
     ],
-    [cities.length, stateName]
+    [locationCount, stateName]
   );
 
   return (
@@ -177,7 +174,7 @@ export default function StatePageClient({
             </h1>
 
             <p className="text-white/78 text-base md:text-lg max-w-2xl mb-7 leading-relaxed">
-              Browse {cities.length} cities and compare trusted professionals
+              Browse {locationCount} cities and compare trusted professionals
               for home, business, event, and personal jobs across {stateName}.
             </p>
 
@@ -236,7 +233,7 @@ export default function StatePageClient({
           </h2>
           <div className="grid gap-5 md:grid-cols-3 text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
             <p>
-              Browse {cities.length} {stateName} locations and compare service
+              Browse {locationCount} {stateName} locations and compare service
               categories that customers commonly request, from home maintenance
               and cleaning to business, events, and personal support.
             </p>
@@ -259,19 +256,6 @@ export default function StatePageClient({
           locationName={stateName}
           className="border-b border-slate-100 dark:border-slate-800"
         />
-
-        <section className="pt-12 pb-6">
-          <LocationAlphabetDirectory
-            locations={cities}
-            title={`Browse locations in ${stateName}`}
-            eyebrow="Cities and suburbs"
-            description="Choose your location to see local professionals and services."
-            overviewHref="/locations"
-            overviewLabel="All Australian locations"
-            buildHref={(city) => `/locations/${stateSlug}/${city.slug}`}
-          />
-        </section>
-
         <InternalLinkModule
           eyebrow="Popular local pages"
           title={`Popular services in ${stateName}`}
@@ -285,6 +269,19 @@ export default function StatePageClient({
             },
           ]}
         />
+        <section className="py-6">
+          <LocationAlphabetDirectory
+            locations={cities}
+            dataUrl={`/api/location-directory?state=${stateSlug}`}
+            totalCount={locationCount}
+            title={`Browse locations in ${stateName}`}
+            eyebrow="Cities and suburbs"
+            description="Choose your location to see local professionals and services."
+            overviewHref="/locations"
+            overviewLabel="All Australian locations"
+            buildHref={(city) => `/locations/${stateSlug}/${city.slug}`}
+          />
+        </section>
 
         {/* Category directory temporarily hidden while the location directory is primary. */}
       </div>

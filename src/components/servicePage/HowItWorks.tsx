@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useMemo, useState } from "react";
 import { useTheme } from "next-themes";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, type Variants } from "motion/react";
 import {
   ChevronDown,
   CheckCircle2,
@@ -135,12 +135,16 @@ function classify(s: any) {
   return "prose";
 }
 
-const up = {
+const up: Variants = {
   hidden: { opacity: 0, y: 12 },
   visible: (i = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.48, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] },
+    transition: {
+      duration: 0.48,
+      delay: i * 0.06,
+      ease: [0.22, 1, 0.36, 1],
+    },
   }),
 };
 
@@ -378,7 +382,6 @@ function ServiceCard({ sub, i }: any) {
           style={{
             fontSize: 20,
             fontWeight: 600,
-            color: T.text,
             lineHeight: 1.4,
             marginBottom: 14,
             color: "#2563EB",

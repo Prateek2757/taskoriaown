@@ -17,6 +17,7 @@ import Image from "next/image";
 import Services from "../Categories";
 import FilterServices from "./FilterServices";
 import usePagination from "@/hooks/usePagination";
+import CategoryAlphabetDirectory, { DirectoryCategory } from "../category/CategoryAlphabetDirectory";
 
 interface ServiceCategory {
   category_id?: string | number;
@@ -119,6 +120,20 @@ export default function ServiceCategoriesClient({
     return filteredCategories.filter((cat) => !topIds.has(cat.category_id));
   }, [filteredCategories, topCategories]);
 
+
+  const directoryCategories = useMemo<DirectoryCategory[]>(() => {
+    return secondaryCategories
+      .filter((category) => category.name && category.slug)
+      .map((category, index) => ({
+        category_id:
+          category.category_id !== undefined
+            ? Number(category.category_id)
+            : index + 1,
+        name: category.name,
+        slug: category.slug,
+      }));
+  }, [secondaryCategories]);
+
   const quickPickCategories = useMemo(() => {
     return categoriesWithSignals.slice(0, 6);
   }, [categoriesWithSignals]);
@@ -164,7 +179,7 @@ export default function ServiceCategoriesClient({
       <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-blue-200/40 blur-3xl dark:bg-blue-700/20" />
       <div className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-sky-200/50 blur-3xl dark:bg-sky-700/20" />
 
-      <div className="relative mx-auto max-w-7xl space-y-10">
+      <div className="relative mx-auto max-w-6xl space-y-10">
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:p-8">
           <div className="mb-4 flex items-center justify-between gap-4">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
@@ -332,7 +347,7 @@ export default function ServiceCategoriesClient({
           </section>
         ) : null}
 
-        {secondaryCategories.length > 0 ? (
+        {/* {secondaryCategories.length > 0 ? (
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:p-8">
             <div className="mb-5 flex items-center justify-between gap-3">
               <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
@@ -365,7 +380,17 @@ export default function ServiceCategoriesClient({
               ))}
             </div>
           </section>
-        ) : null}
+        ) : null} */}
+
+{directoryCategories.length > 0 ? (
+  <CategoryAlphabetDirectory
+    categories={directoryCategories}
+    buildHref={(category) => `/services/${category.slug}`}
+    locationLabel="Australia"
+    title="Browse all services"
+    className="pt-0 pb-0"
+  />
+) : null}
 
         {/* <section className="grid gap-4 md:grid-cols-3">
           <InfoCard
@@ -407,6 +432,8 @@ export default function ServiceCategoriesClient({
     </section>
   );
 }
+
+
 
 function TrustRow({
   icon: Icon,

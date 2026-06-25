@@ -32,13 +32,12 @@ type CityLike = {
 
 export const priorityServiceLinks = [
   { slug: "house-cleaning", label: "House Cleaning" },
-  { slug: "removalists", label: "Removalists" },
-  { slug: "plumbers", label: "Plumbers" },
+  { slug: "removals", label: "Removalists" },
+  { slug: "plumbing", label: "Plumbers" },
   { slug: "electricians", label: "Electricians" },
   { slug: "handyman", label: "Handyman" },
-  { slug: "gardening-lawn-mowing", label: "Gardening & Lawn Mowing" },
+  { slug: "garden-maintenance-weeding", label: "Gardening" },
   { slug: "rubbish-removal", label: "Rubbish Removal" },
-  { slug: "painters", label: "Painters" },
   { slug: "carpet-steam-cleaning", label: "Carpet Steam Cleaning" },
   { slug: "air-conditioning-heating", label: "Air Conditioning & Heating" },
   { slug: "wedding-photography", label: "Wedding Photography" },
@@ -46,12 +45,12 @@ export const priorityServiceLinks = [
 ] satisfies PriorityServiceLink[];
 
 export const priorityCityLinks = [
-  { slug: "sydney", stateSlug: "new-south-wales", label: "Sydney" },
-  { slug: "melbourne", stateSlug: "victoria", label: "Melbourne" },
-  { slug: "brisbane", stateSlug: "queensland", label: "Brisbane" },
-  { slug: "perth", stateSlug: "western-australia", label: "Perth" },
-  { slug: "adelaide", stateSlug: "south-australia", label: "Adelaide" },
-  { slug: "newcastle", stateSlug: "new-south-wales", label: "Newcastle" },
+  { slug: "sydney", stateSlug: "nsw", label: "Sydney" },
+  { slug: "melbourne", stateSlug: "vic", label: "Melbourne" },
+  { slug: "brisbane", stateSlug: "qld", label: "Brisbane" },
+  { slug: "perth", stateSlug: "wa", label: "Perth" },
+  { slug: "adelaide", stateSlug: "sa", label: "Adelaide" },
+  { slug: "newcastle", stateSlug: "nsw", label: "Newcastle" },
   {
     slug: "canberra",
     stateSlug: "australian-capital-territory",

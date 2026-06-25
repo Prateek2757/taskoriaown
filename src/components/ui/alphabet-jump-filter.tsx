@@ -40,7 +40,7 @@ export default function AlphabetJumpFilter({
 
   const buttonClass = (isAvailable: boolean, isActive: boolean) =>
     cn(
-      "inline-flex shrink-0 items-center justify-center rounded-lg border text-xs font-extrabold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
+      "inline-flex shrink-0 items-center  justify-center rounded-lg border text-xs font-extrabold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
       variant === "grid" && "h-8 w-8",
       variant === "horizontal" && "h-9 w-9",
       variant === "rail" && "h-9 min-w-12 md:w-full",
@@ -48,7 +48,7 @@ export default function AlphabetJumpFilter({
         "cursor-not-allowed border-transparent text-slate-300 dark:text-slate-700",
       isAvailable &&
         !isActive &&
-        "border-slate-200 bg-white text-slate-600 shadow-xs hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-blue-950/40 dark:hover:text-blue-300",
+        "border-slate-200 bg-white  text-slate-600 shadow-xs hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-blue-950/40 dark:hover:text-blue-300",
       isActive &&
         "border-blue-600 bg-blue-600 text-white shadow-sm shadow-blue-600/20"
     );

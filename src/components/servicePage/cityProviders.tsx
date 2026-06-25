@@ -10,6 +10,7 @@ import {
   MonitorCheck,
   Tag,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 interface Provider {
@@ -54,6 +55,21 @@ interface Props {
   locationName?: string | null;
   limit?: number;
   className?: string;
+}
+
+const providerRequestCache = new Map<string, Promise<Provider[]>>();
+
+function loadProviders(query: string) {
+  const cached = providerRequestCache.get(query);
+  if (cached) return cached;
+
+  const request = fetch(`/api/service-city-providers/providers?${query}`)
+    .then((res) => (res.ok ? res.json() : []))
+    .then((data) => (Array.isArray(data) ? data : []))
+    .catch(() => []);
+
+  providerRequestCache.set(query, request);
+  return request;
 }
 
 function titleFromSlug(value?: string | null) {
@@ -229,12 +245,9 @@ function ExpandableDescription({
   title: string;
 }) {
   const textRef = useRef<HTMLParagraphElement | null>(null);
-  const [expanded, setExpanded] = useState(false);
+  const [expandedText, setExpandedText] = useState<string | null>(null);
   const [canExpand, setCanExpand] = useState(false);
-
-  useEffect(() => {
-    setExpanded(false);
-  }, [text]);
+  const expanded = expandedText === text;
 
   useEffect(() => {
     const element = textRef.current;
@@ -272,7 +285,7 @@ function ExpandableDescription({
       {canExpand && (
         <button
           type="button"
-          onClick={() => setExpanded((current) => !current)}
+          onClick={() => setExpandedText(expanded ? null : text)}
           className="mt-1 text-sm font-semibold text-blue-600 hover:text-blue-700"
         >
           {expanded ? "See less" : "See more"}
@@ -291,9 +304,6 @@ export default function CityProviders({
   limit = 10,
   className = "",
 }: Props) {
-  const [providers, setProviders] = useState<Provider[]>([]);
-  const [loading, setLoading] = useState(true);
-
   const query = useMemo(() => {
     const params = new URLSearchParams();
 
@@ -305,24 +315,24 @@ export default function CityProviders({
 
     return params.toString();
   }, [citySlug, limit, serviceSlug, stateSlug]);
+  const [providerState, setProviderState] = useState<{
+    query: string;
+    providers: Provider[];
+  }>({ query: "", providers: [] });
+  const loading = providerState.query !== query;
+  const providers = loading ? [] : providerState.providers;
 
   useEffect(() => {
     let cancelled = false;
 
-    setLoading(true);
-
-    fetch(`/api/service-city-providers/providers?${query}`)
-      .then((res) => (res.ok ? res.json() : []))
+    loadProviders(query)
       .then((data) => {
         if (!cancelled) {
-          setProviders(Array.isArray(data) ? data : []);
+          setProviderState({ query, providers: data });
         }
       })
       .catch(() => {
-        if (!cancelled) setProviders([]);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setProviderState({ query, providers: [] });
       });
 
     return () => {
@@ -355,8 +365,8 @@ export default function CityProviders({
 
   if (!providers.length) {
     return (
-      <section className={`py-6 ${className}`}>
-        <div className="rounded-xl border border-slate-200 bg-slate-50 px-6 py-10 text-center dark:border-slate-800 dark:bg-slate-900">
+      <section className={`py-3 ${className}`}>
+        <div className="rounded-xl border border-slate-200 bg-slate-50 px-6 py-6 text-center dark:border-slate-800 dark:bg-slate-900">
           <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Providers are coming soon
             {locationLabel ? ` to ${locationLabel}` : ""}
@@ -432,9 +442,12 @@ export default function CityProviders({
               <div className="grid grid-cols-[56px_minmax(0,1fr)] gap-2 sm:grid-cols-[64px_minmax(0,1fr)_auto]">
                 <div>
                   {provider.logo_url || provider.image ? (
-                    <img
+                    <Image
                       src={provider.logo_url || provider.image || ""}
                       alt={providerName}
+                      width={64}
+                      height={64}
+                      unoptimized
                       className="h-14 w-14 rounded-xl object-contain dark:border-slate-700 sm:h-16 sm:w-16"
                     />
                   ) : (

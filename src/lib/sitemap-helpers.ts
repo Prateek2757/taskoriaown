@@ -21,9 +21,14 @@ export interface Subcity {
 
 export interface City {
   city_id: number;
+  name?: string;
   slug: string;
+  display_name?: string | null;
   state_slug: string;
+  state_name?: string | null;
   popularity: number;
+  postcode?: string | number | null;
+  source?: string | null;
   updated_at?: string;
   subcities?: Subcity[];
 }
@@ -57,11 +62,61 @@ export async function safeFetch<T>(url: string): Promise<T[]> {
   }
 }
 
-export const fetchCategories = () =>
-  safeFetch<Category>(`${BASE_URL}/api/signup/category-selection`);
+export const fetchCategories = async (): Promise<Category[]> => {
+  try {
+    const result = await pool.query(`
+      SELECT
+        category_id,
+        slug,
+        updated_at
+      FROM service_categories
+      WHERE is_active = true
+        AND slug IS NOT NULL
+      ORDER BY rank ASC NULLS LAST, name ASC
+    `);
 
-export const fetchCities = () =>
-  safeFetch<City>(`${BASE_URL}/api/service-location`);
+    return result.rows;
+  } catch (err) {
+    console.error("[sitemap] Failed to fetch categories:", err);
+    return [];
+  }
+};
+
+export const fetchCities = async (): Promise<City[]> => {
+  try {
+    const result = await pool.query(`
+      WITH canonical AS (
+        SELECT DISTINCT ON (state_slug, place_slug)
+          id::integer AS city_id,
+          place_name AS name,
+          place_slug AS slug,
+          display_name,
+          COALESCE(popularity, 0) AS popularity,
+          state_slug,
+          state_name,
+          postal_code AS postcode,
+          source,
+          updated_at
+        FROM australia_locations
+        WHERE is_active = true
+          AND place_slug IS NOT NULL
+          AND state_slug IS NOT NULL
+        ORDER BY state_slug, place_slug, popularity DESC NULLS LAST
+      )
+      SELECT *
+      FROM canonical
+      ORDER BY popularity DESC, name ASC
+    `);
+
+    return result.rows.map((city) => ({
+      ...city,
+      subcities: [],
+    }));
+  } catch (err) {
+    console.error("[sitemap] Failed to fetch cities:", err);
+    return [];
+  }
+};
 
 export const fetchBlogPosts = () => safeFetch<BlogPost>(`${BASE_URL}/api/blog`);
 

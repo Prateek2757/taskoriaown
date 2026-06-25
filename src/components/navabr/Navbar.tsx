@@ -59,9 +59,9 @@ export default function ModernNavbar({
             <Image
               src="/images/taskoria_logo.svg"
               alt="Taskoria"
-              height={41}
-              width={25}
-              className="shrink-0"
+              width={32}
+              height={28}
+              className="h-7 w-auto shrink-0"
               priority
             />
             <span className="text-2xl font-bold text-[#2563EB] truncate">
