@@ -1,43 +1,3 @@
-// interface ServicesProps {
-//   filterData: string;
-//   onChangeFilterData: (filter: string) => void;
-// }
-
-// export default function FilterServices({
-//   filterData,
-//   onChangeFilterData,
-// }: ServicesProps) {
-//   const filters = [
-//     "Cleaning Services",
-//     "Home Improvement & Trades",
-//     "Personal & Wellbeing",
-//     "Transport & Moving",
-//     "IT & Digital Services",
-//     "Events & Catering",
-//     "Pet Services",
-//     "Healthcare Services",
-//     "Food & Beverages",
-//     "Other Services",
-//   ];
-//   return (
-//     <div className="grid grid-cols-1 gap-2 overflow-x-auto hide-scrollbar text-center px-2 py-1">
-//       {filters.map((filter) => (
-//         <button
-//           key={filter}
-//           onClick={() => onChangeFilterData(filter)}
-//           className={`   text-sm transition
-//             ${
-//               filterData === filter
-//                 ? "border-blue-600 bg-[#2563EB] text-white"
-//                 : "border-slate-300 bg-gray-100 text-slate-600 hover:bg-[#2563EB] hover:text-white"
-//             }`}
-//         >
-//           {filter}
-//         </button>
-//       ))}
-//     </div>
-//   );
-// }
 
 "use client";
 
@@ -104,9 +64,11 @@ export default function PopularServices() {
   const router = useRouter();
   const { categories: apiCategories, loading } = useCategories();
 
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
+  const [expandedSections, setExpandedSections] = useState<
+    Record<string, boolean>
+  >({});
 
-  const toggleSection = (label:string) => {
+  const toggleSection = (label: string) => {
     setExpandedSections((prev) => ({
       ...prev,
       [label]: !prev[label],
