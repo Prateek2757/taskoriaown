@@ -17,7 +17,7 @@ const PopularServicesSection = lazy(
 const FeaturesPage = lazy(() => import("@/components/Features"));
 const Testomonail = lazy(() => import("@/components/Testomonail"));
 const CTA = lazy(() => import("@/components/CTA"));
-const TestomonailNew = lazy(() => import("@/components/TestomonailNew"));
+const CustomersReview = lazy(() => import("@/components/CustomersReview"));
 
 export const metadata: Metadata = {
   title: {
@@ -311,7 +311,7 @@ export default function HomePage() {
 
         <Suspense fallback={<div className="min-h-12.5" />}>
           <section aria-label="Customer reviews and testimonials">
-            <TestomonailNew />
+            <CustomersReview />
           </section>
         </Suspense>
 
