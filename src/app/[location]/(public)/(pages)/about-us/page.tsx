@@ -97,7 +97,7 @@ export default function AboutUs() {
 
   const timeline = [
     {
-      year: "2016",
+      year: "2022",
       title: "Founded",
       description:
         "Taskoria was established with the goal of creating a more transparent and trustworthy way for Australians to connect with local service professionals.",
