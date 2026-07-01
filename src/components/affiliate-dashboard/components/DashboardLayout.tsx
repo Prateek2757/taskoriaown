@@ -83,8 +83,8 @@ export function DashboardLayout({
             title="taskoria logo in affiliate dashbaord"
               src="/images/taskoria_logo.svg"
               alt="taskorialogo"
-              height={41}
-              width={28}
+              width={34}
+              height={30}
             />
           </div>
           <div>

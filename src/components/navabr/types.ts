@@ -14,6 +14,9 @@ export const NAV_LINKS: Record<"public" | "customer" | "provider", NavLink[]> =
     public: [
       { name: "Home", href: "/", icon: Home },
       { name: "Services", href: "/services", icon: HandPlatter },
+      { name: "How It Works", href: "/how-it-works", icon: HandPlatter },
+      { name: "Pricing", href: "/pricing", icon: HandPlatter },
+      { name: "Trust & Safety", href: "/trust-safety", icon: HandPlatter },
     ],
     customer: [
       { name: "Home", href: "/", icon: Home },
@@ -43,6 +46,9 @@ export const PREFETCH_ROUTES = [
   "/signin",
   "/services",
   "/",
+  "/how-it-works",
+  "/pricing",
+  "/trust-safety",
   "/provider/leads",
   "/customer/dashboard",
   "/provider/dashboard",

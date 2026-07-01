@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useRef, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
   MapPin,
-  Search,
   TrendingUp,
   Grid3X3,
   ChevronRight,
@@ -24,6 +23,8 @@ import {
   getPriorityCityLinks,
   getRankedCityServiceLinks,
 } from "@/lib/internal-links";
+import LocationAlphabetDirectory from "@/components/Location/LocationAlphabetDirectory";
+import Image from "next/image";
 
 interface Props {
   city: City;
@@ -49,6 +50,14 @@ const ACCENT: Record<string, string> = {
 const DEFAULT_ACCENT = "#1d4ed8";
 
 const Static_State_Image: Record<string, string> = {
+  nsw: "/nsw-sydney.jpg",
+  act: "/act.jpg",
+  nt: "/northern-territory.png",
+  qld: "/queensland.jpg",
+  sa: "/south-australia.jpg",
+  tas: "/tasmania.jpg",
+  wa: "/western-australia.webp",
+  vic: "/victoria.jpg",
   "new-south-wales": "/nsw-sydney.jpg",
   "australian-capital-territory": "/act.jpg",
   "norfolk-island": "/Norfolk_Island.avif",
@@ -56,7 +65,7 @@ const Static_State_Image: Record<string, string> = {
   queensland: "/queensland.jpg",
   "south-australia": "/south-australia.jpg",
   tasmania: "/tasmania.jpg",
-  "western-australia": "/western-australia.jpg",
+  "western-australia": "/western-australia.webp",
   victoria: "/victoria.jpg",
 };
 
@@ -68,9 +77,6 @@ export default function CityPageClient({
   stateSlug,
 }: Props) {
   const [openModal, setOpenModal] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeLetter, setActiveLetter] = useState<string | null>(null);
-  const categoryRefs = useRef<Record<string, HTMLElement | null>>({});
 
   const cityName = city.name;
   const bgImage = Static_State_Image[stateSlug];
@@ -97,36 +103,18 @@ export default function CityPageClient({
     () => categoryTree.slice(5, 10),
     [categoryTree]
   );
-
-  const filteredCategories = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return categoryTree;
-    return categoryTree.filter(
-      (cat) =>
-        cat.name.toLowerCase().includes(q) ||
-        cat.subcategories.some((s) => s.name.toLowerCase().includes(q))
-    );
-  }, [categoryTree, searchQuery]);
-
-  const alphabetGroups = useMemo(() => {
-    const map: Record<string, CategoryWithSubs[]> = {};
-    for (const cat of filteredCategories) {
-      const letter = cat.name[0].toUpperCase();
-      if (!map[letter]) map[letter] = [];
-      map[letter].push(cat);
-    }
-    return map;
-  }, [filteredCategories]);
-
-  const availableLetters = Object.keys(alphabetGroups).sort();
-
-  const scrollToLetter = (letter: string) => {
-    setActiveLetter(letter);
-    categoryRefs.current[letter]?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
+  const directoryCities = useMemo(
+    () =>
+      Array.from(
+        new Map(
+          [...nearbyCities, ...sameStateCities].map((location) => [
+            `${location.state_slug}:${location.slug}`,
+            location,
+          ])
+        ).values()
+      ),
+    [nearbyCities, sameStateCities]
+  );
 
   return (
     <main className="min-h-screen bg-white dark:bg-slate-950">
@@ -347,7 +335,7 @@ export default function CityPageClient({
           </section>
         )}
 
-        {sameStateCities.length > 0 && (
+        {/* {sameStateCities.length > 0 && (
           <section className="pt-10 pb-2">
             <SectionHeader
               title={`Other cities in ${city.state_name}`}
@@ -366,145 +354,21 @@ export default function CityPageClient({
               ))}
             </div>
           </section>
-        )}
+        )} */}
 
+        {/* Category directory is temporarily hidden; use the location directory. */}
         <section className="pt-14 pb-20">
-          <h2 className="text-2xl  font-extrabold text-slate-900 dark:text-white mb-10">
-            Browse all categories
-          </h2>
-
-          <div className="flex gap-10 items-start">
-            <aside className="hidden lg:flex flex-col w-52 shrink-0 sticky top-6 gap-5">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-                <input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search categories…"
-                  className="w-full pl-8 pr-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4">
-                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-3">
-                  Jump to
-                </p>
-                <div className="flex flex-wrap gap-0.5">
-                  {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((l) => {
-                    const active = availableLetters.includes(l);
-                    return (
-                      <button
-                        key={l}
-                        onClick={() => active && scrollToLetter(l)}
-                        className={`w-7 h-7 rounded-md text-xs font-semibold transition-colors ${
-                          !active
-                            ? "text-slate-300 dark:text-slate-700 cursor-default"
-                            : activeLetter === l
-                              ? "bg-blue-600 text-white"
-                              : "text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 cursor-pointer"
-                        }`}
-                      >
-                        {l}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <nav className="space-y-0.5 max-h-72 overflow-y-auto">
-                {filteredCategories.map((cat) => (
-                  <button
-                    key={cat.category_id}
-                    onClick={() => scrollToLetter(cat.name[0].toUpperCase())}
-                    className="block w-full text-left px-2 py-1.5 rounded-md text-sm text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-colors"
-                  >
-                    {cat.name}
-                  </button>
-                ))}
-              </nav>
-            </aside>
-
-            <div className="flex-1 min-w-0 space-y-12">
-              <div className="relative lg:hidden">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-                <input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search categories…"
-                  className="w-full pl-8 pr-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              {availableLetters.map((letter) => (
-                <div
-                  key={letter}
-                  ref={(el) => {
-                    categoryRefs.current[letter] = el;
-                  }}
-                  className="scroll-mt-6 space-y-5"
-                >
-                  {alphabetGroups[letter].map((cat) => (
-                    <div key={cat.category_id}>
-                      <div className="flex items-center gap-2 mb-5 border-b-2 border-slate-100 dark:border-slate-800 pb-1">
-                        <h3 className="text-base font-semibold text-slate-900 dark:text-white">
-                          {cat.name}
-                        </h3>
-                        {/* {cat.subcategories.length > 0 && (
-                          <span className="text-xs text-slate-400 font-medium">
-                            {cat.subcategories.length} services
-                          </span>
-                        )} */}
-                        <Link
-                          href={`/services/${cat.slug}/${stateSlug}/${city.slug}`}
-                          className="ml-auto inline-flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium"
-                        >
-                          All in {cityName}
-                          <ChevronRight className="w-3 h-3" />
-                        </Link>
-                      </div>
-
-                      {/* {cat.subcategories.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-1.5">
-                          {cat.subcategories.map((sub) => (
-                            <Link
-                              key={sub.category_id}
-                              href={`/services/${sub.slug}/${stateSlug}/${city.slug}`}
-                              className="group flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 py-0.5 transition-colors"
-                            >
-                              <span className="w-1.5 h-1.5 rounded-full bg-blue-300 group-hover:bg-blue-600 flex-shrink-0 transition-colors" />
-                              {sub.name}
-                            </Link>
-                          ))}
-                        </div>
-                      ) : (
-                        <Link
-                          href={`/services/${cat.slug}/${stateSlug}/${city.slug}`}
-                          className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
-                        >
-                          Find {cat.name} professionals in {cityName} →
-                        </Link>
-                      )} */}
-                    </div>
-                  ))}
-                </div>
-              ))}
-
-              {filteredCategories.length === 0 && (
-                <div className="text-center py-20 text-slate-400 dark:text-slate-500">
-                  <Search className="w-8 h-8 mx-auto mb-3 opacity-40" />
-                  <p className="font-medium text-slate-600 dark:text-slate-400">
-                    No categories found for "{searchQuery}"
-                  </p>
-                  <button
-                    onClick={() => setSearchQuery("")}
-                    className="mt-3 text-blue-600 dark:text-blue-400 text-sm hover:underline"
-                  >
-                    Clear search
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
+          <LocationAlphabetDirectory
+            locations={directoryCities}
+            title={`Browse locations near ${cityName}`}
+            eyebrow="Nearby locations"
+            description={`Compare professionals across ${city.state_name}.`}
+            overviewHref={`/locations/${stateSlug}`}
+            overviewLabel={`All ${city.state_name} locations`}
+            buildHref={(location) =>
+              `/locations/${location.state_slug}/${location.slug}`
+            }
+          />
         </section>
       </div>
 
@@ -576,50 +440,48 @@ function CategoryCard({
       href={`/services/${cat.slug}/${stateSlug}/${citySlug}`}
       className="group relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-300 dark:hover:border-blue-700 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
     >
-      <div className="relative h-32 overflow-hidden">
-        {cat.image_url ? (
-          <img
-            src={cat.image_url}
-            alt={cat.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div
-            className="w-full h-full flex items-center justify-center"
-            style={{ background: `${accent}14` }}
-          >
-            <span
-              className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-2xl font-extrabold"
-              style={{ background: accent }}
-            >
-              {cat.name[0]}
-            </span>
-          </div>
-        )}
+    <div className="relative h-32 overflow-hidden">
+  {cat.image_url ? (
+    <>
+      <Image
+        height={500}
+        width={500}
+        src={cat.image_url}
+        alt={cat.name}
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
 
-        {rank && (
-          <div className="absolute top-2 left-2 w-6 h-6 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center justify-center shadow-sm">
-            {rank}
-          </div>
-        )}
+      {/* Dim Overlay */}
+      <div className="absolute inset-0 bg-black/40" />
 
-        {showTrend && (
-          <div className="absolute top-2 right-2 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/80 dark:text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full">
-            trending
-          </div>
-        )}
-      </div>
-
-      <div className="p-3">
-        <h3 className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 leading-snug">
+      <div className="absolute bottom-3 left-2 z-10">
+        <h3 className="text-white font-semibold text-sm leading-tight">
           {cat.name}
         </h3>
+
         {cat.subcategories.length > 0 && (
-          <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+          <p className="text-xs text-white/80">
             {cat.subcategories.length} services
           </p>
         )}
       </div>
+    </>
+  ) : (
+    <div
+      className="w-full h-full flex items-center justify-center"
+      style={{ background: `${accent}14` }}
+    >
+      <span
+        className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-2xl font-extrabold"
+        style={{ background: accent }}
+      >
+        {cat.name[0]}
+      </span>
+    </div>
+  )}
+
+</div>
+   
     </Link>
   );
 }

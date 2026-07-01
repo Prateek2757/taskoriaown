@@ -81,7 +81,7 @@ export default function Explore() {
         cat.main_category?.toLowerCase().trim() ===
         currentMenu.toLowerCase().trim()
     );
-  }, [currentMenu, categories]);
+  }, [currentMenu, isMoreMenu, categories]);
 
   const { paginatedData: paginatedCategories } = usePagination(
     filteredCategories,
@@ -114,7 +114,7 @@ export default function Explore() {
     <div ref={containerRef} className="relative z-[70]">
       <button
         type="button"
-        className="mx-3 flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-gray-200 dark:hover:bg-gray-800"
+        className="flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-gray-200 dark:hover:bg-gray-800"
         onClick={() => setShowMenu((open) => !open)}
         aria-haspopup="menu"
         aria-expanded={showMenu}

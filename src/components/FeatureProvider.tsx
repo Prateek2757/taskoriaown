@@ -119,8 +119,8 @@ export const FeatureProvider = () => {
                                 title="taskoria logo "
                                 src="/images/taskoria_logo.svg"
                                 alt="logo taskoria"
-                                height={0}
                                 width={35}
+                                height={31}
                                 sizes="(max-width: 640px) 100vw,
                                 (max-width: 1024px) 50vw,
                                 33vw"

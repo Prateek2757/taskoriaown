@@ -1,13 +1,16 @@
+import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
+
 import { cn } from "@/lib/utils";
 
-interface MarqueeProps {
+interface MarqueeProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
   reverse?: boolean;
   pauseOnHover?: boolean;
-  children?: React.ReactNode;
+  children?: ReactNode;
   vertical?: boolean;
   repeat?: number;
-  [key: string]: any;
+  duration?: string;
+  gap?: string;
 }
 
 export default function Marquee({
@@ -17,13 +20,23 @@ export default function Marquee({
   children,
   vertical = false,
   repeat = 4,
+  duration = "40s",
+  gap = "1rem",
+  style,
   ...props
 }: MarqueeProps) {
   return (
     <div
       {...props}
+      style={
+        {
+          "--duration": duration,
+          "--gap": gap,
+          ...style,
+        } as CSSProperties
+      }
       className={cn(
-        "group flex overflow-hidden p-2 [--duration:40s] [--gap:1rem] gap-(--gap)",
+        "group flex overflow-hidden p-2 gap-(--gap)",
         {
           "flex-row": !vertical,
           "flex-col": vertical,

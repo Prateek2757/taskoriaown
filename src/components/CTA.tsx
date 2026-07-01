@@ -1,12 +1,25 @@
 "use client";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Button } from "./ui/button";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import NewRequestModal from "./leads/RequestModal";
+
+const subscribe = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 function CTA() {
   const [openModal, setOpenModal] = useState(false);
+  const mounted = useSyncExternalStore(
+    subscribe,
+    getClientSnapshot,
+    getServerSnapshot
+  );
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <section className="   dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_50%,rgba(0,0,0,1)_90%)] overflow-hidden">

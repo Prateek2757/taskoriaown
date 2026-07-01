@@ -1,6 +1,7 @@
 import { unstable_cache } from "next/cache";
+import { cache as reactCache } from "react";
 import pool from "@/lib/dbConnect";
-import { City } from "@/app/[location]/(public)/(pages)/services/[...slug]/page";
+import type { City } from "@/app/[location]/(public)/(pages)/services/[...slug]/page";
 
 export const getCategoriesFromDB = unstable_cache(
   async () => {
@@ -24,6 +25,23 @@ export const getCategoriesFromDB = unstable_cache(
     return result.rows;
   },
   ["all-categories"],
+  {
+    revalidate: 604800,
+    tags: ["categories"],
+  },
+);
+
+export const getActiveServiceCategoryCountFromDB = unstable_cache(
+  async (): Promise<number> => {
+    const result = await pool.query(`
+      SELECT COUNT(*)::integer AS count
+      FROM service_categories
+      WHERE is_active = true;
+    `);
+
+    return Number(result.rows[0]?.count ?? 0);
+  },
+  ["active-service-category-count"],
   {
     revalidate: 604800,
     tags: ["categories"],
@@ -128,21 +146,502 @@ export const getServiceProvidersFromDB = unstable_cache(
   },
 );
 
-export const getAllCities = unstable_cache(
-  async (): Promise<City[]> => {
+// The full Australian locality dataset is larger than Next's 2 MB data-cache
+// entry limit. React cache deduplicates metadata/page reads within a request.
+function mapAustraliaLocationRow(row: any): City {
+  return {
+    city_id: row.city_id,
+    name: row.name,
+    slug: row.slug,
+    display_name: row.display_name,
+    popularity: row.popularity,
+    latitude: row.latitude ? parseFloat(row.latitude) : undefined,
+    longitude: row.longitude ? parseFloat(row.longitude) : undefined,
+    image_url: row.image_url,
+    state_slug: row.state_slug,
+    state_name: row.state_name,
+    country_name: row.country_name,
+    city_description: row.city_description,
+    postcode: row.postcode,
+    source: row.source,
+    updated_at: row.updated_at,
+    subcities: [],
+  };
+}
+
+export const getPopularSeoCitiesFromDB = unstable_cache(
+  async (limit = 80): Promise<City[]> => {
+    const result = await pool.query(
+      `
+      WITH canonical AS (
+        SELECT DISTINCT ON (state_slug, place_slug)
+          id::integer AS city_id,
+          place_name AS name,
+          place_slug AS slug,
+          display_name,
+          COALESCE(popularity, 0) AS popularity,
+          latitude,
+          longitude,
+          image_url,
+          state_slug,
+          state_name,
+          'Australia'::text AS country_name,
+          description AS city_description,
+          postal_code AS postcode,
+          source,
+          updated_at
+        FROM australia_locations
+        WHERE is_active = true
+          AND place_slug IS NOT NULL
+          AND state_slug IS NOT NULL
+        ORDER BY state_slug, place_slug, popularity DESC NULLS LAST
+      )
+      SELECT * FROM canonical
+      ORDER BY popularity DESC, name ASC
+      LIMIT $1
+    `,
+      [limit],
+    );
+
+    return result.rows.map(mapAustraliaLocationRow);
+  },
+  ["popular-seo-cities"],
+  {
+    revalidate: 604800,
+    tags: ["locations"],
+  },
+);
+
+export const getSeoCitiesByStateFromDB = reactCache(
+  async (stateSlug: string): Promise<City[]> => {
+    const result = await pool.query(
+      `
+      WITH canonical AS (
+        SELECT DISTINCT ON (state_slug, place_slug)
+          id::integer AS city_id,
+          place_name AS name,
+          place_slug AS slug,
+          display_name,
+          COALESCE(popularity, 0) AS popularity,
+          latitude,
+          longitude,
+          image_url,
+          state_slug,
+          state_name,
+          'Australia'::text AS country_name,
+          description AS city_description,
+          postal_code AS postcode,
+          source,
+          updated_at
+        FROM australia_locations
+        WHERE is_active = true
+          AND place_slug IS NOT NULL
+          AND state_slug = $1
+        ORDER BY state_slug, place_slug, popularity DESC NULLS LAST
+      )
+      SELECT * FROM canonical
+      ORDER BY popularity DESC, name ASC
+    `,
+      [stateSlug],
+    );
+
+    return result.rows.map(mapAustraliaLocationRow);
+  },
+);
+
+export const getPopularSeoCitiesByStateFromDB = unstable_cache(
+  async (stateSlug: string, limit = 24): Promise<City[]> => {
+    const result = await pool.query(
+      `
+      WITH canonical AS (
+        SELECT DISTINCT ON (state_slug, place_slug)
+          id::integer AS city_id,
+          place_name AS name,
+          place_slug AS slug,
+          display_name,
+          COALESCE(popularity, 0) AS popularity,
+          latitude,
+          longitude,
+          image_url,
+          state_slug,
+          state_name,
+          'Australia'::text AS country_name,
+          description AS city_description,
+          postal_code AS postcode,
+          source,
+          updated_at
+        FROM australia_locations
+        WHERE is_active = true
+          AND place_slug IS NOT NULL
+          AND state_slug = $1
+        ORDER BY state_slug, place_slug, popularity DESC NULLS LAST
+      )
+      SELECT * FROM canonical
+      ORDER BY popularity DESC, name ASC
+      LIMIT $2
+    `,
+      [stateSlug, limit],
+    );
+
+    return result.rows.map(mapAustraliaLocationRow);
+  },
+  ["popular-seo-cities-by-state"],
+  {
+    revalidate: 604800,
+    tags: ["locations"],
+  },
+);
+
+export const getSeoCityBySlugFromDB = unstable_cache(
+  async (stateSlug: string | null, citySlug: string): Promise<City | null> => {
+    const result = await pool.query(
+      `
+      SELECT
+        id::integer AS city_id,
+        place_name AS name,
+        place_slug AS slug,
+        display_name,
+        COALESCE(popularity, 0) AS popularity,
+        latitude,
+        longitude,
+        image_url,
+        state_slug,
+        state_name,
+        'Australia'::text AS country_name,
+        description AS city_description,
+        postal_code AS postcode,
+        source,
+        updated_at
+      FROM australia_locations
+      WHERE is_active = true
+        AND place_slug = $1
+        AND ($2::text IS NULL OR state_slug = $2)
+      ORDER BY popularity DESC NULLS LAST, updated_at DESC
+      LIMIT 1
+    `,
+      [citySlug, stateSlug],
+    );
+
+    return result.rows[0] ? mapAustraliaLocationRow(result.rows[0]) : null;
+  },
+  ["seo-city-by-slug"],
+  {
+    revalidate: 604800,
+    tags: ["locations"],
+  },
+);
+
+export const getSeoStatesFromDB = unstable_cache(
+  async (): Promise<{ state_slug: string; state_name: string }[]> => {
     const result = await pool.query(`
       SELECT
-        c.city_id, c.name, c.slug, c.display_name,
-        c.popularity, c.parent_city_id,
-        c.latitude, c.longitude, c.image_url,
-        s.slug  AS state_slug,
-        s.name  AS state_name,
-        co.name AS country_name,
-        c.description as city_description
-      FROM cities c
-      LEFT JOIN states   s  ON c.state_id   = s.state_id
-      JOIN      countries co ON c.country_id = co.country_id
-      ORDER BY c.popularity DESC
+        state_slug,
+        MIN(state_name) AS state_name,
+        MAX(COALESCE(popularity, 0)) AS popularity
+      FROM australia_locations
+      WHERE is_active = true
+        AND place_slug IS NOT NULL
+        AND state_slug IS NOT NULL
+      GROUP BY state_slug
+      ORDER BY state_name ASC
+    `);
+
+    return result.rows;
+  },
+  ["seo-states"],
+  {
+    revalidate: 604800,
+    tags: ["locations"],
+  },
+);
+
+export const getActiveSeoCityCountFromDB = unstable_cache(
+  async (): Promise<number> => {
+    const result = await pool.query(`
+      WITH canonical AS (
+        SELECT DISTINCT ON (state_slug, place_slug)
+          state_slug,
+          place_slug
+        FROM australia_locations
+        WHERE is_active = true
+          AND place_slug IS NOT NULL
+          AND state_slug IS NOT NULL
+        ORDER BY state_slug, place_slug, popularity DESC NULLS LAST
+      )
+      SELECT COUNT(*)::integer AS count
+      FROM canonical;
+    `);
+
+    return Number(result.rows[0]?.count ?? 0);
+  },
+  ["active-seo-city-count"],
+  {
+    revalidate: 604800,
+    tags: ["locations"],
+  },
+);
+
+export const getSeoStateSummaryFromDB = unstable_cache(
+  async (
+    stateSlug: string,
+  ): Promise<{
+    state_slug: string;
+    state_name: string;
+    country_name: string;
+    city_count: number;
+  } | null> => {
+    const result = await pool.query(
+      `
+      WITH canonical AS (
+        SELECT DISTINCT ON (state_slug, place_slug)
+          state_slug,
+          state_name,
+          place_slug
+        FROM australia_locations
+        WHERE is_active = true
+          AND place_slug IS NOT NULL
+          AND state_slug = $1
+        ORDER BY state_slug, place_slug, popularity DESC NULLS LAST
+      )
+      SELECT
+        state_slug,
+        MIN(state_name) AS state_name,
+        'Australia'::text AS country_name,
+        COUNT(*)::integer AS city_count
+      FROM canonical
+      GROUP BY state_slug
+      LIMIT 1
+    `,
+      [stateSlug],
+    );
+
+    return result.rows[0] ?? null;
+  },
+  ["seo-state-summary"],
+  {
+    revalidate: 604800,
+    tags: ["locations"],
+  },
+);
+
+export const getSeoLocationIndexFromDB = unstable_cache(
+  async (
+    perStateLimit = 20,
+  ): Promise<(City & { city_count: number; state_rank: number })[]> => {
+    const result = await pool.query(
+      `
+      WITH canonical AS (
+        SELECT DISTINCT ON (state_slug, place_slug)
+          id::integer AS city_id,
+          place_name AS name,
+          place_slug AS slug,
+          display_name,
+          COALESCE(popularity, 0) AS popularity,
+          latitude,
+          longitude,
+          image_url,
+          state_slug,
+          state_name,
+          'Australia'::text AS country_name,
+          description AS city_description,
+          postal_code AS postcode,
+          source,
+          updated_at
+        FROM australia_locations
+        WHERE is_active = true
+          AND place_slug IS NOT NULL
+          AND state_slug IS NOT NULL
+        ORDER BY state_slug, place_slug, popularity DESC NULLS LAST
+      ),
+      state_counts AS (
+        SELECT state_slug, COUNT(*)::integer AS city_count
+        FROM canonical
+        GROUP BY state_slug
+      ),
+      ranked AS (
+        SELECT
+          canonical.*,
+          state_counts.city_count,
+          ROW_NUMBER() OVER (
+            PARTITION BY canonical.state_slug
+            ORDER BY canonical.popularity DESC, canonical.name ASC
+          )::integer AS state_rank
+        FROM canonical
+        JOIN state_counts ON state_counts.state_slug = canonical.state_slug
+      )
+      SELECT *
+      FROM ranked
+      WHERE state_rank <= $1
+      ORDER BY state_name ASC, state_rank ASC, name ASC
+    `,
+      [perStateLimit],
+    );
+
+    return result.rows.map((row) => ({
+      ...mapAustraliaLocationRow(row),
+      city_count: Number(row.city_count),
+      state_rank: Number(row.state_rank),
+    }));
+  },
+  ["seo-location-index"],
+  {
+    revalidate: 604800,
+    tags: ["locations"],
+  },
+);
+
+export const getNearbySeoCitiesFromDB = unstable_cache(
+  async (
+    stateSlug: string,
+    citySlug: string,
+    latitude?: number | null,
+    longitude?: number | null,
+    limit = 10,
+  ): Promise<City[]> => {
+    const result = await pool.query(
+      `
+      WITH canonical AS (
+        SELECT DISTINCT ON (state_slug, place_slug)
+          id::integer AS city_id,
+          place_name AS name,
+          place_slug AS slug,
+          display_name,
+          COALESCE(popularity, 0) AS popularity,
+          latitude,
+          longitude,
+          image_url,
+          state_slug,
+          state_name,
+          'Australia'::text AS country_name,
+          description AS city_description,
+          postal_code AS postcode,
+          source,
+          updated_at
+        FROM australia_locations
+        WHERE is_active = true
+          AND place_slug IS NOT NULL
+          AND state_slug IS NOT NULL
+        ORDER BY state_slug, place_slug, popularity DESC NULLS LAST
+      )
+      SELECT *,
+        CASE
+          WHEN $3::double precision IS NULL
+            OR $4::double precision IS NULL
+            OR latitude IS NULL
+            OR longitude IS NULL
+          THEN NULL
+          ELSE 6371 * acos(
+            LEAST(
+              1,
+              GREATEST(
+                -1,
+                cos(radians($3::double precision))
+                  * cos(radians(latitude::double precision))
+                  * cos(radians(longitude::double precision) - radians($4::double precision))
+                  + sin(radians($3::double precision))
+                  * sin(radians(latitude::double precision))
+              )
+            )
+          )
+        END AS distance
+      FROM canonical
+      WHERE NOT (state_slug = $1 AND slug = $2)
+      ORDER BY
+        CASE
+          WHEN $3::double precision IS NULL OR $4::double precision IS NULL
+          THEN CASE WHEN state_slug = $1 THEN 0 ELSE 1 END
+          ELSE 0
+        END ASC,
+        distance ASC NULLS LAST,
+        popularity DESC,
+        name ASC
+      LIMIT $5
+    `,
+      [stateSlug, citySlug, latitude ?? null, longitude ?? null, limit],
+    );
+
+    return result.rows.map(mapAustraliaLocationRow);
+  },
+  ["nearby-seo-cities"],
+  {
+    revalidate: 604800,
+    tags: ["locations"],
+  },
+);
+
+export type LocationDirectoryRow = {
+  city_id: number;
+  name: string;
+  slug: string;
+  display_name: string | null;
+  postcode: string | null;
+  state_slug: string;
+};
+
+export const getLocationDirectoryByStateFromDB = unstable_cache(
+  async (stateSlug: string): Promise<LocationDirectoryRow[]> => {
+    const result = await pool.query(
+      `
+      SELECT DISTINCT ON (state_slug, place_slug)
+        id::integer AS city_id,
+        place_name AS name,
+        place_slug AS slug,
+        display_name,
+        postal_code AS postcode,
+        state_slug
+      FROM australia_locations
+      WHERE is_active = true
+        AND place_slug IS NOT NULL
+        AND state_slug = $1
+      ORDER BY
+        state_slug,
+        place_slug,
+        popularity DESC NULLS LAST,
+        updated_at DESC
+    `,
+      [stateSlug],
+    );
+
+    return result.rows.sort((a, b) =>
+      a.name.localeCompare(b.name, "en-AU", { sensitivity: "base" })
+    );
+  },
+  ["location-directory-by-state"],
+  {
+    revalidate: 604800,
+    tags: ["locations"],
+  },
+);
+
+export const getAllCities = reactCache(
+  async (): Promise<City[]> => {
+    const result = await pool.query(`
+      WITH canonical AS (
+        SELECT DISTINCT ON (state_slug, place_slug)
+          id::integer AS city_id,
+          place_name AS name,
+          place_slug AS slug,
+          display_name,
+  COALESCE(popularity, 0) AS popularity,
+            NULL::integer AS parent_city_id,
+          latitude,
+          longitude,
+          image_url ,
+          state_slug,
+          state_name,
+          'Australia'::text AS country_name,
+          description AS city_description,
+          postal_code AS postcode,
+          source,
+          updated_at
+        FROM australia_locations
+        WHERE is_active = true
+          AND place_slug IS NOT NULL
+          AND state_slug IS NOT NULL
+        ORDER BY state_slug, place_slug, popularity DESC NULLS LAST
+      )
+      SELECT * FROM canonical
+      ORDER BY popularity DESC, name ASC
     `);
 
     const map = new Map<number, City>();
@@ -163,6 +662,9 @@ export const getAllCities = unstable_cache(
           state_name: row.state_name,
           country_name: row.country_name,
           city_description: row.city_description,
+          postcode: row.postcode,
+          source: row.source,
+          updated_at: row.updated_at,
           subcities: [],
         };
         map.set(row.city_id, city);
@@ -185,57 +687,51 @@ export const getAllCities = unstable_cache(
 
     return cities;
   },
-  ["all-cities"],
-  {
-    revalidate: 86400,
-    tags: ["cities"],
-  },
 );
 
 export const getCityBySlug = unstable_cache(
-  async (slug: string) => {
+  async (slug: string, stateSlug?: string | null) => {
     const result = await pool.query(
       `
       SELECT
-        c.city_id, c.name, c.slug, c.display_name,
-        c.popularity, c.latitude, ,c.longitude, c.image_url,
-        c.parent_city_id,
-        s.slug AS state_slug,
-        s.name AS state_name,
-        co.name AS country_name,
-      FROM cities c
-      LEFT JOIN states s ON c.state_id = s.state_id
-      JOIN countries co ON c.country_id = co.country_id
-      WHERE c.slug = $1
+        id::integer AS city_id,
+        place_name AS name,
+        place_slug AS slug,
+        display_name,
+        COALESCE(accuracy, 0) AS popularity,
+        latitude,
+        longitude,
+        NULL::text AS image_url,
+        NULL::integer AS parent_city_id,
+        state_slug,
+        state_name,
+        'Australia'::text AS country_name,
+        postal_code AS postcode,
+        source,
+        updated_at
+      FROM australia_locations
+      WHERE place_slug = $1
+        AND is_active = true
+        AND ($2::text IS NULL OR state_slug = $2)
+      ORDER BY accuracy DESC NULLS LAST, updated_at DESC
       LIMIT 1
     `,
-      [slug],
+      [slug, stateSlug ?? null],
     );
 
     return result.rows[0] || null;
   },
-  ["city-by-slug"],
+  ["australia-location-by-slug"],
   {
     revalidate: 86400,
   },
 );
 
 export const getSubcities = unstable_cache(
-  async (cityId: number) => {
-    const result = await pool.query(
-      `
-      SELECT city_id, name, slug, display_name,
-             popularity, latitude, longitude, image_url
-      FROM cities
-      WHERE parent_city_id = $1
-      ORDER BY popularity DESC
-    `,
-      [cityId],
-    );
-
-    return result.rows;
+  async (_cityId: number): Promise<Record<string, unknown>[]> => {
+    return [];
   },
-  ["subcities"],
+  ["australia-location-subcities"],
   {
     revalidate: 86400,
   },

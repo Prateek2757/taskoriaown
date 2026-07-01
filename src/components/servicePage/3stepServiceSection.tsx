@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import { IoIosSearch } from "react-icons/io";
@@ -83,13 +82,6 @@ export default function StepWiseHowItWorks({
     (cityName
       ? CITY_STEPS(serviceName, proLabel, cityName)
       : DEFAULT_STEPS(serviceName));
-
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 100);
-    return () => clearTimeout(t);
-  }, []);
   const icons = [FaRegPenToSquare, IoIosSearch, MdOutlinePostAdd];
   const ctaLabels = ["Post a job", "Compare quotes", "Hire a pro"];
   const images = [
@@ -102,7 +94,7 @@ export default function StepWiseHowItWorks({
       aria-label={`How to hire a ${serviceName} professional${cityName ? ` in ${cityName}` : ""}`}
       className="w-full   dark:bg-slate-900/60 py-10 px-6"
     >
-      <p className="text-sm text-center font-bold uppercase tracking-[0.18em] text-[#2563EB] dark:text-blue-400 pb-4 ">
+      <p className="text-sm text-center font-bold uppercase tracking-[0.18em] text-[#2563EB] dark:text-blue-400 pb-2 ">
         How it works
       </p>
       <div className="max-w-6xl mx-auto">
@@ -160,11 +152,9 @@ export default function StepWiseHowItWorks({
               <div
                 key={i}
                 style={{
-                  opacity: visible ? 1 : 0,
-                  transform: visible ? "translateY(0)" : "translateY(16px)",
-                  transition: `opacity 0.45s ease ${i * 100}ms, transform 0.45s ease ${i * 100}ms`,
+                  animationDelay: `${i * 70}ms`,
                 }}
-                className="group bg-blue-50 dark:bg-slate-800/70 rounded-2xl p-6 flex flex-col gap-5 h-full hover:shadow-md transition-all duration-300"
+                className="service-enter group bg-blue-50 dark:bg-slate-800/70 rounded-2xl p-6 flex flex-col gap-5 h-full hover:shadow-md transition-shadow duration-300"
               >
                 <div className="relative bg-indigo-50 dark:bg-indigo-950/40 rounded-xl h-44 flex items-center justify-center overflow-hidden">
                   <span className="absolute top-3 left-3 text-xs font-semibold text-indigo-500 dark:text-indigo-400">

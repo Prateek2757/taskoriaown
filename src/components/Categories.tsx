@@ -132,7 +132,7 @@ export default function Services() {
             viewport={{ once: true, amount: 0.2 }}
           >
             {/* <div className="block lg:hidden">
-              <Marquee pauseOnHover className="[--duration:40s]">
+              <Marquee pauseOnHover duration="40s">
                 {categories.map((category, index) => (
                   <motion.div
                     key={category.category_id}

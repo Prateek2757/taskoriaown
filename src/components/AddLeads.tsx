@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import LocationSearch from "@/components/Location/locationsearch";
 
 type FormData = {
   title: string;
@@ -48,9 +49,6 @@ export default function AddLeadModal({
   const [categories, setCategories] = useState<
     { category_id: number; name: string }[]
   >([]);
-  const [locations, setLocations] = useState<
-    { city_id: number; name: string }[]
-  >([]);
   const [locationError, setLocationError] = useState<string>("");
 
   const {
@@ -68,18 +66,12 @@ export default function AddLeadModal({
   });
 
   const isRemoteAllowed = watch("is_remote_allowed");
-  const selectedCity = watch("city_id");
-
   useEffect(() => {
     axios
       .get("/api/signup/category-selection")
       .then((res) => setCategories(res.data))
       .catch(() => toast.error("Failed to load categories"));
 
-    axios
-      .get("/api/signup/location")
-      .then((res) => setLocations(res.data))
-      .catch(() => toast.error("Failed to load locations"));
   }, []);
 
   const handleRemoteChange = (checked: boolean) => {
@@ -87,9 +79,9 @@ export default function AddLeadModal({
     setLocationError(""); // clear any previous error
   };
 
-  const handleLocationChange = (value: string) => {
-    setValue("city_id", value);
-    setLocationError(""); // clear any previous error
+  const handleLocationChange = (location: { city_id?: number } | null) => {
+    setValue("city_id", location?.city_id ? String(location.city_id) : "");
+    if (location?.city_id) setLocationError("");
   };
 
   const onSubmit = async (data: FormData) => {
@@ -252,18 +244,7 @@ export default function AddLeadModal({
           {/* Location */}
           <div className="space-y-1">
             <Label>Location (optional if remote enabled)</Label>
-            <Select onValueChange={handleLocationChange} value={selectedCity}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select Location" />
-              </SelectTrigger>
-              <SelectContent>
-                {locations.map((loc) => (
-                  <SelectItem key={loc.city_id} value={String(loc.city_id)}>
-                    {loc.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <LocationSearch onSelect={handleLocationChange} />
           </div>
 
           {/* Remote Checkbox */}
