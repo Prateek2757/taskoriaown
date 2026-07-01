@@ -1,5 +1,16 @@
 
-import { Home, HandPlatter, Search, Binoculars, MessageSquare, LayoutDashboard } from "lucide-react";
+import {
+  BadgeDollarSign,
+  Binoculars,
+  HandPlatter,
+  Home,
+  LayoutDashboard,
+  ListChecks,
+  MessageSquare,
+  Search,
+  ShieldCheck,
+  Wrench,
+} from "lucide-react";
 
 export type ViewMode = "customer" | "provider";
 
@@ -14,9 +25,9 @@ export const NAV_LINKS: Record<"public" | "customer" | "provider", NavLink[]> =
     public: [
       { name: "Home", href: "/", icon: Home },
       { name: "Services", href: "/services", icon: HandPlatter },
-      { name: "How It Works", href: "/how-it-works", icon: HandPlatter },
-      { name: "Pricing", href: "/pricing", icon: HandPlatter },
-      { name: "Trust & Safety", href: "/trust-safety", icon: HandPlatter },
+      { name: "How It Works", href: "/how-it-works", icon: ListChecks },
+      { name: "Pricing", href: "/pricing", icon: BadgeDollarSign },
+      { name: "Trust & Safety", href: "/trust-safety", icon: ShieldCheck },
     ],
     customer: [
       { name: "Home", href: "/", icon: Home },
