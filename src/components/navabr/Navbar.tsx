@@ -62,12 +62,14 @@ export default function ModernNavbar({
               alt="Taskoria"
               width={350}
               height={48}
-              className="h-9 w-auto shrink-0"
+              className="h-8 w-auto shrink-0 sm:h-9"
               priority
             />
           </Link>
 
-          <Explore />
+          <div className="hidden min-[380px]:block">
+            <Explore />
+          </div>
 
           {!isMinimal && (
             <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 px-5 py-2 rounded-full space-x-2">

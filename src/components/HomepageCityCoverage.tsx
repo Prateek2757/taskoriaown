@@ -35,7 +35,7 @@ const cities = [
   {
     name: "Gold Coast",
     state: "QLD",
-    href: "/locations/qld",
+    href: "/locations/qld/gold-coast-mc",
   },
   {
     name: "Canberra",
