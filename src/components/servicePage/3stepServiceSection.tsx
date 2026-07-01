@@ -94,13 +94,13 @@ export default function StepWiseHowItWorks({
       aria-label={`How to hire a ${serviceName} professional${cityName ? ` in ${cityName}` : ""}`}
       className="w-full   dark:bg-slate-900/60 py-10 px-6"
     >
-      <p className="text-sm text-center font-bold uppercase tracking-[0.18em] text-[#2563EB] dark:text-blue-400  ">
+      <p className="text-sm text-center font-bold uppercase tracking-[0.18em] text-[#2563EB] dark:text-blue-400 pb-2 ">
         How it works
       </p>
       <div className="max-w-6xl mx-auto">
         {!cityName && (
           <div className="mb-5">
-            <h2 className="text-2xl text-center md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white py-2">
+            <h2 className="text-2xl text-center md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white py-4">
               Hire a {serviceName.toLowerCase()} pro
               <br /> in{" "}
               <span className="text-[#2563EB] dark:text-blue-400 ">

@@ -23,14 +23,10 @@ interface ServiceCategory {
   slug: string;
   image_url?: { url: string };
 }
-interface ServiceCategoriesProps {
-  categories: ServiceCategory[];
-}
 
 const popularServicesFilters = [
   { label: "Cleaners", icon: <PiSprayBottle size={28} /> },
   { label: "Handymen", icon: <GoTools size={26} /> },
-  // { label: "Plumbers", icon: <MdOutlineWaterDrop size={26} /> },
   { label: "Electricians", icon: <MdElectricalServices size={28} /> },
   { label: "Lawn Mowing", icon: <GiFlowerPot size={28} /> },
   { label: "Events", icon: <MdOutlineEventAvailable size={28} /> },
@@ -61,8 +57,7 @@ export default function PopularServices() {
     popularServicesFilters[0].label
   );
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  const { categories: apiCategories , loading } = useCategories();
+  const { categories: apiCategories, loading } = useCategories();
 
   const filteredCategories = useMemo(() => {
     if (!activeButton || !apiCategories) return [];
@@ -72,37 +67,67 @@ export default function PopularServices() {
     );
   }, [activeButton, apiCategories]);
 
-
   const displayedCategories = filteredCategories.slice(0, 5);
 
   const scroll = (dir: "left" | "right") => {
     if (!scrollRef.current) return;
-    scrollRef.current.scrollBy({ left: dir === "left" ? -200 : 200, behavior: "smooth" });
+    scrollRef.current.scrollBy({
+      left: dir === "left" ? -200 : 200,
+      behavior: "smooth",
+    });
   };
 
   return (
-    <section className="relative py-6 px-4 sm:px-6 lg:px-8">
-   
+    <section className="relative py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <div className="relative flex items-center border-b border-gray-200 pb-1">
+        {/* ── Heading Block ── */}
+        <div className="mb-4 flex flex-col items-center  gap-3">
+          <div className="flex flex-col items-center">
+            {/* Eyebrow label */}
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-blue-600 mb-2">
+              <span className="w-5 h-px bg-blue-600 inline-block" />
+              What are you looking for?
+              <span className="w-5 h-px bg-blue-600 inline-block" />
+            </span>
 
- 
+            {/* Main heading */}
+            <div className="mb-4 flex flex-col items-center text-center">
+              <h2 className="max-w-3xl text-3xl font-bold tracking-tight text-gray-800 sm:text-4xl  dark:text-white">
+                Hire from{" "}
+                <span className="relative inline-block text-[#2563EB]">
+                  181+
+                </span>{" "}
+                Trusted Service Categories
+              </h2>
+            </div>
+          </div>
+
+          {/* "View all" CTA — keeps heading row balanced on wider screens */}
+          {/* <Link
+            href="/services"
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-600 hover:bg-blue-100 transition-colors dark:border-blue-800 dark:bg-blue-950 dark:text-blue-400 dark:hover:bg-blue-900"
+          >
+            View all services
+            <SlArrowRight size={12} />
+          </Link> */}
+        </div>
+
+        {/* ── Filter Tab Bar ── */}
+        <div className="relative flex items-center border-b border-gray-200 dark:border-gray-700 pb-1">
           <button
             onClick={() => scroll("left")}
             aria-label="Scroll left"
-            className="shrink-0 z-10 flex items-center justify-center w-8 h-8 rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 mr-2"
+            className="shrink-0 z-10 flex items-center justify-center w-8 h-8 rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 mr-2 dark:border-gray-700 dark:bg-gray-900"
           >
             <SlArrowLeft size={14} />
           </button>
 
-         
           <div
             ref={scrollRef}
             className="flex flex-1 gap-2 overflow-x-auto scroll-smooth"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             <style>{`div::-webkit-scrollbar { display: none; }`}</style>
-
             {popularServicesFilters.map((filter) => {
               const isActive = activeButton === filter.label;
               return (
@@ -117,7 +142,7 @@ export default function PopularServices() {
                   `}
                 >
                   <span>{filter.icon}</span>
-                  <span className="text-[14px]  mt-1.5 text-center leading-tight whitespace-nowrap">
+                  <span className="text-[14px] mt-1.5 text-center leading-tight whitespace-nowrap">
                     {filter.label}
                   </span>
                   {isActive && (
@@ -131,62 +156,63 @@ export default function PopularServices() {
           <button
             onClick={() => scroll("right")}
             aria-label="Scroll right"
-            className="shrink-0 z-10 flex items-center justify-center w-8 h-8 rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 ml-2"
+            className="shrink-0 z-10 flex items-center justify-center w-8 h-8 rounded-full border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 ml-2 dark:border-gray-700 dark:bg-gray-900"
           >
             <SlArrowRight size={14} />
           </button>
         </div>
       </div>
 
-    <div className="max-w-6xl mx-auto mt-6">
-  {loading ? (
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
-      {[...Array(5)].map((_, i) => (
-        <div
-          key={i}
-          className="animate-pulse rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden"
-        >
-          <div className="h-40 sm:h-52 w-full bg-gray-200" />
-          <div className="p-3">
-            <div className="h-4 bg-gray-200 rounded w-3/4" />
+      {/* ── Category Cards Grid ── */}
+      <div className="max-w-6xl mx-auto mt-6">
+        {loading ? (
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="animate-pulse rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden"
+              >
+                <div className="h-40 sm:h-52 w-full bg-gray-200" />
+                <div className="p-3">
+                  <div className="h-4 bg-gray-200 rounded w-3/4" />
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
-  ) : displayedCategories.length > 0 ? (
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
-      {displayedCategories.map((cat, index) => (
-        <article
-          key={cat.category_id ?? cat.slug}
-          className={`group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900 ${
-            index >= 4 ? "hidden sm:block" : ""
-          }`}
-        >
-          <Link href={`/services/${cat.slug}`} className="block">
-            <div className="relative h-42 sm:h-70 w-full overflow-hidden">
-              <Image
-                src={cat.image_url || "/images/default.webp"}
-                fill
-                className="object-cover transition duration-300 group-hover:scale-105"
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
-                alt={cat.name}
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
-              <h4 className="absolute bottom-3 left-3 right-3 text-sm sm:text-base font-semibold text-white leading-snug">
-                {cat.name}
-              </h4>
-            </div>
-          </Link>
-        </article>
-      ))}
-    </div>
-  ) : (
-    <p className="text-center text-gray-400 py-8">
-      No categories found for{" "}
-      <span className="font-medium">{activeButton}</span>.
-    </p>
-  )}
-</div>
+        ) : displayedCategories.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {displayedCategories.map((cat, index) => (
+              <article
+                key={cat.category_id ?? cat.slug}
+                className={`group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900 ${
+                  index >= 4 ? "hidden sm:block" : ""
+                }`}
+              >
+                <Link href={`/services/${cat.slug}`} className="block">
+                  <div className="relative h-42 sm:h-70 w-full overflow-hidden">
+                    <Image
+                      src={cat.image_url || "/images/default.webp"}
+                      fill
+                      className="object-cover transition duration-300 group-hover:scale-105"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+                      alt={cat.name}
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
+                    <h4 className="absolute bottom-3 left-3 right-3 text-sm sm:text-base font-semibold text-white leading-snug">
+                      {cat.name}
+                    </h4>
+                  </div>
+                </Link>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-400 py-8">
+            No categories found for{" "}
+            <span className="font-medium">{activeButton}</span>.
+          </p>
+        )}
+      </div>
     </section>
   );
 }

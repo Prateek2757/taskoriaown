@@ -76,7 +76,11 @@ const barVariants = {
   },
 };
 
-const Footer = () => {
+type FooterProps = {
+  currentYear: number;
+};
+
+const Footer = ({ currentYear }: FooterProps) => {
   const container = useRef<HTMLDivElement>(null);
   const [openPopup, setOpenPopUp] = useState(false);
   const [openSection, setOpenSection] = useState("");
@@ -129,13 +133,10 @@ const Footer = () => {
                   title="footer logo"
                   src="/images/taskoria_logo.svg"
                   alt="Taskoria - Trusted Local Services Marketplace in Australia"
-                  width={36}
-                  height={32}
-                  className="h-8 w-auto"
+                  width={350}
+                  height={51}
+                  className="h-auto w-[148px]"
                 />
-                <span className="ml- text-3xl font-bold bg-[#2563EB] bg-clip-text text-transparent">
-                  Taskoria
-                </span>
               </Link>
 
               <p className="text-gray-600 dark:text-white text-sm max-w-xs mb-2">
@@ -601,7 +602,7 @@ const Footer = () => {
 
           <div className="flex md:flex-row flex-col gap-3 justify-between py-6 text-gray-600 dark:text-gray-300">
             <span className="text-sm">
-              &copy; {new Date().getFullYear()} Taskoria Pty Ltd. All Rights
+              &copy; {currentYear} Taskoria Pty Ltd. All Rights
               Reserved.{" "}
               <Link
                 href="/privacy-policy"

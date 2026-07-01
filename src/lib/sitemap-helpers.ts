@@ -44,9 +44,11 @@ export interface ProviderProfile {
   updated_at?: string;
 }
 
-export const URLS_PER_SITEMAP = 5000;
+export const URLS_PER_SITEMAP = 20000;
 const MAX_URLS_PER_SITEMAP = 50000;
 const SERVICE_LOCATION_SITEMAP_PREFIX = "australia";
+const SITEMAP_LOCATION_STATE_NAME = "Queensland";
+const SITEMAP_LOCATION_MIN_ACCURACY = 4;
 
 export async function safeFetch<T>(url: string): Promise<T[]> {
   try {
@@ -84,14 +86,15 @@ export const fetchCategories = async (): Promise<Category[]> => {
 
 export const fetchCities = async (): Promise<City[]> => {
   try {
-    const result = await pool.query(`
+    const result = await pool.query(
+      `
       WITH canonical AS (
         SELECT DISTINCT ON (state_slug, place_slug)
           id::integer AS city_id,
           place_name AS name,
           place_slug AS slug,
           display_name,
-          COALESCE(popularity, 0) AS popularity,
+          COALESCE(popularity, accuracy, 0) AS popularity,
           state_slug,
           state_name,
           postal_code AS postcode,
@@ -101,12 +104,21 @@ export const fetchCities = async (): Promise<City[]> => {
         WHERE is_active = true
           AND place_slug IS NOT NULL
           AND state_slug IS NOT NULL
-        ORDER BY state_slug, place_slug, popularity DESC NULLS LAST
+          AND state_name = $1
+          AND accuracy >= $2
+        ORDER BY
+          state_slug,
+          place_slug,
+          accuracy DESC NULLS LAST,
+          popularity DESC NULLS LAST,
+          updated_at DESC
       )
       SELECT *
       FROM canonical
       ORDER BY popularity DESC, name ASC
-    `);
+    `,
+      [SITEMAP_LOCATION_STATE_NAME, SITEMAP_LOCATION_MIN_ACCURACY]
+    );
 
     return result.rows.map((city) => ({
       ...city,

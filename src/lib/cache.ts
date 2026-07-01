@@ -31,6 +31,23 @@ export const getCategoriesFromDB = unstable_cache(
   },
 );
 
+export const getActiveServiceCategoryCountFromDB = unstable_cache(
+  async (): Promise<number> => {
+    const result = await pool.query(`
+      SELECT COUNT(*)::integer AS count
+      FROM service_categories
+      WHERE is_active = true;
+    `);
+
+    return Number(result.rows[0]?.count ?? 0);
+  },
+  ["active-service-category-count"],
+  {
+    revalidate: 604800,
+    tags: ["categories"],
+  },
+);
+
 export const getCategoryBySlug = unstable_cache(
   async (slug: string) => {
     const result = await pool.query(
@@ -332,6 +349,32 @@ export const getSeoStatesFromDB = unstable_cache(
     return result.rows;
   },
   ["seo-states"],
+  {
+    revalidate: 604800,
+    tags: ["locations"],
+  },
+);
+
+export const getActiveSeoCityCountFromDB = unstable_cache(
+  async (): Promise<number> => {
+    const result = await pool.query(`
+      WITH canonical AS (
+        SELECT DISTINCT ON (state_slug, place_slug)
+          state_slug,
+          place_slug
+        FROM australia_locations
+        WHERE is_active = true
+          AND place_slug IS NOT NULL
+          AND state_slug IS NOT NULL
+        ORDER BY state_slug, place_slug, popularity DESC NULLS LAST
+      )
+      SELECT COUNT(*)::integer AS count
+      FROM canonical;
+    `);
+
+    return Number(result.rows[0]?.count ?? 0);
+  },
+  ["active-seo-city-count"],
   {
     revalidate: 604800,
     tags: ["locations"],

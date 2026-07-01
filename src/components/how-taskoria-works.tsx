@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRef } from "react";
 import { AnimatedBeam, Circle, Icons } from "./ui/animated-beam";
 import { Button } from "./ui/button";
+import HomepageStatsCounter from "./HomepageStatsCounter";
 
 const steps = [
   {
@@ -116,31 +117,35 @@ export default function HowTaskoriaWorks() {
           aria-hidden="true"
         />
 
+        
+
         <motion.div
           className="max-w-7xl  mx-auto relative"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          {/* <h1
-            id="how-it-works-heading"
-            className="text-4xl md:text-5xl flex justify-center font-black"
-          >
-            How hiring works on TaskoriaASA
-            <span className="block opacity-0 md:opacity-100 animate-fade-in">
-              ...
+          <div className="flex flex-col items-center">
+            {/* Eyebrow label */}
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-blue-600 mb-2">
+              <span className="w-5 h-px bg-blue-600 inline-block" />
+              How Taskoria works{" "}
+              <span className="w-5 h-px bg-blue-600 inline-block" />
             </span>
-          </h1> */}
 
-          <div className="  text-4xl  text-center text-gray-800 dark:text-white font-bold tracking-tight mb-2 ">
-            How hiring works on{" "}
-            <span className="bg-[#2563EB] bg-clip-text text-transparent">
-              Taskoria ...
-            </span>{" "}
+            <div className="mb-4 flex flex-col items-center text-center">
+              <h2 className="max-w-3xl text-3xl font-bold tracking-tight text-gray-800 sm:text-4xl  dark:text-white">
+                Hire with confidence in{" "}
+                <span className="relative inline-block text-[#2563EB]">
+                  three
+                </span>{" "}
+                steps
+              </h2>
+            </div>
+            <p className=" text-lg   flex justify-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+              Post for free, receive responses, and hire with confidence.
+            </p>
           </div>
-          <p className=" text-lg  my-1 flex justify-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Post for free, receive responses, and hire with confidence.
-          </p>
 
           <div
             className="relative flex max-w-6xl h-16 mx-auto items-center justify-center overflow-hidden"
@@ -165,7 +170,7 @@ export default function HowTaskoriaWorks() {
                   ref={div2Ref}
                   aria-label="Step 2"
                 >
-                  <span className="dark:text-gray-900 text-[#A6B4FA] font-bold text-lg">
+                  <span className="dark:text-gray-900 text-[#5a6bbd] font-bold text-lg">
                     2
                   </span>
                 </Circle>
@@ -267,6 +272,7 @@ export default function HowTaskoriaWorks() {
               </Button>
             </Link>
           </motion.div>
+
         </motion.div>
       </section>
     </>

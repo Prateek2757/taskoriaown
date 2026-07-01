@@ -418,7 +418,7 @@ export default function HeroSection() {
         >
           <div className="container mx-auto px-4 py-4">
             <p className="text-sm text-slate-700  dark:text-slate-300 text-center">
-              Background-checked profiles, clear quotes, direct communication,
+            🛡️ Background-checked profiles, clear quotes, direct communication,
               and safer hiring support.&nbsp;
               <a
                 href="/trust-safety"

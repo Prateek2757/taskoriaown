@@ -84,9 +84,7 @@ export function isSeoLocation(location: SeoLocationLike) {
   if (isStandalonePostcode(location.name) || isStandalonePostcode(location.slug)) {
     return false;
   }
-  // Imported GeoNames rows are already normalized localities. The stricter
-  // rules below exist for legacy Google/address rows and would incorrectly
-  // remove valid places such as Airport West or Station Creek.
+
   if (location.source === "geonames") return true;
   if (
     location.postcode &&
@@ -108,7 +106,6 @@ export function isSeoLocation(location: SeoLocationLike) {
 
   return true;
 }
- //wedwe
 export function filterSeoLocations<T extends SeoLocationLike>(locations: T[]): T[] {
   return locations
     .filter(isSeoLocation)

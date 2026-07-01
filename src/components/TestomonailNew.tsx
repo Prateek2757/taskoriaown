@@ -174,15 +174,20 @@ export default function Testimonial() {
       id="customer-reviews"
     >
       <div className="text-center mb-10">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-blue-50 dark:from-blue-900 dark:to-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800">
+        {/* <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-linear-to-r from-blue-50 to-blue-50 dark:from-blue-900 dark:to-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800">
           Customer stories
-        </div>
+        </div> */}
+        <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-blue-600 mb-2">
+          <span className="w-5 h-px bg-blue-600 inline-block" />
+          Customer stories{" "}
+          <span className="w-5 h-px bg-blue-600 inline-block" />
+        </span>
 
         <h2 className="text-4xl font-bold text-gray-800 dark:text-white ">
-          What customers say about {" "}
+          What customers say about{" "}
           <span className="bg-[#2563EB] bg-clip-text text-transparent">
-              Taskoria ...
-            </span>{" "}
+            Taskoria ...
+          </span>{" "}
         </h2>
 
         <p className="text-lg text-gray-600 dark:text-gray-400 mt-2">

@@ -191,14 +191,13 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
-      <AuthProvider>
-        <head>
-          <link
-            rel="stylesheet"
-            href="https://www.gstatic.com/chat-messenger/sdk/prod/v1.16/themes/chat-messenger-default.css"
-          />
-          <Script id="clarity" strategy="afterInteractive">
-            {`
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://www.gstatic.com/chat-messenger/sdk/prod/v1.16/themes/chat-messenger-default.css"
+        />
+        <Script id="clarity" strategy="afterInteractive">
+          {`
 
     (function(c,l,a,r,i,t,y){
 
@@ -211,9 +210,10 @@ export default function RootLayout({
     })(window, document, "clarity", "script", "wylra8huxw");
 
   `}
-          </Script>
-        </head>
-        <body className="antialiased dark:bg-black" suppressHydrationWarning>
+        </Script>
+      </head>
+      <body className="antialiased dark:bg-black" suppressHydrationWarning>
+        <AuthProvider>
           {GA_ID && (
             <>
               <Script
@@ -257,14 +257,14 @@ export default function RootLayout({
               <main>{children}</main>
               <SpeedInsights />
               <Toaster position="top-right" richColors expand closeButton />
-              <Footer />
+              <Footer currentYear={new Date().getFullYear()} />
               {/* <ChatbotWidget/> */}
               <WhatsAppSupportButton/>
               {/* <TaskoriaAgent /> */}
             </UserProvider>
           </ThemeProvider>
-        </body>
-      </AuthProvider>
+        </AuthProvider>
+      </body>
     </html>
   );
 }
