@@ -47,10 +47,10 @@ export default function HomepageStatsCounterClient({
   return (
     <section
       aria-label="Taskoria platform statistics"
-      className="bg-[#ecf0f7] py-5 dark:bg-slate-950/70 lg:py-5"
+      className="bg-[#ecf0f7] py-5 mb-4 dark:bg-slate-950/70 lg:py-5"
     >
       <div className="section-container">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, index) => {
             const tone = STAT_TONES[index % STAT_TONES.length];
 

@@ -177,7 +177,7 @@ export default function ServiceCategoriesClient({
   const displayData = showData ? filteredData : paginatedData;
 
   return (
-    <section className="relative overflow-hidden bg-linear-to-b from-slate-50 via-white to-sky-50 px-4 py-12 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
+    <section className="relative  overflow-hidden bg-linear-to-b from-slate-50 via-white to-sky-50 px-4 py-12 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
       <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-blue-200/40 blur-3xl dark:bg-blue-700/20" />
       <div className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-sky-200/50 blur-3xl dark:bg-sky-700/20" />
 

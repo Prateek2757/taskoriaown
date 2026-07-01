@@ -135,7 +135,7 @@ export default function HomepageFAQ() {
       aria-labelledby="homepage-faq-title"
       className="relative overflow-hidden border-y border-slate-200 bg-white py-8 dark:border-white/10 dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_50%,rgba(0,0,0,1)_90%)] sm:py-16"
     >
-      <div className="section-container mx-20 relative">
+      <div className="section-container lg:mx-20 relative">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-center">
           <div className="w-full lg:max-w-170 lg:flex-1">
             <div className="mx-auto max-w-2xl text-center sm:text-left">
