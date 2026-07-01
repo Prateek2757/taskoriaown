@@ -18,6 +18,7 @@ import Services from "../Categories";
 import FilterServices from "./FilterServices";
 import usePagination from "@/hooks/usePagination";
 import CategoryAlphabetDirectory, { DirectoryCategory } from "../category/CategoryAlphabetDirectory";
+import ServiceBreadcrumbs from "./ServicesBreadcrumbs";
 
 interface ServiceCategory {
   category_id?: string | number;
@@ -162,7 +163,7 @@ export default function ServiceCategoriesClient({
   const filteredData = useMemo(() => {
     let data = hasSearchQuery ? filteredCategories : secondaryCategories;
 
-    if (filterData !== "All") {
+    if (filterData !==  "Cleaning Services") {
       data = data.filter(
         (c) =>
           c.main_category?.toLowerCase().trim() ===
@@ -174,13 +175,15 @@ export default function ServiceCategoriesClient({
   }, [hasSearchQuery, filteredCategories, secondaryCategories, filterData]);
   const { paginatedData } = usePagination(filteredData, 9, filterData);//for now showing all service we have paginated logic of neccessary
   const displayData = showData ? filteredData : paginatedData;
+
   return (
     <section className="relative overflow-hidden bg-linear-to-b from-slate-50 via-white to-sky-50 px-4 py-12 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
       <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-blue-200/40 blur-3xl dark:bg-blue-700/20" />
       <div className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-sky-200/50 blur-3xl dark:bg-sky-700/20" />
 
-      <div className="relative mx-auto max-w-6xl space-y-10">
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:p-8">
+      <div className="relative mx-auto max-w-7xl space-y-10">
+        <ServiceBreadcrumbs currentPage="Services" />
+        {/* <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:p-8">
           <div className="mb-4 flex items-center justify-between gap-4">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
               Find a service or post directly
@@ -230,8 +233,13 @@ export default function ServiceCategoriesClient({
               {filteredCategories.length === 1 ? " category" : " categories"}
             </p>
           )}
+        </div> */}
+        <div className="mt-4 ">
+          <p className="block mt-2 text-4xl md:text-5xl text-[#2563EB] font-bold">All Services on Taskoria</p>
+          <p className=" mt-5 space-x-2 space-y-2 text-gray-600 text-md dark:text-white">Browse every category — from one-off jobs to ongoing care. Click through to 
+          <br/>
+           <span >post a free job, or use the home search for instant matching.</span> </p>
         </div>
-
         <NewRequestModal
           open={openModal}
           onClose={() => setOpenModal(false)}
@@ -268,32 +276,20 @@ export default function ServiceCategoriesClient({
         {topCategories.length > 0 ? (
           <section className="space-y-5">
             <div className="flex items-center justify-between">
-              {/* <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                {hasSearchQuery
-                  ? "Best matching services"
-                  : "Most requested services"}
-              </h3> */}
               <FilterServices
                 filterData={filterData}
                 onChangeFilterData={setFilterData}
               />
-              {/* <Button
-                variant="outline"
-                onClick={() => handlePostJob()}
-                className="hidden sm:inline-flex"
-              >
-                Post a Custom Job
-              </Button> */}
             </div>
 
-            <div className="flex justify-end">
+            {/* <div className="flex justify-end">
               <button
                 onClick={() => setShowData((prev) => !prev)}
                 className=" flex text-[#2563EB] "
               >
                 {showData ? "Show less" : `Show all (${filteredData.length})`}
               </button>
-            </div>
+            </div> */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {displayData.map((category, index) => (
                 <article

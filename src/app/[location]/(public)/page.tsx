@@ -9,6 +9,8 @@ import {
   getPriorityCityLinks,
   getPriorityServiceLinks,
 } from "@/lib/internal-links";
+import PlatformReachTicker from "@/components/PlatformReachTicker";
+import HomepageCityCoverage from "@/components/HomepageCityCoverage";
 
 const HowTaskoriaWorks = lazy(() => import("@/components/how-taskoria-works"));
 // const Categories = lazy(() => import("@/components/Categories"));
@@ -19,13 +21,7 @@ const FeaturesPage = lazy(() => import("@/components/Features"));
 const Testomonail = lazy(() => import("@/components/Testomonail"));
 const HomepageFAQ = lazy(() => import("@/components/HomepageFAQ"));
 const CTA = lazy(() => import("@/components/CTA"));
-const TestomonailNew = lazy(() => import("@/components/TestomonailNew"));
-const HomepageCityCoverage = lazy(
-  () => import("@/components/HomepageCityCoverage")
-);
-const PlatformReachTicker = lazy(
-  () => import("@/components/PlatformReachTicker")
-);
+const CustomersReview = lazy(() => import("@/components/CustomersReview"));
 
 export const metadata: Metadata = {
   title: {
@@ -334,7 +330,7 @@ export default function HomePage() {
 
         <Suspense fallback={<div className="min-h-12.5" />}>
           <section aria-label="Customer reviews and testimonials">
-            <TestomonailNew />
+            <CustomersReview />
           </section>
         </Suspense>
 
