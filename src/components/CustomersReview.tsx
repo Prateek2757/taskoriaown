@@ -7,6 +7,7 @@ import { useState } from "react";
 
 const reviews = [
   {
+    id: "olivia-thompson",
     name: "Olivia Thompson",
     time: "2 weeks ago",
     rating: "5",
@@ -15,6 +16,7 @@ const reviews = [
     photo: "/images/reviewimage1.avif",
   },
   {
+    id: "liam-anderson",
     name: "Liam Anderson",
     time: "1 month ago",
     rating: "4",
@@ -23,6 +25,7 @@ const reviews = [
     photo: "/images/reviewimage2.avif",
   },
   {
+    id: "charlotte-wilson",
     name: "Charlotte Wilson",
     time: "5 days ago",
     rating: "5",
@@ -31,6 +34,7 @@ const reviews = [
     photo: "/images/reviewimage3.avif",
   },
   {
+    id: "noah-mitchell",
     name: "Noah Mitchell",
     time: "3 weeks ago",
     rating: "5",
