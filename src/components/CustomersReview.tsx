@@ -14,7 +14,7 @@ const reviews = [
     rating: "5",
     bookedService: "Verified House Cleaning",
     reviewDetail:
-      "Taskoria made it incredibly easy to find a reliable cleaner in Melbourne. The booking process was simple, and the service exceeded my expectations. Highly recommended!",
+      "Taskoria made it incredibly easy to find a reliable cleaner in Melbourne. The booking process was simple, transparent, and only took a few minutes from start to finish. I appreciated how easy it was to compare options and choose a professional that matched my needs.I'll definitely be using Taskoria again for future home services and wouldn't hesitate to recommend it to friends and family looking for dependable, high-quality service.",
     photo: "/images/reviewimage1.avif",
   },
   {
@@ -77,7 +77,7 @@ export default function CustomersReview() {
           "border-gray-950/10 bg-white shadow-sm hover:shadow-md",
           "dark:border-gray-50/10 dark:bg-gray-50/5",
           "transition-shadow duration-200",
-          featured ? "p-6 lg:row-span-2 justify-between" : "p-5",
+          featured ? "p-6 lg:row-span-2 justify-between" : "p-5 ",
         )}
       >
         <div>
@@ -141,21 +141,20 @@ export default function CustomersReview() {
       id="customer-reviews"
     >
       <div className="max-w-6xl mx-auto">
-        {/* Header row */}
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-12">
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-blue-50 dark:from-blue-900 dark:to-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-4 border border-blue-100 dark:border-blue-800">
               Customer stories
             </div>
-            <div className="text-5xl font-bold bg-gradient-to-r from-[#2563EB] to-[#60A5FA] bg-clip-text text-transparent">
-              {reviews.length * 100}+
+            <div className="text-5xl font-bold  bg-clip-text text-transparent">
+              <h2 className=" text-gray-950 dark:text-white mt-1">
+                Reviews From Our
+              </h2>
+              <p className="text-[#2563EB]">Customers...</p>
             </div>
-            <h2 className="text-xl font-bold text-gray-800 dark:text-white mt-1">
-              Reviews from happy customers
-            </h2>
           </div>
 
-          <div className="flex flex-col items-start gap-4">
+          <div className="flex flex-col items-start gap-2">
             <div className="flex -space-x-3">
               {reviews.map((review) => (
                 <Image
@@ -196,8 +195,7 @@ export default function CustomersReview() {
           </div>
         </div>
 
-        {/* Reviews grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-6">
           {visibleValues.map((review, i) => (
             <ReviewCard
               key={review.name + review.time}
