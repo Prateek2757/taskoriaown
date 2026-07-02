@@ -17,6 +17,20 @@ const protectedPaths = [
   "/provider-responses",
 ];
 
+function stripDefaultLocale(pathname: string) {
+  const localePrefix = `/${defaultLocale}`;
+
+  if (pathname === localePrefix) {
+    return "/";
+  }
+
+  if (pathname.startsWith(`${localePrefix}/`)) {
+    return pathname.slice(localePrefix.length);
+  }
+
+  return pathname;
+}
+
 async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
@@ -32,9 +46,14 @@ async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = await getToken({ req, secret });
+  const routePath = stripDefaultLocale(pathname);
+  const hasDefaultLocale = routePath !== pathname;
+  const needsCreateRedirect = routePath.startsWith("/create");
+  const needsAuth = protectedPaths.some((path) => routePath.startsWith(path));
+  const token =
+    needsCreateRedirect || needsAuth ? await getToken({ req, secret }) : null;
 
-  if (pathname.startsWith("/create")) {
+  if (needsCreateRedirect) {
     if (token) {
       return NextResponse.redirect(
         new URL(`/provider/dashboard${search}`, req.url),
@@ -43,12 +62,16 @@ async function proxy(req: NextRequest) {
     }
   }
 
-  if (protectedPaths.some((path) => pathname.startsWith(path))) {
+  if (needsAuth) {
     if (!token) {
       const url = new URL(`/signin`, req.url);
       url.searchParams.set("callbackUrl", pathname + search);
       return NextResponse.redirect(url, 307);
     }
+  }
+
+  if (hasDefaultLocale) {
+    return NextResponse.next();
   }
 
   const url = req.nextUrl.clone();

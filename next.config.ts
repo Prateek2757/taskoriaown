@@ -113,6 +113,10 @@ const nextConfig: NextConfig = {
         source: "/fonts/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
       },
+      {
+        source: "/:path*.:ext(svg|png|jpg|jpeg|gif|webp|avif|ico|wav|mp3|woff|woff2)",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
       
       {
         source: "/api/categories/:path*",

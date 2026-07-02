@@ -20,11 +20,17 @@ import {
   useProfessionalPackages,
   type ProfessionalPackage,
 } from "@/hooks/useProfessionalPackage";
-import axios from "axios";
 
-export default function TaskoriaProPage() {
+interface TaskoriaProPageProps {
+  initialPackages?: ProfessionalPackage[];
+}
+
+export default function TaskoriaProPage({
+  initialPackages,
+}: TaskoriaProPageProps) {
   const router = useRouter();
-  const { packages, isLoading, hasError, refresh } = useProfessionalPackages();
+  const { packages, isLoading, hasError, refresh } =
+    useProfessionalPackages(initialPackages);
   const [loadingPackage, setLoadingPackage] = useState<number | null>(null);
   const { data: session } = useSession();
 
@@ -39,21 +45,24 @@ export default function TaskoriaProPage() {
 
     setLoadingPackage(pkg.package_id);
     try {
-      const response = await axios.post("/api/stripe/stripecheckout", {
-        professionalId: session.user.id,
-        packageId: pkg.package_id,
-        amount: pkg.price,
-        packageName: pkg.name,
-        freeTrailDays: pkg.free_trail_days,
+      const response = await fetch("/api/stripe/stripecheckout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          professionalId: session.user.id,
+          packageId: pkg.package_id,
+          amount: pkg.price,
+          packageName: pkg.name,
+          freeTrailDays: pkg.free_trail_days,
+        }),
       });
-      console.log("price_1SzFaCF0IhXFWFdOp4NVpoIW");
 
-      if (!response.status) {
-        const errorData = await response.data.catch(() => ({}));
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || "Failed to create checkout session");
       }
 
-      const data = await response.data;
+      const data = await response.json();
 
       if (!data.url) {
         throw new Error("No checkout URL received");

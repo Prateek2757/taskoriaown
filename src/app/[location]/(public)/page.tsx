@@ -12,6 +12,9 @@ import {
 import PlatformReachTicker from "@/components/PlatformReachTicker";
 import HomepageCityCoverage from "@/components/HomepageCityCoverage";
 
+export const dynamic = "force-static";
+export const revalidate = 604800;
+
 const HowTaskoriaWorks = lazy(() => import("@/components/how-taskoria-works"));
 // const Categories = lazy(() => import("@/components/Categories"));
 const PopularServicesSection = lazy(

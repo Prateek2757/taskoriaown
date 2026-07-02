@@ -1,35 +1,17 @@
-import pool from '@/lib/dbConnect';
+import { getProfessionalPackagesFromDB } from '@/lib/cache';
 import { NextResponse } from 'next/server';
+
+export const revalidate = 604800;
 
 export async function GET() {
   try {
-    const result = await pool.query(
-      `SELECT 
-        package_id,
-        name,
-        description,
-        price,
-        duration_months,
-        visibility_stars,
-        visibility_description,
-        badge,
-        free_enquiries,
-        enquiry_price,
-        discount_percentage,
-        has_performance_insights,
-        has_verified_badge,
-        has_unlocked_inbox,
-        stripe_price_id,
-        free_trail_days,
-        display_order
-      FROM professional_packages 
-      WHERE is_active = true 
-      ORDER BY display_order`
-    );
-
     return NextResponse.json({
       success: true,
-      packages: result.rows
+      packages: await getProfessionalPackagesFromDB(),
+    }, {
+      headers: {
+        "Cache-Control": "public, s-maxage=604800, stale-while-revalidate=86400",
+      },
     });
   } catch (error) {
     console.error('Error fetching packages:', error);

@@ -2,7 +2,7 @@ import "../../globals.css";
 import { UserProvider } from "@/context/userContext";
 import AuthProvider from "@/context/AuthProvider";
 import { Toaster } from "sonner";
-import NavbarServer from "@/components/navabr/NavbarServer";
+import ModernNavbar from "@/components/navabr/Navbar";
 import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
 import { Poppins, Bricolage_Grotesque } from "next/font/google";
@@ -10,11 +10,9 @@ import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import NotificationHandler from "@/components/NotificationHandler";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import TaskoriaAgent from "@/components/TaskoriaAgent";
 import Script from "next/script";
 import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 import WhatsAppSupportButton from "@/components/supportChatbox";
-import ChatbotWidget from "@/components/ChatbotWidget";
 
 export const BASE_URL = "https://www.taskoria.com";
 export const SITE_NAME = "Taskoria";
@@ -131,6 +129,10 @@ export const viewport: Viewport = {
   maximumScale: 5,
   userScalable: true,
 };
+
+export function generateStaticParams() {
+  return [{ location: "en" }];
+}
 
 export default function RootLayout({
   children,
@@ -253,7 +255,7 @@ export default function RootLayout({
             <Analytics />
             <UserProvider>
               <BreadcrumbJsonLd />
-              <NavbarServer />
+              <ModernNavbar />
               <main>{children}</main>
               <SpeedInsights />
               <Toaster position="top-right" richColors expand closeButton />

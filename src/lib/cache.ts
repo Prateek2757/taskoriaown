@@ -48,6 +48,61 @@ export const getActiveServiceCategoryCountFromDB = unstable_cache(
   },
 );
 
+export type ProfessionalPackageRow = {
+  package_id: number;
+  name: string;
+  description: string;
+  price: number;
+  duration_months: number | null;
+  visibility_stars: number;
+  visibility_description: string;
+  badge: string | null;
+  free_enquiries: number;
+  enquiry_price: number;
+  discount_percentage: number;
+  stripe_price_id?: string;
+  free_trail_days?: string;
+  has_performance_insights: boolean;
+  has_verified_badge: boolean;
+  has_unlocked_inbox: boolean;
+  display_order: number;
+};
+
+export const getProfessionalPackagesFromDB = unstable_cache(
+  async (): Promise<ProfessionalPackageRow[]> => {
+    const result = await pool.query(
+      `SELECT 
+        package_id,
+        name,
+        description,
+        price,
+        duration_months,
+        visibility_stars,
+        visibility_description,
+        badge,
+        free_enquiries,
+        enquiry_price,
+        discount_percentage,
+        has_performance_insights,
+        has_verified_badge,
+        has_unlocked_inbox,
+        stripe_price_id,
+        free_trail_days,
+        display_order
+      FROM professional_packages 
+      WHERE is_active = true 
+      ORDER BY display_order`
+    );
+
+    return result.rows;
+  },
+  ["professional-packages"],
+  {
+    revalidate: 604800,
+    tags: ["professional-packages"],
+  },
+);
+
 export const getCategoryBySlug = unstable_cache(
   async (slug: string) => {
     const result = await pool.query(

@@ -15,7 +15,8 @@ import { getCityDedupKey, getCityLabel } from "@/lib/location-labels";
 import { filterSeoLocations } from "@/lib/seo-locations";
 import { getSeoLocationIndexFromDB } from "@/lib/cache";
 
-export const revalidate = 84600;
+export const dynamic = "force-static";
+export const revalidate = 604800;
 
 export const metadata: Metadata = {
   title: { absolute: "Find Services by City | Taskoria" },

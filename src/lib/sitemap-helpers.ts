@@ -45,7 +45,7 @@ export interface ProviderProfile {
 }
 
 export const URLS_PER_SITEMAP = 20000;
-const MAX_URLS_PER_SITEMAP = 50000;
+const MAX_URLS_PER_SITEMAP = 40000;
 const SERVICE_LOCATION_SITEMAP_PREFIX = "australia";
 const SITEMAP_LOCATION_STATE_NAME = "Queensland";
 const SITEMAP_LOCATION_MIN_ACCURACY = 4;

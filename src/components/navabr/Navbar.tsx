@@ -16,13 +16,13 @@ import { MINIMAL_PAGES } from "./types";
 import type { ViewMode } from "./types";
 
 interface ModernNavbarProps {
-  initialViewMode: ViewMode;
-  initialSession: Session | null;
+  initialViewMode?: ViewMode;
+  initialSession?: Session | null;
 }
 
 export default function ModernNavbar({
-  initialViewMode,
-  initialSession,
+  initialViewMode = "customer",
+  initialSession = null,
 }: ModernNavbarProps) {
   const {
     session,

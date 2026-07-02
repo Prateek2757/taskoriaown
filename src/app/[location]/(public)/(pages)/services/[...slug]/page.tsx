@@ -17,8 +17,8 @@ import {
   getSeoStatesFromDB,
 } from "@/lib/cache";
 
-// export const dynamic = "force-static";
-// export const revalidate = 604800;
+export const dynamic = "force-static";
+export const revalidate = 604800;
 
 type Props = {
   params: Promise<{ slug?: string[] }>;
