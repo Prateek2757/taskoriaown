@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useState } from "react";
 import { MdOutlineArrowRightAlt } from "react-icons/md";
 import { Button } from "./ui/button";
-import { useRouter } from "next/router";
 
 const reviews = [
   {
@@ -20,7 +19,7 @@ const reviews = [
   },
   {
     name: "Liam Anderson",
-    time: "1 month ago",
+    time: "2 weeks ago ",
     rating: "4",
     bookedService: "Emergency Electrical Repair",
     reviewDetail:
@@ -29,7 +28,7 @@ const reviews = [
   },
   {
     name: "Charlotte Wilson",
-    time: "5 days ago",
+    time: "1 month ago",
     rating: "5",
     bookedService: "Garden Maintenance",
     reviewDetail:
@@ -38,7 +37,7 @@ const reviews = [
   },
   {
     name: "Noah Mitchell",
-    time: "3 weeks ago",
+    time: "2 months ago",
     rating: "5",
     bookedService: "Home Maintenance",
     reviewDetail:
@@ -47,12 +46,21 @@ const reviews = [
   },
   {
     name: "Ethana",
-    time: "9 months ago",
+    time: "3 months ago",
     rating: "4",
     bookedService: "Handyman Service",
     reviewDetail:
       "Taskoria made finding a skilled handyman quick and stress-free. The professional arrived on time, completed the job perfectly, and the whole experience was seamless.",
     photo: "/images/user4.png",
+  },
+  {
+    name: "James Bennett",
+    time: "4 months ago",
+    rating: "5",
+    bookedService: "Plumbing Repair",
+    reviewDetail:
+      "I had a leaking kitchen pipe that needed immediate attention, and Taskoria made the entire process incredibly simple. Within a short time, I found a verified plumber with excellent reviews and transparent pricing.The quality of service and the smooth booking experience gave me complete confidence in using Taskoria again for future home service needs.",
+    photo: "/images/user6.png",
   },
 ];
 
@@ -149,10 +157,11 @@ export default function CustomersReview() {
             </div>
             <div className=" font-bold  bg-clip-text text-transparent">
               <h1 className="text-5xl text-gray-950 dark:text-white mt-1">
-                Customer Reviews
+                Customer<span className="text-[#2563EB]"> Reviews...</span>
               </h1>
             </div>
-            <p className="text-[#2563EB] text-2xl">
+
+            <p className="text-lg font-medium text-[#2563EB]">
               Read what our customers say
             </p>
           </div>
