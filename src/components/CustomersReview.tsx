@@ -1,11 +1,12 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Quote, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { MdOutlineArrowRightAlt } from "react-icons/md";
 import { Button } from "./ui/button";
+
 const reviews = [
   {
     name: "Olivia Thompson",
@@ -44,19 +45,22 @@ const reviews = [
     photo: "/images/olivreviewimage(1).png",
   },
   {
-    name: " Mitchell",
-    time: "1 weeks ago",
+    name: "Ethana",
+    time: "9 months ago",
     rating: "4",
-    bookedService: " Maintenance",
+    bookedService: "Handyman Service",
     reviewDetail:
-      "I've used Taskoria multiple times for home maintenance services, and every experience has been smooth and professional. It's now my go-to platform.",
-    photo: "/images/olivreviewimage(1).png",
+      "Taskoria made finding a skilled handyman quick and stress-free. The professional arrived on time, completed the job perfectly, and the whole experience was seamless. I'll definitely use the platform again.",
+    photo: "/images/user4.png",
   },
 ];
 
+type Review = (typeof reviews)[number];
+
 export default function CustomersReview() {
   const [showAll, setShowAll] = useState(false);
-const visibleValues = showAll ? reviews : reviews.slice(0, 4);
+  const visibleValues = showAll ? reviews : reviews.slice(0, 4);
+
   function ReviewCard({
     bookedService,
     photo,
@@ -64,72 +68,68 @@ const visibleValues = showAll ? reviews : reviews.slice(0, 4);
     reviewDetail,
     rating,
     time,
-  }: Review) {
-    const [expanded, setExpanded] = useState(false);
-
+    featured = false,
+  }: Review & { featured?: boolean }) {
     return (
       <figure
         className={cn(
-          "relative w-76 shrink-0 cursor-pointer overflow-hidden rounded-xl border p-4",
-          "border-gray-950/10 bg-gray-950/[0.01] hover:bg-gray-950/5",
-          "dark:border-gray-50/10 dark:bg-gray-50/10 dark:hover:bg-gray-50/15",
-          "transition-colors duration-200",
+          "relative flex flex-col rounded-2xl border",
+          "border-gray-950/10 bg-white shadow-sm hover:shadow-md",
+          "dark:border-gray-50/10 dark:bg-gray-50/5",
+          "transition-shadow duration-200",
+          featured ? "p-6 lg:row-span-2 justify-between" : "p-5",
         )}
       >
-        <div className="flex justify-between">
-          <div className="flex items-center gap-0.5 mt-1">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star
-                key={i}
-                className={cn(
-                  "w-3 h-3",
-                  i < rating
-                    ? "text-yellow-400 fill-yellow-400"
-                    : "text-gray-300 fill-gray-300",
-                )}
-              />
-            ))}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className={cn(
+                    "w-3.5 h-3.5",
+                    i < Number(rating)
+                      ? "text-yellow-400 fill-yellow-400"
+                      : "text-gray-300 fill-gray-300",
+                  )}
+                />
+              ))}
+              <span className="ml-1.5 text-xs text-gray-400 dark:text-gray-500">
+                ({rating}/5)
+              </span>
+            </div>
+            <span className="text-xs text-gray-400 dark:text-gray-500">
+              {time}
+            </span>
           </div>
-          <p className="text-[11px] text-gray-400 dark:text-gray-400 mt-0.5 items-right">
-            {time && <span className="ml-1 text-gray-400">{time}</span>}
-          </p>
+
+          <blockquote
+            className={cn(
+              "text-gray-800 dark:text-gray-200 leading-relaxed",
+              featured ? "text-base" : "text-sm",
+            )}
+          >
+            "{reviewDetail}"
+          </blockquote>
         </div>
 
-        <blockquote
-          className={cn(
-            "mt-3 text-sm text-gray-700 dark:text-gray-300 leading-relaxed",
-            !expanded && "line-clamp-3",
-          )}
-        >
-          {reviewDetail}
-        </blockquote>
-
-        {reviewDetail.length > 50 && (
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="mt-1 text-xs font-medium text-blue-500 hover:opacity-75"
-          >
-            {expanded ? "See less" : "See more"}
-          </button>
-        )}
-        <div className="flex items-start gap-3 mt-3">
+        <div className="flex items-center gap-3 mt-6">
           <Image
-            className="relative w-12 h-12 overflow-hidden rounded-full object-cover shrink-0"
-            width={44}
-            height={44}
+            className="w-10 h-10 rounded-full object-cover shrink-0"
+            width={40}
+            height={40}
             alt={`${name} review`}
             src={photo}
-            sizes="44px"
+            sizes="40px"
           />
-
-          <div className="flex flex-col flex-1 min-w-0">
-            <figcaption className="text-base font-semibold truncate dark:text-white">
+          <div className="flex flex-col min-w-0">
+            <figcaption className="text-sm font-semibold truncate text-gray-900 dark:text-white">
               {name}
             </figcaption>
-            <p className="text-xs text-gray-700">{bookedService}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+              {bookedService}
+            </p>
           </div>
-          {/* 
-          <Quote className="shrink-0 h-4 w-4 text-blue-400 dark:text-blue-400 opacity-60" /> */}
         </div>
       </figure>
     );
@@ -137,57 +137,75 @@ const visibleValues = showAll ? reviews : reviews.slice(0, 4);
 
   return (
     <section
-      className="bg-card dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_50%,rgba(0,0,0,1)_90%)] py-14 px-4"
+      className="bg-card dark:bg-[radial-gradient(circle_at_center,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_50%,rgba(0,0,0,1)_90%)] py-16 px-4"
       id="customer-reviews"
     >
-      <div className="text-center mb-10">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-blue-50 dark:from-blue-900 dark:to-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-3 border border-blue-100 dark:border-blue-800">
-          Customer stories
-        </div>
-        <h2 className="text-4xl font-bold text-gray-800 dark:text-white ">
-          What customers say about{" "}
-          <span className="bg-[#2563EB] bg-clip-text text-transparent">
-            Taskoria ...
-          </span>{" "}
-        </h2>
-        <p className="text-lg text-gray-600 dark:text-gray-400 mt-2">
-          Real hiring experiences from local customers.
-        </p>
-      </div>
-
-      <div className="max-w-6xl mx-auto flex justify-end mb-4">
-        <div className="flex flex-col items-start">
-          <div className="flex mb-3">
-            {reviews.map((review) => (
-              <Image
-                key={review.name}
-                className="w-12 h-12 rounded-full object-cover"
-                width={44}
-                height={44}
-                alt={`${review.name} review`}
-                src={review.photo}
-                sizes="44px"
-              />
-            ))}
+      <div className="max-w-6xl mx-auto">
+        {/* Header row */}
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-12">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-blue-50 dark:from-blue-900 dark:to-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-4 border border-blue-100 dark:border-blue-800">
+              Customer stories
+            </div>
+            <div className="text-5xl font-bold bg-gradient-to-r from-[#2563EB] to-[#60A5FA] bg-clip-text text-transparent">
+              {reviews.length * 100}+
+            </div>
+            <h2 className="text-xl font-bold text-gray-800 dark:text-white mt-1">
+              Reviews from happy customers
+            </h2>
           </div>
 
-          <p className="text-md font-medium text-gray-900">
-            1000+ users already using our services.
-          </p>
+          <div className="flex flex-col items-start gap-4">
+            <div className="flex -space-x-3">
+              {reviews.map((review) => (
+                <Image
+                  key={review.name}
+                  className="w-11 h-11 rounded-full object-cover ring-2 ring-white dark:ring-gray-900"
+                  width={44}
+                  height={44}
+                  alt={`${review.name} review`}
+                  src={review.photo}
+                  sizes="44px"
+                />
+              ))}
+            </div>
 
-          <Button
-            className="mt-2 w-48 flex items-center justify-between"
-            onClick={() => setShowAll(!showAll)}
-          >
-            <span className="text-sm">{`${showAll ?"Read less reviews":"Read more reviews"}`}</span>
-            <MdOutlineArrowRightAlt size={48} />
-          </Button>
+            <p className="text-lg font-medium text-gray-700 dark:text-gray-300 max-w-xs">
+              <span className="font-semibold text-gray-900 dark:text-white">
+                100+
+              </span>{" "}
+              users already using our services.
+            </p>
+
+            <div className="flex items-center gap-3">
+              <Button className="flex items-center gap-1.5 px-5 rounded-xl  shadow-sm hover:shadow-md transition-shadow">
+                <span className="text-sm font-medium">Get a free trial</span>
+                <MdOutlineArrowRightAlt size={18} />
+              </Button>
+              <Button
+                variant="outline"
+                className="flex items-center gap-1.5 px-5 rounded-full border-blue-600 text-blue-600 dark:text-blue-300 shadow-sm hover:shadow-md transition-shadow"
+                onClick={() => setShowAll(!showAll)}
+              >
+                <span className="text-sm font-medium">
+                  {showAll ? "Read less reviews" : "Read more reviews"}
+                </span>
+                <MdOutlineArrowRightAlt size={18} />
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="max-w-7xl flex flex-wrap gap-4 pr-4 mx-auto items-start">
-        {visibleValues.map((review) => (
-          <ReviewCard key={review} {...review} />
-        ))}
+
+        {/* Reviews grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:grid-rows-2 gap-6">
+          {visibleValues.map((review, i) => (
+            <ReviewCard
+              key={review.name + review.time}
+              {...review}
+              featured={i === 0}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
