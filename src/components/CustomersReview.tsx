@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { MdOutlineArrowRightAlt } from "react-icons/md";
 import { Button } from "./ui/button";
+import { useRouter } from "next/router";
 
 const reviews = [
   {
@@ -50,7 +51,7 @@ const reviews = [
     rating: "4",
     bookedService: "Handyman Service",
     reviewDetail:
-      "Taskoria made finding a skilled handyman quick and stress-free. The professional arrived on time, completed the job perfectly, and the whole experience was seamless. I'll definitely use the platform again.",
+      "Taskoria made finding a skilled handyman quick and stress-free. The professional arrived on time, completed the job perfectly, and the whole experience was seamless.",
     photo: "/images/user4.png",
   },
 ];
@@ -59,7 +60,7 @@ type Review = (typeof reviews)[number];
 
 export default function CustomersReview() {
   const [showAll, setShowAll] = useState(false);
-  const visibleValues = showAll ? reviews : reviews.slice(0, 4);
+  const visibleValues = showAll ? reviews : reviews.slice(0, 5);
 
   function ReviewCard({
     bookedService,
@@ -146,12 +147,14 @@ export default function CustomersReview() {
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-blue-50 dark:from-blue-900 dark:to-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-4 border border-blue-100 dark:border-blue-800">
               Customer stories
             </div>
-            <div className="text-5xl font-bold  bg-clip-text text-transparent">
-              <h2 className=" text-gray-950 dark:text-white mt-1">
-                Reviews From Our
-              </h2>
-              <p className="text-[#2563EB]">Customers...</p>
+            <div className=" font-bold  bg-clip-text text-transparent">
+              <h1 className="text-5xl text-gray-950 dark:text-white mt-1">
+                Customer Reviews
+              </h1>
             </div>
+            <p className="text-[#2563EB] text-2xl">
+              Read what our customers say
+            </p>
           </div>
 
           <div className="flex flex-col items-start gap-2">
