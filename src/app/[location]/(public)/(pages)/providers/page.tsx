@@ -43,7 +43,7 @@ async function fetchAdminProviders() {
 
   return res.json();
 }
-//rrr
+//rrr23
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Service Providers | Taskoria",
