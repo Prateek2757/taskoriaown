@@ -18,8 +18,7 @@ import {
 } from "@/lib/cache";
 
 // export const dynamic = "force-static";
-// export const revalidate = 604800;
-
+// export const revalidate = 604800;//ef
 type Props = {
   params: Promise<{ slug?: string[] }>;
 };
