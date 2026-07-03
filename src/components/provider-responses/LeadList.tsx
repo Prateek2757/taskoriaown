@@ -27,17 +27,12 @@ export default function LeadList({ responses, activeId, onSelect, searchQuery }:
   return (
     <div className="overflow-y-auto flex-1">
       {responses.map((response) => (
-        <button
+        <LeadListItem
           key={response.response_id}
+          response={response}
+          isActive={activeId === response.response_id}
           onClick={() => onSelect(response)}
-          className="w-full"
-        >
-          <LeadListItem
-            response={response}
-            isActive={activeId === response.response_id}
-            onClick={() => onSelect(response)}
-          />
-        </button>
+        />
       ))}
     </div>
   );

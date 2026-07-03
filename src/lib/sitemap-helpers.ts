@@ -45,6 +45,7 @@ export interface ProviderProfile {
 }
 
 export const URLS_PER_SITEMAP = 20000;
+export const SERVICE_LOCATION_SITEMAP_URL_LIMIT = 20000;
 const MAX_URLS_PER_SITEMAP = 40000;
 const SERVICE_LOCATION_SITEMAP_PREFIX = "australia";
 const SITEMAP_LOCATION_STATE_NAME = "Queensland";
@@ -309,7 +310,9 @@ export async function getServiceLocationSitemapCount(): Promise<number> {
     total += (city.subcities?.length ?? 0) * categories.length;
   }
 
-  return Math.ceil(total / URLS_PER_SITEMAP);
+  return Math.ceil(
+    Math.min(total, SERVICE_LOCATION_SITEMAP_URL_LIMIT) / URLS_PER_SITEMAP
+  );
 }
 
 export const getServiceSitemapCount = getServiceLocationSitemapCount;
@@ -327,7 +330,14 @@ export async function buildServiceLocationSitemapEntries(
   );
 
   const start = sitemapIndex * URLS_PER_SITEMAP;
-  const end = start + URLS_PER_SITEMAP;
+  const end = Math.min(
+    start + URLS_PER_SITEMAP,
+    SERVICE_LOCATION_SITEMAP_URL_LIMIT
+  );
+
+  if (start >= SERVICE_LOCATION_SITEMAP_URL_LIMIT) {
+    return [];
+  }
 
   let currentIndex = 0;
   const entries: UrlEntry[] = [];
