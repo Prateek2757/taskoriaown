@@ -17,11 +17,28 @@ const protectedPaths = [
   "/provider-responses",
 ];
 
-const crawlerUserAgentPattern =
-  /\b(?:googlebot|googleother|bingbot|gptbot|claudebot|petalbot|amazonbot|duckassistbot|ahrefsbot|semrushbot|bot|crawler|spider|scraper)\b/i;
+const blockedCrawlerUserAgentTokens = [
+  "googlebot",
+  "googleother",
+  "bingbot",
+  "gptbot",
+  "claudebot",
+  "petalbot",
+  "amazonbot",
+  "duckassistbot",
+  "ahrefsbot",
+  "semrush",
+  "bot",
+  "crawler",
+  "spider",
+  "scraper",
+];
 
 function isCrawlerRequest(req: NextRequest) {
-  return crawlerUserAgentPattern.test(req.headers.get("user-agent") ?? "");
+  const userAgent = req.headers.get("user-agent")?.toLowerCase() ?? "";
+  return blockedCrawlerUserAgentTokens.some((token) =>
+    userAgent.includes(token)
+  );
 }
 
 function stripDefaultLocale(pathname: string) {
@@ -46,7 +63,7 @@ async function proxy(req: NextRequest) {
       status: 403,
       headers: {
         "X-Robots-Tag": "noindex, nofollow, noarchive",
-        "Cache-Control": "public, max-age=3600",
+        "Cache-Control": "no-store",
       },
     });
   }
