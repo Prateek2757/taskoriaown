@@ -7,6 +7,17 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         disallow: "/",
       },
+
+      {
+        userAgent: "GoogleOther",
+        disallow: "/",
+      },
+
+      {
+        userAgent: "GPTBot",
+        disallow: "/",
+      },
+      
     ],
   };
 }
