@@ -17,6 +17,13 @@ const protectedPaths = [
   "/provider-responses",
 ];
 
+const crawlerUserAgentPattern =
+  /\b(?:googlebot|googleother|bingbot|gptbot|claudebot|petalbot|amazonbot|duckassistbot|ahrefsbot|semrushbot|bot|crawler|spider|scraper)\b/i;
+
+function isCrawlerRequest(req: NextRequest) {
+  return crawlerUserAgentPattern.test(req.headers.get("user-agent") ?? "");
+}
+
 function stripDefaultLocale(pathname: string) {
   const localePrefix = `/${defaultLocale}`;
 
@@ -33,6 +40,16 @@ function stripDefaultLocale(pathname: string) {
 
 async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
+
+  if (pathname !== "/robots.txt" && isCrawlerRequest(req)) {
+    return new NextResponse("Crawling disabled", {
+      status: 403,
+      headers: {
+        "X-Robots-Tag": "noindex, nofollow, noarchive",
+        "Cache-Control": "public, max-age=3600",
+      },
+    });
+  }
 
   if (
     pathname === "/sitemap.xml" ||
