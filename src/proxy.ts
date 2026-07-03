@@ -18,8 +18,11 @@ const protectedPaths = [
 ];
 
 const blockedCrawlerUserAgentTokens = [
+  "google",
   "googlebot",
   "googleother",
+  "google-inspectiontool",
+  "apis-google",
   "bingbot",
   "gptbot",
   "claudebot",
