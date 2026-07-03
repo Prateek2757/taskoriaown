@@ -118,7 +118,7 @@ async function proxy(req: NextRequest) {
   // response.headers.set("X-Robots-Tag", "index, follow");
   return response;
 }
-
+//sd
 export { proxy };
 
 export const config = {
