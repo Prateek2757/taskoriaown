@@ -168,11 +168,11 @@ export default function CustomersReview() {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-12">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-linear-to-r from-blue-50 to-blue-50 dark:from-blue-900 dark:to-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold mb-4 border border-blue-100 dark:border-blue-800">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-linear-to-r from-blue-50 to-blue-50 dark:from-blue-900 dark:to-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold  border border-blue-100 dark:border-blue-800">
               Customer stories
             </div>
             <div className=" font-bold  bg-clip-text text-transparent">
-              <h1 className="text-5xl text-gray-950 dark:text-white mt-1">
+              <h1 className="text-4xl text-gray-950 dark:text-white mt-1">
                 Customer<span className="text-[#2563EB]"> Reviews...</span>
               </h1>
             </div>
