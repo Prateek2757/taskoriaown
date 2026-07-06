@@ -13,6 +13,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
 import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 import WhatsAppSupportButton from "@/components/supportChatbox";
+import ChatbotWidget from "@/components/ChatbotWidget";
+import TaskoriaAgent from "@/components/TaskoriaAgent";
 
 export const BASE_URL = "https://www.taskoria.com";
 export const SITE_NAME = "Taskoria";
@@ -262,7 +264,7 @@ export default function RootLayout({
               <Footer currentYear={new Date().getFullYear()} />
               {/* <ChatbotWidget/> */}
               <WhatsAppSupportButton/>
-              {/* <TaskoriaAgent /> */}
+            {/* <TaskoriaAgent /> */}
             </UserProvider>
           </ThemeProvider>
         </AuthProvider>

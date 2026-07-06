@@ -6,10 +6,29 @@ import { useCallback, useEffect, useRef, useState } from "react";
 const CHAT_SDK_URL =
   "https://www.gstatic.com/chat-messenger/sdk/prod/v1.16/chat-messenger.js";
 
+// Default theme stylesheet for the widget (colors, shape, typography tokens).
+// We override the color tokens below with your brand color via CSS variables.
+const CHAT_SDK_THEME_URL =
+  "https://www.gstatic.com/ces-console/fast/chat-messenger/prod/v1/themes/chat-messenger-default.css";
+
 const DEFAULT_DEPLOYMENT_NAME =
   "projects/942515104650/locations/us/apps/1fd5d94e-afde-4166-8013-b92f55e3aa19/deployments/63a157f1-3537-461f-9165-b5423d6e8175";
 
 const MESSAGE_COOLDOWN_MS = 7000;
+const CHAT_WIDGET_RIGHT_OFFSET = "clamp(16px, 4vw, 66px)";
+const CHAT_WIDGET_BOTTOM_OFFSET = "max(16px, env(safe-area-inset-bottom))";
+const CHAT_WIDGET_WINDOW_WIDTH = "min(400px, calc(100vw - 32px))";
+const CHAT_WIDGET_WINDOW_HEIGHT = "min(620px, calc(100dvh - 112px))";
+
+// --- Brand theming ---------------------------------------------------------
+// Primary brand color used for the bubble icon, send button, and other
+// high-emphasis fills. Derived light-tint and text colors are picked to stay
+// readable against #2563EB.
+const BRAND_PRIMARY = "#2563EB";
+const BRAND_PRIMARY_CONTAINER = "#DCE7FD"; // light tint of primary, used for user message bubbles
+const BRAND_ON_PRIMARY = "#FFFFFF"; // text/icons on top of primary
+const BRAND_ON_PRIMARY_CONTAINER = "#1E3A8A"; // text on top of primary-container
+const BRAND_LINK = "#2563EB";
 
 let registrationStarted = false;
 let registrationCompleted = false;
@@ -45,7 +64,10 @@ declare global {
         "max-query-length"?: string;
         "url-allowlist"?: string;
       };
-      "chat-messenger-container": React.DetailedHTMLProps<
+      // Wraps the chat UI behind a floating bubble icon. The chat box only
+      // opens once the bubble is clicked — this replaces
+      // <chat-messenger-container>, which renders open by default.
+      "chat-messenger-chat-bubble": React.DetailedHTMLProps<
         React.HTMLAttributes<HTMLElement>,
         HTMLElement
       > & {
@@ -253,6 +275,9 @@ export default function TaskoriaAgent() {
         onReady={registerAgent}
       />
 
+      {/* Next.js hoists <link> tags rendered in components into <head>. */}
+      <link rel="stylesheet" href={CHAT_SDK_THEME_URL} />
+
       {isCoolingDown && (
         <div
           style={{
@@ -272,28 +297,45 @@ export default function TaskoriaAgent() {
         </div>
       )}
 
-<chat-messenger
-  ref={messengerRef}
-  render-mode="slide-over"
-  language-code="en"
-  max-query-length="500"
-  url-allowlist="https://taskoria.com,http://localhost:3000"
-  style={{
-    position: "fixed",
-    right: 16,
-    bottom: 16,
-    zIndex: 9999,
+      <chat-messenger
+        ref={messengerRef}
+        render-mode="slide-over"
+        language-code="en"
+        max-query-length="500"
+        url-allowlist="https://taskoria.com,http://localhost:3000"
+        style={
+          {
+            position: "fixed",
+            right: CHAT_WIDGET_RIGHT_OFFSET,
+            bottom: CHAT_WIDGET_BOTTOM_OFFSET,
+            zIndex: 9999,
 
-    width: "400px",
-    height: "600px",
-    maxWidth: "calc(100vw - 32px)",
-    maxHeight: "calc(100vh - 32px)",
+            display: "block",
+            maxWidth: "calc(100vw - 32px)",
+            maxHeight: "calc(100dvh - 32px)",
+            pointerEvents: isCoolingDown ? "none" : "auto",
 
-    display: "block",
-    pointerEvents: isCoolingDown ? "none" : "auto",
-  }}
->
-        <chat-messenger-container
+            "--chat-messenger-window-width": CHAT_WIDGET_WINDOW_WIDTH,
+            "--chat-messenger-window-height": CHAT_WIDGET_WINDOW_HEIGHT,
+
+            // Brand color tokens — see the CSS customization table in
+            // Google's chat-messenger docs for the full token list.
+            "--chat-messenger-color--primary": BRAND_PRIMARY,
+            "--chat-messenger-color--primary-container":
+              BRAND_PRIMARY_CONTAINER,
+            "--chat-messenger-color--on-primary": BRAND_ON_PRIMARY,
+            "--chat-messenger-color--on-primary-container":
+              BRAND_ON_PRIMARY_CONTAINER,
+            "--chat-messenger-color--link": BRAND_LINK,
+          } as React.CSSProperties
+        }
+      >
+        {/*
+          chat-messenger-chat-bubble renders a closed floating icon first.
+          The box (chat-title, titlebar buttons, message list, input) only
+          mounts/opens once the user clicks that bubble.
+        */}
+        <chat-messenger-chat-bubble
           chat-title="Taskoria Agent"
           chat-title-icon="https://gstatic.com/dialogflow-console/common/assets/ccai-favicons/conversational_agents.png"
           enable-file-upload=""
@@ -314,7 +356,7 @@ export default function TaskoriaAgent() {
             slot="titlebar-actions"
             title-text="Close"
           />
-        </chat-messenger-container>
+        </chat-messenger-chat-bubble>
       </chat-messenger>
     </>
   );
