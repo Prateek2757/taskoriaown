@@ -10,6 +10,7 @@ import {
   MdEventAvailable,
   MdFastfood,
   MdKeyboardArrowRight,
+  MdOutlineExplore,
   MdOutlinePets,
 } from "react-icons/md";
 import { PiSprayBottle } from "react-icons/pi";
@@ -38,7 +39,6 @@ const moreServices = [
   { label: "Other Services", icon: <IoHeartOutline size={22} /> },
 ];
 
-
 export default function Explore() {
   const [menuStack, setMenuStack] = useState<string[]>([]);
   const [showMenu, setShowMenu] = useState(false);
@@ -47,7 +47,9 @@ export default function Explore() {
   const { paginatedData } = usePagination(exploreServices, 6);
   const router = useRouter();
 
-  useEffect(() => { router.prefetch("/services"); }, [router]);
+  useEffect(() => {
+    router.prefetch("/services");
+  }, [router]);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -111,24 +113,46 @@ export default function Explore() {
     moreServices.find((s) => s.label === currentMenu)?.icon;
 
   return (
-    <div ref={containerRef} className="relative z-[70]">
+    <div ref={containerRef} className="relative md:static z-[70]">
       <button
         type="button"
-        className="flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-gray-200 dark:hover:bg-gray-800"
+        className="flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-gray-200 dark:hover:bg-gray-800 min-[420px]:px-3"
         onClick={() => setShowMenu((open) => !open)}
         aria-haspopup="menu"
         aria-expanded={showMenu}
         aria-controls="explore-services-menu"
+        aria-label="Explore services"
       >
-          <span>Explore</span>
-          {showMenu ? <IoCaretUp size={16} /> : <IoCaretDown size={16} />}
+        {/* <MdOutlineExplore size={18} className="min-[420px]:hidden" /> */}
+        <span className="">Explore</span>
+        {showMenu ? <IoCaretUp size={16} /> : <IoCaretDown size={16} />}
       </button>
 
       {showMenu && (
         <div
           id="explore-services-menu"
           role="menu"
-          className="absolute left-0 top-full mt-2 w-[min(320px,calc(100vw-24px))] bg-white border border-gray-200 shadow-xl rounded-xl z-[100] overflow-hidden dark:bg-slate-950 text-white"
+          className="fixed
+  inset-x-3
+  top-[3.75rem]
+  max-h-[calc(100dvh-5rem)]
+  w-75
+  sm:absolute
+  sm:inset-x-auto
+  sm:top-full
+  sm:mt-2
+  sm:w-[320px]
+  sm:max-w-[calc(100vw-24px)]
+  lg:right-auto
+  lg:left-0
+  bg-white
+  border border-gray-200
+  shadow-xl
+  rounded-xl
+  z-[100]
+  overflow-x-hidden
+  overflow-y-auto
+  dark:bg-slate-950"
         >
           <AnimatePresence mode="popLayout" initial={false}>
             {menuStack.length === 0 ? (
@@ -144,7 +168,9 @@ export default function Explore() {
                     Services
                   </h2>
                   <span className="text-sm font-medium text-blue-600 cursor-pointer underline">
-                    <Link href="/services" prefetch>See all</Link>
+                    <Link href="/services" prefetch>
+                      See all
+                    </Link>
                   </span>
                 </div>
                 <div className="flex flex-col pb-2">
@@ -184,7 +210,11 @@ export default function Explore() {
                         className="flex items-center gap-3 px-4 py-1"
                       >
                         <span className="text-sm text-gray-600 dark:text-gray-400 hover:text-black hover:underline">
-                          <Link href={`/services/${popularService.slug}`} prefetch onClick={closeMenu} >
+                          <Link
+                            href={`/services/${popularService.slug}`}
+                            prefetch
+                            onClick={closeMenu}
+                          >
                             {popularService?.name}
                           </Link>
                         </span>
@@ -269,7 +299,7 @@ export default function Explore() {
                           <Link
                             href={`/services/${cat.slug}`}
                             prefetch
-                            onClick={()=> closeMenu()}
+                            onClick={() => closeMenu()}
                           >
                             {cat.name}{" "}
                           </Link>

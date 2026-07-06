@@ -91,7 +91,7 @@ export default function PopularServices() {
   if (loading) {
     return (
       <section className="py-10 px-4 sm:px-6 lg:px-8 bg-[#F5F0E8]">
-        <div className="max-w-7xl mx-auto space-y-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12 items-center">
           {[...Array(3)].map((_, i) => (
             <div key={i}>
               <div className="h-8 w-40 bg-gray-200 rounded-lg mb-6 animate-pulse" />
@@ -112,11 +112,11 @@ export default function PopularServices() {
 
   return (
     <section className="py-4">
-      <div className="mx-auto max-w-7xl space-y-12">
+      <div className="mx-auto max-w-7xl space-y-12 justify-center">
         {sections.map((section) =>
           section.categories.length === 0 ? null : (
             <div key={section.label}>
-              <div className="flex items-center justify-between gap-2 mb-4">
+              <div className="flex items-center justify-between  gap-2 mb-4">
                 <h2 className="text-lg sm:text-xl font-semibold text-[#2563EB]">
                   {section.label}
                 </h2>
@@ -150,7 +150,7 @@ export default function PopularServices() {
                         `/services/${category.slug ?? category.category_id}`,
                       )
                     }
-                    className="relative sm:w-72 sm:shrink-0 rounded-2xl overflow-hidden h-36 sm:h-48 cursor-pointer group shadow-sm hover:shadow-lg transition-shadow duration-300 bg-gray-100 dark:bg-gray-800"
+                    className="relative sm:w-78 sm:shrink-0 rounded-2xl overflow-hidden h-36 sm:h-48 cursor-pointer group shadow-sm hover:shadow-lg transition-shadow duration-300 bg-gray-100 dark:bg-gray-800"
                   >
                     <Image
                       title="popular categories"
