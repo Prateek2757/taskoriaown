@@ -16,13 +16,13 @@ import { MINIMAL_PAGES } from "./types";
 import type { ViewMode } from "./types";
 
 interface ModernNavbarProps {
-  initialViewMode: ViewMode;
-  initialSession: Session | null;
+  initialViewMode?: ViewMode;
+  initialSession?: Session | null;
 }
 
 export default function ModernNavbar({
-  initialViewMode,
-  initialSession,
+  initialViewMode = "customer",
+  initialSession = null,
 }: ModernNavbarProps) {
   const {
     session,
@@ -51,25 +51,25 @@ export default function ModernNavbar({
           border-b border-white/40 dark:border-white/10 
           shadow-sm transition-colors w-full"
       >
-        <div className="container max-w-7xl mx-auto px-4 py-2 flex items-center gap-2 relative">
+        <div className="container max-w-7xl mx-auto px-4 py-2 flex items-center gap-3 relative">
           <Link
             href="/"
-            className="flex gap-1 items-center hover:opacity-90 transition-opacity flex-1 md:flex-none min-w-0"
+            className="flex flex-none items-center hover:opacity-90 transition-opacity min-w-0"
+            aria-label="Taskoria home"
           >
             <Image
               src="/images/taskoria_logo.svg"
               alt="Taskoria"
-              height={41}
-              width={25}
-              className="shrink-0"
+              width={350}
+              height={48}
+              className="h-8 w-auto shrink-0 sm:h-9"
               priority
             />
-            <span className="text-2xl font-bold text-[#2563EB] truncate">
-              Taskoria
-            </span>
           </Link>
 
-          <Explore />
+          <div className="hidden min-[380px]:block">
+            <Explore />
+          </div>
 
           {!isMinimal && (
             <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 px-5 py-2 rounded-full space-x-2">

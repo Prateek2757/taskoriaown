@@ -3,10 +3,10 @@
 import { useState, useRef, useEffect, useCallback, useId } from "react";
 import { Loader2, MapPin, X, Navigation } from "lucide-react";
 import { Input } from "../ui/input";
-import axios from "axios";
 
 type Location = {
-  place_id: string;
+  place_id?: string;
+  australia_location_id?: number;
   city_id?: number;
   display_name: string;
   city?: string;
@@ -25,12 +25,6 @@ type Props = {
   presetLocation?: Location | null;
 };
 
-function newSessionToken() {
-  return typeof crypto !== "undefined"
-    ? crypto.randomUUID()
-    : String(Date.now());
-}
-
 function stripCountry(name: string) {
   return name.replace(/,?\s*Australia$/i, "").trim();
 }
@@ -43,15 +37,19 @@ function formatResultLabel(raw: string) {
   return { primary, secondary };
 }
 
+function isAbortError(error: unknown) {
+  return error instanceof Error && error.name === "AbortError";
+}
+
 export default function LocationSearch({
   onSelect,
   onLoadingChange,
   presetLocation,
 }: Props) {
   const listboxId = useId();
-  const sessionToken = useRef(newSessionToken());
-
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(() =>
+    presetLocation?.display_name ? stripCountry(presetLocation.display_name) : ""
+  );
   const [results, setResults] = useState<Location[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -70,12 +68,6 @@ export default function LocationSearch({
     },
     [onLoadingChange]
   );
-
-  useEffect(() => {
-    if (presetLocation?.display_name) {
-      setQuery(stripCountry(presetLocation.display_name));
-    }
-  }, [presetLocation?.display_name]);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -110,48 +102,35 @@ export default function LocationSearch({
       }
 
       abortRef.current?.abort();
-      abortRef.current = new AbortController();
+      const controller = new AbortController();
+      abortRef.current = controller;
 
       setLoadingState(true);
       try {
-        const res = await axios.post(
-          "/api/googlemap/autocomplete",
-          { input, session: sessionToken.current },
-          { signal: abortRef.current.signal }
-        );
+        const params = new URLSearchParams({ q: input, limit: "30" });
+        const res = await fetch(`/api/signup/location?${params.toString()}`, {
+          signal: controller.signal,
+        });
 
-        const suggestions: any[] = res.data.suggestions ?? [];
-        const mapped: Location[] = suggestions.map((s) => ({
-          place_id: s.placePrediction.placeId,
-          display_name: s.placePrediction.text.text,
-        }));
+        if (!res.ok) throw new Error("Location autocomplete failed");
+
+        const mapped = (await res.json()) as Location[];
 
         cache.current[cacheKey] = mapped;
         setResults(mapped);
         setShowDropdown(true);
-      } catch (err: any) {
-        if (axios.isCancel(err) || err?.code === "ERR_CANCELED") return;
+      } catch (err: unknown) {
+        if (isAbortError(err)) return;
         console.error("Autocomplete error:", err);
         setResults([]);
       } finally {
-        setLoadingState(false);
+        if (abortRef.current === controller) {
+          setLoadingState(false);
+        }
       }
     },
     [setLoadingState]
   );
-
-  const fetchPlaceDetails = async (
-    placeId: string
-  ): Promise<Location | null> => {
-    try {
-      const res = await axios.get("/api/googlemap/place-details", {
-        params: { place_id: placeId, session: sessionToken.current },
-      });
-      return res.data as Location;
-    } catch {
-      return null;
-    }
-  };
 
   const handleSelect = async (loc: Location) => {
     const displayClean = stripCountry(loc.display_name);
@@ -160,22 +139,27 @@ export default function LocationSearch({
     setShowDropdown(false);
     setActiveIndex(-1);
   
-    sessionToken.current = newSessionToken();
-  
-    onSelect?.({ ...loc, display_name: loc.display_name, _resolving: false });
+    onSelect?.({ ...loc, _resolving: true });
   
     setLoadingState(true);
     try {
-      const details = await fetchPlaceDetails(loc.place_id);
-      if (!details) return;
-  
-      const cityRes = await axios.post("/api/signup/location", details);
-      const city_id = cityRes.data.city_id;
+      const res = await fetch("/api/signup/location", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          australia_location_id: loc.australia_location_id ?? loc.place_id,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Location enrichment failed");
+
+      const cityData = await res.json();
+      const city_id = cityData.city_id;
   
       onSelect?.({
-        ...details,
+        ...loc,
         city_id,
-        display_name: loc.display_name,
+        city: cityData.city ?? loc.city,
         _resolving: false,
       });
     } catch (err) {
@@ -294,7 +278,7 @@ export default function LocationSearch({
                 const isActive = i === activeIndex;
                 return (
                   <li
-                    key={r.place_id}
+                    key={r.australia_location_id ?? r.place_id ?? r.display_name}
                     id={`loc-option-${i}`}
                     role="option"
                     aria-selected={isActive}
@@ -323,10 +307,10 @@ export default function LocationSearch({
                           className={`block truncate text-xs ${
                             isActive
                               ? "text-blue-100"
-                              : "text-gray-400 dark:text-gray-500"
+                              : "text-gray-500 dark:text-gray-400"
                           }`}
                         >
-                          {secondary}
+                          {secondary} {r.postcode}
                         </span>
                       )}
                     </span>

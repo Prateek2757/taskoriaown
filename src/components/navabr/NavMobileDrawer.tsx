@@ -68,13 +68,10 @@ export default function NavMobileDrawer({
               <Image
                 src="/images/taskoria_logo.svg"
                 alt="Taskoria"
-                height={32}
-                width={22}
-                className="shrink-0"
+                width={150}
+                height={43}
+                className="h-auto w-[112px] shrink-0"
               />
-              <span className="text-xl font-bold text-[#2563EB] truncate">
-                Taskoria
-              </span>
             </Link>
             <div className="flex items-center gap-1 shrink-0">
               <div suppressHydrationWarning>

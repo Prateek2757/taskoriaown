@@ -1,15 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export function useJoinAsProvider() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    router.prefetch("/create");
-  }, [router]);
 
   const joinAsProvider = useCallback(async (referralCode?: string) => {
     try {

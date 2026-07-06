@@ -12,7 +12,6 @@ import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import type { Session } from "next-auth";
 import {
   NAV_LINKS,
-  PREFETCH_ROUTES,
   type NavLink,
   type ViewMode,
 } from "./types";
@@ -121,11 +120,6 @@ export function useNavState({
     setIsMenuOpen(false);
     setIsProfileOpen(false);
   }, [pathname]);
-
-  // ── Prefetch common routes ───────────────────────────────────────────────────
-  useEffect(() => {
-    PREFETCH_ROUTES.forEach((r) => router.prefetch(r));
-  }, [router]);
 
   // ── Memoised current nav links ───────────────────────────────────────────────
   const currentLinks = useMemo<NavLink[]>(() => {

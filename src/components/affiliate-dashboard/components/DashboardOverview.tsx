@@ -102,7 +102,9 @@ const KPICard = ({
 
 const SparklineData = (baseValue: number, growth: number) => {
   return Array.from({ length: 7 }, (_, i) => ({
-    value: baseValue * (1 + (growth / 100) * (i / 6) + (Math.random() - 0.5) * 0.1),
+    value:
+      baseValue *
+      (1 + (growth / 100) * (i / 6) + (Math.sin((i + 1) * 1.31) - 0.5) * 0.1),
   }));
 };
 

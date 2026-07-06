@@ -20,11 +20,17 @@ import {
   useProfessionalPackages,
   type ProfessionalPackage,
 } from "@/hooks/useProfessionalPackage";
-import axios from "axios";
 
-export default function TaskoriaProPage() {
+interface TaskoriaProPageProps {
+  initialPackages?: ProfessionalPackage[];
+}
+
+export default function TaskoriaProPage({
+  initialPackages,
+}: TaskoriaProPageProps) {
   const router = useRouter();
-  const { packages, isLoading, hasError, refresh } = useProfessionalPackages();
+  const { packages, isLoading, hasError, refresh } =
+    useProfessionalPackages(initialPackages);
   const [loadingPackage, setLoadingPackage] = useState<number | null>(null);
   const { data: session } = useSession();
 
@@ -39,21 +45,24 @@ export default function TaskoriaProPage() {
 
     setLoadingPackage(pkg.package_id);
     try {
-      const response = await axios.post("/api/stripe/stripecheckout", {
-        professionalId: session.user.id,
-        packageId: pkg.package_id,
-        amount: pkg.price,
-        packageName: pkg.name,
-        freeTrailDays: pkg.free_trail_days,
+      const response = await fetch("/api/stripe/stripecheckout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          professionalId: session.user.id,
+          packageId: pkg.package_id,
+          amount: pkg.price,
+          packageName: pkg.name,
+          freeTrailDays: pkg.free_trail_days,
+        }),
       });
-      console.log("price_1SzFaCF0IhXFWFdOp4NVpoIW");
 
-      if (!response.status) {
-        const errorData = await response.data.catch(() => ({}));
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || "Failed to create checkout session");
       }
 
-      const data = await response.data;
+      const data = await response.json();
 
       if (!data.url) {
         throw new Error("No checkout URL received");
@@ -113,25 +122,25 @@ export default function TaskoriaProPage() {
     return (
       <div className="relative group h-full">
         {highlighted && (
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-300" />
+          <div className="absolute -inset-0.5 bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-300" />
         )}
 
         <Card
           className={`relative h-full overflow-hidden transition-all duration-300 border-2 ${
             highlighted
-              ? "bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white border-blue-400 shadow-2xl shadow-blue-500/20 transform hover:scale-[1.03]"
+              ? "bg-linear-to-br from-blue-600 via-blue-700 to-blue-800 text-white border-blue-400 shadow-2xl shadow-blue-500/20 transform hover:scale-[1.03]"
               : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-xl hover:scale-[1.02]"
           } rounded-2xl`}
         >
           {/* {highlighted && (
-            <div className="absolute top-2 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-white to-blue-400" />
+            <div className="absolute top-2 left-0 right-0 h-1 bg-linear-to-r from-blue-400 via-white to-blue-400" />
           )} */}
 
           {pkg.badge && (
             <div className="absolute top-2 left-1/2 -translate-x-1/2 z-10">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full blur-md opacity-60" />
-                <div className="relative bg-gradient-to-r from-orange-500 to-pink-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 whitespace-nowrap">
+                <div className="absolute inset-0 bg-linear-to-r from-orange-500 to-pink-500 rounded-full blur-md opacity-60" />
+                <div className="relative bg-linear-to-r from-orange-500 to-pink-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 whitespace-nowrap">
                   <Sparkles className="w-3.5 h-3.5" />
                   {pkg.badge}
                 </div>
@@ -149,7 +158,7 @@ export default function TaskoriaProPage() {
                 {pkg.name}
               </h3>
               <p
-                className={`text-sm leading-relaxed min-h-[36px] ${
+                className={`text-sm leading-relaxed min-h-9 ${
                   highlighted
                     ? "text-blue-100"
                     : "text-gray-600 dark:text-gray-400"
@@ -171,7 +180,7 @@ export default function TaskoriaProPage() {
                   A$
                 </span>
                 <span
-                  className={`text-4xl font-bold tracking-tight ${
+                  className={`text-3xl font-bold tracking-tight ${
                     highlighted ? "text-white" : "text-gray-900 dark:text-white"
                   }`}
                 >
@@ -258,7 +267,7 @@ export default function TaskoriaProPage() {
               {features.map((feature, idx) => (
                 <div key={idx} className="flex items-start gap-2.5">
                   <div
-                    className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5 ${
+                    className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5 ${
                       highlighted
                         ? "bg-white/20 backdrop-blur-sm"
                         : "bg-blue-50 dark:bg-blue-900/30"
@@ -292,7 +301,7 @@ export default function TaskoriaProPage() {
               className={`w-full py-5 text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg ${
                 highlighted
                   ? "bg-white text-blue-700 hover:bg-blue-50 hover:shadow-xl hover:shadow-white/20 disabled:bg-white/80"
-                  : "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 hover:shadow-xl hover:shadow-blue-500/30 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500"
+                  : "bg-linear-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 hover:shadow-xl hover:shadow-blue-500/30 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500"
               } disabled:cursor-not-allowed`}
             >
               {loadingPackage === pkg.package_id ? (
@@ -314,9 +323,9 @@ export default function TaskoriaProPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50/50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-400/5 dark:bg-blue-600/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-blue-500/5 dark:bg-blue-500/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-blue-50/50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-150 h-150 bg-blue-400/5 dark:bg-blue-600/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-150 h-150 bg-blue-500/5 dark:bg-blue-500/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
 
       <div className="relative max-w-7xl mx-auto px-4 py-6">
         <div className="">
@@ -338,7 +347,7 @@ export default function TaskoriaProPage() {
             </span>
           </div>
 
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 bg-gradient-to-r from-gray-900 via-blue-900 to-blue-800 dark:from-white dark:via-blue-200 dark:to-blue-300 bg-clip-text text-transparent leading-tight">
+          <h1 className="text-3xl md:text-4xl font-bold mb-3 bg-linear-to-r from-gray-900 via-blue-900 to-blue-800 dark:from-white dark:via-blue-200 dark:to-blue-300 bg-clip-text text-transparent leading-tight">
             This is where clients find you
           </h1>
           <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
@@ -406,7 +415,7 @@ export default function TaskoriaProPage() {
             </div>
 
             <div className="max-w-4xl mx-auto">
-              <div className="bg-gradient-to-r from-blue-50 to-blue-50 dark:from-blue-950/30 dark:to-blue-950/30 rounded-2xl p-6 border border-blue-200 dark:border-blue-800">
+              <div className="bg-linear-to-r from-blue-50 to-blue-50 dark:from-blue-950/30 dark:to-blue-950/30 rounded-2xl p-6 border border-blue-200 dark:border-blue-800">
                 <div className="text-center mb-4">
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
                     All plans include
@@ -418,7 +427,7 @@ export default function TaskoriaProPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="flex items-start gap-3 p-3 bg-white dark:bg-gray-800/50 rounded-xl">
-                    <div className="flex-shrink-0 w-9 h-9 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                    <div className="shrink-0 w-9 h-9 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
                       <Shield className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>
@@ -432,7 +441,7 @@ export default function TaskoriaProPage() {
                   </div>
 
                   <div className="flex items-start gap-3 p-3 bg-white dark:bg-gray-800/50 rounded-xl">
-                    <div className="flex-shrink-0 w-9 h-9 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                    <div className="shrink-0 w-9 h-9 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
                       <Zap className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>

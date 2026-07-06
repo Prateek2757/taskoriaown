@@ -10,7 +10,7 @@ export async function GET(request: Request) {
 
   try {
     if (citySlug) {
-      const city = await getCityBySlug(citySlug);
+      const city = await getCityBySlug(citySlug, stateSlug);
 
       if (!city || !isSeoLocation(city)) return NextResponse.json(null);
 

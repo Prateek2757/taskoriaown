@@ -86,11 +86,12 @@ const TrustSafety = () => {
               <Shield className="w-4 h-4" />
               Australian Verified & Protected
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground">
+            <h1 className="text-4xl  font-bold text-foreground">
               Trust & Safety at Taskoria
             </h1>
-            <p className="text-xl text-muted-foreground">
-         Australia's trusted service marketplace. Verified providers, secure payments, and support every step of the way.
+            <p className="text-lg text-muted-foreground">
+              Australia's most secure service marketplace. Every provider
+              verified, every payment protected, every job guaranteed.
             </p>
           </div>
         </div>
@@ -111,7 +112,7 @@ const TrustSafety = () => {
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {verificationSteps.map((step, index) => (
               <Card key={index} className="border-2">
-                <CardContent className="p-3">
+                <CardContent className="p-3 py-0">
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">{step.icon}</div>
                     <div>
@@ -145,9 +146,9 @@ const TrustSafety = () => {
           <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {safetyFeatures.map((feature, index) => (
               <Card key={index}>
-                <CardContent className="p-3">
+                <CardContent className="p-3 py-0">
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 p-3 bg-muted rounded-lg">
+                    <div className="shrink-0 p-3 bg-muted rounded-lg">
                       {feature.icon}
                     </div>
                     <div>
@@ -170,7 +171,7 @@ const TrustSafety = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <Card className="border-2">
-              <CardContent className="p-4">
+              <CardContent className="p-5 py-0">
                 <div className="flex items-start gap-4 mb-6">
                   <AlertCircle className="w-8 h-8 text-blue-600 flex-shrink-0" />
                   <div>

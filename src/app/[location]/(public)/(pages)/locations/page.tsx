@@ -13,9 +13,10 @@ import {
 } from "lucide-react";
 import { getCityDedupKey, getCityLabel } from "@/lib/location-labels";
 import { filterSeoLocations } from "@/lib/seo-locations";
+import { getSeoLocationIndexFromDB } from "@/lib/cache";
 
 export const dynamic = "force-static";
-export const revalidate = 84600;
+export const revalidate = 604800;
 
 export const metadata: Metadata = {
   title: { absolute: "Find Services by City | Taskoria" },
@@ -34,6 +35,7 @@ interface City {
   state_slug: string;
   state_name: string;
   country_name: string;
+  source?: string | null;
   subcities: {
     city_id: number;
     name: string;
@@ -43,11 +45,13 @@ interface City {
     image_url?: string | null;
     state_slug?: string | null;
   }[];
+  city_count?: number;
 }
 
 interface StateGroup {
   stateName: string;
   stateSlug: string;
+  cityCount: number;
   cities: City[];
 }
 
@@ -55,23 +59,11 @@ const FEATURED_CITY_LIMIT = 20;
 
 async function getCities(): Promise<City[]> {
   try {
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL;
-
-    if (!appUrl) {
-      return [];
-    }
-
-    const res = await fetch(`${appUrl}/api/service-location`, {
-      next: { revalidate: 84600 },
-    });
-
-    if (!res.ok) {
-      return [];
-    }
-
-    const cities = await res.json();
-
-    return filterSeoLocations(cities);
+    return filterSeoLocations(
+      (await getSeoLocationIndexFromDB(
+        FEATURED_CITY_LIMIT * 2
+      )) as unknown as City[]
+    );
   } catch {
     return [];
   }
@@ -89,11 +81,16 @@ function groupCitiesByState(cities: City[]): StateGroup[] {
       byState.set(city.state_slug, {
         stateName: city.state_name,
         stateSlug: city.state_slug,
+        cityCount: city.city_count ?? 0,
         cities: [],
       });
     }
 
-    byState.get(city.state_slug)?.cities.push(city);
+    const state = byState.get(city.state_slug);
+    if (state) {
+      state.cityCount = Math.max(state.cityCount, city.city_count ?? 0);
+      state.cities.push(city);
+    }
   }
 
   const states = Array.from(byState.values()).sort((a, b) =>
@@ -121,7 +118,11 @@ function groupCitiesByState(cities: City[]): StateGroup[] {
         }
       });
 
-    state.cities = Array.from(uniqueCities.values());
+    state.cities = Array.from(uniqueCities.values()).slice(
+      0,
+      FEATURED_CITY_LIMIT
+    );
+    state.cityCount = Math.max(state.cityCount, state.cities.length);
   }
 
   return states;
@@ -131,7 +132,7 @@ export default async function CitiesIndexPage() {
   const cities = await getCities();
   const states = groupCitiesByState(cities);
 
-  const totalCities = states.reduce((sum, state) => sum + state.cities.length, 0);
+  const totalCities = states.reduce((sum, state) => sum + state.cityCount, 0);
 
   return (
     <main className="min-h-screen bg-white dark:bg-slate-950">
@@ -197,7 +198,7 @@ export default async function CitiesIndexPage() {
 
       {/* QUICK STATE NAV */}
       {states.length > 0 && (
-        <section className="sticky top-0 z-20 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl">
+        <section className=" top-0 z-20 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl">
           <div className="max-w-7xl mx-auto px-6 md:px-16 py-4">
             <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
               <span className="hidden sm:inline-flex text-xs font-bold uppercase tracking-widest text-slate-400 shrink-0">
@@ -212,7 +213,7 @@ export default async function CitiesIndexPage() {
                 >
                   {state.stateName}
                   <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[11px] text-slate-500">
-                    {state.cities.length}
+                    {state.cityCount}
                   </span>
                 </a>
               ))}
@@ -249,8 +250,8 @@ export default async function CitiesIndexPage() {
         {states.length > 0 ? (
           <div className="space-y-14">
             {states.map((state) => {
-              const visibleCities = state.cities.slice(0, FEATURED_CITY_LIMIT);
-              const hasMore = state.cities.length > FEATURED_CITY_LIMIT;
+              const visibleCities = state.cities;
+              const hasMore = state.cityCount > visibleCities.length;
 
               return (
                 <section
@@ -270,7 +271,7 @@ export default async function CitiesIndexPage() {
                             {state.stateName}
                           </h3>
                           <p className="text-sm text-slate-500 dark:text-slate-400">
-                            {state.cities.length} cities available
+                            {state.cityCount} cities available
                           </p>
                         </div>
                       </div>
@@ -301,7 +302,7 @@ export default async function CitiesIndexPage() {
                         href={`/locations/${state.stateSlug}`}
                         className="inline-flex items-center gap-2 rounded-full border border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/30 px-5 py-2.5 text-sm font-bold text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-950/50 transition-colors"
                       >
-                        Show {state.cities.length - FEATURED_CITY_LIMIT} more
+                        Show {state.cityCount - visibleCities.length} more
                         cities in {state.stateName}
                         <ArrowRight className="w-4 h-4" />
                       </Link>
@@ -314,6 +315,110 @@ export default async function CitiesIndexPage() {
         ) : (
           <EmptyState />
         )}
+
+        {/* <section
+          id="alphabetical-locations"
+          className="scroll-mt-28 mt-16 border-t border-slate-200 dark:border-slate-800 pt-12"
+        >
+          <div className="max-w-3xl">
+            <p className="text-sm font-bold uppercase tracking-widest text-blue-600">
+              Location directory
+            </p>
+            <h2 className="mt-2 text-3xl font-extrabold text-slate-950 dark:text-white">
+              Browse Australian locations A–Z
+            </h2>
+            <p className="mt-3 text-slate-500 dark:text-slate-400">
+              Choose a letter to browse every matching suburb and locality,
+              grouped by state.
+            </p>
+          </div>
+
+          <nav
+            aria-label="Filter locations by first letter"
+            className="mt-7 flex flex-wrap gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900"
+          >
+            {ALPHABET.map((item) => {
+              const available = availableLetters.has(item);
+              const active = item === selectedLetter;
+
+              return available ? (
+                <Link
+                  key={item}
+                  href={`/locations?letter=${item.toLowerCase()}#alphabetical-locations`}
+                  aria-current={active ? "page" : undefined}
+                  className={`flex h-10 w-10 items-center justify-center rounded-lg text-sm font-bold transition-colors ${
+                    active
+                      ? "bg-blue-600 text-white shadow-sm"
+                      : "bg-white text-blue-700 hover:bg-blue-50 dark:bg-slate-950 dark:text-blue-400 dark:hover:bg-blue-950/40"
+                  }`}
+                >
+                  {item}
+                </Link>
+              ) : (
+                <span
+                  key={item}
+                  aria-disabled="true"
+                  className="flex h-10 w-10 cursor-not-allowed items-center justify-center rounded-lg text-sm font-bold text-slate-300 dark:text-slate-700"
+                >
+                  {item}
+                </span>
+              );
+            })}
+          </nav>
+
+          <div className="mt-8 space-y-8">
+            {alphabeticalStates.map((state) => (
+              <div key={state.stateSlug}>
+                <div className="mb-4 flex items-center justify-between border-b border-slate-200 pb-3 dark:border-slate-800">
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                    {state.stateName}
+                  </h3>
+                  <Link
+                    href={`/locations/${state.stateSlug}`}
+                    className="text-sm font-semibold text-blue-600 hover:underline dark:text-blue-400"
+                  >
+                    All {state.stateName} locations
+                  </Link>
+                </div>
+                <div className="grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                  {state.cities.slice(0, 50).map((city) => (
+                    <Link
+                      key={city.city_id}
+                      href={`/locations/${state.stateSlug}/${city.slug}`}
+                      className="group flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-700 dark:text-slate-300 dark:hover:bg-blue-950/30 dark:hover:text-blue-300"
+                    >
+                      <MapPin className="h-3.5 w-3.5 shrink-0 text-blue-500" />
+                      <span className="truncate">{getCityLabel(city)}</span>
+                    </Link>
+                  ))}
+                </div>
+                {state.cities.length > 50 && (
+                  <Link
+                    href={`/locations/${state.stateSlug}`}
+                    className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:underline dark:text-blue-400"
+                  >
+                    Browse {state.cities.length - 50} more {selectedLetter}
+                    locations in {state.stateName}
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        </section> */}
+
+        {/* <section id="alphabetical-locations" className="scroll-mt-28 mt-16">
+          <LocationAlphabetDirectory
+            locations={[]}
+            dataUrl="/api/location-directory"
+            totalCount={totalCities}
+            title="Browse Australian locations A–Z"
+            eyebrow="Location directory"
+            description="Choose a location to find nearby professionals and services."
+            availableLetters={Array.from(availableLetters)}
+            basePath="/locations"
+          />
+        </section> */}
       </div>
 
       {/* CTA */}

@@ -7,6 +7,8 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
 async function requireAdmin() {
   const session = await getServerSession(authOptions);
 
@@ -35,29 +37,17 @@ async function fetchAdminProviders() {
     cache: "no-store",
   });
 
-  if (!res.ok) throw new Error("Failed to fetch providers");
+  if (!res.ok) {
+    throw new Error(`Failed to fetch providers: ${res.status}`);
+  }
 
   return res.json();
 }
-
+//rrr23
 export async function generateMetadata(): Promise<Metadata> {
-  await requireAdmin();
-  const providers = await fetchAdminProviders();
-  const count = providers.length;
-
   return {
-    title: `Service Providers (${count}) — Find Local Experts | Taskoria`,
-    description: `Browse ${count} verified service providers on Taskoria. Find top-rated professionals by name, service, or location. Read reviews and hire with confidence.`,
-    alternates: {
-      canonical: "https://www.taskoria.com/providers",
-    },
-    openGraph: {
-      title: `Service Providers — Find Local Experts | Taskoria`,
-      description: `Browse ${count} verified service providers on Taskoria. Find top-rated professionals by name, service, or location.`,
-      url: "https://www.taskoria.com/providers",
-      siteName: "Taskoria",
-      type: "website",
-    },
+    title: "Service Providers | Taskoria",
+    robots: { index: false, follow: false },
   };
 }
 

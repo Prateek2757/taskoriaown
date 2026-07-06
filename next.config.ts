@@ -62,6 +62,7 @@ const nextConfig: NextConfig = {
 
   images: {
     formats: ["image/avif", "image/webp"],
+    qualities: [50, 75, 76, 90],
     remotePatterns: [
       {
         protocol: "https",
@@ -110,6 +111,10 @@ const nextConfig: NextConfig = {
       // },
       {
         source: "/fonts/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
+        source: "/:path*.:ext(svg|png|jpg|jpeg|gif|webp|avif|ico|wav|mp3|woff|woff2)",
         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
       },
       

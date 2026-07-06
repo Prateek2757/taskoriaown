@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "locations:optimize": "node scripts/optimize-australia-locations.mjs"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^11.1.0",
@@ -112,7 +113,7 @@
     "@types/react-dom": "^19",
     "critters": "^0.0.23",
     "eslint": "^9",
-    "eslint-config-next": "15.2.4",
+    "eslint-config-next": "^16.2.9",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.2.9",
     "typescript": "^5"

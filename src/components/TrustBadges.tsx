@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import useSWR from "swr";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star } from "lucide-react";
@@ -30,13 +30,15 @@ function StarRow({
   size?: number;
   color?: string;
 }) {
+  const gradientIdPrefix = useId();
+
   return (
     <div className="flex items-center gap-0.5">
       {Array.from({ length: max }).map((_, i) => {
         const filled = i < Math.floor(rating);
         const partial = !filled && i < rating;
         const pct = partial ? Math.round((rating % 1) * 100) : 0;
-        const id = `star-partial-${i}-${Math.random().toString(36).slice(2, 7)}`;
+        const id = `star-partial-${gradientIdPrefix}-${i}`;
 
         return (
           <svg

@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { lazy, Suspense } from "react";
 import HeroSection from "@/components/HeroSection/Herosection";
+import HomepageStatsCounter from "@/components/HomepageStatsCounter";
 import Script from "next/script";
 import { BASE_URL, LOGO, OG_IMAGE, SITE_NAME, TWITTER_HANDLE } from "./layout";
 import InternalLinkModule from "@/components/InternalLinkModule";
@@ -8,6 +9,11 @@ import {
   getPriorityCityLinks,
   getPriorityServiceLinks,
 } from "@/lib/internal-links";
+import PlatformReachTicker from "@/components/PlatformReachTicker";
+import HomepageCityCoverage from "@/components/HomepageCityCoverage";
+
+export const dynamic = "force-static";
+export const revalidate = 604800;
 
 const HowTaskoriaWorks = lazy(() => import("@/components/how-taskoria-works"));
 // const Categories = lazy(() => import("@/components/Categories"));
@@ -16,6 +22,7 @@ const PopularServicesSection = lazy(
 );
 const FeaturesPage = lazy(() => import("@/components/Features"));
 const Testomonail = lazy(() => import("@/components/Testomonail"));
+const HomepageFAQ = lazy(() => import("@/components/HomepageFAQ"));
 const CTA = lazy(() => import("@/components/CTA"));
 const CustomersReview = lazy(() => import("@/components/CustomersReview"));
 
@@ -227,18 +234,10 @@ const structuredData = {
       mainEntity: [
         {
           "@type": "Question",
-          name: "How does Taskoria work?",
+          name: "Is Taskoria free to use?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Get quotes for free on Taskoria, receive quotes from verified local professionals within minutes, compare reviews and pricing, then book directly through the platform.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Is Taskoria available across all of Australia?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Yes. Taskoria operates across 50+ Australian cities including Sydney, Melbourne, Brisbane, Perth, Adelaide, and surrounding suburbs.",
+            text: "Yes. Customers can post a job and receive quotes for free. You only pay when you choose a professional and agree to move ahead with the work.",
           },
         },
         {
@@ -246,15 +245,31 @@ const structuredData = {
           name: "Are professionals on Taskoria verified?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "All professionals on Taskoria go through identity verification and background checks before they can accept jobs on the platform.",
+            text: "Taskoria asks professionals to complete verification checks before they respond to customer jobs. Profiles can also include business details, licences, accreditations, reviews, and past work so customers can compare with confidence.",
           },
         },
         {
           "@type": "Question",
-          name: "How much does it cost to post a job on Taskoria?",
+          name: "How fast will I receive quotes?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Posting a job on Taskoria is completely free. You only pay when you hire a professional.",
+            text: "Many customers receive their first responses within minutes. Timing can vary by service, location, and job detail, but common jobs often attract multiple quotes within a few hours.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Where in Australia does Taskoria operate?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Taskoria supports customers across Australia, including major cities, regional centres, and surrounding suburbs. Availability can vary by service category and local provider coverage.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "What services can I book on Taskoria?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Customers can request quotes for home cleaning, plumbing, electrical work, gardening, removals, rubbish removal, events, tutoring, digital services, design, and many other local or professional jobs.",
           },
         },
       ],
@@ -281,6 +296,8 @@ export default function HomePage() {
           <HeroSection />
         </section>
 
+        {/* <HomepageStatsCounter /> */}
+
         <Suspense fallback={<div className="min-h-12.5" />}>
           <section aria-label="Browse service categories">
             <PopularServicesSection />
@@ -302,6 +319,11 @@ export default function HomePage() {
             <HowTaskoriaWorks />
           </section>
         </Suspense>
+        <Suspense fallback={<div className="min-h-12.5" />}>
+          <section aria-label="How Taskoria works — step by step">
+            <HomepageStatsCounter />
+          </section>
+        </Suspense>
 
         <Suspense fallback={<div className="min-h-12.5" />}>
           <section aria-label="Platform features and benefits">
@@ -316,10 +338,23 @@ export default function HomePage() {
         </Suspense>
 
         <Suspense fallback={<div className="min-h-12.5" />}>
+          <HomepageCityCoverage />
+        </Suspense>
+
+        <Suspense fallback={<div className="min-h-12.5" />}>
+          <HomepageFAQ />
+        </Suspense>
+
+        <Suspense fallback={<div className="min-h-12.5" />}>
+          <PlatformReachTicker />
+        </Suspense>
+
+        <Suspense fallback={<div className="min-h-12.5" />}>
           <section aria-label="Get started — post your first job free">
             <CTA />
           </section>
         </Suspense>
+        
       </main>
     </>
   );

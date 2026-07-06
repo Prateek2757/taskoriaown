@@ -51,6 +51,79 @@ body {
   color: var(--foreground);
 }
 
+@keyframes service-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes service-media-in {
+  from {
+    opacity: 0.94;
+    transform: scale3d(1.04, 1.04, 1);
+  }
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@layer utilities {
+  .service-enter {
+    animation: service-fade-up 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    transform: translate3d(0, 0, 0);
+    will-change: opacity, transform;
+  }
+
+  .service-enter-delay-1 {
+    animation-delay: 90ms;
+  }
+
+  .service-enter-delay-2 {
+    animation-delay: 160ms;
+  }
+
+  .service-hero-media {
+    animation: service-media-in 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+
+  .service-hydrate-enter:not(.service-hydrate-ready) .service-enter {
+    animation: none;
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+
+  .service-hydrate-enter:not(.service-hydrate-ready) .service-hero-media {
+    animation: none;
+    opacity: 0.94;
+    transform: scale3d(1.04, 1.04, 1);
+  }
+
+  .service-content-visibility {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 760px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service-enter,
+    .service-hero-media,
+    .service-hydrate-enter:not(.service-hydrate-ready) .service-enter,
+    .service-hydrate-enter:not(.service-hydrate-ready) .service-hero-media {
+      animation: none;
+      opacity: 1;
+      transform: none;
+      will-change: auto;
+    }
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

@@ -17,8 +17,8 @@ import Image from "next/image";
 import Services from "../Categories";
 import FilterServices from "./FilterServices";
 import usePagination from "@/hooks/usePagination";
+import CategoryAlphabetDirectory, { DirectoryCategory } from "../category/CategoryAlphabetDirectory";
 import ServiceBreadcrumbs from "./ServicesBreadcrumbs";
-import { convertServerPatchToFullTree } from "next/dist/client/components/segment-cache/navigation";
 
 interface ServiceCategory {
   category_id?: string | number;
@@ -121,6 +121,20 @@ export default function ServiceCategoriesClient({
     return filteredCategories.filter((cat) => !topIds.has(cat.category_id));
   }, [filteredCategories, topCategories]);
 
+
+  const directoryCategories = useMemo<DirectoryCategory[]>(() => {
+    return secondaryCategories
+      .filter((category) => category.name && category.slug)
+      .map((category, index) => ({
+        category_id:
+          category.category_id !== undefined
+            ? Number(category.category_id)
+            : index + 1,
+        name: category.name,
+        slug: category.slug,
+      }));
+  }, [secondaryCategories]);
+
   const quickPickCategories = useMemo(() => {
     return categoriesWithSignals.slice(0, 6);
   }, [categoriesWithSignals]);
@@ -163,7 +177,7 @@ export default function ServiceCategoriesClient({
   const displayData = showData ? filteredData : paginatedData;
 
   return (
-    <section className="relative overflow-hidden bg-linear-to-b from-slate-50 via-white to-sky-50 px-4 py-12 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
+    <section className="relative  overflow-hidden bg-linear-to-b from-slate-50 via-white to-sky-50 px-4 py-12 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
       <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-blue-200/40 blur-3xl dark:bg-blue-700/20" />
       <div className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-sky-200/50 blur-3xl dark:bg-sky-700/20" />
 
@@ -329,7 +343,7 @@ export default function ServiceCategoriesClient({
           </section>
         ) : null}
 
-        {secondaryCategories.length > 0 ? (
+        {/* {secondaryCategories.length > 0 ? (
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:p-8">
             <div className="mb-5 flex items-center justify-between gap-3">
               <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
@@ -362,11 +376,60 @@ export default function ServiceCategoriesClient({
               ))}
             </div>
           </section>
-        ) : null}
+        ) : null} */}
+
+{directoryCategories.length > 0 ? (
+  <CategoryAlphabetDirectory
+    categories={directoryCategories}
+    buildHref={(category) => `/services/${category.slug}`}
+    locationLabel="Australia"
+    title="Browse all services"
+    className="pt-0 pb-0"
+  />
+) : null}
+
+        {/* <section className="grid gap-4 md:grid-cols-3">
+          <InfoCard
+            title="1. Post your job"
+            body="Describe what you need, your location, and when you want it done."
+            icon={CheckCircle2}
+          />
+          <InfoCard
+            title="2. Compare providers"
+            body="Review profiles, pricing, and response quality before choosing."
+            icon={UserCheck}
+          />
+          <InfoCard
+            title="3. Hire with confidence"
+            body="Use transparent messaging and support if anything goes wrong."
+            icon={ShieldCheck}
+          />
+        </section> */}
+
+        {/* <section className="rounded-3xl border border-blue-200 bg-blue-50 p-6 dark:border-blue-800 dark:bg-slate-900 md:p-8">
+          <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
+            <div>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                Are you a service provider?
+              </h3>
+              <p className="mt-2 max-w-2xl text-sm text-slate-700 dark:text-slate-300">
+                Join Taskoria to receive local leads in categories you choose. Control your availability and quote only jobs you want.
+              </p>
+            </div>
+            <Button asChild className="h-11 bg-blue-600 px-6 text-white hover:bg-blue-700">
+              <Link href="/providers/register">
+                Join as Provider
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </section> */}
       </div>
     </section>
   );
 }
+
+
 
 function TrustRow({
   icon: Icon,

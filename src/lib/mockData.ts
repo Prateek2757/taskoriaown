@@ -34,15 +34,17 @@ export const earningsSummary: EarningsSummary = {
 
 export const generateChartData = (days: number): ChartDataPoint[] => {
   const data: ChartDataPoint[] = [];
-  const today = new Date();
+  const today = new Date("2024-03-15T00:00:00Z");
   
   for (let i = days - 1; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(date.getDate() - i);
     
-    const baseClicks = 400 + Math.random() * 200;
-    const baseConversions = baseClicks * (0.06 + Math.random() * 0.04);
-    const baseEarnings = baseConversions * (15 + Math.random() * 5);
+    const dayIndex = days - i;
+    const variance = Math.sin(dayIndex * 1.7) * 0.5 + 0.5;
+    const baseClicks = 400 + variance * 200;
+    const baseConversions = baseClicks * (0.06 + (dayIndex % 5) * 0.01);
+    const baseEarnings = baseConversions * (15 + (dayIndex % 4) * 1.25);
     
     data.push({
       date: date.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric' }),

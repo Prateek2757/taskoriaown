@@ -39,12 +39,19 @@ interface PackageResponse {
 //   return res.json();
 // };
 
-export function useProfessionalPackages() {
+export function useProfessionalPackages(initialPackages?: ProfessionalPackage[]) {
+  const hasInitialPackages = Boolean(initialPackages?.length);
+
   const { data, error, isLoading, mutate } = useSWR<PackageResponse>(
     "/api/professional-package",
     fetcher,
     {
+      fallbackData: hasInitialPackages
+        ? { success: true, packages: initialPackages ?? [] }
+        : undefined,
       dedupingInterval: 5000,
+      revalidateIfStale: false,
+      revalidateOnMount: !hasInitialPackages,
       revalidateOnFocus: false,
       shouldRetryOnError: true,
       errorRetryInterval: 3000,

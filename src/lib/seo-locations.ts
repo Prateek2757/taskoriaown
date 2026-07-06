@@ -9,6 +9,7 @@ export type SeoLocationLike = {
   state_name?: string | null;
   parent_city_id?: number | null;
   postcode?: string | number | null;
+  source?: string | null;
   subcities?: SeoLocationLike[] | null;
 };
 
@@ -83,6 +84,8 @@ export function isSeoLocation(location: SeoLocationLike) {
   if (isStandalonePostcode(location.name) || isStandalonePostcode(location.slug)) {
     return false;
   }
+
+  if (location.source === "geonames") return true;
   if (
     location.postcode &&
     (normalize(location.name) === normalize(location.postcode) ||
@@ -103,7 +106,6 @@ export function isSeoLocation(location: SeoLocationLike) {
 
   return true;
 }
- //wedwe
 export function filterSeoLocations<T extends SeoLocationLike>(locations: T[]): T[] {
   return locations
     .filter(isSeoLocation)

@@ -2,18 +2,18 @@ import Image from "next/image";
 import ScrollPopularSection from "../ScrollPopularSection";
 import HeroInteractive from "./HeroInteractive";
 import SparklesThemed from "./SparklesThemed";
+import TrustSafetyHighlights from "../TrustSafetyHighlights";
 
 export default function HeroSection() {
   return (
     <>
       <section
-        className="relative flex flex-col text-center 
-          dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,1)_0%,rgba(0,0,0,1)_30%,rgba(0,0,0,1)_100%)]"
+        className="relative flex flex-col overflow-hidden text-center
+          bg-white dark:bg-slate-950"
         aria-label="Hero section with service marketplace search"
       >
         <div
-          className="dark:hidden z-[-9] bg-radial-[at_0%_100%] from-blue-100 via-white/0 to-white/0 to-90%
-            h-full w-full absolute left-0 top-0 right-0 bottom-0"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.12),transparent_34%),linear-gradient(180deg,#ffffff_0%,#f8fafc_58%,#eef4ff_100%)] dark:bg-[radial-gradient(circle_at_left,rgba(19,50,102,0.85)_0%,rgba(2,6,23,0.5)_32%,transparent_100%)]"
           aria-hidden="true"
         />
         <div
@@ -31,8 +31,8 @@ export default function HeroSection() {
                 src="/flag-aus.png"
                 alt="Australian flag"
                 width={18}
-                height={5}
-                style={{ height: "auto" }}
+                height={18}
+                className="h-4 w-4 rounded-full object-cover"
                 fetchPriority="high"
                 sizes="(max-width: 640px) 100vw,
                 (max-width: 1024px) 50vw,
@@ -52,7 +52,7 @@ export default function HeroSection() {
               }}
             >
               <span className="text-foreground dark:text-white">
-                Australia's best
+                Australia&apos;s best
               </span>{" "}
               <span className="relative inline-block">
                 <span
@@ -124,58 +124,43 @@ export default function HeroSection() {
             <div className="mx-auto max-w-4xl relative" />
 
             <div
-              className="relative -mt-48 h-76 overflow-hidden
+              className="relative -mt-48 h-76 overflow-hidden 
                 mask-[radial-gradient(50%_50%,black,transparent)]
                 dark:mask-[radial-gradient(50%_50%,white,transparent)]
                 before:absolute before:inset-0
                 before:bg-[radial-gradient(circle_at_bottom_center,#fff,transparent_80%)]
                 dark:before:bg-[radial-gradient(circle_at_left_center,#000,transparent_100%)]
                 before:opacity-100
-                after:absolute after:-left-1/2 after:top-4/6 after:aspect-[1/0.7]
+                after:absolute after:-left-1/2 after:top-4/6 after:aspect-[1/0.7] 
                 after:w-[200%] after:rounded-[100%] after:border-t
                 after:border-gray-400 dark:after:border-[#7876c566]
                 after:bg-zinc-100 dark:after:bg-zinc-900"
               aria-hidden="true"
             >
-              {/* <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#ffffff2c_1px,transparent_1px),linear-gradient(to_bottom,#3a3a3a01_1px,transparent_1px)] bg-size-[70px_80px]" />
+              <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#ffffff2c_1px,transparent_1px),linear-gradient(to_bottom,#3a3a3a01_1px,transparent_1px)] bg-size-[70px_80px]" />
               <SparklesThemed
                 variant="fullbleed"
                 particleDensity={800}
                 speed={1}
                 maxSize={1.7}
-              /> */}
+              />
             </div>
 
             <div className="w-full px-8 absolute bottom-2 left-1/2 -translate-x-1/2 text-center">
-              <p className="text-gray-600 text-lg sm:text-xl lg:text-2xl dark:text-white font-semibold leading-tight mb-2">
+              <p className="text-gray-600 text-lg sm:text-xl lg:text-2xl dark:text-white font-semibold leading-tight mb-4">
                 Need a provider fast?
               </p>
-              <p className="text-gray-500 text-sm dark:text-gray-400 mb-4">
-                Get free quotes and receive responses from trusted local
-                professionals, with clearer quotes and safer hiring support.
+              <p className="text-gray-500 text-sm dark:text-gray-400 mb-1">
+                Post a job in 60 seconds and get quotes from background-checked
+                local pros — cleaners, electricians, plumbers, handymen and 100+
+                more services.
               </p>
             </div>
           </div>
 
-          <section
-            aria-label="Trust and safety highlights"
-            className="bg-slate-50 dark:bg-slate-950 border-y border-slate-200 dark:border-slate-800"
-          >
-            <div className="container mx-auto px-4 py-4">
-              <p className="text-sm text-slate-700 dark:text-slate-300 text-center">
-                Background-checked profiles, clear quotes, direct communication,
-                and safer hiring support.&nbsp;
-                <a
-                  href="/trust-safety"
-                  className="font-semibold text-blue-600 hover:underline"
-                >
-                  Learn how Taskoria keeps you safe
-                </a>
-              </p>
-            </div>
-          </section>
         </div>
       </section>
+      <TrustSafetyHighlights/>
     </>
   );
 }

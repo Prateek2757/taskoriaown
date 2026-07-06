@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import PageClient from "./page-client";
+import { getProfessionalPackagesFromDB } from "@/lib/cache";
+
+export const dynamic = "force-static";
+export const revalidate = 604800;
 
 export const metadata: Metadata = {
   title: `Taskoria Pricing | Provider Plans and Credits`,
@@ -7,6 +11,8 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function Page() {
-  return <PageClient />;
+export default async function Page() {
+  const packages = await getProfessionalPackagesFromDB();
+
+  return <PageClient initialPackages={packages} />;
 }

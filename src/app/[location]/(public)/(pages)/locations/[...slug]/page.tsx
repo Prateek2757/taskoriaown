@@ -3,15 +3,23 @@ import { notFound, redirect } from "next/navigation";
 import Script from "next/script";
 import StatePageClient from "../components/state-page/state-page";
 import CityPageClient from "../components/City-page/citypageclient";
-import { getAllCities, getCategoriesFromDB } from "@/lib/cache";
+import {
+  getAllCities,
+  getCategoriesFromDB,
+  getNearbySeoCitiesFromDB,
+  getPopularSeoCitiesByStateFromDB,
+  getSeoCitiesByStateFromDB,
+  getSeoCityBySlugFromDB,
+  getSeoStateSummaryFromDB,
+  getSeoStatesFromDB,
+} from "@/lib/cache";
 import { getCityDedupKey, getCityLabel } from "@/lib/location-labels";
 import {
   filterSeoLocations,
   findSeoRedirectLocation,
 } from "@/lib/seo-locations";
-// export const revalidate = 604800;
-
-// export const dynamic = "force-static";
+export const revalidate = 604800;
+export const dynamic = "force-static";
 type Props = {
   params: Promise<{ slug: string[] }>;
 };
@@ -28,6 +36,9 @@ export interface City {
   state_slug: string;
   state_name: string;
   country_name: string;
+  postcode?: string | null;
+  source?: string | null;
+  updated_at?: string;
   subcities: SubCity[];
 }
 
@@ -57,15 +68,62 @@ export interface CategoryWithSubs {
   }[];
 }
 
-function distanceKm(lat1: number, lon1: number, lat2: number, lon2: number) {
-  const R = 6371;
-  const toRad = (v: number) => (v * Math.PI) / 180;
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+type StateSummary = {
+  state_slug: string;
+  state_name: string;
+};
+
+type StateInfo = StateSummary & {
+  country_name: string;
+  city_count: number;
+};
+
+type CategoryRow = {
+  category_id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  image_url?: string;
+  rank?: number | null;
+  parent_category_id?: number | null;
+};
+
+function toClientCity(city: City): City {
+  return {
+    city_id: city.city_id,
+    name: city.name,
+    slug: city.slug,
+    display_name: city.display_name,
+    popularity: city.popularity,
+    latitude: city.latitude ?? null,
+    longitude: city.longitude ?? null,
+    image_url: city.image_url,
+    state_slug: city.state_slug,
+    state_name: city.state_name,
+    country_name: city.country_name,
+    postcode: city.postcode,
+    source: city.source,
+    updated_at: city.updated_at,
+    subcities: (city.subcities ?? []).map((subcity) => ({
+      city_id: subcity.city_id,
+      name: subcity.name,
+      slug: subcity.slug,
+      display_name: subcity.display_name,
+      popularity: subcity.popularity,
+      image_url: subcity.image_url,
+    })),
+  };
+}
+
+function toCategory(category: CategoryRow): Omit<CategoryWithSubs, "subcategories"> {
+  return {
+    category_id: category.category_id,
+    name: category.name,
+    slug: category.slug,
+    description: category.description,
+    image_url: category.image_url,
+    rank: category.rank,
+  };
 }
 
 // async function getAllCities(): Promise<City[]> {
@@ -82,15 +140,109 @@ function distanceKm(lat1: number, lon1: number, lat2: number, lon2: number) {
 
 async function getCategories(): Promise<CategoryWithSubs[]> {
   try {
-    const raw = await getCategoriesFromDB();
+    const raw = (await getCategoriesFromDB()) as CategoryRow[];
 
-    const parents = raw.filter((c) => !c.parent_category_id);
+    const parents = raw
+      .filter((c) => !c.parent_category_id && c.slug && c.name)
+      .sort((a, b) => {
+        const rankDiff =
+          (a.rank ?? Number.MAX_SAFE_INTEGER) -
+          (b.rank ?? Number.MAX_SAFE_INTEGER);
+        if (rankDiff !== 0) return rankDiff;
+        return a.name.localeCompare(b.name);
+      });
 
     return parents.map((p) => ({
-      ...p,
-
-      subcategories: raw.filter((c) => c.parent_category_id === p.category_id),
+      ...toCategory(p),
+      subcategories: raw
+        .filter((c) => c.parent_category_id === p.category_id && c.slug && c.name)
+        .sort((a, b) => {
+          const rankDiff =
+            (a.rank ?? Number.MAX_SAFE_INTEGER) -
+            (b.rank ?? Number.MAX_SAFE_INTEGER);
+          if (rankDiff !== 0) return rankDiff;
+          return a.name.localeCompare(b.name);
+        })
+        .map(toCategory),
     }));
+  } catch {
+    return [];
+  }
+}
+
+async function getStateCities(stateSlug: string): Promise<City[]> {
+  try {
+    return filterSeoLocations(
+      (await getSeoCitiesByStateFromDB(stateSlug)) as unknown as City[]
+    ).map(toClientCity);
+  } catch {
+    return [];
+  }
+}
+
+async function getSelectedCity(
+  stateSlug: string,
+  citySlug: string
+): Promise<City | null> {
+  try {
+    const city = (await getSeoCityBySlugFromDB(
+      stateSlug,
+      citySlug
+    )) as unknown as City | null;
+    const seoCity = city ? filterSeoLocations([city])[0] : null;
+    return seoCity ? toClientCity(seoCity) : null;
+  } catch {
+    return null;
+  }
+}
+
+async function getStates(): Promise<StateSummary[]> {
+  try {
+    return (await getSeoStatesFromDB()) as StateSummary[];
+  } catch {
+    return [];
+  }
+}
+
+async function getStateInfo(stateSlug: string): Promise<StateInfo | null> {
+  try {
+    return (await getSeoStateSummaryFromDB(stateSlug)) as StateInfo | null;
+  } catch {
+    return null;
+  }
+}
+
+async function getNearbyCities(city: City, limit = 10): Promise<City[]> {
+  try {
+    return filterSeoLocations(
+      (await getNearbySeoCitiesFromDB(
+        city.state_slug,
+        city.slug,
+        city.latitude,
+        city.longitude,
+        limit * 2
+      )) as unknown as City[]
+    )
+      .map(toClientCity)
+      .slice(0, limit);
+  } catch {
+    return [];
+  }
+}
+
+async function getPopularStateCities(
+  stateSlug: string,
+  limit = 12
+): Promise<City[]> {
+  try {
+    return filterSeoLocations(
+      (await getPopularSeoCitiesByStateFromDB(
+        stateSlug,
+        limit * 2
+      )) as unknown as City[]
+    )
+      .map(toClientCity)
+      .slice(0, limit);
   } catch {
     return [];
   }
@@ -101,17 +253,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [stateSlug, citySlug] = slug;
   const isStatePage = !citySlug;
 
-  const cities = filterSeoLocations((await getAllCities()) as unknown as City[]);
-
   if (isStatePage) {
-    const stateCities = cities.filter((c) => c.state_slug === stateSlug);
-    if (!stateCities.length)
+    const stateInfo = await getStateInfo(stateSlug);
+    if (!stateInfo)
       return {
         title: { absolute: "State Not Found | Taskoria" },
         robots: { index: false, follow: false },
       };
 
-    const stateName = stateCities[0].state_name;
+    const stateName = stateInfo.state_name;
     const title = `Services in ${stateName} | Find Local Professionals`;
     const description = `Find trusted local service providers across ${stateName}. Browse all cities and categories — get free quotes from verified professionals on Taskoria.`;
     const canonicalUrl = `https://www.taskoria.com/locations/${stateSlug}`;
@@ -149,9 +299,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const city = cities.find(
-    (c) => c.slug === citySlug && c.state_slug === stateSlug
-  );
+  const city = await getSelectedCity(stateSlug, citySlug);
   if (!city)
     return {
       title: { absolute: "City Not Found | Taskoria" },
@@ -222,38 +370,21 @@ export default async function CityOrStatePage({ params }: Props) {
   const [stateSlug, citySlug] = slug;
   const isStatePage = !citySlug;
 
-  const [rawCitiesResult, categoryTree] = await Promise.all([
-    getAllCities(),
-    getCategories(),
-  ]);
-  const rawCities = rawCitiesResult as unknown as City[];
-  const allCities = filterSeoLocations(rawCities);
-  //  const {categories,loading}= useCategories()
-
   if (isStatePage) {
-    const stateCitiesRaw = allCities
-      .filter((c) => c.state_slug === stateSlug)
-      .sort((a, b) => b.popularity - a.popularity);
+    const [stateInfo, categoryTree, states] = await Promise.all([
+      getStateInfo(stateSlug),
+      getCategories(),
+      getStates(),
+    ]);
 
-    const stateCities = Array.from(
-      new Map(stateCitiesRaw.map((c) => [getCityDedupKey(c), c])).values()
-    );
+    if (!stateInfo) notFound();
 
-    if (!stateCities.length) notFound();
+    const stateName = stateInfo.state_name;
+    const countryName = stateInfo.country_name;
 
-    const stateName = stateCities[0].state_name;
-    const countryName = stateCities[0].country_name;
-
-    const otherStates = [
-      ...new Map(
-        allCities
-          .filter((c) => c.state_slug !== stateSlug)
-          .map((c) => [
-            c.state_slug,
-            { state_slug: c.state_slug, state_name: c.state_name },
-          ])
-      ).values(),
-    ].sort((a, b) => a.state_name.localeCompare(b.state_name));
+    const otherStates = states
+      .filter((state) => state.state_slug !== stateSlug)
+      .sort((a, b) => a.state_name.localeCompare(b.state_name));
 
     const jsonLd = {
       "@context": "https://schema.org",
@@ -281,7 +412,8 @@ export default async function CityOrStatePage({ params }: Props) {
           stateSlug={stateSlug}
           stateName={stateName}
           countryName={countryName}
-          cities={stateCities}
+          cities={[]}
+          cityCount={stateInfo.city_count}
           categoryTree={categoryTree}
           otherStates={otherStates}
         />
@@ -289,11 +421,14 @@ export default async function CityOrStatePage({ params }: Props) {
     );
   }
 
-  const city = allCities.find(
-    (c) => c.slug === citySlug && c.state_slug === stateSlug
-  );
+  const [city, categoryTree] = await Promise.all([
+    getSelectedCity(stateSlug, citySlug),
+    getCategories(),
+  ]);
 
   if (!city) {
+    const rawCities = (await getAllCities()) as unknown as City[];
+    const allCities = filterSeoLocations(rawCities);
     const redirectCity = findSeoRedirectLocation(rawCities, stateSlug, citySlug);
 
     if (redirectCity?.slug) {
@@ -306,39 +441,28 @@ export default async function CityOrStatePage({ params }: Props) {
     redirect("/locations");
   }
 
-  type CityWithDist = City & { _dist: number };
-  const seen = new Set<string>();
+  const [nearbyCitiesRaw, sameStateRaw] = await Promise.all([
+    getNearbyCities(city, 10),
+    getPopularStateCities(stateSlug, 12),
+  ]);
 
-  const nearbyCities: City[] = (allCities as CityWithDist[])
+  const seenNearby = new Set<string>();
+  const nearbyCities: City[] = nearbyCitiesRaw
     .filter((c) => c.city_id !== city.city_id)
-    .map((c) => ({
-      ...c,
-      _dist:
-        city.latitude != null &&
-        city.longitude != null &&
-        c.latitude != null &&
-        c.longitude != null
-          ? distanceKm(city.latitude, city.longitude, c.latitude, c.longitude)
-          : Infinity,
-    }))
-    .sort((a, b) =>
-      a._dist !== b._dist ? a._dist - b._dist : b.popularity - a.popularity
-    )
     .filter((c) => {
-      const key = c.name.trim().toLowerCase();
-      if (seen.has(key)) return false;
-      seen.add(key);
+      const key = getCityDedupKey(c);
+      if (seenNearby.has(key)) return false;
+      seenNearby.add(key);
       return true;
     })
-    .slice(0, 10)
-    .map(({ _dist: _, ...rest }) => rest as City);
-
-  const sameStateRaw = allCities
-    .filter((c) => c.state_slug === stateSlug && c.city_id !== city.city_id)
-    .sort((a, b) => b.popularity - a.popularity);
+    .slice(0, 10);
 
   const sameStateCities: City[] = Array.from(
-    new Map(sameStateRaw.map((c) => [getCityDedupKey(c), c])).values()
+    new Map(
+      sameStateRaw
+        .filter((c) => c.city_id !== city.city_id)
+        .map((c) => [getCityDedupKey(c), c])
+    ).values()
   ).slice(0, 12);
 
   const jsonLd = {

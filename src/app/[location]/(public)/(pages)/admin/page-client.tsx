@@ -16,6 +16,7 @@ import {
   LayoutGrid,
   Mail,
   ClipboardList,
+  MapPinned,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -180,6 +181,18 @@ const SECTIONS = [
   shadow: "shadow-sky-500/10",
   desc: "Review contact form submissions, reply to customers, and track each support message status.",
   actions: ["View new messages", "Reply by email", "Mark resolved"],
+  badgeKey: null,
+  badgeLabel: null,
+},
+{
+  label: "Australian Locations",
+  href: "/admin/locations",
+  icon: MapPinned,
+  accent: "from-teal-500 to-cyan-700",
+  ring: "ring-teal-500/20",
+  shadow: "shadow-teal-500/10",
+  desc: "Choose specific Australian locations and add popularity ranking, imagery, and descriptive content.",
+  actions: ["Search locations", "Set popularity", "Add images and descriptions"],
   badgeKey: null,
   badgeLabel: null,
 },

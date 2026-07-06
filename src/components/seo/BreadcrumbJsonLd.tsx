@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 
 const BASE_URL = "https://www.taskoria.com";
-// const LOCALE_SEGMENTS = new Set(["en", "ne"]);
+const LOCALE_SEGMENTS = new Set(["en", "en-au", "au", "ne"]);
 
 const SEGMENT_LABELS: Record<string, string> = {
   about: "About",
@@ -58,18 +58,19 @@ function labelFromSegment(segment: string) {
     .join(" ");
 }
 
-// function normalizePathname(pathname: string) {
-//   const segments = pathname.split("/").filter(Boolean);
-//   const publicSegments = LOCALE_SEGMENTS.has(segments[0])
-//     ? segments.slice(1)
-//     : segments;
+function getPublicSegments(pathname: string) {
+  const segments = pathname.split("/").filter(Boolean);
+  return LOCALE_SEGMENTS.has(segments[0]) ? segments.slice(1) : segments;
+}
 
-//   return `/${publicSegments.join("/")}`;
-// }
+function buildPublicPath(segments: string[]) {
+  return segments.length ? `/${segments.join("/")}` : "/";
+}
 
 export default function BreadcrumbJsonLd() {
   const pathname = usePathname();
-  const segments = pathname.split("/").filter(Boolean);
+  const segments = getPublicSegments(pathname);
+  const publicPathname = buildPublicPath(segments);
 
   if (segments.length === 0) return null;
 
@@ -95,7 +96,7 @@ export default function BreadcrumbJsonLd() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "@id": `${BASE_URL}${pathname}#breadcrumb`,
+    "@id": `${BASE_URL}${publicPathname}#breadcrumb`,
     itemListElement,
   };
 
