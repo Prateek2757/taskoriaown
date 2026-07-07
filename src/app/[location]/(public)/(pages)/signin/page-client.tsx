@@ -1,7 +1,7 @@
 "use client";
 
-import { type ComponentType, Suspense, useEffect, useRef, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { Suspense, useEffect, useCallback } from "react";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import {
   Eye,
@@ -17,13 +17,25 @@ import { useState } from "react";
 
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const DEFAULT_LOCATION = "en";
+
+function isSigninPath(pathname: string) {
+  return pathname === "/signin" || pathname === `/${DEFAULT_LOCATION}/signin`;
+}
+
+function withLocationPrefix(path: string, location: string) {
+  if (!path.startsWith("/") || path.startsWith("//")) return `/${location}`;
+  if (path === `/${location}` || path.startsWith(`/${location}/`)) return path;
+
+  return `/${location}${path}`;
+}
 
 function getSafeRedirectPath(value: string | null): string | null {
   if (!value) return null;
 
   if (value.startsWith("/") && !value.startsWith("//")) {
     const url = new URL(value, "http://localhost");
-    if (url.pathname === "/signin") return null;
+    if (isSigninPath(url.pathname)) return null;
 
     return `${url.pathname}${url.search}${url.hash}`;
   }
@@ -34,7 +46,7 @@ function getSafeRedirectPath(value: string | null): string | null {
     const url = new URL(value, window.location.origin);
 
     if (url.origin !== window.location.origin) return null;
-    if (url.pathname === "/signin") return null;
+    if (isSigninPath(url.pathname)) return null;
 
     return `${url.pathname}${url.search}${url.hash}`;
   } catch {
@@ -45,10 +57,15 @@ function getSafeRedirectPath(value: string | null): string | null {
 function resolveRedirect(opts: {
   hasPendingLead: boolean;
   redirectPath: string | null;
+  location: string;
 }): string {
-  if (opts.hasPendingLead) return "/customer/dashboard";
-  if (opts.redirectPath) return opts.redirectPath;
-  return "/provider/dashboard";
+  if (opts.hasPendingLead) {
+    return withLocationPrefix("/customer/dashboard", opts.location);
+  }
+  if (opts.redirectPath) {
+    return withLocationPrefix(opts.redirectPath, opts.location);
+  }
+  return withLocationPrefix("/provider/dashboard", opts.location);
 }
 
 
@@ -60,6 +77,8 @@ function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const router                          = useRouter();
+  const params                          = useParams<{ location?: string }>();
+  const location                        = params.location || DEFAULT_LOCATION;
   const { joinAsProvider, loading: joinLoading } = useJoinAsProvider();
   const searchParams                    = useSearchParams();
   const next                            = searchParams.get("next");
@@ -68,10 +87,10 @@ function SignInForm() {
   const resumeRequest                   = searchParams.get("resume_request") === "1";
 
   useEffect(() => {
-    router.prefetch("/provider/dashboard");
-    router.prefetch("/customer/dashboard");
-    if (redirectPath) router.prefetch(redirectPath);
-  }, [router, redirectPath]);
+    router.prefetch(withLocationPrefix("/provider/dashboard", location));
+    router.prefetch(withLocationPrefix("/customer/dashboard", location));
+    if (redirectPath) router.prefetch(withLocationPrefix(redirectPath, location));
+  }, [router, redirectPath, location]);
 
   useEffect(() => {
     const hasPending = !!localStorage.getItem("pendingpayload");
@@ -93,8 +112,9 @@ function SignInForm() {
     if (redirectPath) base.set("callbackUrl", redirectPath);
     if (resumeRequest) base.set("resume_request", "1");
 
-    router.replace(base.size ? `/signin?${base.toString()}` : "/signin", { scroll: false });
-  }, [searchParams, router, redirectPath, resumeRequest]);
+    const signinPath = withLocationPrefix("/signin", location);
+    router.replace(base.size ? `${signinPath}?${base.toString()}` : signinPath, { scroll: false });
+  }, [searchParams, router, redirectPath, resumeRequest, location]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -127,12 +147,15 @@ function SignInForm() {
         .catch(() => {/* non-critical */});
 
       const savedLead = localStorage.getItem("pendingpayload");
+      let submittedPendingLead = false;
+
       if (savedLead) {
         try {
           const parsedData = JSON.parse(savedLead);
           if (Date.now() <= parsedData.expiry) {
             const submitRes = await axios.post("/api/leads", parsedData.value);
             if (!submitRes.data.error) {
+              submittedPendingLead = true;
               localStorage.removeItem("pendingpayload");
               localStorage.setItem("viewMode", "customer");
               window.dispatchEvent(new Event("viewModeChanged"));
@@ -150,20 +173,25 @@ function SignInForm() {
       }
 
       const destination = resolveRedirect({
-        hasPendingLead: !!savedLead,
+        hasPendingLead: submittedPendingLead,
         redirectPath,
+        location,
       });
 
       router.replace(destination);
     },
-    [email, password, redirectPath, router],
+    [email, password, redirectPath, router, location],
   );
 
   const handleGoogleSignIn = useCallback(() => {
     signIn("google", {
-      callbackUrl: redirectPath ?? "/provider/dashboard",
+      callbackUrl: resolveRedirect({
+        hasPendingLead: false,
+        redirectPath,
+        location,
+      }),
     });
-  }, [redirectPath]);
+  }, [redirectPath, location]);
 
   return (
     <div className="bg-linear-to-b from-slate-50 via-white to-slate-100 px-4 py-10 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
@@ -301,25 +329,6 @@ function SignInForm() {
           </Button>
         </section>
       </div>
-    </div>
-  );
-}
-
-
-function ProofRow({
-  icon: Icon,
-  title,
-  body,
-}: {
-  icon: ComponentType<{ className?: string }>;
-  title: string;
-  body: string;
-}) {
-  return (
-    <div className="rounded-xl border border-blue-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800/70">
-      <Icon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-      <p className="mt-1 text-sm font-semibold text-slate-900 dark:text-slate-100">{title}</p>
-      <p className="text-xs text-slate-600 dark:text-slate-300">{body}</p>
     </div>
   );
 }

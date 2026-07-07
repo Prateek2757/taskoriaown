@@ -58,6 +58,33 @@ function stripDefaultLocale(pathname: string) {
   return pathname;
 }
 
+function isSigninPath(pathname: string) {
+  return pathname === "/signin" || pathname === `/${defaultLocale}/signin`;
+}
+
+function withDefaultLocale(pathname: string) {
+  if (pathname === `/${defaultLocale}` || pathname.startsWith(`/${defaultLocale}/`)) {
+    return pathname;
+  }
+
+  return `/${defaultLocale}${pathname}`;
+}
+
+function getSafeRedirectPath(value: string | null, req: NextRequest) {
+  if (!value) return null;
+
+  try {
+    const url = new URL(value, req.url);
+
+    if (url.origin !== req.nextUrl.origin) return null;
+    if (isSigninPath(url.pathname)) return null;
+
+    return `${url.pathname}${url.search}${url.hash}`;
+  } catch {
+    return null;
+  }
+}
+
 async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
@@ -87,21 +114,35 @@ async function proxy(req: NextRequest) {
   const hasDefaultLocale = routePath !== pathname;
   const needsCreateRedirect = routePath.startsWith("/create");
   const needsAuth = protectedPaths.some((path) => routePath.startsWith(path));
+  const needsSigninRedirect = routePath === "/signin";
   const token =
-    needsCreateRedirect || needsAuth ? await getToken({ req, secret }) : null;
+    needsCreateRedirect || needsAuth || needsSigninRedirect
+      ? await getToken({ req, secret })
+      : null;
 
   if (needsCreateRedirect) {
     if (token) {
       return NextResponse.redirect(
-        new URL(`/provider/dashboard${search}`, req.url),
+        new URL(withDefaultLocale(`/provider/dashboard${search}`), req.url),
         307
       );
     }
   }
 
+  if (needsSigninRedirect && token) {
+    const redirectPath =
+      getSafeRedirectPath(req.nextUrl.searchParams.get("callbackUrl"), req) ??
+      "/provider/dashboard";
+
+    return NextResponse.redirect(
+      new URL(withDefaultLocale(redirectPath), req.url),
+      307
+    );
+  }
+
   if (needsAuth) {
     if (!token) {
-      const url = new URL(`/signin`, req.url);
+      const url = new URL(withDefaultLocale("/signin"), req.url);
       url.searchParams.set("callbackUrl", pathname + search);
       return NextResponse.redirect(url, 307);
     }

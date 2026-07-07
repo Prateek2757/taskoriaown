@@ -3,6 +3,7 @@ const { Pool } = pkg;
 
 declare global {
   var pgPool: InstanceType<typeof Pool> | undefined;
+  var pgPoolMax: number | undefined;
 }
 
 const configuredPoolMax = Number(process.env.PG_POOL_MAX);
@@ -11,9 +12,16 @@ const poolMax = Number.isFinite(configuredPoolMax) && configuredPoolMax > 0
   ? configuredPoolMax
   : isProductionBuild
     ? 1
-    : process.env.NODE_ENV === "production"
-      ? 3
-      : 10;
+    : 2;
+
+if (
+  process.env.NODE_ENV !== "production" &&
+  global.pgPool &&
+  global.pgPoolMax !== poolMax
+) {
+  global.pgPool.end().catch(() => {});
+  global.pgPool = undefined;
+}
 
 const pool =
   global.pgPool ||
@@ -23,12 +31,13 @@ const pool =
       ? { rejectUnauthorized: false }
       : false,
     max: poolMax,
-    idleTimeoutMillis: 30000,   
+    idleTimeoutMillis: 10000,   
     connectionTimeoutMillis: 10000,
   });
 
 if (process.env.NODE_ENV !== "production") {
   global.pgPool = pool;
+  global.pgPoolMax = poolMax;
 }
 
 export default pool;
