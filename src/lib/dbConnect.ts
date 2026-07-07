@@ -5,6 +5,16 @@ declare global {
   var pgPool: InstanceType<typeof Pool> | undefined;
 }
 
+const configuredPoolMax = Number(process.env.PG_POOL_MAX);
+const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+const poolMax = Number.isFinite(configuredPoolMax) && configuredPoolMax > 0
+  ? configuredPoolMax
+  : isProductionBuild
+    ? 1
+    : process.env.NODE_ENV === "production"
+      ? 3
+      : 10;
+
 const pool =
   global.pgPool ||
   new Pool({
@@ -12,7 +22,7 @@ const pool =
     ssl: process.env.NODE_ENV === "production"
       ? { rejectUnauthorized: false }
       : false,
-    max: 10,                   
+    max: poolMax,
     idleTimeoutMillis: 30000,   
     connectionTimeoutMillis: 10000,
   });

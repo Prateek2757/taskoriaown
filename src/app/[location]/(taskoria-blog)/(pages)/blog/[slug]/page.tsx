@@ -6,6 +6,7 @@ import {
 } from "@/lib/cache";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 import Script from "next/script";
 
 type Props = {
@@ -39,6 +40,8 @@ function buildCanonical(slug: string) {
   return `https://www.taskoria.com/blog/${slug}`;
 }
 
+const getCachedBlogPostBySlug = cache((slug: string) => getBlogPostBySlug(slug));
+
 export const revalidate = 300;
 export const dynamicParams = true;
 
@@ -54,7 +57,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
 
-  const post: Post | null = await getBlogPostBySlug(slug);
+  const post: Post | null = await getCachedBlogPostBySlug(slug);
   if (!post) return {};
   return {
     title: post.title,
@@ -82,7 +85,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const { slug } = await params;
-  const post: Post | null = await getBlogPostBySlug(slug);
+  const post: Post | null = await getCachedBlogPostBySlug(slug);
 
   if (!post) notFound();
 
