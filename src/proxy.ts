@@ -70,6 +70,10 @@ function withDefaultLocale(pathname: string) {
   return `/${defaultLocale}${pathname}`;
 }
 
+function withoutDefaultLocale(pathname: string) {
+  return stripDefaultLocale(pathname);
+}
+
 function getSafeRedirectPath(value: string | null, req: NextRequest) {
   if (!value) return null;
 
@@ -123,7 +127,7 @@ async function proxy(req: NextRequest) {
   if (needsCreateRedirect) {
     if (token) {
       return NextResponse.redirect(
-        new URL(withDefaultLocale(`/provider/dashboard${search}`), req.url),
+        new URL(`/provider/dashboard${search}`, req.url),
         307
       );
     }
@@ -135,7 +139,7 @@ async function proxy(req: NextRequest) {
       "/provider/dashboard";
 
     return NextResponse.redirect(
-      new URL(withDefaultLocale(redirectPath), req.url),
+      new URL(withoutDefaultLocale(redirectPath), req.url),
       307
     );
   }

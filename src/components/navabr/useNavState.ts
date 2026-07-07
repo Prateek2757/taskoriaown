@@ -86,7 +86,6 @@ export function useNavState({
       localStorage.setItem("viewMode", nextView);
     }
     setCookieViewMode(nextView);
-    setViewMode(nextView);
   }, [status, session]);
 
   // ── Cross-tab / cross-component viewMode sync ────────────────────────────────
@@ -114,12 +113,6 @@ export function useNavState({
       window.removeEventListener("storage", update);
     };
   }, [activeRole, hasActiveSession]);
-
-  // ── Close menus on route change ──────────────────────────────────────────────
-  useEffect(() => {
-    setIsMenuOpen(false);
-    setIsProfileOpen(false);
-  }, [pathname]);
 
   // ── Memoised current nav links ───────────────────────────────────────────────
   const currentLinks = useMemo<NavLink[]>(() => {

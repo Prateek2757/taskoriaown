@@ -1,23 +1,33 @@
 "use client";
 
-import { Suspense, useEffect, useCallback } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import {
-  Eye,
-  EyeOff,
-  Loader2,
- 
-} from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
 import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { z } from "zod";
 
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DEFAULT_LOCATION = "en";
+
+const signInSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .email("Please enter a valid email address.")
+    .transform((value) => value.toLowerCase()),
+  password: z.string().min(1, "Please enter your password."),
+});
+
+type SignInFormValues = z.infer<typeof signInSchema>;
+
+const AUTH_TIMEOUT_MS = 15000;
+const LEAD_SUBMIT_TIMEOUT_MS = 10000;
 
 function isSigninPath(pathname: string) {
   return pathname === "/signin" || pathname === `/${DEFAULT_LOCATION}/signin`;
@@ -28,6 +38,15 @@ function withLocationPrefix(path: string, location: string) {
   if (path === `/${location}` || path.startsWith(`/${location}/`)) return path;
 
   return `/${location}${path}`;
+}
+
+function withoutDefaultLocationPrefix(path: string) {
+  if (path === `/${DEFAULT_LOCATION}`) return "/";
+  if (path.startsWith(`/${DEFAULT_LOCATION}/`)) {
+    return path.slice(DEFAULT_LOCATION.length + 1);
+  }
+
+  return path;
 }
 
 function getSafeRedirectPath(value: string | null): string | null {
@@ -57,24 +76,100 @@ function getSafeRedirectPath(value: string | null): string | null {
 function resolveRedirect(opts: {
   hasPendingLead: boolean;
   redirectPath: string | null;
-  location: string;
 }): string {
   if (opts.hasPendingLead) {
-    return withLocationPrefix("/customer/dashboard", opts.location);
+    return "/customer/dashboard";
   }
   if (opts.redirectPath) {
-    return withLocationPrefix(opts.redirectPath, opts.location);
+    return withoutDefaultLocationPrefix(opts.redirectPath);
   }
-  return withLocationPrefix("/provider/dashboard", opts.location);
+  return "/provider/dashboard";
+}
+
+function getSignInErrorMessage(error: string | null) {
+  if (error === "not_registered") {
+    return "This Google account is not registered. Create an account first.";
+  }
+  if (error === "OAuthAccountNotLinked") {
+    return "This email is already linked to a different sign-in method.";
+  }
+  return "";
+}
+
+async function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  timeoutMessage: string,
+) {
+  let timeout: number | undefined;
+
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<never>((_, reject) => {
+        timeout = window.setTimeout(
+          () => reject(new Error(timeoutMessage)),
+          timeoutMs,
+        );
+      }),
+    ]);
+  } finally {
+    if (timeout) window.clearTimeout(timeout);
+  }
+}
+
+async function submitPendingLead(savedLead: string) {
+  const parsedData = JSON.parse(savedLead);
+
+  if (Date.now() > parsedData.expiry) {
+    localStorage.removeItem("pendingpayload");
+    return false;
+  }
+
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), LEAD_SUBMIT_TIMEOUT_MS);
+
+  try {
+    const submitRes = await axios.post("/api/leads", parsedData.value, {
+      signal: controller.signal,
+    });
+
+    if (submitRes.data.error) {
+      throw new Error(submitRes.data.error);
+    }
+
+    localStorage.removeItem("pendingpayload");
+    localStorage.setItem("viewMode", "customer");
+    window.dispatchEvent(new Event("viewModeChanged"));
+    return true;
+  } finally {
+    window.clearTimeout(timeout);
+  }
+}
+
+function navigateAfterSignIn(destination: string) {
+  window.location.assign(destination);
 }
 
 
 function SignInForm() {
-  const [email, setEmail]           = useState("");
-  const [password, setPassword]     = useState("");
-  const [message, setMessage]       = useState("");
-  const [loading, setLoading]       = useState(false);
+  const [message, setMessage]       = useState(() => {
+    if (typeof window === "undefined") return "";
+    return getSignInErrorMessage(new URLSearchParams(window.location.search).get("error"));
+  });
   const [showPassword, setShowPassword] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    setFocus,
+    formState: { errors, isSubmitting },
+  } = useForm<SignInFormValues>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   const router                          = useRouter();
   const params                          = useParams<{ location?: string }>();
@@ -85,28 +180,27 @@ function SignInForm() {
   const callbackUrl                     = searchParams.get("callbackUrl");
   const redirectPath                    = getSafeRedirectPath(callbackUrl) ?? getSafeRedirectPath(next);
   const resumeRequest                   = searchParams.get("resume_request") === "1";
+  const shouldSubmitPendingLead         = resumeRequest || !redirectPath;
 
   useEffect(() => {
-    router.prefetch(withLocationPrefix("/provider/dashboard", location));
-    router.prefetch(withLocationPrefix("/customer/dashboard", location));
-    if (redirectPath) router.prefetch(withLocationPrefix(redirectPath, location));
-  }, [router, redirectPath, location]);
+    router.prefetch("/provider/dashboard");
+    router.prefetch("/customer/dashboard");
+    if (redirectPath) router.prefetch(withoutDefaultLocationPrefix(redirectPath));
+  }, [router, redirectPath]);
 
   useEffect(() => {
-    const hasPending = !!localStorage.getItem("pendingpayload");
+    const hasPending = shouldSubmitPendingLead && !!localStorage.getItem("pendingpayload");
     localStorage.setItem("viewMode", hasPending ? "customer" : "provider");
     window.dispatchEvent(new Event("viewModeChanged"));
-  }, []);
+  }, [shouldSubmitPendingLead]);
+
+  useEffect(() => {
+    setFocus("email");
+  }, [setFocus]);
 
   useEffect(() => {
     const error = searchParams.get("error");
     if (!error) return;
-
-    if (error === "not_registered") {
-      setMessage("This Google account is not registered. Create an account first.");
-    } else if (error === "OAuthAccountNotLinked") {
-      setMessage("This email is already linked to a different sign-in method.");
-    }
 
     const base = new URLSearchParams();
     if (redirectPath) base.set("callbackUrl", redirectPath);
@@ -116,71 +210,64 @@ function SignInForm() {
     router.replace(base.size ? `${signinPath}?${base.toString()}` : signinPath, { scroll: false });
   }, [searchParams, router, redirectPath, resumeRequest, location]);
 
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-
-      if (!EMAIL_RE.test(email.trim())) {
-        setMessage("Please enter a valid email address.");
-        return;
-      }
-
-      setLoading(true);
+  const onSubmit: SubmitHandler<SignInFormValues> = useCallback(
+    async ({ email, password }) => {
       setMessage("");
 
-      const res = await signIn("credentials", {
-        redirect: false,
-        email: email.trim().toLowerCase(),
-        password,
-      });
+      try {
+        const res = await withTimeout(
+          signIn("credentials", {
+            redirect: false,
+            email,
+            password,
+          }),
+          AUTH_TIMEOUT_MS,
+          "Sign in is taking too long. Please check your connection and try again.",
+        );
 
-      if (res?.error) {
-        setMessage(res.error);
-        setLoading(false);
-        return;
-      }
-
-     
-      fetch("/api/auth/register-session", { method: "POST" })
-        .then((r) => r.json())
-        .then(({ token }) => localStorage.setItem("redirect_token", token))
-        .catch(() => {/* non-critical */});
-
-      const savedLead = localStorage.getItem("pendingpayload");
-      let submittedPendingLead = false;
-
-      if (savedLead) {
-        try {
-          const parsedData = JSON.parse(savedLead);
-          if (Date.now() <= parsedData.expiry) {
-            const submitRes = await axios.post("/api/leads", parsedData.value);
-            if (!submitRes.data.error) {
-              submittedPendingLead = true;
-              localStorage.removeItem("pendingpayload");
-              localStorage.setItem("viewMode", "customer");
-              window.dispatchEvent(new Event("viewModeChanged"));
-            } else {
-              setMessage(submitRes.data.error);
-              setLoading(false);
-              return;
-            }
-          } else {
-            localStorage.removeItem("pendingpayload");
-          }
-        } catch (err) {
-          console.error("Auto-submit failed:", err);
+        if (res?.error) {
+          setMessage(res.error);
+          return;
         }
+
+        fetch("/api/auth/register-session", { method: "POST" })
+          .then((r) => r.json())
+          .then(({ token }) => {
+            if (token) localStorage.setItem("redirect_token", token);
+          })
+          .catch(() => {/* non-critical */});
+
+        const savedLead = shouldSubmitPendingLead
+          ? localStorage.getItem("pendingpayload")
+          : null;
+        let submittedPendingLead = false;
+
+        if (savedLead) {
+          try {
+            submittedPendingLead = await submitPendingLead(savedLead);
+          } catch (err) {
+            console.error("Auto-submit failed:", err);
+            setMessage(
+              err instanceof Error
+                ? err.message
+                : "Your sign in worked, but your request could not be submitted.",
+            );
+            return;
+          }
+        }
+
+        const destination = resolveRedirect({
+          hasPendingLead: submittedPendingLead,
+          redirectPath,
+        });
+
+        navigateAfterSignIn(destination);
+      } catch (err) {
+        console.error("Sign in failed:", err);
+        setMessage(err instanceof Error ? err.message : "Unable to sign in right now. Please try again.");
       }
-
-      const destination = resolveRedirect({
-        hasPendingLead: submittedPendingLead,
-        redirectPath,
-        location,
-      });
-
-      router.replace(destination);
     },
-    [email, password, redirectPath, router, location],
+    [redirectPath, shouldSubmitPendingLead],
   );
 
   const handleGoogleSignIn = useCallback(() => {
@@ -188,10 +275,9 @@ function SignInForm() {
       callbackUrl: resolveRedirect({
         hasPendingLead: false,
         redirectPath,
-        location,
       }),
     });
-  }, [redirectPath, location]);
+  }, [redirectPath]);
 
   return (
     <div className="bg-linear-to-b from-slate-50 via-white to-slate-100 px-4 py-10 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
@@ -209,29 +295,42 @@ function SignInForm() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-200">
+              <label
+                htmlFor="email"
+                className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-200"
+              >
                 Email
               </label>
               <input
+                id="email"
                 type="email"
                 placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 autoCapitalize="none"
                 spellCheck={false}
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? "email-error" : undefined}
                 className="h-11 w-full rounded-lg border border-slate-300 px-3 text-slate-900 outline-none transition
                   focus:border-blue-500 focus:ring-2 focus:ring-blue-200
                   dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100 dark:focus:ring-blue-900"
+                {...register("email")}
                 required
               />
+              {errors.email && (
+                <p id="email-error" className="mt-1 text-xs text-red-500 dark:text-red-400">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             <div>
               <div className="mb-1.5 flex items-center justify-between">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-medium text-slate-700 dark:text-slate-200"
+                >
                   Password
                 </label>
                 <Link
@@ -243,14 +342,16 @@ function SignInForm() {
               </div>
               <div className="relative">
                 <input
+                  id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
+                  aria-invalid={!!errors.password}
+                  aria-describedby={errors.password ? "password-error" : undefined}
                   className="h-11 w-full rounded-lg border border-slate-300 px-3 pr-10 text-slate-900 outline-none transition
                     focus:border-blue-500 focus:ring-2 focus:ring-blue-200
                     dark:border-slate-600 dark:bg-slate-950 dark:text-slate-100 dark:focus:ring-blue-900"
+                  {...register("password")}
                   required
                 />
                 <button
@@ -263,14 +364,19 @@ function SignInForm() {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
+              {errors.password && (
+                <p id="password-error" className="mt-1 text-xs text-red-500 dark:text-red-400">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
             <Button
-              disabled={loading}
+              disabled={isSubmitting}
               type="submit"
               className="h-11 w-full bg-[#2563EB] text-white hover:bg-blue-700 disabled:opacity-70"
             >
-              {loading ? (
+              {isSubmitting ? (
                 <span className="inline-flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" /> Signing in...
                 </span>
@@ -305,9 +411,11 @@ function SignInForm() {
             onClick={handleGoogleSignIn}
             className="h-11 w-full"
           >
-            <img
+            <Image
               src="/images/googleicon.svg"
               alt="Google"
+              width={20}
+              height={20}
               className="mr-2 h-5 w-5"
             />
             Continue with Google
