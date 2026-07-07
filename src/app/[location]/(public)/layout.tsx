@@ -132,6 +132,56 @@ export const viewport: Viewport = {
   userScalable: true,
 };
 
+const stripBrowserExtensionAttributesScript = `
+(() => {
+  const attributeName = "bis_skin_checked";
+  const selector = "[" + attributeName + "]";
+
+  const strip = (root) => {
+    if (!root) return;
+
+    if (root.nodeType === 1 && root.removeAttribute) {
+      root.removeAttribute(attributeName);
+    }
+
+    if (root.querySelectorAll) {
+      root.querySelectorAll(selector).forEach((node) => {
+        node.removeAttribute(attributeName);
+      });
+    }
+  };
+
+  strip(document.documentElement);
+
+  if (typeof MutationObserver === "undefined" || !document.documentElement) {
+    return;
+  }
+
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === "attributes") {
+        mutation.target.removeAttribute(attributeName);
+        return;
+      }
+
+      mutation.addedNodes.forEach(strip);
+    });
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: [attributeName],
+    childList: true,
+    subtree: true,
+  });
+
+  window.setTimeout(() => {
+    observer.disconnect();
+    strip(document.documentElement);
+  }, 10000);
+})();
+`;
+
 export function generateStaticParams() {
   return [{ location: "en" }];
 }
@@ -196,6 +246,13 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <Script
+          id="strip-browser-extension-hydration-attributes"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: stripBrowserExtensionAttributesScript,
+          }}
+        />
         <link
           rel="stylesheet"
           href="https://www.gstatic.com/chat-messenger/sdk/prod/v1.16/themes/chat-messenger-default.css"
@@ -264,7 +321,7 @@ export default function RootLayout({
               <Footer currentYear={new Date().getFullYear()} />
               {/* <ChatbotWidget/> */}
               <WhatsAppSupportButton/>
-            {/* <TaskoriaAgent /> */}
+              {/* <TaskoriaAgent /> */}
             </UserProvider>
           </ThemeProvider>
         </AuthProvider>

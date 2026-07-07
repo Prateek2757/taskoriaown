@@ -6,29 +6,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 const CHAT_SDK_URL =
   "https://www.gstatic.com/chat-messenger/sdk/prod/v1.16/chat-messenger.js";
 
-// Default theme stylesheet for the widget (colors, shape, typography tokens).
-// We override the color tokens below with your brand color via CSS variables.
-const CHAT_SDK_THEME_URL =
-  "https://www.gstatic.com/ces-console/fast/chat-messenger/prod/v1/themes/chat-messenger-default.css";
-
 const DEFAULT_DEPLOYMENT_NAME =
   "projects/942515104650/locations/us/apps/1fd5d94e-afde-4166-8013-b92f55e3aa19/deployments/63a157f1-3537-461f-9165-b5423d6e8175";
 
 const MESSAGE_COOLDOWN_MS = 7000;
-const CHAT_WIDGET_RIGHT_OFFSET = "clamp(16px, 4vw, 66px)";
-const CHAT_WIDGET_BOTTOM_OFFSET = "max(16px, env(safe-area-inset-bottom))";
-const CHAT_WIDGET_WINDOW_WIDTH = "min(400px, calc(100vw - 32px))";
-const CHAT_WIDGET_WINDOW_HEIGHT = "min(620px, calc(100dvh - 112px))";
-
-// --- Brand theming ---------------------------------------------------------
-// Primary brand color used for the bubble icon, send button, and other
-// high-emphasis fills. Derived light-tint and text colors are picked to stay
-// readable against #2563EB.
-const BRAND_PRIMARY = "#2563EB";
-const BRAND_PRIMARY_CONTAINER = "#DCE7FD"; // light tint of primary, used for user message bubbles
-const BRAND_ON_PRIMARY = "#FFFFFF"; // text/icons on top of primary
-const BRAND_ON_PRIMARY_CONTAINER = "#1E3A8A"; // text on top of primary-container
-const BRAND_LINK = "#2563EB";
 
 let registrationStarted = false;
 let registrationCompleted = false;
@@ -64,10 +45,7 @@ declare global {
         "max-query-length"?: string;
         "url-allowlist"?: string;
       };
-      // Wraps the chat UI behind a floating bubble icon. The chat box only
-      // opens once the bubble is clicked — this replaces
-      // <chat-messenger-container>, which renders open by default.
-      "chat-messenger-chat-bubble": React.DetailedHTMLProps<
+      "chat-messenger-container": React.DetailedHTMLProps<
         React.HTMLAttributes<HTMLElement>,
         HTMLElement
       > & {
@@ -77,21 +55,6 @@ declare global {
         "enable-audio-input"?: string;
       };
       "chat-reset-session-button": React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & {
-        slot?: string;
-        "title-text"?: string;
-      };
-      "chat-toggle-dialog-button": React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & {
-        slot?: string;
-        "title-text-expanded"?: string;
-        "title-text-collapsed"?: string;
-      };
-      "chat-messenger-close-button": React.DetailedHTMLProps<
         React.HTMLAttributes<HTMLElement>,
         HTMLElement
       > & {
@@ -116,6 +79,7 @@ export default function TaskoriaAgent() {
   const cooldownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cooldownUntilRef = useRef<number>(0);
 
+  const [isOpen, setIsOpen] = useState(false);
   const [isCoolingDown, setIsCoolingDown] = useState(false);
 
   const startCooldown = useCallback(() => {
@@ -259,12 +223,7 @@ export default function TaskoriaAgent() {
         clearTimeout(cooldownTimerRef.current);
       }
     };
-  }, [
-    registerAgent,
-    isInsideMessenger,
-    shouldBlockMessage,
-    startCooldown,
-  ]);
+  }, [registerAgent, isInsideMessenger, shouldBlockMessage, startCooldown]);
 
   return (
     <>
@@ -275,16 +234,42 @@ export default function TaskoriaAgent() {
         onReady={registerAgent}
       />
 
-      {/* Next.js hoists <link> tags rendered in components into <head>. */}
-      <link rel="stylesheet" href={CHAT_SDK_THEME_URL} />
+      {!isOpen && (
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          style={{
+            position: "fixed",
+            right: 16,
+            bottom: 16,
+            zIndex: 9999,
+            border: "none",
+            outline: "none",
+            cursor: "pointer",
+            borderRadius: 999,
+            padding: "14px 18px",
+            background: "linear-gradient(135deg, #2563eb, #38bdf8)",
+            color: "#fff",
+            fontSize: 15,
+            fontWeight: 600,
+            boxShadow: "0 12px 30px rgba(37, 99, 235, 0.35)",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <span style={{ fontSize: 18 }}>💬</span>
+          Chat with Taskoria
+        </button>
+      )}
 
-      {isCoolingDown && (
+      {isOpen && isCoolingDown && (
         <div
           style={{
             position: "fixed",
             right: 16,
-            bottom: 88,
-            zIndex: 9998,
+            bottom: 590,
+            zIndex: 10001,
             background: "#111827",
             color: "#fff",
             padding: "8px 12px",
@@ -297,67 +282,76 @@ export default function TaskoriaAgent() {
         </div>
       )}
 
-      <chat-messenger
-        ref={messengerRef}
-        render-mode="slide-over"
-        language-code="en"
-        max-query-length="500"
-        url-allowlist="https://taskoria.com,http://localhost:3000"
-        style={
-          {
-            position: "fixed",
-            right: CHAT_WIDGET_RIGHT_OFFSET,
-            bottom: CHAT_WIDGET_BOTTOM_OFFSET,
-            zIndex: 9999,
+      <div
+        style={{
+          position: "fixed",
+          right: 16,
+          bottom: 16,
+          zIndex: 10000,
 
-            display: "block",
-            maxWidth: "calc(100vw - 32px)",
-            maxHeight: "calc(100dvh - 32px)",
-            pointerEvents: isCoolingDown ? "none" : "auto",
+          width: "350px",
+          maxWidth: "calc(100vw - 32px)",
 
-            "--chat-messenger-window-width": CHAT_WIDGET_WINDOW_WIDTH,
-            "--chat-messenger-window-height": CHAT_WIDGET_WINDOW_HEIGHT,
+          opacity: isOpen ? 1 : 0,
+          visibility: isOpen ? "visible" : "hidden",
+          transform: isOpen ? "translateY(0)" : "translateY(20px)",
+          transition: "all 0.25s ease",
+          pointerEvents: isOpen ? "auto" : "none",
 
-            // Brand color tokens — see the CSS customization table in
-            // Google's chat-messenger docs for the full token list.
-            "--chat-messenger-color--primary": BRAND_PRIMARY,
-            "--chat-messenger-color--primary-container":
-              BRAND_PRIMARY_CONTAINER,
-            "--chat-messenger-color--on-primary": BRAND_ON_PRIMARY,
-            "--chat-messenger-color--on-primary-container":
-              BRAND_ON_PRIMARY_CONTAINER,
-            "--chat-messenger-color--link": BRAND_LINK,
-          } as React.CSSProperties
-        }
+          display: "flex",
+          flexDirection: "column",
+          gap: 10,
+        }}
       >
-        {/*
-          chat-messenger-chat-bubble renders a closed floating icon first.
-          The box (chat-title, titlebar buttons, message list, input) only
-          mounts/opens once the user clicks that bubble.
-        */}
-        <chat-messenger-chat-bubble
-          chat-title="Taskoria Agent"
-          chat-title-icon="https://gstatic.com/dialogflow-console/common/assets/ccai-favicons/conversational_agents.png"
-          enable-file-upload=""
-          enable-audio-input=""
+        <chat-messenger
+          ref={messengerRef}
+          render-mode="slide-over"
+          language-code="en"
+          max-query-length="500"
+          url-allowlist="https://taskoria.com,http://localhost:3000"
+          style={{
+            width: "100%",
+            height: "550px",
+            maxHeight: "calc(100vh - 90px)",
+            display: "block",
+            pointerEvents: isCoolingDown ? "none" : "auto",
+            borderRadius:35,
+            overflow: "hidden",
+            boxShadow: "0 18px 45px rgba(15, 23, 42, 0.22)",
+          }}
         >
-          <chat-reset-session-button
-            slot="titlebar-actions"
-            title-text="Start new chat"
-          />
+          <chat-messenger-container
+            chat-title="Taskoria Agent"
+            chat-title-icon="https://gstatic.com/dialogflow-console/common/assets/ccai-favicons/conversational_agents.png"
+            enable-file-upload=""
+            enable-audio-input=""
+          >
+            <chat-reset-session-button
+              slot="titlebar-actions"
+              title-text="Start new chat"
+            />
+          </chat-messenger-container>
+        </chat-messenger>
 
-          <chat-toggle-dialog-button
-            slot="titlebar-actions"
-            title-text-expanded="Collapse"
-            title-text-collapsed="Expand"
-          />
-
-          <chat-messenger-close-button
-            slot="titlebar-actions"
-            title-text="Close"
-          />
-        </chat-messenger-chat-bubble>
-      </chat-messenger>
+        <button
+          type="button"
+          onClick={() => setIsOpen(false)}
+          style={{
+            width: "100%",
+            border: "1px solid #e5e7eb",
+            background: "#ffffff",
+            color: "#374151",
+            borderRadius: 999,
+            padding: "11px 16px",
+            fontSize: 14,
+            fontWeight: 600,
+            cursor: "pointer",
+            boxShadow: "0 8px 24px rgba(15, 23, 42, 0.12)",
+          }}
+        >
+          Close chat
+        </button>
+      </div>
     </>
   );
 }
