@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight, MapPin } from "lucide-react";
 import { IoMdCheckmarkCircle } from "react-icons/io";
+import { useState, useEffect } from "react";
 // import LocalProsFeature from "./LocalProFeature";
 
 interface ServiceHeroSectionProps {
@@ -11,6 +12,7 @@ interface ServiceHeroSectionProps {
     slug: string;
     short_description?: string;
     description?: string;
+    service_detail?: string;
   };
   onLocationSelect?: (location: any) => void;
   onPostJob?: () => void;
@@ -69,6 +71,13 @@ export default function SubHeroService({
 }: ServiceHeroSectionProps) {
   const proLabel = getBreadcrumbLabel(service.name);
   const paragraphs = getDefaultParagraphs(service.name, proLabel);
+
+  const [introParagraphs, setIntroParagraphs] = useState<string[]>([]);
+
+  useEffect(() => {
+    setIntroParagraphs(getIntroParagraphs(service.service_detail));
+  }, [service.service_detail]);
+  const hasCustomContent = introParagraphs.length > 0;
   const article = getArticle(proLabel);
   const cityParagraphs = cityName
     ? getCityParagraphs(service.name, proLabel, cityName)
@@ -126,7 +135,27 @@ export default function SubHeroService({
       </section>
     );
   }
+  function getIntroParagraphs(html?: string) {
+    if (!html) return [];
 
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    const paragraphs: string[] = [];
+
+    let node = doc.querySelector("h1")?.nextElementSibling ?? null;
+
+    while (node && node.tagName !== "H2") {
+      if (node.tagName === "P") {
+        const text = node.textContent?.trim();
+        if (text) paragraphs.push(text);
+      }
+
+      node = node.nextElementSibling;
+    }
+
+    return paragraphs;
+  }
   return (
     <section
       aria-label={`Find ${proLabel} on Taskoria`}
@@ -162,18 +191,34 @@ export default function SubHeroService({
               </span>{" "}
               {!proLabel.endsWith("?") && "?"}
             </h2>
+            {hasCustomContent ? (
+              introParagraphs.map((text, index) => (
+                <p
+                  key={index}
+                  className={
+                    index === 0
+                      ? "text-base text-slate-700 dark:text-slate-300 font-medium leading-relaxed"
+                      : "text-base text-slate-500 dark:text-slate-400 leading-relaxed"
+                  }
+                >
+                  {text}
+                </p>
+              ))
+            ) : (
+              <>
+                <p className="text-base text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
+                  {service.short_description ?? paragraphs.lead}
+                </p>
 
-            <p className="text-base text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
-              {service.short_description ?? paragraphs.lead}
-            </p>
+                <p className="text-base text-slate-500 dark:text-slate-400 leading-relaxed">
+                  {service.description ?? paragraphs.body}
+                </p>
 
-            <p className="text-base text-slate-500 dark:text-slate-400 leading-relaxed">
-              {service.description ?? paragraphs.body}
-            </p>
-
-            <p className="inline-flex items-center gap-2 text-base font-semibold text-[#2563EB] dark:text-[#60a5fa]">
-              {paragraphs.highlight}
-            </p>
+                <p className="inline-flex items-center gap-2 text-base font-semibold text-[#2563EB] dark:text-[#60a5fa]">
+                  {paragraphs.highlight}
+                </p>
+              </>
+            )}
 
             <div className="pt-1 ">
               <button
