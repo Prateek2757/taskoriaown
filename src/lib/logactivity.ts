@@ -16,15 +16,18 @@ export async function logActivity({
   activity_type,
   metadata = {},
 }: LogActivityParams): Promise<void> {
+  let client: Awaited<ReturnType<typeof pool.connect>> | undefined;
+
   try {
-    const client = await pool.connect();
+    client = await pool.connect();
     await client.query(
       `INSERT INTO provider_activities (task_id, professional_id, activity_type, metadata)
        VALUES ($1, $2, $3, $4)`,
       [task_id, professional_id, activity_type, JSON.stringify(metadata)]
     );
-    client.release();
   } catch (err) {
     console.error("[logActivity] Failed to log activity:", err);
+  } finally {
+    client?.release();
   }
 }

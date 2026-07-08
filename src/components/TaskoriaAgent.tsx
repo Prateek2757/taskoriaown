@@ -76,6 +76,8 @@ function isChatSdkReady() {
 }
 
 export default function TaskoriaAgent() {
+  const panelRef = useRef<HTMLDivElement | null>(null);
+
   const messengerRef = useRef<HTMLElement | null>(null);
   const cooldownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cooldownUntilRef = useRef<number>(0);
@@ -191,6 +193,13 @@ export default function TaskoriaAgent() {
     };
 
     const handleClick = (event: MouseEvent) => {
+      const panel = panelRef.current;
+
+      if (isOpen && panel && !panel.contains(event.target as Node)) {
+        setIsOpen(false);
+        return;
+      }
+
       if (!isInsideMessenger(event)) return;
 
       if (shouldBlockMessage()) {
@@ -224,8 +233,13 @@ export default function TaskoriaAgent() {
         clearTimeout(cooldownTimerRef.current);
       }
     };
-  }, [registerAgent, isInsideMessenger, shouldBlockMessage, startCooldown]);
-
+  }, [
+    isOpen,
+    registerAgent,
+    isInsideMessenger,
+    shouldBlockMessage,
+    startCooldown,
+  ]);
   return (
     <>
       <Script
@@ -246,14 +260,15 @@ export default function TaskoriaAgent() {
           <span>Chat with Taskoria</span>
         </button>
       )}
-
+{/* 
       {isOpen && isCoolingDown && (
         <div className="taskoria-agent-cooldown" role="status">
           Agent is replying...
         </div>
-      )}
+      )} */}
 
-      <div className="taskoria-agent-panel" data-open={isOpen}>
+      <div ref={panelRef} className="taskoria-agent-panel" data-open={isOpen}>
+        {" "}
         <chat-messenger
           ref={messengerRef}
           render-mode="slide-over"
@@ -275,7 +290,6 @@ export default function TaskoriaAgent() {
             />
           </chat-messenger-container>
         </chat-messenger>
-
         <button
           type="button"
           onClick={() => setIsOpen(false)}
@@ -303,7 +317,7 @@ export default function TaskoriaAgent() {
           cursor: pointer;
           border-radius: 999px;
           padding: 14px 18px;
-          background: linear-gradient(135deg, #2563eb, #38bdf8);
+          background: linear-gradient(360deg, #2563eb, #2563eb,#3970F3);
           color: #fff;
           font-size: 15px;
           font-weight: 600;
@@ -412,6 +426,7 @@ export default function TaskoriaAgent() {
             bottom: max(10px, env(safe-area-inset-bottom));
             left: 10px;
             width: auto;
+
           }
 
           .taskoria-agent-messenger {

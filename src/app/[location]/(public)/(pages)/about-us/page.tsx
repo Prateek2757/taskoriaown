@@ -1,14 +1,29 @@
-import { Shield, Lock, Award, Heart } from "lucide-react";
+import Link from "next/link";
+import {
+  ArrowRight,
+  Award,
+  CheckCircle2,
+  Heart,
+  Lock,
+  Shield,
+} from "lucide-react";
 import Image from "next/image";
 export const dynamic = "force-static";
 
 import type { Metadata } from "next";
+import InternalLinkModule from "@/components/InternalLinkModule";
+import {
+  getPriorityCityLinks,
+  getPriorityServiceLinks,
+} from "@/lib/internal-links";
 import { OurStory } from "./OurStory";
 
+const BASE_URL = "https://www.taskoria.com";
+
 export const metadata: Metadata = {
-  title: { absolute: "About Taskoria — Trusted Local Services Marketplace" },
+  title: { absolute: "About Taskoria | Trusted Local Services Across Australia" },
   description:
-    "Learn about Taskoria, Australia’s trusted local services marketplace connecting customers with verified professionals for safe, simple, and reliable home services.",
+    "Taskoria helps Australians compare verified local professionals, request free quotes, and hire safely for home, business, and digital services.",
 
   keywords: [
     "About Taskoria",
@@ -24,13 +39,13 @@ export const metadata: Metadata = {
   authors: [{ name: "Taskoria Team" }],
   creator: "Taskoria",
   publisher: "Taskoria",
-  metadataBase: new URL("https://www.taskoria.com"),
+  metadataBase: new URL(BASE_URL),
 
   openGraph: {
-    title: "About Taskoria — Trusted Local Services Marketplace",
+    title: "About Taskoria | Trusted Local Services Across Australia",
     description:
-      "Learn how Taskoria connects Australians with verified local professionals through a safer, simpler, and more reliable services marketplace.",
-    url: "https://www.taskoria.com/about-us",
+      "See how Taskoria connects Australians with verified local professionals for safer, simpler service hiring.",
+    url: `${BASE_URL}/about-us`,
     siteName: "Taskoria",
     images: [
       {
@@ -45,9 +60,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "About Taskoria — Trusted Local Services Marketplace",
+    title: "About Taskoria | Trusted Local Services Across Australia",
     description:
-      "Discover how Taskoria helps Australians hire verified local professionals safely and easily.",
+      "Compare verified local professionals, request free quotes, and hire with confidence on Taskoria.",
     images: ["/images/providers.jpeg"],
   },
 
@@ -57,15 +72,42 @@ export const metadata: Metadata = {
   },
 
   alternates: {
-    canonical: "https://www.taskoria.com/about-us",
+    canonical: `${BASE_URL}/about-us`,
+  },
+};
+
+const aboutPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: "About Taskoria",
+  url: `${BASE_URL}/about-us`,
+  description:
+    "Taskoria helps Australians compare verified local professionals, request free quotes, and hire safely for home, business, and digital services.",
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Taskoria",
+    url: BASE_URL,
+  },
+  about: {
+    "@type": "Organization",
+    name: "Taskoria",
+    url: BASE_URL,
+    logo: `${BASE_URL}/taskorialogo2026.png`,
+    sameAs: ["https://www.trustpilot.com/review/taskoria.com"],
   },
 };
 export default function AboutUs() {
   const stats = [
-    { value: "500+", label: "Verified Providers" },
-    { value: "5K+", label: "Jobs Completed" },
+    { value: "50+", label: "Verified Providers" },
     { value: "99.8%", label: "Satisfaction Rate" },
-    { value: "$5M+", label: "Protected Payments" },
+    { value: "99.9%", label: "Secure Transactions" },
+    { value: "24/7", label: "Customer Support" },
+    ];
+
+  const trustProof = [
+    "Provider identity checks",
+    "Reviews and profile history",
+    "Support for job-related issues",
   ];
 
   const values = [
@@ -122,9 +164,12 @@ export default function AboutUs() {
     },
   ];
 
+  const priorityServices = getPriorityServiceLinks(undefined, 6);
+  const priorityCities = getPriorityCityLinks(undefined, 4);
+
   return (
     <div className=" from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 transition-colors">
-      <section className="max-w-7xl mx-auto flex justify-between relative py-24 mb-8 items-center text-center md:text-left overflow-hidden px-6">
+      <section className="max-w-7xl mx-auto grid gap-10 lg:grid-cols-[minmax(0,1fr)_420px] relative py-16 md:py-24 mb-8 items-center text-center md:text-left overflow-hidden px-6">
         <div className="relative text-black dark:text-white z-10 max-w-2xl">
           <div className="flex items-center gap-2 mb-6 md:justify-start justify-center">
             <div
@@ -146,20 +191,66 @@ export default function AboutUs() {
           </h1>
 
           <p className="text-xl text-slate-700 dark:text-blue-200 max-w-3xl leading-relaxed">
-            We're on a mission to make finding trusted service providers safe,
+            We&apos;re on a mission to make finding trusted service providers safe,
             simple, and secure for every Australian. Because when it comes to
-            your home and family, trust isn't optional.
+            your home and family, trust isn&apos;t optional.
           </p>
+
+          <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center md:justify-start">
+            <Link
+              href="/post-a-job"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            >
+              Post a job free
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/services"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-5 text-sm font-semibold text-slate-900 transition-colors hover:border-blue-300 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:hover:border-blue-500"
+            >
+              Browse services
+            </Link>
+          </div>
+
+          <div className="mt-7 grid gap-2 sm:grid-cols-3">
+            {trustProof.map((item) => (
+              <div
+                key={item}
+                className="flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 md:justify-start"
+              >
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-blue-600" />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="shrink-0 hidden md:flex items-center">
-          <Image
-            src="/images/team.svg"
-            alt="team image"
-            width={480}
-            height={480}
-            className="w-[320px] lg:w-120 h-auto"
-          />
+        <div className="hidden md:block">
+          <div className="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl dark:border-slate-700 dark:bg-slate-900">
+            <Image
+              src="/images/team.svg"
+              alt="Taskoria team supporting trusted local service connections"
+              width={480}
+              height={480}
+              className="h-auto w-full bg-blue-50 p-8 dark:bg-slate-800"
+              priority
+            />
+            <div className="grid grid-cols-2 border-t border-slate-200 dark:border-slate-700">
+              {stats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="border-slate-200 px-4 py-4 text-left odd:border-r dark:border-slate-700"
+                >
+                  <div className="text-2xl font-bold text-[#2563EB]">
+                    {stat.value}
+                  </div>
+                  <div className="mt-1 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
       <section className=" relative  mx-auto w-full bg-white overflow-hidden mb-8">
@@ -185,7 +276,7 @@ export default function AboutUs() {
               What We Stand For
             </h2>
             <p className="text-lg text-slate-700 max-w-3xl mx-auto dark:text-slate-300">
-              These aren't just values on a wall. They're the principles that
+              These aren&apos;t just values on a wall. They&apos;re the principles that
               guide every decision we make and every feature we build.
             </p>
           </div>
@@ -220,7 +311,7 @@ export default function AboutUs() {
             Our Journey
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-            From a small startup to Australia's most trusted service marketplace
+            From a small startup to Australia&apos;s most trusted service marketplace
           </p>
         </div>
 
@@ -259,6 +350,70 @@ export default function AboutUs() {
           </div>
         </div>
       </section>
+
+      <section className="mx-auto max-w-7xl px-6 pb-20">
+        <div className="grid gap-6 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-center">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-widest text-blue-600 dark:text-blue-400">
+              Ready to use Taskoria?
+            </p>
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+              Start with a trusted local professional
+            </h2>
+            <p className="mt-3 max-w-2xl text-slate-600 dark:text-slate-300">
+              Tell us what you need, compare responses from local providers,
+              and keep the whole job easier to manage from first quote to final
+              message.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+            <Link
+              href="/post-a-job"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-4 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+            >
+              Get free quotes
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/join"
+              className="inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-900 transition-colors hover:border-blue-300 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+            >
+              Join as a provider
+            </Link>
+          </div>
+        </div>
+
+        <InternalLinkModule
+          className="mt-8"
+          eyebrow="Popular next steps"
+          title="Explore Taskoria's priority pages"
+          description="Use these links to find services, learn how safer hiring works, or browse key Australian locations."
+          groups={[
+            {
+              title: "Core pages",
+              links: [
+                { href: "/services", label: "Browse all services" },
+                { href: "/trust-safety", label: "Trust and safety" },
+                { href: "/locations", label: "Service locations" },
+                { href: "/how-it-works", label: "How Taskoria works" },
+              ],
+            },
+            {
+              title: "Priority services",
+              links: priorityServices,
+            },
+            {
+              title: "Popular locations",
+              links: priorityCities,
+            },
+          ]}
+        />
+      </section>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageSchema) }}
+      />
     </div>
   );
 }

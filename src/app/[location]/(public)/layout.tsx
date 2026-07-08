@@ -320,8 +320,8 @@ export default function RootLayout({
               <Toaster position="top-right" richColors expand closeButton />
               <Footer currentYear={new Date().getFullYear()} />
               {/* <ChatbotWidget/> */}
-              <WhatsAppSupportButton/>
-              {/* <TaskoriaAgent /> */}
+              {/* <WhatsAppSupportButton/> */}
+              <TaskoriaAgent />
             </UserProvider>
           </ThemeProvider>
         </AuthProvider>

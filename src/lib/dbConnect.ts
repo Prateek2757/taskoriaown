@@ -7,12 +7,22 @@ declare global {
 }
 
 const configuredPoolMax = Number(process.env.PG_POOL_MAX);
+const configuredIdleTimeout = Number(process.env.PG_IDLE_TIMEOUT_MS);
+const configuredConnectionTimeout = Number(process.env.PG_CONNECTION_TIMEOUT_MS);
 const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
 const poolMax = Number.isFinite(configuredPoolMax) && configuredPoolMax > 0
   ? configuredPoolMax
-  : isProductionBuild
+  : process.env.NODE_ENV === "production" || isProductionBuild
     ? 1
     : 2;
+const idleTimeoutMillis =
+  Number.isFinite(configuredIdleTimeout) && configuredIdleTimeout > 0
+    ? configuredIdleTimeout
+    : 5000;
+const connectionTimeoutMillis =
+  Number.isFinite(configuredConnectionTimeout) && configuredConnectionTimeout > 0
+    ? configuredConnectionTimeout
+    : 10000;
 
 if (
   process.env.NODE_ENV !== "production" &&
@@ -31,8 +41,8 @@ const pool =
       ? { rejectUnauthorized: false }
       : false,
     max: poolMax,
-    idleTimeoutMillis: 10000,   
-    connectionTimeoutMillis: 10000,
+    idleTimeoutMillis,
+    connectionTimeoutMillis,
   });
 
 if (process.env.NODE_ENV !== "production") {
