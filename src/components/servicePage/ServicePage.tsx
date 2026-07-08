@@ -219,6 +219,7 @@ export default function ServicePageClient({
           {!citySlug && (
             <StepWiseHowItWorks
               serviceName={service.name}
+              serviceDetail={service.service_detail}
               onPostJob={handleSelectCategory}
             />
           )}

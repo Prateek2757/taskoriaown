@@ -5,6 +5,7 @@ import { FaRegPenToSquare } from "react-icons/fa6";
 import { IoIosSearch } from "react-icons/io";
 import { MdOutlinePostAdd } from "react-icons/md";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 interface Step {
   title: string;
@@ -16,9 +17,9 @@ interface HowItWorksProps {
   serviceSlug?: string;
   onPostJob?: () => void;
   steps?: Step[];
-  cityName?: string; // e.g. "Sydney"
+  cityName?: string;
+  serviceDetail?: string;
 }
-
 function getBreadcrumbLabel(name: string) {
   const irregulars: Record<string, string> = {
     "House Cleaning": "Cleaners",
@@ -55,33 +56,66 @@ const CITY_STEPS = (
   proLabel: string,
   city: string,
 ): Step[] => [
-  {
-    title: `Need ${proLabel.endsWith("s") ? "a " + proLabel.slice(0, -1).toLowerCase() : "a " + proLabel.toLowerCase()} in ${city}?`,
-    description: `Choosing the right ${serviceName.toLowerCase()} professional for your home can feel overwhelming. At Taskoria, we take the hassle out of finding and contacting verified ${proLabel.toLowerCase()} across ${city}. Simply tell us what you need and we'll do the rest.`,
-  },
-  {
-    title: `Get quotes from the best ${proLabel.toLowerCase()} in ${city}`,
-    description: `Once your ${serviceName.toLowerCase()} requirements are set out, we'll quickly send you quotes from trusted professionals in your part of ${city}. You can turn on notifications to hear from a pro straight away, or simply check your messages when it suits you. It's that flexible.`,
-  },
-  {
-    title: `Hire your local ${serviceName.toLowerCase()} pro`,
-    description: `After receiving your quotes, it's time to hire. You'll have your pick of ${city}'s best ${serviceName.toLowerCase()} professionals. Compare profiles, read genuine customer reviews, and choose the perfect professional for your job.`,
-  },
-];
+    {
+      title: `Need ${proLabel.endsWith("s") ? "a " + proLabel.slice(0, -1).toLowerCase() : "a " + proLabel.toLowerCase()} in ${city}?`,
+      description: `Choosing the right ${serviceName.toLowerCase()} professional for your home can feel overwhelming. At Taskoria, we take the hassle out of finding and contacting verified ${proLabel.toLowerCase()} across ${city}. Simply tell us what you need and we'll do the rest.`,
+    },
+    {
+      title: `Get quotes from the best ${proLabel.toLowerCase()} in ${city}`,
+      description: `Once your ${serviceName.toLowerCase()} requirements are set out, we'll quickly send you quotes from trusted professionals in your part of ${city}. You can turn on notifications to hear from a pro straight away, or simply check your messages when it suits you. It's that flexible.`,
+    },
+    {
+      title: `Hire your local ${serviceName.toLowerCase()} pro`,
+      description: `After receiving your quotes, it's time to hire. You'll have your pick of ${city}'s best ${serviceName.toLowerCase()} professionals. Compare profiles, read genuine customer reviews, and choose the perfect professional for your job.`,
+    },
+  ];
 
+function getStepsFromHtml(html?: string): Step[] {
+  if (!html) return [];
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  const result: Step[] = [];
+
+  const headings = Array.from(doc.querySelectorAll("h3"));
+
+  headings.forEach((heading) => {
+    const paragraph = heading.nextElementSibling;
+
+    if (paragraph?.tagName === "P") {
+      result.push({
+        title: heading.textContent?.trim() ?? "",
+        description: paragraph.textContent?.trim() ?? "",
+      });
+    }
+  });
+
+  return result;
+}
 export default function StepWiseHowItWorks({
   serviceName,
   onPostJob,
   steps,
   cityName,
+  serviceDetail,
 }: HowItWorksProps) {
   const proLabel = getBreadcrumbLabel(serviceName);
 
-  const items =
-    steps ??
-    (cityName
-      ? CITY_STEPS(serviceName, proLabel, cityName)
-      : DEFAULT_STEPS(serviceName));
+  const [dbSteps, setDbSteps] = useState<Step[]>([]);
+
+  useEffect(() => {
+    setDbSteps(getStepsFromHtml(serviceDetail));
+  }, [serviceDetail]);
+
+  const items = (
+    dbSteps.length > 0
+      ? dbSteps
+      : steps ??
+      (cityName
+        ? CITY_STEPS(serviceName, proLabel, cityName)
+        : DEFAULT_STEPS(serviceName))
+  ).slice(0, 3);
   const icons = [FaRegPenToSquare, IoIosSearch, MdOutlinePostAdd];
   const ctaLabels = ["Post a job", "Compare quotes", "Hire a pro"];
   const images = [
@@ -89,6 +123,8 @@ export default function StepWiseHowItWorks({
     "/recieveqoutes.svg",
     "/verified.svg",
   ];
+
+
   return (
     <section
       aria-label={`How to hire a ${serviceName} professional${cityName ? ` in ${cityName}` : ""}`}
@@ -180,10 +216,8 @@ export default function StepWiseHowItWorks({
                   </p>
                 </div>
                 <button className="mt-auto self-start flex items-center gap-2 text-xs bg-gray-200 text-blue-600  border border-slate-200 dark:border-slate-700 rounded-full px-4 py-2 hover:bg-blue-200 dark:text-[#2563EB] transition-colors">
-                  <Icon
-                    className={`ti ${icons[i] ?? "ti-circle"} text-base `}
-                    size={20}
-                  />
+
+                  <Icon className="text-base" size={20} />
                   {ctaLabels[i] ?? "Learn more"}
                 </button>
               </div>
