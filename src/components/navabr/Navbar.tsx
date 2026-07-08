@@ -67,7 +67,7 @@ export default function ModernNavbar({
             />
           </Link>
 
-          <div className="hidden min-[380px]:block">
+          <div className="block shrink-0">
             <Explore />
           </div>
 

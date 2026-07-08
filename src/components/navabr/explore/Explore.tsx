@@ -10,6 +10,7 @@ import {
   MdEventAvailable,
   MdFastfood,
   MdKeyboardArrowRight,
+  MdOutlineExplore,
   MdOutlinePets,
 } from "react-icons/md";
 import { PiSprayBottle } from "react-icons/pi";
@@ -80,13 +81,13 @@ export default function Explore() {
     return categories.filter(
       (cat) =>
         cat.main_category?.toLowerCase().trim() ===
-        currentMenu.toLowerCase().trim(),
+        currentMenu.toLowerCase().trim()
     );
   }, [currentMenu, isMoreMenu, categories]);
 
   const { paginatedData: paginatedCategories } = usePagination(
     filteredCategories,
-    7,
+    7
   );
 
   const filteredPopularServices = useMemo(() => {
@@ -96,7 +97,7 @@ export default function Explore() {
 
   const { paginatedData: paginatedFilteredPopularServices } = usePagination(
     filteredPopularServices,
-    6,
+    6
   );
 
   const goToMenu = (menu: string) => {
@@ -115,13 +116,15 @@ export default function Explore() {
     <div ref={containerRef} className="relative md:static z-[70]">
       <button
         type="button"
-        className="flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-gray-200 dark:hover:bg-gray-800"
+        className="flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:text-gray-200 dark:hover:bg-gray-800 min-[420px]:px-3"
         onClick={() => setShowMenu((open) => !open)}
         aria-haspopup="menu"
         aria-expanded={showMenu}
         aria-controls="explore-services-menu"
+        aria-label="Explore services"
       >
-        <span>Explore</span>
+        {/* <MdOutlineExplore size={18} className="min-[420px]:hidden" /> */}
+        <span className="">Explore</span>
         {showMenu ? <IoCaretUp size={16} /> : <IoCaretDown size={16} />}
       </button>
 
@@ -129,19 +132,26 @@ export default function Explore() {
         <div
           id="explore-services-menu"
           role="menu"
-          className="absolute
-  top-full mt-2
-  right-0
+          className="fixed
+  inset-x-3
+  top-[3.75rem]
+  max-h-[calc(100dvh-5rem)]
+  w-75
+  sm:absolute
+  sm:inset-x-auto
+  sm:top-full
+  sm:mt-2
+  sm:w-[320px]
+  sm:max-w-[calc(100vw-24px)]
   lg:right-auto
   lg:left-0
-  w-[320px]
-  max-w-[calc(100vw-24px)]
   bg-white
   border border-gray-200
   shadow-xl
   rounded-xl
   z-[100]
-  overflow-hidden
+  overflow-x-hidden
+  overflow-y-auto
   dark:bg-slate-950"
         >
           <AnimatePresence mode="popLayout" initial={false}>
