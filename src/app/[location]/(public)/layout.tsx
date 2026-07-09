@@ -2,7 +2,7 @@ import "../../globals.css";
 import { UserProvider } from "@/context/userContext";
 import AuthProvider from "@/context/AuthProvider";
 import { Toaster } from "sonner";
-import ModernNavbar from "@/components/navabr/Navbar";
+import NavbarServer from "@/components/navabr/NavbarServer";
 import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
 import { Poppins, Bricolage_Grotesque } from "next/font/google";
@@ -13,6 +13,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
 import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 import WhatsAppSupportButton from "@/components/supportChatbox";
+import ChatbotWidget from "@/components/ChatbotWidget";
+import TaskoriaAgent from "@/components/TaskoriaAgent";
 
 export const BASE_URL = "https://www.taskoria.com";
 export const SITE_NAME = "Taskoria";
@@ -130,6 +132,56 @@ export const viewport: Viewport = {
   userScalable: true,
 };
 
+const stripBrowserExtensionAttributesScript = `
+(() => {
+  const attributeName = "bis_skin_checked";
+  const selector = "[" + attributeName + "]";
+
+  const strip = (root) => {
+    if (!root) return;
+
+    if (root.nodeType === 1 && root.removeAttribute) {
+      root.removeAttribute(attributeName);
+    }
+
+    if (root.querySelectorAll) {
+      root.querySelectorAll(selector).forEach((node) => {
+        node.removeAttribute(attributeName);
+      });
+    }
+  };
+
+  strip(document.documentElement);
+
+  if (typeof MutationObserver === "undefined" || !document.documentElement) {
+    return;
+  }
+
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === "attributes") {
+        mutation.target.removeAttribute(attributeName);
+        return;
+      }
+
+      mutation.addedNodes.forEach(strip);
+    });
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: [attributeName],
+    childList: true,
+    subtree: true,
+  });
+
+  window.setTimeout(() => {
+    observer.disconnect();
+    strip(document.documentElement);
+  }, 10000);
+})();
+`;
+
 export function generateStaticParams() {
   return [{ location: "en" }];
 }
@@ -194,6 +246,13 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <Script
+          id="strip-browser-extension-hydration-attributes"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: stripBrowserExtensionAttributesScript,
+          }}
+        />
         <link
           rel="stylesheet"
           href="https://www.gstatic.com/chat-messenger/sdk/prod/v1.16/themes/chat-messenger-default.css"
@@ -255,14 +314,14 @@ export default function RootLayout({
             <Analytics />
             <UserProvider>
               <BreadcrumbJsonLd />
-              <ModernNavbar />
+              <NavbarServer />
               <main>{children}</main>
               <SpeedInsights />
               <Toaster position="top-right" richColors expand closeButton />
               <Footer currentYear={new Date().getFullYear()} />
               {/* <ChatbotWidget/> */}
-              <WhatsAppSupportButton/>
-              {/* <TaskoriaAgent /> */}
+              {/* <WhatsAppSupportButton/> */}
+              <TaskoriaAgent />
             </UserProvider>
           </ThemeProvider>
         </AuthProvider>

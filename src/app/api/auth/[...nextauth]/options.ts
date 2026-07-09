@@ -87,6 +87,7 @@ export const authOptions: NextAuthOptions = {
 
           LEFT JOIN roles r ON r.role_id = u.default_role_id
           WHERE u.email = $1 AND u.is_deleted = FALSE
+          LIMIT 1
           `,
           [email]
         );
@@ -152,7 +153,8 @@ export const authOptions: NextAuthOptions = {
           LEFT JOIN  company c ON u.user_id = c.user_id
 
           LEFT JOIN professional_subscriptions ps ON u.user_id = ps.user_id
-          where  u.email = $1 AND u.is_deleted = FALSE  `,
+          where  u.email = $1 AND u.is_deleted = FALSE
+          LIMIT 1`,
           [email]
         );
 

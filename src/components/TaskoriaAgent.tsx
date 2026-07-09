@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { MessageCircle, X } from "lucide-react";
 
 const CHAT_SDK_URL =
   "https://www.gstatic.com/chat-messenger/sdk/prod/v1.16/chat-messenger.js";
@@ -61,21 +62,6 @@ declare global {
         slot?: string;
         "title-text"?: string;
       };
-      "chat-toggle-dialog-button": React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & {
-        slot?: string;
-        "title-text-expanded"?: string;
-        "title-text-collapsed"?: string;
-      };
-      "chat-messenger-close-button": React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & {
-        slot?: string;
-        "title-text"?: string;
-      };
     }
   }
 }
@@ -90,10 +76,13 @@ function isChatSdkReady() {
 }
 
 export default function TaskoriaAgent() {
+  const panelRef = useRef<HTMLDivElement | null>(null);
+
   const messengerRef = useRef<HTMLElement | null>(null);
   const cooldownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cooldownUntilRef = useRef<number>(0);
 
+  const [isOpen, setIsOpen] = useState(false);
   const [isCoolingDown, setIsCoolingDown] = useState(false);
 
   const startCooldown = useCallback(() => {
@@ -204,6 +193,13 @@ export default function TaskoriaAgent() {
     };
 
     const handleClick = (event: MouseEvent) => {
+      const panel = panelRef.current;
+
+      if (isOpen && panel && !panel.contains(event.target as Node)) {
+        setIsOpen(false);
+        return;
+      }
+
       if (!isInsideMessenger(event)) return;
 
       if (shouldBlockMessage()) {
@@ -238,12 +234,12 @@ export default function TaskoriaAgent() {
       }
     };
   }, [
+    isOpen,
     registerAgent,
     isInsideMessenger,
     shouldBlockMessage,
     startCooldown,
   ]);
-
   return (
     <>
       <Script
@@ -253,69 +249,217 @@ export default function TaskoriaAgent() {
         onReady={registerAgent}
       />
 
-      {isCoolingDown && (
-        <div
-          style={{
-            position: "fixed",
-            right: 16,
-            bottom: 88,
-            zIndex: 9998,
-            background: "#111827",
-            color: "#fff",
-            padding: "8px 12px",
-            borderRadius: 999,
-            fontSize: 13,
-            boxShadow: "0 8px 24px rgba(0,0,0,0.18)",
-          }}
+      {!isOpen && (
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          className="taskoria-agent-launcher"
+          aria-label="Open Taskoria chat"
         >
+          <MessageCircle aria-hidden="true" size={18} />
+          <span>Chat with Taskoria</span>
+        </button>
+      )}
+{/* 
+      {isOpen && isCoolingDown && (
+        <div className="taskoria-agent-cooldown" role="status">
           Agent is replying...
         </div>
-      )}
+      )} */}
 
-<chat-messenger
-  ref={messengerRef}
-  render-mode="slide-over"
-  language-code="en"
-  max-query-length="500"
-  url-allowlist="https://taskoria.com,http://localhost:3000"
-  style={{
-    position: "fixed",
-    right: 16,
-    bottom: 16,
-    zIndex: 9999,
-
-    width: "400px",
-    height: "600px",
-    maxWidth: "calc(100vw - 32px)",
-    maxHeight: "calc(100vh - 32px)",
-
-    display: "block",
-    pointerEvents: isCoolingDown ? "none" : "auto",
-  }}
->
-        <chat-messenger-container
-          chat-title="Taskoria Agent"
-          chat-title-icon="https://gstatic.com/dialogflow-console/common/assets/ccai-favicons/conversational_agents.png"
-          enable-file-upload=""
-          enable-audio-input=""
+      <div ref={panelRef} className="taskoria-agent-panel" data-open={isOpen}>
+        {" "}
+        <chat-messenger
+          ref={messengerRef}
+          render-mode="slide-over"
+          language-code="en"
+          max-query-length="500"
+          url-allowlist="https://taskoria.com,http://localhost:3000"
+          className="taskoria-agent-messenger"
+          data-cooling={isCoolingDown}
         >
-          <chat-reset-session-button
-            slot="titlebar-actions"
-            title-text="Start new chat"
-          />
+          <chat-messenger-container
+            chat-title="Taskoria Agent"
+            chat-title-icon="https://gstatic.com/dialogflow-console/common/assets/ccai-favicons/conversational_agents.png"
+            enable-file-upload=""
+            enable-audio-input=""
+          >
+            <chat-reset-session-button
+              slot="titlebar-actions"
+              title-text="Start new chat"
+            />
+          </chat-messenger-container>
+        </chat-messenger>
+        <button
+          type="button"
+          onClick={() => setIsOpen(false)}
+          className="taskoria-agent-close"
+          aria-label="Close Taskoria chat"
+        >
+          <X aria-hidden="true" size={16} />
+          <span>Close chat</span>
+        </button>
+      </div>
 
-          <chat-toggle-dialog-button
-            slot="titlebar-actions"
-            title-text-expanded="Collapse"
-            title-text-collapsed="Expand"
-          />
+      <style>{`
+        .taskoria-agent-launcher {
+          position: fixed;
+          right: 16px;
+          bottom: max(16px, env(safe-area-inset-bottom));
+          z-index: 9999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          max-width: calc(100vw - 32px);
+          border: none;
+          outline: none;
+          cursor: pointer;
+          border-radius: 999px;
+          padding: 14px 18px;
+          background: linear-gradient(360deg, #2563eb, #2563eb,#3970F3);
+          color: #fff;
+          font-size: 15px;
+          font-weight: 600;
+          line-height: 1;
+          box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
+        }
 
-          <chat-messenger-close-button
-            slot="titlebar-actions"
-            title-text="Close"
-          />
-        </chat-messenger-container>
-      </chat-messenger>
+        .taskoria-agent-cooldown {
+          position: fixed;
+          right: 16px;
+          bottom: min(590px, calc(100dvh - 64px));
+          z-index: 10001;
+          background: #111827;
+          color: #fff;
+          padding: 8px 12px;
+          border-radius: 999px;
+          font-size: 13px;
+          line-height: 1.2;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        }
+
+        .taskoria-agent-panel {
+          position: fixed;
+          right: 16px;
+          bottom: max(16px, env(safe-area-inset-bottom));
+          z-index: 10000;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          width: min(350px, calc(100vw - 32px));
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(20px);
+          transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+          pointer-events: none;
+        }
+
+        .taskoria-agent-panel[data-open="true"] {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+          pointer-events: auto;
+        }
+
+        .taskoria-agent-messenger {
+          display: block;
+          width: 100%;
+          height: min(550px, calc(100dvh - 90px));
+          max-height: calc(100vh - 90px);
+          border-radius: 28px;
+          overflow: hidden;
+          box-shadow: 0 18px 45px rgba(15, 23, 42, 0.22);
+        }
+
+        .taskoria-agent-messenger[data-cooling="true"] {
+          pointer-events: none;
+        }
+
+        .taskoria-agent-close {
+          display: flex;
+          width: 100%;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          border: 1px solid #e5e7eb;
+          background: #ffffff;
+          color: #374151;
+          border-radius: 999px;
+          padding: 11px 16px;
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 1;
+          cursor: pointer;
+          box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+        }
+
+        @supports not (height: 100dvh) {
+          .taskoria-agent-cooldown {
+            bottom: min(590px, calc(100vh - 64px));
+          }
+
+          .taskoria-agent-messenger {
+            height: min(550px, calc(100vh - 90px));
+          }
+        }
+
+        @media (max-width: 640px) {
+          .taskoria-agent-launcher {
+            right: 12px;
+            bottom: max(12px, env(safe-area-inset-bottom));
+            max-width: calc(100vw - 24px);
+            padding: 13px 16px;
+            font-size: 14px;
+          }
+
+          .taskoria-agent-cooldown {
+            top: max(12px, env(safe-area-inset-top));
+            right: 12px;
+            bottom: auto;
+            left: 12px;
+            text-align: center;
+          }
+
+          .taskoria-agent-panel {
+            right: 10px;
+            bottom: max(10px, env(safe-area-inset-bottom));
+            left: 10px;
+            width: auto;
+
+          }
+
+          .taskoria-agent-messenger {
+            height: calc(100dvh - 20px - env(safe-area-inset-bottom));
+            max-height: none;
+            border-radius: 18px;
+          }
+
+          .taskoria-agent-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-color: rgba(209, 213, 219, 0.9);
+            background: rgba(255, 255, 255, 0.95);
+            color: #111827;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
+          }
+
+          .taskoria-agent-close span {
+            display: none;
+          }
+        }
+
+        @media (max-width: 360px) {
+          .taskoria-agent-launcher {
+            width: calc(100vw - 24px);
+          }
+        }
+      `}</style>
     </>
   );
 }

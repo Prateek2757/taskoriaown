@@ -101,10 +101,12 @@ export async function POST(req: Request) {
     const categoryname = categoryRes.rows[0]?.name || "Task";
 
     const adminRes = await client.query(
-      `SELECT email FROM users WHERE role='admin'`
+      `SELECT user_id, email FROM users WHERE role='admin'`
     );
-    const adminEmails: string[] = adminRes.rows.map((r) => r.email);
-
+    const adminEmails: string[] = [
+      ...adminRes.rows.map((r) => r.email),
+      "contact@taskoria.com",
+    ];
     const providersRes = await client.query(
       `
       SELECT u.email, u.user_id, up.display_name
@@ -140,6 +142,7 @@ export async function POST(req: Request) {
           action_url: "/provider/leads",
         }).catch(console.error);
       });
+
     } else {
       adminEmails.forEach((adminEmail) => {
         emailQueue.push({
@@ -148,6 +151,18 @@ export async function POST(req: Request) {
           type: "task-posted-no-budget",
           taskTitle: categoryname,
         });
+      });
+
+      adminRes.rows.forEach((admin) => {
+        createNotification({
+          userId: String(admin.user_id),
+          type: "task_posted",
+          user_name: String(session.user.name),
+          title: `${session.user.name} posted a task without budget`,
+          body: `New ${categoryname} task needs budget review`,
+          action_url: "/admin/adminbudgetmanager",
+          role: "admin",
+        }).catch(console.error);
       });
     }
 

@@ -82,6 +82,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "nxjjwcmekcwsdiaoloqy.supabase.co",
+      },
+      {
+        protocol: "https",
         hostname: "avatar.vercel.sh",
       },
         {
