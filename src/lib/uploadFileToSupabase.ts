@@ -7,7 +7,10 @@ export async function uploadToSupabase(file: File, folder: string) {
 
   const { error } = await supabaseBrowser.storage
     .from("taskoria")
-    .upload(filePath, file);
+    .upload(filePath, file, {
+      cacheControl: "31536000",
+      upsert: false,
+    });
 
   if (error) throw error;
 

@@ -10,7 +10,7 @@ export async function GET() {
 
   const { data } = await supabaseAdmin
     .from('notifications')
-    .select('*')
+    .select('notification_id, title, body, is_read, created_at, type, action_url, role, user_name, user_avatar, action_buttons, attachment')
     .eq('user_id', Number(session.user.id))
     .order('created_at', { ascending: false })
     .limit(20)

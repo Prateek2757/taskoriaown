@@ -16,7 +16,7 @@ const {userId} = await params;
 
     const { data: subscription, error } = await supabaseBrowser
       .from("professional_subscriptions")
-      .select("*")
+      .select("subscription_id, package_id, status, end_date, cancel_at_period_end")
       .eq("user_id", userId)
       .in("status", ["active","trialing"])
       .gte("end_date", new Date().toISOString())
