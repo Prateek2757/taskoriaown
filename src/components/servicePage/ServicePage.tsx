@@ -231,7 +231,8 @@ export default function ServicePageClient({
               onPostJob={handleSelectCategory}
             />
           )}
-          {!citySlug && (
+       
+          {!citySlug && service.seo_service_details && (
             <WhyBookByTaskoria
               serviceName={service.name}
               seo_service_details={service.seo_service_details}

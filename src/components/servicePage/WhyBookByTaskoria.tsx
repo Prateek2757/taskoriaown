@@ -62,6 +62,7 @@ export default function WhyBookByTaskoria({
     );
 
     return (
+
         <section className="relative py-8 px-4 dark:from-slate-950 dark:to-slate-900 overflow-hidden">
 
             <div className="text-center mb-12">
@@ -113,8 +114,8 @@ export default function WhyBookByTaskoria({
                             <h2 className="text-xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
                                 Popular {serviceName} Jobs
                                 <br />
-                                People Book on{" "}
-                                <span className="text-[#2563EB] dark:text-blue-400">Taskoria</span>
+
+                                <span className="text-[#2563EB] dark:text-blue-400"> People Book on{" "}Taskoria</span>
                             </h2>
                         </div>
                         <p className="text-center text-slate-500 dark:text-slate-400 text-sm md:text-base mb-12">
