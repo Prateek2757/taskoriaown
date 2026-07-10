@@ -62,7 +62,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         const { email, password } = credentials;
-
+        console.time("db-query");
         const result = await pool.query(
           `
           SELECT 
@@ -92,13 +92,16 @@ export const authOptions: NextAuthOptions = {
           [email]
         );
 
+        console.timeEnd("db-query");
         if (result.rows.length === 0) {
           throw new Error("User not found");
         }
 
         const user = result.rows[0];
-
+        console.time("bcrypt-compare");
         const valid = await bcrypt.compare(password, user.password_hash);
+        console.timeEnd("bcrypt-compare");
+
         if (!valid) {
           throw new Error("Invalid password");
         }
