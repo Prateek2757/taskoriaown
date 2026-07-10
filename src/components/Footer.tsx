@@ -131,7 +131,7 @@ const Footer = ({ currentYear }: FooterProps) => {
               >
                 <Image
                   title="footer logo"
-                  src="/images/taskoria_logo.svg"
+                  src="/images/taskoria_logo.svg?v=bold-control-1"
                   alt="Taskoria - Trusted Local Services Marketplace in Australia"
                   width={350}
                   height={51}

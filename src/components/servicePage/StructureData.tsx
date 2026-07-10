@@ -75,6 +75,7 @@ export default function StructuredData({
   const websiteId = `${baseUrl}/#website`;
   const breadcrumbId = `${pageUrl}#breadcrumb`;
   const serviceId = `${pageUrl}#service`;
+  const localBusinessId = `${pageUrl}#local-business`;
 
   const breadcrumbItems: { name: string; url: string }[] = [
     { name: "Home", url: baseUrl },
@@ -211,6 +212,52 @@ export default function StructuredData({
           value: providers.length,
         },
       ],
+    }),
+    compact({
+      "@type": ["LocalBusiness", "ProfessionalService"],
+      "@id": localBusinessId,
+      name:
+        serviceAreaName !== "Australia"
+          ? `${service.name} professionals in ${serviceAreaName}`
+          : `Taskoria ${service.name} professionals`,
+      description,
+      url: pageUrl,
+      image: imageUrl,
+      telephone: "+61 1300 531 727",
+      email: "contact@taskoria.com",
+      priceRange: "$$",
+      parentOrganization: { "@id": organizationId },
+      makesOffer: { "@id": serviceId },
+      areaServed:
+        serviceAreaName === "Australia"
+          ? {
+              "@type": "Country",
+              name: "Australia",
+            }
+          : {
+              "@type": cityName || subCityName ? "City" : "State",
+              name: serviceAreaName,
+              ...(stateName && {
+                containedInPlace: {
+                  "@type": stateName === serviceAreaName ? "Country" : "State",
+                  name: stateName === serviceAreaName ? "Australia" : stateName,
+                },
+              }),
+            },
+      address: compact({
+        "@type": "PostalAddress",
+        addressCountry: "AU",
+        addressRegion: stateName ?? undefined,
+        addressLocality: subCityName ?? cityName ?? undefined,
+      }),
+      geo:
+        city?.latitude && city?.longitude
+          ? {
+              "@type": "GeoCoordinates",
+              latitude: city.latitude,
+              longitude: city.longitude,
+            }
+          : undefined,
     }),
   ];
 

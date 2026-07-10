@@ -141,6 +141,41 @@ const structuredData = {
     },
 
     {
+      "@type": ["LocalBusiness", "ProfessionalService"],
+      "@id": `${BASE_URL}/#local-business`,
+      name: "Taskoria Australia",
+      url: BASE_URL,
+      image: OG_IMAGE,
+      logo: LOGO,
+      description:
+        "Taskoria connects Australians with verified local professionals for home, business, trade, and digital services.",
+      telephone: "+61 1300 531 727",
+      email: "contact@taskoria.com",
+      priceRange: "$$",
+      parentOrganization: { "@id": `${BASE_URL}/#organization` },
+      areaServed: {
+        "@type": "Country",
+        name: "Australia",
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: "AU",
+      },
+      makesOffer: {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Local professional services marketplace",
+          serviceType: "Service Marketplace",
+          areaServed: {
+            "@type": "Country",
+            name: "Australia",
+          },
+        },
+      },
+    },
+
+    {
       "@type": "WebSite",
       "@id": `${BASE_URL}/#website`,
       url: BASE_URL,

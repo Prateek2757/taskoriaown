@@ -4,6 +4,7 @@ import { getToken } from "next-auth/jwt";
 
 const secret = process.env.NEXTAUTH_SECRET;
 const defaultLocale = "en";
+const publicLocalePrefixes = new Set(["en", "en-au", "au", "ne"]);
 
 const protectedPaths = [
   "/provider/dashboard",
@@ -18,7 +19,6 @@ const protectedPaths = [
 ];
 
 const blockedCrawlerUserAgentTokens = [
-  "google",
   "googlebot",
   "googleother",
   "google-inspectiontool",
@@ -44,18 +44,20 @@ function isCrawlerRequest(req: NextRequest) {
   );
 }
 
+function stripPublicLocale(pathname: string) {
+  const [, firstSegment = "", ...restSegments] = pathname.split("/");
+
+  if (!publicLocalePrefixes.has(firstSegment.toLowerCase())) {
+    return pathname;
+  }
+
+  const strippedPath = `/${restSegments.join("/")}`;
+
+  return strippedPath === "/" ? "/" : strippedPath.replace(/\/$/, "");
+}
+
 function stripDefaultLocale(pathname: string) {
-  const localePrefix = `/${defaultLocale}`;
-
-  if (pathname === localePrefix) {
-    return "/";
-  }
-
-  if (pathname.startsWith(`${localePrefix}/`)) {
-    return pathname.slice(localePrefix.length);
-  }
-
-  return pathname;
+  return stripPublicLocale(pathname);
 }
 
 function isSigninPath(pathname: string) {
@@ -114,8 +116,13 @@ async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const routePath = stripDefaultLocale(pathname);
-  const hasDefaultLocale = routePath !== pathname;
+  const routePath = stripPublicLocale(pathname);
+  const hasPublicLocalePrefix = routePath !== pathname;
+
+  if (hasPublicLocalePrefix) {
+    return NextResponse.redirect(new URL(`${routePath}${search}`, req.url), 308);
+  }
+
   const needsCreateRedirect = routePath.startsWith("/create");
   const needsAuth = protectedPaths.some((path) => routePath.startsWith(path));
   const needsSigninRedirect = routePath === "/signin";
@@ -146,14 +153,10 @@ async function proxy(req: NextRequest) {
 
   if (needsAuth) {
     if (!token) {
-      const url = new URL(withDefaultLocale("/signin"), req.url);
+      const url = new URL("/signin", req.url);
       url.searchParams.set("callbackUrl", pathname + search);
       return NextResponse.redirect(url, 307);
     }
-  }
-
-  if (hasDefaultLocale) {
-    return NextResponse.next();
   }
 
   const url = req.nextUrl.clone();

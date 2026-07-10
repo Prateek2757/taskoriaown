@@ -1,6 +1,7 @@
 import {
   BASE_URL,
   buildUrlsetXml,
+  canonicalCategories,
   canonicalSeoCities,
   fetchCategories,
   fetchCities,
@@ -11,10 +12,11 @@ import {
 export const revalidate = 604800;
 
 export async function GET() {
-  const [categories, cities] = await Promise.all([
+  const [categoriesRaw, cities] = await Promise.all([
     fetchCategories(),
     fetchCities(),
   ]);
+  const categories = canonicalCategories(categoriesRaw);
 
   const stateslugs = uniqueStateslugs(canonicalSeoCities(cities));
   const entries = [];

@@ -119,6 +119,20 @@ function buildServicePath(
   return segments.join("/");
 }
 
+function normalizeServiceSegments(slug: string[]) {
+  return slug.slice(0, 4).map((segment) => segment.toLowerCase());
+}
+
+function isCanonicalServiceSlug(slug: string[]) {
+  const normalizedSlug = normalizeServiceSegments(slug);
+
+  return (
+    slug.length <= 4 &&
+    normalizedSlug.length === slug.length &&
+    normalizedSlug.every((segment, index) => segment === slug[index])
+  );
+}
+
 async function getService(serviceSlug: string): Promise<ServiceData | null> {
   try {
     const service = (await getCategoryBySlug(serviceSlug)) as ServiceData | null;
@@ -244,7 +258,8 @@ function toDirectoryCity(city: City) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug = [] } = await params;
+  const { slug: rawSlug = [] } = await params;
+  const slug = normalizeServiceSegments(rawSlug);
   const [serviceSlug, stateSlug = null, citySlug = null, subCitySlug = null] =
     slug;
 
@@ -261,6 +276,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: { absolute: "Service Not Found | Taskoria" },
       robots: { index: false, follow: false },
+    };
+  }
+
+  if (!isCanonicalServiceSlug(rawSlug)) {
+    return {
+      title: { absolute: `${service.name} | Taskoria` },
+      robots: { index: false, follow: true },
+      alternates: {
+        canonical: buildCanonical(serviceSlug, stateSlug, citySlug, subCitySlug),
+      },
     };
   }
 
@@ -433,11 +458,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ServicePage({ params }: Props) {
-  const { slug = [] } = await params;
+  const { slug: rawSlug = [] } = await params;
+  const slug = normalizeServiceSegments(rawSlug);
   const [serviceSlug, stateSlug = null, citySlug = null, subCitySlug = null] =
     slug;
 
   if (!serviceSlug || serviceSlug === "undefined") notFound();
+
+  if (!isCanonicalServiceSlug(rawSlug)) {
+    redirect(buildServicePath(serviceSlug, stateSlug, citySlug, subCitySlug));
+  }
 
   const statePageDataPromise: Promise<[City[], StateData[]] | null> =
     stateSlug && !citySlug

@@ -43,7 +43,7 @@ const AppEmail = (props: AppEmailProps) => {
           company={props.company}
           taskTitle={props.taskTitle}
           taskLocation={props.taskLocation}
-        />
+        /> //sdd
       );
     case "task-posted-no-budget":
       return (

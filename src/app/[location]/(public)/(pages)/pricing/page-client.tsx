@@ -39,7 +39,7 @@ export default function TaskoriaProPage({
   const handleActivate = async (pkg: ProfessionalPackage) => {
     if (!session?.user?.id) {
       toast.error("Please Login or Signup to continue");
-      router.push("/signin")
+      router.push(`/signin?callbackUrl=${encodeURIComponent("/pricing")}`);
       return;
     }
 
@@ -435,7 +435,7 @@ export default function TaskoriaProPage({
                         Taskoria Verified Badge
                       </h4>
                       <p className="text-xs text-gray-600 dark:text-gray-400">
-                        Show clients you're a trusted professional
+                        Show clients you&apos;re a trusted professional
                       </p>
                     </div>
                   </div>

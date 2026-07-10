@@ -207,7 +207,7 @@ export default function FeaturesStacking() {
                   >
                     <Image
                       title="taskoria logo features"
-                      src="/images/taskoria_logo.svg"
+                      src="/images/taskoria_logo.svg?v=bold-control-1"
                       alt="Taskoria service marketplace logo"
                       width={32}
                       height={28}

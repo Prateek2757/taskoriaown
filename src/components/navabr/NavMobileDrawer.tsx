@@ -66,7 +66,7 @@ export default function NavMobileDrawer({
               onClick={onClose}
             >
               <Image
-                src="/images/taskoria_logo.svg"
+                src="/images/taskoria_logo.svg?v=bold-control-5"
                 alt="Taskoria"
                 width={150}
                 height={43}

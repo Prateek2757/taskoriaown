@@ -1,6 +1,7 @@
 import {
   BASE_URL,
   buildUrlsetXml,
+  canonicalCategories,
   fetchCategories,
   xmlResponse,
 } from "@/lib/sitemap-helpers";
@@ -8,7 +9,7 @@ import {
 export const revalidate = 604800;
 
 export async function GET() {
-  const categories = await fetchCategories();
+  const categories = canonicalCategories(await fetchCategories());
 
   return xmlResponse(
     buildUrlsetXml(

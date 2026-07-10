@@ -266,10 +266,25 @@ export function dedupeEntries<T extends { loc: string }>(entries: T[]): T[] {
   const seen = new Set<string>();
 
   return entries.filter((entry) => {
-    if (seen.has(entry.loc)) return false;
-    seen.add(entry.loc);
+    const loc = entry.loc.replace(/\/$/, "");
+
+    if (seen.has(loc)) return false;
+    seen.add(loc);
     return true;
   });
+}
+
+export function canonicalCategories(categories: Category[]): Category[] {
+  const canonical = new Map<string, Category>();
+
+  for (const category of categories) {
+    const slug = category.slug?.toLowerCase();
+
+    if (!slug || canonical.has(slug)) continue;
+    canonical.set(slug, { ...category, slug });
+  }
+
+  return Array.from(canonical.values());
 }
 
 export function serviceLocationSitemapPath(pageNumber: number): string {
@@ -298,10 +313,11 @@ export function canonicalSeoCities(cities: City[]): City[] {
 }
 
 export async function getServiceLocationSitemapCount(): Promise<number> {
-  const [categories, cities] = await Promise.all([
+  const [categoriesRaw, cities] = await Promise.all([
     fetchCategories(),
     fetchCities(),
   ]);
+  const categories = canonicalCategories(categoriesRaw);
 
   let total = 0;
   for (const city of canonicalSeoCities(cities)) {
@@ -320,10 +336,11 @@ export const getServiceSitemapCount = getServiceLocationSitemapCount;
 export async function buildServiceLocationSitemapEntries(
   sitemapIndex: number
 ): Promise<UrlEntry[]> {
-  const [categories, cities] = await Promise.all([
+  const [categoriesRaw, cities] = await Promise.all([
     fetchCategories(),
     fetchCities(),
   ]);
+  const categories = canonicalCategories(categoriesRaw);
 
   const sortedCities = canonicalSeoCities(cities).sort(
     (a, b) => b.popularity - a.popularity

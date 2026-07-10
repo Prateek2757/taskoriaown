@@ -5,8 +5,6 @@ import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useJoinAsProvider } from "@/hooks/useJoinAsProvider";
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -130,12 +128,17 @@ async function submitPendingLead(savedLead: string) {
   const timeout = window.setTimeout(() => controller.abort(), LEAD_SUBMIT_TIMEOUT_MS);
 
   try {
-    const submitRes = await axios.post("/api/leads", parsedData.value, {
+    const res = await fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(parsedData.value),
       signal: controller.signal,
     });
 
-    if (submitRes.data.error) {
-      throw new Error(submitRes.data.error);
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok || data.error) {
+      throw new Error(data.error || "Failed to submit request.");
     }
 
     localStorage.removeItem("pendingpayload");
@@ -147,8 +150,17 @@ async function submitPendingLead(savedLead: string) {
   }
 }
 
-function navigateAfterSignIn(destination: string) {
-  window.location.assign(destination);
+
+function scheduleIdle(fn: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+
+  if ("requestIdleCallback" in window) {
+    const id = window.requestIdleCallback(fn);
+    return () => window.cancelIdleCallback(id);
+  }
+
+  const id = window.setTimeout(fn, 200);
+  return () => window.clearTimeout(id);
 }
 
 
@@ -158,6 +170,7 @@ function SignInForm() {
     return getSignInErrorMessage(new URLSearchParams(window.location.search).get("error"));
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [joinLoading, setJoinLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -174,7 +187,6 @@ function SignInForm() {
   const router                          = useRouter();
   const params                          = useParams<{ location?: string }>();
   const location                        = params.location || DEFAULT_LOCATION;
-  const { joinAsProvider, loading: joinLoading } = useJoinAsProvider();
   const searchParams                    = useSearchParams();
   const next                            = searchParams.get("next");
   const callbackUrl                     = searchParams.get("callbackUrl");
@@ -182,10 +194,15 @@ function SignInForm() {
   const resumeRequest                   = searchParams.get("resume_request") === "1";
   const shouldSubmitPendingLead         = resumeRequest || !redirectPath;
 
+  // Prefetches are deferred to idle time so they don't compete with the
+  // sign-in form's own scripts/styles for bandwidth and main-thread time
+  // during initial load.
   useEffect(() => {
-    router.prefetch("/provider/dashboard");
-    router.prefetch("/customer/dashboard");
-    if (redirectPath) router.prefetch(withoutDefaultLocationPrefix(redirectPath));
+    return scheduleIdle(() => {
+      router.prefetch("/provider/dashboard");
+      router.prefetch("/customer/dashboard");
+      if (redirectPath) router.prefetch(withoutDefaultLocationPrefix(redirectPath));
+    });
   }, [router, redirectPath]);
 
   useEffect(() => {
@@ -261,13 +278,19 @@ function SignInForm() {
           redirectPath,
         });
 
-        navigateAfterSignIn(destination);
+        // Client-side navigation instead of a full page reload. The
+        // dashboards were already prefetched, so this is near-instant and
+        // avoids re-downloading/re-hydrating the whole JS bundle.
+        // router.refresh() re-runs server components so anything reading
+        // the session server-side (e.g. auth-gated layout data) is current.
+        router.push(destination);
+        router.refresh();
       } catch (err) {
         console.error("Sign in failed:", err);
         setMessage(err instanceof Error ? err.message : "Unable to sign in right now. Please try again.");
       }
     },
-    [redirectPath, shouldSubmitPendingLead],
+    [redirectPath, shouldSubmitPendingLead, router],
   );
 
   const handleGoogleSignIn = useCallback(() => {
@@ -278,6 +301,28 @@ function SignInForm() {
       }),
     });
   }, [redirectPath]);
+
+  // The join-as-provider hook (and its dependencies) is dynamically
+  // imported on click rather than eagerly at the top of the module, so
+  // its code doesn't add to the initial bundle for the common "sign in"
+  // path. Adjust the import target if useJoinAsProvider exposes something
+  // other than a plain callable — e.g. if it's implemented as a hook that
+  // itself calls other hooks, expose a plain async `joinAsProvider()`
+  // helper from that module for this dynamic-import pattern to work.
+  const handleJoinAsProvider = useCallback(async () => {
+    setJoinLoading(true);
+    try {
+      const mod = await import("@/hooks/useJoinAsProvider");
+      await mod.useJoinAsProvider?.();
+    } catch (err) {
+      console.error("Join as provider failed:", err);
+      setMessage(
+        err instanceof Error ? err.message : "Unable to start provider signup right now.",
+      );
+    } finally {
+      setJoinLoading(false);
+    }
+  }, []);
 
   return (
     <div className="bg-linear-to-b from-slate-50 via-white to-slate-100 px-4 py-10 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
@@ -424,7 +469,7 @@ function SignInForm() {
           <Button
             type="button"
             disabled={joinLoading}
-            onClick={() => joinAsProvider()}
+            onClick={handleJoinAsProvider}
             className="mt-3 h-11 w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900"
           >
             {joinLoading ? (

@@ -5,13 +5,13 @@ import {
   fetchCities,
   uniqueStateslugs,
   cityPriorityByRank,
+  canonicalSeoCities,
 } from "@/lib/sitemap-helpers";
-import { filterSeoLocations } from "@/lib/seo-locations";
 
 export const revalidate = 604800;
 
 export async function GET() {
-  const cities = filterSeoLocations(await fetchCities());
+  const cities = canonicalSeoCities(await fetchCities());
 
   const stateSlugs = uniqueStateslugs(cities);
   const sortedCities = [...cities].sort((a, b) => b.popularity - a.popularity);

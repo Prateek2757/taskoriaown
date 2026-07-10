@@ -81,7 +81,7 @@ export function DashboardLayout({
           <div className="w-10 h-10 rounded-xl shadow-glow flex items-center justify-center ">
             <Image
             title="taskoria logo in affiliate dashbaord"
-              src="/images/taskoria_logo.svg"
+              src="/images/taskoria_logo.svg?v=bold-control-1"
               alt="taskorialogo"
               width={34}
               height={30}

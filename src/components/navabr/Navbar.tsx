@@ -58,7 +58,7 @@ export default function ModernNavbar({
             aria-label="Taskoria home"
           >
             <Image
-              src="/images/taskoria_logo.svg"
+              src="/images/taskoria_logo.svg?v=bold-control-1"
               alt="Taskoria"
               width={350}
               height={48}
