@@ -24,6 +24,8 @@ const connectionTimeoutMillis =
     ? configuredConnectionTimeout
     : 10000;
 
+// Dev-only: kill and recreate the pool on hot-reload if pool size config changed.
+// Not needed in prod — global is reused across invocations, config doesn't change mid-run.
 if (
   process.env.NODE_ENV !== "production" &&
   global.pgPool &&
@@ -45,9 +47,10 @@ const pool =
     connectionTimeoutMillis,
   });
 
-if (process.env.NODE_ENV !== "production") {
-  global.pgPool = pool;
-  global.pgPoolMax = poolMax;
-}
+// Cache in ALL environments — on Vercel/serverless, this is what lets the pool
+// survive across invocations on the same warm Lambda instance instead of
+// reconnecting from scratch every request.
+global.pgPool = pool;
+global.pgPoolMax = poolMax;
 
 export default pool;
