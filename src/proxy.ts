@@ -18,12 +18,18 @@ const protectedPaths = [
   "/provider-responses",
 ];
 
-const blockedCrawlerUserAgentTokens = [
+const allowedGoogleCrawlerUserAgentTokens = [
   "googlebot",
-  "googleother",
   "google-inspectiontool",
   "apis-google",
-  "bingbot",
+  "adsbot-google",
+  "mediapartners-google",
+  "googleother",
+  "feedfetcher-google",
+  "storebot-google",
+];
+
+const blockedCrawlerUserAgentTokens = [
   "gptbot",
   "claudebot",
   "petalbot",
@@ -36,6 +42,13 @@ const blockedCrawlerUserAgentTokens = [
   "spider",
   "scraper",
 ];
+
+function isAllowedGoogleCrawlerRequest(req: NextRequest) {
+  const userAgent = req.headers.get("user-agent")?.toLowerCase() ?? "";
+  return allowedGoogleCrawlerUserAgentTokens.some((token) =>
+    userAgent.includes(token)
+  );
+}
 
 function isCrawlerRequest(req: NextRequest) {
   const userAgent = req.headers.get("user-agent")?.toLowerCase() ?? "";
@@ -94,7 +107,11 @@ function getSafeRedirectPath(value: string | null, req: NextRequest) {
 async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
-  if (pathname !== "/robots.txt" && isCrawlerRequest(req)) {
+  if (
+    pathname !== "/robots.txt" &&
+    !isAllowedGoogleCrawlerRequest(req) &&
+    isCrawlerRequest(req)
+  ) {
     return new NextResponse("Crawling disabled", {
       status: 403,
       headers: {

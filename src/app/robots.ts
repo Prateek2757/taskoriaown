@@ -5,19 +5,14 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-          allow: "/",
-      },
-
-      {
-        userAgent: "GoogleOther",
-        disallow: "/",
+        allow: "/",
       },
 
       {
         userAgent: "GPTBot",
         disallow: "/",
       },
-      
     ],
+    sitemap: "https://www.taskoria.com/sitemap.xml",
   };
 }
