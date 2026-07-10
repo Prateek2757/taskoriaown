@@ -34,6 +34,7 @@ interface ServiceData {
   service_detail?: string;
   slug?: string;
   faqs?: { question: string; answer: string }[];
+   seo_service_details?:string;
 }
 
 export interface City {
@@ -136,6 +137,7 @@ async function getService(serviceSlug: string): Promise<ServiceData | null> {
     return null;
   }
 }
+
 
 async function getAllCities(): Promise<City[]> {
   try {
