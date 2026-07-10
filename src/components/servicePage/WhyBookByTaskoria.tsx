@@ -1,4 +1,3 @@
-
 "use client"
 import { useMemo } from "react";
 import { ShieldCheck, Clock, FileText, MapPin } from "lucide-react";
@@ -46,35 +45,39 @@ export default function WhyBookByTaskoria({
     );
 
     return (
-        <section>
-            <div className="text-center mb-10">
-                <h1 className="text-2xl text-center md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white py-4">
+        <section className="relative py-8 px-4 dark:from-slate-950 dark:to-slate-900 overflow-hidden">
+
+            <div className="text-center mb-12">
+                <h1 className="text-xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
                     Booking a {serviceName.toLowerCase()} pro:{" "}
+                    <br/>
                     <span className="text-[#2563EB] dark:text-blue-400">
-                        Here's What to Know
+                        Here's what to know...
                     </span>
                 </h1>
             </div>
 
             {cards.length > 0 && (
-                <div className="grid gap-6 sm:grid-cols-2 max-w-4xl mx-auto">
+                <div className="relative grid gap-6 sm:grid-cols-2 max-w-4xl mx-auto">
                     {cards.map((card, i) => {
                         const Icon = ICONS[i % ICONS.length];
                         return (
                             <div
                                 key={i}
-                                className="flex gap-4 p-6 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-lg"
+                                className="flex gap-5 p-7 rounded-2xl bg-white dark:bg-slate-900
+                                           shadow-[0_2px_20px_rgba(15,23,42,0.06)]
+                                           dark:shadow-none dark:border dark:border-slate-800"
                             >
                                 <div className="shrink-0">
-                                    <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-950 flex items-center justify-center">
-                                        <Icon className="w-5 h-5 text-[#2563EB] dark:text-blue-400" />
+                                    <div className="w-16 h-16 rounded-full bg-blue-50 dark:bg-blue-950 flex items-center justify-center">
+                                        <Icon className="w-7 h-7 text-[#2563EB] dark:text-blue-400" strokeWidth={1.75} />
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-slate-900 dark:text-white mb-1">
+                                    <h3 className="text-md md:text-lg font-bold text-slate-900 dark:text-white mb-2 leading-snug">
                                         {card.title}
                                     </h3>
-                                    <p className="text-sm text-slate-600 dark:text-slate-300">
+                                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                                         {card.description}
                                     </p>
                                 </div>
@@ -83,6 +86,9 @@ export default function WhyBookByTaskoria({
                     })}
                 </div>
             )}
+
+
+            <div className="pointer-events-none absolute -top-10 right-0 w-64 h-64 rounded-full bg-blue-100/40 dark:bg-blue-900/10 blur-3xl" />
         </section>
     )
 }
