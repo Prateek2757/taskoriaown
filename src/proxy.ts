@@ -31,6 +31,7 @@ const allowedGoogleCrawlerUserAgentTokens = [
 
 const blockedCrawlerUserAgentTokens = [
   "gptbot",
+  "googleother",
   "claudebot",
   "petalbot",
   "amazonbot",
