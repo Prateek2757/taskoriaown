@@ -113,11 +113,9 @@
 //     );
 //   }
 // }
-import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+import { getStripe } from "@/lib/stripe";
 
 interface CheckoutRequestBody {
   professionalId: string;
@@ -130,6 +128,7 @@ interface CheckoutRequestBody {
 
 export async function POST(request: Request) {
   try {
+    const stripe = getStripe();
     const body: CheckoutRequestBody = await request.json();
     const {
       professionalId,

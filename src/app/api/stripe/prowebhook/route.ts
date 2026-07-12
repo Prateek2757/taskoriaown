@@ -1,9 +1,9 @@
 import Stripe from "stripe";
 import pool from "@/lib/dbConnect";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+import { getStripe } from "@/lib/stripe";
 
 export async function POST(req: Request) {
+  const stripe = getStripe();
   const raw = await req.text();
   const sig = req.headers.get("stripe-signature") || "";
 

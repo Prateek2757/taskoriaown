@@ -1,7 +1,6 @@
 import Stripe from "stripe";
 import pool from "@/lib/dbConnect";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+import { getStripe } from "@/lib/stripe";
 
 async function triggerAffiliateCommission(
   subscriptionId: string,
@@ -45,6 +44,7 @@ async function triggerAffiliateCommission(
 }
 
 export async function POST(req: Request) {
+  const stripe = getStripe();
   const raw = await req.text();
   const sig = req.headers.get("stripe-signature") || "";
 
@@ -140,6 +140,8 @@ async function handleCheckoutCompleted(session: any) {
 }
 
 async function getSubscriptionType(session: any): Promise<string> {
+  const stripe = getStripe();
+
   if (session.metadata?.type) return session.metadata.type;
 
   const subscriptionId =
@@ -160,6 +162,8 @@ async function getSubscriptionType(session: any): Promise<string> {
 }
 
 async function handleInvoicePaid(invoice: any) {
+  const stripe = getStripe();
+
   console.log(
     "💰 invoice.paid:",
     invoice.id,
@@ -285,6 +289,8 @@ async function handleCreditTopup(session: any) {
 }
 
 async function handleProSubscription(session: any) {
+  const stripe = getStripe();
+
   const meta = session.metadata;
   const professionalId = Number(meta.professionalId);
   const packageId = Number(meta.packageId);
