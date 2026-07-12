@@ -42,7 +42,6 @@ const bricolage = Bricolage_Grotesque({
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-
   title: {
     default: "Find Trusted Local Professionals Across Australia | Taskoria",
     template: `%s | ${SITE_NAME}`,
