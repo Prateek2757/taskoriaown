@@ -1,11 +1,18 @@
-import {Resend} from "resend"
+import { Resend } from "resend";
 
+let resendClient: Resend | null = null;
 
-const pratik = process.env.NEXT_PUBLIC_RESEND_API_KEY
+export function getResend() {
+  if (resendClient) {
+    return resendClient;
+  }
 
+  const apiKey = process.env.NEXT_PUBLIC_RESEND_API_KEY;
 
-// if (!process.env.RESEND_API_KEY) {
-//     throw new Error("RESEND_API_KEY is missing")
-//   }
+  if (!apiKey) {
+    throw new Error("RESEND_API_KEY is missing");
+  }
 
- export const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
+  resendClient = new Resend(apiKey);
+  return resendClient;
+}

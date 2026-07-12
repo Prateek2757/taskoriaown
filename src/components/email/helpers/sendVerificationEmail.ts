@@ -1,4 +1,4 @@
-import { resend } from "@/lib/resend";
+import { getResend } from "@/lib/resend";
 import { CompleteProfileEmailProps, EmailType } from "../type";
 import AppEmail from "../MainEmail";
 import { CompleteProfileEmail } from "../templates/ProfileCompletion/ProfileCompletion";
@@ -90,6 +90,7 @@ export async function sendEmail(
   }
 
   try {
+    const resend = getResend();
     const { data, error } = await resend.emails.send({
       from: EMAIL_CONFIG.from,
       to: email,

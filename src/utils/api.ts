@@ -1,3 +1,8 @@
+import {
+  getCategoriesFromDB,
+  getCategoryBySlug as getCategoryBySlugFromDB,
+} from "@/lib/cache";
+
 const isServer = typeof window === "undefined";
 
 const baseURL = isServer
@@ -24,11 +29,14 @@ export async function fetchProviders(limit?: number) {
 
   export async function fetchCategories(limit?: number) {
     try {
-       const isServer = typeof window === "undefined";
+      const isServer = typeof window === "undefined";
 
-    const baseURL = isServer
-      ? process.env.NEXT_PUBLIC_APP_URL || "https://www.taskoria.com"
-      : "";
+      if (isServer) {
+        const data = await getCategoriesFromDB();
+        return limit ? data.slice(0, limit) : data;
+      }
+
+      const baseURL = "";
       const res = await fetch(`${baseURL}/api/signup/category-selection`, {
         next: { revalidate: 3600 } 
       });
@@ -43,6 +51,10 @@ export async function fetchProviders(limit?: number) {
   }
 
   export async function fetchCategoryBySlug(slug: string) {
+    if (typeof window === "undefined") {
+      return getCategoryBySlugFromDB(slug);
+    }
+
     const res = await fetch(`${baseURL}/api/categories/${slug}`, {
       next: { revalidate: 3600 }, 
     });
