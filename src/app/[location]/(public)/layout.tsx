@@ -22,7 +22,7 @@ export const LEGAL_NAME = "Taskoria Pty Ltd";
 export const ABN = "37 658 760 831";
 export const TWITTER_HANDLE = "@taskoria";
 export const OG_IMAGE = `${BASE_URL}/og-image.png`;
-export const LOGO = `${BASE_URL}/images/taskoria_logo.svg`;
+export const LOGO = `${BASE_URL}/taskorialogonew.png`;
 
 const poppins = Poppins({
   subsets: ["latin"],
