@@ -103,7 +103,7 @@ export default function NotificationBell({ userId }: { userId: number }) {
     const fetchNotifications = async () => {
       try {
         const res = await axios.get("/api/notifications");
-        const data = await res.data;
+        const data = Array.isArray(res.data) ? res.data : [];
         setNotifications(
           data.sort(
             (a: Notification, b: Notification) =>

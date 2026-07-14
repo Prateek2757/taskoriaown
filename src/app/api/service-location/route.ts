@@ -1,12 +1,28 @@
-import { getAllCities, getCityBySlug, getSubcities } from "@/lib/cache";
+import {
+  getCityBySlug,
+  getPopularSeoCitiesFromDB,
+  getSeoCitiesByStateFromDB,
+  getSubcities,
+} from "@/lib/cache";
 import { filterSeoLocations, isSeoLocation } from "@/lib/seo-locations";
 import { NextResponse } from "next/server";
 
+const DEFAULT_CITY_LIMIT = 80;
+const MAX_CITY_LIMIT = 200;
+
+function getRequestedLimit(searchParams: URLSearchParams) {
+  const requestedLimit = Number(searchParams.get("limit"));
+
+  if (!Number.isFinite(requestedLimit)) return DEFAULT_CITY_LIMIT;
+
+  return Math.min(Math.max(Math.trunc(requestedLimit), 1), MAX_CITY_LIMIT);
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const stateSlug = searchParams.get("state");
   const citySlug = searchParams.get("city");
+  const limit = getRequestedLimit(searchParams);
 
   try {
     if (citySlug) {
@@ -38,12 +54,10 @@ export async function GET(request: Request) {
       );
     }
 
-    const rows = await getAllCities();
-
-    const filtered = stateSlug
-      ? rows.filter((r) => r.state_slug === stateSlug)
-      : rows;
-    const cities = filterSeoLocations(filtered);
+    const rows = stateSlug
+      ? await getSeoCitiesByStateFromDB(stateSlug)
+      : await getPopularSeoCitiesFromDB(limit * 2);
+    const cities = filterSeoLocations(rows).slice(0, limit);
 
     return NextResponse.json(cities, {
       headers: {

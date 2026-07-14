@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Mail, Phone, Clock, Send, CheckCircle, MapPin } from "lucide-react";
 import axios from "axios";
-export const dynamic = "force-static";
+// export const dynamic = "force-static";
 
 type ContactFormValues = {
   name: string;

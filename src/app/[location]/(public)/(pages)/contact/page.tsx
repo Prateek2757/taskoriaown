@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ContactSupport from "./components/contact";
 
-export const dynamic = "force-static";
+// export const dynamic = "force-static";
 
 const BASE_URL = "https://www.taskoria.com";
 

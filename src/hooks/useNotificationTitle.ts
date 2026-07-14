@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useRef } from "react"
 import { useSession } from "next-auth/react"
-import { supabaseAdmin } from "@/lib/supabase-admin"
+import { supabaseBrowser } from "@/lib/supabase-server"
 
 export function useNotificationTitle() {
   const { data: session } = useSession()
@@ -41,7 +41,7 @@ export function useNotificationTitle() {
       }
     }
 
-    const readChannel = supabaseAdmin
+    const readChannel = supabaseBrowser
       .channel("notification-reads")
       .on(
         "postgres_changes",
@@ -62,7 +62,7 @@ export function useNotificationTitle() {
       )
       .subscribe()
 
-    channelRef.current = supabaseAdmin
+    channelRef.current = supabaseBrowser
       .channel("notification-inserts")
       .on(
         "postgres_changes",
@@ -93,11 +93,11 @@ export function useNotificationTitle() {
       document.removeEventListener("visibilitychange", handleVisibilityChange)
       
       if (channelRef.current) {
-        supabaseAdmin.removeChannel(channelRef.current)
+        supabaseBrowser.removeChannel(channelRef.current)
       }
       
       if (readChannel) {
-        supabaseAdmin.removeChannel(readChannel)
+        supabaseBrowser.removeChannel(readChannel)
       }
       
       if (originalTitle.current) {

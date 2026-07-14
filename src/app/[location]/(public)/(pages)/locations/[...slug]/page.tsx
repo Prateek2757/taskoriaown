@@ -4,12 +4,12 @@ import Script from "next/script";
 import StatePageClient from "../components/state-page/state-page";
 import CityPageClient from "../components/City-page/citypageclient";
 import {
-  getAllCities,
   getCategoriesFromDB,
   getNearbySeoCitiesFromDB,
   getPopularSeoCitiesByStateFromDB,
   getSeoCitiesByStateFromDB,
   getSeoCityBySlugFromDB,
+  getSeoRedirectCandidatesByStateFromDB,
   getSeoStateSummaryFromDB,
   getSeoStatesFromDB,
 } from "@/lib/cache";
@@ -427,16 +427,21 @@ export default async function CityOrStatePage({ params }: Props) {
   ]);
 
   if (!city) {
-    const rawCities = (await getAllCities()) as unknown as City[];
-    const allCities = filterSeoLocations(rawCities);
-    const redirectCity = findSeoRedirectLocation(rawCities, stateSlug, citySlug);
+    const [rawCities, stateInfo] = await Promise.all([
+      getSeoRedirectCandidatesByStateFromDB(stateSlug, citySlug),
+      getStateInfo(stateSlug),
+    ]);
+    const redirectCity = findSeoRedirectLocation(
+      rawCities as unknown as City[],
+      stateSlug,
+      citySlug
+    );
 
     if (redirectCity?.slug) {
       redirect(`/locations/${stateSlug}/${redirectCity.slug}`);
     }
 
-    const hasStatePage = allCities.some((c) => c.state_slug === stateSlug);
-    if (hasStatePage) redirect(`/locations/${stateSlug}`);
+    if (stateInfo) redirect(`/locations/${stateSlug}`);
 
     redirect("/locations");
   }

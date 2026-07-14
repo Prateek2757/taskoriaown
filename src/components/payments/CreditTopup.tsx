@@ -214,28 +214,29 @@ function CreditPurchase({
 
       <div className="mb-4">
         <div className="relative group">
-          <div className="absolute inset-0 bg-linear-to-r from-blue-500 to-blue-600 rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity" />
-          <div className="relative bg-linear-to-br from-blue-600 to-blue-600 dark:from-blue-600 dark:to-blue-400 rounded-2xl p-3 ">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
-                  <Wallet className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-blue-100 text-sm font-medium">
-                    Available Balance
-                  </p>
-                  <p className="text-3xl font-bold text-white mt-1">
-                    {balance ?? 0}{" "}
-                    <span className="text-lg font-normal text-blue-100">
-                      credits
-                    </span>
-                  </p>
-                </div>
-              </div>
-              <Sparkles className="w-8 h-8 text-white/40" />
-            </div>
-          </div>
+          <div className="absolute inset-0  rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity" />
+          <div className="relative rounded-2xl p-3 bg-white dark:bg-slate-900  ">
+  <div className="flex items-center justify-between">
+    <div className="flex items-center gap-3">
+      <div className="p-3 rounded-xl bg-blue-100 dark:bg-blue-500/20 backdrop-blur-sm">
+        <Wallet className="w-6 h-6 text-blue-600 dark:text-white" />
+      </div>
+
+      <div>
+        <p className="text-slate-500 dark:text-blue-100 text-sm font-medium">
+          Available Balance
+        </p>
+
+        <p className="text-3xl font-bold text-slate-900 dark:text-white mt-1">
+          {balance ?? 0}{" "}
+          <span className="text-lg font-normal text-slate-500 dark:text-blue-100">
+            credits
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
         </div>
       </div>
 
@@ -407,7 +408,7 @@ function CreditPurchase({
             <Button
               onClick={handlePurchase}
               disabled={loadingButton}
-              className="w-full bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-600 text-white dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-600 font-semibold py-7 text-base shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 rounded-xl group"
+              className="w-full bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-600 text-white dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-600 font-semibold py-5 text-base shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 rounded-xl group"
               size="lg"
             >
               {loadingButton ? (
@@ -483,7 +484,7 @@ function CreditPurchase({
               <Wallet className="w-8 h-8 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold bg-linear-to-r from-gray-900 via-blue-900 to-blue-500 dark:from-white dark:via-blue-200 dark:to-purple-200 bg-clip-text text-transparent">
+              <h1 className="text-4xl  font-bold bg-linear-to-r from-[#2563EB] to-blue-500 dark:from-white dark:via-blue-200 dark:to-purple-200 bg-clip-text text-transparent">
                 My Credits
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-1">

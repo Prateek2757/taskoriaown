@@ -386,6 +386,72 @@ export const getSeoCityBySlugFromDB = unstable_cache(
   },
 );
 
+export const getSeoRedirectCandidatesByStateFromDB = reactCache(
+  async (stateSlug: string, citySlug: string): Promise<City[]> => {
+    const result = await pool.query(
+      `
+      WITH raw_match AS (
+        SELECT
+          id::integer AS city_id,
+          place_name AS name,
+          place_slug AS slug,
+          display_name,
+          COALESCE(popularity, 0) AS popularity,
+          latitude,
+          longitude,
+          image_url,
+          state_slug,
+          state_name,
+          'Australia'::text AS country_name,
+          description AS city_description,
+          postal_code AS postcode,
+          source,
+          updated_at
+        FROM australia_locations
+        WHERE is_active = true
+          AND place_slug = $2
+          AND state_slug = $1
+        ORDER BY popularity DESC NULLS LAST, updated_at DESC
+        LIMIT 1
+      ),
+      canonical AS (
+        SELECT DISTINCT ON (state_slug, place_slug)
+          id::integer AS city_id,
+          place_name AS name,
+          place_slug AS slug,
+          display_name,
+          COALESCE(popularity, 0) AS popularity,
+          latitude,
+          longitude,
+          image_url,
+          state_slug,
+          state_name,
+          'Australia'::text AS country_name,
+          description AS city_description,
+          postal_code AS postcode,
+          source,
+          updated_at
+        FROM australia_locations
+        WHERE is_active = true
+          AND place_slug IS NOT NULL
+          AND state_slug = $1
+        ORDER BY state_slug, place_slug, popularity DESC NULLS LAST
+      )
+      SELECT * FROM raw_match
+      UNION ALL
+      SELECT *
+      FROM canonical
+      WHERE EXISTS (SELECT 1 FROM raw_match)
+        AND slug <> $2
+      ORDER BY popularity DESC, name ASC
+    `,
+      [stateSlug, citySlug],
+    );
+
+    return result.rows.map(mapAustraliaLocationRow);
+  },
+);
+
 export const getSeoStatesFromDB = unstable_cache(
   async (): Promise<{ state_slug: string; state_name: string }[]> => {
     const result = await pool.query(`

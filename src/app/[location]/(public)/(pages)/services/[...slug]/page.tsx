@@ -8,12 +8,12 @@ import {
   findSeoRedirectLocation,
 } from "@/lib/seo-locations";
 import {
-  getAllCities as getAllCitiesFromDB,
   getCategoriesFromDB,
   getCategoryBySlug,
   getPopularSeoCitiesFromDB,
   getSeoCitiesByStateFromDB,
   getSeoCityBySlugFromDB,
+  getSeoRedirectCandidatesByStateFromDB,
   getSeoStatesFromDB,
 } from "@/lib/cache";
 
@@ -148,14 +148,6 @@ async function getService(serviceSlug: string): Promise<ServiceData | null> {
     };
   } catch {
     return null;
-  }
-}
-
-async function getAllCities(): Promise<City[]> {
-  try {
-    return (await getAllCitiesFromDB()) as unknown as City[];
-  } catch {
-    return [];
   }
 }
 
@@ -553,11 +545,11 @@ export default async function ServicePage({ params }: Props) {
   if (citySlug && !selectedLocation) {
     if (stateSlug) {
       const [rawCities, stateCities] = await Promise.all([
-        getAllCities(),
+        getSeoRedirectCandidatesByStateFromDB(stateSlug, citySlug),
         getStateCities(stateSlug),
       ]);
       const redirectCity = findSeoRedirectLocation(
-        rawCities,
+        rawCities as unknown as City[],
         stateSlug,
         citySlug
       );
