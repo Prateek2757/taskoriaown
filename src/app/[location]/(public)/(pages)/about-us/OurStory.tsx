@@ -11,7 +11,7 @@ export function OurStory() {
           Our Story
         </h2>
         <div
-          className={`overflow-hidden transition-all duration-500 mb-8 ${showMore ? "max-h-[1000px] md:max-h-[600px]" : "max-h-[200px]"}`}
+          className={`overflow-hidden transition-all duration-500 mb-8 ${showMore ? "max-h-250 md:max-h-150" : "max-h-50"}`}
         >
           <p className="text-[#2563EB] font-semibold text-lg mb-2">
             We started Taskoria because trust should never be optional.

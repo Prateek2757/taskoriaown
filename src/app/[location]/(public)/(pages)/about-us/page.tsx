@@ -8,7 +8,7 @@ import {
   Shield,
 } from "lucide-react";
 import Image from "next/image";
-export const dynamic = "force-static";
+// export const dynamic = "force-static";
 
 import type { Metadata } from "next";
 import InternalLinkModule from "@/components/InternalLinkModule";

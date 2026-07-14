@@ -11,7 +11,14 @@ function isViewMode(value: unknown): value is ViewMode {
 
 export default async function NavbarServer() {
   const cookieStore = await cookies();
-  const session = await getServerSession(authOptions);
+  // Static pages render this shared navbar during `next build`. Runtime auth
+  // secrets intentionally are not baked into the image, so defer session
+  // resolution to SessionProvider for the build-generated HTML.
+  const isProductionBuild =
+    process.env.NEXT_PHASE === "phase-production-build";
+  const session = isProductionBuild
+    ? null
+    : await getServerSession(authOptions);
   const cookieViewMode = cookieStore.get("taskoria_viewMode")?.value;
   const canUseProviderView = session?.user?.role === "provider";
   const defaultViewMode: ViewMode =
