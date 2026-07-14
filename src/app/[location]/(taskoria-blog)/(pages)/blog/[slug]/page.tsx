@@ -1,13 +1,14 @@
 import BlogDetails from "@/components/blog/BlogDetails";
 import {
   getBlogPostBySlug,
-  getBlogPostSlugs,
   getRelatedBlogPosts,
 } from "@/lib/cache";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import Script from "next/script";
+
+export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{
@@ -41,18 +42,6 @@ function buildCanonical(slug: string) {
 }
 
 const getCachedBlogPostBySlug = cache((slug: string) => getBlogPostBySlug(slug));
-
-export const revalidate = 300;
-export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  const posts = await getBlogPostSlugs();
-
-  return posts.map((post) => ({
-    location: "en",
-    slug: post.slug,
-  }));
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
