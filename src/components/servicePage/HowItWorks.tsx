@@ -49,7 +49,10 @@ const DARK = {
 const ThemeCtx = createContext(LIGHT);
 const useT = () => useContext(ThemeCtx);
 
-function parseHTML(html: string) {
+function parseHTML(html?: string |null) {
+  if (!html || typeof html !== "string") {
+    return { title: "", intros: [], sections: [] };
+  }
   const $ = cheerio.load(html);
 
   const title = $("h1").first().text().trim();

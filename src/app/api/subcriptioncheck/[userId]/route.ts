@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseBrowser } from "@/lib/supabase-server";
+import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 export async function GET(
     req: NextRequest,
@@ -14,7 +14,8 @@ const {userId} = await params;
       );
     }
 
-    const { data: subscription, error } = await supabaseBrowser
+    // Defer client creation until request time so builds do not require runtime secrets.
+    const { data: subscription, error } = await getSupabaseAdmin()
       .from("professional_subscriptions")
       .select("subscription_id, package_id, status, end_date, cancel_at_period_end")
       .eq("user_id", userId)

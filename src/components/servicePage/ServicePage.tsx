@@ -14,6 +14,7 @@ import {
   getRankedServiceLinks,
 } from "@/lib/internal-links";
 
+
 const NewRequestModal = dynamic(
   () => import("@/components/leads/RequestModal"),
   {
@@ -61,6 +62,12 @@ const StepWiseHowItWorks = dynamic(
     loading: () => null,
   }
 );
+const WhyBookByTaskoria = dynamic(
+  () => import("@/components/servicePage/WhyBookByTaskoria"),
+  {
+    loading: () => null,
+  }
+)
 
 const InternalLinkModule = dynamic(
   () => import("@/components/InternalLinkModule"),
@@ -142,9 +149,9 @@ export default function ServicePageClient({
 
   const subCityName: string | undefined = subCitySlug
     ? getReadableLocationName(
-        selectedLocation?.subcities?.find((s: any) => s.slug === subCitySlug),
-        subCitySlug
-      )
+      selectedLocation?.subcities?.find((s: any) => s.slug === subCitySlug),
+      subCitySlug
+    )
     : undefined;
 
   const stateName: string | undefined =
@@ -162,12 +169,12 @@ export default function ServicePageClient({
     () =>
       citySlug
         ? getRankedCityServiceLinks(
-            stateSlug ?? selectedLocation?.state_slug,
-            subCitySlug ?? citySlug,
-            rankedCategories,
-            8,
-            service.slug
-          )
+          stateSlug ?? selectedLocation?.state_slug,
+          subCitySlug ?? citySlug,
+          rankedCategories,
+          8,
+          service.slug
+        )
         : getRankedServiceLinks(rankedCategories, 8, service.slug),
     [
       citySlug,
@@ -216,6 +223,7 @@ export default function ServicePageClient({
               onPostJob={handleSelectCategory}
             />
           )}
+
           {!citySlug && (
             <StepWiseHowItWorks
               serviceName={service.name}
@@ -223,7 +231,13 @@ export default function ServicePageClient({
               onPostJob={handleSelectCategory}
             />
           )}
-
+       
+          {!citySlug && service.seo_service_details && (
+            <WhyBookByTaskoria
+              serviceName={service.name}
+              seo_service_details={service.seo_service_details}
+            />
+          )}
           {!citySlug && !stateSlug && (
             <CityProviders serviceSlug={service.slug} serviceName={service.name} />
           )}
@@ -250,6 +264,8 @@ export default function ServicePageClient({
                 citySlug={subCitySlug ?? citySlug}
                 locationName={activeCityName}
               />
+
+
             </>
           )}
 

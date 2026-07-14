@@ -114,7 +114,8 @@ export const getCategoryBySlug = unstable_cache(
         description,
         faqs,
         slug,
-        service_detail
+        service_detail,
+        seo_service_details
       FROM service_categories
       WHERE slug = $1`,
       [slug],

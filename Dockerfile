@@ -2,6 +2,13 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
+# NEXT_PUBLIC_* values are compiled into browser bundles by Next.js and must be
+# supplied as Docker build arguments (they are public client configuration).
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+
 COPY package.json package-lock.json ./
 
 RUN npm ci

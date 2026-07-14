@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import { supabaseBrowser } from "@/lib/supabase-server";
-import { createNotification } from "@/lib/notifications";
+import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -82,7 +81,9 @@ export async function POST(req: Request) {
 
     await client.query("COMMIT");
 
-    const channel = supabaseBrowser.channel(`conversation:${conversation_id}`);
+    // Create the server client only while handling a request. API route modules are
+    // evaluated during `next build`, when runtime secrets may not be available.
+    const channel = getSupabaseAdmin().channel(`conversation:${conversation_id}`);
     await channel.send({
       type: "broadcast",
       event: "message",
