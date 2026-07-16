@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import PageClient from "./page-client";
 import { getProfessionalPackagesFromDB } from "@/lib/cache";
 
-export const dynamic = "force-static";
-export const revalidate = 604800;
+// Packages come from PostgreSQL. Render this page at request time so Docker
+// builds do not require access to the production database.
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: `Taskoria Pricing | Provider Plans and Credits`,

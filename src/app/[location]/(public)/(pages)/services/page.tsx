@@ -2,8 +2,9 @@ import ServiceCategoriesClient from "@/components/services/serviceCategories";
 import { fetchCategories } from "@/utils/api";
 import type { Metadata } from "next";
 
-export const dynamic = "force-static";
-export const revalidate = 86400;
+// Categories come from PostgreSQL. Render this page at request time so Docker
+// builds do not require access to the production database.
+export const dynamic = "force-dynamic";
 
 const BASE_URL = "https://www.taskoria.com";
 const PAGE_URL = `${BASE_URL}/services`;
