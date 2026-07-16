@@ -1,7 +1,7 @@
 import { BASE_URL, buildUrlsetXml, xmlResponse } from "@/lib/sitemap-helpers";
 import { getAllBlogPosts } from "@/lib/cache";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   const posts = await getAllBlogPosts();

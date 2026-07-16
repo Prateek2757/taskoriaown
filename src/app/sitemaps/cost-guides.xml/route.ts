@@ -6,7 +6,7 @@ import {
   xmlResponse,
 } from "@/lib/sitemap-helpers";
 
-export const revalidate = 604800;
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   const categories = canonicalCategories(await fetchCategories());
