@@ -32,20 +32,20 @@ const withSerwist = withSerwistInit({
 
 const securityHeaders = [
   {
-    key: 'X-Frame-Options',
-    value: 'DENY',
+    key: "X-Frame-Options",
+    value: "DENY",
   },
   {
-    key: 'X-Content-Type-Options',
-    value: 'nosniff',
+    key: "X-Content-Type-Options",
+    value: "nosniff",
   },
   {
-    key: 'Referrer-Policy',
-    value: 'strict-origin-when-cross-origin',
+    key: "Referrer-Policy",
+    value: "strict-origin-when-cross-origin",
   },
   {
-    key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(self), geolocation=()',
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(self), geolocation=()",
   },
   // {
   //   key: 'Content-Security-Policy',
@@ -64,7 +64,7 @@ const securityHeaders = [
   //     "upgrade-insecure-requests",
   //   ].join('; '),
   // },
-]
+];
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -73,12 +73,12 @@ const nextConfig: NextConfig = {
 
   experimental: {
     optimizeCss: true,
-  optimizePackageImports: [
-  "@radix-ui/react-icons",
-  "@radix-ui/*",
-  "lucide-react",
-  "date-fns",
-],
+    optimizePackageImports: [
+      "@radix-ui/react-icons",
+      "@radix-ui/*",
+      "lucide-react",
+      "date-fns",
+    ],
   },
 
   images: {
@@ -88,28 +88,39 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "images.unsplash.com",
+        port: "",
+        pathname: "/**",
       },
       {
         protocol: "https",
         hostname: "plus.unsplash.com",
+        port: "",
+        pathname: "/**",
       },
-        {
+      {
         protocol: "https",
         hostname: "unsplash.com",
+        port: "",
+        pathname: "/**",
       },
       {
         protocol: "https",
         hostname: "**.supabase.co",
-        pathname: "/storage/v1/object/**",
+        port: "",
+        pathname: "/storage/v1/**",
       },
       {
         protocol: "https",
         hostname: "avatar.vercel.sh",
+        port: "",
+        pathname: "/**",
       },
-        {
-    protocol: "https",
-    hostname: "lh3.googleusercontent.com",
-  },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        port: "",
+        pathname: "/**",
+      },
       {
         protocol: "https",
         hostname: "taskoria.com",
@@ -144,24 +155,50 @@ const nextConfig: NextConfig = {
       // },
       {
         source: "/fonts/:path*",
-        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
       },
       {
-        source: "/:path*.:ext(svg|png|jpg|jpeg|gif|webp|avif|ico|wav|mp3|woff|woff2)",
-        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+        source:
+          "/:path*.:ext(svg|png|jpg|jpeg|gif|webp|avif|ico|wav|mp3|woff|woff2)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
       },
-      
+
       {
         source: "/api/categories/:path*",
-        headers: [{ key: "Cache-Control", value: "public, s-maxage=3600, stale-while-revalidate=86400" }],
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=3600, stale-while-revalidate=86400",
+          },
+        ],
       },
       {
         source: "/api/category-questions/:path*",
-        headers: [{ key: "Cache-Control", value: "public, s-maxage=21600, stale-while-revalidate=86400" }],
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=21600, stale-while-revalidate=86400",
+          },
+        ],
       },
       {
         source: "/api/service-providers",
-        headers: [{ key: "Cache-Control", value: "public, s-maxage=300, stale-while-revalidate=3600" }],
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=300, stale-while-revalidate=3600",
+          },
+        ],
       },
     ];
   },
