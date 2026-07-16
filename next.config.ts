@@ -1,6 +1,27 @@
 import type { NextConfig } from "next";
 import withSerwistInit from "@serwist/next";
 
+const appImagePattern = (() => {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+
+  if (!appUrl) return null;
+
+  try {
+    const { protocol, hostname, port } = new URL(appUrl);
+
+    if (protocol !== "http:" && protocol !== "https:") return null;
+
+    return {
+      protocol: protocol.slice(0, -1) as "http" | "https",
+      hostname,
+      port,
+      pathname: "/**",
+    };
+  } catch {
+    return null;
+  }
+})();
+
 const withSerwist = withSerwistInit({
   swSrc: "src/app/sw.ts",
   swDest: "public/sw.js",
@@ -78,11 +99,8 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "eoicjmcyigolwgjantsl.supabase.co",
-      },
-      {
-        protocol: "https",
-        hostname: "nxjjwcmekcwsdiaoloqy.supabase.co",
+        hostname: "**.supabase.co",
+        pathname: "/storage/v1/object/**",
       },
       {
         protocol: "https",
@@ -92,6 +110,17 @@ const nextConfig: NextConfig = {
     protocol: "https",
     hostname: "lh3.googleusercontent.com",
   },
+      {
+        protocol: "https",
+        hostname: "taskoria.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.taskoria.com",
+        pathname: "/**",
+      },
+      ...(appImagePattern ? [appImagePattern] : []),
     ],
   },
 
