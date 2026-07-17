@@ -245,6 +245,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Parser-blocking runtime configuration is available before client
+            components hydrate, including on build-generated static pages. */}
+        <script src="/api/runtime-config.js" />
         <Script
           id="strip-browser-extension-hydration-attributes"
           strategy="beforeInteractive"

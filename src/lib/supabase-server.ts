@@ -1,16 +1,29 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
+declare global {
+  interface Window {
+    __TASKORIA_CONFIG__?: {
+      supabaseUrl?: string;
+      supabaseAnonKey?: string;
+    };
+  }
+}
+
 let browserClient: SupabaseClient | null = null;
 
 function getSupabaseBrowserClient(): SupabaseClient {
   if (browserClient) return browserClient;
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  const runtimeConfig =
+    typeof window === "undefined" ? undefined : window.__TASKORIA_CONFIG__;
+  const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL || runtimeConfig?.supabaseUrl;
+  const supabaseAnonKey =
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || runtimeConfig?.supabaseAnonKey;
 
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error(
-      "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "Missing Supabase browser configuration. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in the Cloud Run runtime environment.",
     );
   }
   
