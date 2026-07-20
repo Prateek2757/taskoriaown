@@ -88,7 +88,10 @@ export async function POST(req: Request) {
 
     await client.query("BEGIN");
     const locationResult = await client.query(
-      `SELECT * FROM australia_locations
+      `SELECT
+         id, place_name, postal_code, state_code, state_name,
+         latitude, longitude, place_slug, display_name
+       FROM australia_locations
        WHERE id = $1 AND is_active = true LIMIT 1`,
       [locationId]
     );

@@ -122,7 +122,7 @@ export const getCategoryBySlug = unstable_cache(
     );
     return result.rows[0] ?? null;
   },
-  ["category-by-slug"],
+  ["category-by-slug-v2"],
   {
     revalidate: 604800,
     tags: ["categories"],
@@ -268,7 +268,7 @@ export const getPopularSeoCitiesFromDB = unstable_cache(
   },
 );
 
-export const getSeoCitiesByStateFromDB = reactCache(
+export const getSeoCitiesByStateFromDB = unstable_cache(
   async (stateSlug: string): Promise<City[]> => {
     const result = await pool.query(
       `
@@ -302,6 +302,11 @@ export const getSeoCitiesByStateFromDB = reactCache(
     );
 
     return result.rows.map(mapAustraliaLocationRow);
+  },
+  ["seo-cities-by-state"],
+  {
+    revalidate: 604800,
+    tags: ["locations"],
   },
 );
 

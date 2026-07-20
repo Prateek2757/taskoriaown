@@ -1,11 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useState } from "react";
 import Link from "next/link";
 import { motion, Variants, easeOut } from "motion/react";
-import axios from "axios";
-import { toast } from "sonner";
 import Image from "next/image";
 import type { Metadata } from "next";
 
@@ -89,52 +86,13 @@ const itemVariants: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: easeOut } },
 };
 
-export default function CategoryPage() {
-  const params = useParams();
-  const slug = params?.slug;
-
-  const [category, setCategory] = useState<Category | null>(null);
+export default function CategoryPage({
+  initialCategory,
+}: {
+  initialCategory: Category | null;
+}) {
+  const [category] = useState<Category | null>(initialCategory);
   const [providers, setProviders] = useState<Provider[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchCategoryData = async () => {
-      try {
-        // Fetch category info by slug
-        const categoryRes = await axios.get(`/api/categories/${slug}`);
-        setCategory(categoryRes.data);
-
-        // Fetch providers linked to this category
-        // const providerRes = await axios.get(`/api/providers?category=${slug}`);
-        // setProviders(providerRes.data);
-      } catch (error: any) {
-        console.error(error);
-        toast.error("Failed to load category or providers.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (slug) fetchCategoryData();
-  }, [slug]);
-
-  if (isLoading) {
-    return (
-      <div className="py-20 px-4 text-center">
-        <h2 className="text-3xl font-semibold text-foreground animate-pulse">
-          Loading category...
-        </h2>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-32 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-xl border border-gray-200 dark:border-gray-700"
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
 
   if (!category) {
     return (

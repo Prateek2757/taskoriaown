@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageClient from "./page-client";
+import { getCategoryBySlug } from "@/lib/cache";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -11,7 +12,8 @@ function toTitleCase(slug: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const categoryName = toTitleCase(slug);
+  const category = await getCategoryBySlug(slug);
+  const categoryName = category?.name ?? toTitleCase(slug);
 
   return {
     title: `${categoryName} Services | Hire Verified Professionals | Taskoria`,
@@ -24,6 +26,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // export const dynamic = "force-static";
 
-export default function Page() {
-  return <PageClient />;
+export default async function Page({ params }: Props) {
+  const { slug } = await params;
+  const category = await getCategoryBySlug(slug);
+
+  return <PageClient initialCategory={category} />;
 }

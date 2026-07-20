@@ -272,7 +272,6 @@ export default function StatePageClient({
         <section className="py-6">
           <LocationAlphabetDirectory
             locations={cities}
-            dataUrl={`/api/location-directory?state=${stateSlug}`}
             totalCount={locationCount}
             title={`Browse locations in ${stateName}`}
             eyebrow="Cities and suburbs"
