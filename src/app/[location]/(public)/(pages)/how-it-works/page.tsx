@@ -135,7 +135,7 @@ export default function HowItWorksPage() {
           <div className="mx-auto grid  gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-16">
             <div className="flex flex-col justify-center">
               <div className="mb-8">
-                <ServiceBreadcrumbs currentPage="how-it-works" />
+                <ServiceBreadcrumbs currentPage="how It Works" />
               </div>
 
               <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-md border border-blue-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700 shadow-sm dark:border-blue-400/30 dark:bg-white/5 dark:text-blue-200">

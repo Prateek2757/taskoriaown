@@ -314,7 +314,7 @@ export default function TaskoriaProPage({
 
       <div className="relative max-w-7xl mx-auto px-4 py-6">
         <div className=" max-w-6xl mx-auto  ">
-          <ServiceBreadcrumbs currentPage="pricing" />
+          <ServiceBreadcrumbs currentPage="Pricing" />
         </div>
 
         <div className="text-center  max-w-3xl mx-auto">
