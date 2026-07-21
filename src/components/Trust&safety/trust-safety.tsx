@@ -84,11 +84,11 @@ const TrustSafety = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="max-w-6xl mx-auto text-center space-y-6">
              <ServiceBreadcrumbs currentPage="Trust & Safety" />
-            <div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 px-4 py-2 rounded-full text-sm font-medium">
+            <div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/20 text-[#2563EB] px-4 py-2 rounded-full text-sm font-medium">
               <Shield className="w-4 h-4" />
               Australian Verified & Protected
             </div>
-            <h1 className="text-4xl  font-bold text-foreground">
+            <h1 className="text-4xl font-bold text-[#2563EB] ">
               Trust & Safety at Taskoria
             </h1>
             <p className="text-lg text-muted-foreground">
