@@ -131,279 +131,284 @@ export default function HowItWorksPage() {
       />
 
       <div className="bg-white text-slate-950  dark:bg-slate-950 dark:text-white max-w-6xl  mx-auto">
-        <section className="border-b border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-slate-950">
-          <div className="mx-auto grid  gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:px-8 lg:py-16">
-            <div className="flex flex-col justify-center">
-              <div className="mb-8">
-                <ServiceBreadcrumbs currentPage="how It Works" />
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="max-w-6xl mx-auto">
+            <ServiceBreadcrumbs currentPage="How it works" />
+          </div>
+          <section className="border-b border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-slate-950">
+
+            <div className=" grid  gap-10  py-6 lg:grid-cols-[1.02fr_0.98fr]  ">
+
+              <div className="flex flex-col justify-center">
+
+
+                <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-md border border-blue-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700 shadow-sm dark:border-blue-400/30 dark:bg-white/5 dark:text-blue-200">
+                  <Sparkles className="size-4" aria-hidden="true" />
+                  One marketplace for getting work done
+                </div>
+
+                <h1 className="max-w-3xl text-3xl font-bold leading-tight text-slate-950 sm:text-4xl  dark:text-white">
+                  How Taskoria works for customers and providers
+                </h1>
+
+                <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600  dark:text-slate-300">
+                  Customers post clear service requests. Providers respond with
+                  relevant quotes. Taskoria keeps both sides moving from first
+                  request to final hire with simple tools and transparent profiles.
+                </p>
+
+                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                  <Button asChild size="sm" className="h-11 rounded-xl">
+                    <Link href="/post-a-job">
+                      Post a job free
+                      <ArrowRight className="size-4" aria-hidden="true" />
+                    </Link>
+                  </Button>
+                  <Button asChild size="sm" variant="outline" className="h-11 rounded-xl">
+                    <Link href="/join">
+                      Join as a provider
+                      <ArrowRight className="size-4" aria-hidden="true" />
+                    </Link>
+                  </Button>
+                </div>
+
+                <div className="mt-8 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">
+                  {[
+                    ["Free", "to post"],
+                    ["Local", "providers"],
+                    ["Clear", "quotes"],
+                    ["Direct", "messages"],
+                  ].map(([value, label]) => (
+                    <div
+                      key={value}
+                      className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm dark:border-white/10 dark:bg-white/5"
+                    >
+                      <p className="text-lg font-bold text-slate-950 dark:text-white">
+                        {value}
+                      </p>
+                      <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                        {label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-md border border-blue-200 bg-white px-3 py-2 text-sm font-semibold text-blue-700 shadow-sm dark:border-blue-400/30 dark:bg-white/5 dark:text-blue-200">
-                <Sparkles className="size-4" aria-hidden="true" />
-                One marketplace for getting work done
-              </div>
-
-              <h1 className="max-w-3xl text-3xl font-bold leading-tight text-slate-950 sm:text-4xl  dark:text-white">
-                How Taskoria works for customers and providers
-              </h1>
-
-              <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600  dark:text-slate-300">
-                Customers post clear service requests. Providers respond with
-                relevant quotes. Taskoria keeps both sides moving from first
-                request to final hire with simple tools and transparent profiles.
-              </p>
-
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <Button asChild size="sm" className="h-11 rounded-xl">
-                  <Link href="/post-a-job">
-                    Post a job free
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </Link>
-                </Button>
-                <Button asChild size="sm" variant="outline" className="h-11 rounded-xl">
-                  <Link href="/join">
-                    Join as a provider
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </Link>
-                </Button>
-              </div>
-
-              <div className="mt-8 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">
-                {[
-                  ["Free", "to post"],
-                  ["Local", "providers"],
-                  ["Clear", "quotes"],
-                  ["Direct", "messages"],
-                ].map(([value, label]) => (
-                  <div
-                    key={value}
-                    className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm dark:border-white/10 dark:bg-white/5"
-                  >
-                    <p className="text-lg font-bold text-slate-950 dark:text-white">
-                      {value}
+              <div className="grid gap-4 self-center sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                <article className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5">
+                  <div className="relative aspect-4/3 bg-slate-100">
+                    <Image
+                      src="/images/jobpost.png"
+                      alt="Customer posting a job request on Taskoria"
+                      fill
+                      sizes="(min-width: 1280px) 280px, (min-width: 1024px) 420px, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
+                  <div className="p-5">
+                    <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-blue-700 dark:text-blue-200">
+                      <UsersRound className="size-4" aria-hidden="true" />
+                      For customers
+                    </div>
+                    <h2 className="text-xl font-bold text-slate-950 dark:text-white">
+                      Find the right help faster
+                    </h2>
+                    <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                      Post once, compare provider responses, then choose the fit
+                      that works for your budget and timing.
                     </p>
-                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                      {label}
+                    <Link
+                      href="/how-it-works/customers"
+                      className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800 dark:text-blue-200 dark:hover:text-blue-100"
+                    >
+                      View customer guide
+                      <ArrowRight className="size-4" aria-hidden="true" />
+                    </Link>
+                  </div>
+                </article>
+
+                <article className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5">
+                  <div className="relative aspect-[4/3] bg-slate-100">
+                    <Image
+                      src="/images/providers.jpeg"
+                      alt="Service provider reviewing customer leads on Taskoria"
+                      fill
+                      sizes="(min-width: 1280px) 280px, (min-width: 1024px) 420px, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="p-5">
+                    <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-emerald-700 dark:text-emerald-200">
+                      <BriefcaseBusiness className="size-4" aria-hidden="true" />
+                      For providers
+                    </div>
+                    <h2 className="text-xl font-bold text-slate-950 dark:text-white">
+                      Turn local demand into jobs
+                    </h2>
+                    <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                      Build a trusted profile, receive relevant leads, and respond
+                      only when a job is right for your business.
+                    </p>
+                    <Link
+                      href="/how-it-works/providers"
+                      className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-800 dark:text-emerald-200 dark:hover:text-emerald-100"
+                    >
+                      View provider guide
+                      <ArrowRight className="size-4" aria-hidden="true" />
+                    </Link>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <section className="px-4 py-14 ">
+            <div className="mx-auto max-w-7xl">
+              <div className="max-w-2xl">
+                <p className="text-sm font-semibold text-blue-700 dark:text-blue-200">
+                  Two simple journeys
+                </p>
+                <h2 className="mt-2 text-2xl font-bold text-slate-950 sm:text-3xl dark:text-white">
+                  Built for both sides of the job
+                </h2>
+                <p className="mt-3 text-base leading-7 text-slate-600 dark:text-slate-300">
+                  Customers and providers use different tools, but the goal is the
+                  same: clear requests, better conversations, and confident hiring.
+                </p>
+              </div>
+
+              <div className="mt-8 grid gap-5 lg:grid-cols-2">
+                <JourneyPanel
+                  label="Customer flow"
+                  title="From request to hired provider"
+                  description="A focused flow for people who need work completed."
+                  href="/how-it-works/customers"
+                  linkLabel="See how it works for customers"
+                  steps={customerSteps}
+                  tone="blue"
+                />
+                <JourneyPanel
+                  label="Provider flow"
+                  title="From profile to local work"
+                  description="A practical flow for professionals who want better leads."
+                  href="/how-it-works/providers"
+                  linkLabel="See how it works for providers"
+                  steps={providerSteps}
+                  tone="emerald"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className="border-y border-slate-200 bg-slate-50 px-4 py-14 sm:px-6 lg:px-8 dark:border-white/10 dark:bg-white/5">
+            <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+              <div>
+                <p className="text-sm font-semibold text-amber-700 dark:text-amber-200">
+                  Why it feels easier
+                </p>
+                <h2 className="mt-2 text-2xl font-bold text-slate-950 sm:text-3xl dark:text-white">
+                  Less chasing, more useful information
+                </h2>
+                <p className="mt-4 text-base leading-7 text-slate-600 dark:text-slate-300">
+                  Taskoria is designed around the details that usually slow jobs
+                  down: unclear scope, missed messages, uncertain trust, and
+                  mismatched expectations.
+                </p>
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                  <Button asChild>
+                    <Link href="/services">Browse services</Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link href="/trust-safety">Trust and safety</Link>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                {platformHighlights.map((item) => (
+                  <div
+                    key={item}
+                    className="flex gap-3 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-slate-950"
+                  >
+                    <CheckCircle2
+                      className="mt-0.5 size-5 shrink-0 text-emerald-600 dark:text-emerald-300"
+                      aria-hidden="true"
+                    />
+                    <p className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-200">
+                      {item}
                     </p>
                   </div>
                 ))}
               </div>
             </div>
+          </section>
 
-            <div className="grid gap-4 self-center sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-              <article className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5">
-                <div className="relative aspect-4/3 bg-slate-100">
-                  <Image
-                    src="/images/jobpost.png"
-                    alt="Customer posting a job request on Taskoria"
-                    fill
-                    sizes="(min-width: 1280px) 280px, (min-width: 1024px) 420px, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-                <div className="p-5">
-                  <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-blue-700 dark:text-blue-200">
-                    <UsersRound className="size-4" aria-hidden="true" />
-                    For customers
-                  </div>
-                  <h2 className="text-xl font-bold text-slate-950 dark:text-white">
-                    Find the right help faster
-                  </h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                    Post once, compare provider responses, then choose the fit
-                    that works for your budget and timing.
+          <section className="px-4 py-14 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl">
+              <div className="grid gap-5 lg:grid-cols-3">
+                <div className="lg:col-span-1">
+                  <p className="text-sm font-semibold text-blue-700 dark:text-blue-200">
+                    What happens next
                   </p>
-                  <Link
-                    href="/how-it-works/customers"
-                    className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800 dark:text-blue-200 dark:hover:text-blue-100"
-                  >
-                    View customer guide
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </Link>
-                </div>
-              </article>
-
-              <article className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5">
-                <div className="relative aspect-[4/3] bg-slate-100">
-                  <Image
-                    src="/images/providers.jpeg"
-                    alt="Service provider reviewing customer leads on Taskoria"
-                    fill
-                    sizes="(min-width: 1280px) 280px, (min-width: 1024px) 420px, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-5">
-                  <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-emerald-700 dark:text-emerald-200">
-                    <BriefcaseBusiness className="size-4" aria-hidden="true" />
-                    For providers
-                  </div>
-                  <h2 className="text-xl font-bold text-slate-950 dark:text-white">
-                    Turn local demand into jobs
+                  <h2 className="mt-2 text-2xl font-bold text-slate-950 dark:text-white">
+                    Pick your path
                   </h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                    Build a trusted profile, receive relevant leads, and respond
-                    only when a job is right for your business.
+                  <p className="mt-3 text-base leading-7 text-slate-600 dark:text-slate-300">
+                    Use the detailed guide for your role, or jump straight into
+                    the action when you are ready.
                   </p>
-                  <Link
-                    href="/how-it-works/providers"
-                    className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-800 dark:text-emerald-200 dark:hover:text-emerald-100"
-                  >
-                    View provider guide
-                    <ArrowRight className="size-4" aria-hidden="true" />
-                  </Link>
                 </div>
-              </article>
-            </div>
-          </div>
-        </section>
 
-        <section className="px-4 py-14 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="max-w-2xl">
-              <p className="text-sm font-semibold text-blue-700 dark:text-blue-200">
-                Two simple journeys
-              </p>
-              <h2 className="mt-2 text-2xl font-bold text-slate-950 sm:text-3xl dark:text-white">
-                Built for both sides of the job
-              </h2>
-              <p className="mt-3 text-base leading-7 text-slate-600 dark:text-slate-300">
-                Customers and providers use different tools, but the goal is the
-                same: clear requests, better conversations, and confident hiring.
-              </p>
-            </div>
-
-            <div className="mt-8 grid gap-5 lg:grid-cols-2">
-              <JourneyPanel
-                label="Customer flow"
-                title="From request to hired provider"
-                description="A focused flow for people who need work completed."
-                href="/how-it-works/customers"
-                linkLabel="See how it works for customers"
-                steps={customerSteps}
-                tone="blue"
-              />
-              <JourneyPanel
-                label="Provider flow"
-                title="From profile to local work"
-                description="A practical flow for professionals who want better leads."
-                href="/how-it-works/providers"
-                linkLabel="See how it works for providers"
-                steps={providerSteps}
-                tone="emerald"
-              />
-            </div>
-          </div>
-        </section>
-
-        <section className="border-y border-slate-200 bg-slate-50 px-4 py-14 sm:px-6 lg:px-8 dark:border-white/10 dark:bg-white/5">
-          <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-            <div>
-              <p className="text-sm font-semibold text-amber-700 dark:text-amber-200">
-                Why it feels easier
-              </p>
-              <h2 className="mt-2 text-2xl font-bold text-slate-950 sm:text-3xl dark:text-white">
-                Less chasing, more useful information
-              </h2>
-              <p className="mt-4 text-base leading-7 text-slate-600 dark:text-slate-300">
-                Taskoria is designed around the details that usually slow jobs
-                down: unclear scope, missed messages, uncertain trust, and
-                mismatched expectations.
-              </p>
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <Button asChild>
-                  <Link href="/services">Browse services</Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <Link href="/trust-safety">Trust and safety</Link>
-                </Button>
+                <ActionCard
+                  icon={<MessageSquareText className="size-5" aria-hidden="true" />}
+                  title="I need a provider"
+                  description="Create a job request and start receiving responses from local professionals."
+                  primaryHref="/post-a-job"
+                  primaryLabel="Post a job"
+                  secondaryHref="/how-it-works/customers"
+                  secondaryLabel="Customer guide"
+                />
+                <ActionCard
+                  icon={<Star className="size-5" aria-hidden="true" />}
+                  title="I provide services"
+                  description="Create your provider profile and start finding local jobs that match your services."
+                  primaryHref="/join"
+                  primaryLabel="Join Taskoria"
+                  secondaryHref="/how-it-works/providers"
+                  secondaryLabel="Provider guide"
+                />
               </div>
             </div>
+          </section>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {platformHighlights.map((item) => (
-                <div
-                  key={item}
-                  className="flex gap-3 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-slate-950"
-                >
-                  <CheckCircle2
-                    className="mt-0.5 size-5 shrink-0 text-emerald-600 dark:text-emerald-300"
-                    aria-hidden="true"
-                  />
-                  <p className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-200">
-                    {item}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="px-4 py-14 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="grid gap-5 lg:grid-cols-3">
-              <div className="lg:col-span-1">
+          <section className="border-t border-slate-200 px-4 py-14 sm:px-6 lg:px-8 dark:border-white/10">
+            <div className="mx-auto max-w-4xl">
+              <div className="text-center">
                 <p className="text-sm font-semibold text-blue-700 dark:text-blue-200">
-                  What happens next
+                  Common questions
                 </p>
                 <h2 className="mt-2 text-2xl font-bold text-slate-950 dark:text-white">
-                  Pick your path
+                  How-it-works FAQs
                 </h2>
-                <p className="mt-3 text-base leading-7 text-slate-600 dark:text-slate-300">
-                  Use the detailed guide for your role, or jump straight into
-                  the action when you are ready.
-                </p>
               </div>
 
-              <ActionCard
-                icon={<MessageSquareText className="size-5" aria-hidden="true" />}
-                title="I need a provider"
-                description="Create a job request and start receiving responses from local professionals."
-                primaryHref="/post-a-job"
-                primaryLabel="Post a job"
-                secondaryHref="/how-it-works/customers"
-                secondaryLabel="Customer guide"
-              />
-              <ActionCard
-                icon={<Star className="size-5" aria-hidden="true" />}
-                title="I provide services"
-                description="Create your provider profile and start finding local jobs that match your services."
-                primaryHref="/join"
-                primaryLabel="Join Taskoria"
-                secondaryHref="/how-it-works/providers"
-                secondaryLabel="Provider guide"
-              />
+              <div className="mt-8 divide-y divide-slate-200 rounded-lg border border-slate-200 bg-white dark:divide-white/10 dark:border-white/10 dark:bg-white/5">
+                {faqs.map((item) => (
+                  <article key={item.question} className="p-5 sm:p-6">
+                    <h3 className="text-base font-bold text-slate-950 dark:text-white">
+                      {item.question}
+                    </h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                      {item.answer}
+                    </p>
+                  </article>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
-
-        <section className="border-t border-slate-200 px-4 py-14 sm:px-6 lg:px-8 dark:border-white/10">
-          <div className="mx-auto max-w-4xl">
-            <div className="text-center">
-              <p className="text-sm font-semibold text-blue-700 dark:text-blue-200">
-                Common questions
-              </p>
-              <h2 className="mt-2 text-2xl font-bold text-slate-950 dark:text-white">
-                How-it-works FAQs
-              </h2>
-            </div>
-
-            <div className="mt-8 divide-y divide-slate-200 rounded-lg border border-slate-200 bg-white dark:divide-white/10 dark:border-white/10 dark:bg-white/5">
-              {faqs.map((item) => (
-                <article key={item.question} className="p-5 sm:p-6">
-                  <h3 className="text-base font-bold text-slate-950 dark:text-white">
-                    {item.question}
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                    {item.answer}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-      </div>
+          </section>
+        </div>
+        /</div>
     </>
   );
 }

@@ -14,7 +14,7 @@ export default function ServiceBreadcrumbs({
         <li>
           <Link
             href="/"
-            className="flex items-center gap-1.5 rounded-md px-1.5 py-0.5 text-slate-500 transition-colors hover:text-[#2563EB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:text-slate-400 dark:hover:text-slate-100"
+            className="flex items-center gap-1.5 rounded-md  py-0.5 text-slate-500 transition-colors hover:text-[#2563EB] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:text-slate-400 dark:hover:text-slate-100"
           >
             <Home className="h-4 w-4 shrink-0" />
             <span>Home</span>
@@ -29,7 +29,7 @@ export default function ServiceBreadcrumbs({
             <li className="min-w-0">
               <span
                 aria-current="page"
-                className="block truncate px-1.5 py-0.5 font-medium  text-[#2563EB]"
+                className="block truncate py-0.5 font-medium  text-[#2563EB]"
               >
                 {currentPage}
               </span>
