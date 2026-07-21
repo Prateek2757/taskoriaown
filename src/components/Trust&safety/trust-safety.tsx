@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
+import ServiceBreadcrumbs from "../services/ServicesBreadcrumbs";
 
 // export const metadata: Metadata = {
 //   title: "Trust & Safety | How Taskoria Protects Customers and Providers",
@@ -82,6 +83,7 @@ const TrustSafety = () => {
       <section className="py-10 bg-gradient-to-br from-primary/5 to-secondary/5">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center space-y-6">
+             <ServiceBreadcrumbs currentPage="Trust & Safety" />
             <div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 px-4 py-2 rounded-full text-sm font-medium">
               <Shield className="w-4 h-4" />
               Australian Verified & Protected

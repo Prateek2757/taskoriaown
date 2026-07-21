@@ -20,6 +20,7 @@ import {
   useProfessionalPackages,
   type ProfessionalPackage,
 } from "@/hooks/useProfessionalPackage";
+import ServiceBreadcrumbs from "@/components/services/ServicesBreadcrumbs";
 
 interface TaskoriaProPageProps {
   initialPackages?: ProfessionalPackage[];
@@ -126,11 +127,10 @@ export default function TaskoriaProPage({
         )}
 
         <Card
-          className={`relative h-full overflow-hidden transition-all duration-300 border-2 ${
-            highlighted
+          className={`relative h-full overflow-hidden transition-all duration-300 border-2 ${highlighted
               ? "bg-linear-to-br from-blue-600 via-blue-700 to-blue-800 text-white border-blue-400 shadow-2xl shadow-blue-500/20 transform hover:scale-[1.03]"
               : "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-xl hover:scale-[1.02]"
-          } rounded-2xl`}
+            } rounded-2xl`}
         >
           {/* {highlighted && (
             <div className="absolute top-2 left-0 right-0 h-1 bg-linear-to-r from-blue-400 via-white to-blue-400" />
@@ -151,18 +151,16 @@ export default function TaskoriaProPage({
           <CardContent className="p-5">
             <div className="mb-4 mt-1">
               <h3
-                className={`text-xl font-bold mb-1.5 ${
-                  highlighted ? "text-white" : "text-gray-900 dark:text-white"
-                }`}
+                className={`text-xl font-bold mb-1.5 ${highlighted ? "text-white" : "text-gray-900 dark:text-white"
+                  }`}
               >
                 {pkg.name}
               </h3>
               <p
-                className={`text-sm leading-relaxed min-h-9 ${
-                  highlighted
+                className={`text-sm leading-relaxed min-h-9 ${highlighted
                     ? "text-blue-100"
                     : "text-gray-600 dark:text-gray-400"
-                }`}
+                  }`}
               >
                 {pkg.description}
               </p>
@@ -171,66 +169,59 @@ export default function TaskoriaProPage({
             <div className="mb-4">
               <div className="flex items-baseline gap-1.5">
                 <span
-                  className={`text-sm font-medium ${
-                    highlighted
+                  className={`text-sm font-medium ${highlighted
                       ? "text-blue-200"
                       : "text-gray-600 dark:text-gray-400"
-                  }`}
+                    }`}
                 >
                   A$
                 </span>
                 <span
-                  className={`text-3xl font-bold tracking-tight ${
-                    highlighted ? "text-white" : "text-gray-900 dark:text-white"
-                  }`}
+                  className={`text-3xl font-bold tracking-tight ${highlighted ? "text-white" : "text-gray-900 dark:text-white"
+                    }`}
                 >
                   {typeof pkg.price === "number"
                     ? pkg.price.toFixed(0)
                     : pkg.price}
                 </span>
                 <span
-                  className={`text-sm font-medium ml-1 ${
-                    highlighted
+                  className={`text-sm font-medium ml-1 ${highlighted
                       ? "text-blue-200"
                       : "text-gray-600 dark:text-gray-400"
-                  }`}
+                    }`}
                 >
                   /month
                 </span>
               </div>
               <p
-                className={`text-xs mt-1 ${
-                  highlighted
+                className={`text-xs mt-1 ${highlighted
                     ? "text-blue-200"
                     : "text-gray-500 dark:text-gray-400"
-                }`}
+                  }`}
               >
                 ex. GST • Billed monthly
               </p>
             </div>
 
             <div
-              className={`mb-4 pb-4 border-b ${
-                highlighted
+              className={`mb-4 pb-4 border-b ${highlighted
                   ? "border-blue-500/30"
                   : "border-gray-200 dark:border-gray-700"
-              }`}
+                }`}
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <TrendingUp
-                    className={`w-4 h-4 ${
-                      highlighted
+                    className={`w-4 h-4 ${highlighted
                         ? "text-blue-200"
                         : "text-blue-600 dark:text-blue-400"
-                    }`}
+                      }`}
                   />
                   <span
-                    className={`text-sm font-semibold ${
-                      highlighted
+                    className={`text-sm font-semibold ${highlighted
                         ? "text-white"
                         : "text-gray-900 dark:text-white"
-                    }`}
+                      }`}
                   >
                     Profile Visibility
                   </span>
@@ -239,25 +230,23 @@ export default function TaskoriaProPage({
                   {[...Array(3)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-5 h-5 transition-all ${
-                        i < pkg.visibility_stars
+                      className={`w-5 h-5 transition-all ${i < pkg.visibility_stars
                           ? highlighted
                             ? "fill-white text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]"
                             : "fill-blue-600 text-blue-600 dark:fill-blue-500 dark:text-blue-500"
                           : highlighted
                             ? "text-blue-400/40 fill-blue-400/20"
                             : "text-gray-300 dark:text-gray-600 fill-gray-200 dark:fill-gray-700"
-                      }`}
+                        }`}
                     />
                   ))}
                 </div>
               </div>
               <p
-                className={`text-sm leading-relaxed ${
-                  highlighted
+                className={`text-sm leading-relaxed ${highlighted
                     ? "text-blue-100"
                     : "text-gray-600 dark:text-gray-400"
-                }`}
+                  }`}
               >
                 {pkg.visibility_description}
               </p>
@@ -267,27 +256,24 @@ export default function TaskoriaProPage({
               {features.map((feature, idx) => (
                 <div key={idx} className="flex items-start gap-2.5">
                   <div
-                    className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5 ${
-                      highlighted
+                    className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5 ${highlighted
                         ? "bg-white/20 backdrop-blur-sm"
                         : "bg-blue-50 dark:bg-blue-900/30"
-                    }`}
+                      }`}
                   >
                     <Check
-                      className={`w-3.5 h-3.5 ${
-                        highlighted
+                      className={`w-3.5 h-3.5 ${highlighted
                           ? "text-white"
                           : "text-blue-600 dark:text-blue-400"
-                      }`}
+                        }`}
                       strokeWidth={3}
                     />
                   </div>
                   <p
-                    className={`text-sm leading-relaxed ${
-                      highlighted
+                    className={`text-sm leading-relaxed ${highlighted
                         ? "text-white"
                         : "text-gray-700 dark:text-gray-300"
-                    }`}
+                      }`}
                   >
                     {feature}
                   </p>
@@ -298,11 +284,10 @@ export default function TaskoriaProPage({
             <Button
               onClick={() => handleActivate(pkg)}
               disabled={loadingPackage !== null || isLoading}
-              className={`w-full py-5 text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg ${
-                highlighted
+              className={`w-full py-5 text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg ${highlighted
                   ? "bg-white text-blue-700 hover:bg-blue-50 hover:shadow-xl hover:shadow-white/20 disabled:bg-white/80"
                   : "bg-linear-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 hover:shadow-xl hover:shadow-blue-500/30 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500"
-              } disabled:cursor-not-allowed`}
+                } disabled:cursor-not-allowed`}
             >
               {loadingPackage === pkg.package_id ? (
                 <div className="flex items-center justify-center gap-2">
@@ -328,18 +313,12 @@ export default function TaskoriaProPage({
       <div className="absolute bottom-0 right-0 w-150 h-150 bg-blue-500/5 dark:bg-blue-500/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
 
       <div className="relative max-w-7xl mx-auto px-4 py-6">
-        <div className="">
-          <Button
-            variant="ghost"
-            className="group flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-            onClick={() => router.back()}
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-medium">Back</span>
-          </Button>
+        <div className=" max-w-6xl mx-auto  ">
+          <ServiceBreadcrumbs currentPage="Pricing" />
         </div>
 
         <div className="text-center  max-w-3xl mx-auto">
+
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-4">
             <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">
