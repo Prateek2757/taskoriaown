@@ -16,7 +16,7 @@ interface Category {
 
 export const useCategories = (limit?: number) => {
   const { data, error, isLoading } = useSWR<Category[]>(
-    "/api/signup/category-selection",
+    "/api/signup/category-selection?v=2",
     fetcher,
     {
       revalidateOnFocus: false,

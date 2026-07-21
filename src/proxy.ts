@@ -24,7 +24,6 @@ const allowedGoogleCrawlerUserAgentTokens = [
   "apis-google",
   "adsbot-google",
   "mediapartners-google",
-  "googleother",
   "feedfetcher-google",
   "storebot-google",
 ];

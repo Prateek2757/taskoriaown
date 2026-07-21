@@ -24,9 +24,9 @@ export const getCategoriesFromDB = unstable_cache(
 
     return result.rows;
   },
-  ["all-categories"],
+  ["all-categories-v2"],
   {
-    revalidate: 604800,
+    revalidate: 600,
     tags: ["categories"],
   },
 );

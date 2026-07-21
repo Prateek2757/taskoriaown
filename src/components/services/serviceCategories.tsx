@@ -181,7 +181,7 @@ export default function ServiceCategoriesClient({
       <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-blue-200/40 blur-3xl dark:bg-blue-700/20" />
       <div className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-sky-200/50 blur-3xl dark:bg-sky-700/20" />
 
-      <div className="relative mx-auto max-w-7xl space-y-10">
+      <div className="relative mx-auto w-full max-w-6xl space-y-10">
         <ServiceBreadcrumbs currentPage="Services" />
         {/* <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:p-8">
           <div className="mb-4 flex items-center justify-between gap-4">
@@ -235,7 +235,7 @@ export default function ServiceCategoriesClient({
           )}
         </div> */}
         <div className="mt-4 ">
-          <p className="block mt-2 text-4xl md:text-5xl text-[#2563EB] font-bold">All Services on Taskoria</p>
+          <p className="block mt-2 text-4xl  text-[#2563EB] font-bold">All Services on Taskoria</p>
           <p className=" mt-5 space-x-2 space-y-2 text-gray-600 text-md dark:text-white">Browse every category — from one-off jobs to ongoing care. Click through to 
           <br/>
            <span >post a free job, or use the home search for instant matching.</span> </p>

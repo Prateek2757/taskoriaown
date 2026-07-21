@@ -265,7 +265,7 @@ export default function LocationSearch({
           id={listboxId}
           role="listbox"
           aria-label="Location suggestions"
-          className="absolute top-full left-0 z-[9999] mt-1 max-h-64 w-full overflow-y-auto
+          className="absolute top-full left-0 z-9999 mt-1 max-h-64 w-full overflow-y-auto
             rounded-xl border border-gray-200 bg-white
             dark:border-gray-700 dark:bg-gray-900
             shadow-lg shadow-black/10 dark:shadow-black/40"

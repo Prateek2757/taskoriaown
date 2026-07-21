@@ -132,13 +132,7 @@ export default function PopularServices() {
                 )}
               </div>
 
-              <div
-                className={
-                  expandedSections[section.label]
-                    ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 pb-2"
-                    : "grid grid-cols-2 sm:flex sm:flex-row gap-3 overflow-x-auto pb-2"
-                }
-              >
+              <div className="grid grid-cols-2 gap-3 pb-2 md:grid-cols-3 lg:grid-cols-4">
                 {(expandedSections[section.label]
                   ? section.categories
                   : section.categories.slice(0, 4)
@@ -150,7 +144,7 @@ export default function PopularServices() {
                         `/services/${category.slug ?? category.category_id}`,
                       )
                     }
-                    className="relative sm:w-78 sm:shrink-0 rounded-2xl overflow-hidden h-36 sm:h-48 cursor-pointer group shadow-sm hover:shadow-lg transition-shadow duration-300 bg-gray-100 dark:bg-gray-800"
+                    className="relative sm:w-68 w-full rounded-2xl overflow-hidden h-36 sm:h-48 cursor-pointer group shadow-sm hover:shadow-lg transition-shadow duration-300 bg-gray-100 dark:bg-gray-800"
                   >
                     <Image
                       title="popular categories"
@@ -158,7 +152,7 @@ export default function PopularServices() {
                       src={category.image_url ?? ""}
                       alt={category.name}
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 640px) 50vw, 288px"
+                      sizes="(max-width: 767px) 50vw, (max-width: 1023px) 33vw, 25vw"
                       priority={index === 0}
                     />
 
