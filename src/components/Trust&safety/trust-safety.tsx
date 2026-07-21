@@ -80,7 +80,7 @@ const TrustSafety = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="py-10 bg-gradient-to-br from-primary/5 to-secondary/5">
+      <section className="py-6 bg-gradient-to-br from-primary/5 to-secondary/5">
         <div className="max-w-7xl mx-auto px-4">
           <div className="max-w-6xl mx-auto text-center space-y-6">
              <ServiceBreadcrumbs currentPage="Trust & Safety" />

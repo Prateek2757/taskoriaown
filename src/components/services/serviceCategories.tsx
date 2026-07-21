@@ -177,14 +177,14 @@ export default function ServiceCategoriesClient({
   const displayData = showData ? filteredData : paginatedData;
 
   return (
-  <section className="relative overflow-hidden bg-linear-to-b from-slate-50 via-white to-sky-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
-  <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-blue-200/40 blur-3xl dark:bg-blue-700/20" />
-  <div className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-sky-200/50 blur-3xl dark:bg-sky-700/20" />
+    <section className="relative overflow-hidden bg-linear-to-b from-slate-50 via-white to-sky-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
+      <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-blue-200/40 blur-3xl dark:bg-blue-700/20" />
+      <div className="absolute -bottom-20 -right-20 h-80 w-80 rounded-full bg-sky-200/50 blur-3xl dark:bg-sky-700/20" />
 
-  <div className="relative max-w-7xl mx-auto px-4 py-6">
-    <div className="max-w-6xl mx-auto">
-      <ServiceBreadcrumbs currentPage="Services" />
-    </div>
+      <div className="relative max-w-7xl mx-auto px-4 py-6">
+        <div className="max-w-6xl mx-auto">
+          <ServiceBreadcrumbs currentPage="Services" />
+        </div>
         {/* <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900 md:p-8">
           <div className="mb-4 flex items-center justify-between gap-4">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 md:text-2xl">
@@ -237,7 +237,10 @@ export default function ServiceCategoriesClient({
           )}
         </div> */}
         <div className="mt-4 ">
-          <p className="block text-4xl md:text-5xl text-[#2563EB] font-bold">All Services on Taskoria</p>
+          <p className="block text-4xl md:text-5xl text-black font-bold">All Services on
+
+            Taskoria
+          </p>
           <p className=" mt-5 space-x-2 space-y-2 text-gray-600 text-md dark:text-white">Browse every category — from one-off jobs to ongoing care. Click through to
             <br />
             <span >post a free job, or use the home search for instant matching.</span> </p>
