@@ -79,7 +79,7 @@
     "next-auth": "^4.24.13",
     "next-themes": "^0.4.6",
     "pg": "^8.16.3",
-    "postcss": "^8.5.14",
+    "postcss": "^8.5.18",
     "protobufjs": "^8.4.1",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.1",
