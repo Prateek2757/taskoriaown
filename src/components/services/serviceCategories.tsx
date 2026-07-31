@@ -1,23 +1,16 @@
 "use client";
 
 import { type ComponentType, useMemo, useState } from "react";
-import {
-  BadgeCheck,
-  ChevronRight,
-  Clock3,
-  FolderOpen,
-  Search,
-  X,
-} from "lucide-react";
+import { FolderOpen } from "lucide-react";
 import Link from "next/link";
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import NewRequestModal from "../leads/RequestModal";
 import Image from "next/image";
-import Services from "../Categories";
 import FilterServices from "./FilterServices";
 import usePagination from "@/hooks/usePagination";
-import CategoryAlphabetDirectory, { DirectoryCategory } from "../category/CategoryAlphabetDirectory";
+import CategoryAlphabetDirectory, {
+  DirectoryCategory,
+} from "../category/CategoryAlphabetDirectory";
 import ServiceBreadcrumbs from "./ServicesBreadcrumbs";
 
 interface ServiceCategory {
@@ -121,7 +114,6 @@ export default function ServiceCategoriesClient({
     return filteredCategories.filter((cat) => !topIds.has(cat.category_id));
   }, [filteredCategories, topCategories]);
 
-
   const directoryCategories = useMemo<DirectoryCategory[]>(() => {
     return secondaryCategories
       .filter((category) => category.name && category.slug)
@@ -163,7 +155,7 @@ export default function ServiceCategoriesClient({
   const filteredData = useMemo(() => {
     let data = hasSearchQuery ? filteredCategories : secondaryCategories;
 
-    if (filterData !==  "Cleaning Services") {
+    if (filterData !== "Cleaning Services") {
       data = data.filter(
         (c) =>
           c.main_category?.toLowerCase().trim() ===
@@ -173,7 +165,7 @@ export default function ServiceCategoriesClient({
 
     return data;
   }, [hasSearchQuery, filteredCategories, secondaryCategories, filterData]);
-  const { paginatedData } = usePagination(filteredData, 9, filterData);//for now showing all service we have paginated logic of neccessary
+  const { paginatedData } = usePagination(filteredData, 9, filterData); //for now showing all service we have paginated logic of neccessary
   const displayData = showData ? filteredData : paginatedData;
 
   return (
@@ -235,10 +227,17 @@ export default function ServiceCategoriesClient({
           )}
         </div> */}
         <div className="mt-4 ">
-          <p className="block mt-2 text-4xl  text-[#2563EB] font-bold">All Services on Taskoria</p>
-          <p className=" mt-5 space-x-2 space-y-2 text-gray-600 text-md dark:text-white">Browse every category — from one-off jobs to ongoing care. Click through to 
-          <br/>
-           <span >post a free job, or use the home search for instant matching.</span> </p>
+          <p className="block mt-2 text-4xl  text-[#2563EB] font-bold">
+            All Services on Taskoria
+          </p>
+          <p className=" mt-5 space-x-2 space-y-2 text-gray-600 text-md dark:text-white">
+            Browse every category — from one-off jobs to ongoing care. Click
+            through to
+            <br />
+            <span>
+              post a free job, or use the home search for instant matching.
+            </span>{" "}
+          </p>
         </div>
         <NewRequestModal
           open={openModal}
@@ -378,15 +377,15 @@ export default function ServiceCategoriesClient({
           </section>
         ) : null} */}
 
-{directoryCategories.length > 0 ? (
-  <CategoryAlphabetDirectory
-    categories={directoryCategories}
-    buildHref={(category) => `/services/${category.slug}`}
-    locationLabel="Australia"
-    title="Browse all services"
-    className="pt-0 pb-0"
-  />
-) : null}
+        {directoryCategories.length > 0 ? (
+          <CategoryAlphabetDirectory
+            categories={directoryCategories}
+            buildHref={(category) => `/services/${category.slug}`}
+            locationLabel="Australia"
+            title="Browse all services"
+            className="pt-0 pb-0"
+          />
+        ) : null}
 
         {/* <section className="grid gap-4 md:grid-cols-3">
           <InfoCard
@@ -428,8 +427,6 @@ export default function ServiceCategoriesClient({
     </section>
   );
 }
-
-
 
 function TrustRow({
   icon: Icon,

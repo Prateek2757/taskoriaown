@@ -97,7 +97,7 @@ export async function POST(req: Request) {
         Number(session.user.id),
       ]
     );
-    revalidateTag("blog-posts", "default");
+    revalidateTag("blog-post", "default");
     return NextResponse.json(rows[0], { status: 201 });
   } catch (err: unknown) {
     if ((err as { code?: string }).code === "23505") {

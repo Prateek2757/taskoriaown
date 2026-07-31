@@ -135,7 +135,7 @@ export default function HowItWorksPage() {
           <div className="max-w-6xl mx-auto">
             <ServiceBreadcrumbs currentPage="How it works" />
           </div>
-          <section className="border-b border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-slate-950">
+          <section className="border-b border-slate-200  dark:border-white/10 dark:bg-slate-950">
 
             <div className=" grid  gap-10  py-6 lg:grid-cols-[1.02fr_0.98fr]  ">
 
@@ -229,7 +229,7 @@ export default function HowItWorksPage() {
                 </article>
 
                 <article className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/5">
-                  <div className="relative aspect-[4/3] bg-slate-100">
+                  <div className="relative aspect-4/3 bg-slate-100">
                     <Image
                       src="/images/providers.jpeg"
                       alt="Service provider reviewing customer leads on Taskoria"

@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MessageCircle, X } from "lucide-react";
 
@@ -11,6 +12,12 @@ const DEFAULT_DEPLOYMENT_NAME =
   "projects/942515104650/locations/us/apps/1fd5d94e-afde-4166-8013-b92f55e3aa19/deployments/63a157f1-3537-461f-9165-b5423d6e8175";
 
 const MESSAGE_COOLDOWN_MS = 7000;
+
+type ChatMessengerElement = HTMLElement & {
+  setQueryParameters?: (queryParameters: {
+    parameters: Record<string, string | boolean>;
+  }) => void;
+};
 
 let registrationStarted = false;
 let registrationCompleted = false;
@@ -78,9 +85,12 @@ function isChatSdkReady() {
 export default function TaskoriaAgent() {
   const panelRef = useRef<HTMLDivElement | null>(null);
 
-  const messengerRef = useRef<HTMLElement | null>(null);
+  const messengerRef = useRef<ChatMessengerElement | null>(null);
   const cooldownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cooldownUntilRef = useRef<number>(0);
+
+  const { data: session, status } = useSession();
+  const userName = session?.user?.name?.trim() || "";
 
   const [isOpen, setIsOpen] = useState(false);
   const [isCoolingDown, setIsCoolingDown] = useState(false);
@@ -110,6 +120,19 @@ export default function TaskoriaAgent() {
   const shouldBlockMessage = useCallback(() => {
     return Date.now() < cooldownUntilRef.current;
   }, []);
+
+  const setChatUserContext = useCallback(() => {
+    const messenger = messengerRef.current;
+
+    if (!messenger?.setQueryParameters || status === "loading") return;
+
+    messenger.setQueryParameters({
+      parameters: {
+        user_name: userName,
+        is_authenticated: status === "authenticated",
+      },
+    });
+  }, [status, userName]);
 
   const registerAgent = useCallback(() => {
     if (typeof window === "undefined") return;
@@ -154,6 +177,7 @@ export default function TaskoriaAgent() {
 
     const handleLoaded = () => {
       registerAgent();
+      setChatUserContext();
     };
 
     const handleError = (event: Event) => {
@@ -218,6 +242,7 @@ export default function TaskoriaAgent() {
     document.addEventListener("click", handleClick, true);
 
     registerAgent();
+    setChatUserContext();
 
     return () => {
       window.removeEventListener("chat-messenger-loaded", handleLoaded);
@@ -239,6 +264,7 @@ export default function TaskoriaAgent() {
     isInsideMessenger,
     shouldBlockMessage,
     startCooldown,
+    setChatUserContext,
   ]);
   return (
     <>
