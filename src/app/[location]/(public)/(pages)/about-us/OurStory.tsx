@@ -6,7 +6,7 @@ export function OurStory() {
   const [showMore, setShowMore] = useState(false);
   return (
     <>
-      <div className="relative z-10 max-w-lg mx-12 bg-white rounded-tl-[28px] rounded-tr-[28px] rounded-br-[28px] p-12 shadow-lg dark:bg-black ">
+      <div className="relative z-10 max-w-lg mx-1 bg-white rounded-tl-[28px] rounded-tr-[28px] rounded-br-[28px] p-6 sm:p-12 shadow-lg dark:bg-black ">
         <h2 className="text-4xl font-light text-gray-900 mb-6 dark:text-white">
           Our Story
         </h2>

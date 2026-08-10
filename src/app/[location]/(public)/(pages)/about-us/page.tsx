@@ -315,17 +315,17 @@ export default function AboutUs() {
           </p>
         </div>
 
-        <div className="relative">
-          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-linear-to-b from-blue-200 via-blue-400 to-blue-600 hidden md:block"></div>
+        <div className="relative pl-8 md:pl-0">
+          <div className="absolute bottom-0 left-3 top-0 w-0.5 bg-linear-to-b from-blue-200 via-blue-400 to-blue-600 md:left-1/2 md:-translate-x-1/2"></div>
 
           <div className="space-y-10">
             {timeline.map((item, index) => (
               <div
                 key={index}
-                className={`relative flex items-center ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
+                className={`relative flex w-full items-center ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
               >
                 <div
-                  className={`flex-1 ${index % 2 === 0 ? "md:pr-12 md:text-right" : "md:pl-14"}`}
+                  className={`w-full md:flex-1 ${index % 2 === 0 ? "md:pr-12 md:text-right" : "md:pl-14"}`}
                 >
                   <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-shadow">
                     <div className="text-blue-600 font-bold text-md mb-2">
@@ -334,17 +334,17 @@ export default function AboutUs() {
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">
                       {item.title}
                     </h3>
-                    <p className="text-slate-600 dark:text-slate-300 text-justify">
+                    <p className="text-left text-slate-600 dark:text-slate-300 md:text-justify">
                       {item.description}
                     </p>
                   </div>
                 </div>
 
-                <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 w-10 h-10 bg-blue-600 rounded-full items-center justify-center shadow-lg border-4 border-white z-10">
+                <div className="absolute -left-8 z-10 flex h-6 w-6 items-center justify-center rounded-full border-4 border-white bg-blue-600 shadow-lg md:left-1/2 md:h-10 md:w-10 md:-translate-x-1/2">
                   <div className="w-3 h-3 bg-white rounded-full"></div>
                 </div>
 
-                <div className="flex-1"></div>
+                <div className="hidden flex-1 md:block"></div>
               </div>
             ))}
           </div>

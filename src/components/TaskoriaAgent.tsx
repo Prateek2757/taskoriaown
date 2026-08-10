@@ -331,7 +331,7 @@ export default function TaskoriaAgent() {
         .taskoria-agent-launcher {
           position: fixed;
           right: 16px;
-          bottom: max(16px, env(safe-area-inset-bottom));
+          bottom: max(66px, env(safe-area-inset-bottom));
           z-index: 9999;
           display: flex;
           align-items: center;
