@@ -205,7 +205,9 @@ export async function GET(req: NextRequest, { params }: Props) {
 
     return NextResponse.json(rows, {
       headers: {
-        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600",
+        "Cache-Control": "public, max-age=60, s-maxage=900, stale-while-revalidate=86400",
+        "CDN-Cache-Control": "public, s-maxage=900, stale-while-revalidate=86400",
+        "Vercel-CDN-Cache-Control": "public, s-maxage=900, stale-while-revalidate=86400",
       },
     });
   } catch (error) {
