@@ -6,9 +6,9 @@ import {
   xmlResponse,
 } from "@/lib/sitemap-helpers";
 
-// The index size depends on database-backed sitemap data. Generate it at
-// request time so the Docker build does not need a PostgreSQL connection.
-export const dynamic = "force-dynamic";
+// Sitemap structure changes infrequently; avoid a database-backed function run
+// for every crawler request.
+export const revalidate = 86400;
 
 const STATIC_SITEMAPS = [
   "sitemaps/static.xml",

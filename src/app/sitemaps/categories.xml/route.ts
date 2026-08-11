@@ -9,7 +9,7 @@ import {
   xmlResponse,
 } from "@/lib/sitemap-helpers";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 86400;
 
 export async function GET() {
   const [categoriesRaw, cities] = await Promise.all([

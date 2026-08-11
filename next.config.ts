@@ -25,7 +25,25 @@ const appImagePattern = (() => {
 const withSerwist = withSerwistInit({
   swSrc: "src/app/sw.ts",
   swDest: "public/sw.js",
-  cacheOnNavigation: true,
+  // Large public media should only be fetched when a page actually needs it.
+  // Precaching it made every service-worker install download tens of MB.
+  additionalPrecacheEntries: [],
+  manifestTransforms: [
+    async (entries) => ({
+      // Next.js route chunks and public media are cached on demand by the
+      // runtime strategies in sw.ts. Preloading all of them makes each new
+      // service-worker installation transfer the whole application.
+      manifest: entries.filter(
+        ({ url }) =>
+          !url.includes("/_next/static/chunks/") &&
+          !/\.(?:avif|gif|jpe?g|mp3|mp4|ogg|png|svg|wav|webm|webp)(?:\?|$)/i.test(
+            url,
+          ),
+      ),
+      warnings: [],
+    }),
+  ],
+  cacheOnNavigation: false,
   reloadOnOnline: true,
   disable: process.env.NODE_ENV !== "production",
 });

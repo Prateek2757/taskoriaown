@@ -190,6 +190,8 @@ export { proxy };
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // API requests and static files do not need locale/auth rewriting. Keeping
+    // them out of Proxy avoids a billed invocation before their real handler.
+    "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|sitemaps/|.*\\..*).*)",
   ],
 };
