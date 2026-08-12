@@ -17,12 +17,10 @@ import {
   getSeoStatesFromDB,
 } from "@/lib/cache";
 
-// Service/location combinations are public SEO pages. Generate them on first
-// request and reuse the result at the CDN for a week instead of rendering the
-// same database-backed page for every visitor and Next.js prefetch.
-export const dynamic = "force-static";
-export const dynamicParams = true;
-export const revalidate = 604800;
+// Render service/location pages at request time to avoid creating an ISR entry
+// for every service and locality combination. The underlying database queries
+// and provider endpoint retain their own shared caches.
+export const dynamic = "force-dynamic";
 type Props = {
   params: Promise<{ slug?: string[] }>;
 };
