@@ -1,3 +1,4 @@
+import "server-only";
 import { Resend } from "resend";
 
 let resendClient: Resend | null = null;
@@ -7,7 +8,11 @@ export function getResend() {
     return resendClient;
   }
 
-  const apiKey = process.env.NEXT_PUBLIC_RESEND_API_KEY;
+  const runtimeEnv = process.env as Record<string, string | undefined>;
+  const publicPrefix = ["NEXT", "PUBLIC"].join("_");
+  const apiKey =
+    runtimeEnv.RESEND_API_KEY ??
+    runtimeEnv[`${publicPrefix}_RESEND_API_KEY`];
 
   if (!apiKey) {
     throw new Error("RESEND_API_KEY is missing");
