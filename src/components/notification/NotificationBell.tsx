@@ -117,6 +117,10 @@ export default function NotificationBell({ userId }: { userId: number }) {
     };
 
     fetchNotifications();
+    // Supabase Realtime can be temporarily unavailable (for example when a
+    // project is quota-restricted). Polling keeps the bell functional while
+    // the realtime subscription remains the fast path.
+    const pollNotifications = window.setInterval(fetchNotifications, 15_000);
 
     if (!globalChannelRef || globalUserId !== userId) {
       if (globalChannelRef) {
@@ -164,6 +168,7 @@ export default function NotificationBell({ userId }: { userId: number }) {
     }
 
     return () => {
+      window.clearInterval(pollNotifications);
       // console.log("🔄 Component unmounting");
       initializedRef.current = false;
     };

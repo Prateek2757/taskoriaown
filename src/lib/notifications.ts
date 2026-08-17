@@ -1,4 +1,5 @@
-import { getSupabaseAdmin } from "@/lib/supabase-admin";
+import "server-only";
+import pool from "@/lib/dbConnect";
 
 type CreateNotificationParams = {
   userId: string;
@@ -31,29 +32,13 @@ export async function createNotification({
   action_url,
   role,
 }: CreateNotificationParams) {
-  const supabaseAdmin = getSupabaseAdmin();
+  const { rows } = await pool.query(
+    `INSERT INTO notifications
+      (user_id, title, body, channel, type, user_name, action_url, role, is_read, created_at)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, FALSE, NOW())
+     RETURNING *`,
+    [userId, title, body, channel, type ?? null, user_name ?? null, action_url ?? null, role ?? null]
+  );
 
-  const { data: notification, error } = await supabaseAdmin
-    .from("notifications")
-    .insert({
-      user_id: userId,
-      title,
-      body,
-      channel,
-      type,
-      user_name,
-      action_url,
-      role,
-      is_read: false,
-      created_at: new Date().toISOString(),
-    })
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Error creating notification:", error);
-    throw error;
-  }
-
-  return notification;
+  return rows[0];
 }

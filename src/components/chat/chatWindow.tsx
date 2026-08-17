@@ -60,9 +60,9 @@ export default function ChatWindow({
   useEffect(() => {
     if (!conversationId) return;
 
-    const loadMessages = async () => {
+    const loadMessages = async (showLoading = true) => {
       try {
-        setLoading(true);
+        if (showLoading) setLoading(true);
         const res = await axios.get(
           `/api/messages/conversation-read/${conversationId}`
         );
@@ -73,11 +73,13 @@ export default function ChatWindow({
       } catch (err) {
         console.error("Fetch messages error:", err);
       } finally {
-        setLoading(false);
+        if (showLoading) setLoading(false);
       }
     };
 
     loadMessages();
+    // Keep receiving persisted messages when Supabase Realtime is unavailable.
+    const messagePoll = window.setInterval(() => loadMessages(false), 5_000);
 
     // const chan = supabaseBrowser.channel(`conversation:${conversationId}`, {
     //   config: {
@@ -200,6 +202,7 @@ export default function ChatWindow({
     }, 1000);
 
     return () => {
+      window.clearInterval(messagePoll);
       clearInterval(cleanTyping);
       // ✅ Use `chan` directly — don't rely on channelRef which may not be set yet
       chan.unsubscribe();
@@ -272,7 +275,9 @@ export default function ChatWindow({
 
       broadcastPromises.push(sidebarBroadcast);
 
-      await Promise.all(broadcastPromises);
+      // The message is already committed by the API. Realtime broadcasts are
+      // best-effort; polling above is the delivery fallback.
+      await Promise.allSettled(broadcastPromises);
 
       setTimeout(() => {
         supabaseBrowser.removeChannel(sidebarChannel);
