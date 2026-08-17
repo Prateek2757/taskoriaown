@@ -277,7 +277,7 @@ export function TrustBadges({
 
       <div className="inline-flex flex-wrap items-center gap-3 sm:gap-4">
         {/* Google Reviews */}
-        {!fetchError && <GoogleBadge data={googleData ?? null} />}
+        {/* {!fetchError && <GoogleBadge data={googleData ?? null} />} */}
 
         {/* Divider — only show when both badges are visible */}
         {/* {!fetchError && <Divider />} */}
