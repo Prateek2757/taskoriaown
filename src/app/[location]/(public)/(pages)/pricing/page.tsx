@@ -4,6 +4,7 @@ import { getProfessionalPackagesFromDB } from "@/lib/cache";
 
 // Package data changes rarely and is already invalidated by its cache tag.
 export const revalidate = 604800;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: `Taskoria Pricing | Provider Plans and Credits`,
