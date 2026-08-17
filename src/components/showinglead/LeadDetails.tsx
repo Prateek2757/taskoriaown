@@ -17,7 +17,6 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useConversation } from "@/hooks/useConversation";
 import LocationMap from "../map/map";
-import { createNotification } from "@/lib/notifications";
 import { useSubscription } from "@/hooks/useSubcription";
 import { useRouter } from "next/navigation";
 import ContactActions from "../provider-responses/ContactActions";
@@ -262,24 +261,6 @@ const LeadDetails: React.FC<LeadDetailsProps> = ({
       }
 
       await fetchResponses();
-
-      await createNotification({
-        userId: String(session?.user?.id),
-        title: isFree
-          ? "Free Lead Claimed 🎉!"
-          : "Lead Purchased Successfully 🎉!",
-        type: "lead_purchased",
-        body: `Congratulations ${session?.user?.name}! You have ${isFree ? "claimed a free" : "purchased a"} Lead For ${lead.category_name}`,
-        action_url: `/provider-responses`,
-      });
-
-      await createNotification({
-        userId: String(userId),
-        title: "Lead Response 🎉",
-        type: "lead_response",
-        body: `Congratulations! Your Posted ${lead.category_name} Lead Got Response By ${session?.user?.name}`,
-        action_url: `/customer/dashboard`,
-      });
 
       toast.info("Preparing your chat...");
       await new Promise((resolve) => setTimeout(resolve, 500));

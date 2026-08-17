@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/dbConnect";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { createNotification } from "@/lib/notifications";
 
 interface DeductRequestBody {
   professionalId: string;
@@ -9,10 +12,20 @@ interface DeductRequestBody {
 
 export async function POST(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body: DeductRequestBody = await req.json();
     const { professionalId, taskId, credits } = body;
 
-    if (!professionalId || credits === undefined || credits === null ) {
+    if (
+      !professionalId ||
+      professionalId !== session.user.id ||
+      credits === undefined ||
+      credits === null
+    ) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     }
 
@@ -74,8 +87,27 @@ export async function POST(req: Request) {
       );
 
       let responseId: number | null = null;
+      let taskOwnerId: string | null = null;
+      let categoryName = "Task";
 
       if (taskId) {
+        const { rows: taskRows } = await client.query(
+          `SELECT t.customer_id, sc.name AS category_name
+           FROM tasks t
+           LEFT JOIN service_categories sc ON sc.category_id = t.category_id
+           WHERE t.task_id = $1
+           LIMIT 1`,
+          [taskId]
+        );
+
+        if (taskRows.length === 0) {
+          await client.query("ROLLBACK");
+          return NextResponse.json({ error: "Task not found" }, { status: 404 });
+        }
+
+        taskOwnerId = String(taskRows[0].customer_id);
+        categoryName = taskRows[0].category_name || "Task";
+
         const result = await client.query(
           `
       
@@ -94,6 +126,36 @@ export async function POST(req: Request) {
       }
 
       await client.query("COMMIT");
+
+      if (taskOwnerId) {
+        const professionalName = session.user.name?.trim() || "A professional";
+        const notificationResults = await Promise.allSettled([
+          createNotification({
+            userId: professionalId,
+            title:
+              credits === 0
+                ? "Free Lead Claimed 🎉!"
+                : "Lead Purchased Successfully 🎉!",
+            type: "lead_purchased",
+            body: `You have ${credits === 0 ? "claimed a free" : "purchased a"} lead for ${categoryName}`,
+            action_url: "/provider-responses",
+          }),
+          createNotification({
+            userId: taskOwnerId,
+            title: "Lead Response 🎉",
+            type: "lead_response",
+            body: `Your ${categoryName} task received a response from ${professionalName}`,
+            action_url: "/customer/dashboard",
+          }),
+        ]);
+
+        notificationResults.forEach((result) => {
+          if (result.status === "rejected") {
+            console.error("Lead notification delivery failed:", result.reason);
+          }
+        });
+      }
+
       return NextResponse.json({
         success: true,
         responseId,

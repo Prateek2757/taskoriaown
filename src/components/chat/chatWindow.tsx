@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSession } from "next-auth/react";
 import MessageList from "./messageList";
 import { supabaseBrowser } from "@/lib/supabase-server";
-import { createNotification } from "@/lib/notifications";
 import { Info } from "lucide-react";
 import axios from "axios";
 import TaskDetailsPanel from "./task-details";
@@ -42,7 +40,6 @@ export default function ChatWindow({
   const [showTaskDetails, setShowTaskDetails] = useState<boolean>(false);
 
   const channelRef = useRef<any>(null);
-  const { data: session } = useSession();
 
   const sortMessages = (arr: Message[]) =>
     arr.sort(
@@ -281,22 +278,6 @@ export default function ChatWindow({
         supabaseBrowser.removeChannel(sidebarChannel);
       }, 100);
 
-      const otherUserIsViewing =
-        OtherUserId && activeUsers.includes(String(OtherUserId));
-
-      const role = localStorage.getItem("viewMode");
-
-      if (!otherUserIsViewing && OtherUserId) {
-        await createNotification({
-          userId: String(OtherUserId),
-          type: "message",
-          user_name: `${session?.user.name}`,
-          title: `${session?.user.name} is messaging you`,
-          body: `You have received a message from ${session?.user.name}`,
-          action_url: `/messages/${conversationId}`,
-          role: String(role),
-        });
-      }
     } catch (err) {
       console.error("Send message error:", err);
       setMessages((prev) =>
