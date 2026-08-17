@@ -126,6 +126,27 @@ interface CheckoutRequestBody {
   freeTrailDays?: number;
 }
 
+function getAppUrl() {
+  const runtimeEnv = globalThis.process?.env;
+  const configuredUrl =
+    runtimeEnv?.APP_URL ??
+    runtimeEnv?.NEXT_PUBLIC_APP_URL ??
+    "https://www.taskoria.com";
+
+  try {
+    const appUrl = new URL(configuredUrl);
+    if (appUrl.protocol !== "https:" && appUrl.protocol !== "http:") {
+      throw new Error("unsupported protocol");
+    }
+
+    return appUrl;
+  } catch {
+    throw new Error(
+      "APP_URL must be a complete URL such as https://www.taskoria.com",
+    );
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const stripe = getStripe();
@@ -169,9 +190,11 @@ export async function POST(request: Request) {
       }
     }
 
-    const successUrl = credits
-      ? `${process.env.NEXT_PUBLIC_APP_URL}/provider/leads`
-      : `${process.env.NEXT_PUBLIC_APP_URL}/provider/dashboard`;
+    const appUrl = getAppUrl();
+    const successUrl = new URL(
+      credits ? "/provider/leads" : "/provider/dashboard",
+      appUrl,
+    ).toString();
 
     let sessionData: any = {
       payment_method_types: ["card"],
@@ -183,7 +206,7 @@ export async function POST(request: Request) {
         type: credits ? "credit_onetime" : "pro_subscription",
       },
       success_url: successUrl,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/provider/dashboard`,
+      cancel_url: new URL("/provider/dashboard", appUrl).toString(),
     };
 
     if (credits) {
