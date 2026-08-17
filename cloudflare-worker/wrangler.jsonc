@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "taskoria-cloud-run-proxy",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-08-17",
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "www.taskoria.com",
+      "custom_domain": true
+    },
+    {
+      "pattern": "taskoria.com",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

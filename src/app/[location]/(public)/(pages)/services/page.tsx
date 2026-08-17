@@ -5,6 +5,9 @@ import type { Metadata } from "next";
 // Category data is already cached; reuse the rendered page between requests.
 export const revalidate = 600;
 
+// This route reads database-backed data, so it must not be prerendered in the container build.
+export const dynamic = "force-dynamic";
+
 const BASE_URL = "https://www.taskoria.com";
 const PAGE_URL = `${BASE_URL}/services`;
 

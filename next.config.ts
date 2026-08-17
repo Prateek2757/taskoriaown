@@ -237,6 +237,16 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "taskoria.com" }],
+        destination: "https://www.taskoria.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
   // async rewrites() {
   //   return [
   //     { source: "/proposal", destination: "/views/proposal" },
