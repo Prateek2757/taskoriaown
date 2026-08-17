@@ -35,7 +35,7 @@ const withSerwist = withSerwistInit({
       // service-worker installation transfer the whole application.
       manifest: entries.filter(
         ({ url }) =>
-          !url.includes("/_next/static/chunks/") &&
+          !url.startsWith("/_next/static/") &&
           !/\.(?:avif|gif|jpe?g|mp3|mp4|ogg|png|svg|wav|webm|webp)(?:\?|$)/i.test(
             url,
           ),
@@ -44,7 +44,9 @@ const withSerwist = withSerwistInit({
     }),
   ],
   cacheOnNavigation: false,
-  reloadOnOnline: true,
+  // Reconnecting should not force every open tab to reload the application.
+  // Users can continue from the runtime cache and refresh normally if needed.
+  reloadOnOnline: false,
   disable: process.env.NODE_ENV !== "production",
 });
 

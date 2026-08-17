@@ -6,6 +6,29 @@ const secret = process.env.NEXTAUTH_SECRET;
 const defaultLocale = "en";
 const publicLocalePrefixes = new Set(["en", "en-au", "au", "ne"]);
 
+type RateLimitEntry = { count: number; resetAt: number };
+
+// This protects downstream handlers from short bursts. On Vercel, each isolate has
+// its own memory, so keep the Vercel Firewall enabled for globally coordinated
+// rate limiting as well.
+const rateLimitStore = new Map<string, RateLimitEntry>();
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const SENSITIVE_API_PREFIXES = [
+  "/api/auth/forget-password",
+  "/api/auth/register-session",
+  "/api/chat",
+  "/api/contact",
+  "/api/emailVerification",
+  "/api/googlemap",
+  "/api/provider-compose-email",
+  "/api/signup",
+];
+const FILTER_EXEMPT_PATHS = [
+  "/api/cron/",
+  "/api/stripe/webhook",
+  "/api/stripe/prowebhook",
+];
+
 const protectedPaths = [
   "/provider/dashboard",
   "/messages",
@@ -59,6 +82,65 @@ function isCrawlerRequest(req: NextRequest) {
   );
 }
 
+function isFilterExemptPath(pathname: string) {
+  return FILTER_EXEMPT_PATHS.some((path) => pathname.startsWith(path));
+}
+
+function getClientIp(req: NextRequest) {
+  return (
+    req.headers.get("x-real-ip") ??
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    "unknown"
+  );
+}
+
+function getApiRequestLimit(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+
+  if (SENSITIVE_API_PREFIXES.some((path) => pathname.startsWith(path))) {
+    return 10;
+  }
+
+  // Mutations are more costly and risky than ordinary reads.
+  return ["POST", "PUT", "PATCH", "DELETE"].includes(req.method) ? 30 : 120;
+}
+
+function rateLimitApiRequest(req: NextRequest) {
+  const now = Date.now();
+  const limit = getApiRequestLimit(req);
+  const key = `${getClientIp(req)}:${req.method}:${req.nextUrl.pathname}`;
+  const current = rateLimitStore.get(key);
+
+  // Bound memory use if an attacker continuously rotates source addresses.
+  if (rateLimitStore.size > 10_000) {
+    for (const [storedKey, entry] of rateLimitStore) {
+      if (entry.resetAt <= now) rateLimitStore.delete(storedKey);
+    }
+  }
+
+  if (!current || current.resetAt <= now) {
+    rateLimitStore.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return null;
+  }
+
+  current.count += 1;
+  if (current.count <= limit) return null;
+
+  const retryAfter = Math.max(1, Math.ceil((current.resetAt - now) / 1000));
+  return NextResponse.json(
+    { error: "Too many requests. Please try again shortly." },
+    {
+      status: 429,
+      headers: {
+        "Cache-Control": "no-store",
+        "Retry-After": String(retryAfter),
+        "X-RateLimit-Limit": String(limit),
+        "X-RateLimit-Remaining": "0",
+      },
+    }
+  );
+}
+
 function stripPublicLocale(pathname: string) {
   const [, firstSegment = "", ...restSegments] = pathname.split("/");
 
@@ -109,7 +191,10 @@ function getSafeRedirectPath(value: string | null, req: NextRequest) {
 async function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
+  const isExempt = isFilterExemptPath(pathname);
+
   if (
+    !isExempt &&
     pathname !== "/robots.txt" &&
     !isAllowedGoogleCrawlerRequest(req) &&
     isCrawlerRequest(req)
@@ -121,6 +206,11 @@ async function proxy(req: NextRequest) {
         "Cache-Control": "no-store",
       },
     });
+  }
+
+  if (pathname.startsWith("/api/") && !isExempt) {
+    const rateLimitedResponse = rateLimitApiRequest(req);
+    if (rateLimitedResponse) return rateLimitedResponse;
   }
 
   if (
@@ -190,8 +280,6 @@ export { proxy };
 
 export const config = {
   matcher: [
-    // API requests and static files do not need locale/auth rewriting. Keeping
-    // them out of Proxy avoids a billed invocation before their real handler.
-    "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|sitemaps/|.*\\..*).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)",
   ],
 };

@@ -55,8 +55,11 @@ const serwist = new Serwist({
     },
 
     {
-      matcher: /\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,
-      handler: new StaleWhileRevalidate({
+      // These files are deployed with year-long immutable cache headers. A
+      // stale-while-revalidate strategy still starts a network request on
+      // every view, which needlessly warms Vercel's origin/CDN path again.
+      matcher: /\.(?:avif|jpg|jpeg|gif|png|svg|ico|webp)$/i,
+      handler: new CacheFirst({
         cacheName: "static-image-assets",
         plugins: [
           new ExpirationPlugin({
@@ -69,7 +72,7 @@ const serwist = new Serwist({
 
     {
       matcher: /\/_next\/image\?url=.+$/i,
-      handler: new StaleWhileRevalidate({
+      handler: new CacheFirst({
         cacheName: "next-image",
         plugins: [
           new ExpirationPlugin({
@@ -101,8 +104,10 @@ const serwist = new Serwist({
     },
 
     {
-      matcher: /\.(?:js)$/i,
-      handler: new StaleWhileRevalidate({
+      // Only cache Next's content-hashed build assets cache-first. Do not
+      // catch dynamic JavaScript endpoints such as /api/runtime-config.js.
+      matcher: /\/_next\/static\/.*\.js$/i,
+      handler: new CacheFirst({
         cacheName: "static-js-assets",
         plugins: [
           new ExpirationPlugin({
@@ -114,8 +119,8 @@ const serwist = new Serwist({
     },
 
     {
-      matcher: /\.(?:css|less)$/i,
-      handler: new StaleWhileRevalidate({
+      matcher: /\/_next\/static\/.*\.(?:css|less)$/i,
+      handler: new CacheFirst({
         cacheName: "static-style-assets",
         plugins: [
           new ExpirationPlugin({

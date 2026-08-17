@@ -3,10 +3,13 @@ import pool from "@/lib/dbConnect";
 import { sendEmailQueue } from "@/lib/sendEmailQueue";
 
 export async function GET(req: NextRequest) {
-  // Uncomment in production:
-  // if (req.headers.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) {
-  //   return new Response("Unauthorized", { status: 401 });
-  // }
+  const cronSecret = process.env.CRON_SECRET;
+  if (
+    !cronSecret ||
+    req.headers.get("authorization") !== `Bearer ${cronSecret}`
+  ) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const type = req.nextUrl.searchParams.get("type");
   if (!type || !["nudge", "month"].includes(type)) {
