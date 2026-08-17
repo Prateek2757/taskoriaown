@@ -8,6 +8,10 @@
     {
       "pattern": "www.taskoria.com",
       "custom_domain": true
+    },
+    {
+      "pattern": "taskoria.com",
+      "custom_domain": true
     }
   ],
   "observability": {
