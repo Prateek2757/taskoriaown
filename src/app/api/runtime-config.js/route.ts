@@ -15,6 +15,14 @@ export function GET() {
       runtimeEnv[`${publicPrefix}_SUPABASE_ANON_KEY`] ??
       runtimeEnv.SUPABASE_ANON_KEY ??
       "",
+    // These values are intentionally public: both are sent to the browser.
+    // Restrict the Google Maps key by HTTP referrer in Google Cloud Console.
+    googleMapsApiKey:
+      runtimeEnv[`${publicPrefix}_GOOGLE_MAPS_API_KEY`] ??
+      runtimeEnv.GOOGLE_MAPS_API_KEY ??
+      "",
+    ckEditorLicenseKey:
+      runtimeEnv[`${publicPrefix}_CK_EDITOR_5`] ?? runtimeEnv.CK_EDITOR_5 ?? "",
   }).replace(/</g, "\\u003c");
 
   return new NextResponse(`window.__TASKORIA_CONFIG__=${config};`, {

@@ -10,14 +10,21 @@ interface CkEditorProps {
   placeholder?: string;
 }
 
-const LICENSE_KEY = process.env.CK_EDITOR_5 ?? process.env.NEXT_PUBLIC_CK_EDITOR_5!;
-
 export default function CkEditor({
   value = "",
   onChange,
   height = "300px",
   placeholder = "Write your content here...",
 }: CkEditorProps) {
+  // CKEditor validates this key in the browser. Use the build-time public
+  // variable locally and the runtime configuration fallback on Cloud Run.
+  const licenseKey =
+    process.env.NEXT_PUBLIC_CK_EDITOR_5 ??
+    (typeof window === "undefined"
+      ? undefined
+      : (window as Window & {
+          __TASKORIA_CONFIG__?: { ckEditorLicenseKey?: string };
+        }).__TASKORIA_CONFIG__?.ckEditorLicenseKey);
   const cloud = useCKEditorCloud({
     version: "48.0.1",
   });
@@ -54,7 +61,7 @@ export default function CkEditor({
     return {
       ClassicEditor,
       config: {
-        licenseKey: LICENSE_KEY,
+        licenseKey,
 
         placeholder,
 
@@ -131,7 +138,7 @@ export default function CkEditor({
         },
       },
     };
-  }, [cloud, placeholder]);
+  }, [cloud, licenseKey, placeholder]);
 
   if (cloud.status === "loading") {
     return (

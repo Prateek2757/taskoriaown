@@ -28,7 +28,16 @@ export default function LocationMap({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  // NEXT_PUBLIC_* variables are baked in during `next build`; Cloud Run
+  // supplies its environment at container start, so use the runtime config
+  // endpoint as a production fallback.
+  const GOOGLE_MAPS_API_KEY =
+    process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ??
+    (typeof window === "undefined"
+      ? undefined
+      : (window as Window & {
+          __TASKORIA_CONFIG__?: { googleMapsApiKey?: string };
+        }).__TASKORIA_CONFIG__?.googleMapsApiKey);
 
   const initMap = () => {
     if (!mapRef.current || mapInstance.current || !window.google) return;
