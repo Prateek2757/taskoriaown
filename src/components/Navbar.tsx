@@ -74,7 +74,6 @@ export default function Navbar() {
   const handleLogout = async () => {
     setIsProfileOpen(false);
     setIsMenuOpen(false);
-    await signOut({ redirect: false });
     setViewMode(null);
 
     if (typeof window !== "undefined") {
@@ -82,7 +81,9 @@ export default function Navbar() {
       localStorage.removeItem("draftProviderId");
     }
 
-    router.push("/signin");
+    // NextAuth must finish clearing its cookies before /signin is requested;
+    // otherwise the auth middleware can redirect the user to the dashboard.
+    await signOut({ callbackUrl: "/signin" });
   };
 
   const handleSwitchView = (newView: "customer" | "provider") => {

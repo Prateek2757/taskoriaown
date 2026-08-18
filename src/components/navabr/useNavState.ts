@@ -128,14 +128,17 @@ export function useNavState({
 
   const handleLogout = useCallback(async () => {
     closeAll();
-    await signOut({ redirect: false });
     if (typeof window !== "undefined") {
       localStorage.removeItem("viewMode");
       clearCookieViewMode();
     }
-    setViewMode("provider");
-    router.push("/signin");
-  }, [closeAll, router]);
+    setViewMode("customer");
+
+    // Let NextAuth perform the navigation. Pushing to /signin immediately after
+    // a non-redirecting sign-out can race with the session-cookie removal, which
+    // makes the middleware send the user back to the provider dashboard.
+    await signOut({ callbackUrl: "/signin" });
+  }, [closeAll]);
 
   const handleSwitchView = useCallback(
     (newView: ViewMode) => {

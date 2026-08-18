@@ -10,7 +10,7 @@ interface CkEditorProps {
   placeholder?: string;
 }
 
-const LICENSE_KEY = process.env.NEXT_PUBLIC_CK_EDITOR_5!;
+const LICENSE_KEY = process.env.CK_EDITOR_5!;
 
 export default function CkEditor({
   value = "",

@@ -37,6 +37,7 @@ export default function NotificationBell({ userId }: { userId: number }) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const bellRef = useRef<HTMLButtonElement>(null);
   const initializedRef = useRef(false);
+  const pollingRef = useRef<number | null>(null);
 
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
@@ -116,11 +117,19 @@ export default function NotificationBell({ userId }: { userId: number }) {
       }
     };
 
+    const stopPolling = () => {
+      if (pollingRef.current !== null) {
+        window.clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
+    };
+
+    const startPolling = () => {
+      if (pollingRef.current !== null) return;
+      pollingRef.current = window.setInterval(fetchNotifications, 60_000);
+    };
+
     fetchNotifications();
-    // Supabase Realtime can be temporarily unavailable (for example when a
-    // project is quota-restricted). Polling keeps the bell functional while
-    // the realtime subscription remains the fast path.
-    const pollNotifications = window.setInterval(fetchNotifications, 15_000);
 
     if (!globalChannelRef || globalUserId !== userId) {
       if (globalChannelRef) {
@@ -158,9 +167,15 @@ export default function NotificationBell({ userId }: { userId: number }) {
           handleUpdateNotification
         )
         .subscribe((status) => {
-          // console.log(`📊 Status: ${status}`);
-
           if (status === "SUBSCRIBED") {
+            stopPolling();
+            return;
+          }
+
+          // Realtime is the normal update path. Fall back to a low-frequency
+          // poll only if that connection cannot be established.
+          if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
+            startPolling();
           }
         });
 
@@ -168,7 +183,7 @@ export default function NotificationBell({ userId }: { userId: number }) {
     }
 
     return () => {
-      window.clearInterval(pollNotifications);
+      stopPolling();
       // console.log("🔄 Component unmounting");
       initializedRef.current = false;
     };
