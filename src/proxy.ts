@@ -189,7 +189,12 @@ function getSafeRedirectPath(value: string | null, req: NextRequest) {
 }
 
 async function proxy(req: NextRequest) {
-  const { pathname, search } = req.nextUrl;
+  const { pathname: requestedPathname, search } = req.nextUrl;
+  // Google previously discovered service/location URLs with their path
+  // separators encoded (for example, `service%2Fqld%2Fbrisbane`). Decode only
+  // those separators before route matching so they make one canonical redirect
+  // instead of repeatedly redirecting to the same encoded URL.
+  const pathname = requestedPathname.replace(/%2f/gi, "/");
 
   const isExempt = isFilterExemptPath(pathname);
 
@@ -228,7 +233,7 @@ async function proxy(req: NextRequest) {
   const routePath = stripPublicLocale(pathname);
   const hasPublicLocalePrefix = routePath !== pathname;
 
-  if (hasPublicLocalePrefix) {
+  if (hasPublicLocalePrefix || pathname !== requestedPathname) {
     return NextResponse.redirect(new URL(`${routePath}${search}`, req.url), 308);
   }
 

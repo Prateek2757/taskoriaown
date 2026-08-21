@@ -8,7 +8,7 @@ export default function HeroSection() {
   return (
     <>
       <section
-        className="relative flex flex-col overflow-hidden text-center
+        className="relative flex flex-col overflow-visible text-center
           bg-white dark:bg-slate-950"
         aria-label="Hero section with service marketplace search"
       >

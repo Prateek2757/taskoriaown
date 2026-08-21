@@ -153,8 +153,8 @@ export default function CategorySearch({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute z-10 border mt-1 w-full rounded-lg shadow-lg 
-             max-h-110 overflow-y-auto overflow-visible pointer-events-auto backdrop-blur-xl bg-[rgba(255,255,255,.2)] dark:bg-gray-900 touch-pan-y overscroll-auto"
+            className="absolute z-50 mt-1 w-full rounded-lg border shadow-lg
+             max-h-[32rem] overflow-x-hidden overflow-y-auto pointer-events-auto backdrop-blur-xl bg-[rgba(255,255,255,.2)] dark:bg-gray-900 touch-pan-y overscroll-auto"
           >
             {filtered.map((cat) => (
               <li

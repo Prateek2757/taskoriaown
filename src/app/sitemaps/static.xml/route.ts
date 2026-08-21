@@ -9,7 +9,6 @@ export async function GET() {
     { path: "/locations",               priority: 0.8, changefreq: "weekly"  },
     { path: "/blog",                 priority: 0.8, changefreq: "daily"   },
     { path: "/cost-guides",          priority: 0.7, changefreq: "weekly"  },
-    { path: "/providers",            priority: 0.7, changefreq: "weekly"  },
     { path: "/how-it-works/customers", priority: 0.6, changefreq: "monthly" },
     { path: "/how-it-works/providers", priority: 0.6, changefreq: "monthly" },
     { path: "/about-us",             priority: 0.6, changefreq: "monthly" },

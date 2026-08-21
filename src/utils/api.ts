@@ -38,7 +38,6 @@ export async function fetchProviders(limit?: number) {
 
       const baseURL = "";
       const res = await fetch(`${baseURL}/api/signup/category-selection`, {
-        next: { revalidate: 3600 } 
       });
       if (!res.ok) throw new Error("Failed to fetch providers");
   

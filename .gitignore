@@ -39,7 +39,7 @@ Temporary Items
 /node_modules
 /.pnp
 .pnp.js
-
+/migrate_providers.py 
 # testing
 /coverage
 

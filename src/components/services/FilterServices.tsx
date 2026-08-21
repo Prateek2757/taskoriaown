@@ -156,7 +156,7 @@ export default function PopularServices() {
                       priority={index === 0}
                     />
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/40 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/40 to-transparent" />
 
                     <div className="absolute bottom-0 left-0 p-3 sm:p-4 pr-8 sm:pr-10">
                       <h3 className="text-[13px] sm:text-[15px] font-bold text-white leading-snug line-clamp-2">
