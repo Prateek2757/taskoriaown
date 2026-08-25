@@ -18,7 +18,7 @@ import {
   filterSeoLocations,
   findSeoRedirectLocation,
 } from "@/lib/seo-locations";
-// export const revalidate = 604800;
+// export const revalidate = 604800;@
 // export const dynamic = "force-static";
 type Props = {
   params: Promise<{ slug: string[] }>;
