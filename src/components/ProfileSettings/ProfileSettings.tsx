@@ -64,8 +64,9 @@ export default function ProfileSettings() {
         profile_image_url: payload.avatarUrl,
       });
 
-      await updateCompany({
+      const companyUpdate = await updateCompany({
         company_name: payload.company_name,
+        slug: payload.slug,
         contact_name: payload.display_name,
         company_logo_url: payload.companyLogoUrl,
         about: payload.description,
@@ -77,9 +78,17 @@ export default function ProfileSettings() {
         website: payload.website,
       });
 
-      await update({ name: payload.display_name });
+      // Refresh the JWT immediately so profile links in the navigation use the
+      // newly saved slug without requiring a logout/login cycle.
+      await update({
+        name: payload.display_name,
+        company_name: companyUpdate.company.company_name,
+        company_slug: companyUpdate.company.slug,
+        website: companyUpdate.company.website,
+      });
     } catch (err) {
       console.error("❌ Failed to update profile:", err);
+      throw err;
     }
   };
 

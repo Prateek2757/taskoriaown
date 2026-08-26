@@ -14,6 +14,7 @@ type Props = {
   };
   companydata?: {
     company_name?: string;
+    slug?: string;
     logo_url?: string;
     company_size?: string;
     years_in_business?: string;
@@ -29,6 +30,7 @@ type Props = {
 interface FormValues {
   name: string;
   companyName: string;
+  companySlug: string;
   contactEmail: string;
   contactPhone: string;
   website: string;
@@ -53,6 +55,18 @@ const MAX_FILE_BYTES = 5 * 1024 * 1024; // 5 MB
 /** Safely revokes an object URL only if it was created by us (blob:). */
 function revokeIfBlob(url: string | null) {
   if (url?.startsWith("blob:")) URL.revokeObjectURL(url);
+}
+
+/** Creates the public profile path segment as the company name is entered. */
+function createCompanySlug(value: string) {
+  return value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 100);
 }
 
 // ─── Sub-component: ImageUploader ────────────────────────────────────────────
@@ -183,6 +197,7 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
   const defaultValues: FormValues = {
     name: data?.display_name ?? "",
     companyName: companydata?.company_name ?? "",
+    companySlug: companydata?.slug ?? createCompanySlug(companydata?.company_name ?? ""),
     contactEmail: companydata?.contact_email ?? "",
     contactPhone: companydata?.contact_phone ?? "",
     website: companydata?.website ?? "",
@@ -205,6 +220,7 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
   } = useForm<FormValues>({ defaultValues, mode: "onTouched" });
 
   const description = watch("description");
+  const companySlug = watch("companySlug");
   const avatarFileList = watch("avatarFile");
   const logoFileList = watch("companyLogoFile");
 
@@ -212,6 +228,8 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
     const nextDefaults: FormValues = {
       name: data?.display_name ?? "",
       companyName: companydata?.company_name ?? "",
+      companySlug:
+        companydata?.slug ?? createCompanySlug(companydata?.company_name ?? ""),
       contactEmail: companydata?.contact_email ?? "",
       contactPhone: companydata?.contact_phone ?? "",
       website: companydata?.website ?? "",
@@ -310,6 +328,7 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
         display_name: values.name,
         avatarUrl: finalAvatarUrl,
         company_name: values.companyName,
+        slug: values.companySlug,
         companyLogoUrl: finalLogoUrl,
         contact_email: values.contactEmail,
         contact_phone: values.contactPhone,
@@ -425,6 +444,11 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
                 type="text"
                 placeholder="Your company name"
                 {...register("companyName", {
+                  onChange: (event) => {
+                    setValue("companySlug", createCompanySlug(event.target.value), {
+                      shouldDirty: true,
+                    });
+                  },
                   maxLength: {
                     value: 100,
                     message: "Company name must be under 100 characters.",
@@ -433,6 +457,14 @@ export default function AboutSection({ companydata, data, onSave }: Props) {
                 className={`w-full rounded-md border bg-white dark:bg-gray-800 px-3 py-2 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 text-sm transition-colors duration-200 ${errCls(!!errors.companyName)}`}
               />
               <FieldError message={errors.companyName?.message} />
+              {companySlug && (
+                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                  Profile link:{" "}
+                  <span className="font-medium text-gray-700 dark:text-gray-200">
+                    /providerprofile/{companySlug}
+                  </span>
+                </p>
+              )}
             </div>
           </div>
         </section>

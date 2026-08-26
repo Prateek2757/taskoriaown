@@ -3,6 +3,17 @@ import pool from "@/lib/dbConnect";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
 
+function createCompanySlug(value: string) {
+  return value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 100);
+}
+
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
@@ -14,7 +25,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const { rows } = await client.query(
-      `SELECT user_id, company_name,logo_url, contact_name, contact_email, website, contact_phone, about, company_size, years_in_business,business_abn
+      `SELECT user_id, company_name, slug, logo_url, contact_name, contact_email, website, contact_phone, about, company_size, years_in_business,business_abn
        FROM company
        WHERE user_id = $1`,
       [userId]
@@ -58,6 +69,7 @@ export async function PUT(req: NextRequest) {
       years_in_business,
       business_abn,
       about,
+      slug,
     } = body;
 
     console.log(business_abn,"abn");
@@ -67,6 +79,27 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
+      );
+    }
+
+    // The client updates this instantly while typing; normalize again before
+    // persisting so direct API calls cannot save an invalid public URL.
+    const companySlug = createCompanySlug(slug || company_name);
+    if (!companySlug) {
+      return NextResponse.json(
+        { message: "Company name must contain letters or numbers" },
+        { status: 400 }
+      );
+    }
+
+    const existingSlug = await client.query(
+      "SELECT 1 FROM company WHERE slug = $1 AND user_id <> $2 LIMIT 1",
+      [companySlug, userId]
+    );
+    if (existingSlug.rowCount) {
+      return NextResponse.json(
+        { message: "That company name is already being used for another profile" },
+        { status: 409 }
       );
     }
 
@@ -87,8 +120,9 @@ export async function PUT(req: NextRequest) {
            business_abn = $8,
            about = $9,
            logo_url = $10,
+           slug = $11,
            updated_at = NOW()
-       WHERE user_id = $11`,
+       WHERE user_id = $12`,
       [
         company_name,
         contact_name,
@@ -100,6 +134,7 @@ export async function PUT(req: NextRequest) {
         business_abn || null, 
         about?.trim() || null,
         company_logo_url,
+        companySlug,
         userId,
       ]
     );
@@ -112,7 +147,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const { rows } = await client.query(
-      `SELECT user_id, company_name,logo_url, contact_name, contact_email, contact_phone, website, company_size, years_in_business, about,business_abn
+      `SELECT user_id, company_name, slug, logo_url, contact_name, contact_email, contact_phone, website, company_size, years_in_business, about,business_abn
        FROM company
        WHERE user_id = $1`,
       [userId]

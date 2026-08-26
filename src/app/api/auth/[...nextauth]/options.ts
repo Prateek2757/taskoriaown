@@ -204,7 +204,17 @@ export const authOptions: NextAuthOptions = {
       }
 
       if (trigger === "update" && session) {
-        return { ...token, ...session };
+        const profileUpdate = session as {
+          name?: string;
+          company_name?: string;
+          company_slug?: string;
+          website?: string;
+        };
+
+        token.name = profileUpdate.name ?? token.name;
+        token.company_name = profileUpdate.company_name ?? token.company_name;
+        token.company_slug = profileUpdate.company_slug ?? token.company_slug;
+        token.website = profileUpdate.website ?? token.website;
       }
 
       return token;

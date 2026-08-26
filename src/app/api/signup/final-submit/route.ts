@@ -4,6 +4,36 @@ import bcrypt from "bcryptjs";
 import { sendEmail } from "@/components/email/helpers/sendVerificationEmail";
 import { isValidABN } from "@/features/onboarding/schema";
 import { lookupAbnRegistration } from "@/lib/abn-lookup";
+import type { PoolClient } from "pg";
+
+function createCompanySlug(value: string) {
+  return value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 100);
+}
+
+async function getAvailableCompanySlug(
+  client: PoolClient,
+  companyName: string,
+  userId: number
+) {
+  const baseSlug = createCompanySlug(companyName) || `provider-${userId}`;
+
+  for (let suffix = 0; ; suffix += 1) {
+    const candidate = suffix === 0 ? baseSlug : `${baseSlug}-${suffix}`;
+    const { rowCount } = await client.query(
+      "SELECT 1 FROM company WHERE slug = $1 AND user_id <> $2 LIMIT 1",
+      [candidate, userId]
+    );
+
+    if (!rowCount) return candidate;
+  }
+}
 
 export async function POST(req: NextRequest) {
   const client = await pool.connect();
@@ -121,15 +151,23 @@ export async function POST(req: NextRequest) {
       [normalizationemail, phone || null, hashedPassword, user_idd]
     );
 
+    const companyNameForSlug = companyName?.trim() || name.trim();
+    const companySlug = await getAvailableCompanySlug(
+      client,
+      companyNameForSlug,
+      user_idd
+    );
+
     await client.query(
       `
-      INSERT INTO company (user_id, company_name, contact_name, contact_email, contact_phone, website, company_size,business_abn)
-      VALUES ($1, $2, $3, $4, $5, $6, $7,$8)
-      ON CONFLICT (user_id) DO NOTHING
+      INSERT INTO company (user_id, company_name, slug, contact_name, contact_email, contact_phone, website, company_size,business_abn)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      ON CONFLICT (user_id) DO UPDATE SET slug = EXCLUDED.slug
       `,
       [
         user_idd,
-        companyName || name,
+        companyNameForSlug,
+        companySlug,
         name,
         normalizationemail,
         phone || null,
