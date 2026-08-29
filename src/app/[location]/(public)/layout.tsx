@@ -248,6 +248,11 @@ export default function RootLayout({
         {/* Parser-blocking runtime configuration is available before client
             components hydrate, including on build-generated static pages. */}
         <script src="/api/runtime-config.js" />
+        {/* Google requires this asynchronous loader for Preferred Sources. */}
+        <script
+          async
+          src="https://news.google.com/swg/js/v1/publisher.js"
+        />
         <Script
           id="strip-browser-extension-hydration-attributes"
           strategy="beforeInteractive"

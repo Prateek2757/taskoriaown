@@ -145,6 +145,8 @@ const Footer = ({ currentYear }: FooterProps) => {
                 services.{" "}
               </p>
 
+              <div className="mb-5" google-add-preferred-source-btn="" data-lang="en" data-theme="light" />
+
               <div className="pt-2 w-full  sm:w-96">
                 <p className="md:text-xl text-lg  font-semibold">
                   Become a Professional
