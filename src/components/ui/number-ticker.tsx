@@ -29,6 +29,10 @@ export function NumberTicker({
     stiffness: 100,
   })
   const isInView = useInView(ref, { once: true, margin: "0px" })
+  const finalValue = Intl.NumberFormat("en-US", {
+    minimumFractionDigits: decimalPlaces,
+    maximumFractionDigits: decimalPlaces,
+  }).format(value)
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | null = null
@@ -61,14 +65,18 @@ export function NumberTicker({
 
   return (
     <span
-      ref={ref}
       className={cn(
-        "inline-block tracking-wider text-black tabular-nums dark:text-white",
+        "relative inline-grid tracking-wider text-black tabular-nums dark:text-white",
         className
       )}
       {...props}
     >
-      {startValue}
+      <span aria-hidden="true" className="invisible col-start-1 row-start-1">
+        {finalValue}
+      </span>
+      <span ref={ref} className="col-start-1 row-start-1 text-right">
+        {startValue}
+      </span>
     </span>
   )
 }
