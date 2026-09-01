@@ -2,6 +2,48 @@ const ORIGIN_HOST =
   "taskoriaown-942515104650.australia-southeast2.run.app";
 const CANONICAL_HOST = "www.taskoria.com";
 const APEX_HOST = "taskoria.com";
+const ALLOWED_VISITOR_COUNTRIES = new Set(["AU", "NP"]);
+
+function isVerifiedBot(request) {
+  return request.cf?.botManagement?.verifiedBot === true;
+}
+
+function isPublicDocumentRequest(request, url) {
+  if (request.method !== "GET" && request.method !== "HEAD") return false;
+
+  const accept = request.headers.get("Accept") || "";
+  if (!accept.includes("text/html")) return false;
+
+  return !(
+    url.pathname.startsWith("/api/") ||
+    url.pathname.startsWith("/.well-known/") ||
+    url.pathname === "/robots.txt" ||
+    url.pathname.startsWith("/sitemap")
+  );
+}
+
+function shouldBlockVisitor(request, url) {
+  if (!isPublicDocumentRequest(request, url) || isVerifiedBot(request)) {
+    return false;
+  }
+
+  const country = request.cf?.country;
+
+  // Fail open when Cloudflare cannot determine a country. This avoids locking
+  // out traffic from internal services while still blocking known locations.
+  return Boolean(country && !ALLOWED_VISITOR_COUNTRIES.has(country));
+}
+
+function countryBlockedResponse() {
+  return new Response("Taskoria is currently available in Australia only.", {
+    status: 403,
+    headers: {
+      "Cache-Control": "private, no-store",
+      "Content-Type": "text/plain; charset=utf-8",
+      "X-Robots-Tag": "noindex",
+    },
+  });
+}
 
 function canonicalRedirect(requestUrl) {
   const redirectUrl = new URL(requestUrl);
@@ -31,6 +73,10 @@ export default {
 
     if (publicUrl.hostname === APEX_HOST) {
       return canonicalRedirect(publicUrl);
+    }
+
+    if (shouldBlockVisitor(request, publicUrl)) {
+      return countryBlockedResponse();
     }
 
     const originUrl = new URL(request.url);
