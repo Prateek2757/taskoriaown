@@ -6,6 +6,7 @@ import {
 } from "@/lib/sitemap-helpers";
 
 export const revalidate = 86400;
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   const profiles = await fetchProviderProfiles();

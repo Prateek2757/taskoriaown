@@ -53,10 +53,10 @@ export const priorityCityLinks = [
   { slug: "newcastle", stateSlug: "nsw", label: "Newcastle" },
   {
     slug: "canberra",
-    stateSlug: "australian-capital-territory",
+    stateSlug: "act",
     label: "Canberra",
   },
-  { slug: "gold-coast", stateSlug: "queensland", label: "Gold Coast" },
+  { slug: "hobart", stateSlug: "tas", label: "Hobart" },
 ] satisfies PriorityCityLink[];
 
 export function getPriorityServiceLinks(

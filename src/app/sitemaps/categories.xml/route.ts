@@ -10,6 +10,9 @@ import {
 } from "@/lib/sitemap-helpers";
 
 export const revalidate = 86400;
+// Do not prerender a database-backed sitemap during deployment: a temporary
+// database timeout would otherwise publish an empty sitemap for a full day.
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   const [categoriesRaw, cities] = await Promise.all([

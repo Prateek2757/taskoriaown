@@ -53,7 +53,9 @@ export default function InternalLinkModule({
                 key={group.title}
                 className={group.variant === "service-cards" ? "md:col-span-2" : ""}
               >
-               
+                <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                  {group.title}
+                </h3>
                 {group.variant === "service-cards" ? (
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                     {group.links.map((link) => (

@@ -9,6 +9,9 @@ import {
 } from "@/lib/sitemap-helpers";
 
 export const revalidate = 86400;
+// See categories.xml: sitemap data must be read at request time, not frozen
+// from a potentially failed build-time database connection.
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   const cities = canonicalSeoCities(await fetchCities());

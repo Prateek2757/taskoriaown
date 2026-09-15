@@ -9,6 +9,8 @@ import {
   getPriorityCityLinks,
   getPriorityServiceLinks,
 } from "@/lib/internal-links";
+import { getCategoriesFromDB, getPopularSeoCitiesFromDB } from "@/lib/cache";
+import { filterSeoLocations } from "@/lib/seo-locations";
 import PlatformReachTicker from "@/components/PlatformReachTicker";
 import HomepageCityCoverage from "@/components/HomepageCityCoverage";
 
@@ -312,9 +314,13 @@ const structuredData = {
   ],
 };
 
-export default function HomePage() {
-  const serviceLinks = getPriorityServiceLinks(undefined, 8);
-  const cityLinks = getPriorityCityLinks(undefined, 8);
+export default async function HomePage() {
+  const [services, cities] = await Promise.all([
+    getCategoriesFromDB(),
+    getPopularSeoCitiesFromDB(80),
+  ]);
+  const serviceLinks = getPriorityServiceLinks(services, 8);
+  const cityLinks = getPriorityCityLinks(filterSeoLocations(cities), 8);
 
   return (
     <>
@@ -340,8 +346,9 @@ export default function HomePage() {
         </Suspense>
 
         {/* <InternalLinkModule
-          title="Popular services and cities"
-          description="Start with Taskoria's priority service and city pages, then narrow your search by service area."
+          eyebrow="Popular on Taskoria"
+          title="Find trusted professionals in Australia's major cities"
+          description="Browse popular services, then choose your city to compare local professionals and request free quotes."
           groups={[
             { title: "Priority services", links: serviceLinks },
             { title: "Priority cities", links: cityLinks },
