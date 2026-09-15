@@ -172,7 +172,7 @@ export const getServiceProvidersFromDB = unstable_cache(
         json_agg(DISTINCT sc.slug)
           FILTER (WHERE sc.slug IS NOT NULL) AS slugs,
         c.name AS locationname,
-        c.slug AS cityslug,
+        c.slug AS cityslug
       FROM user_profiles up
       JOIN professional_subscriptions ps
         ON ps.user_id = up.user_id

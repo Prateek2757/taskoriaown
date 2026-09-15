@@ -45,11 +45,8 @@ export interface ProviderProfile {
 }
 
 export const URLS_PER_SITEMAP = 20000;
-export const SERVICE_LOCATION_SITEMAP_URL_LIMIT = 20000;
+// Keep this below Google's 50,000-URL sitemap limit, with room for growth.
 const MAX_URLS_PER_SITEMAP = 40000;
-const SERVICE_LOCATION_SITEMAP_PREFIX = "australia";
-const SITEMAP_LOCATION_STATE_NAME = "Queensland";
-const SITEMAP_LOCATION_MIN_ACCURACY = 4;
 
 export async function safeFetch<T>(url: string): Promise<T[]> {
   try {
@@ -105,8 +102,7 @@ export const fetchCities = async (): Promise<City[]> => {
         WHERE is_active = true
           AND place_slug IS NOT NULL
           AND state_slug IS NOT NULL
-          AND state_name = $1
-          AND accuracy >= $2
+          AND accuracy >= 4
         ORDER BY
           state_slug,
           place_slug,
@@ -117,8 +113,7 @@ export const fetchCities = async (): Promise<City[]> => {
       SELECT *
       FROM canonical
       ORDER BY popularity DESC, name ASC
-    `,
-      [SITEMAP_LOCATION_STATE_NAME, SITEMAP_LOCATION_MIN_ACCURACY]
+    `
     );
 
     return result.rows.map((city) => ({
@@ -205,13 +200,11 @@ export function buildUrlsetXml(entries: UrlEntry[]): string {
 
   const urls = uniqueEntries
     .map((e) => {
-      const lastmod = e.lastmod
-        ? new Date(e.lastmod).toISOString()
-        : new Date().toISOString();
+      const lastmod = e.lastmod ? new Date(e.lastmod).toISOString() : null;
       return [
         `  <url>`,
         `    <loc>${escapeXml(e.loc)}</loc>`,
-        `    <lastmod>${lastmod}</lastmod>`,
+        ...(lastmod ? [`    <lastmod>${lastmod}</lastmod>`] : []),
         `    <changefreq>${e.changefreq}</changefreq>`,
         `    <priority>${e.priority.toFixed(1)}</priority>`,
         `  </url>`,
@@ -243,12 +236,12 @@ export function buildSitemapIndexXml(
     .map((entry) => {
       const lastmod = entry.lastmod
         ? new Date(entry.lastmod).toISOString()
-        : new Date().toISOString();
+        : null;
 
       return [
         `  <sitemap>`,
         `    <loc>${escapeXml(entry.loc)}</loc>`,
-        `    <lastmod>${lastmod}</lastmod>`,
+        ...(lastmod ? [`    <lastmod>${lastmod}</lastmod>`] : []),
         `  </sitemap>`,
       ].join("\n");
     })
@@ -287,17 +280,6 @@ export function canonicalCategories(categories: Category[]): Category[] {
   return Array.from(canonical.values());
 }
 
-export function serviceLocationSitemapPath(pageNumber: number): string {
-  return `sitemaps/service-locations/${SERVICE_LOCATION_SITEMAP_PREFIX}-${pageNumber}.xml`;
-}
-
-export function parseServiceLocationSitemapIndex(slug: string): number {
-  const name = slug.replace(/\.xml$/, "");
-  const pageNumber = Number(name.match(/(\d+)$/)?.[1]);
-
-  return Number.isInteger(pageNumber) && pageNumber > 0 ? pageNumber - 1 : -1;
-}
-
 export function canonicalSeoCities(cities: City[]): City[] {
   const canonicalCities = new Map<string, City>();
 
@@ -310,91 +292,4 @@ export function canonicalSeoCities(cities: City[]): City[] {
   }
 
   return Array.from(canonicalCities.values());
-}
-
-export async function getServiceLocationSitemapCount(): Promise<number> {
-  const [categoriesRaw, cities] = await Promise.all([
-    fetchCategories(),
-    fetchCities(),
-  ]);
-  const categories = canonicalCategories(categoriesRaw);
-
-  let total = 0;
-  for (const city of canonicalSeoCities(cities)) {
-    if (!city.state_slug || !city.slug) continue;
-    total += categories.length;
-    total += (city.subcities?.length ?? 0) * categories.length;
-  }
-
-  return Math.ceil(
-    Math.min(total, SERVICE_LOCATION_SITEMAP_URL_LIMIT) / URLS_PER_SITEMAP
-  );
-}
-
-export const getServiceSitemapCount = getServiceLocationSitemapCount;
-
-export async function buildServiceLocationSitemapEntries(
-  sitemapIndex: number
-): Promise<UrlEntry[]> {
-  const [categoriesRaw, cities] = await Promise.all([
-    fetchCategories(),
-    fetchCities(),
-  ]);
-  const categories = canonicalCategories(categoriesRaw);
-
-  const sortedCities = canonicalSeoCities(cities).sort(
-    (a, b) => b.popularity - a.popularity
-  );
-
-  const start = sitemapIndex * URLS_PER_SITEMAP;
-  const end = Math.min(
-    start + URLS_PER_SITEMAP,
-    SERVICE_LOCATION_SITEMAP_URL_LIMIT
-  );
-
-  if (start >= SERVICE_LOCATION_SITEMAP_URL_LIMIT) {
-    return [];
-  }
-
-  let currentIndex = 0;
-  const entries: UrlEntry[] = [];
-
-  for (const [rank, city] of sortedCities.entries()) {
-    if (!city.state_slug || !city.slug) continue;
-
-    const cityPriority = cityPriorityByRank(rank);
-
-    for (const cat of categories) {
-      if (currentIndex >= start && currentIndex < end) {
-        entries.push({
-          loc: `${BASE_URL}/services/${cat.slug}/${city.state_slug}/${city.slug}`,
-          lastmod: city.updated_at,
-          changefreq: "weekly",
-          priority: cityPriority,
-        });
-      }
-      currentIndex++;
-      if (currentIndex >= end) break;
-    }
-
-    for (const sub of city.subcities ?? []) {
-      for (const cat of categories) {
-        if (currentIndex >= start && currentIndex < end) {
-          entries.push({
-            loc: `${BASE_URL}/services/${cat.slug}/${city.state_slug}/${city.slug}/${sub.slug}`,
-            lastmod: sub.updated_at ?? city.updated_at,
-            changefreq: "monthly",
-            priority: 0.55,
-          });
-        }
-        currentIndex++;
-        if (currentIndex >= end) break;
-      }
-      if (currentIndex >= end) break;
-    }
-
-    if (currentIndex >= end) break;
-  }
-
-  return entries;
 }

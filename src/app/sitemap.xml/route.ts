@@ -1,8 +1,6 @@
 import {
   BASE_URL,
   buildSitemapIndexXml,
-  getServiceLocationSitemapCount,
-  serviceLocationSitemapPath,
   xmlResponse,
 } from "@/lib/sitemap-helpers";
 
@@ -17,22 +15,9 @@ const STATIC_SITEMAPS = [
 ];
 
 export async function GET() {
-  const now = new Date().toISOString();
-
-  const serviceLocationCount = await getServiceLocationSitemapCount();
-
-  const serviceLocationSitemaps = Array.from(
-    { length: serviceLocationCount },
-    (_, i) => serviceLocationSitemapPath(i + 1)
-  );
-  const allSitemaps = [...STATIC_SITEMAPS, ...serviceLocationSitemaps];
-
   return xmlResponse(
     buildSitemapIndexXml(
-      allSitemaps.map((name) => ({
-        loc: `${BASE_URL}/${name}`,
-        lastmod: now,
-      }))
+      STATIC_SITEMAPS.map((name) => ({ loc: `${BASE_URL}/${name}` }))
     )
   );
 }

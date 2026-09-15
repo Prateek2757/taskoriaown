@@ -11,6 +11,7 @@ import {
   getCategoriesFromDB,
   getCategoryBySlug,
   getPopularSeoCitiesFromDB,
+  getServiceProvidersFromDB,
   getSeoCitiesByStateFromDB,
   getSeoCityBySlugFromDB,
   getSeoRedirectCandidatesByStateFromDB,
@@ -320,6 +321,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       alternates: { canonical: redirectUrl },
     };
   }
+  // A city/service page must offer something local that the broader service
+  // page does not. Nationwide-only listings create thousands of near-identical
+  // pages, so let Google follow their links but do not index them.
+  const hasLocalProvider = citySlug
+    ? (await getServiceProvidersFromDB(
+        serviceSlug,
+        subCitySlug ?? citySlug
+      )).some((provider) => !provider.nationwide)
+    : true;
   const cityName =
     getLocationLabel(selectedCity) ?? (citySlug ? toTitleCase(citySlug) : null);
   const subCityName =
@@ -405,10 +415,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     creator: "Taskoria",
     publisher: "Taskoria",
     robots: {
-      index: true,
+      index: hasLocalProvider,
       follow: true,
       googleBot: {
-        index: true,
+        index: hasLocalProvider,
         follow: true,
         "max-video-preview": -1,
         "max-image-preview": "large",
