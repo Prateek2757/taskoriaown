@@ -4,8 +4,7 @@ import {
   xmlResponse,
 } from "@/lib/sitemap-helpers";
 
-// Sitemap structure changes infrequently; avoid a database-backed function run
-// for every crawler request.
+
 export const revalidate = 604800;
 const STATIC_SITEMAPS = [
   "sitemaps/static.xml",
