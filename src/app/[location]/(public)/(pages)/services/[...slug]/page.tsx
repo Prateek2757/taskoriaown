@@ -2,7 +2,7 @@ import ServicePageWrapper from "@/components/servicePage/ServicePageWrapper";
 import ServiceStatePageClient from "@/components/servicePage/Servicestatepageclient";
 import StructuredData from "@/components/servicePage/StructureData";
 import { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import {
   filterSeoLocations,
   findSeoRedirectLocation,
@@ -20,7 +20,7 @@ import {
 // Render service/location pages at request time to avoid creating an ISR entry
 // for every service and locality combination. The underlying database queries
 // and provider endpoint retain their own shared caches.
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-static";
 type Props = {
   params: Promise<{ slug?: string[] }>;
 };
@@ -137,21 +137,19 @@ function isCanonicalServiceSlug(slug: string[]) {
 }
 
 async function getService(serviceSlug: string): Promise<ServiceData | null> {
-  try {
-    const service = (await getCategoryBySlug(serviceSlug)) as ServiceData | null;
-    if (!service) return null;
+  // Let database failures remain server errors instead of presenting a missing
+  // service and a noindex directive during a temporary outage.
+  const service = (await getCategoryBySlug(serviceSlug)) as ServiceData | null;
+  if (!service) return null;
 
-    return {
-      ...service,
-      hero_image:
-        service.hero_image ??
-        service.service_image_url ??
-        service.image_url ??
-        undefined,
-    };
-  } catch {
-    return null;
-  }
+  return {
+    ...service,
+    hero_image:
+      service.hero_image ??
+      service.service_image_url ??
+      service.image_url ??
+      undefined,
+  };
 }
 
 
@@ -462,7 +460,7 @@ export default async function ServicePage({ params }: Props) {
   if (!serviceSlug || serviceSlug === "undefined") notFound();
 
   if (!isCanonicalServiceSlug(rawSlug)) {
-    redirect(buildServicePath(serviceSlug, stateSlug, citySlug, subCitySlug));
+    permanentRedirect(buildServicePath(serviceSlug, stateSlug, citySlug, subCitySlug));
   }
 
   const statePageDataPromise: Promise<[City[], StateData[]] | null> =
@@ -484,20 +482,7 @@ export default async function ServicePage({ params }: Props) {
       popularCitiesPromise,
     ]);
 
-  if (!service) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Service Not Found
-          </h1>
-          <p className="mt-2 text-gray-500">
-            We couldn&apos;t find the service you&apos;re looking for.
-          </p>
-        </div>
-      </div>
-    );
-  }
+  if (!service) notFound();
 
   if (stateSlug && !citySlug) {
     const [stateCitiesRaw, states] = statePageData ?? [[], []];
@@ -559,19 +544,19 @@ export default async function ServicePage({ params }: Props) {
       );
 
       if (redirectCity?.slug) {
-        redirect(buildServicePath(serviceSlug, stateSlug, redirectCity.slug));
+        permanentRedirect(buildServicePath(serviceSlug, stateSlug, redirectCity.slug));
       }
 
       if (stateCities.length) {
-        redirect(`/services/${serviceSlug}/${stateSlug}`);
+        permanentRedirect(`/services/${serviceSlug}/${stateSlug}`);
       }
     }
 
-    redirect(`/services/${serviceSlug}`);
+    permanentRedirect(`/services/${serviceSlug}`);
   }
 
   if (subCitySlug && !selectedSubCity) {
-    redirect(`/services/${serviceSlug}/${stateSlug}/${citySlug}`);
+    permanentRedirect(`/services/${serviceSlug}/${stateSlug}/${citySlug}`);
   }
 
   return (

@@ -15,8 +15,9 @@ import { getCityDedupKey, getCityLabel } from "@/lib/location-labels";
 import { filterSeoLocations } from "@/lib/seo-locations";
 import { getSeoLocationIndexFromDB } from "@/lib/cache";
 
-// export const dynamic = "force-static";
-// export const revalidate = 604800;
+// Database access is available when Cloud Run starts, not while building.
+// Avoid publishing an empty directory from the build-time error fallback.
+// export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: { absolute: "Find Services by City | Taskoria" },

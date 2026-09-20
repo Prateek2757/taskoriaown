@@ -2,9 +2,7 @@ import pool from "@/lib/dbConnect";
 import { getCityDedupKey } from "@/lib/location-labels";
 import { filterSeoLocations } from "@/lib/seo-locations";
 
-const BASE_URL = (
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://www.taskoria.com"
-).replace(/\/$/, "");
+const BASE_URL = "https://www.taskoria.com";
 
 export { BASE_URL };
 
@@ -78,7 +76,7 @@ export const fetchCategories = async (): Promise<Category[]> => {
     return result.rows;
   } catch (err) {
     console.error("[sitemap] Failed to fetch categories:", err);
-    return [];
+    throw err;
   }
 };
 
@@ -92,7 +90,7 @@ export const fetchCities = async (): Promise<City[]> => {
           place_name AS name,
           place_slug AS slug,
           display_name,
-          COALESCE(popularity, accuracy, 0) AS popularity,
+          popularity,
           state_slug,
           state_name,
           postal_code AS postcode,
@@ -103,6 +101,7 @@ export const fetchCities = async (): Promise<City[]> => {
           AND place_slug IS NOT NULL
           AND state_slug IS NOT NULL
           AND accuracy >= 4
+          AND popularity > 1
         ORDER BY
           state_slug,
           place_slug,
@@ -122,7 +121,7 @@ export const fetchCities = async (): Promise<City[]> => {
     }));
   } catch (err) {
     console.error("[sitemap] Failed to fetch cities:", err);
-    return [];
+    throw err;
   }
 };
 
@@ -143,14 +142,13 @@ export const fetchProviderProfiles = async (): Promise<ProviderProfile[]> => {
       FROM user_profiles up
       JOIN users u ON up.user_id = u.user_id
       JOIN company cp ON up.user_id = cp.user_id
-      JOIN user_profile_services ups ON up.user_id = ups.user_id
+      LEFT JOIN user_profile_services ups ON up.user_id = ups.user_id
       LEFT JOIN user_profile_photos upp ON up.user_id = upp.user_id
       LEFT JOIN user_faqs uf ON up.user_id = uf.user_id AND uf.is_visible = true
       LEFT JOIN user_accreditations ua ON up.user_id = ua.user_id
       WHERE u.status = 'active'
         AND cp.slug IS NOT NULL
         AND cp.slug <> ''
-        AND up.display_name IS NOT NULL
       GROUP BY cp.slug, up.created_at
       ORDER BY up.created_at DESC
     `);
@@ -158,7 +156,7 @@ export const fetchProviderProfiles = async (): Promise<ProviderProfile[]> => {
     return result.rows;
   } catch (err) {
     console.error("[sitemap] Failed to fetch provider profiles:", err);
-    return [];
+    throw err;
   }
 };
 
@@ -292,4 +290,32 @@ export function canonicalSeoCities(cities: City[]): City[] {
   }
 
   return Array.from(canonicalCities.values());
+}
+
+// Sort consistently so the index and individual chunks use the same URL order.
+export async function fetchServiceSitemapData() {
+  const [categories, cities] = await Promise.all([fetchCategories(), fetchCities()]);
+  return {
+    categories: canonicalCategories(categories).sort((a, b) => a.slug.localeCompare(b.slug)),
+    cities: canonicalSeoCities(cities).sort((a, b) =>
+      `${a.state_slug}/${a.slug}`.localeCompare(`${b.state_slug}/${b.slug}`)
+    ),
+  };
+}
+
+export function serviceLocationEntries(categories: Category[], cities: City[], page: number) {
+  const total = categories.length * cities.length;
+  const start = page * URLS_PER_SITEMAP;
+  const end = Math.min(start + URLS_PER_SITEMAP, total);
+  const entries: UrlEntry[] = [];
+  for (let i = start; i < end; i++) {
+    const category = categories[Math.floor(i / cities.length)];
+    const city = cities[i % cities.length];
+    entries.push({
+      loc: `${BASE_URL}/services/${category.slug}/${city.state_slug}/${city.slug}`,
+      changefreq: "weekly",
+      priority: 0.7,
+    });
+  }
+  return entries;
 }

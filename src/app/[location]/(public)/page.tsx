@@ -14,8 +14,9 @@ import { filterSeoLocations } from "@/lib/seo-locations";
 import PlatformReachTicker from "@/components/PlatformReachTicker";
 import HomepageCityCoverage from "@/components/HomepageCityCoverage";
 
-// export const dynamic = "force-static";
-// export const revalidate = 604800;
+// Cloud Run supplies database access at runtime, not during the Docker build.
+// Render the homepage on request so its database queries are never prerendered.
+export const dynamic = "force-dynamic";
 
 const HowTaskoriaWorks = lazy(() => import("@/components/how-taskoria-works"));
 // const Categories = lazy(() => import("@/components/Categories"));

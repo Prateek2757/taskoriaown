@@ -12,11 +12,9 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  if (!/^(0|[1-9]\d*)\.xml$/.test(slug)) {
-    return new Response("Sitemap not found", { status: 404 });
-  }
-  const page = Number(slug.slice(0, -4));
-  if (!Number.isSafeInteger(page)) {
+  const match = /^categories_([1-9]\d*)\.xml$/.exec(slug);
+  const page = match ? Number(match[1]) - 1 : -1;
+  if (!Number.isSafeInteger(page) || page < 0) {
     return new Response("Sitemap not found", { status: 404 });
   }
   const { categories, cities } = await fetchServiceSitemapData();

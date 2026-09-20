@@ -17,8 +17,10 @@ export async function GET() {
   const cities = canonicalSeoCities(await fetchCities());
 
   const stateSlugs = uniqueStateslugs(cities);
-  const sortedCities = [...cities].sort((a, b) => b.popularity - a.popularity);
-  const entries = [];
+  const sortedCities = cities
+  .filter((city) => city.popularity > 0)
+  .sort((a, b) => b.popularity - a.popularity);
+    const entries = [];
 
   for (const stateSlug of stateSlugs) {
     entries.push({
