@@ -1,28 +1,35 @@
 import "../../globals.css";
+
+import type { Metadata, Viewport } from "next";
+import { Poppins, Bricolage_Grotesque } from "next/font/google";
+import Script from "next/script";
+
 import { UserProvider } from "@/context/userContext";
 import AuthProvider from "@/context/AuthProvider";
-import { Toaster } from "sonner";
+
 import NavbarServer from "@/components/navabr/NavbarServer";
-import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
-import { Poppins, Bricolage_Grotesque } from "next/font/google";
-import type { Metadata, Viewport } from "next";
-import { Analytics } from "@vercel/analytics/next";
 import NotificationHandler from "@/components/NotificationHandler";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import Script from "next/script";
-import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 import WhatsAppSupportButton from "@/components/supportChatbox";
-import ChatbotWidget from "@/components/ChatbotWidget";
-import TaskoriaAgent from "@/components/TaskoriaAgent";
+
+import { ThemeProvider } from "next-themes";
+import { Toaster } from "sonner";
+
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
+
 
 export const BASE_URL = "https://www.taskoria.com";
 export const SITE_NAME = "Taskoria";
 export const LEGAL_NAME = "Taskoria Pty Ltd";
 export const ABN = "37 658 760 831";
+
 export const TWITTER_HANDLE = "@taskoria";
+
 export const OG_IMAGE = `${BASE_URL}/og-image.png`;
 export const LOGO = `${BASE_URL}/taskorialogonew.png`;
+
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -40,40 +47,53 @@ const bricolage = Bricolage_Grotesque({
   preload: true,
 });
 
+
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
+
+  applicationName: SITE_NAME,
+
   title: {
-    default: "Find Trusted Local Professionals Across Australia | Taskoria",
+    default: "Taskoria | Find Trusted Local Professionals Across Australia",
     template: `%s | ${SITE_NAME}`,
   },
 
   description:
-    "Taskoria connects Australians with verified local professionals for home, business, and digital services. Compare quotes, read real reviews, and book with confidence.",
+    "Find trusted local professionals across Australia with Taskoria. Compare quotes and connect with professionals for home, trade, business and digital services.",
 
   keywords: [
-    "taskoria",
-    "find professionals australia",
-    "hire local experts australia",
-    "home services australia",
-    "professional services near me",
-    "verified tradespeople australia",
-    "get free quotes australia",
-    "book local professionals",
-    "house cleaning australia",
-    "plumber australia",
-    "electrician australia",
+    "Taskoria",
+    "local professionals Australia",
+    "tradies Australia",
+    "home services Australia",
+    "professional services Australia",
+    "plumbers Australia",
+    "electricians Australia",
+    "cleaners Australia",
+    "local service marketplace",
+    "compare quotes Australia",
   ],
 
-  authors: [{ name: SITE_NAME, url: BASE_URL }],
+  authors: [
+    {
+      name: SITE_NAME,
+      url: BASE_URL,
+    },
+  ],
+
   creator: SITE_NAME,
   publisher: SITE_NAME,
+
+  category: "Business",
 
   robots: {
     index: true,
     follow: true,
+
     googleBot: {
       index: true,
       follow: true,
+
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
@@ -81,47 +101,72 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Find Trusted Local Professionals Across Australia | Taskoria",
-    description:
-      "Connect with verified Australian professionals for home, business, and digital services. AI-powered matching, transparent pricing, and secure payments.",
+    type: "website",
+    locale: "en_AU",
+
     url: BASE_URL,
     siteName: SITE_NAME,
-    locale: "en_AU",
-    type: "website",
+
+    title: "Taskoria | Find Trusted Local Professionals Across Australia",
+
+    description:
+      "Find trusted local professionals across Australia. Compare quotes and connect with professionals for home, trade, business and digital services.",
+
     images: [
       {
         url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Taskoria – Find Trusted Local Professionals Across Australia",
+        alt: "Taskoria - Find Trusted Local Professionals Across Australia",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Taskoria | Trusted Local Professionals Across Australia",
+
+    title: "Taskoria | Find Trusted Local Professionals Across Australia",
+
     description:
-      "Discover and hire verified professionals near you. Compare quotes, read reviews, and book instantly with Taskoria.",
+      "Find and compare trusted local professionals across Australia with Taskoria.",
+
     images: [OG_IMAGE],
+
     creator: TWITTER_HANDLE,
     site: TWITTER_HANDLE,
   },
 
   manifest: "/manifest.json",
+
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: SITE_NAME,
   },
+
   formatDetection: {
     telephone: false,
   },
+
   icons: {
-    icon: [{ url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" }],
-    apple: [{ url: LOGO, sizes: "140x140" }],
+    icon: [
+      {
+        url: "/favicon.ico",
+        sizes: "48x48",
+        type: "image/x-icon",
+      },
+    ],
+
+    apple: [
+      {
+        url: "/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
   },
 };
+
 
 export const viewport: Viewport = {
   themeColor: "#2563EB",
@@ -131,204 +176,142 @@ export const viewport: Viewport = {
   userScalable: true,
 };
 
-const stripBrowserExtensionAttributesScript = `
-(() => {
-  const attributeName = "bis_skin_checked";
-  const selector = "[" + attributeName + "]";
 
-  const strip = (root) => {
-    if (!root) return;
-
-    if (root.nodeType === 1 && root.removeAttribute) {
-      root.removeAttribute(attributeName);
-    }
-
-    if (root.querySelectorAll) {
-      root.querySelectorAll(selector).forEach((node) => {
-        node.removeAttribute(attributeName);
-      });
-    }
-  };
-
-  strip(document.documentElement);
-
-  if (typeof MutationObserver === "undefined" || !document.documentElement) {
-    return;
-  }
-
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.type === "attributes") {
-        mutation.target.removeAttribute(attributeName);
-        return;
-      }
-
-      mutation.addedNodes.forEach(strip);
-    });
-  });
-
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: [attributeName],
-    childList: true,
-    subtree: true,
-  });
-
-  window.setTimeout(() => {
-    observer.disconnect();
-    strip(document.documentElement);
-  }, 10000);
-})();
-`;
-
-export function generateStaticParams() {
-  return [{ location: "en" }];
-}
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
-  const GA_ID = process.env.NEXT_PUBLIC_GOOGLEANALYTICS_MEASUREMENT_ID;
-  const organizationJsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Organization",
-        "@id": `${BASE_URL}/#organization`,
-        name: SITE_NAME,
-        legalName: LEGAL_NAME,
-        url: BASE_URL,
-        logo: {
-          "@type": "ImageObject",
-          url: LOGO,
-        },
-        taxID: `ABN ${ABN}`,
-        contactPoint: [
-          {
-            "@type": "ContactPoint",
-            telephone: "+61 1300 531 727",
-            contactType: "customer support",
-            email: "contact@taskoria.com",
-            areaServed: "AU",
-            availableLanguage: ["en"],
-          },
-        ],
-        sameAs: [
-          "https://www.instagram.com/taskoria.au/",
-          "https://www.tiktok.com/@taskoria",
-          "https://x.com/taskoria",
-          "https://www.linkedin.com/company/taskoria-au",
-          "https://www.trustpilot.com/review/taskoria.com",
-        ],
-      },
-      {
-        "@type": "WebSite",
-        "@id": `${BASE_URL}/#website`,
-        name: SITE_NAME,
-        url: BASE_URL,
-        publisher: { "@id": `${BASE_URL}/#organization` },
-        inLanguage: "en-AU",
-        potentialAction: {
-          "@type": "SearchAction",
-          target: `${BASE_URL}/services?q={search_term_string}`,
-          "query-input": "required name=search_term_string",
-        },
-      },
-    ],
-  };
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const GA_ID =
+    process.env.NEXT_PUBLIC_GOOGLEANALYTICS_MEASUREMENT_ID;
 
   return (
     <html
-      lang="en"
+      lang="en-AU"
       className={`${poppins.variable} ${bricolage.variable}`}
-      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <head>
-        {/* Parser-blocking runtime configuration is available before client
-            components hydrate, including on build-generated static pages. */}
-        <script src="/api/runtime-config.js" />
-        {/* Google requires this asynchronous loader for Preferred Sources. */}
+      
+        <Script
+          src="/api/runtime-config.js"
+          strategy="beforeInteractive"
+        />
+
+      
         <script
           async
           src="https://news.google.com/swg/js/v1/publisher.js"
         />
-        <Script
-          id="strip-browser-extension-hydration-attributes"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: stripBrowserExtensionAttributesScript,
-          }}
-        />
-        <link
-          rel="stylesheet"
-          href="https://www.gstatic.com/chat-messenger/sdk/prod/v1.16/themes/chat-messenger-default.css"
-        />
-        <Script id="clarity" strategy="afterInteractive">
-          {`
-
-    (function(c,l,a,r,i,t,y){
-
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-
-    })(window, document, "clarity", "script", "wylra8huxw");
-
-  `}
-        </Script>
       </head>
-      <body className="antialiased dark:bg-black" suppressHydrationWarning>
+
+      <body
+        className="antialiased dark:bg-black"
+        suppressHydrationWarning
+      >
         <AuthProvider>
-          {GA_ID && (
-            <>
-              <Script
-                src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-                strategy="afterInteractive"
-              />
-              <Script id="google-analytics" strategy="afterInteractive">
-                {`
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${GA_ID}');
-                `}
-              </Script>
-            </>
-          )}
-
-          <Script
-            src="https://static.cloudflareinsights.com/beacon.min.js"
-            data-cf-beacon='{"token": "b0381ce5a7494c56869a77d5b4d0623c"}'
-            strategy="afterInteractive"
-          />
-
-          <NotificationHandler />
-          <Script
-            id="organization-jsonld"
-            type="application/ld+json"
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-          />
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >
-            <Analytics />
             <UserProvider>
-              <BreadcrumbJsonLd />
+             
+
+              {GA_ID ? (
+                <>
+                  <Script
+                    src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+                    strategy="afterInteractive"
+                  />
+
+                  <Script
+                    id="google-analytics"
+                    strategy="afterInteractive"
+                  >
+                    {`
+                      window.dataLayer = window.dataLayer || [];
+
+                      function gtag() {
+                        window.dataLayer.push(arguments);
+                      }
+
+                      gtag('js', new Date());
+
+                      gtag('config', '${GA_ID}', {
+                        anonymize_ip: true
+                      });
+                    `}
+                  </Script>
+                </>
+              ) : null}
+
+            
+
+              <Script
+                id="microsoft-clarity"
+                strategy="afterInteractive"
+              >
+                {`
+                  (function(c,l,a,r,i,t,y){
+                    c[a]=c[a]||function(){
+                      (c[a].q=c[a].q||[]).push(arguments)
+                    };
+
+                    t=l.createElement(r);
+                    t.async=1;
+                    t.src="https://www.clarity.ms/tag/"+i;
+
+                    y=l.getElementsByTagName(r)[0];
+                    y.parentNode.insertBefore(t,y);
+
+                  })(window, document, "clarity", "script", "wylra8huxw");
+                `}
+              </Script>
+
+
+              <Script
+                src="https://static.cloudflareinsights.com/beacon.min.js"
+                data-cf-beacon='{"token":"b0381ce5a7494c56869a77d5b4d0623c"}'
+                strategy="afterInteractive"
+              />
+
+
+              <NotificationHandler />
+
+              <Analytics />
+
               <NavbarServer />
-              <main>{children}</main>
-              <SpeedInsights />
-              <Toaster position="top-right" richColors expand closeButton />
+
+              {/*
+                IMPORTANT:
+
+                There is intentionally NO <main> here.
+
+                Every route should own its own <main> element.
+                This prevents:
+
+                <main>
+                  <main>...</main>
+                </main>
+              */}
+
+              {children}
+
               <Footer currentYear={new Date().getFullYear()} />
-              {/* <ChatbotWidget/> */}
-              <WhatsAppSupportButton/>
-              {/* <TaskoriaAgent /> */}
+
+              <WhatsAppSupportButton />
+
+              <Toaster
+                position="top-right"
+                richColors
+                expand
+                closeButton
+              />
+
+              <SpeedInsights />
             </UserProvider>
           </ThemeProvider>
         </AuthProvider>

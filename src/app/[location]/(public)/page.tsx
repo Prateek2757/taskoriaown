@@ -1,403 +1,520 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { lazy, Suspense } from "react";
+
 import HeroSection from "@/components/HeroSection/Herosection";
 import HomepageStatsCounter from "@/components/HomepageStatsCounter";
-import Script from "next/script";
-import { BASE_URL, LOGO, OG_IMAGE, SITE_NAME, TWITTER_HANDLE } from "./layout";
 import InternalLinkModule from "@/components/InternalLinkModule";
+import HomepageCityCoverage from "@/components/HomepageCityCoverage";
+
 import {
   getPriorityCityLinks,
   getPriorityServiceLinks,
 } from "@/lib/internal-links";
-import { getCategoriesFromDB, getPopularSeoCitiesFromDB } from "@/lib/cache";
-import { filterSeoLocations } from "@/lib/seo-locations";
-import PlatformReachTicker from "@/components/PlatformReachTicker";
-import HomepageCityCoverage from "@/components/HomepageCityCoverage";
 
-// Cloud Run supplies database access at runtime, not during the Docker build.
-// Render the homepage on request so its database queries are never prerendered.
+import {
+  getCategoriesFromDB,
+  getPopularSeoCitiesFromDB,
+} from "@/lib/cache";
+
+import { filterSeoLocations } from "@/lib/seo-locations";
+
+import {
+  BASE_URL,
+  LEGAL_NAME,
+  ABN,
+  LOGO,
+  OG_IMAGE,
+  SITE_NAME,
+  TWITTER_HANDLE,
+} from "./layout";
+
+/* -------------------------------------------------------------------------- */
+/*                         HOMEPAGE RENDERING MODE                            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Your homepage reads service/category/city information from the database.
+ *
+ * Cloud Run has database access at runtime, while your Docker build may not.
+ * Keeping force-dynamic avoids requiring those database queries during build.
+ */
 export const dynamic = "force-dynamic";
 
-const HowTaskoriaWorks = lazy(() => import("@/components/how-taskoria-works"));
-// const Categories = lazy(() => import("@/components/Categories"));
+/* -------------------------------------------------------------------------- */
+/*                              LAZY COMPONENTS                               */
+/* -------------------------------------------------------------------------- */
+
+const HowTaskoriaWorks = lazy(
+  () => import("@/components/how-taskoria-works")
+);
+
 const PopularServicesSection = lazy(
   () => import("@/components/PopularServicesSection")
 );
-const FeaturesPage = lazy(() => import("@/components/Features"));
-const Testomonail = lazy(() => import("@/components/Testomonail"));
-const HomepageFAQ = lazy(() => import("@/components/HomepageFAQ"));
-const CTA = lazy(() => import("@/components/CTA"));
-const CustomersReview = lazy(() => import("@/components/CustomersReview"));
+
+const FeaturesPage = lazy(
+  () => import("@/components/Features")
+);
+
+const CustomersReview = lazy(
+  () => import("@/components/CustomersReview")
+);
+
+const HomepageFAQ = lazy(
+  () => import("@/components/HomepageFAQ")
+);
+
+const PlatformReachTicker = lazy(
+  () => import("@/components/PlatformReachTicker")
+);
+
+const CTA = lazy(
+  () => import("@/components/CTA")
+);
+
+/* -------------------------------------------------------------------------- */
+/*                              HOMEPAGE METADATA                             */
+/* -------------------------------------------------------------------------- */
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Connect with Local Experts & Earn Money Easily | Taskoria",
+    absolute:
+      "Taskoria | Find Trusted Local Professionals Across Australia",
   },
+
   description:
-    "Find trusted, verified local professionals across Australia. Get free quotes, compare services, and hire with confidence on Taskoria — fast, easy, and reliable.",
-
-  keywords: [
-    "hire professionals australia",
-    "local tradespeople australia",
-    "verified service providers australia",
-    "home services australia",
-    "find tradespeople near me",
-    "instant quotes australia",
-    "cleaning services australia",
-    "plumbing services australia",
-    "electricians australia",
-    "web development services australia",
-    "AI powered service marketplace",
-    "taskoria",
-    "australian service marketplace",
-    "book local professionals",
-    "trusted professionals australia",
-  ],
-
-  authors: [{ name: SITE_NAME, url: BASE_URL }],
-  creator: SITE_NAME,
-  publisher: SITE_NAME,
-  category: "Business",
+    "Find trusted local professionals across Australia with Taskoria. Compare quotes for cleaning, plumbing, electrical, gardening, removals, digital services and more.",
 
   alternates: {
-    canonical: BASE_URL,
-  },
-
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
+    canonical: "/",
   },
 
   openGraph: {
     type: "website",
+
     locale: "en_AU",
-    url: BASE_URL,
+
+    url: "/",
+
     siteName: SITE_NAME,
-    title: "Hire Verified Local Professionals Across Australia | Taskoria",
+
+    title:
+      "Taskoria | Find Trusted Local Professionals Across Australia",
+
     description:
-      "Connect with 1,000+ verified Australian professionals. Get instant quotes for cleaning, trades, tech and more. Serving 50+ cities nationwide.",
+      "Find trusted local professionals across Australia. Compare quotes for home, trade, business and digital services.",
+
     images: [
       {
         url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Taskoria — Hire Verified Professionals Across Australia",
+        alt: "Taskoria - Find Trusted Local Professionals Across Australia",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Taskoria | Hire Verified Professionals Across Australia",
+
+    title:
+      "Taskoria | Find Trusted Local Professionals Across Australia",
+
     description:
-      "Post a job free and get matched with trusted local professionals. 4.8★ rated across 50+ Australian cities.",
+      "Find and compare trusted local professionals across Australia with Taskoria.",
+
     images: [OG_IMAGE],
+
     creator: TWITTER_HANDLE,
     site: TWITTER_HANDLE,
   },
 };
 
-const structuredData = {
+
+const homepageJsonLd = {
   "@context": "https://schema.org",
+
   "@graph": [
+  
     {
       "@type": "Organization",
+
       "@id": `${BASE_URL}/#organization`,
+
       name: SITE_NAME,
+
+      alternateName: "Taskoria Australia",
+
+      legalName: LEGAL_NAME,
+
       url: BASE_URL,
+
       logo: {
         "@type": "ImageObject",
-        url: LOGO,
-        width: 250,
-        height: 60,
-      },
-      description:
-        "Taskoria is Australia's trusted service marketplace connecting customers with verified local professionals for home, business, and digital services.",
-      address: {
-        "@type": "PostalAddress",
-        addressCountry: "AU",
-      },
-      contactPoint: {
-        "@type": "ContactPoint",
-        contactType: "customer support",
-        availableLanguage: "English",
-      },
-      sameAs: [
-        "https://www.facebook.com/taskoria",
-        "https://twitter.com/taskoria",
-      ],
-  
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.7",
-        reviewCount: "120",
-        bestRating: "5",
-        worstRating: "1",
-      },
-    },
 
-    {
-      "@type": ["LocalBusiness", "ProfessionalService"],
-      "@id": `${BASE_URL}/#local-business`,
-      name: "Taskoria Australia",
-      url: BASE_URL,
+        "@id": `${BASE_URL}/#logo`,
+
+        url: LOGO,
+      },
+
       image: OG_IMAGE,
-      logo: LOGO,
-      description:
-        "Taskoria connects Australians with verified local professionals for home, business, trade, and digital services.",
-      telephone: "+61 1300 531 727",
+
+      taxID: ABN,
+
       email: "contact@taskoria.com",
-      priceRange: "$$",
-      parentOrganization: { "@id": `${BASE_URL}/#organization` },
-      areaServed: {
-        "@type": "Country",
-        name: "Australia",
-      },
-      address: {
-        "@type": "PostalAddress",
-        addressCountry: "AU",
-      },
-      makesOffer: {
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: "Local professional services marketplace",
-          serviceType: "Service Marketplace",
+
+      telephone: "+61 1300 531 727",
+
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+
+          telephone: "+61 1300 531 727",
+
+          email: "contact@taskoria.com",
+
+          contactType: "customer support",
+
           areaServed: {
             "@type": "Country",
             name: "Australia",
           },
+
+          availableLanguage: ["English"],
         },
+      ],
+
+      areaServed: {
+        "@type": "Country",
+        name: "Australia",
       },
+
+      sameAs: [
+        "https://www.instagram.com/taskoria.au/",
+        "https://www.tiktok.com/@taskoria",
+        "https://x.com/taskoria",
+        "https://www.linkedin.com/company/taskoria-au",
+        "https://www.trustpilot.com/review/taskoria.com",
+      ],
     },
 
+    
     {
       "@type": "WebSite",
+
       "@id": `${BASE_URL}/#website`,
+
       url: BASE_URL,
+
       name: SITE_NAME,
-      inLanguage: "en-AU",
-      publisher: { "@id": `${BASE_URL}/#organization` },
-      potentialAction: {
-        "@type": "SearchAction",
-        target: {
-          "@type": "EntryPoint",
-          urlTemplate: `${BASE_URL}/services?q={search_term_string}`,
-        },
-        "query-input": "required name=search_term_string",
+
+      alternateName: [
+        "Taskoria Australia",
+        "taskoria.com",
+      ],
+
+      description:
+        "Taskoria is an Australian service marketplace connecting customers with local professionals.",
+
+      publisher: {
+        "@id": `${BASE_URL}/#organization`,
       },
+
+      inLanguage: "en-AU",
     },
 
+  
     {
       "@type": "WebPage",
+
       "@id": `${BASE_URL}/#webpage`,
+
       url: BASE_URL,
-      name: "Hire Verified Local Professionals Across Australia | Taskoria",
+
+      name:
+        "Taskoria | Find Trusted Local Professionals Across Australia",
+
       description:
-        "Find and hire trusted local professionals across Australia. Get instant quotes from verified tradespeople, cleaners, tech experts and more.",
-      inLanguage: "en-AU",
-      isPartOf: { "@id": `${BASE_URL}/#website` },
-      about: { "@id": `${BASE_URL}/#organization` },
-      primaryImageOfPage: {
-        "@type": "ImageObject",
-        url: OG_IMAGE,
+        "Find trusted local professionals across Australia with Taskoria. Compare quotes for home, trade, business and digital services.",
+
+      isPartOf: {
+        "@id": `${BASE_URL}/#website`,
       },
+
+      about: {
+        "@id": `${BASE_URL}/#organization`,
+      },
+
+      primaryImageOfPage: {
+        "@id": `${BASE_URL}/#primaryimage`,
+      },
+
+      inLanguage: "en-AU",
     },
 
+    {
+      "@type": "ImageObject",
+
+      "@id": `${BASE_URL}/#primaryimage`,
+
+      url: OG_IMAGE,
+
+      contentUrl: OG_IMAGE,
+
+      caption:
+        "Taskoria - Find Trusted Local Professionals Across Australia",
+    },
+
+  
     {
       "@type": "Service",
-      name: "Taskoria — Australian Service Marketplace",
-      serviceType: "Service Marketplace",
-      provider: { "@id": `${BASE_URL}/#organization` },
-      areaServed: { "@type": "Country", name: "Australia" },
-      hasOfferCatalog: {
-        "@type": "OfferCatalog",
-        name: "Service Categories",
-        itemListElement: [
-          {
-            "@type": "OfferCatalog",
-            name: "Cleaning Services",
-            itemListElement: [
-              {
-                "@type": "Offer",
-                itemOffered: { "@type": "Service", name: "House Cleaning" },
-              },
-            ],
-          },
-          {
-            "@type": "OfferCatalog",
-            name: "Trade Services",
-            itemListElement: [
-              {
-                "@type": "Offer",
-                itemOffered: { "@type": "Service", name: "Plumbing" },
-              },
-              {
-                "@type": "Offer",
-                itemOffered: { "@type": "Service", name: "Electrical" },
-              },
-            ],
-          },
-          {
-            "@type": "OfferCatalog",
-            name: "Digital Services",
-            itemListElement: [
-              {
-                "@type": "Offer",
-                itemOffered: { "@type": "Service", name: "Web Development" },
-              },
-            ],
-          },
-        ],
+
+      "@id": `${BASE_URL}/#service`,
+
+      name: "Taskoria Local Services Marketplace",
+
+      description:
+        "Taskoria connects customers across Australia with local professionals for home, trade, business and digital services.",
+
+      serviceType:
+        "Local professional services marketplace",
+
+      provider: {
+        "@id": `${BASE_URL}/#organization`,
       },
-    },
 
-    {
-      "@type": "BreadcrumbList",
-      "@id": `${BASE_URL}/#breadcrumb`,
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
-      ],
-    },
+      areaServed: {
+        "@type": "Country",
+        name: "Australia",
+      },
 
-    {
-      "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "Is Taskoria free to use?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Yes. Customers can post a job and receive quotes for free. You only pay when you choose a professional and agree to move ahead with the work.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Are professionals on Taskoria verified?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Taskoria asks professionals to complete verification checks before they respond to customer jobs. Profiles can also include business details, licences, accreditations, reviews, and past work so customers can compare with confidence.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "How fast will I receive quotes?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Many customers receive their first responses within minutes. Timing can vary by service, location, and job detail, but common jobs often attract multiple quotes within a few hours.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Where in Australia does Taskoria operate?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Taskoria supports customers across Australia, including major cities, regional centres, and surrounding suburbs. Availability can vary by service category and local provider coverage.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "What services can I book on Taskoria?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Customers can request quotes for home cleaning, plumbing, electrical work, gardening, removals, rubbish removal, events, tutoring, digital services, design, and many other local or professional jobs.",
-          },
-        },
-      ],
+      url: BASE_URL,
     },
   ],
 };
 
+
+function serializeJsonLd(data: unknown) {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
 export default async function HomePage() {
-  const [services, cities] = await Promise.all([
-    getCategoriesFromDB(),
-    getPopularSeoCitiesFromDB(80),
-  ]);
-  const serviceLinks = getPriorityServiceLinks(services, 8);
-  const cityLinks = getPriorityCityLinks(filterSeoLocations(cities), 8);
+  /**
+   * Fetch both datasets in parallel.
+   */
+  // const [services, cities] = await Promise.all([
+  //   getCategoriesFromDB(),
+  //   getPopularSeoCitiesFromDB(80),
+  // ]);
+
+  // /**
+  //  * Select the most important crawlable internal links.
+  //  */
+  // const serviceLinks =
+  //   getPriorityServiceLinks(services, 8);
+
+  // const cityLinks =
+  //   getPriorityCityLinks(
+  //     filterSeoLocations(cities),
+  //     8
+  //   );
 
   return (
     <>
+    
 
-      <Script
-        id="homepage-schema"
+      <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd(homepageJsonLd),
+        }}
       />
 
-    
-      <main className="" role="main">
-        <section aria-label="Hero — find and hire local professionals">
+     
+
+      <main id="main-content">
+      
+
+        <section
+          aria-label="Find and hire local professionals"
+        >
           <HeroSection />
         </section>
 
-        {/* <HomepageStatsCounter /> */}
 
-        <Suspense fallback={<div className="min-h-12.5" />}>
-          <section aria-label="Browse service categories">
+        <Suspense
+          fallback={
+            <div
+              className="min-h-12.5"
+              aria-hidden="true"
+            />
+          }
+        >
+          <section
+            aria-label="Browse popular service categories"
+          >
             <PopularServicesSection />
           </section>
         </Suspense>
 
-        {/* <InternalLinkModule
-          eyebrow="Popular on Taskoria"
-          title="Find trusted professionals in Australia's major cities"
-          description="Browse popular services, then choose your city to compare local professionals and request free quotes."
-          groups={[
-            { title: "Priority services", links: serviceLinks },
-            { title: "Priority cities", links: cityLinks },
-          ]}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-        /> */}
 
-        <Suspense fallback={<div className="min-h-12.5" />}>
-          <section aria-label="How Taskoria works — step by step">
+        {/*
+          IMPORTANT:
+
+          Keep these links visible to normal users.
+
+          Do NOT render these only for Googlebot.
+          Do NOT use CSS to hide these only for SEO.
+        */}
+
+        {/* {(serviceLinks.length > 0 ||
+          cityLinks.length > 0) && (
+          <InternalLinkModule
+            eyebrow="Popular on Taskoria"
+            title="Find trusted professionals across Australia"
+            description="Browse popular services and locations to find local professionals and compare quotes."
+            groups={[
+              {
+                title: "Popular services",
+                links: serviceLinks,
+              },
+              {
+                title: "Popular locations",
+                links: cityLinks,
+              },
+            ]}
+            className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+          />
+        )} */}
+
+
+        <Suspense
+          fallback={
+            <div
+              className="min-h-12.5"
+              aria-hidden="true"
+            />
+          }
+        >
+          <section
+            aria-label="How Taskoria works"
+          >
             <HowTaskoriaWorks />
           </section>
         </Suspense>
-        <Suspense fallback={<div className="min-h-12.5" />}>
-          <section aria-label="How Taskoria works — step by step">
+
+        <Suspense
+          fallback={
+            <div
+              className="min-h-12.5"
+              aria-hidden="true"
+            />
+          }
+        >
+          <section
+            aria-label="Taskoria marketplace statistics"
+          >
             <HomepageStatsCounter />
           </section>
         </Suspense>
 
-        <Suspense fallback={<div className="min-h-12.5" />}>
-          <section aria-label="Platform features and benefits">
+     
+
+        <Suspense
+          fallback={
+            <div
+              className="min-h-12.5"
+              aria-hidden="true"
+            />
+          }
+        >
+          <section
+            aria-label="Taskoria features and benefits"
+          >
             <FeaturesPage />
           </section>
         </Suspense>
 
-        <Suspense fallback={<div className="min-h-12.5" />}>
-          <section aria-label="Customer reviews and testimonials">
+      
+        <Suspense
+          fallback={
+            <div
+              className="min-h-12.5"
+              aria-hidden="true"
+            />
+          }
+        >
+          <section
+            aria-label="Customer reviews"
+          >
             <CustomersReview />
           </section>
         </Suspense>
 
-        <Suspense fallback={<div className="min-h-12.5" />}>
-          <HomepageCityCoverage />
+      
+        <Suspense
+          fallback={
+            <div
+              className="min-h-12.5"
+              aria-hidden="true"
+            />
+          }
+        >
+          <section
+            aria-label="Taskoria service locations across Australia"
+          >
+            <HomepageCityCoverage />
+          </section>
         </Suspense>
 
-        <Suspense fallback={<div className="min-h-12.5" />}>
-          <HomepageFAQ />
+
+        <Suspense
+          fallback={
+            <div
+              className="min-h-12.5"
+              aria-hidden="true"
+            />
+          }
+        >
+          <section
+            aria-label="Frequently asked questions"
+          >
+            <HomepageFAQ />
+          </section>
         </Suspense>
 
-        <Suspense fallback={<div className="min-h-12.5" />}>
-          <PlatformReachTicker />
+       
+
+        <Suspense
+          fallback={
+            <div
+              className="min-h-12.5"
+              aria-hidden="true"
+            />
+          }
+        >
+          <section
+            aria-label="Taskoria platform reach"
+          >
+            <PlatformReachTicker />
+          </section>
         </Suspense>
 
-        <Suspense fallback={<div className="min-h-12.5" />}>
-          <section aria-label="Get started — post your first job free">
+
+        <Suspense
+          fallback={
+            <div
+              className="min-h-12.5"
+              aria-hidden="true"
+            />
+          }
+        >
+          <section
+            aria-label="Get started with Taskoria"
+          >
             <CTA />
           </section>
         </Suspense>
-        
       </main>
     </>
   );
