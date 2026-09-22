@@ -78,8 +78,7 @@ const CTA = lazy(
 
 export const metadata: Metadata = {
   title: {
-    absolute:
-      "Taskoria | Find Trusted Local Professionals Across Australia",
+    absolute: "Connect with Local Experts & Earn Money Easily | Taskoria",
   },
 
   description:

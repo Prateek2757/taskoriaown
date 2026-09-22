@@ -54,8 +54,7 @@ export const metadata: Metadata = {
   applicationName: SITE_NAME,
 
   title: {
-    default: "Taskoria | Find Trusted Local Professionals Across Australia",
-    template: `%s | ${SITE_NAME}`,
+    absolute: "Taskoria | Find Trusted Local Professionals Across Australia"
   },
 
   description:
