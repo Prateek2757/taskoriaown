@@ -1,3 +1,4 @@
+import { EmailLogo } from "../components/EmailLogo";
 import {
   Body,
   Column,
@@ -6,7 +7,6 @@ import {
   Heading,
   Hr,
   Html,
-  Img,
   Link,
   Preview,
   Row,
@@ -35,13 +35,7 @@ export const VerificationEmail = ({
         <Container style={container}>
 
           <Section style={hero}>
-            <Img
-              src="https://www.taskoria.com/images/taskoria_logo.svg"
-              alt={`${company} logo`}
-              width="44"
-              height="44"
-              style={{ display: "block", margin: "0 auto 18px" }}
-            />
+            <EmailLogo company={company} />
             <Text style={eyebrow}>Email verification</Text>
             <Heading style={heroHeading}>
               Confirm your email address

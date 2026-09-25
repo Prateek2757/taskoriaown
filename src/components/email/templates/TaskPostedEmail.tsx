@@ -1,3 +1,4 @@
+import { EmailLogo } from "../components/EmailLogo";
 /**
  * TaskPostedEmail.tsx
  *
@@ -26,7 +27,6 @@ import {
   Head,
   Heading,
   Html,
-  Img,
   Link,
   Row,
   Section,
@@ -91,13 +91,7 @@ export const TaskPostedEmail = ({
               <Section style={heroSection}>
                 <Row>
                   <Column style={heroCol}>
-                    <Img
-                      src="https://www.taskoria.com/images/taskoria_logo.svg"
-                      alt={`${company} logo`}
-                      width="44"
-                      height="44"
-                      style={{ display: "block", margin: "0 auto 18px" }}
-                    />
+                    <EmailLogo company={company} />
                     <Text style={eyebrow}>Task posted</Text>
                     <Heading as="h1" style={heroHeading}>
                       You&apos;re live! 🎉

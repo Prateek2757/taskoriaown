@@ -1,3 +1,4 @@
+import { EmailLogo } from "../components/EmailLogo";
 import {
   Body,
   Button,
@@ -7,7 +8,6 @@ import {
   Heading,
   Hr,
   Html,
-  Img,
   Link,
   Preview,
   Row,
@@ -87,13 +87,7 @@ export const ProviderEmailCompose = ({
                 <Section style={heroSection}>
                   <Row>
                     <Column style={heroCol}>
-                      <Img
-                        src="https://www.taskoria.com/images/taskoria_logo.svg"
-                        alt={`${company} logo`}
-                        width="44"
-                        height="44"
-                        style={{ display: "block", margin: "0 auto 18px" }}
-                      />
+                      <EmailLogo company={company} />
                       <Text style={eyebrow}>New message</Text>
                       <Heading as="h1" style={heroHeading}>
                         You received a message from a professional.

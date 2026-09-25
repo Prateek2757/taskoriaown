@@ -1,3 +1,4 @@
+import { EmailLogo } from "./components/EmailLogo";
 import {
   Body,
   Button,
@@ -80,15 +81,8 @@ const ProviderTaskEmail = ({
         <Section style={s.brandBar}>
           <Container style={s.brandBarInner}>
             <Row>
-              <Column>
-                <Img
-                  src={`${baseUrl}/images/taskoria_logo.svg`}
-                  alt={company}
-                  width="30"
-                  height="30"
-                  style={{ display: "inline-block", verticalAlign: "middle" }}
-                />
-                <Text style={s.brandName}>{company}</Text>
+              <Column style={{ width: "50%" }}>
+                <EmailLogo company={company} baseUrl={baseUrl} width={140} align="left" marginBottom={0} />
               </Column>
               <Column style={{ textAlign: "right" as const }}>
                 <Text style={s.brandTagline}>

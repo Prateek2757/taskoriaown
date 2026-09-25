@@ -1,3 +1,4 @@
+import { EmailLogo } from "../components/EmailLogo";
 import {
   Body,
   Button,
@@ -7,7 +8,6 @@ import {
   Heading,
   Hr,
   Html,
-  Img,
   Link,
   Preview,
   Row,
@@ -55,13 +55,7 @@ export const ProviderEstimateEmail = ({
 
           {/* ── Hero ── */}
           <Section style={hero}>
-            <Img
-              src="https://www.taskoria.com/images/taskoria_logo.svg"
-              alt={`${company} logo`}
-              width="44"
-              height="44"
-              style={{ display: "block", margin: "0 auto 18px" }}
-            />
+            <EmailLogo company={company} />
             <Text style={eyebrow}>New estimate received</Text>
             <Heading style={heroHeading}>
               You&apos;ve got a quote for your task.

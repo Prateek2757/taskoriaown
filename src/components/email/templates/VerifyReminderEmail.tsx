@@ -1,3 +1,4 @@
+import { EmailLogo } from "../components/EmailLogo";
 import {
     Body, Button, Container, Head,
     Heading, Hr, Html, Img, Link,
@@ -35,13 +36,7 @@ import {
   
           {/* ── Hero ── */}
           <Section style={hero}>
-            <Img
-              src="https://www.taskoria.com/images/taskoria_logo.svg"
-              alt={`${company} logo`}
-              width="44"
-              height="44"
-              style={{ display: "block", margin: "0 auto 18px" }}
-            />
+            <EmailLogo company={company} />
             <Text style={eyebrow}>Action required</Text>
             <Heading style={heroHeading}>
               Verify your email{username ? `, ${username}` : ""}.

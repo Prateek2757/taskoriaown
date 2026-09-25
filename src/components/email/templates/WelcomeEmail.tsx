@@ -1,3 +1,4 @@
+import { EmailLogo } from "../components/EmailLogo";
 import {
   Body,
   Button,
@@ -7,7 +8,6 @@ import {
   Heading,
   Hr,
   Html,
-  Img,
   Link,
   Preview,
   Row,
@@ -55,13 +55,7 @@ export const WelcomeEmail = ({
     <Body style={body}>
       <Container style={container}>
         <Section style={hero}>
-          <Img
-            src="https://www.taskoria.com/images/taskoria_logo.svg"
-            alt={`${company} logo`}
-            width="44"
-            height="44"
-            style={logoStyle}
-          />
+          <EmailLogo company={company} marginBottom={20} />
           <Text style={eyebrow}>Welcome aboard</Text>
           <Heading style={heroHeading}>
             Hello, {username ?? "there"} —{"\n"}great to have you.
@@ -158,11 +152,6 @@ const hero: React.CSSProperties = {
   background: "linear-gradient(135deg, #0f1d47 0%, #162d78 55%, #1a3799 100%)",
   padding: "40px 40px 48px",
   textAlign: "center",
-};
-
-const logoStyle: React.CSSProperties = {
-  margin: "0 auto 20px",
-  display: "block",
 };
 
 const eyebrow: React.CSSProperties = {

@@ -1,3 +1,4 @@
+import { EmailLogo } from "../components/EmailLogo";
 import {
   Body,
   Button,
@@ -7,7 +8,6 @@ import {
   Heading,
   Hr,
   Html,
-  Img,
   Link,
   Row,
   Section,
@@ -45,7 +45,7 @@ export const ProviderNewTaskEmail = ({
 }: ProviderNewTaskEmailProps) => (
   <Html lang="en">
     <Head>
-      <title>New task available — {company}</title>
+      <title>{`New task available — ${company}`}</title>
     </Head>
 
     <Body style={body}>
@@ -66,13 +66,7 @@ export const ProviderNewTaskEmail = ({
               <Section style={heroSection}>
                 <Row>
                   <Column style={heroCol}>
-                    <Img
-                      src="https://www.taskoria.com/images/taskoria_logo.svg"
-                      alt={`${company} logo`}
-                      width="44"
-                      height="44"
-                      style={{ display: "block", margin: "0 auto 18px" }}
-                    />
+                    <EmailLogo company={company} />
                     <Text style={eyebrow}>New opportunity</Text>
                     <Heading as="h1" style={heroHeading}>
                       A task matches your skills!

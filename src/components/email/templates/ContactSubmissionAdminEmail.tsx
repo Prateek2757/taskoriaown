@@ -1,3 +1,4 @@
+import { EmailLogo } from "../components/EmailLogo";
 import {
   Body,
   Button,
@@ -6,7 +7,6 @@ import {
   Head,
   Heading,
   Html,
-  Img,
   Link,
   Preview,
   Row,
@@ -60,13 +60,7 @@ export const ContactSubmissionAdminEmail = ({
               <Section style={heroSection}>
                 <Row>
                   <Column style={heroCol}>
-                    <Img
-                      src="https://www.taskoria.com/images/taskoria_logo.svg"
-                      alt={`${company} logo`}
-                      width="44"
-                      height="44"
-                      style={{ display: "block", margin: "0 auto 18px" }}
-                    />
+                    <EmailLogo company={company} />
                     <Text style={eyebrow}>Contact form</Text>
                     <Heading as="h1" style={heroHeading}>
                       New support message received.

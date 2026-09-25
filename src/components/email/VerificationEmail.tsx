@@ -1,3 +1,4 @@
+import { EmailLogo } from "./components/EmailLogo";
 import {
   Body,
   Button,
@@ -5,7 +6,6 @@ import {
   Head,
   Heading,
   Html,
-  Img,
   Section,
   Text,
   Link,
@@ -137,13 +137,7 @@ const AppEmaill = (props: AppEmailProps) => {
           }}
         >
           <Section style={{ textAlign: "center" }}>
-            <Img
-              src="https://www.taskoria.com/images/taskoria_logo.svg"
-              alt={`${company} Logo`}
-              width="48"
-              height="48"
-              style={{ margin: "0 auto 24px" }}
-            />
+            <EmailLogo company={company} marginBottom={24} />
           </Section>
 
           <Heading

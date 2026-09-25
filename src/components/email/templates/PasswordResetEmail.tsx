@@ -1,3 +1,4 @@
+import { EmailLogo } from "../components/EmailLogo";
 import {
   Body,
   Column,
@@ -6,7 +7,6 @@ import {
   Heading,
   Hr,
   Html,
-  Img,
   Link,
   Preview,
   Row,
@@ -75,13 +75,7 @@ export const PasswordResetEmail = ({
                 <Section style={heroSection}>
                   <Row>
                     <Column style={heroCol}>
-                      <Img
-                        src="https://www.taskoria.com/images/taskoria_logo.svg"
-                        alt={`${company} logo`}
-                        width="44"
-                        height="44"
-                        style={{ display: "block", margin: "0 auto 18px" }}
-                      />
+                      <EmailLogo company={company} />
                       <Text style={eyebrow}>Security alert</Text>
                       <Heading as="h1" style={heroHeading}>
                         Reset your password

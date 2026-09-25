@@ -1,9 +1,9 @@
+import { EmailLogo } from "./EmailLogo";
 import {
   Body,
   Container,
   Head,
   Html,
-  Img,
   Link,
   Section,
   Text,
@@ -39,13 +39,7 @@ export const EmailLayout = ({ title, company, children }: EmailLayoutProps) => (
         }}
       >
         <Section style={{ textAlign: "center" }}>
-          <Img
-            src="https://www.taskoria.com/images/taskoria_logo.svg"
-            alt={`${company} Logo`}
-            width="48"
-            height="48"
-            style={{ margin: "0 auto 24px" }}
-          />
+          <EmailLogo company={company} marginBottom={24} />
         </Section>
 
         {children}
