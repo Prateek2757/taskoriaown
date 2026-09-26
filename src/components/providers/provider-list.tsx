@@ -205,11 +205,26 @@ export default function ProvidersGrid({
             service.toLowerCase() === selectedCategory.name.toLowerCase()
         );
 
-      return matchesSearch && matchesCategory;
-    });
-  }, [providers, normalizedSearch, selectedCategory]);
+      const matchesCategorySearch =
+        !normalizedCategorySearch ||
+        providerServices.some((service) =>
+          service.toLowerCase().includes(normalizedCategorySearch)
+        ) ||
+        visibleCategoryOptions.some((category) =>
+          providerSlugs.includes(category.slug ?? "")
+        );
 
-  const hasActiveFilters = Boolean(search.trim() || selectedCategory);
+      return matchesSearch && matchesCategory && matchesCategorySearch;
+    });
+  }, [
+    providers,
+    normalizedSearch,
+    normalizedCategorySearch,
+    selectedCategory,
+    visibleCategoryOptions,
+  ]);
+
+  const hasActiveFilters = Boolean(normalizedSearch || normalizedCategorySearch || selectedCategory);
 
   const clearFilters = () => {
     setSearch("");
@@ -357,7 +372,10 @@ export default function ProvidersGrid({
                   type="text"
                   placeholder="Filter by category..."
                   value={categorySearch}
-                  onChange={(event) => setCategorySearch(event.target.value)}
+                  onChange={(event) => {
+                    setCategorySearch(event.target.value);
+                    setSelectedCategorySlug("");
+                  }}
                   className="h-10 w-full rounded-xl border border-border bg-muted pl-11 pr-10 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500/30"
                 />
                 {categorySearch && (
@@ -377,6 +395,7 @@ export default function ProvidersGrid({
                   type="button"
                   onClick={() => {
                     setSelectedCategorySlug("");
+                    setCategorySearch("");
                     setShowAllCategories(false);
                   }}
                   className={`inline-flex h-9 items-center gap-2 rounded-full border px-4 text-xs font-semibold transition ${
@@ -397,9 +416,10 @@ export default function ProvidersGrid({
                     <button
                       type="button"
                       key={category.slug}
-                      onClick={() =>
-                        setSelectedCategorySlug(category.slug ?? "")
-                      }
+                      onClick={() => {
+                        setSelectedCategorySlug(category.slug ?? "");
+                        setCategorySearch("");
+                      }}
                       className={`inline-flex h-9 items-center gap-2 rounded-full border px-4 text-xs font-semibold transition ${
                         selectedCategorySlug === category.slug
                           ? "border-blue-500 bg-[#2563EB] text-white"
@@ -425,7 +445,7 @@ export default function ProvidersGrid({
 
                 {displayedCategoryOptions.length === 0 && (
                   <span className="inline-flex h-9 items-center rounded-full border border-border px-4 text-xs text-muted-foreground">
-                    No categories match "{categorySearch}"
+                    No categories match &quot;{categorySearch}&quot;
                   </span>
                 )}
               </div>
@@ -485,17 +505,25 @@ export default function ProvidersGrid({
                 searchMatchedServiceIndex >= 0
                   ? services[searchMatchedServiceIndex]
                   : undefined;
+              const serviceByCategorySearch = normalizedCategorySearch
+                ? services.find((service) =>
+                    service.toLowerCase().includes(normalizedCategorySearch)
+                  ) ?? visibleCategoryOptions.find((category) =>
+                    providerSlugs.includes(category.slug ?? "")
+                  )?.name
+                : undefined;
               const displayedService =
                 serviceBySelectedName ??
                 serviceBySelectedSlug ??
+                serviceByCategorySearch ??
                 serviceBySearch ??
                 services[0];
               const isDisplayedServiceMatched = Boolean(
-                selectedCategory || serviceBySearch
+                selectedCategory || serviceByCategorySearch || serviceBySearch
               );
               const displayedServiceLabel = selectedCategory
                 ? "Selected category"
-                : serviceBySearch
+                : serviceByCategorySearch || serviceBySearch
                   ? "Search match"
                   : normalizedSearch
                     ? "Provider match"
@@ -573,7 +601,7 @@ export default function ProvidersGrid({
                                 {isDisplayedServiceMatched ? (
                                   <HighlightText
                                     text={displayedService}
-                                    query={search}
+                                    query={serviceByCategorySearch ? categorySearch : search}
                                   />
                                 ) : (
                                   displayedService
@@ -643,7 +671,7 @@ export default function ProvidersGrid({
               <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
                 {selectedCategory
                   ? "This category is still opening in the marketplace. Post your job anyway so available professionals can respond, or clear the filter to browse every provider."
-                  : `No providers match "${search}". Try a broader service term or clear your filters.`}
+                  : `No providers match "${[search.trim(), categorySearch.trim()].filter(Boolean).join(" / ")}". Try a broader service term or clear your filters.`}
               </p>
             </div>
             <div className="flex flex-col gap-2 sm:flex-row">
