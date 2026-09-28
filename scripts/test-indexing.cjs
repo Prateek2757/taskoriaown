@@ -52,11 +52,19 @@ async function main() {
   assert.equal((await route.GET(null, { params: Promise.resolve({ slug: '1.xml' }) })).status, 200);
   const index = load('src/app/sitemap.xml/route.ts', mocks);
   const body = await (await index.GET()).text();
-  for (const name of ['categories.xml', 'cities.xml', 'provider-profiles.xml', 'cost-guides.xml']) assert.ok(body.includes(name));
+  for (const name of ['static', 'categories', 'cities', 'blog', 'cost-guides']) assert.ok(body.includes(`/sitemap-${name}.xml`));
   assert.ok(!body.includes('service-locations/'));
-  assert.ok(body.includes('/sitemaps/categories_1.xml'));
-  assert.ok(body.includes('/sitemaps/categories_2.xml'));
-  assert.ok(!body.includes('/sitemaps/categories_3.xml'));
+  assert.ok(!body.includes('/sitemaps/'));
+  assert.ok(body.includes('/sitemap-categories_1.xml'));
+  assert.ok(body.includes('/sitemap-categories_2.xml'));
+  assert.ok(!body.includes('/sitemap-categories_3.xml'));
+  const staticRoute = load('src/app/sitemaps/static.xml/route.ts', mocks);
+  const staticBody = await (await staticRoute.GET()).text();
+  assert.ok(staticBody.includes('<loc>https://www.taskoria.com/</loc>'));
+  assert.ok(staticBody.includes('<loc>https://www.taskoria.com/help-center</loc>'));
+  assert.ok(!staticBody.includes('<loc>https://www.taskoria.com/help</loc>'));
+  const robots = load('src/app/robots.ts').default();
+  assert.ok(robots.sitemap.includes('https://www.taskoria.com/sitemap-static.xml'));
   const categoryRoute = load('src/app/sitemaps/[slug]/route.ts', mocks);
   for (const slug of ['categories_0.xml', 'categories_01.xml', 'categories_3.xml', 'junk.xml']) {
     assert.equal((await categoryRoute.GET(null, { params: Promise.resolve({ slug }) })).status, 404);

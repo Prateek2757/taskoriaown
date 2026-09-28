@@ -247,6 +247,17 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async rewrites() {
+    // Root-level sitemaps can describe URLs across the whole site, including
+    // when discovered through robots.txt rather than submitted in Search Console.
+    // Keep the existing /sitemaps/* endpoints working for previous submissions.
+    return [
+      {
+        source: "/sitemap-:name.xml",
+        destination: "/sitemaps/:name.xml",
+      },
+    ];
+  },
   // async rewrites() {
   //   return [
   //     { source: "/proposal", destination: "/views/proposal" },

@@ -8,11 +8,11 @@ import {
 export const revalidate = 3600;
 export const dynamic = "force-dynamic";
 const SITEMAPS = [
-  "sitemaps/static.xml",
-  "sitemaps/categories.xml",
-  "sitemaps/cities.xml",
-  "sitemaps/blog.xml",
-  "sitemaps/cost-guides.xml",
+  "sitemap-static.xml",
+  "sitemap-categories.xml",
+  "sitemap-cities.xml",
+  "sitemap-blog.xml",
+  "sitemap-cost-guides.xml",
 ];
 
 export async function GET() {
@@ -20,7 +20,7 @@ export async function GET() {
   const count = Math.ceil(categories.length * cities.length / URLS_PER_SITEMAP);
   const categorySitemaps = Array.from(
     { length: count },
-    (_, index) => `sitemaps/categories_${index + 1}.xml`
+    (_, index) => `sitemap-categories_${index + 1}.xml`
   );
   return xmlResponse(
     buildSitemapIndexXml(

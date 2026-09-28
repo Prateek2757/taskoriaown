@@ -47,6 +47,11 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
     },
 
-    sitemap: "https://www.taskoria.com/sitemap.xml",
+    // Advertise the database-independent pages sitemap directly as well, so
+    // discovery of the homepage does not depend on database-backed index queries.
+    sitemap: [
+      "https://www.taskoria.com/sitemap.xml",
+      "https://www.taskoria.com/sitemap-static.xml",
+    ],
   };
 }

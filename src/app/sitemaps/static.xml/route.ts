@@ -7,7 +7,7 @@ export async function GET() {
     { path: "/",                     priority: 1.0, changefreq: "daily"   },
     { path: "/contact", priority: 0.6, changefreq: "monthly" },
     { path: "/how-it-works", priority: 0.6, changefreq: "monthly" },
-    { path: "/help", priority: 0.6, changefreq: "monthly" },
+    { path: "/help-center", priority: 0.6, changefreq: "monthly" },
     { path: "/verification-badges", priority: 0.6, changefreq: "monthly" },
     { path: "/refund-policy", priority: 0.3, changefreq: "yearly" },
     { path: "/security-policy", priority: 0.3, changefreq: "yearly" },
