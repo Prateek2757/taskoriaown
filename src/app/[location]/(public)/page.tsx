@@ -207,7 +207,7 @@ const homepageJsonLd = {
 
       alternateName: [
         "Taskoria Australia",
-        "taskoria.com",
+        "Taskoria q",
       ],
 
       description:

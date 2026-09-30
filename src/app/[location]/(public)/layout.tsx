@@ -148,14 +148,7 @@ export const metadata: Metadata = {
   },
 
   icons: {
-    icon: [
-      {
-        url: "/favicon.ico",
-        sizes: "48x48",
-        type: "image/x-icon",
-      },
-    ],
-
+    // Next.js generates the favicon link from src/app/favicon.ico.
     apple: [
       {
         url: "/apple-touch-icon.png",
