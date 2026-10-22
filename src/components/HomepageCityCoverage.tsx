@@ -73,7 +73,6 @@ export default function HomepageCityCoverage() {
                 key={`${city.state}-${city.name}`}
                 href={city.href}
                 className="group flex h-auto items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-4 py-2 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f3ec] dark:border-white/10 dark:bg-white/5 dark:hover:border-blue-400"
-                aria-label={`Find professionals in ${city.name}, ${city.state}`}
               >
                 <span className="min-w-0 text-base font-semibold leading-6 text-slate-950 transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-300">
                   {city.name}

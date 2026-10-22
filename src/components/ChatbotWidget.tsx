@@ -427,7 +427,6 @@ export default function ChatbotWidget() {
             </div>
           </div>
 
-          {/* Messages scroll content */}
           <div className="flex flex-1 flex-col gap-3.5 overflow-y-auto bg-slate-50 p-5">
             {messages.map((msg, index) => (
               <div key={index} className="flex w-full flex-col">
@@ -436,7 +435,6 @@ export default function ChatbotWidget() {
                   <span className={`mt-1 self-end text-[10px] ${msg.role === "user" ? "text-white/70" : "text-[var(--text-muted)]"}`}>{msg.timestamp}</span>
                 </div>
 
-                {/* Lead Flow Summary Card */}
                 {msg.summaryCard === "job" && (
                   <div className="mt-2 w-full rounded-lg border border-blue-200 bg-card p-4 shadow-sm dark:border-slate-700">
                     <div className="mb-2.5 border-b border-border pb-1.5 text-[13px] font-bold tracking-[0.05em] text-card-foreground uppercase">Job Request Summary</div>

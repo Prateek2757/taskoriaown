@@ -3,6 +3,7 @@ import "../../globals.css";
 import type { Metadata, Viewport } from "next";
 import { Poppins, Bricolage_Grotesque } from "next/font/google";
 import Script from "next/script";
+import HostedScripts from "@/components/HostedScripts";
 
 import { UserProvider } from "@/context/userContext";
 import AuthProvider from "@/context/AuthProvider";
@@ -192,10 +193,27 @@ export default function RootLayout({
         />
 
       
-        <script
-          async
+        <HostedScripts><Script
+          strategy="lazyOnload"
           src="https://news.google.com/swg/js/v1/publisher.js"
-        />
+        /></HostedScripts>
+
+<HostedScripts><Script id="smartsupp-chat" strategy="lazyOnload">
+  {`
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = 'cc08ee683b26b6e5b9558c2f1b49ec635c505f11';
+    window.smartsupp || (function(d) {
+      var s,c,o=smartsupp=function(){o._.push(arguments)};o._=[];
+      s=d.getElementsByTagName('script')[0];
+      c=d.createElement('script');
+      c.type='text/javascript';
+      c.charset='utf-8';
+      c.async=true;
+      c.src='https://www.smartsuppchat.com/loader.js?';
+      s.parentNode.insertBefore(c,s);
+    })(document);
+  `}
+</Script></HostedScripts>
       </head>
 
       <body
@@ -213,15 +231,15 @@ export default function RootLayout({
              
 
               {GA_ID ? (
-                <>
+                <HostedScripts>
                   <Script
                     src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-                    strategy="afterInteractive"
+                    strategy="lazyOnload"
                   />
 
                   <Script
                     id="google-analytics"
-                    strategy="afterInteractive"
+                    strategy="lazyOnload"
                   >
                     {`
                       window.dataLayer = window.dataLayer || [];
@@ -237,14 +255,14 @@ export default function RootLayout({
                       });
                     `}
                   </Script>
-                </>
+                </HostedScripts>
               ) : null}
 
             
 
-              <Script
+              <HostedScripts><Script
                 id="microsoft-clarity"
-                strategy="afterInteractive"
+                strategy="lazyOnload"
               >
                 {`
                   (function(c,l,a,r,i,t,y){
@@ -261,19 +279,18 @@ export default function RootLayout({
 
                   })(window, document, "clarity", "script", "wylra8huxw");
                 `}
-              </Script>
+              </Script></HostedScripts>
 
-
-              <Script
+              <HostedScripts><Script
                 src="https://static.cloudflareinsights.com/beacon.min.js"
                 data-cf-beacon='{"token":"b0381ce5a7494c56869a77d5b4d0623c"}'
-                strategy="afterInteractive"
-              />
+                strategy="lazyOnload"
+              /></HostedScripts>
 
 
               <NotificationHandler />
 
-              <Analytics />
+              {process.env.VERCEL === "1" && <Analytics />}
 
               <NavbarServer />
 
@@ -303,7 +320,7 @@ export default function RootLayout({
                 closeButton
               />
 
-              <SpeedInsights />
+              {process.env.VERCEL === "1" && <SpeedInsights />}
             </UserProvider>
           </ThemeProvider>
         </AuthProvider>

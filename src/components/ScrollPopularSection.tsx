@@ -1,8 +1,8 @@
 "use client";
 import { ChevronRight, TrendingUp } from "lucide-react";
-import { useCategories } from "@/hooks/useCategories";
+import { useCategories, type Category } from "@/hooks/useCategories";
 import { Skeleton } from "./ui/skeleton";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 
 const staticImages = [
@@ -28,9 +28,8 @@ const staticImages = [
   },
 ];
 
-function ScrollPopularSection() {
-  const { categories, loading } = useCategories(5);
-  const router = useRouter();
+function ScrollPopularSection({ initialCategories }: { initialCategories?: Category[] }) {
+  const { categories, loading } = useCategories(5, initialCategories);
 
   if (loading) {
     return (
@@ -65,23 +64,21 @@ function ScrollPopularSection() {
             {categories.map((category, index) => {
               const img = staticImages[index % staticImages.length];
               return (
-                <div
+                <Link
                   key={category.category_id}
-                  onClick={() =>
-                    router.push(
-                      `/services/${category.slug ?? category.category_id}`
-                    )
-                  }
+                  href={`/services/${category.slug ?? category.category_id}`}
                   className="relative w-65 shrink-0 rounded-2xl overflow-hidden h-35 cursor-pointer group shadow-sm hover:shadow-lg transition-shadow duration-300 bg-gray-100 dark:bg-gray-800"
                 >
                   <Image
-                    title="popular catgories"
+                    unoptimized={false}
+                    title="Popular categories"
                     fill
                     src={img.url}
                     alt={category.name}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="260px"
                     priority={index === 0}
+                    fetchPriority={index === 0 ? "high" : undefined}
                   />
                   <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/40 to-transparent" />
 
@@ -99,7 +96,7 @@ function ScrollPopularSection() {
                     className="absolute top-0 left-0 right-0 h-[3px] opacity-80"
                     style={{ background: img.accent }}
                   /> */}
-                </div>
+                </Link>
               );
             })}
           </div>

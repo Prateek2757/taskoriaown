@@ -17,7 +17,7 @@ const reviews = [
     bookedService: "Verified House Cleaning",
     reviewDetail:
       "Taskoria made it incredibly easy to find a reliable cleaner in Melbourne. The booking process was simple, transparent, and only took a few minutes from start to finish. I appreciated how easy it was to compare options and choose a professional that matched my needs.I'll definitely be using Taskoria again for future home services and wouldn't hesitate to recommend it to friends and family looking for dependable, high-quality service.",
-    photo: "/images/reviewimage1.avif",
+    photo: "/images/review-avatars/customer-1.webp",
   },
   {
     id: "liam-anderson",
@@ -27,7 +27,7 @@ const reviews = [
     bookedService: "Emergency Electrical Repair",
     reviewDetail:
       "I needed an electrician urgently, and Taskoria connected me with a verified professional within minutes. Great experience from start to finish.",
-    photo: "/images/reviewimage2.avif",
+    photo: "/images/review-avatars/customer-2.webp",
   },
   {
     id: "charlotte-wilson",
@@ -37,7 +37,7 @@ const reviews = [
     bookedService: "Garden Maintenance",
     reviewDetail:
       "Fantastic platform! I hired a gardener through Taskoria, and the quality of work was excellent. The reviews helped me choose the right person.",
-    photo: "/images/reviewimage3.avif",
+    photo: "/images/review-avatars/customer-3.webp",
   },
   {
     id: "noah-mitchell",
@@ -47,7 +47,7 @@ const reviews = [
     bookedService: "Home Maintenance",
     reviewDetail:
       "I've used Taskoria multiple times for home maintenance services, and every experience has been smooth and professional. It's now my go-to platform.",
-    photo: "/images/olivreviewimage(1).png",
+    photo: "/images/review-avatars/customer-4.webp",
   },
   {
     name: "Ethana",
@@ -56,7 +56,7 @@ const reviews = [
     bookedService: "Handyman Service",
     reviewDetail:
       "Taskoria made finding a skilled handyman quick and stress-free. The professional arrived on time, completed the job perfectly, and the whole experience was seamless.",
-    photo: "/images/user4.png",
+    photo: "/images/review-avatars/customer-5.webp",
   },
   {
     name: "James Bennett",
@@ -65,7 +65,7 @@ const reviews = [
     bookedService: "Plumbing Repair",
     reviewDetail:
       "I had a leaking kitchen pipe that needed immediate attention, and Taskoria made the entire process incredibly simple. Within a short time, I found a verified plumber with excellent reviews and transparent pricing.The quality of service and the smooth booking experience gave me complete confidence in using Taskoria again for future home service needs.",
-    photo: "/images/user6.png",
+    photo: "/images/review-avatars/customer-6.webp",
   },
 ];
 
@@ -119,11 +119,11 @@ export default function CustomersReview() {
                   )}
                 />
               ))}
-              <span className="ml-1.5 text-xs text-gray-400 dark:text-gray-500">
+              <span className="ml-1.5 text-xs text-gray-600 dark:text-gray-400">
                 ({rating}/5)
               </span>
             </div>
-            <span className="text-xs text-gray-400 dark:text-gray-500">
+            <span className="text-xs text-gray-600 dark:text-gray-400">
               {time}
             </span>
           </div>
@@ -134,7 +134,7 @@ export default function CustomersReview() {
               featured ? "text-base" : "text-sm",
             )}
           >
-            "{reviewDetail}"
+            &ldquo;{reviewDetail}&rdquo;
           </blockquote>
         </div>
 
@@ -145,6 +145,7 @@ export default function CustomersReview() {
             height={40}
             alt={`${name} review`}
             src={photo}
+            unoptimized
             sizes="40px"
           />
           <div className="flex flex-col min-w-0">
@@ -196,6 +197,7 @@ export default function CustomersReview() {
                   height={44}
                   alt={`${review.name} review`}
                   src={review.photo}
+                  unoptimized
                   sizes="44px"
                 />
               ))}

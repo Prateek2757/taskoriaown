@@ -1,10 +1,11 @@
 import Image from "next/image";
+import type { Category } from "@/hooks/useCategories";
 import ScrollPopularSection from "../ScrollPopularSection";
 import HeroInteractive from "./HeroInteractive";
 import SparklesThemed from "./SparklesThemed";
 import TrustSafetyHighlights from "../TrustSafetyHighlights";
 
-export default function HeroSection() {
+export default function HeroSection({ initialCategories }: { initialCategories?: Category[] }) {
   return (
     <>
       <section
@@ -116,7 +117,7 @@ export default function HeroSection() {
         </div>
 
         <div className="flex-1 flex flex-col justify-center">
-          <ScrollPopularSection />
+          <ScrollPopularSection initialCategories={initialCategories} />
         </div>
 
         <div className="flex flex-col">

@@ -1,7 +1,9 @@
 "use client";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { SparklesCore } from "../ui/sparkles";
-import { SparklesCoreLight } from "../ui/sparklesLight";
+const SparklesCore = dynamic(() => import("../ui/sparkles").then((module) => module.SparklesCore), { ssr: false });
+const SparklesCoreLight = dynamic(() => import("../ui/sparklesLight").then((module) => module.SparklesCoreLight), { ssr: false });
 
 interface SparklesThemedProps {
   variant: "underline" | "fullbleed";
@@ -19,6 +21,25 @@ export default function SparklesThemed({
   maxSize = 1.7,
 }: SparklesThemedProps) {
   const { resolvedTheme } = useTheme();
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 1024px) and (prefers-reduced-motion: no-preference)");
+    let timer: ReturnType<typeof setTimeout>;
+    const update = () => {
+      clearTimeout(timer);
+      setEnabled(false);
+      if (query.matches) timer = setTimeout(() => setEnabled(true), 3000);
+    };
+    update();
+    query.addEventListener("change", update);
+    return () => {
+      clearTimeout(timer);
+      query.removeEventListener("change", update);
+    };
+  }, []);
+
+  if (!enabled) return null;
   const particleColor = resolvedTheme === "dark" ? "#fff" : "#000";
 
   if (variant === "underline") {
@@ -35,34 +56,15 @@ export default function SparklesThemed({
     );
   }
 
-  // "fullbleed" — the decorative bottom field.
-  // SparklesCoreLight is used in light mode, SparklesCore in dark.
-  // Both rendered with CSS visibility toggling to avoid a flash on hydration.
+  const Field = resolvedTheme === "dark" ? SparklesCore : SparklesCoreLight;
   return (
-    <>
-      {/* Light-mode sparkles (hidden in dark via Tailwind) */}
-      <SparklesCoreLight
-        particleDensity={particleDensity}
-        speed={speed}
-        maxSize={maxSize}
-        particleColor={particleColor}
-        className="absolute inset-x-0 bottom-0 h-full w-full
-          mask-[radial-gradient(50%_50%,black,transparent_85%)]
-          dark:mask-[radial-gradient(50%_50%,white,transparent_85%)]
-          dark:hidden"
-      />
-      {/* Dark-mode sparkles (hidden in light via Tailwind) */}
-      <SparklesCore
-        background="transparent"
-        particleDensity={particleDensity}
-        speed={speed}
-        maxSize={maxSize}
-        particleColor={particleColor}
-        className="absolute inset-x-0 bottom-0 h-full w-full
-          mask-[radial-gradient(50%_50%,black,transparent_85%)]
-          dark:mask-[radial-gradient(50%_50%,white,transparent_85%)]
-          hidden dark:block"
-      />
-    </>
+    <Field
+      background="transparent"
+      particleDensity={particleDensity}
+      speed={speed}
+      maxSize={maxSize}
+      particleColor={particleColor}
+      className="absolute inset-x-0 bottom-0 h-full w-full mask-[radial-gradient(50%_50%,black,transparent_85%)] dark:mask-[radial-gradient(50%_50%,white,transparent_85%)]"
+    />
   );
 }

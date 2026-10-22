@@ -27,22 +27,12 @@ import {
   SITE_NAME,
   TWITTER_HANDLE,
 } from "./layout";
+import ChatbotWidget from "@/components/ChatbotWidget";
 
-/* -------------------------------------------------------------------------- */
-/*                         HOMEPAGE RENDERING MODE                            */
-/* -------------------------------------------------------------------------- */
 
-/**
- * Your homepage reads service/category/city information from the database.
- *
- * Cloud Run has database access at runtime, while your Docker build may not.
- * Keeping force-dynamic avoids requiring those database queries during build.
- */
 export const dynamic = "force-dynamic";
 
-/* -------------------------------------------------------------------------- */
-/*                              LAZY COMPONENTS                               */
-/* -------------------------------------------------------------------------- */
+
 
 const HowTaskoriaWorks = lazy(
   () => import("@/components/how-taskoria-works")
@@ -207,7 +197,7 @@ const homepageJsonLd = {
 
       alternateName: [
         "Taskoria Australia",
-        "Taskoria q",
+        "Taskoria",
       ],
 
       description:
@@ -296,6 +286,7 @@ function serializeJsonLd(data: unknown) {
 }
 
 export default async function HomePage() {
+  const initialCategories = await getCategoriesFromDB().catch(() => undefined);
   /**
    * Fetch both datasets in parallel.
    */
@@ -335,7 +326,7 @@ export default async function HomePage() {
         <section
           aria-label="Find and hire local professionals"
         >
-          <HeroSection />
+          <HeroSection initialCategories={initialCategories} />
         </section>
 
 

@@ -255,7 +255,9 @@ export default function HomepageFAQ() {
                 height={420}
                 className="w-full object-cover transition-transform duration-500 hover:scale-105"
                 style={{ height: "470px", maxHeight: "65vh" }}
-                priority
+                loading="lazy"
+                sizes="(min-width: 1024px) 560px, 1px"
+                unoptimized={false}
               />
             </div>
           </div>

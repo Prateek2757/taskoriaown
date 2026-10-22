@@ -134,7 +134,7 @@ export default function HeroInteractive() {
               <Button
                 onClick={() => handlePostJob()}
                 className=" w-58  text-base  group  py-4.5 bg-transparent  hover:bg-transparent border border-blue-500    hover:bg-none text-[#2563EB] dark:text-blue-300 font-semibold   transition-all duration-300 shadow-lg shadow-blue-500/20 hover hover:scale-105 hover:shadow-xl hover:shadow-blue-500/30"
-                aria-label="Post a job to find service providers"
+                aria-label="Get Free Quotes — post a job to find service providers"
               >
                 Get Free Quotes
                 <ArrowUpRight
@@ -158,7 +158,7 @@ export default function HeroInteractive() {
            hover:scale-105
                transition-all duration-300
 norder-none             "
-                  aria-label="Register as a service provider"
+                  aria-label="Join as Provider — register as a service provider"
                 >
                   Join as Provider
                 </Button>

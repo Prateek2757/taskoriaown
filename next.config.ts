@@ -102,7 +102,7 @@ const nextConfig: NextConfig = {
   },
 
   images: {
-    unoptimized: true,
+    unoptimized: false,
     formats: ["image/avif", "image/webp"],
     qualities: [50, 75, 76, 90],
     remotePatterns: [

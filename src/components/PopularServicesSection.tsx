@@ -198,9 +198,9 @@ export default function PopularServices() {
                       alt={cat.name}
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
-                    <h4 className="absolute bottom-3 left-3 right-3 text-sm sm:text-base font-semibold text-white leading-snug">
+                    <h3 className="absolute bottom-3 left-3 right-3 text-sm sm:text-base font-semibold text-white leading-snug">
                       {cat.name}
-                    </h4>
+                    </h3>
                   </div>
                 </Link>
               </article>

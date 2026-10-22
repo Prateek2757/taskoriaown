@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { fetcher } from "@/lib/fetcher";
 
-interface Category {
+export interface Category {
   category_id: number;
   name: string;
   slug: string;
@@ -14,11 +14,13 @@ interface Category {
 }
 
 
-export const useCategories = (limit?: number) => {
+export const useCategories = (limit?: number, initialCategories?: Category[]) => {
   const { data, error, isLoading } = useSWR<Category[]>(
     "/api/signup/category-selection?v=2",
     fetcher,
     {
+      fallbackData: initialCategories,
+      revalidateOnMount: initialCategories ? false : undefined,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       dedupingInterval: 1000 * 60 * 60, 
@@ -32,14 +34,12 @@ export const useCategories = (limit?: number) => {
     }
   }, [error]);
 
-  const categories = isLoading
-    ? undefined
-    : limit && data
+  const categories = limit && data
       ? data.slice(0, limit)
       : (data ?? []);
 
   return {
     categories,
-    loading: isLoading,
+    loading: isLoading && !data,
   };
 };

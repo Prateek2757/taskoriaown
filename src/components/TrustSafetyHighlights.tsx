@@ -32,7 +32,7 @@ export default function TrustSafetyHighlights() {
           <div className="flex items-center gap-2">
             <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
             <span>
-              <span className="font-semibold text-yellow-500">5.0</span> on
+              <span className="font-semibold text-yellow-700 dark:text-yellow-400">5.0</span> on
               Google Reviews
             </span>
           </div>
