@@ -146,6 +146,13 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "bcfysvmfxeaqoulqirmb.supabase.co",
+        port: "",
+        pathname: "/storage/v1/**",
+        
+      },
+      {
+        protocol: "https",
         hostname: "avatar.vercel.sh",
         port: "",
         pathname: "/**",
